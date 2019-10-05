@@ -1,0 +1,146 @@
+EESchema Schematic File Version 4
+EELAYER 26 0
+EELAYER END
+$Descr A4 11693 8268
+encoding utf-8
+Sheet 1 1
+Title ""
+Date ""
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+$Comp
+L RF_Module:E73-2G4M04S-52832 U1
+U 1 1 5D87721B
+P 3300 2800
+F 0 "U1" H 3300 1114 50  0000 C CNN
+F 1 "E73-2G4M04S-52832" H 3300 1023 50  0000 C CNN
+F 2 "RF_Module:E73-2G4M04S" H 3300 3250 50  0001 C CNN
+F 3 "http://www.cdebyte.com/en/downpdf.aspx?id=243" H 3300 3250 50  0001 C CNN
+	1    3300 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L W25Q16BVSSIG:W25Q16BVSSIG U?
+U 1 1 5D87735B
+P 8050 1900
+F 0 "U?" H 8050 2570 50  0000 C CNN
+F 1 "W25Q16BVSSIG" H 8050 2479 50  0000 C CNN
+F 2 "SOIC127P790X216-8N" H 8050 1900 50  0001 L BNN
+F 3 "None" H 8050 1900 50  0001 L BNN
+F 4 "Winbond" H 8050 1900 50  0001 L BNN "Field4"
+F 5 "Flash, pin, soic, flash, Memory, Semiconductors and Actives, serial, ic" H 8050 1900 50  0001 L BNN "Field5"
+F 6 "SOIC-8 Winbond" H 8050 1900 50  0001 L BNN "Field6"
+F 7 "Unavailable" H 8050 1900 50  0001 L BNN "Field7"
+F 8 "W25Q16BVSSIG" H 8050 1900 50  0001 L BNN "Field8"
+	1    8050 1900
+	1    0    0    -1  
+$EndComp
+Text Label 7150 1700 2    50   ~ 0
+FLASH_CS
+Wire Wire Line
+	7350 1700 7150 1700
+Text Label 7150 1800 2    50   ~ 0
+SPI_SCK
+Wire Wire Line
+	7350 1800 7150 1800
+Wire Wire Line
+	7350 1900 7150 1900
+Text Label 7150 1900 2    50   ~ 0
+SPI_MOSI
+Wire Wire Line
+	7350 2000 7150 2000
+Text Label 7150 2000 2    50   ~ 0
+SPI_MISO
+Wire Wire Line
+	8750 1500 8900 1500
+Wire Wire Line
+	8750 1900 9050 1900
+Wire Wire Line
+	9050 1900 9050 1500
+Wire Wire Line
+	8750 1800 8900 1800
+Wire Wire Line
+	8900 1800 8900 1500
+Connection ~ 8900 1500
+Wire Wire Line
+	8900 1500 9050 1500
+Text Label 9350 1500 0    50   ~ 0
+VCC_3.3V
+Wire Wire Line
+	9050 1500 9300 1500
+Connection ~ 9050 1500
+$Comp
+L pspice:CAP C?
+U 1 1 5D8777DF
+P 9300 1750
+F 0 "C?" H 9478 1796 50  0000 L CNN
+F 1 "0.1uF" H 9478 1705 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 9300 1750 50  0001 C CNN
+F 3 "" H 9300 1750 50  0001 C CNN
+	1    9300 1750
+	1    0    0    -1  
+$EndComp
+Connection ~ 9300 1500
+Wire Wire Line
+	9300 1500 9350 1500
+$Comp
+L power:GND #PWR?
+U 1 1 5D877870
+P 8850 2300
+F 0 "#PWR?" H 8850 2050 50  0001 C CNN
+F 1 "GND" H 8855 2127 50  0000 C CNN
+F 2 "" H 8850 2300 50  0001 C CNN
+F 3 "" H 8850 2300 50  0001 C CNN
+	1    8850 2300
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8750 2200 8850 2200
+Wire Wire Line
+	8850 2200 8850 2300
+$Comp
+L power:GND #PWR?
+U 1 1 5D877974
+P 9300 2100
+F 0 "#PWR?" H 9300 1850 50  0001 C CNN
+F 1 "GND" H 9305 1927 50  0000 C CNN
+F 2 "" H 9300 2100 50  0001 C CNN
+F 3 "" H 9300 2100 50  0001 C CNN
+	1    9300 2100
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	9300 2100 9300 2000
+$Comp
+L Hirose_connectors:FH26-13S-0.3SHW(05) U?
+U 1 1 5D877F18
+P 6950 3450
+F 0 "U?" H 7100 3575 50  0000 C CNN
+F 1 "FH26-13S-0.3SHW(05)" H 7100 3484 50  0000 C CNN
+F 2 "" H 6950 3450 50  0001 C CNN
+F 3 "" H 6950 3450 50  0001 C CNN
+	1    6950 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L TXS0108E:TXS0108E IC?
+U 1 1 5D8780E1
+P 9100 4750
+F 0 "IC?" H 9100 5517 50  0000 C CNN
+F 1 "TXS0108E" H 9100 5426 50  0000 C CNN
+F 2 "PW_R-PDSO-G20" H 9100 4750 50  0001 L BNN
+F 3 "8-Bit Bidirectional Voltage-Level Translator For Open-Drain And Push-Pull Application" H 9100 4750 50  0001 L BNN
+F 4 "Texas Instruments" H 9100 4750 50  0001 L BNN "Field4"
+F 5 "Unavailable" H 9100 4750 50  0001 L BNN "Field5"
+F 6 "None" H 9100 4750 50  0001 L BNN "Field6"
+F 7 "TXS0108E" H 9100 4750 50  0001 L BNN "Field7"
+F 8 "TSSOP-20 Texas Instruments" H 9100 4750 50  0001 L BNN "Field8"
+	1    9100 4750
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC

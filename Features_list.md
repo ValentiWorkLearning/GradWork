@@ -61,11 +61,17 @@ http://www.kosmodrom.com.ua/prodlist.php?name=%CF%F0%E5%EE%E1%F0%E0%E7%EE%E2%E0%
 
 
 
-### **Features**
+#### Schematic Libraries:
 
-###### **Main features:**
+- Nordic nRF52832 MOD
 
--[ ] Pulse and oxy measurement
+https://kicad.github.io/symbols/RF_Module
 
--[ ]
+- W25Q128
+
+[https://www.snapeda.com/parts/W25Q16BVSSIG/Winbond%20Electronics/view-part/](https://www.snapeda.com/parts/W25Q16BVSSIG/Winbond Electronics/view-part/) 
+
+- MPU-9250
+
+[https://www.snapeda.com/parts/MPU-9250/TDK%20InvenSense/view-part/](https://www.snapeda.com/parts/MPU-9250/TDK InvenSense/view-part/)
 

@@ -1,0 +1,8 @@
+nrfjprog.exe --program  C:/Nordic/components/softdevice/s132/hex/s132_nrf52_6.1.1_softdevice.hex -f nrf52 --sectorerase
+
+
+nrfjprog.exe --program .\BlinkyExample.hex -f nrf52
+
+nrfjprog.exe -e -f nrf52
+
+nrfjprog.exe --reset -f nrf52
