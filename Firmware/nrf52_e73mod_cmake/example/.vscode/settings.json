@@ -9,6 +9,7 @@
     },
     "files.associations": {
         "nrf51822_peripherals.h": "c",
-        "boards.h": "c"
+        "boards.h": "c",
+        "nrf_delay.h": "c"
     }
 }

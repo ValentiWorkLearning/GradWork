@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(BlinkyExample C ASM)
+project(BlinkyExample CXX ASM)
 
 # define some variables just for this example to determine file locations
 set(NRF_PROJECT_NAME ble_app_blinky)
@@ -30,7 +30,7 @@ add_definitions(-DCONFIG_GPIO_AS_PINRESET)
 
 # usually you would include files in this directory here, like so:
 #include_directories(.)
-list(APPEND SOURCE_FILES main.c)
+list(APPEND SOURCE_FILES main.cpp)
 
 # for example projects we include the example source files
 include_directories(${NRF_PROJECT_DEVICE_PATH}/config)

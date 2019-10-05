@@ -62,13 +62,19 @@ int main(void)
     bsp_board_init(BSP_INIT_LEDS);
 
     /* Toggle LEDs. */
-    while (true)
+    auto ledToggler = 
+    []( size_t _delayTime )
     {
         for (int i = 0; i < LEDS_NUMBER; i++)
         {
             bsp_board_led_invert(0);
-            nrf_delay_ms(500);
+            nrf_delay_ms( _delayTime );
         }
+    };
+
+    while (true)
+    {
+        ledToggler( 300 );
     }
 }
 
