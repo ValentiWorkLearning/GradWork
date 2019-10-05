@@ -1,3 +1,0 @@
-#!/bin/bash
-
-JLinkGDBServer -device nrf51 -strict -timeout 0 -nogui -if swd -speed 1000 -endian little
