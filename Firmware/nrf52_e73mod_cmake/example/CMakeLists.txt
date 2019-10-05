@@ -7,6 +7,7 @@ if (NOT DEFINED ARM_NONE_EABI_TOOLCHAIN_PATH)
 endif ()
 
 set(NRF5_SDK_PATH $ENV{NRF5_SDK_PATH})
+
 set(NRFJPROG $ENV{NRFJPROG_PATH}/nrfjprog.exe )
 
 include("${CMAKE_CURRENT_LIST_DIR}/../CMake_nRF5x.cmake")

@@ -66,7 +66,7 @@ int main(void)
     {
         for (int i = 0; i < LEDS_NUMBER; i++)
         {
-            bsp_board_led_invert(i);
+            bsp_board_led_invert(0);
             nrf_delay_ms(500);
         }
     }
