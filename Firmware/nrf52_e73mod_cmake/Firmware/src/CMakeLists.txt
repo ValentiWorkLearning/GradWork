@@ -8,11 +8,16 @@ set(NRF_BOARD pca10040)
 set(NRF_SOFTDEVICE s132)
 
 # define some convenience variables to point to example project directories
-set(NRF_PROJECT_PATH ${NRF5_SDK_PATH}/examples/ble_peripheral/${NRF_PROJECT_NAME})
-set(NRF_PROJECT_DEVICE_PATH ${NRF_PROJECT_PATH}/${NRF_BOARD}/${NRF_SOFTDEVICE})
+set(NRF_CMAKE_CURRENT_LIST ${CMAKE_CURRENT_LIST_DIR})
+
+set(NRF_PROJECT_PATH ${NRF_CMAKE_CURRENT_LIST}/..)
+#set(NRF_PROJECT_PATH ${NRF5_SDK_PATH}/examples/ble_peripheral/${NRF_PROJECT_NAME})
+
+set(NRF_PROJECT_DEVICE_PATH ${NRF_PROJECT_PATH}/sdk_dependent)
+#set(NRF_PROJECT_DEVICE_PATH ${NRF_PROJECT_PATH}/${NRF_BOARD}/${NRF_SOFTDEVICE})
 
 # you can specify the location of the linker script if desired instead of using a specific file name
-set(NRF5_LINKER_SCRIPT ${NRF_PROJECT_DEVICE_PATH}/armgcc/${NRF_PROJECT_NAME}_gcc_${NRF_TARGET}.ld)
+set( NRF5_LINKER_SCRIPT ${NRF_PROJECT_PATH}/sdk_dependent/gcc_nrf52.ld )
 
 nRF5x_setup()
 
@@ -33,6 +38,7 @@ add_definitions(-DCONFIG_GPIO_AS_PINRESET)
 list(APPEND SOURCE_FILES main.cpp)
 
 # for example projects we include the example source files
+message( "Config include inside:" ${NRF_PROJECT_DEVICE_PATH}/config)
 include_directories(${NRF_PROJECT_DEVICE_PATH}/config)
 #list(APPEND SOURCE_FILES ${NRF_PROJECT_PATH}/main.c)
 
