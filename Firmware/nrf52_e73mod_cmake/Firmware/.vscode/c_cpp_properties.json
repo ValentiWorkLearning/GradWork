@@ -23,12 +23,6 @@
             "intelliSenseMode": "clang-x64",
             "configurationProvider": "go2sh.cmake-integration",
             "compileCommands": "${workspaceFolder}/build/compile_commands.json"
-        },
-        {
-            "name": "pca10056/s140",
-            "cStandard": "c11",
-            "cppStandard": "c++17",
-            "intelliSenseMode": "clang-x64"
         }
     ],
     "version": 4
