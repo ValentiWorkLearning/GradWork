@@ -40,6 +40,7 @@ list(APPEND SOURCE_FILES main.cpp)
 # for example projects we include the example source files
 message( "Config include inside:" ${NRF_PROJECT_DEVICE_PATH}/config)
 include_directories(${NRF_PROJECT_DEVICE_PATH}/config)
+include_directories(${NRF_PROJECT_DEVICE_PATH}/board-pinout)
 #list(APPEND SOURCE_FILES ${NRF_PROJECT_PATH}/main.c)
 
 nRF5x_addExecutable(BlinkyExample "${SOURCE_FILES}")
