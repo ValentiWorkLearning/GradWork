@@ -16,7 +16,22 @@
         "interface": "swd",
         "serialNumber": "", //if you have more than one J-Link probe add the serial number here 
         "runToMain": true,
-        "svdFile": "${workspaceRoot}//utils//nrf52.svd" 
+        "svdFile": "${workspaceRoot}//utils//nrf52.svd",
+
+        "swoConfig": {
+                "source": "probe",
+                "enabled": true,
+                "swoFrequency": 0,
+                "cpuFrequency": 0,
+                "decoders": [
+                    {
+                        "encoding": "utf8",
+                        "port": 0,
+                        "label": "SWO"
+                        "type": "console"
+                    }
+                ]
+        }
         }
         ]
     }

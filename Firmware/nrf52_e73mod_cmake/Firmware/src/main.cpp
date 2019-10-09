@@ -19,6 +19,11 @@ namespace UartConstants
     static const std::string HelloWorld = "Hello from E73 nordic board!\r\n";
 };
 
+namespace SwoPrint
+{
+    static const std::string SwoTest = "SwoTest complited! \r\n";
+}
+
 
 void uart_error_handle(app_uart_evt_t * p_event)
 {
@@ -59,12 +64,25 @@ void initUartModule()
     APP_ERROR_CHECK(err_code);
 }
 
+
+void initSwoPrint()
+{
+    NRF_CLOCK->TRACECONFIG =
+        ( NRF_CLOCK->TRACECONFIG & ~CLOCK_TRACECONFIG_TRACEPORTSPEED_Msk )
+    |   ( CLOCK_TRACECONFIG_TRACEPORTSPEED_4MHz << CLOCK_TRACECONFIG_TRACEPORTSPEED_Pos );
+
+    ITM->TCR |= 1;  
+    ITM->TER |= 1;  
+}
+
 int main(void)
 {
     /* Configure board. */
     bsp_board_init(BSP_INIT_LEDS);
 
     initUartModule();
+
+    initSwoPrint();
 
     /* Toggle LEDs. */
     auto ledToggler = 
@@ -81,9 +99,17 @@ int main(void)
            app_uart_put( static_cast<std::uint8_t>( ch ) );
     };
 
+    auto swoPrinter =
+    []
+    {
+        for( const auto ch : SwoPrint::SwoTest )
+            ITM_SendChar( ch );
+    };
+
     while (true)
     {
         ledToggler( 300 );
         uartWriter();
+        swoPrinter();
     }
 }
