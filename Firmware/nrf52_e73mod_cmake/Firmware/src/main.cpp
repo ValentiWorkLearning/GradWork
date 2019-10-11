@@ -10,11 +10,13 @@
 #include "app_error.h"
 #include "bsp.h"
 
+#include "drivers/display/display_st7789v.hpp"
+
 namespace UartConstants
 {
-    static constexpr std::uint16_t TxSize = 256;        /**< max number of test bytes to be used for tx and rx. */
-    static constexpr std::uint16_t RxSize = TxSize;     /**< UART TX buffer size. */
-    static constexpr std::uint8_t TestDataBytes = 15;   /**< UART RX buffer size. */
+    constexpr std::uint16_t TxSize = 256;        /**< max number of test bytes to be used for tx and rx. */
+    constexpr std::uint16_t RxSize = TxSize;     /**< UART TX buffer size. */
+    constexpr std::uint8_t TestDataBytes = 15;   /**< UART RX buffer size. */
 
     static const std::string HelloWorld = "Hello from E73 nordic board!\r\n";
 };
@@ -83,6 +85,8 @@ int main(void)
     initUartModule();
 
     initSwoPrint();
+
+    auto display = DisplayDriver::createDisplayDriver();
 
     /* Toggle LEDs. */
     auto ledToggler = 

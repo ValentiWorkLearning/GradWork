@@ -49,6 +49,14 @@
         "typeinfo": "cpp",
         "sdk_common.h": "c",
         "sdk_config.h": "c",
-        "string.h": "c"
+        "string.h": "c",
+        "concepts": "cpp",
+        "memory": "cpp",
+        "string": "cpp",
+        "xmemory": "cpp",
+        "xstddef": "cpp",
+        "xstring": "cpp",
+        "xtr1common": "cpp",
+        "xutility": "cpp"
     }
 }

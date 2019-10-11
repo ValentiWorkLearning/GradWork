@@ -1,11 +1,14 @@
 cmake_minimum_required(VERSION 3.12)
 
-project(BlinkyExample CXX ASM)
+project(E73DevBoard CXX ASM)
+
+set (TARGET_NAME E73DevBoardBin)
 
 # define some variables just for this example to determine file locations
 set(NRF_PROJECT_NAME ble_app_blinky)
 set(NRF_BOARD pca10040)
 set(NRF_SOFTDEVICE s132)
+
 
 # define some convenience variables to point to example project directories
 set(NRF_CMAKE_CURRENT_LIST ${CMAKE_CURRENT_LIST_DIR})
@@ -39,8 +42,15 @@ list(APPEND SOURCE_FILES main.cpp)
 
 # for example projects we include the example source files
 message( "Config include inside:" ${NRF_PROJECT_DEVICE_PATH}/config)
+include_directories(${NRF_PROJECT_DEVICE_PATH}/drivers)
 include_directories(${NRF_PROJECT_DEVICE_PATH}/config)
 include_directories(${NRF_PROJECT_DEVICE_PATH}/board-pinout)
 #list(APPEND SOURCE_FILES ${NRF_PROJECT_PATH}/main.c)
 
-nRF5x_addExecutable(BlinkyExample "${SOURCE_FILES}")
+nRF5x_addExecutable(${TARGET_NAME} "${SOURCE_FILES}")
+
+target_sources(
+    ${TARGET_NAME}
+    PRIVATE
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/display/display_st7789v.cpp
+)

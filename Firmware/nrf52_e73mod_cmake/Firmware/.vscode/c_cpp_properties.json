@@ -3,7 +3,7 @@
         {
             "name": "pca10040/s132",
             "includePath": [
-                "${workspaceFolder}/pca10040/s132/config",
+                "${workspaceFolder}/sdk_dependent/config",
                 "${env:NRF5_SDK_PATH}/**"
             ],
             "defines": [
