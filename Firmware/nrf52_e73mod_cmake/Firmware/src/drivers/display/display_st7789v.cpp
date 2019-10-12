@@ -3,6 +3,8 @@
 
 #include "spi/spi_wrapper.hpp"
 
+#include <array>
+
 // Based on Adafruit's implementation: https://github.com/adafruit/Adafruit-ST7735-Library/
 
 namespace
@@ -55,21 +57,23 @@ constexpr St7789V::St7789V( Interface::Spi::SpiBus* _pBus )
 void
 St7789V::initDisplay()
 {
-    sendCommand( DisplayReg::SWRESET );
-    sendCommand( DisplayReg::SLPOUT );
-    sendCommand( DisplayReg::COLMOD, 0x55 );
-    sendCommand( DisplayReg::MADCTL, 0x08 );
-    sendCommand( DisplayReg::CASET, 0x00,0,0,240 );
-    sendCommand( DisplayReg::RASET, 0x00, 0, 320>>8, 320&0xFF );
-    sendCommand( DisplayReg::INVON );
-    sendCommand( DisplayReg::NORON );
-    sendCommand( DisplayReg::DISPON );
+    m_pBusPtr->beginTransaction();
+
+    sendCommand(    DisplayReg::SWRESET    );
+    sendCommand(    DisplayReg::SLPOUT     );
+    sendCommand(    DisplayReg::COLMOD     , 0x55   );
+    sendCommand(    DisplayReg::MADCTL     , 0x08   );
+    sendCommand(    DisplayReg::CASET      , 0x00,0,0,240 );
+    sendCommand(    DisplayReg::RASET      , 0x00, 0, 320>>8, 320&0xFF );
+    sendCommand(    DisplayReg::INVON      );
+    sendCommand(    DisplayReg::NORON      );
+    sendCommand(    DisplayReg::DISPON     );
+
+    m_pBusPtr->endTransaction();
 }
 
-template<typename>
 void St7789V::sendCommand(
-        std::uint16_t _command
-    ,   bool _withPostDelay
+        std::uint8_t _command
 )
 {
     m_pBusPtr->sendData( _command );
@@ -77,13 +81,14 @@ void St7789V::sendCommand(
 
 template< typename ... Args >
 void St7789V::sendCommand(
-        std::uint16_t _command
-    ,   bool _withPostDelay
+        std::uint8_t _command
     ,   Args... _commandArgs
     )
 {
     m_pBusPtr->sendData( _command );
-    (m_pBusPtr->sendData( _commandArgs ), ...);
+    std::array argList = { _commandArgs... };
+
+    m_pBusPtr->sendChunk( argList );
 }
 
 std::unique_ptr<St7789V>

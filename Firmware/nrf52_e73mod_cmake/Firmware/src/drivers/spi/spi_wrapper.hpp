@@ -2,7 +2,7 @@
 
 #include<memory>
 #include "nrfx_spim.h"
-#include "bsp.h"
+#include "pca10040.h"
 
 namespace Interface::Spi
 {
@@ -15,7 +15,6 @@ namespace SpiInstance
         static constexpr std::uint8_t MisoPin = SPIM0_MISO_PIN;
         static constexpr std::uint8_t MosiPin = SPIM0_MOSI_PIN;
         static constexpr std::uint8_t SlaveSelectPin = SPIM0_SS_PIN;
-        static constexpr std::uint8_t DataCommandPin = SPIM0_DC_PIN;
     };
 };
 
@@ -29,7 +28,6 @@ public:
         ,   std::uint8_t _misoPin
         ,   std::uint8_t _mosiPin
         ,   std::uint8_t _chipSelectPin
-        ,   std::uint8_t _dataCommandPin
     );
 
     ~SpiBus() = default;
@@ -41,6 +39,9 @@ public:
     void endTransaction();
 
     bool sendData( std::uint8_t _data );
+
+    template< typename TSequenceContainter>
+    bool sendChunk( const TSequenceContainter& _arrayToTransmit );
 
 private:
 
@@ -63,8 +64,19 @@ std::unique_ptr<SpiBus> createSpiBus()
         ,   TSpiInstance::MisoPin
         ,   TSpiInstance::MosiPin
         ,   TSpiInstance::SlaveSelectPin
-        ,   TSpiInstance::DataCommandPin
     );
+}
+
+template< typename TSequenceContainter>
+bool SpiBus::sendChunk( const TSequenceContainter& _arrayToTransmit )
+{
+    nrfx_spim_xfer_desc_t xfer_desc =
+        NRFX_SPIM_XFER_TX(
+                _arrayToTransmit.data()
+            ,   _arrayToTransmit.size()
+        );
+
+    return true;
 }
 
 } // namespace Interface

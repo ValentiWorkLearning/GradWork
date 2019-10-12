@@ -1,5 +1,5 @@
 #include "spi_wrapper.hpp"
-#include "bsp.h"
+#include "pca10040.h"
 #include "CallbackConnector.hpp"
 
 #define SPI_INSTANCE  0
@@ -11,7 +11,6 @@ SpiBus::SpiBus(
         ,   std::uint8_t _misoPin
         ,   std::uint8_t _mosiPin
         ,   std::uint8_t _chipSelectPin
-        ,   std::uint8_t _dataCommandPin
     )
 {
 
@@ -54,7 +53,6 @@ SpiBus::SpiBus(
 
 void SpiBus::beginTransaction()
 {
-    
 }
 
 void SpiBus::endTransaction()
@@ -67,12 +65,27 @@ void SpiBus::spimEventHandler(
     ,   void* _pContext
 )
 {
-
+    if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
+    {
+        //okay
+    }
 }
 
 bool SpiBus::sendData( std::uint8_t _data )
 {
-    
+      
+    nrfx_spim_xfer_desc_t xfer_desc =
+        NRFX_SPIM_XFER_TX(
+                &_data
+            ,   1
+        );
+
+    nrfx_err_t transmissionError = nrfx_spim_xfer(
+            &m_spiHandle
+        ,   &xfer_desc
+        ,   0
+    );
+
     return true;
 }
 

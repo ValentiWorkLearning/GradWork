@@ -70,6 +70,15 @@
         "stdbool.h": "c",
         "nordic_common.h": "c",
         "sdk_errors.h": "c",
-        "sdk_macros.h": "c"
+        "sdk_macros.h": "c",
+        "algorithm": "cpp",
+        "ios": "cpp",
+        "iterator": "cpp",
+        "xfacet": "cpp",
+        "xhash": "cpp",
+        "xiosbase": "cpp",
+        "xlocale": "cpp",
+        "xlocinfo": "cpp",
+        "xlocnum": "cpp"
     }
 }

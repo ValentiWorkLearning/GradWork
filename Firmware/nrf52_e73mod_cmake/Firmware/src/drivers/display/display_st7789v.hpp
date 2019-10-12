@@ -21,16 +21,13 @@ private:
 
     void initDisplay();
 
-    template<typename>
     void sendCommand(
-            std::uint16_t _command
-        ,   bool _withPostDelay = false
+            std::uint8_t _command
     );
 
     template< typename ... Args >
     void sendCommand(
-            std::uint16_t _command
-        ,   bool _withPostDelay = false
+            std::uint8_t _command
         ,   Args... _commandArgs
     );
 
