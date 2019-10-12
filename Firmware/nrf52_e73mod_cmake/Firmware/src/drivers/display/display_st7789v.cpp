@@ -1,6 +1,8 @@
 #include "display_st7789v.hpp"
 #include "display_st7789v_constants.hpp"
 
+#include "spi/spi_wrapper.hpp"
+
 // Based on Adafruit's implementation: https://github.com/adafruit/Adafruit-ST7735-Library/
 
 namespace

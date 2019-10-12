@@ -4,14 +4,7 @@
 
 namespace Interface::Spi
 {
-    struct SpiBus{
-
-        bool sendData( std::uint16_t _data  )
-        {
-            return true;
-        }
-
-    };
+    class SpiBus;
 }
 
 namespace DisplayDriver

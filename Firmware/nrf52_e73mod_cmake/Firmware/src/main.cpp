@@ -11,6 +11,7 @@
 #include "bsp.h"
 
 #include "drivers/display/display_st7789v.hpp"
+#include "drivers/spi/spi_wrapper.hpp"
 
 namespace UartConstants
 {
@@ -87,6 +88,8 @@ int main(void)
     initSwoPrint();
 
     auto display = DisplayDriver::createDisplayDriver();
+
+    auto spiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M0>();
 
     /* Toggle LEDs. */
     auto ledToggler = 

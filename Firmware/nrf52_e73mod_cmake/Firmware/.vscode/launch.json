@@ -9,7 +9,7 @@
         "request": "launch",
         "name": "Debug J-Link",
         "cwd": "${workspaceRoot}",
-        "executable": "${workspaceRoot}//build//src//BlinkyExample.out",
+        "executable": "${workspaceRoot}//build//src//E73DevBoardBin.out",
         "serverpath": "JLinkGDBServerCL.exe", 
         "servertype": "jlink",
         "device": "NRF52",

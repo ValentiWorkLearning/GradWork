@@ -119,6 +119,7 @@ macro(nRF5x_setup)
             "${NRF5_SDK_PATH}/modules/nrfx/drivers/src/nrfx_clock.c"
             "${NRF5_SDK_PATH}/modules/nrfx/drivers/src/nrfx_gpiote.c"
             "${NRF5_SDK_PATH}/modules/nrfx/drivers/src/nrfx_uart.c"
+            "${NRF5_SDK_PATH}/modules/nrfx/drivers/src/nrfx_spim.c"
             "${NRF5_SDK_PATH}/modules/nrfx/drivers/src/nrfx_uarte.c"
             "${NRF5_SDK_PATH}/modules/nrfx/drivers/src/prs/nrfx_prs.c"
             "${NRF5_SDK_PATH}/modules/nrfx/soc/nrfx_atomic.c"
