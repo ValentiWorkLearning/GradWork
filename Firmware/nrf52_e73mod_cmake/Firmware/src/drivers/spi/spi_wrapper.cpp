@@ -2,10 +2,16 @@
 #include "pca10040.h"
 #include "CallbackConnector.hpp"
 
+#include <array>
+
 #define SPI_INSTANCE  0
 
 namespace Interface::Spi
 {
+
+std::array<std::uint8_t,SpiBus::DmaArraySize>
+SpiBus::DmaArray = {};
+
 SpiBus::SpiBus(
             std::uint8_t _clockPin
         ,   std::uint8_t _misoPin
@@ -17,7 +23,7 @@ SpiBus::SpiBus(
     // using TInstanceEnum = std::underlying_type_t< SpiInstance >;
     // TInstanceEnum instanceId = static_cast<TInstanceEnum>( _spiInstance );
     // NRFX_SPIM0_INST_IDX;
-
+    m_transactionSize = 0;
     m_spiHandle = NRFX_SPIM_INSTANCE( SPI_INSTANCE );
 
     nrfx_spim_config_t spiConfig{};
@@ -51,15 +57,6 @@ SpiBus::SpiBus(
 
 }
 
-void SpiBus::beginTransaction()
-{
-}
-
-void SpiBus::endTransaction()
-{
-    
-}
-
 void SpiBus::spimEventHandler(
         nrfx_spim_evt_t const* _pEvent
     ,   void* _pContext
@@ -71,13 +68,24 @@ void SpiBus::spimEventHandler(
     }
 }
 
+void SpiBus::resetDcPin()
+{
+    // reset DC pin
+}
+    
+void SpiBus::setDcPin()
+{
+    // set DC pin
+}
+
 bool SpiBus::sendData( std::uint8_t _data )
 {
-      
+    m_transactionSize = 1;
+
     nrfx_spim_xfer_desc_t xfer_desc =
         NRFX_SPIM_XFER_TX(
-                &_data
-            ,   1
+                SpiBus::DmaArray.data()
+            ,   m_transactionSize
         );
 
     nrfx_err_t transmissionError = nrfx_spim_xfer(

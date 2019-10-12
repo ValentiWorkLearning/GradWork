@@ -10,7 +10,9 @@
 #include "app_error.h"
 #include "bsp.h"
 
+#include "drivers/display/display_st7789v_constants.hpp"
 #include "drivers/display/display_st7789v.hpp"
+
 #include "drivers/spi/spi_wrapper.hpp"
 
 namespace UartConstants
@@ -87,9 +89,16 @@ int main(void)
 
     initSwoPrint();
 
-    auto display = DisplayDriver::createDisplayDriver();
-
     auto spiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M0>();
+
+    auto display = DisplayDriver::createDisplayDriver(
+            spiInstance.get()
+        ,   DisplayDriver::St7789v::Disp208_240::Width
+        ,   DisplayDriver::St7789v::Disp208_240::Height
+    );
+
+    display->drawPixel( 100,100,DisplayDriver::Colors::GREEN );
+    display->fillColor( DisplayDriver::Colors::GREEN );
 
     /* Toggle LEDs. */
     auto ledToggler = 

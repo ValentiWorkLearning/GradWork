@@ -34,14 +34,14 @@ public:
 
 public:
 
-    void beginTransaction( );
-
-    void endTransaction();
-
     bool sendData( std::uint8_t _data );
 
     template< typename TSequenceContainter>
     bool sendChunk( const TSequenceContainter& _arrayToTransmit );
+
+    void resetDcPin();
+    
+    void setDcPin();
 
 private:
 
@@ -54,6 +54,11 @@ private:
 
 private:
     nrfx_spim_t m_spiHandle;
+
+    std::uint16_t m_transactionSize;
+
+    static constexpr std::uint16_t DmaArraySize = 256;
+    static std::array<std::uint8_t,DmaArraySize> DmaArray;
 };
 
 template< typename TSpiInstance >
@@ -70,11 +75,25 @@ std::unique_ptr<SpiBus> createSpiBus()
 template< typename TSequenceContainter>
 bool SpiBus::sendChunk( const TSequenceContainter& _arrayToTransmit )
 {
+    m_transactionSize = _arrayToTransmit.size();
+
+    std::copy(
+            std::begin( _arrayToTransmit )
+        ,   std::end( _arrayToTransmit )
+        ,   std::begin( SpiBus::DmaArray )
+    );
+
     nrfx_spim_xfer_desc_t xfer_desc =
         NRFX_SPIM_XFER_TX(
-                _arrayToTransmit.data()
-            ,   _arrayToTransmit.size()
+                SpiBus::DmaArray.data()
+            ,   m_transactionSize
         );
+
+    nrfx_err_t transmissionError = nrfx_spim_xfer(
+            &m_spiHandle
+        ,   &xfer_desc
+        ,   0
+    );
 
     return true;
 }

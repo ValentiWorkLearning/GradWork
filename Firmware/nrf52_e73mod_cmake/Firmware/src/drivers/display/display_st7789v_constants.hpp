@@ -51,15 +51,29 @@ namespace St7789vRegisters
 };
 };
 
-namespace DisplayDriver::Colors
+namespace DisplayDriver
 {
-    constexpr std::uint32_t BLACK      = 0x0000;
-    constexpr std::uint32_t WHITE      = 0xFFFF;
-    constexpr std::uint32_t RED        = 0xF800;
-    constexpr std::uint32_t GREEN      = 0x07E0;
-    constexpr std::uint32_t BLUE       = 0x001F;
-    constexpr std::uint32_t CYAN       = 0x07FF;
-    constexpr std::uint32_t MAGENTA    = 0xF81F;
-    constexpr std::uint32_t YELLOW     = 0xFFE0;
-    constexpr std::uint32_t ORANGE     = 0xFC00;
+    enum class Colors
+    {
+            BLACK      = 0x0000
+        ,   WHITE      = 0xFFFF
+        ,   RED        = 0xF800
+        ,   GREEN      = 0x07E0
+        ,   BLUE       = 0x001F
+        ,   CYAN       = 0x07FF
+        ,   MAGENTA    = 0xF81F
+        ,   YELLOW     = 0xFFE0
+        ,   ORANGE     = 0xFC00
+    };
 };
+namespace DisplayDriver::St7789v::Disp208_240
+{
+    constexpr std::uint8_t Width = 240;
+    constexpr std::uint8_t Height = 240;
+}
+
+namespace DisplayDriver::St7789v::Disp240_320
+{
+    constexpr std::uint8_t Width = 240;
+    constexpr std::uint16_t Height = 320;
+}

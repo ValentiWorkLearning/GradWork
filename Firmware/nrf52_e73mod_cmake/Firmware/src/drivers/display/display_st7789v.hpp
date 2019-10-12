@@ -1,6 +1,9 @@
 #pragma once
 
 #include <memory>
+#include <cstdint>
+
+#include "display/display_st7789v_constants.hpp"
 
 namespace Interface::Spi
 {
@@ -14,8 +17,27 @@ class St7789V
 {
 
 public:
-    constexpr explicit St7789V( Interface::Spi::SpiBus* _busPtr );
+
+    explicit St7789V(
+            Interface::Spi::SpiBus* _busPtr
+        ,   std::uint16_t _width
+        ,   std::uint16_t _height
+    );
+
     ~St7789V() = default;
+
+    void turnOn();
+
+    void turnOff();
+
+
+    void drawPixel(
+            std::uint16_t _x
+        ,   std::uint16_t _y
+        ,   DisplayDriver::Colors _color
+    );
+
+    void fillColor( DisplayDriver::Colors _color );
 
 private:
 
@@ -31,13 +53,48 @@ private:
         ,   Args... _commandArgs
     );
 
+    template< typename ... Args >
+    void sendChunk(
+        Args... _commandArgs
+    );
+
+    void initColumnRow(
+            std::uint16_t _width
+        ,   std::uint16_t _height
+    );
+
+    void setAddrWindow(
+            std::uint16_t _x
+        ,   std::uint16_t _y
+        ,   std::uint16_t _width
+        ,   std::uint16_t _height
+    );
+
+    void fillRectangle(
+            std::uint16_t _x
+        ,   std::uint16_t _y
+        ,   std::uint16_t _width
+        ,   std::uint16_t _height
+        ,   DisplayDriver::Colors _color
+    );
+
 private:
 
+    std::uint8_t m_columnStart;
+    std::uint8_t m_rowStart;
+
+    const std::uint16_t m_width;
+    const std::uint16_t m_height;
+    
     Interface::Spi::SpiBus* m_pBusPtr;
 };
 
 std::unique_ptr<St7789V>
-createDisplayDriver();
+createDisplayDriver(
+        Interface::Spi::SpiBus* _busPtr
+    ,   std::uint16_t _width
+    ,   std::uint16_t _height
+);
 
 }; // namespace DisplayDriver
 
