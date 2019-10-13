@@ -85,7 +85,7 @@ int main(void)
     /* Configure board. */
     bsp_board_init(BSP_INIT_LEDS);
 
-    initUartModule();
+    // initUartModule();
 
     initSwoPrint();
 
@@ -97,8 +97,23 @@ int main(void)
         ,   DisplayDriver::St7789v::Disp208_240::Height
     );
 
-    display->drawPixel( 100,100,DisplayDriver::Colors::GREEN );
+    //display->drawPixel( 100,100,DisplayDriver::Colors::GREEN );
+
     display->fillColor( DisplayDriver::Colors::GREEN );
+    nrf_delay_ms(500);
+    display->fillColor( DisplayDriver::Colors::RED );
+    nrf_delay_ms(500);
+    display->fillColor( DisplayDriver::Colors::BLUE );
+    nrf_delay_ms(500);
+    display->fillColor( DisplayDriver::Colors::CYAN );
+    nrf_delay_ms(500);
+    display->fillColor( DisplayDriver::Colors::WHITE );
+    nrf_delay_ms(500);
+    display->fillColor( DisplayDriver::Colors::MAGENTA );
+    nrf_delay_ms(500);
+    display->fillColor( DisplayDriver::Colors::YELLOW );
+    nrf_delay_ms(500);
+    display->fillColor( DisplayDriver::Colors::ORANGE );
 
     /* Toggle LEDs. */
     auto ledToggler = 
@@ -125,7 +140,7 @@ int main(void)
     while (true)
     {
         ledToggler( 300 );
-        uartWriter();
+        //uartWriter();
         swoPrinter();
     }
 }

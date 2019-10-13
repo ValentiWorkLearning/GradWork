@@ -18,12 +18,16 @@ SpiBus::SpiBus(
         ,   std::uint8_t _mosiPin
         ,   std::uint8_t _chipSelectPin
     )
+    :   m_isTransactionCompleted{ true }
+    ,   m_repeatsCount{}
 {
 
     // using TInstanceEnum = std::underlying_type_t< SpiInstance >;
     // TInstanceEnum instanceId = static_cast<TInstanceEnum>( _spiInstance );
     // NRFX_SPIM0_INST_IDX;
-    m_transactionSize = 0;
+
+    initGpio();
+
     m_spiHandle = NRFX_SPIM_INSTANCE( SPI_INSTANCE );
 
     nrfx_spim_config_t spiConfig{};
@@ -42,7 +46,7 @@ SpiBus::SpiBus(
      auto eventHandler = cbc::obtain_connector(
        [ this ]( nrfx_spim_evt_t const* _pEvent, void* _pContext )
        {
-           this->spimEventHandler( _pEvent,_pContext );
+           spimEventHandler( _pEvent,_pContext );
        }
      );
 
@@ -64,37 +68,101 @@ void SpiBus::spimEventHandler(
 {
     if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
     {
-        //okay
+        m_isTransactionCompleted = true;
+
+        if( !m_transactionsQueue.empty() )
+        {
+            if( m_transactionsQueue.front().afterTransaction )
+                m_transactionsQueue.front().afterTransaction();
+
+            m_transactionsQueue.pop();
+
+            runQueue();
+        }
+
+        if( m_repeatsCount != 0 )
+        {
+            --m_repeatsCount;
+            performTransaction( SpiBus::DmaArraySize );
+        }
     }
 }
 
 void SpiBus::resetDcPin()
 {
-    // reset DC pin
+    nrf_gpio_pin_clear( SPIM0_DC_PIN );
 }
     
 void SpiBus::setDcPin()
 {
-    // set DC pin
+    nrf_gpio_pin_set( SPIM0_DC_PIN );
+}
+
+void SpiBus::initGpio()
+{
+    nrf_gpio_cfg_output( SPIM0_DC_PIN );
+}
+
+
+std::uint16_t SpiBus::getDmaBufferSize()
+{
+    return SpiBus::DmaArray.size();
+}
+
+void SpiBus::addTransaction( Transaction && _item )
+{
+    m_transactionsQueue.push( std::move( _item ) );
+}
+
+void SpiBus::runQueue()
+{
+    if( !m_transactionsQueue.empty() && m_isTransactionCompleted )
+    {
+        if( m_transactionsQueue.front().beforeTransaction )
+            m_transactionsQueue.front().beforeTransaction();
+
+        m_transactionsQueue.front().transactionAction();
+    }
 }
 
 bool SpiBus::sendData( std::uint8_t _data )
 {
-    m_transactionSize = 1;
+    constexpr std::uint8_t transactionSize = 1;
 
-    nrfx_spim_xfer_desc_t xfer_desc =
+    while( m_isTransactionCompleted )
+    {        
+        SpiBus::DmaArray[0] = _data;
+        performTransaction( transactionSize );
+    }
+    return true;
+}
+
+void SpiBus::performTransaction( uint16_t _dataSize )
+{
+    m_isTransactionCompleted = false;
+
+    nrfx_spim_xfer_desc_t xferDesc =
         NRFX_SPIM_XFER_TX(
                 SpiBus::DmaArray.data()
-            ,   m_transactionSize
+            ,   _dataSize
         );
 
     nrfx_err_t transmissionError = nrfx_spim_xfer(
             &m_spiHandle
-        ,   &xfer_desc
+        ,   &xferDesc
         ,   0
     );
 
-    return true;
+    APP_ERROR_CHECK( transmissionError );
+}
+
+void SpiBus::runRepeatedSend( std::uint16_t _repeatsCount )
+{
+    while( m_isTransactionCompleted )
+    {
+        performTransaction( SpiBus::DmaArraySize );
+        m_repeatsCount = _repeatsCount;
+    }
 }
 
 };

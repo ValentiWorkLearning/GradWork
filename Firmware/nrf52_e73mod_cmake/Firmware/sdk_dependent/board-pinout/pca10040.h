@@ -92,16 +92,17 @@ extern "C" {
 #define RTS_PIN_NUMBER 5
 #define HWFC           true
 
-#define SPIS_MISO_PIN   28  // SPI MISO signal.
-#define SPIS_CSN_PIN    12  // SPI CSN signal.
-#define SPIS_MOSI_PIN   25  // SPI MOSI signal.
-#define SPIS_SCK_PIN    29  // SPI SCK signal.
+// #define SPIS_MISO_PIN   28  // SPI MISO signal.
+// #define SPIS_CSN_PIN    12  // SPI CSN signal.
+// #define SPIS_MOSI_PIN   25  // SPI MOSI signal.
+// #define SPIS_SCK_PIN    29  // SPI SCK signal.
 
-#define SPIM0_SCK_PIN   27  // SPI clock GPIO pin number.
-#define SPIM0_MOSI_PIN  28  // SPI Master Out Slave In GPIO pin number.
-#define SPIM0_MISO_PIN  29  // SPI Master In Slave Out GPIO pin number.
-#define SPIM0_SS_PIN    30  // SPI Slave Select GPIO pin number.
-#define SPIM0_DC_PIN    31  // SPI Slave Select GPIO pin number.
+#define SPIM0_SCK_PIN   28  // SPI clock GPIO pin number.
+#define SPIM0_MOSI_PIN  29  // SPI Master Out Slave In GPIO pin number.
+#define SPIM0_MISO_PIN  2   // SPI Master In Slave Out GPIO pin number.
+#define SPIM0_SS_PIN    27  // SPI Slave Select GPIO pin number.
+#define SPIM0_DC_PIN    30  // SPI Slave Select GPIO pin number.
+#define DISP_RST        31
 
 #define SPIM1_SCK_PIN   2   // SPI clock GPIO pin number.
 #define SPIM1_MOSI_PIN  3   // SPI Master Out Slave In GPIO pin number.
@@ -119,12 +120,12 @@ extern "C" {
 #define SER_APP_CTS_PIN             2     // UART Clear To Send pin number.
 #define SER_APP_RTS_PIN             25    // UART Request To Send pin number.
 
-#define SER_APP_SPIM0_SCK_PIN       27     // SPI clock GPIO pin number.
-#define SER_APP_SPIM0_MOSI_PIN      2      // SPI Master Out Slave In GPIO pin number
-#define SER_APP_SPIM0_MISO_PIN      26     // SPI Master In Slave Out GPIO pin number
-#define SER_APP_SPIM0_SS_PIN        23     // SPI Slave Select GPIO pin number
-#define SER_APP_SPIM0_RDY_PIN       25     // SPI READY GPIO pin number
-#define SER_APP_SPIM0_REQ_PIN       24     // SPI REQUEST GPIO pin number
+// #define SER_APP_SPIM0_SCK_PIN       27     // SPI clock GPIO pin number.
+// #define SER_APP_SPIM0_MOSI_PIN      2      // SPI Master Out Slave In GPIO pin number
+// #define SER_APP_SPIM0_MISO_PIN      26     // SPI Master In Slave Out GPIO pin number
+// #define SER_APP_SPIM0_SS_PIN        23     // SPI Slave Select GPIO pin number
+// #define SER_APP_SPIM0_RDY_PIN       25     // SPI READY GPIO pin number
+// #define SER_APP_SPIM0_REQ_PIN       24     // SPI REQUEST GPIO pin number
 
 // serialization CONNECTIVITY board
 #define SER_CON_RX_PIN              24    // UART RX pin number.
@@ -133,18 +134,18 @@ extern "C" {
 #define SER_CON_RTS_PIN             2     // UART Request To Send pin number. Not used if HWFC is set to false.
 
 
-#define SER_CON_SPIS_SCK_PIN        27    // SPI SCK signal.
-#define SER_CON_SPIS_MOSI_PIN       2     // SPI MOSI signal.
-#define SER_CON_SPIS_MISO_PIN       26    // SPI MISO signal.
-#define SER_CON_SPIS_CSN_PIN        23    // SPI CSN signal.
-#define SER_CON_SPIS_RDY_PIN        25    // SPI READY GPIO pin number.
-#define SER_CON_SPIS_REQ_PIN        24    // SPI REQUEST GPIO pin number.
+// #define SER_CON_SPIS_SCK_PIN        27    // SPI SCK signal.
+// #define SER_CON_SPIS_MOSI_PIN       2     // SPI MOSI signal.
+// #define SER_CON_SPIS_MISO_PIN       26    // SPI MISO signal.
+// #define SER_CON_SPIS_CSN_PIN        23    // SPI CSN signal.
+// #define SER_CON_SPIS_RDY_PIN        25    // SPI READY GPIO pin number.
+// #define SER_CON_SPIS_REQ_PIN        24    // SPI REQUEST GPIO pin number.
 
 #define SER_CONN_CHIP_RESET_PIN     11    // Pin used to reset connectivity chip
 
 
 // Arduino board mappings
-#define ARDUINO_SCL_PIN             27    // SCL signal pin
+// #define ARDUINO_SCL_PIN             27    // SCL signal pin
 #define ARDUINO_SDA_PIN             26    // SDA signal pin
 #define ARDUINO_AREF_PIN            2     // Aref pin
 #define ARDUINO_13_PIN              25    // Digital pin 13

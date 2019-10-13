@@ -1,6 +1,7 @@
 #include "display_st7789v.hpp"
 #include "display_st7789v_constants.hpp"
 
+#include "spi/transaction_item.hpp"
 #include "spi/spi_wrapper.hpp"
 
 #include "nrf_delay.h"
@@ -10,39 +11,7 @@
 // Based on Adafruit's implementation: https://github.com/adafruit/Adafruit-ST7735-Library/
 // Thanks eax.me : https://github.com/afiskon/stm32-st7735/blob/master/st7735/st7735.c
 
-namespace
-{
-    namespace DisplayReg = DisplayDriver::St7789vRegisters;
-    constexpr std::int16_t InitSequenceSt7789[] =
-    {                                                   // Init commands for 7789 screens
-            9                                           //  9 commands in list:
-        ,   DisplayReg::SWRESET,   DisplayReg::DELAY    //  1: Software reset, no args, w/delay
-        ,   150                                         //     ~150 ms delay
-        ,   DisplayReg::SLPOUT ,   DisplayReg::DELAY    //  2: Out of sleep mode, no args, w/delay
-        ,   10                                          //      10 ms delay
-        ,   DisplayReg::COLMOD , 1+DisplayReg::DELAY    //  3: Set color mode, 1 arg + delay:
-        ,   0x55                                        //      16-bit color
-        ,   10                                          //     10 ms delay
-        ,   DisplayReg::MADCTL , 1                      //  4: Mem access ctrl (directions), 1 arg:
-        ,   0x08                                        //     Row/col addr, bottom-top refresh
-        ,   DisplayReg::CASET  , 4                      //  5: Column addr set, 4 args, no delay:
-        ,   0x00
-        ,   0                                           //     XSTART = 0
-        ,   0
-        ,   240                                         //     XEND = 240
-        ,   DisplayReg::RASET  , 4                      //  6: Row addr set, 4 args, no delay:
-        ,   0x00
-        ,   0                                           //     YSTART = 0
-        ,   320>>8
-        ,   320&0xFF                                    //     YEND = 320
-        ,   DisplayReg::INVON  ,   DisplayReg::DELAY    //  7: hack
-        ,   10
-        ,   DisplayReg::NORON  ,   DisplayReg::DELAY    //  8: Normal display on, no args, w/delay
-        ,   10                                          //     10 ms delay
-        ,   DisplayReg::DISPON ,   DisplayReg::DELAY    //  9: Main screen turn on, no args, delay
-        ,   10                                          //    10 ms delay
-    };
-};
+namespace DisplayReg = DisplayDriver::St7789vRegisters;
 
 namespace DisplayDriver
 {
@@ -56,10 +25,7 @@ St7789V::St7789V(
     ,   m_height { _height }
     ,   m_pBusPtr{ _busPtr }
 {
-    //Just dummy action
-    for( auto item : InitSequenceSt7789 )
-        int a = item++;
-
+    initGpio();
     initDisplay();
     initColumnRow( _width, _height );
 }
@@ -67,30 +33,51 @@ St7789V::St7789V(
 void
 St7789V::initDisplay()
 {
+    nrf_gpio_pin_clear( DISP_RST );
+    nrf_delay_ms( 100 );
+    nrf_gpio_pin_set( DISP_RST );
+
     sendCommand(    DisplayReg::SWRESET    );
-    nrf_delay_ms( 150 );
+    // nrf_delay_ms( 150 );
     sendCommand(    DisplayReg::SLPOUT     );
-    nrf_delay_ms( 10 );
     sendCommand(    DisplayReg::COLMOD     , 0x55   );
-    nrf_delay_ms( 10 );
     sendCommand(    DisplayReg::MADCTL     , 0x08   );
     sendCommand(    DisplayReg::CASET      , 0x00,0,0,240 );
     sendCommand(    DisplayReg::RASET      , 0x00, 0, 320>>8, 320&0xFF );
     sendCommand(    DisplayReg::INVON      );
-    nrf_delay_ms( 10 );
     sendCommand(    DisplayReg::NORON      );
-    nrf_delay_ms( 10 );
     sendCommand(    DisplayReg::DISPON     );
-    nrf_delay_ms( 10 );
+    sendCommand(    DisplayReg::MADCTL     , 0xC0   );
+
+    m_pBusPtr->runQueue();
 }
 
 void St7789V::sendCommand(
         std::uint8_t _command
 )
 {
-    m_pBusPtr->resetDcPin();
-    m_pBusPtr->sendData( _command );
-    m_pBusPtr->setDcPin();
+    Interface::Spi::Transaction commandTransaction;
+
+    commandTransaction.beforeTransaction =
+        [ this ]
+        {
+            m_pBusPtr->resetDcPin();
+        };
+    
+    commandTransaction.transactionAction =
+        [ this, _command ]
+        {
+            m_pBusPtr->sendData( _command );
+        };
+
+    commandTransaction.afterTransaction =
+        [ this ]
+        {
+            m_pBusPtr->setDcPin();
+        };
+    
+    m_pBusPtr->addTransaction( std::move( commandTransaction ) );
+
 }
 
 template< typename ... Args >
@@ -109,9 +96,28 @@ void St7789V::sendChunk(
 )
 {
     std::array chunk = { _chunkArgs... };
+
+    Interface::Spi::Transaction chunkTransaction;
+
+    chunkTransaction.beforeTransaction =
+        [ this ]
+        {
+            m_pBusPtr->setDcPin();
+        };
     
-    m_pBusPtr->setDcPin();
-    m_pBusPtr->sendChunk( chunk );
+    chunkTransaction.transactionAction =
+        [ this, chunk ]
+        {
+            m_pBusPtr->sendChunk( chunk );
+        };
+
+    chunkTransaction.afterTransaction =
+        [ this ]
+        {
+            m_pBusPtr->resetDcPin();
+        };
+    
+    m_pBusPtr->addTransaction( std::move( chunkTransaction ) );
 }
 
 void St7789V::initColumnRow(
@@ -125,9 +131,9 @@ void St7789V::initColumnRow(
     )
     {
         m_columnStart = 0;
-        m_rowStart = 80;        
+        m_rowStart = 110;
     }
-    else if( 
+    else if(
             _width == DisplayDriver::St7789v::Disp240_320::Width
         &&  _height == DisplayDriver::St7789v::Disp240_320::Height
     )
@@ -182,16 +188,28 @@ void St7789V::fillRectangle(
         ,   _y + _height - 1
     );
 
-    for(_y = _height; _y > 0; _y--)
-    {
-        for(_x = _width; _x > 0; _x--)
+    sendCommand( DisplayReg::RAMWR );
+
+    m_pBusPtr->fillDmaArray(
+        [ localColor ]( size_t index )
         {
-            sendChunk(
-                    localColor >> 8
-                ,   localColor & 0xFF
-            );
+            std::uint8_t value = ( index % 2 ) == 0 ? localColor >> 8 : localColor & 0xFF;
+            return value;
         }
-    }
+    );
+
+    m_pBusPtr->runQueue();
+    m_pBusPtr->runRepeatedSend( _height * 2 );
+
+    // // // get _height
+    // // // get _width
+
+    // for(_y = _height; _y > 0; _y--)
+    // {
+    //     sendChunk( localColor >> 8 );
+    //     sendChunk( localColor & 0xFF );
+    // }
+    // m_pBusPtr->runQueue();
 }
 
 void St7789V::setAddrWindow(
@@ -201,24 +219,29 @@ void St7789V::setAddrWindow(
         ,   std::uint16_t _height
 )
 {
-    constexpr std::uint8_t ST7789_XSTART = 0;
-    constexpr std::uint8_t ST7789_YSTART = 0;
+    _x +=m_columnStart;
+    _y +=m_rowStart;
+
+    uint32_t xa = ((uint32_t)_x << 16) | (_x+_width-1);
+    uint32_t ya = ((uint32_t)_y << 16) | (_y+_height-1); 
 
     sendCommand(
             DisplayReg::CASET
-        ,   0x00
-        ,   _x + ST7789_XSTART
-        ,   0x00
-        ,   _width + ST7789_XSTART
+        ,   static_cast<std::uint8_t>( xa >> 24 )
+        ,   static_cast<std::uint8_t>( xa >> 16 )
+        ,   static_cast<std::uint8_t>( xa >> 8 )
+        ,   static_cast<std::uint8_t>( xa )
     );
 
     sendCommand(
             DisplayReg::RASET
-        ,   0x00
-        ,   _y + ST7789_YSTART
-        ,   0x00
-        ,   _height + ST7789_YSTART
+        ,   static_cast<std::uint8_t>( ya >> 24 )
+        ,   static_cast<std::uint8_t>( ya >> 16 )
+        ,   static_cast<std::uint8_t>( ya >> 8 )
+        ,   static_cast<std::uint8_t>( ya )
     );
+    
+    m_pBusPtr->runQueue();
 }
 
 void St7789V::drawPixel(
@@ -237,6 +260,12 @@ void St7789V::drawPixel(
             localColor >> 8
         ,   localColor & 0xFF
     );
+    m_pBusPtr->runQueue();
+}
+
+void St7789V::initGpio()
+{
+    nrf_gpio_cfg_output( DISP_RST );
 }
 
 std::unique_ptr<St7789V>

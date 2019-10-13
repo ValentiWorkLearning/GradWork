@@ -78,6 +78,8 @@ private:
         ,   DisplayDriver::Colors _color
     );
 
+    void initGpio();
+
 private:
 
     std::uint8_t m_columnStart;
