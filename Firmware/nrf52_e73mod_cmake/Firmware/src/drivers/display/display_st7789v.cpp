@@ -38,7 +38,7 @@ St7789V::initDisplay()
     nrf_gpio_pin_set( DISP_RST );
 
     sendCommand(    DisplayReg::SWRESET    );
-    // nrf_delay_ms( 150 );
+    nrf_delay_ms( 150 );
     sendCommand(    DisplayReg::SLPOUT     );
     sendCommand(    DisplayReg::COLMOD     , 0x55   );
     sendCommand(    DisplayReg::MADCTL     , 0x08   );

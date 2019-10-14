@@ -85,7 +85,7 @@ int main(void)
     /* Configure board. */
     bsp_board_init(BSP_INIT_LEDS);
 
-    // initUartModule();
+    initUartModule();
 
     initSwoPrint();
 
@@ -96,24 +96,34 @@ int main(void)
         ,   DisplayDriver::St7789v::Disp208_240::Width
         ,   DisplayDriver::St7789v::Disp208_240::Height
     );
+    nrf_delay_ms(230);
 
-    //display->drawPixel( 100,100,DisplayDriver::Colors::GREEN );
-
-    display->fillColor( DisplayDriver::Colors::GREEN );
-    nrf_delay_ms(500);
-    display->fillColor( DisplayDriver::Colors::RED );
-    nrf_delay_ms(500);
-    display->fillColor( DisplayDriver::Colors::BLUE );
-    nrf_delay_ms(500);
-    display->fillColor( DisplayDriver::Colors::CYAN );
-    nrf_delay_ms(500);
     display->fillColor( DisplayDriver::Colors::WHITE );
-    nrf_delay_ms(500);
-    display->fillColor( DisplayDriver::Colors::MAGENTA );
-    nrf_delay_ms(500);
-    display->fillColor( DisplayDriver::Colors::YELLOW );
-    nrf_delay_ms(500);
+    nrf_delay_ms(110);
+    display->fillColor( DisplayDriver::Colors::BLACK );
+    nrf_delay_ms(110);
+    display->fillColor( DisplayDriver::Colors::BLUE );
+    nrf_delay_ms(110);
     display->fillColor( DisplayDriver::Colors::ORANGE );
+    nrf_delay_ms(110);
+    display->fillColor( DisplayDriver::Colors::YELLOW );
+    nrf_delay_ms(110);
+    display->fillColor( DisplayDriver::Colors::RED );
+    nrf_delay_ms(110);
+    display->fillColor( DisplayDriver::Colors::CYAN );
+    nrf_delay_ms(110);
+    display->fillColor( DisplayDriver::Colors::MAGENTA );
+    nrf_delay_ms(110);
+    display->fillColor( DisplayDriver::Colors::BLACK );
+    nrf_delay_ms(110);
+    display->fillRectangle( 40,50,70,75,DisplayDriver::Colors::RED );
+    nrf_delay_ms(80);
+    display->fillRectangle( 70,70,40,55,DisplayDriver::Colors::BLUE );
+    nrf_delay_ms(80);
+    display->fillRectangle( 20,10,60,50,DisplayDriver::Colors::MAGENTA );
+    nrf_delay_ms(80);
+    display->fillRectangle( 30,40,60,50,DisplayDriver::Colors::ORANGE );
+    nrf_delay_ms(80);
 
     /* Toggle LEDs. */
     auto ledToggler = 
@@ -140,7 +150,7 @@ int main(void)
     while (true)
     {
         ledToggler( 300 );
-        //uartWriter();
+        uartWriter();
         swoPrinter();
     }
 }

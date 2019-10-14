@@ -116,7 +116,7 @@ void SpiBus::addTransaction( Transaction && _item )
 
 void SpiBus::runQueue()
 {
-    if( !m_transactionsQueue.empty() && m_isTransactionCompleted )
+    if( !m_transactionsQueue.empty() && m_isTransactionCompleted && ( m_repeatsCount == 0 ) )
     {
         if( m_transactionsQueue.front().beforeTransaction )
             m_transactionsQueue.front().beforeTransaction();

@@ -39,6 +39,15 @@ public:
 
     void fillColor( DisplayDriver::Colors _color );
 
+
+    void fillRectangle(
+            std::uint16_t _x
+        ,   std::uint16_t _y
+        ,   std::uint16_t _width
+        ,   std::uint16_t _height
+        ,   DisplayDriver::Colors _color
+    );
+
 private:
 
     void initDisplay();
@@ -68,14 +77,6 @@ private:
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-    );
-
-    void fillRectangle(
-            std::uint16_t _x
-        ,   std::uint16_t _y
-        ,   std::uint16_t _width
-        ,   std::uint16_t _height
-        ,   DisplayDriver::Colors _color
     );
 
     void initGpio();
