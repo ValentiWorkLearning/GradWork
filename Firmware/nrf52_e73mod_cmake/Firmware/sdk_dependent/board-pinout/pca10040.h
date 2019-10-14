@@ -86,8 +86,8 @@ extern "C" {
 #define BSP_BUTTON_2   BUTTON_3
 #define BSP_BUTTON_3   BUTTON_4
 
-#define RX_PIN_NUMBER  25
-#define TX_PIN_NUMBER  26
+#define RX_PIN_NUMBER  23
+#define TX_PIN_NUMBER  24
 #define CTS_PIN_NUMBER 7
 #define RTS_PIN_NUMBER 5
 #define HWFC           true
@@ -100,8 +100,8 @@ extern "C" {
 #define SPIM0_SCK_PIN   28  // SPI clock GPIO pin number.
 #define SPIM0_MOSI_PIN  29  // SPI Master Out Slave In GPIO pin number.
 #define SPIM0_MISO_PIN  2   // SPI Master In Slave Out GPIO pin number.
-#define SPIM0_SS_PIN    27  // SPI Slave Select GPIO pin number.
-#define SPIM0_DC_PIN    30  // SPI Slave Select GPIO pin number.
+#define SPIM0_SS_PIN    30  // SPI Slave Select GPIO pin number.
+#define SPIM0_DC_PIN    27  // SPI Slave Select GPIO pin number.
 #define DISP_RST        31
 
 #define SPIM1_SCK_PIN   2   // SPI clock GPIO pin number.

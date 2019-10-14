@@ -1,0 +1,283 @@
+PCBNEW-LibModule-V1  
+# encoding utf-8
+Units mm
+$INDEX
+PW_R-PDSO-G20
+$EndINDEX
+$MODULE PW_R-PDSO-G20
+Po 0 0 0 15 00000000 00000000 ~~
+Li PW_R-PDSO-G20
+Cd <b>PLASTIC SMALL-OUTLINE PACKAGE SO 20</b> JEDEC MO-153, PW Type<p>Source: www.ti.com/.. slvs087l.pdf
+Sc 00000000
+At SMD
+Op 0 0 0
+.SolderMask 0
+.SolderPaste 0
+T0 -4.44855 1e-05 1.0008 1.0008 900 0.05 N V 21 "PW_R-PDSO-G20"
+T1 4.45016 -0.635725 1.00116 1.00116 900 0.05 N V 21 "VAL**"
+DC -2.525 1.3 -2.2 1.3 0.2032 21
+DS -3.2 -2.15 3.2 -2.15 0.2032 21
+DS 3.2 -2.15 3.2 2.15 0.2032 21
+DS 3.2 2.15 -3.2 2.15 0.2032 21
+DS -3.2 2.15 -3.2 -2.15 0.2032 21
+DP 0 0 0 0 4 0 27
+Dl -3.07982 2.23
+Dl -2.775 2.23
+Dl -2.775 3.30517
+Dl -3.07982 3.30517
+DP 0 0 0 0 4 0 27
+Dl -2.42873 2.23
+Dl -2.125 2.23
+Dl -2.125 3.30508
+Dl -2.42873 3.30508
+DP 0 0 0 0 4 0 27
+Dl -1.77771 2.23
+Dl -1.475 2.23
+Dl -1.475 3.30504
+Dl -1.77771 3.30504
+DP 0 0 0 0 4 0 27
+Dl -1.12707 2.23
+Dl -0.825 2.23
+Dl -0.825 3.30608
+Dl -1.12707 3.30608
+DP 0 0 0 0 4 0 27
+Dl -0.475443 2.23
+Dl -0.175 2.23
+Dl -0.175 3.30308
+Dl -0.475443 3.30308
+DP 0 0 0 0 4 0 27
+Dl 0.175074 2.23
+Dl 0.475 2.23
+Dl 0.475 3.30139
+Dl 0.175074 3.30139
+DP 0 0 0 0 4 0 27
+Dl 0.825564 2.23
+Dl 1.125 2.23
+Dl 1.125 3.30226
+Dl 0.825564 3.30226
+DP 0 0 0 0 4 0 27
+Dl 1.47793 2.23
+Dl 1.775 2.23
+Dl 1.775 3.30656
+Dl 1.47793 3.30656
+DP 0 0 0 0 4 0 27
+Dl 2.1267 2.23
+Dl 2.425 2.23
+Dl 2.425 3.30264
+Dl 2.1267 3.30264
+DP 0 0 0 0 4 0 27
+Dl 2.78014 2.23
+Dl 3.075 2.23
+Dl 3.075 3.30612
+Dl 2.78014 3.30612
+DP 0 0 0 0 4 0 27
+Dl 3.075 -2.23164
+Dl 2.77704 -2.23164
+Dl 2.77704 -3.3
+Dl 3.075 -3.3
+DP 0 0 0 0 4 0 27
+Dl 2.425 -2.23431
+Dl 2.12911 -2.23431
+Dl 2.12911 -3.3
+Dl 2.425 -3.3
+DP 0 0 0 0 4 0 27
+Dl 1.775 -2.23154
+Dl 1.47602 -2.23154
+Dl 1.47602 -3.3
+Dl 1.775 -3.3
+DP 0 0 0 0 4 0 27
+Dl 1.125 -2.23318
+Dl 0.826177 -2.23318
+Dl 0.826177 -3.3
+Dl 1.125 -3.3
+DP 0 0 0 0 4 0 27
+Dl 0.475 -2.23267
+Dl 0.17521 -2.23267
+Dl 0.17521 -3.3
+Dl 0.475 -3.3
+DP 0 0 0 0 4 0 27
+Dl -0.175 -2.23097
+Dl -0.475206 -2.23097
+Dl -0.475206 -3.3
+Dl -0.175 -3.3
+DP 0 0 0 0 4 0 27
+Dl -0.825 -2.23027
+Dl -1.12514 -2.23027
+Dl -1.12514 -3.3
+Dl -0.825 -3.3
+DP 0 0 0 0 4 0 27
+Dl -1.475 -2.23327
+Dl -1.77761 -2.23327
+Dl -1.77761 -3.3
+Dl -1.475 -3.3
+DP 0 0 0 0 4 0 27
+Dl -2.125 -2.2333
+Dl -2.42859 -2.2333
+Dl -2.42859 -3.3
+Dl -2.125 -3.3
+DP 0 0 0 0 4 0 27
+Dl -2.775 -2.23135
+Dl -3.07687 -2.23135
+Dl -3.07687 -3.3
+Dl -2.775 -3.3
+$PAD
+Sh "1" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -2.925 2.9
+$EndPAD
+$PAD
+Sh "2" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -2.275 2.9
+$EndPAD
+$PAD
+Sh "3" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -1.625 2.9
+$EndPAD
+$PAD
+Sh "4" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -0.975 2.9
+$EndPAD
+$PAD
+Sh "5" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -0.325 2.9
+$EndPAD
+$PAD
+Sh "6" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 0.325 2.9
+$EndPAD
+$PAD
+Sh "7" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 0.975 2.9
+$EndPAD
+$PAD
+Sh "8" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 1.625 2.9
+$EndPAD
+$PAD
+Sh "9" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 2.275 2.9
+$EndPAD
+$PAD
+Sh "10" R 0.4 1.2 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 2.925 2.9
+$EndPAD
+$PAD
+Sh "11" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 2.925 -2.9
+$EndPAD
+$PAD
+Sh "12" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 2.275 -2.9
+$EndPAD
+$PAD
+Sh "13" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 1.625 -2.9
+$EndPAD
+$PAD
+Sh "14" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 0.975 -2.9
+$EndPAD
+$PAD
+Sh "15" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 0.325 -2.9
+$EndPAD
+$PAD
+Sh "16" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -0.325 -2.9
+$EndPAD
+$PAD
+Sh "17" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -0.975 -2.9
+$EndPAD
+$PAD
+Sh "18" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -1.625 -2.9
+$EndPAD
+$PAD
+Sh "19" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -2.275 -2.9
+$EndPAD
+$PAD
+Sh "20" R 0.4 1.2 0 0 1800
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -2.925 -2.9
+$EndPAD
+$EndMODULE PW_R-PDSO-G20
