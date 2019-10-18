@@ -102,7 +102,7 @@ void St7789V::sendChunk(
     chunkTransaction.beforeTransaction =
         [ this ]
         {
-            m_pBusPtr->setDcPin();
+            setDcPin();
         };
     
     chunkTransaction.transactionAction =
@@ -114,7 +114,7 @@ void St7789V::sendChunk(
     chunkTransaction.afterTransaction =
         [ this ]
         {
-            m_pBusPtr->resetDcPin();
+            resetDcPin();
         };
     
     m_pBusPtr->addTransaction( std::move( chunkTransaction ) );
@@ -266,6 +266,17 @@ void St7789V::drawPixel(
 void St7789V::initGpio()
 {
     nrf_gpio_cfg_output( DISP_RST );
+    nrf_gpio_cfg_output( DISP_DC_PIN );
+}
+
+void St7789V::resetDcPin()
+{
+    nrf_gpio_pin_clear( DISP_DC_PIN );
+}
+    
+void St7789V::setDcPin()
+{
+    nrf_gpio_pin_set( DISP_DC_PIN );
 }
 
 std::unique_ptr<St7789V>

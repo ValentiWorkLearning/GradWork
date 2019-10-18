@@ -19,7 +19,6 @@ SpiBus::SpiBus(
         ,   std::uint8_t _chipSelectPin
     )
     :   m_isTransactionCompleted{ true }
-    ,   m_repeatsCount{}
 {
 
     // using TInstanceEnum = std::underlying_type_t< SpiInstance >;
@@ -70,6 +69,8 @@ void SpiBus::spimEventHandler(
     {
         m_isTransactionCompleted = true;
 
+        onTransactionComplete();
+
         if( !m_transactionsQueue.empty() )
         {
             if( m_transactionsQueue.front().afterTransaction )
@@ -79,23 +80,7 @@ void SpiBus::spimEventHandler(
 
             runQueue();
         }
-
-        if( m_repeatsCount != 0 )
-        {
-            --m_repeatsCount;
-            performTransaction( SpiBus::DmaArraySize );
-        }
     }
-}
-
-void SpiBus::resetDcPin()
-{
-    nrf_gpio_pin_clear( SPIM0_DC_PIN );
-}
-    
-void SpiBus::setDcPin()
-{
-    nrf_gpio_pin_set( SPIM0_DC_PIN );
 }
 
 void SpiBus::initGpio()
@@ -116,7 +101,7 @@ void SpiBus::addTransaction( Transaction && _item )
 
 void SpiBus::runQueue()
 {
-    if( !m_transactionsQueue.empty() && m_isTransactionCompleted && ( m_repeatsCount == 0 ) )
+    if( !m_transactionsQueue.empty() && m_isTransactionCompleted )
     {
         if( m_transactionsQueue.front().beforeTransaction )
             m_transactionsQueue.front().beforeTransaction();
@@ -154,15 +139,6 @@ void SpiBus::performTransaction( uint16_t _dataSize )
     );
 
     APP_ERROR_CHECK( transmissionError );
-}
-
-void SpiBus::runRepeatedSend( std::uint16_t _repeatsCount )
-{
-    while( m_isTransactionCompleted )
-    {
-        performTransaction( SpiBus::DmaArraySize );
-        m_repeatsCount = _repeatsCount;
-    }
 }
 
 };

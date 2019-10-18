@@ -1,15 +1,17 @@
 #pragma once
 
 #include "nrfx_spim.h"
-#include "pca10040.h"
 
 #include "transaction_item.hpp"
 
 #include <queue>
 #include <memory>
+#include "utils/nod.hpp"
 
 namespace Interface::Spi
 {
+
+class TransactionListener;
 
 namespace SpiInstance
 {
@@ -52,13 +54,7 @@ public:
     template< typename TSequenceContainter>
     bool sendChunk( const TSequenceContainter& _arrayToTransmit );
 
-    void runRepeatedSend( std::uint16_t _repeatsCount );
-
-public:
-
-    void resetDcPin();
-    
-    void setDcPin();
+    nod::unsafe_signal<void()> onTransactionComplete;
 
 public:
 
@@ -67,8 +63,6 @@ public:
     void runQueue();
 
 private:
-
-    static constexpr std::uint8_t SlaveSelectDuration = 20;
 
     void spimEventHandler(
             nrfx_spim_evt_t const* _pEvent
@@ -86,7 +80,7 @@ private:
 
     static std::array<std::uint8_t,DmaArraySize> DmaArray;
     std::queue<Transaction> m_transactionsQueue;
-    std::uint16_t m_repeatsCount;
+
 };
 
 template< typename TSpiInstance >

@@ -79,7 +79,13 @@ private:
         ,   std::uint16_t _height
     );
 
+private:
+
     void initGpio();
+
+    void resetDcPin();
+
+    void setDcPin();
 
 private:
 
