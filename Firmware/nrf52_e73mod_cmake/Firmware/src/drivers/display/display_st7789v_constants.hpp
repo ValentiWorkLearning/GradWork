@@ -69,19 +69,39 @@ namespace DisplayDriver
 
     enum class EncodedColor : unsigned char
     {
-            RedEnc = 3
-        ,   GreenEnc = 4
+            BlackEnc = 0
+        ,   WhiteEnc = 1
+        ,   RedEnc = 2
+        ,   GreenEnc = 3
+        ,   BlueEnc = 4
+        ,   CyanEnc = 5
+        ,   MagentaEnc = 6
+        ,   YellowEnc = 7
+        ,   OrangeEnc = 8
     };
 
     inline EncodedColor toEncodedColor( Colors _color )
     {
         switch ( _color )
         {
+        case Colors::BLACK:
+            return EncodedColor::BlackEnc;
+        case Colors::WHITE:
+            return EncodedColor::WhiteEnc;
         case Colors::RED:
             return EncodedColor::RedEnc;
-            break;
         case Colors::GREEN:
             return EncodedColor::GreenEnc;
+        case Colors::BLUE:
+            return EncodedColor::BlueEnc;
+        case Colors::CYAN:
+            return EncodedColor::CyanEnc;
+        case Colors::MAGENTA:
+            return EncodedColor::MagentaEnc;
+        case Colors::YELLOW:
+            return EncodedColor::YellowEnc;
+        case Colors::ORANGE:
+            return EncodedColor::OrangeEnc;
         default:
             break;
         }

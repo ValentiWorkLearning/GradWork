@@ -98,10 +98,24 @@ int main(void)
     );
     nrf_delay_ms(230);
 
+    display->fillColor( DisplayDriver::Colors::BLACK );
+    nrf_delay_ms(100);
+    display->fillColor( DisplayDriver::Colors::WHITE );
+    nrf_delay_ms(100);
+    display->fillColor( DisplayDriver::Colors::RED );
+    nrf_delay_ms(100);
     display->fillColor( DisplayDriver::Colors::GREEN );
-    nrf_delay_ms(200);
-    //display->fillColor( DisplayDriver::Colors::RED );
-
+    nrf_delay_ms(100);
+    display->fillColor( DisplayDriver::Colors::BLUE );
+    nrf_delay_ms(100);
+    display->fillColor( DisplayDriver::Colors::CYAN );
+    nrf_delay_ms(100);
+    display->fillColor( DisplayDriver::Colors::MAGENTA );
+    nrf_delay_ms(100);
+    display->fillColor( DisplayDriver::Colors::YELLOW );
+    nrf_delay_ms(100);
+    display->fillColor( DisplayDriver::Colors::ORANGE );
+    nrf_delay_ms(100);
     /* Toggle LEDs. */
     auto ledToggler = 
     []( size_t _delayTime )
