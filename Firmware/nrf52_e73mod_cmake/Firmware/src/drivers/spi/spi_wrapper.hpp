@@ -40,7 +40,7 @@ public:
 
 public:
 
-    static constexpr std::uint16_t DmaArraySize = 240;
+    static constexpr std::uint16_t DmaArraySize = 480;
     using DmaArrayType = std::array<std::uint8_t,DmaArraySize>;
 
     std::uint16_t getDmaBufferSize();

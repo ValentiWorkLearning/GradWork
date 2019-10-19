@@ -74,7 +74,7 @@ private:
   ProtoSignal&  operator=   (const ProtoSignal&) = delete;
 
   using CallbackSlot = std::shared_ptr<CbFunction>;
-  using CallbackList = std::list<CallbackSlot>;
+  using CallbackList = std::vector<CallbackSlot>;
   CallbackList callback_list_;
 
   size_t add_cb(const CbFunction& cb)

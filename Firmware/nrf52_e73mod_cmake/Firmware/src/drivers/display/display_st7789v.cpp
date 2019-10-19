@@ -190,7 +190,7 @@ void St7789V::fillRectangle(
         ,   _y + _height - 1
     );
 
-    m_frameBuffer->fillRectangle( 0,100,0,100,_color );
+    m_frameBuffer->fillRectangle( 0,0,100,100,_color );
 
     sendCommand( DisplayReg::RAMWR );
 
@@ -201,17 +201,17 @@ void St7789V::fillRectangle(
     //         return value;
     //     }
     // );
-
     m_connectionId = m_pBusPtr->onTransactionCompleted.connect(
         [ this ]
         {
-            transmitFrameBuffer();
+            setDcPin();
+            transmitRestBuffer();
         }
     );
     m_pBusPtr->runQueue();
 }
 
-void St7789V::transmitFrameBuffer()
+void St7789V::transmitRestBuffer()
 {
     if( m_frameBuffer->isAllBufferTransmitted() )
     {
@@ -231,10 +231,10 @@ void St7789V::transmitFrameBuffer()
         DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
         TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
 
-        // dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
-        // dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
-        // dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
-        // dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
+        dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
+        dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
+        dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
+        dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
     }
 
     m_pBusPtr->sendFullDmaArray();

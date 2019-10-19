@@ -82,7 +82,7 @@ private:
 
 private:
 
-    void transmitFrameBuffer();
+    void transmitRestBuffer();
 
 private:
 

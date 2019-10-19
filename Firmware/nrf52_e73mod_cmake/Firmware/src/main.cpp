@@ -98,7 +98,9 @@ int main(void)
     );
     nrf_delay_ms(230);
 
-    display->fillColor( DisplayDriver::Colors::RED );
+    display->fillColor( DisplayDriver::Colors::GREEN );
+    nrf_delay_ms(200);
+    //display->fillColor( DisplayDriver::Colors::RED );
 
     /* Toggle LEDs. */
     auto ledToggler = 

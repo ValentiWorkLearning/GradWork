@@ -69,7 +69,8 @@ namespace DisplayDriver
 
     enum class EncodedColor : unsigned char
     {
-        RedEnc = 3
+            RedEnc = 3
+        ,   GreenEnc = 4
     };
 
     inline EncodedColor toEncodedColor( Colors _color )
@@ -79,7 +80,8 @@ namespace DisplayDriver
         case Colors::RED:
             return EncodedColor::RedEnc;
             break;
-        
+        case Colors::GREEN:
+            return EncodedColor::GreenEnc;
         default:
             break;
         }
@@ -91,7 +93,8 @@ namespace DisplayDriver
         case EncodedColor::RedEnc:
             return Colors::RED;
             break;
-        
+        case EncodedColor::GreenEnc:
+            return Colors::GREEN;
         default:
             break;
         }
