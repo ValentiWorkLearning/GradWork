@@ -272,8 +272,6 @@ void St7789V::setAddrWindow(
 {
     _x +=m_columnStart;
     _y +=m_rowStart;
-    _x = 0; //hack for row-based output;
-    _width = 239;
 
     uint32_t xa = ((uint32_t)_x << 16) | (_x+_width-1);
     uint32_t ya = ((uint32_t)_y << 16) | (_y+_height-1); 
@@ -334,7 +332,7 @@ void St7789V::fillTranasctionBuffer()
 
     const FrameBuffer::RowType& rowToTransmit{ m_frameBuffer->getNextTransmissionRow() };
 
-    std::uint8_t dmaBufferIndex{};
+    std::uint16_t dmaBufferIndex{};
 
     for( DisplayDriver::EncodedColor pixel: rowToTransmit )
     {

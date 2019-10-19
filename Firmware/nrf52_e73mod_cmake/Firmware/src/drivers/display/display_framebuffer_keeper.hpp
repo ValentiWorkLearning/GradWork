@@ -48,7 +48,7 @@ public:
 
 private:
 
-    static constexpr std::uint8_t RowRepeatsCount = 4; // Number of repeating bufferTransmissions;
+    static constexpr std::uint8_t RowRepeatsCount = 2; // Number of repeating bufferTransmissions;
 
     std::uint8_t getTranmissionRowIndex();
 

@@ -98,25 +98,26 @@ int main(void)
     );
     nrf_delay_ms(230);
 
-    // display->fillColor( DisplayDriver::Colors::BLACK );
-    // nrf_delay_ms(120);
-    // display->fillColor( DisplayDriver::Colors::WHITE );
-    // nrf_delay_ms(120);
-    // display->fillColor( DisplayDriver::Colors::RED );
-    // nrf_delay_ms(120);
-    // display->fillColor( DisplayDriver::Colors::GREEN );
-    // nrf_delay_ms(120);
-    // display->fillColor( DisplayDriver::Colors::BLUE );
-    // nrf_delay_ms(120);
-    // display->fillColor( DisplayDriver::Colors::CYAN );
-    // nrf_delay_ms(120);
-    // display->fillColor( DisplayDriver::Colors::MAGENTA );
-    // nrf_delay_ms(120);
-    // display->fillColor( DisplayDriver::Colors::YELLOW );
-    // nrf_delay_ms(120);
-    //display->fillColor( DisplayDriver::Colors::ORANGE );
-    // nrf_delay_ms(120);
-    display->fillRectangle( 0,0,100,100,DisplayDriver::Colors::BLUE );
+    display->fillColor( DisplayDriver::Colors::BLACK );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::WHITE );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::RED );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::GREEN );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::BLUE );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::CYAN );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::MAGENTA );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::YELLOW );
+    nrf_delay_ms(120);
+    display->fillColor( DisplayDriver::Colors::ORANGE );
+    nrf_delay_ms(120);
+    display->fillRectangle( 40,40,20,20,DisplayDriver::Colors::BLUE );
+    nrf_delay_ms(120);
     /* Toggle LEDs. */
     auto ledToggler = 
     []( size_t _delayTime )
