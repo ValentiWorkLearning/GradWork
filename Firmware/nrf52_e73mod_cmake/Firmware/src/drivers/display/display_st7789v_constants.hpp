@@ -103,6 +103,7 @@ namespace DisplayDriver
         case Colors::ORANGE:
             return EncodedColor::OrangeEnc;
         default:
+            return EncodedColor::BlackEnc;
             break;
         }
     }
@@ -116,6 +117,7 @@ namespace DisplayDriver
         case EncodedColor::GreenEnc:
             return Colors::GREEN;
         default:
+            return Colors::BLACK;
             break;
         }
     }

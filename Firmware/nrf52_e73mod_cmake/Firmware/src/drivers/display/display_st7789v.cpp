@@ -2,7 +2,6 @@
 #include "display_st7789v_constants.hpp"
 
 #include "spi/transaction_item.hpp"
-#include "spi/spi_wrapper.hpp"
 
 #include "nrf_delay.h"
 #include "pca10040.h"
@@ -22,9 +21,13 @@ St7789V::St7789V(
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     )
-    :   m_width{ _width }
+    :   
+        m_isSwapBufferReady{ false }
+    ,   m_width{ _width }
     ,   m_height { _height }
-    ,   m_connectionId{}
+    ,   m_transactionStartedId{}
+    ,   m_transactionCompletedId{}
+    ,   m_dmaSwapBuferReady{}
     ,   m_pBusPtr{ _busPtr }
 {
     initGpio();
@@ -181,8 +184,6 @@ void St7789V::fillRectangle(
     if((_x + _width - 1) >= m_width) _width = m_width - _x;
     if((_y + _height - 1) >= m_height) _height = m_height - _y;
 
-    using TColor = std::underlying_type<DisplayDriver::Colors>::type;
-
     setAddrWindow(
             _x
         ,   _y
@@ -194,50 +195,60 @@ void St7789V::fillRectangle(
 
     sendCommand( DisplayReg::RAMWR );
 
-    // m_pBusPtr->fillDmaArray(
-    //     [ localColor ]( size_t index )
-    //     {
-    //         std::uint8_t value = ( index % 2 ) == 0 ? localColor >> 8 : localColor & 0xFF;
-    //         return value;
-    //     }
-    // );
-    m_connectionId = m_pBusPtr->onTransactionCompleted.connect(
-        [ this ]
-        {
-            setDcPin();
-            transmitRestBuffer();
-        }
-    );
+    startFrameBufferTransimission();
+
     m_pBusPtr->runQueue();
+}
+
+void St7789V::startFrameBufferTransimission()
+{
+    m_transactionStartedId = m_pBusPtr->onTransactionStarted.connect(
+            [ this ]
+            {
+                fillTranasctionBuffer();
+            }
+        ,   m_transactionStartedId
+    );
+
+    m_transactionCompletedId = m_pBusPtr->onTransactionCompleted.connect(
+            [ this ]
+            {
+                setDcPin();
+                transmitRestBuffer();
+            }
+        ,   m_transactionCompletedId
+    );
 }
 
 void St7789V::transmitRestBuffer()
 {
     if( m_frameBuffer->isAllBufferTransmitted() )
     {
-        m_pBusPtr->onTransactionCompleted.disconnect( m_connectionId );
+        m_pBusPtr->onTransactionCompleted.disconnect( m_transactionStartedId );
+        m_pBusPtr->onTransactionCompleted.disconnect( m_transactionCompletedId );
         return;
     }
 
-    const FrameBuffer::RowType& rowToTransmit{ m_frameBuffer->getNextTransmissionRow() };
-    Interface::Spi::SpiBus::DmaArrayType& dmaArray { m_pBusPtr->getDmaArray() };
-
-    std::uint8_t dmaArrayIndex{};
-
-    for( DisplayDriver::EncodedColor pixel: rowToTransmit )
+    if( m_isSwapBufferReady )
     {
-        using TUnderlyingColor = std::underlying_type_t<DisplayDriver::Colors>;
-
-        DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
-        TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
-
-        dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
-        dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
-        dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
-        dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
+        Interface::Spi::SpiBus::DmaBufferType& dmaArray { m_pBusPtr->getDmaBuffer() };
+        dmaArray.swap( DmaSwapBuffer );
+        m_pBusPtr->sendFullDmaArray();
     }
+    else
+    {
+        m_dmaSwapBuferReady = onSwapBufferReady.connect(
+                [ this ]
+                {
+                    Interface::Spi::SpiBus::DmaBufferType& dmaArray { m_pBusPtr->getDmaBuffer() };
+                    dmaArray.swap( DmaSwapBuffer );
+                    m_pBusPtr->sendFullDmaArray();
 
-    m_pBusPtr->sendFullDmaArray();
+                    onSwapBufferReady.disconnect( m_dmaSwapBuferReady );
+                }
+            ,   m_dmaSwapBuferReady
+        );
+    }
 }
 
 void St7789V::setAddrWindow(
@@ -281,11 +292,9 @@ void St7789V::drawPixel(
     setAddrWindow( _x, _y, _x+1, _y+1 );
 
     m_frameBuffer->drawPixel( _x,_y,_color );
+    
+    startFrameBufferTransimission();
 
-    // sendChunk(
-    //         localColor >> 8
-    //     ,   localColor & 0xFF
-    // );
     m_pBusPtr->runQueue();
 }
 
@@ -304,6 +313,35 @@ void St7789V::setDcPin()
 {
     nrf_gpio_pin_set( DISP_DC_PIN );
 }
+
+void St7789V::fillTranasctionBuffer()
+{
+    m_isSwapBufferReady = false;
+
+    const FrameBuffer::RowType& rowToTransmit{ m_frameBuffer->getNextTransmissionRow() };
+
+    std::uint8_t dmaBufferIndex{};
+
+    for( DisplayDriver::EncodedColor pixel: rowToTransmit )
+    {
+        using TUnderlyingColor = std::underlying_type_t<DisplayDriver::Colors>;
+
+        DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
+        TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
+
+        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor >> 8;
+        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor & 0xFF;
+        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor >> 8;
+        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor & 0xFF;
+    }
+
+    m_isSwapBufferReady = true;
+    onSwapBufferReady.emit();
+
+}
+
+Interface::Spi::SpiBus::DmaBufferType
+DisplayDriver::St7789V::St7789V::DmaSwapBuffer( Interface::Spi::SpiBus::DmaBufferSize );
 
 std::unique_ptr<St7789V>
 createDisplayDriver(

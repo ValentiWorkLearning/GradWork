@@ -1,11 +1,11 @@
 #pragma once
 
 #include "nrfx_spim.h"
-
 #include "pca10040.h"
 
-#include "transaction_item.hpp"
 #include "SimpleSignal.hpp"
+
+#include "transaction_item.hpp"
 
 #include <queue>
 #include <memory>
@@ -40,8 +40,8 @@ public:
 
 public:
 
-    static constexpr std::uint16_t DmaArraySize = 480;
-    using DmaArrayType = std::array<std::uint8_t,DmaArraySize>;
+    static constexpr std::uint16_t DmaBufferSize = 480;
+    using DmaBufferType = std::vector<std::uint8_t>;
 
     std::uint16_t getDmaBufferSize();
 
@@ -54,7 +54,7 @@ public:
 
     void sendFullDmaArray();
 
-    DmaArrayType& getDmaArray();
+    DmaBufferType& getDmaBuffer();
 
     Simple::Signal<void()> onTransactionStarted;
     Simple::Signal<void()> onTransactionCompleted;
@@ -79,7 +79,7 @@ private:
     volatile bool m_isTransactionCompleted;
     nrfx_spim_t m_spiHandle;
 
-    static DmaArrayType DmaArray;
+    static DmaBufferType DmaArray;
     std::queue<Transaction> m_transactionsQueue;
 };
 

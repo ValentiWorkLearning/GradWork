@@ -1,4 +1,6 @@
 // from https://github.com/larspensjo/SimpleSignal/blob/master/SimpleSignal.h
+// Modyfied by ValentiWorkLearning
+
 #pragma once
 
 #include <memory>
@@ -75,12 +77,28 @@ private:
 
   using CallbackSlot = std::shared_ptr<CbFunction>;
   using CallbackList = std::vector<CallbackSlot>;
-  CallbackList callback_list_;
+  using LastConnectedCallback  = std::pair<size_t,CallbackSlot>;
 
-  size_t add_cb(const CbFunction& cb)
+  CallbackList callback_list_;
+  LastConnectedCallback last_connected_;
+
+  size_t add_cb(const CbFunction& cb, size_t _callbackId = std::numeric_limits<size_t>::max() )
   {
-    callback_list_.emplace_back(std::make_shared<CbFunction>(cb));
-    return size_t (callback_list_.back().get());
+
+    if( last_connected_.first == _callbackId )
+    {
+        callback_list_.push_back( last_connected_.second );
+        return last_connected_.first;
+    }
+    else
+    {
+      auto callback = std::make_shared<CbFunction>(cb);
+      auto callback_id = size_t ( callback.get() );
+
+      callback_list_.push_back( callback );
+      last_connected_ = { callback_id,callback };
+      return callback_id;
+    }
   }
 
   bool remove_cb(size_t id)
@@ -105,7 +123,7 @@ public:
   }
 
   /// Operator to add a new function or lambda as signal handler, returns a handler connection ID.
-  size_t connect (const CbFunction &cb)      { return add_cb(cb); }
+  size_t connect (const CbFunction &cb, size_t connectionId = std::numeric_limits<size_t>::max())      { return add_cb(cb,connectionId); }
   /// Operator to remove a signal handler through it connection ID, returns if a handler was removed.
   bool   disconnect (size_t connection)         { return remove_cb(connection); }
 

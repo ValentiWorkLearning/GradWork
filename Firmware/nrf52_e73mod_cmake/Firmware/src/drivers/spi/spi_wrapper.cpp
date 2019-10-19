@@ -9,8 +9,8 @@
 namespace Interface::Spi
 {
 
-std::array<std::uint8_t,SpiBus::DmaArraySize>
-SpiBus::DmaArray = {};
+SpiBus::DmaBufferType
+SpiBus::DmaArray ( SpiBus::DmaBufferSize );
 
 SpiBus::SpiBus(
             std::uint8_t _clockPin
@@ -132,14 +132,14 @@ void SpiBus::performTransaction( uint16_t _dataSize )
     APP_ERROR_CHECK( transmissionError );
 }
 
-SpiBus::DmaArrayType& SpiBus::getDmaArray()
+SpiBus::DmaBufferType& SpiBus::getDmaBuffer()
 {
     return SpiBus::DmaArray;
 }
 
 void SpiBus::sendFullDmaArray()
 {
-    performTransaction( DmaArraySize );
+    performTransaction( DmaBufferSize );
 }
 
 };

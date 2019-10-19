@@ -6,6 +6,10 @@
 #include "display/display_st7789v_constants.hpp"
 #include "display_framebuffer_keeper.hpp"
 
+#include "spi/spi_wrapper.hpp"
+
+#include "SimpleSignal.hpp"
+
 namespace Interface::Spi
 {
     class SpiBus;
@@ -82,7 +86,11 @@ private:
 
 private:
 
+    void startFrameBufferTransimission();
+
     void transmitRestBuffer();
+
+    void fillTranasctionBuffer();
 
 private:
 
@@ -94,13 +102,21 @@ private:
 
 private:
 
+    static Interface::Spi::SpiBus::DmaBufferType DmaSwapBuffer;
+
+    bool m_isSwapBufferReady;
+    Simple::Signal<void()> onSwapBufferReady;
+
     std::uint8_t m_columnStart;
     std::uint8_t m_rowStart;
 
     const std::uint16_t m_width;
     const std::uint16_t m_height;
     
-    size_t m_connectionId;
+    size_t m_transactionStartedId;
+    size_t m_transactionCompletedId;
+    size_t m_dmaSwapBuferReady;
+
     Interface::Spi::SpiBus* m_pBusPtr;
 
     std::unique_ptr<FrameBuffer::DisplayBuffer>m_frameBuffer;
