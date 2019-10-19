@@ -54,7 +54,7 @@ St7789V::initDisplay()
     sendCommand(    DisplayReg::INVON      );
     sendCommand(    DisplayReg::NORON      );
     sendCommand(    DisplayReg::DISPON     );
-    sendCommand(    DisplayReg::MADCTL     , 0xC0   );
+    sendCommand(    DisplayReg::MADCTL     , 0xC0   ); // 0xC0 for inverted orientation
 
     m_pBusPtr->runQueue();
 }
@@ -191,7 +191,19 @@ void St7789V::fillRectangle(
         ,   _y + _height - 1
     );
 
-    m_frameBuffer->fillRectangle( 0,0,100,100,_color );
+    auto[ mappedX, mappedY ] =
+        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x, _y );
+
+    auto [ mappedWidth, mappedHeight ] =
+        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x + _width, _y + _height );
+
+    m_frameBuffer->fillRectangle(
+            mappedX
+        ,   mappedY
+        ,   mappedWidth
+        ,   mappedHeight
+        ,   _color
+    );
 
     sendCommand( DisplayReg::RAMWR );
 
@@ -224,7 +236,7 @@ void St7789V::transmitRestBuffer()
 {
     if( m_frameBuffer->isAllBufferTransmitted() )
     {
-        m_pBusPtr->onTransactionCompleted.disconnect( m_transactionStartedId );
+        m_pBusPtr->onTransactionStarted.disconnect( m_transactionStartedId );
         m_pBusPtr->onTransactionCompleted.disconnect( m_transactionCompletedId );
         return;
     }
@@ -260,6 +272,8 @@ void St7789V::setAddrWindow(
 {
     _x +=m_columnStart;
     _y +=m_rowStart;
+    _x = 0; //hack for row-based output;
+    _width = 239;
 
     uint32_t xa = ((uint32_t)_x << 16) | (_x+_width-1);
     uint32_t ya = ((uint32_t)_y << 16) | (_y+_height-1); 
@@ -329,12 +343,14 @@ void St7789V::fillTranasctionBuffer()
         DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
         TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
 
-        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor >> 8;
-        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor & 0xFF;
-        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor >> 8;
-        DmaSwapBuffer[ dmaBufferIndex++ ] = underlyingColor & 0xFF;
-    }
+        std::uint8_t msbColor = underlyingColor >> 8;
+        std::uint8_t lsbColor = underlyingColor & 0xFF;
 
+        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
+        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
+        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
+        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
+    }
     m_isSwapBufferReady = true;
     onSwapBufferReady.emit();
 

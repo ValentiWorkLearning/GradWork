@@ -86,22 +86,31 @@ namespace DisplayDriver
         {
         case Colors::BLACK:
             return EncodedColor::BlackEnc;
+
         case Colors::WHITE:
             return EncodedColor::WhiteEnc;
+
         case Colors::RED:
             return EncodedColor::RedEnc;
+
         case Colors::GREEN:
             return EncodedColor::GreenEnc;
+
         case Colors::BLUE:
             return EncodedColor::BlueEnc;
+
         case Colors::CYAN:
             return EncodedColor::CyanEnc;
+
         case Colors::MAGENTA:
             return EncodedColor::MagentaEnc;
+
         case Colors::YELLOW:
             return EncodedColor::YellowEnc;
+
         case Colors::ORANGE:
             return EncodedColor::OrangeEnc;
+
         default:
             return EncodedColor::BlackEnc;
             break;
@@ -111,11 +120,33 @@ namespace DisplayDriver
     {
         switch ( _color )
         {
+        case EncodedColor::BlackEnc:
+            return Colors::BLACK;
+
+        case EncodedColor::WhiteEnc:
+            return Colors::WHITE;
+
         case EncodedColor::RedEnc:
             return Colors::RED;
-            break;
+
         case EncodedColor::GreenEnc:
             return Colors::GREEN;
+
+        case EncodedColor::BlueEnc:
+            return Colors::BLUE;
+
+        case EncodedColor::CyanEnc:
+            return Colors::CYAN;
+        
+        case EncodedColor::MagentaEnc:
+            return Colors::MAGENTA;
+
+        case EncodedColor::YellowEnc:
+            return Colors::YELLOW;
+        
+        case EncodedColor::OrangeEnc:
+            return Colors::ORANGE;
+
         default:
             return Colors::BLACK;
             break;

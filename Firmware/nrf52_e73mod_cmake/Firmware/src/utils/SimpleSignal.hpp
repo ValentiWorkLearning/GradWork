@@ -85,7 +85,7 @@ private:
   size_t add_cb(const CbFunction& cb, size_t _callbackId = std::numeric_limits<size_t>::max() )
   {
 
-    if( last_connected_.first == _callbackId )
+    if( last_connected_.first == _callbackId && _callbackId != 0 )
     {
         callback_list_.push_back( last_connected_.second );
         return last_connected_.first;
@@ -95,7 +95,7 @@ private:
       auto callback = std::make_shared<CbFunction>(cb);
       auto callback_id = size_t ( callback.get() );
 
-      callback_list_.push_back( callback );
+      callback_list_.emplace_back( callback );
       last_connected_ = { callback_id,callback };
       return callback_id;
     }

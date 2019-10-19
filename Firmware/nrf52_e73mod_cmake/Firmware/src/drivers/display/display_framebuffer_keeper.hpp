@@ -15,6 +15,13 @@ namespace FrameBuffer
 class DisplayBuffer
 {
 
+
+public:
+
+    using CoordsPair = std::pair<std::uint8_t,std::uint8_t>;
+
+    static CoordsPair getFrameBufferCoords( std::uint16_t _realDisplayX, std::uint16_t _realDisplayY );
+
 public:
 
     void drawPixel(
@@ -40,10 +47,6 @@ public:
     bool isAllBufferTransmitted();
 
 private:
-
-    using CoordsPair = std::pair<std::uint8_t,std::uint8_t>;
-
-    CoordsPair getFrameBufferCoords( std::uint16_t _realDisplayX, std::uint16_t _realDisplayY );
 
     static constexpr std::uint8_t RowRepeatsCount = 4; // Number of repeating bufferTransmissions;
 

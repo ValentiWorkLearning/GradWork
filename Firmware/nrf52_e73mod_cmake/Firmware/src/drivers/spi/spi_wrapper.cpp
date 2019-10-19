@@ -123,6 +123,8 @@ void SpiBus::performTransaction( uint16_t _dataSize )
             ,   _dataSize
         );
 
+    onTransactionStarted.emit();
+    
     nrfx_err_t transmissionError = nrfx_spim_xfer(
             &m_spiHandle
         ,   &xferDesc

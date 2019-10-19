@@ -72,7 +72,10 @@ bool DisplayBuffer::isAllBufferTransmitted()
 DisplayBuffer::CoordsPair
 DisplayBuffer::getFrameBufferCoords( std::uint16_t _realDisplayX, std::uint16_t _realDisplayY )
 {
-    return{ _realDisplayX/2, _realDisplayY/2 };
+    return{
+            _realDisplayX / 2 + _realDisplayX % 2
+        ,   _realDisplayY / 2 + _realDisplayY % 2
+    };
 }
 
 
