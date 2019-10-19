@@ -2,16 +2,16 @@
 
 #include "nrfx_spim.h"
 
+#include "pca10040.h"
+
 #include "transaction_item.hpp"
+#include "SimpleSignal.hpp"
 
 #include <queue>
 #include <memory>
-#include "utils/nod.hpp"
 
 namespace Interface::Spi
 {
-
-class TransactionListener;
 
 namespace SpiInstance
 {
@@ -40,21 +40,24 @@ public:
 
 public:
 
-    static constexpr std::uint16_t DmaArraySize = 480;
+    static constexpr std::uint16_t DmaArraySize = 240;
+    using DmaArrayType = std::array<std::uint8_t,DmaArraySize>;
 
     std::uint16_t getDmaBufferSize();
 
-    template< typename FillerFunction >
-    void fillDmaArray( FillerFunction _functor );
-
 public:
 
-    bool sendData( std::uint8_t _data );
+    void sendData( std::uint8_t _data );
 
     template< typename TSequenceContainter>
-    bool sendChunk( const TSequenceContainter& _arrayToTransmit );
+    void sendChunk( const TSequenceContainter& _arrayToTransmit );
 
-    nod::unsafe_signal<void()> onTransactionComplete;
+    void sendFullDmaArray();
+
+    DmaArrayType& getDmaArray();
+
+    Simple::Signal<void()> onTransactionStarted;
+    Simple::Signal<void()> onTransactionCompleted;
 
 public:
 
@@ -69,8 +72,6 @@ private:
         ,   void* _pContext
     );
 
-    void initGpio();
-
     void performTransaction( uint16_t _dataSize );
 
 private:
@@ -78,9 +79,8 @@ private:
     volatile bool m_isTransactionCompleted;
     nrfx_spim_t m_spiHandle;
 
-    static std::array<std::uint8_t,DmaArraySize> DmaArray;
+    static DmaArrayType DmaArray;
     std::queue<Transaction> m_transactionsQueue;
-
 };
 
 template< typename TSpiInstance >
@@ -95,7 +95,7 @@ std::unique_ptr<SpiBus> createSpiBus()
 }
 
 template< typename TSequenceContainter>
-bool SpiBus::sendChunk( const TSequenceContainter& _arrayToTransmit )
+void SpiBus::sendChunk( const TSequenceContainter& _arrayToTransmit )
 {
     while( m_isTransactionCompleted )
     {
@@ -104,17 +104,8 @@ bool SpiBus::sendChunk( const TSequenceContainter& _arrayToTransmit )
             ,   std::end( _arrayToTransmit )
             ,   std::begin( SpiBus::DmaArray )
         );
-
         performTransaction( _arrayToTransmit.size() );
     }
-    return true;
-}
-
-template< typename FillerFunction >
-void SpiBus::fillDmaArray( FillerFunction _functor )
-{
-    for( size_t i{}; i<SpiBus::DmaArraySize; ++i )
-        SpiBus::DmaArray[i] = _functor( i );
 }
 
 } // namespace Interface

@@ -1,0 +1,103 @@
+PCBNEW-LibModule-V1  
+# encoding utf-8
+Units mm
+$INDEX
+SON50P200X300X60-9N
+$EndINDEX
+$MODULE SON50P200X300X60-9N
+Po 0 0 0 15 00000000 00000000 ~~
+Li SON50P200X300X60-9N
+Cd 
+Sc 00000000
+At SMD
+Op 0 0 0
+.SolderMask 0
+.SolderPaste 0
+T0 -1.02544 -1.62758 0.481709 0.481709 0 0.05 N V 21 "SON50P200X300X60-9N"
+T1 -0.69507 1.63872 0.48074 0.48074 0 0.05 N V 21 "VAL**"
+DS -1.5 1 1.5 1 0.127 21
+DS 1.5 1 1.5 -1 0.127 27
+DS 1.5 -1 -1.5 -1 0.127 21
+DS -1.5 -1 -1.5 1 0.127 27
+DC -2.44 -0.866 -2.34 -0.866 0.2 21
+DS -2.183 -1.266 2.183 -1.266 0.05 26
+DS 2.183 -1.266 2.183 1.266 0.05 26
+DS 2.183 1.266 -2.183 1.266 0.05 26
+DS -2.183 1.266 -2.183 -1.266 0.05 26
+DP 0 0 0 0 4 0 19
+Dl -0.445229 -0.475
+Dl 0.445 -0.475
+Dl 0.445 0.475244
+Dl -0.445229 0.475244
+$PAD
+Sh "1" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -1.485 -0.75
+$EndPAD
+$PAD
+Sh "2" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -1.485 -0.25
+$EndPAD
+$PAD
+Sh "3" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -1.485 0.25
+$EndPAD
+$PAD
+Sh "4" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po -1.485 0.75
+$EndPAD
+$PAD
+Sh "5" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 1.485 0.75
+$EndPAD
+$PAD
+Sh "6" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 1.485 0.25
+$EndPAD
+$PAD
+Sh "7" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 1.485 -0.25
+$EndPAD
+$PAD
+Sh "8" R 0.76 0.27 0 0 0
+At SMD N 00888000
+.SolderMask 0
+.SolderPaste 0
+Ne 0 ""
+Po 1.485 -0.75
+$EndPAD
+$PAD
+Sh "9" R 1.4 1.5 0 0 0
+At SMD N 00888000
+.SolderMask 0
+Ne 0 ""
+Po 0 0
+$EndPAD
+$EndMODULE SON50P200X300X60-9N

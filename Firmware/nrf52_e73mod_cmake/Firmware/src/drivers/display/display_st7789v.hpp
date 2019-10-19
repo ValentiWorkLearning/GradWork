@@ -4,6 +4,7 @@
 #include <cstdint>
 
 #include "display/display_st7789v_constants.hpp"
+#include "display_framebuffer_keeper.hpp"
 
 namespace Interface::Spi
 {
@@ -81,6 +82,10 @@ private:
 
 private:
 
+    void transmitFrameBuffer();
+
+private:
+
     void initGpio();
 
     void resetDcPin();
@@ -95,7 +100,10 @@ private:
     const std::uint16_t m_width;
     const std::uint16_t m_height;
     
+    size_t m_connectionId;
     Interface::Spi::SpiBus* m_pBusPtr;
+
+    std::unique_ptr<FrameBuffer::DisplayBuffer>m_frameBuffer;
 };
 
 std::unique_ptr<St7789V>

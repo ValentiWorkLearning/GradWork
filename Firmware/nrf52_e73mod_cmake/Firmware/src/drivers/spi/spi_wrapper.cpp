@@ -25,8 +25,6 @@ SpiBus::SpiBus(
     // TInstanceEnum instanceId = static_cast<TInstanceEnum>( _spiInstance );
     // NRFX_SPIM0_INST_IDX;
 
-    initGpio();
-
     m_spiHandle = NRFX_SPIM_INSTANCE( SPI_INSTANCE );
 
     nrfx_spim_config_t spiConfig{};
@@ -69,7 +67,7 @@ void SpiBus::spimEventHandler(
     {
         m_isTransactionCompleted = true;
 
-        onTransactionComplete();
+        onTransactionCompleted.emit();
 
         if( !m_transactionsQueue.empty() )
         {
@@ -82,12 +80,6 @@ void SpiBus::spimEventHandler(
         }
     }
 }
-
-void SpiBus::initGpio()
-{
-    nrf_gpio_cfg_output( SPIM0_DC_PIN );
-}
-
 
 std::uint16_t SpiBus::getDmaBufferSize()
 {
@@ -110,7 +102,7 @@ void SpiBus::runQueue()
     }
 }
 
-bool SpiBus::sendData( std::uint8_t _data )
+void SpiBus::sendData( std::uint8_t _data )
 {
     constexpr std::uint8_t transactionSize = 1;
 
@@ -119,7 +111,6 @@ bool SpiBus::sendData( std::uint8_t _data )
         SpiBus::DmaArray[0] = _data;
         performTransaction( transactionSize );
     }
-    return true;
 }
 
 void SpiBus::performTransaction( uint16_t _dataSize )
@@ -139,6 +130,16 @@ void SpiBus::performTransaction( uint16_t _dataSize )
     );
 
     APP_ERROR_CHECK( transmissionError );
+}
+
+SpiBus::DmaArrayType& SpiBus::getDmaArray()
+{
+    return SpiBus::DmaArray;
+}
+
+void SpiBus::sendFullDmaArray()
+{
+    performTransaction( DmaArraySize );
 }
 
 };

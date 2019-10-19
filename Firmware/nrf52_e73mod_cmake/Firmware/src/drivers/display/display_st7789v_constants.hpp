@@ -1,6 +1,7 @@
 #pragma once
 
 #include <cstdint>
+#include <cstddef>
 
 namespace DisplayDriver{
 
@@ -65,6 +66,37 @@ namespace DisplayDriver
         ,   YELLOW     = 0xFFE0
         ,   ORANGE     = 0xFC00
     };
+
+    enum class EncodedColor : unsigned char
+    {
+        RedEnc = 3
+    };
+
+    inline EncodedColor toEncodedColor( Colors _color )
+    {
+        switch ( _color )
+        {
+        case Colors::RED:
+            return EncodedColor::RedEnc;
+            break;
+        
+        default:
+            break;
+        }
+    }
+    inline Colors fromEncodedColor( EncodedColor _color )
+    {
+        switch ( _color )
+        {
+        case EncodedColor::RedEnc:
+            return Colors::RED;
+            break;
+        
+        default:
+            break;
+        }
+    }
+
 };
 namespace DisplayDriver::St7789v::Disp208_240
 {

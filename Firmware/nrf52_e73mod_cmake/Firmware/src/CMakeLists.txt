@@ -52,6 +52,7 @@ target_sources(
     ${TARGET_NAME}
     PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/drivers/display/display_st7789v.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/display/display_framebuffer_keeper.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/spi/spi_wrapper.cpp
 )
 

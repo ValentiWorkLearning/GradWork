@@ -5,6 +5,7 @@
 #include "spi/spi_wrapper.hpp"
 
 #include "nrf_delay.h"
+#include "pca10040.h"
 
 #include <array>
 
@@ -23,11 +24,14 @@ St7789V::St7789V(
     )
     :   m_width{ _width }
     ,   m_height { _height }
+    ,   m_connectionId{}
     ,   m_pBusPtr{ _busPtr }
 {
     initGpio();
     initDisplay();
     initColumnRow( _width, _height );
+
+    m_frameBuffer = FrameBuffer::createFrameBuffer();
 }
 
 void
@@ -61,7 +65,7 @@ void St7789V::sendCommand(
     commandTransaction.beforeTransaction =
         [ this ]
         {
-            m_pBusPtr->resetDcPin();
+            resetDcPin();
         };
     
     commandTransaction.transactionAction =
@@ -73,7 +77,7 @@ void St7789V::sendCommand(
     commandTransaction.afterTransaction =
         [ this ]
         {
-            m_pBusPtr->setDcPin();
+            setDcPin();
         };
     
     m_pBusPtr->addTransaction( std::move( commandTransaction ) );
@@ -131,7 +135,7 @@ void St7789V::initColumnRow(
     )
     {
         m_columnStart = 0;
-        m_rowStart = 110;
+        m_rowStart = 80;
     }
     else if(
             _width == DisplayDriver::St7789v::Disp240_320::Width
@@ -179,8 +183,6 @@ void St7789V::fillRectangle(
 
     using TColor = std::underlying_type<DisplayDriver::Colors>::type;
 
-    TColor localColor { static_cast<TColor>( _color ) };
-
     setAddrWindow(
             _x
         ,   _y
@@ -188,28 +190,54 @@ void St7789V::fillRectangle(
         ,   _y + _height - 1
     );
 
+    m_frameBuffer->fillRectangle( 0,100,0,100,_color );
+
     sendCommand( DisplayReg::RAMWR );
 
-    m_pBusPtr->fillDmaArray(
-        [ localColor ]( size_t index )
+    // m_pBusPtr->fillDmaArray(
+    //     [ localColor ]( size_t index )
+    //     {
+    //         std::uint8_t value = ( index % 2 ) == 0 ? localColor >> 8 : localColor & 0xFF;
+    //         return value;
+    //     }
+    // );
+
+    m_connectionId = m_pBusPtr->onTransactionCompleted.connect(
+        [ this ]
         {
-            std::uint8_t value = ( index % 2 ) == 0 ? localColor >> 8 : localColor & 0xFF;
-            return value;
+            transmitFrameBuffer();
         }
     );
-
     m_pBusPtr->runQueue();
-    m_pBusPtr->runRepeatedSend( _height * 2 );
+}
 
-    // // // get _height
-    // // // get _width
+void St7789V::transmitFrameBuffer()
+{
+    if( m_frameBuffer->isAllBufferTransmitted() )
+    {
+        m_pBusPtr->onTransactionCompleted.disconnect( m_connectionId );
+        return;
+    }
 
-    // for(_y = _height; _y > 0; _y--)
-    // {
-    //     sendChunk( localColor >> 8 );
-    //     sendChunk( localColor & 0xFF );
-    // }
-    // m_pBusPtr->runQueue();
+    const FrameBuffer::RowType& rowToTransmit{ m_frameBuffer->getNextTransmissionRow() };
+    Interface::Spi::SpiBus::DmaArrayType& dmaArray { m_pBusPtr->getDmaArray() };
+
+    std::uint8_t dmaArrayIndex{};
+
+    for( DisplayDriver::EncodedColor pixel: rowToTransmit )
+    {
+        using TUnderlyingColor = std::underlying_type_t<DisplayDriver::Colors>;
+
+        DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
+        TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
+
+        // dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
+        // dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
+        // dmaArray[ dmaArrayIndex++ ] = underlyingColor >> 8;
+        // dmaArray[ dmaArrayIndex++ ] = underlyingColor & 0xFF;
+    }
+
+    m_pBusPtr->sendFullDmaArray();
 }
 
 void St7789V::setAddrWindow(
@@ -252,14 +280,12 @@ void St7789V::drawPixel(
 {
     setAddrWindow( _x, _y, _x+1, _y+1 );
 
-    using TColor = std::underlying_type<DisplayDriver::Colors>::type;
+    m_frameBuffer->drawPixel( _x,_y,_color );
 
-    TColor localColor { static_cast<TColor>( _color ) };
-
-    sendChunk(
-            localColor >> 8
-        ,   localColor & 0xFF
-    );
+    // sendChunk(
+    //         localColor >> 8
+    //     ,   localColor & 0xFF
+    // );
     m_pBusPtr->runQueue();
 }
 
