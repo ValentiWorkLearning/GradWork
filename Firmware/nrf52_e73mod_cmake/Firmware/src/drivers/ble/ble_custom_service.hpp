@@ -21,7 +21,7 @@ namespace Ble::CustomService
 
     static constexpr std::uint8_t UuidSize = 16;
 
-    static constexpr std::array<std::uint8_t,UuidSize> UUID_BE = {
+    static constexpr std::array<std::uint8_t,UuidSize> UuidBase_BE = {
             0xF3, 0x64,0xAD,0xC9
         ,   0xB0, 0x00
         ,   0x40, 0x42
@@ -42,7 +42,38 @@ namespace Ble::CustomService
         return outputArray;
     }
 
-    static constexpr std::array UUID_LE{
+    static constexpr std::array UuidBase{
         reverseByteOrder( UUID_BE )
+    };
+
+    static constexpr std::size_t ServiceUuid = 0x1400;
+    static constexpr std::size_t ValueCharUuid = 0x1401;
+
+
+    class CustomService
+    {
+
+        public:
+        CustomService();
+
+        private:
+
+        void initCustomService();
+
+        void initAdvertisment();
+
+        void initCustomCharacteric();
+
+        private:
+
+        std::uint16_t m_serviceHandle;
+        ble_gatts_char_handles_t m_customValueHandles;   
+        std::uint16_t m_connectionHandle;
+        std::uint8_t m_uuidType;
+    }
+
+    struct BleCustomService
+    {
+        std::uint16_t se
     };
 }
