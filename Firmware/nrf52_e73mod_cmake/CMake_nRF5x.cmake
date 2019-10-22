@@ -107,7 +107,7 @@ macro(nRF5x_setup)
             "${NRF5_SDK_PATH}/modules/nrfx"
             "${NRF5_SDK_PATH}/modules/nrfx/drivers/include"
             "${NRF5_SDK_PATH}/modules/nrfx/hal"
-            "${NRF5_SDK_PATH}/modules/nrfx/mdk"
+            "${NRF5_SDK_PATH}/modules/nrfx/mdk" 
     )
 
     list(APPEND SDK_SOURCE_FILES
@@ -125,12 +125,10 @@ macro(nRF5x_setup)
             "${NRF5_SDK_PATH}/modules/nrfx/soc/nrfx_atomic.c"
             )
 
-
     # toolchain specific
     include_directories(
             "${NRF5_SDK_PATH}/components/toolchain/cmsis/include"
     )
-
 
     # libraries
     include_directories(

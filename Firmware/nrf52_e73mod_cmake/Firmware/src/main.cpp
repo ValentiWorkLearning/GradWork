@@ -15,6 +15,8 @@
 
 #include "drivers/spi/spi_wrapper.hpp"
 
+#include "drivers/ble/ble_custom_service.hpp"
+
 namespace UartConstants
 {
     constexpr std::uint16_t TxSize = 256;        /**< max number of test bytes to be used for tx and rx. */
@@ -89,6 +91,10 @@ int main(void)
 
     initSwoPrint();
 
+    auto ServiceUuidBe = Ble::CustomService::UUID_BE;
+    // auto ServiceUuid = Ble::CustomService::UUID_LE;
+    auto Something = Ble::CustomService::bigEndianToLittleEndian(Ble::CustomService::UUID_BE);
+
     auto spiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M0>();
 
     auto display = DisplayDriver::createDisplayDriver(
@@ -116,7 +122,7 @@ int main(void)
     nrf_delay_ms(120);
     display->fillColor( DisplayDriver::Colors::ORANGE );
     nrf_delay_ms(120);
-    display->fillRectangle( 40,40,20,20,DisplayDriver::Colors::BLUE );
+    display->fillRectangle( 40,40,20,20,DisplayDriver::Colors::BLACK );
     nrf_delay_ms(120);
     /* Toggle LEDs. */
     auto ledToggler = 

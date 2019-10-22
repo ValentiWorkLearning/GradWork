@@ -853,4 +853,14 @@ Wire Wire Line
 Connection ~ 10550 4050
 Wire Wire Line
 	10550 4050 10700 4050
+Wire Notes Line
+	2500 6300 2500 7700
+Wire Notes Line
+	2500 7700 4100 7700
+Wire Notes Line
+	4100 7700 4100 6300
+Wire Notes Line
+	4100 6300 2500 6300
+Text Notes 2900 7550 0    50   ~ 0
+Onboard RED LED
 $EndSCHEMATC

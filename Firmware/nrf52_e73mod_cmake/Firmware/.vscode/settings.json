@@ -80,6 +80,7 @@
         "xlocale": "cpp",
         "xlocinfo": "cpp",
         "xlocnum": "cpp",
-        "pca10040.h": "c"
+        "pca10040.h": "c",
+        "bitset": "cpp"
     }
 }
