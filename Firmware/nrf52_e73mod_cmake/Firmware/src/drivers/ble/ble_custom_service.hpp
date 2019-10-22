@@ -31,28 +31,18 @@ namespace Ble::CustomService
 
 
     template<typename TArray>
-    auto bigEndianToLittleEndian( TArray _array )
+    constexpr auto reverseByteOrder( TArray _array )
     {   
-        constexpr std::uint8_t TItemSize =  sizeof( _array[0] );
-        constexpr std::uint8_t BitsInByte = 8;
-        constexpr std::uint8_t TItemBitSize = TItemSize * BitsInByte;
-
         TArray outputArray{};
         for( size_t i{}; i< _array.size(); ++i )
         {
-            std::uint8_t lsbValue{};
-            for( int j{}; j<TItemBitSize ; ++j )
-            {
-                bool bitValue = ((_array[i] & (1<<i)) >> i);
-                lsbValue |= (bitValue << (TItemBitSize - 1 - i ) );
-            }
-            outputArray[i] = lsbValue;
+            outputArray[ _array.size()-i-1 ] = _array[i];
         }
             
         return outputArray;
     }
 
-    // static constexpr std::array UUID_LE{
-    //     bigEndianToLittleEndian( UUID_BE )
-    // };
+    static constexpr std::array UUID_LE{
+        reverseByteOrder( UUID_BE )
+    };
 }

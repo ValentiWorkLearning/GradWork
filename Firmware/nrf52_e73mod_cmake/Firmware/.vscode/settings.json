@@ -81,6 +81,7 @@
         "xlocinfo": "cpp",
         "xlocnum": "cpp",
         "pca10040.h": "c",
-        "bitset": "cpp"
+        "bitset": "cpp",
+        "queue": "cpp"
     }
 }

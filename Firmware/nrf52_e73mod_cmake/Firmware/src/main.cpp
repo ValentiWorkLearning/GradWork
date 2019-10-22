@@ -93,7 +93,7 @@ int main(void)
 
     auto ServiceUuidBe = Ble::CustomService::UUID_BE;
     // auto ServiceUuid = Ble::CustomService::UUID_LE;
-    auto Something = Ble::CustomService::bigEndianToLittleEndian(Ble::CustomService::UUID_BE);
+    auto Something = Ble::CustomService::reverseByteOrder(Ble::CustomService::UUID_BE);
 
     auto spiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M0>();
 
