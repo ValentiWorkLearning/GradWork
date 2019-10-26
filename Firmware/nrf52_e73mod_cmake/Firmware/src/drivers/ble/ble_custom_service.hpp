@@ -43,7 +43,7 @@ namespace Ble::CustomService
     }
 
     static constexpr std::array UuidBase{
-        reverseByteOrder( UUID_BE )
+        reverseByteOrder( UuidBase_BE )
     };
 
     static constexpr std::size_t ServiceUuid = 0x1400;
@@ -70,10 +70,10 @@ namespace Ble::CustomService
         ble_gatts_char_handles_t m_customValueHandles;   
         std::uint16_t m_connectionHandle;
         std::uint8_t m_uuidType;
-    }
-
-    struct BleCustomService
-    {
-        std::uint16_t se
     };
+
+    // struct BleCustomService
+    // {
+    //     std::uint16_t se
+    // };
 }

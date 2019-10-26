@@ -18,6 +18,8 @@ CustomService::CustomService()
     ,   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
     ,   m_uuidType{}
 {
+    initCustomService();
+    initAdvertisment();
 }
 
 void CustomService::initCustomService()
@@ -28,16 +30,15 @@ void CustomService::initCustomService()
         ble_srv_cccd_security_mode_t m_customValueCharAttribute;
     };
 
+    ret_code_t errCode{};
+
     // Add Custom Service UUID
     ble_uuid128_t baseUuid{};
     std::memcpy( baseUuid, UuidBase_BE.data(), UuidSize );
 
     errCode = sd_ble_uuid_vs_add( &baseUuid, &m_uuidType ); // Add the Custom Service
 
-    if( errCode != NRF_SUCCESS )
-    {
-        throw std::exception( "Error while initializing custom service" );
-    }
+    APP_CHECK_ERROR( errCode )
 
     ble_uuid_t bleUuid{ m_uuidType, ServiceUuid };
 
@@ -47,10 +48,7 @@ void CustomService::initCustomService()
         ,   m_serviceHandle
     );
 
-    if( errCode != NRF_SUCCESS )
-    {
-        throw std::exception( "Error while initializing custom service" );
-    }
+    APP_CHECK_ERROR( errCode );
 
 }
 
@@ -61,11 +59,7 @@ void CustomService::initCustomCharacteric()
 
 void CustomService::initAdvertisment()
 {
-    ret_code_t errCode{};
-    nrf_ble_qwr_init_t qwrInit{};
-    
-    qwrInit.error_handler = nrf_qwr_error_handler;
-    errCode = nrf_ble_qwr_init(  , &qwrInit );
+
 }
 
 };

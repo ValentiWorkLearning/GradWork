@@ -16,6 +16,8 @@
 #include "drivers/spi/spi_wrapper.hpp"
 
 #include "drivers/ble/ble_custom_service.hpp"
+#include "drivers/ble/ble_softdevice.hpp"
+
 
 namespace UartConstants
 {
@@ -91,9 +93,9 @@ int main(void)
 
     initSwoPrint();
 
-    auto ServiceUuidBe = Ble::CustomService::UUID_BE;
+    auto ServiceUuidBe = Ble::CustomService::UuidBase_BE;
     // auto ServiceUuid = Ble::CustomService::UUID_LE;
-    auto Something = Ble::CustomService::reverseByteOrder(Ble::CustomService::UUID_BE);
+    auto Something = Ble::CustomService::reverseByteOrder(Ble::CustomService::UuidBase);
 
     auto spiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M0>();
 
@@ -102,6 +104,9 @@ int main(void)
         ,   DisplayDriver::St7789v::Disp208_240::Width
         ,   DisplayDriver::St7789v::Disp208_240::Height
     );
+
+    auto bleStackKeeper = Ble::Stack::createBleStackKeeper();
+
     nrf_delay_ms(230);
 
     display->fillColor( DisplayDriver::Colors::BLACK );
