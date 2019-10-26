@@ -52,7 +52,14 @@ private:
 
 private:
 
-    NRF_BLE_QWR_DEF(m_qwr);                                                 /**< Context for the Queued Write module.*/
+    // Thanks godbolt compiler exporer for this magic-macro expanding.
+    // Just add -E compilation flag for getting the post-prreprocessing output
+
+    /**< Context for the Queued Write module.*/
+    static nrf_ble_qwr_t m_qwr;
+    static constexpr nrf_sdh_ble_evt_observer_t m_qwr_obs __attribute__ ((section("." STRINGIFY(sdh_ble_observersNRF_BLE_QWR_BLE_OBSERVER_PRIO)))) __attribute__((used)) = { .handler = nrf_ble_qwr_on_ble_evt, .p_context = &m_qwr };
+    /**< Context for the Queued Write module.*/
+
     std::uint16_t m_connectionHandle;
 };
 

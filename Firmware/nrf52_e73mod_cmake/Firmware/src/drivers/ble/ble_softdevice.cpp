@@ -18,6 +18,7 @@ BleStackKeeper::BleStackKeeper()
     :   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
 {
     bleStackInit();
+    initGattModule();
 }
 
 void BleStackKeeper::initGattModule()
@@ -127,6 +128,8 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent, void * _pCont
             break;
     }
 }
+
+nrf_ble_qwr_t BleStackKeeper::m_qwr{};
 
 std::unique_ptr<BleStackKeeper> createBleStackKeeper()
 {
