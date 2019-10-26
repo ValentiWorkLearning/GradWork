@@ -805,11 +805,6 @@ Wire Wire Line
 	6250 7000 6250 7150
 Connection ~ 6250 7000
 Wire Wire Line
-	6600 7000 6600 7100
-Connection ~ 6600 7100
-Wire Wire Line
-	6600 7100 6600 7150
-Wire Wire Line
 	5550 7100 6600 7100
 Wire Wire Line
 	5900 7450 5900 7500
@@ -863,4 +858,20 @@ Wire Notes Line
 	4100 6300 2500 6300
 Text Notes 2900 7550 0    50   ~ 0
 Onboard RED LED
+Connection ~ 6600 7100
+Wire Wire Line
+	6600 7100 6600 7150
+Wire Wire Line
+	6600 7000 6600 7100
+$Comp
+L Regulator_Linear:MCP1700-3302E_SOT23 U5
+U 1 1 5DBB69D4
+P 5050 6000
+F 0 "U5" H 5050 6242 50  0000 C CNN
+F 1 "MCP1700-3302E_SOT23" H 5050 6151 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 5050 6225 50  0001 C CNN
+F 3 "http://ww1.microchip.com/downloads/en/DeviceDoc/20001826C.pdf" H 5050 6000 50  0001 C CNN
+	1    5050 6000
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
