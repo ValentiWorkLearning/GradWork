@@ -510,7 +510,7 @@ F 3 "" H 13150 1100 50  0001 C CNN
 $EndComp
 Wire Wire Line
 	12900 1100 13150 1100
-Text Notes 7400 3900 0    50   ~ 0
+Text Notes 8400 3900 0    50   ~ 0
 Display module, Controller ST7789V
 $Comp
 L Connector:Conn_01x09_Female J2
@@ -639,7 +639,7 @@ Wire Notes Line
 	600  7700 2450 7700
 Wire Notes Line
 	600  6300 600  7700
-Text Notes 1000 7550 0    50   ~ 0
+Text Notes 1350 7600 0    50   ~ 0
 SWD programming interface
 Text Label 3750 4150 0    50   ~ 0
 DISP_FMARK
@@ -712,7 +712,7 @@ Wire Notes Line
 	2500 7700 4100 7700
 Wire Notes Line
 	4100 7700 4100 6300
-Text Notes 2900 7550 0    50   ~ 0
+Text Notes 3350 7600 0    50   ~ 0
 Onboard RED LED
 $Comp
 L Regulator_Linear:LP2985-2.8 U7
@@ -993,7 +993,7 @@ Wire Wire Line
 Wire Wire Line
 	950  10250 950  10150
 Connection ~ 1000 10250
-Text Notes 1150 11150 0    50   ~ 0
+Text Notes 1750 11150 0    50   ~ 0
 Diplsay & board supply
 Wire Notes Line
 	600  7750 600  11200
@@ -1005,7 +1005,7 @@ Wire Notes Line
 	13500 2300 13500 550 
 Wire Notes Line
 	13500 550  10050 550 
-Text Notes 11350 2150 0    50   ~ 0
+Text Notes 12700 2200 0    50   ~ 0
 SPI FLASH Memory\n
 $Comp
 L MPU-9250:MPU-9250 U8
@@ -1251,7 +1251,7 @@ Wire Wire Line
 Connection ~ 8850 6000
 Wire Notes Line
 	9850 4200 5100 4200
-Text Notes 6950 7050 0    50   ~ 0
+Text Notes 7350 7050 0    50   ~ 0
 Gyroscope & Accelerometer & Magnetometer with I2C interface
 $Comp
 L Connector:Conn_01x10_Female J4
@@ -1687,17 +1687,6 @@ Connection ~ 3000 10250
 Wire Wire Line
 	3000 10250 3000 10500
 $Comp
-L Switch:SW_Push RESET
-U 1 1 5E7B968E
-P 5100 9850
-F 0 "RESET" H 5100 10135 50  0000 C CNN
-F 1 "SW_Push" H 5100 10044 50  0000 C CNN
-F 2 "Button_Switch_SMD:SW_SPST_SKQG_WithStem" H 5100 10050 50  0001 C CNN
-F 3 "~" H 5100 10050 50  0001 C CNN
-	1    5100 9850
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR0148
 U 1 1 5E7BB451
 P 5350 10100
@@ -1714,4 +1703,65 @@ Wire Wire Line
 	5350 9850 5300 9850
 Text Label 4900 9850 2    50   ~ 0
 SWD_RESET
+$Comp
+L Switch:SW_Push RESET1
+U 1 1 5E7B968E
+P 5100 9850
+F 0 "RESET1" H 5100 10135 50  0000 C CNN
+F 1 "SW_Push" H 5100 10044 50  0000 C CNN
+F 2 "Button_Switch_SMD:SW_SPST_SKQG_WithStem" H 5100 10050 50  0001 C CNN
+F 3 "~" H 5100 10050 50  0001 C CNN
+	1    5100 9850
+	1    0    0    -1  
+$EndComp
+Wire Notes Line
+	4400 7800 4400 8850
+Wire Notes Line
+	4400 8850 5500 8850
+Wire Notes Line
+	5500 8850 5500 7800
+Wire Notes Line
+	5500 7800 4400 7800
+Text Notes 5200 8800 0    50   ~ 0
+UART1
+Wire Notes Line
+	2800 7750 2800 9150
+Wire Notes Line
+	2800 9150 4300 9150
+Wire Notes Line
+	4300 9150 4300 7750
+Wire Notes Line
+	4300 7750 2800 7750
+Text Notes 3650 9000 0    50   ~ 0
+USB Supply
+Wire Notes Line
+	2800 9250 2800 10800
+Wire Notes Line
+	2800 10800 4300 10800
+Wire Notes Line
+	4300 10800 4300 9250
+Wire Notes Line
+	4300 9250 2800 9250
+Text Notes 3750 10700 0    50   ~ 0
+User Buttons
+Wire Notes Line
+	4400 9500 4400 10450
+Wire Notes Line
+	4400 10450 5500 10450
+Wire Notes Line
+	5500 10450 5500 9500
+Wire Notes Line
+	5500 9500 4400 9500
+Text Notes 5050 10400 0    50   ~ 0
+MCU Reset
+Wire Notes Line
+	650  750  650  5250
+Wire Notes Line
+	650  5250 4550 5250
+Wire Notes Line
+	4550 5250 4550 750 
+Wire Notes Line
+	4550 750  650  750 
+Text Notes 3550 5150 0    50   ~ 0
+NRF52832-E73 Module
 $EndSCHEMATC
