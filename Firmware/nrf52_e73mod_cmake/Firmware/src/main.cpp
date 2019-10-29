@@ -94,8 +94,8 @@ int main(void)
     initSwoPrint();
 
     auto ServiceUuidBe = Ble::CustomService::UuidBase_BE;
-    // auto ServiceUuid = Ble::CustomService::UUID_LE;
-    auto Something = Ble::CustomService::reverseByteOrder(Ble::CustomService::UuidBase);
+
+    auto ServiceUuid = Ble::CustomService::UuidBase;
 
     auto spiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M0>();
 

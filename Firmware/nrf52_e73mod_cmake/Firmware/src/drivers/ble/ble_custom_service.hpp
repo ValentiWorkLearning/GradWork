@@ -3,6 +3,8 @@
 #include "ble.h"
 #include "ble_srv_common.h"
 
+#include "MetaUtils.hpp"
+
 #include <cstdint>
 #include <array>
 #include <bitset>
@@ -29,22 +31,7 @@ namespace Ble::CustomService
         ,   0x05, 0xCA,0x45,0xBF, 0x8A, 0xBC
     };
 
-
-    template<typename TArray>
-    constexpr auto reverseByteOrder( TArray _array )
-    {   
-        TArray outputArray{};
-        for( size_t i{}; i< _array.size(); ++i )
-        {
-            outputArray[ _array.size()-i-1 ] = _array[i];
-        }
-            
-        return outputArray;
-    }
-
-    static constexpr std::array UuidBase{
-        reverseByteOrder( UuidBase_BE )
-    };
+    static constexpr std::array UuidBase{ Meta::reverseArray( UuidBase_BE ) };
 
     static constexpr std::size_t ServiceUuid = 0x1400;
     static constexpr std::size_t ValueCharUuid = 0x1401;
