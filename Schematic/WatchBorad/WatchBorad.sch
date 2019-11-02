@@ -384,17 +384,17 @@ Wire Wire Line
 	7300 2050 7050 2050
 Wire Wire Line
 	7300 2150 7050 2150
-Text Label 7050 1450 2    50   ~ 0
-RS_1.8
-Text Label 7050 1550 2    50   ~ 0
-SDA_1.8
-Text Label 7050 1650 2    50   ~ 0
-SCLK_1.8
-Text Label 7050 1750 2    50   ~ 0
-FMARK_1.8
-Text Label 7050 1850 2    50   ~ 0
-CS_1.8
 Text Label 7050 1950 2    50   ~ 0
+RS_1.8
+Text Label 7050 1850 2    50   ~ 0
+SDA_1.8
+Text Label 7050 1750 2    50   ~ 0
+SCLK_1.8
+Text Label 7050 1650 2    50   ~ 0
+FMARK_1.8
+Text Label 7050 1550 2    50   ~ 0
+CS_1.8
+Text Label 7050 1450 2    50   ~ 0
 RESET_1.8
 $Comp
 L power:+1V8 #PWR0113
