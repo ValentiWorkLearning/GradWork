@@ -2297,4 +2297,9 @@ Wire Wire Line
 Connection ~ 3900 10250
 Wire Wire Line
 	3900 10250 4350 10250
+Text Label 4350 10950 0    50   ~ 0
+P_19
+Wire Wire Line
+	4350 10950 4200 10950
+Connection ~ 4200 10950
 $EndSCHEMATC
