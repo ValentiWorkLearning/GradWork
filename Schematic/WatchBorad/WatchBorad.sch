@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:WatchBorad-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -454,17 +454,17 @@ Wire Wire Line
 Wire Wire Line
 	8500 1250 9150 1250
 Connection ~ 9150 1250
-Text Label 8600 1450 0    50   ~ 0
-DISP_RS
-Text Label 8600 1550 0    50   ~ 0
-DISP_SDA
-Text Label 8600 1650 0    50   ~ 0
-DISP_SCLK
-Text Label 8600 1750 0    50   ~ 0
-DISP_FMARK
-Text Label 8600 1850 0    50   ~ 0
-DISP_CS
 Text Label 8600 1950 0    50   ~ 0
+DISP_RS
+Text Label 8600 1850 0    50   ~ 0
+DISP_SDA
+Text Label 8600 1750 0    50   ~ 0
+DISP_SCLK
+Text Label 8600 1650 0    50   ~ 0
+DISP_FMARK
+Text Label 8600 1550 0    50   ~ 0
+DISP_CS
+Text Label 8600 1450 0    50   ~ 0
 DISP_RESET
 Wire Wire Line
 	8500 1450 8600 1450
