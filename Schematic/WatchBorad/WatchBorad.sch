@@ -1,6 +1,6 @@
 EESchema Schematic File Version 4
 LIBS:WatchBorad-cache
-EELAYER 30 0
+EELAYER 26 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
@@ -787,17 +787,6 @@ F 3 "" H 2300 8000 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:C C10
-U 1 1 5DB89395
-P 2050 8350
-F 0 "C10" H 2165 8396 50  0000 L CNN
-F 1 "0.1uF" H 2165 8305 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 2088 8200 50  0001 C CNN
-F 3 "~" H 2050 8350 50  0001 C CNN
-	1    2050 8350
-	1    0    0    -1  
-$EndComp
-$Comp
 L power:GND #PWR0131
 U 1 1 5DB88504
 P 1650 8600
@@ -816,17 +805,6 @@ Wire Notes Line
 	2450 6300 600  6300
 Wire Notes Line
 	2450 7700 2450 6300
-$Comp
-L Device:C C9
-U 1 1 5DBC7BF7
-P 1200 8350
-F 0 "C9" H 1315 8396 50  0000 L CNN
-F 1 "0.1uF" H 1315 8305 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0805_2012Metric_Pad1.15x1.40mm_HandSolder" H 1238 8200 50  0001 C CNN
-F 3 "~" H 1200 8350 50  0001 C CNN
-	1    1200 8350
-	1    0    0    -1  
-$EndComp
 $Comp
 L power:+5V #PWR0132
 U 1 1 5DBDB7DD
@@ -2302,4 +2280,26 @@ P_19
 Wire Wire Line
 	4350 10950 4200 10950
 Connection ~ 4200 10950
+$Comp
+L Device:CP C6
+U 1 1 5DC2AF23
+P 2050 8350
+F 0 "C6" H 2168 8396 50  0000 L CNN
+F 1 "10uF" H 2168 8305 50  0000 L CNN
+F 2 "Capacitor_SMD:CP_Elec_4x3.9" H 2088 8200 50  0001 C CNN
+F 3 "~" H 2050 8350 50  0001 C CNN
+	1    2050 8350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:CP C5
+U 1 1 5DC2B18E
+P 1200 8350
+F 0 "C5" H 1318 8396 50  0000 L CNN
+F 1 "10uF" H 1318 8305 50  0000 L CNN
+F 2 "Capacitor_SMD:CP_Elec_4x3.9" H 1238 8200 50  0001 C CNN
+F 3 "~" H 1200 8350 50  0001 C CNN
+	1    1200 8350
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
