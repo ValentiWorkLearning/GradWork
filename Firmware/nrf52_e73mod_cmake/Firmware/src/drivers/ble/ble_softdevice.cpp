@@ -10,6 +10,7 @@
 #include "nrf_sdh_ble.h"
 #include "nrf_ble_qwr.h"
 
+#include "logger_service.hpp"
 
 namespace
 {
@@ -91,6 +92,9 @@ void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt
 {
     if ( _pEvent->evt_id == NRF_BLE_GATT_EVT_ATT_MTU_UPDATED )
     {
+        Logger::Instance().logDebug(
+            "GATT ATT MTU on connection 0x%x changed to %d."
+        );
         // NRF_LOG_INFO("GATT ATT MTU on connection 0x%x changed to %d.",
         //              p_evt->conn_handle,
         //              p_evt->params.att_mtu_effective);
@@ -143,7 +147,7 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent, void * _pCont
     switch (_pBleEvent->header.evt_id)
     {
         case BLE_GAP_EVT_DISCONNECTED:
-            //NRF_LOG_INFO("Disconnected.");
+            Logger::Instance().logDebug("Disconnected.");
             // LED indication will be changed when advertising starts.
             break;
 
@@ -160,7 +164,7 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent, void * _pCont
 
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
         {
-            //NRF_LOG_DEBUG("PHY update request.");
+            Logger::Instance().logDebug( "PHY update request." );
 
             ble_gap_phys_t const phys =
             {
@@ -174,7 +178,7 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent, void * _pCont
 
         case BLE_GATTC_EVT_TIMEOUT:
             // Disconnect on GATT Client timeout event.
-            //NRF_LOG_DEBUG("GATT Client Timeout.");
+            Logger::Instance().logDebug( "GATT Client Timeout." );
 
             errCode = sd_ble_gap_disconnect(
                     _pBleEvent->evt.gattc_evt.conn_handle
@@ -209,8 +213,6 @@ void BleStackKeeper::initAdvertising()
     ret_code_t errCode{};
     ble_advertising_init_t initAdvertisingParams{};
 
-    memset(&initAdvertisingParams, 0, sizeof(initAdvertisingParams));
-
     initAdvertisingParams.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
     initAdvertisingParams.advdata.include_appearance      = true;
     initAdvertisingParams.advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
@@ -240,12 +242,12 @@ void BleStackKeeper::initAdvertising()
 
 void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )
 {
-    ret_code_t errorCode;
+    ret_code_t errorCode{};
 
-    switch (_pAdvertisingEvent)
+    switch ( _pAdvertisingEvent )
     {
         case BLE_ADV_EVT_FAST:
-            // NRF_LOG_INFO("Fast advertising.");
+            Logger::Instance().logDebug( "Fast advertising." );
             // errorCode = bsp_indication_set(BSP_INDICATE_ADVERTISING);
             APP_ERROR_CHECK(errorCode);
             break;
@@ -262,7 +264,7 @@ void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )
 void BleStackKeeper::initPeerManager()
 {
     ble_gap_sec_params_t securityParams{};
-    ret_code_t           errorCode;
+    ret_code_t           errorCode{};
 
     errorCode = pm_init();
     APP_ERROR_CHECK( errorCode );
@@ -300,7 +302,7 @@ void BleStackKeeper::initPeerManager()
 
 void BleStackKeeper::connectionParamsEventHandler( ble_conn_params_evt_t * _pEvent )
 {
-    ret_code_t errCode;
+    ret_code_t errCode{};
 
     if ( _pEvent->evt_type == BLE_CONN_PARAMS_EVT_FAILED )
     {
@@ -347,23 +349,23 @@ void BleStackKeeper::initConnectionParams()
     connectionParams.error_handler                  = connectionParamsErrorCallback;
 
     errCode = ble_conn_params_init( &connectionParams );
-    APP_ERROR_CHECK(errCode);
+    APP_ERROR_CHECK( errCode );
 }
 
 void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
 {
-    ret_code_t errCode;
+    ret_code_t errCode{};
 
     switch ( _pPeerEvent->evt_id )
     {
         case PM_EVT_BONDED_PEER_CONNECTED:
         {
-            // NRF_LOG_INFO( "Connected to a previously bonded device." );
+            Logger::Instance().logDebug(  "Connected to a previously bonded device." );
         } break;
 
         case PM_EVT_CONN_SEC_SUCCEEDED:
         {
-            // NRF_LOG_INFO( "Connection secured: role: %d, conn_handle: 0x%x, procedure: %d.",
+            Logger::Instance().logDebug(  "Connection secured: role: %d, conn_handle: 0x%x, procedure: %d." );
             //              ble_conn_state_role( _pPeerEvent->conn_handle ),
             //              _pPeerEvent->conn_handle,
             //              _pPeerEvent->params.conn_sec_succeeded.procedure );
@@ -459,9 +461,9 @@ void BleStackKeeper::startAdvertising( EraseBondsConfig _eraseBonds )
 
 void BleStackKeeper::deleteBonds()
 {
-    ret_code_t errCode;
+    ret_code_t errCode{};
 
-    // NRF_LOG_INFO("Erase bonds!");
+    Logger::Instance().logDebug( "Erase bonds!" );
 
     errCode = pm_peers_delete();
     APP_ERROR_CHECK( errCode );

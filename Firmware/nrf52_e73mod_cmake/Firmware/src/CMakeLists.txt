@@ -37,6 +37,7 @@ nRF5x_addAppFDS()
 nRF5x_addBLEService(ble_lbs)
 
 add_definitions(-DCONFIG_GPIO_AS_PINRESET)
+add_definitions(-DLoggerUart)
 
 # usually you would include files in this directory here, like so:
 #include_directories(.)
@@ -57,6 +58,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/display/display_framebuffer_keeper.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/spi/spi_wrapper.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/logger/logger_service_impl.cpp
 )
 
 target_include_directories(
@@ -64,4 +66,5 @@ target_include_directories(
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utils
+    ${CMAKE_CURRENT_LIST_DIR}/logger
 )
