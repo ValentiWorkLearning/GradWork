@@ -48,18 +48,52 @@ private:
 
     void bleEventHandler( ble_evt_t const* _pBleEvent, void * _pContext );
 
-    void initGattModule();
 
 private:
 
-    // Thanks godbolt compiler exporer for this magic-macro expanding.
-    // Just add -E compilation flag for getting the post-prreprocessing output
+    void initGapModule();
 
-    /**< Context for the Queued Write module.*/
-    static nrf_ble_qwr_t m_qwr;
-    static constexpr nrf_sdh_ble_evt_observer_t m_qwr_obs __attribute__ ((section("." STRINGIFY(sdh_ble_observersNRF_BLE_QWR_BLE_OBSERVER_PRIO)))) __attribute__((used)) = { .handler = nrf_ble_qwr_on_ble_evt, .p_context = &m_qwr };
-    /**< Context for the Queued Write module.*/
+    void initGatt();
 
+    void gattEventHandler( nrf_ble_gatt_t* p_gatt, nrf_ble_gatt_evt_t const* p_evt );
+
+private:
+
+    void initPeerManager();
+
+    void peerManagerEventHandler( pm_evt_t const* _pPeerEvent );
+
+private:
+
+    void initAdvertising();
+
+    void advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent );
+
+private:
+
+    void initConnectionParams();
+
+    void connectionParamsEventHandler( ble_conn_params_evt_t* _pEvent );
+
+    void connectionParamsErrorHandler( std::uint32_t _nrfError );
+
+private:
+
+    void initServices();
+
+private:
+
+    enum class EraseBondsConfig
+    {
+            EraseBoundsPolicy
+        ,   DontEraseBounds
+    };
+
+    void startAdvertising( EraseBondsConfig _eraseBonds );
+
+    void deleteBonds();
+
+private:
     std::uint16_t m_connectionHandle;
 };
 
