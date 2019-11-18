@@ -12,6 +12,8 @@
 
 #include "logger_service.hpp"
 
+#include "ble_custom_service.hpp"
+
 namespace
 {
     BLE_ADVERTISING_DEF( m_advertising );       /**< Advertising module instance. */
@@ -19,11 +21,16 @@ namespace
     NRF_BLE_GATT_DEF( m_gatt );                 /**< GATT module instance. */
 
     //TODO: this uuids must be placed as constexpr uuids for custome services. This just for compilation.
-    static ble_uuid_t m_adv_uuids[] =                       /**< Universally unique service identifiers. */
+    //Think about better solution :/
+    //
+    // {BLE_UUID_PLX_SERVICE, BLE_UUID_TYPE_BLE},
+    // {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
+    // {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
+
+    static constexpr size_t UuidsCount = 1;
+    static std::array<ble_uuid_t,UuidsCount> m_advertisingUuids =                   /**< Universally unique service identifiers. */
     {
-        {BLE_UUID_PLX_SERVICE, BLE_UUID_TYPE_BLE},
-        {BLE_UUID_BATTERY_SERVICE, BLE_UUID_TYPE_BLE},
-        {BLE_UUID_DEVICE_INFORMATION_SERVICE, BLE_UUID_TYPE_BLE}
+        { Ble::CustomService::ServiceUuid , Ble::CustomService::ServiceType }
     };
 }
 
@@ -216,8 +223,8 @@ void BleStackKeeper::initAdvertising()
     initAdvertisingParams.advdata.name_type               = BLE_ADVDATA_FULL_NAME;
     initAdvertisingParams.advdata.include_appearance      = true;
     initAdvertisingParams.advdata.flags                   = BLE_GAP_ADV_FLAGS_LE_ONLY_GENERAL_DISC_MODE;
-    initAdvertisingParams.advdata.uuids_complete.uuid_cnt = sizeof(m_adv_uuids) / sizeof(m_adv_uuids[0]);
-    initAdvertisingParams.advdata.uuids_complete.p_uuids  = m_adv_uuids;
+    initAdvertisingParams.advdata.uuids_complete.uuid_cnt = m_advertisingUuids.size();
+    initAdvertisingParams.advdata.uuids_complete.p_uuids  = m_advertisingUuids.data();
 
     namespace AdvertisingSettings = Ble::Stack::AdvertisingSettings;
 
@@ -473,6 +480,23 @@ void BleStackKeeper::deleteBonds()
 void BleStackKeeper::initServices()
 {
     //Here we init services.
+
+    ret_code_t errCode{};
+    nrf_ble_qwr_init_t qwrInit{};
+
+    auto qwrErrorCallback = cbc::obtain_connector(
+        [ this ]( uint32_t _nrfError )
+        {
+            APP_ERROR_HANDLER( _nrfError );
+        }
+    );
+
+    qwrInit.error_handler = qwrErrorCallback;
+
+    errCode = nrf_ble_qwr_init( &m_qwr, &qwrInit );
+    APP_ERROR_CHECK( errCode );
+
+    m_customService = std::make_unique<CustomService::CustomService>();
 }
 
 std::unique_ptr<BleStackKeeper> createBleStackKeeper()

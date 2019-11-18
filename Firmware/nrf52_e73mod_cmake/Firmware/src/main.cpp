@@ -24,13 +24,9 @@
 int main(void)
 {
     /* Configure board. */
-    bsp_board_init(BSP_INIT_LEDS);
+    bsp_board_init( BSP_INIT_LEDS );
 
     Logger::Instance().logDebug( "Hello world!" );
-
-    auto ServiceUuidBe = Ble::CustomService::UuidBase_BE;
-
-    auto ServiceUuid = Ble::CustomService::UuidBase;
 
     auto spiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M0>();
 

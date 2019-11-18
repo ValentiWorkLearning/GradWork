@@ -7,20 +7,11 @@
 
 #include <cstdint>
 #include <array>
-#include <bitset>
 
-// #include <arpa/inet.h>
+#include "Noncopyable.hpp"
 
 namespace Ble::CustomService
 {
-    // static constexpr std::array UUID_BE = {
-    //         0xCA,0x32,0x44,0xCC
-    //     ,   0xF4,0x3A
-    //     ,   0x11, 0xE9
-    //     ,   0xa7, 0x13
-    //     ,   0x2A, 0x2A,0xE2,0xDB, 0xCC, 0xE4
-    // };
-
     static constexpr std::uint8_t UuidSize = 16;
 
     static constexpr std::array<std::uint8_t,UuidSize> UuidBase_BE = {
@@ -31,17 +22,21 @@ namespace Ble::CustomService
         ,   0x05, 0xCA,0x45,0xBF, 0x8A, 0xBC
     };
 
-    static constexpr std::array UuidBase{ Meta::reverseArray( UuidBase_BE ) };
+    static constexpr std::array CustomServiceUuid{ Meta::reverseArray( UuidBase_BE ) };
+    static constexpr std::uint8_t ServiceType = BLE_UUID_TYPE_VENDOR_BEGIN;
 
-    static constexpr std::size_t ServiceUuid = 0x1400;
-    static constexpr std::size_t ValueCharUuid = 0x1401;
+    static constexpr std::uint16_t ServiceUuid = 0x1400;
+    static constexpr std::uint16_t ValueCharUuid = 0x1401;
 
 
     class CustomService
+        :   private Utils::noncopyable
     {
 
         public:
+
         CustomService();
+        ~CustomService() = default;
 
         private:
 
@@ -54,13 +49,11 @@ namespace Ble::CustomService
         private:
 
         std::uint16_t m_serviceHandle;
+
         ble_gatts_char_handles_t m_customValueHandles;   
+
         std::uint16_t m_connectionHandle;
+
         std::uint8_t m_uuidType;
     };
-
-    // struct BleCustomService
-    // {
-    //     std::uint16_t se
-    // };
 }

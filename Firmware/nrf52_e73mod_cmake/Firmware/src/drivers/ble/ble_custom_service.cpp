@@ -6,8 +6,7 @@
 #include "boards.h"
 #include "nrf_log.h"
 
-#include <string>
-
+#include <cstring>
 
 namespace Ble::CustomService
 {
@@ -20,6 +19,7 @@ CustomService::CustomService()
 {
     initCustomService();
     initAdvertisment();
+    initCustomCharacteric();
 }
 
 void CustomService::initCustomService()
@@ -34,21 +34,25 @@ void CustomService::initCustomService()
 
     // Add Custom Service UUID
     ble_uuid128_t baseUuid{};
-    std::memcpy( baseUuid, UuidBase_BE.data(), UuidSize );
+    std::memcpy(
+            &baseUuid
+        ,   CustomServiceUuid.data()
+        ,   CustomServiceUuid.size()
+    );
 
     errCode = sd_ble_uuid_vs_add( &baseUuid, &m_uuidType ); // Add the Custom Service
 
-    APP_CHECK_ERROR( errCode )
+    APP_ERROR_CHECK( errCode );
 
-    ble_uuid_t bleUuid{ m_uuidType, ServiceUuid };
+    ble_uuid_t bleUuid{ ServiceUuid, m_uuidType };
 
     errCode = sd_ble_gatts_service_add(
             BLE_GATTS_SRVC_TYPE_PRIMARY
-        ,   bleUuid
-        ,   m_serviceHandle
+        ,   &bleUuid
+        ,   &m_serviceHandle
     );
 
-    APP_CHECK_ERROR( errCode );
+    APP_ERROR_CHECK( errCode );
 
 }
 

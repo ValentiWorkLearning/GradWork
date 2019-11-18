@@ -58,6 +58,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/display/display_framebuffer_keeper.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/spi/spi_wrapper.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/logger/logger_service_impl.cpp
 )
 

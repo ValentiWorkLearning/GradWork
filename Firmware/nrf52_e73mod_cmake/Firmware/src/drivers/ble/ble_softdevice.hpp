@@ -29,6 +29,11 @@
 #include "nrf_ble_qwr.h"
 #include "nrf_pwr_mgmt.h"
 
+namespace Ble::CustomService
+{
+    class CustomService;
+}
+
 namespace Ble::Stack
 {
 
@@ -95,6 +100,8 @@ private:
 
 private:
     std::uint16_t m_connectionHandle;
+
+    std::unique_ptr<Ble::CustomService::CustomService> m_customService;
 };
 
 std::unique_ptr<BleStackKeeper> createBleStackKeeper();
