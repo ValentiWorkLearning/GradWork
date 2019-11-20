@@ -108,60 +108,11 @@ void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt
     }
 }
 
-static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
+void BleStackKeeper::bleEventHandlerLink( ble_evt_t const * _pBleEvent, void * _pContext )
 {
-    ret_code_t err_code = NRF_SUCCESS;
-
-    switch (p_ble_evt->header.evt_id)
-    {
-        case BLE_GAP_EVT_DISCONNECTED:
-            Logger::Instance().logDebug("Disconnected.");
-            // LED indication will be changed when advertising starts.
-            break;
-
-        case BLE_GAP_EVT_CONNECTED:
-            Logger::Instance().logDebug("Connected.");
-            // err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
-            // APP_ERROR_CHECK(err_code);
-            // m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
-            // err_code = nrf_ble_qwr_conn_handle_assign(&m_qwr, m_conn_handle);
-            // APP_ERROR_CHECK(err_code);
-            break;
-
-        case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
-        {
-            Logger::Instance().logDebug("PHY update request.");
-            // ble_gap_phys_t const phys =
-            // {
-            //     .tx_phys = BLE_GAP_PHY_AUTO,
-            //     .rx_phys = BLE_GAP_PHY_AUTO,
-            // };
-            // err_code = sd_ble_gap_phy_update(p_ble_evt->evt.gap_evt.conn_handle, &phys);
-            // APP_ERROR_CHECK(err_code);
-        } break;
-
-        case BLE_GATTC_EVT_TIMEOUT:
-            // Disconnect on GATT Client timeout event.
-            Logger::Instance().logDebug("GATT Client Timeout.");
-            // err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
-            //                                  BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-            // APP_ERROR_CHECK(err_code);
-            break;
-
-        case BLE_GATTS_EVT_TIMEOUT:
-            // Disconnect on GATT Server timeout event.
-            Logger::Instance().logDebug("GATT Server Timeout.");
-            // err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
-            //                                  BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
-            // APP_ERROR_CHECK(err_code);
-            break;
-
-        default:
-            // No implementation needed.
-            break;
-    }
+    TThis* pThis = reinterpret_cast<TThis*>( _pContext );
+    pThis->bleEventHandler( _pBleEvent );
 }
-
 
 void BleStackKeeper::bleStackInit()
 {
@@ -183,24 +134,17 @@ void BleStackKeeper::bleStackInit()
     errCode = nrf_sdh_ble_enable( &ramStart );
     APP_ERROR_CHECK( errCode );
 
-    static auto bleEventHandlerCallback = cbc::obtain_connector(
-        [ this ]( ble_evt_t const * _pEvent, void * _pContext )
-        {
-            return bleEventHandler( _pEvent,_pContext );
-        }
-    );
-
     // Register a handler for BLE events.
     NRF_SDH_BLE_OBSERVER(
             m_bleObserver
         ,   StackConstants::ObserverPriority
-        ,   ble_evt_handler
+        ,   bleEventHandlerLink
         ,   nullptr
     );
 }
 
 
-void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent, void * _pContext )
+void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
 {
     //copied as is from https://github.com/NordicPlayground/nRF52-Bluetooth-Course/blob/master/main.c
 

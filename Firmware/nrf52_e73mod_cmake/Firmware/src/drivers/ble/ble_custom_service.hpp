@@ -49,7 +49,11 @@ namespace Ble::CustomService
 
         private:
 
-        void serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext );
+        using TThis = CustomService;
+
+        static void serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext );
+
+        void bleEventHandler( ble_evt_t const * _pEvent );
 
         void initEventHandler();
 

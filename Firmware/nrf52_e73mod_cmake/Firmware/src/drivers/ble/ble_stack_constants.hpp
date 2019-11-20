@@ -29,7 +29,7 @@ namespace Ble::Stack::GapSettings
     constexpr size_t SlaveLatency                   = 0;                                       /**< Slave latency. */
     constexpr size_t ConnectionSupervisoryTimeout   = MSEC_TO_UNITS( 4000, UNIT_10_MS );       /**< Connection supervisory timeout (4 seconds). */
 
-    static std::string_view DeviceName = "VWDev";
+    static std::string_view DeviceName = "VDev";
 }
 
 namespace Ble::Stack::AdvertisingSettings

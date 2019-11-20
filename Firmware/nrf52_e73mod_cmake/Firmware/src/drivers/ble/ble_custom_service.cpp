@@ -26,18 +26,24 @@ CustomService::CustomService()
     initAdvertisment();
     initCustomCharacteric();
 }
-//TODO: Remove and think about better. Just for test :/
-void ble_cus_on_ble_evt( ble_evt_t const * p_ble_evt, void * p_context)
+
+void CustomService::initEventHandler()
 {
-   // ble_cus_t * p_cus = (ble_cus_t *) p_context;
+        NRF_SDH_BLE_OBSERVER(
+            m_serviceEvent
+        ,   ServiceObserverPriority
+        ,   serviceBleEventHandler
+        ,   this
+    );
     
-    NRF_LOG_INFO("BLE event received. Event type = %d\r\n", p_ble_evt->header.evt_id); 
-    // if (p_cus == NULL || p_ble_evt == NULL)
-    // {
-    //     return;
-    // }
-    
-    switch (p_ble_evt->header.evt_id)
+ }
+
+void CustomService::bleEventHandler( ble_evt_t const * _pEvent )
+{
+    if( _pEvent == nullptr )
+        return;
+
+    switch (_pEvent->header.evt_id)
     {
         case BLE_GAP_EVT_CONNECTED:
             //on_connect(p_cus, p_ble_evt);
@@ -59,30 +65,14 @@ void ble_cus_on_ble_evt( ble_evt_t const * p_ble_evt, void * p_context)
             // No implementation needed.
             break;
     }
+
 }
-
-void CustomService::initEventHandler()
-{
-
-    static auto customServiceHandler = cbc::obtain_connector(
-        [ this ]( ble_evt_t const * _pEvent, void * _pContext )
-        {
-            return serviceBleEventHandler( _pEvent,_pContext );
-        }
-    );
-
-        NRF_SDH_BLE_OBSERVER(
-            m_serviceEvent
-        ,   ServiceObserverPriority
-        ,   ble_cus_on_ble_evt
-        ,   nullptr
-    );
-    
- }
 
 void CustomService::serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext )
 {
-    Logger::Instance().logDebug( "BLE event received." );
+    TThis* pThis = reinterpret_cast<TThis*>( _pContext );
+    pThis->bleEventHandler( _pEvent );
+
 }
 
 void CustomService::initCustomService()

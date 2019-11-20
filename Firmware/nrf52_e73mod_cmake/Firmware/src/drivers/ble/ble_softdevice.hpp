@@ -51,8 +51,9 @@ private:
 
     void bleStackInit();
 
-    void bleEventHandler( ble_evt_t const* _pBleEvent, void * _pContext );
+    void bleEventHandler( ble_evt_t const* _pBleEvent );
 
+    static void bleEventHandlerLink( ble_evt_t const * _pBleEvent, void * _pContext );
 
 private:
 
@@ -89,6 +90,8 @@ private:
     void initAppTimer();
     
 private:
+
+    using TThis = BleStackKeeper;
 
     enum class EraseBondsConfig
     {
