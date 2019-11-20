@@ -29,7 +29,7 @@ namespace Ble::Stack::GapSettings
     constexpr size_t SlaveLatency                   = 0;                                       /**< Slave latency. */
     constexpr size_t ConnectionSupervisoryTimeout   = MSEC_TO_UNITS( 4000, UNIT_10_MS );       /**< Connection supervisory timeout (4 seconds). */
 
-    static std::string_view DeviceName = "E73BoardDevice";
+    static std::string_view DeviceName = "VWDev";
 }
 
 namespace Ble::Stack::AdvertisingSettings
@@ -37,7 +37,7 @@ namespace Ble::Stack::AdvertisingSettings
     using namespace std::chrono_literals;
 
     constexpr std::chrono::milliseconds Duration = 18'000ms;
-    constexpr std::chrono::milliseconds Interval = 25ms;
+    constexpr std::chrono::milliseconds Interval = 300ms;
 }
 
 

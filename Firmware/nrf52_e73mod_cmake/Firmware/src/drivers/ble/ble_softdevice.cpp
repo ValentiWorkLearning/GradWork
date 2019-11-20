@@ -1,18 +1,17 @@
 #include "ble_softdevice.hpp"
-
 #include "ble_stack_constants.hpp"
 
+#include "ble_custom_service.hpp"
+
 #include "CallbackConnector.hpp"
+#include "logger_service.hpp"
+
 
 #include "app_error.h"
 
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_ble_qwr.h"
-
-#include "logger_service.hpp"
-
-#include "ble_custom_service.hpp"
 
 namespace
 {
@@ -41,15 +40,16 @@ namespace Ble::Stack
 BleStackKeeper::BleStackKeeper()
     :   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
 {
+    initAppTimer();
     bleStackInit();
     initGapModule();
     initGatt();
-    initAdvertising();
-
     initServices();
-
+    initAdvertising();
     initConnectionParams();
     initPeerManager();
+
+    startAdvertising( EraseBondsConfig::DontEraseBounds );
 }
 
 void BleStackKeeper::initGapModule()
@@ -65,7 +65,7 @@ void BleStackKeeper::initGapModule()
     errCode = sd_ble_gap_device_name_set(
             &securityMode
         ,   reinterpret_cast<const std::uint8_t*>( GapParams::DeviceName.data() )
-        ,   GapParams::DeviceName.length()
+        ,   11
     );
     APP_ERROR_CHECK( errCode );
 
@@ -108,6 +108,61 @@ void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt
     }
 }
 
+static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
+{
+    ret_code_t err_code = NRF_SUCCESS;
+
+    switch (p_ble_evt->header.evt_id)
+    {
+        case BLE_GAP_EVT_DISCONNECTED:
+            Logger::Instance().logDebug("Disconnected.");
+            // LED indication will be changed when advertising starts.
+            break;
+
+        case BLE_GAP_EVT_CONNECTED:
+            Logger::Instance().logDebug("Connected.");
+            // err_code = bsp_indication_set(BSP_INDICATE_CONNECTED);
+            // APP_ERROR_CHECK(err_code);
+            // m_conn_handle = p_ble_evt->evt.gap_evt.conn_handle;
+            // err_code = nrf_ble_qwr_conn_handle_assign(&m_qwr, m_conn_handle);
+            // APP_ERROR_CHECK(err_code);
+            break;
+
+        case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
+        {
+            Logger::Instance().logDebug("PHY update request.");
+            // ble_gap_phys_t const phys =
+            // {
+            //     .tx_phys = BLE_GAP_PHY_AUTO,
+            //     .rx_phys = BLE_GAP_PHY_AUTO,
+            // };
+            // err_code = sd_ble_gap_phy_update(p_ble_evt->evt.gap_evt.conn_handle, &phys);
+            // APP_ERROR_CHECK(err_code);
+        } break;
+
+        case BLE_GATTC_EVT_TIMEOUT:
+            // Disconnect on GATT Client timeout event.
+            Logger::Instance().logDebug("GATT Client Timeout.");
+            // err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gattc_evt.conn_handle,
+            //                                  BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            // APP_ERROR_CHECK(err_code);
+            break;
+
+        case BLE_GATTS_EVT_TIMEOUT:
+            // Disconnect on GATT Server timeout event.
+            Logger::Instance().logDebug("GATT Server Timeout.");
+            // err_code = sd_ble_gap_disconnect(p_ble_evt->evt.gatts_evt.conn_handle,
+            //                                  BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
+            // APP_ERROR_CHECK(err_code);
+            break;
+
+        default:
+            // No implementation needed.
+            break;
+    }
+}
+
+
 void BleStackKeeper::bleStackInit()
 {
     ret_code_t errCode{};
@@ -128,7 +183,7 @@ void BleStackKeeper::bleStackInit()
     errCode = nrf_sdh_ble_enable( &ramStart );
     APP_ERROR_CHECK( errCode );
 
-    auto bleEventHandlerCallback = cbc::obtain_connector(
+    static auto bleEventHandlerCallback = cbc::obtain_connector(
         [ this ]( ble_evt_t const * _pEvent, void * _pContext )
         {
             return bleEventHandler( _pEvent,_pContext );
@@ -139,7 +194,7 @@ void BleStackKeeper::bleStackInit()
     NRF_SDH_BLE_OBSERVER(
             m_bleObserver
         ,   StackConstants::ObserverPriority
-        ,   bleEventHandlerCallback
+        ,   ble_evt_handler
         ,   nullptr
     );
 }
@@ -212,7 +267,6 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent, void * _pCont
             break;
     }
 }
-
 
 
 void BleStackKeeper::initAdvertising()
@@ -497,6 +551,13 @@ void BleStackKeeper::initServices()
     APP_ERROR_CHECK( errCode );
 
     m_customService = std::make_unique<CustomService::CustomService>();
+}
+
+
+void BleStackKeeper::initAppTimer()
+{
+    ret_code_t errCode = app_timer_init();
+    APP_ERROR_CHECK( errCode );
 }
 
 std::unique_ptr<BleStackKeeper> createBleStackKeeper()

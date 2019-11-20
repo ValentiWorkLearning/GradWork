@@ -28,6 +28,7 @@ namespace Ble::CustomService
     static constexpr std::uint16_t ServiceUuid = 0x1400;
     static constexpr std::uint16_t ValueCharUuid = 0x1401;
 
+    static constexpr std::uint8_t ServiceObserverPriority = 2;
 
     class CustomService
         :   private Utils::noncopyable
@@ -48,12 +49,15 @@ namespace Ble::CustomService
 
         private:
 
+        void serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext );
+
+        void initEventHandler();
+
+        private:
+
         std::uint16_t m_serviceHandle;
-
         ble_gatts_char_handles_t m_customValueHandles;   
-
         std::uint16_t m_connectionHandle;
-
         std::uint8_t m_uuidType;
     };
 }

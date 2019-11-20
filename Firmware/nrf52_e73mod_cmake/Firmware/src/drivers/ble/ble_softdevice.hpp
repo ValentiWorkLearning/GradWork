@@ -86,6 +86,8 @@ private:
 
     void initServices();
 
+    void initAppTimer();
+    
 private:
 
     enum class EraseBondsConfig

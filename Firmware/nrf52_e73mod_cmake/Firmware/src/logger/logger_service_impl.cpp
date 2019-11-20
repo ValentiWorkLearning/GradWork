@@ -11,6 +11,10 @@
 
 #include <type_traits>
 
+namespace
+{
+    std::string_view CaretReset = "\r\n";
+}
 
 class Logger::LoggerImpl
 {
@@ -55,6 +59,7 @@ public:
         void logString( std::string_view _toLog ) const override
         {
             m_logger.logString( _toLog );
+            m_logger.logString( CaretReset );
         }
 
         void initLogInterface()
