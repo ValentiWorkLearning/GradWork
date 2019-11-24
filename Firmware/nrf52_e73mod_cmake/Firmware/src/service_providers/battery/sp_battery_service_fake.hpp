@@ -34,6 +34,8 @@ private:
 
     void initTimer();
 
+    std::uint32_t convertToTimerTicks( std::chrono::seconds _interval );
+
 private:
 
     static constexpr std::uint8_t BatteryIncrement = 1;

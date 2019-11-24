@@ -74,9 +74,6 @@ BatteryServiceFake::initTimer()
 {
     ret_code_t errorCode{};
 
-    errorCode = app_timer_init();
-    APP_ERROR_CHECK( errorCode );
-
     auto timerExpiredCallback = cbc::obtain_connector(
         [ this ]( void * _pContext )
         {
@@ -93,10 +90,19 @@ BatteryServiceFake::initTimer()
 
     errorCode = app_timer_start(
             m_batterySimulatorTimer
-        ,   std::chrono::duration_cast<std::chrono::milliseconds>( m_measuringPeriod ).count()
+        ,   convertToTimerTicks( m_measuringPeriod )
         ,   nullptr
     );
     APP_ERROR_CHECK( errorCode );
+}
+
+std::uint32_t
+BatteryServiceFake::convertToTimerTicks( std::chrono::seconds _interval )
+{
+    std::chrono::milliseconds msValue = std::chrono::duration_cast<std::chrono::milliseconds>( _interval );
+    std::uint32_t timerTicksValue = APP_TIMER_TICKS( msValue.count() );
+
+    return timerTicksValue;
 }
 
 };

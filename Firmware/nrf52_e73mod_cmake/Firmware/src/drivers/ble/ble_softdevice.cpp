@@ -40,7 +40,6 @@ namespace Ble::Stack
 BleStackKeeper::BleStackKeeper()
     :   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
 {
-    initAppTimer();
     bleStackInit();
     initGapModule();
     initGatt();
@@ -495,13 +494,6 @@ void BleStackKeeper::initServices()
     m_customService = std::make_unique<CustomService::CustomService>();
     m_batteryService = std::make_unique<BatteryService::BatteryLevelService>();
 
-}
-
-
-void BleStackKeeper::initAppTimer()
-{
-    ret_code_t errCode = app_timer_init();
-    APP_ERROR_CHECK( errCode );
 }
 
 Ble::BatteryService::BatteryLevelService&

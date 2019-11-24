@@ -22,6 +22,11 @@ Application::initBoard()
     bsp_board_init( BSP_INIT_LEDS );
 
     Logger::Instance().logDebug( "Hello from E73 Mod Board!" );
+
+    ret_code_t errorCode{};
+
+    errorCode = app_timer_init();
+    APP_ERROR_CHECK( errorCode );
 }
 
 void

@@ -83,6 +83,7 @@
         "pca10040.h": "c",
         "bitset": "cpp",
         "queue": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "iostream": "cpp"
     }
 }

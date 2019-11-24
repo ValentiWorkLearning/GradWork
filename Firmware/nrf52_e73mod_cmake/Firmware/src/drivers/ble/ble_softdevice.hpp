@@ -94,8 +94,6 @@ private:
 private:
 
     void initServices();
-
-    void initAppTimer();
     
 private:
 
