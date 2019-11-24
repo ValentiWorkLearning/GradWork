@@ -477,8 +477,6 @@ void BleStackKeeper::deleteBonds()
 
 void BleStackKeeper::initServices()
 {
-    //Here we init services.
-
     ret_code_t errCode{};
     nrf_ble_qwr_init_t qwrInit{};
 
@@ -495,6 +493,8 @@ void BleStackKeeper::initServices()
     APP_ERROR_CHECK( errCode );
 
     m_customService = std::make_unique<CustomService::CustomService>();
+    m_batteryService = std::make_unique<BatteryService::BatteryLevelService>();
+
 }
 
 
@@ -502,6 +502,18 @@ void BleStackKeeper::initAppTimer()
 {
     ret_code_t errCode = app_timer_init();
     APP_ERROR_CHECK( errCode );
+}
+
+Ble::BatteryService::BatteryLevelService&
+BleStackKeeper::getBatteryService()
+{
+    return *m_batteryService.get();
+}
+
+const Ble::BatteryService::BatteryLevelService&
+BleStackKeeper::getBatteryService() const
+{
+    return *m_batteryService.get();
 }
 
 std::unique_ptr<BleStackKeeper> createBleStackKeeper()

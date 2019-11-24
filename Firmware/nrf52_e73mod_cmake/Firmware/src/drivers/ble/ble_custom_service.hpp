@@ -43,12 +43,7 @@ namespace Ble::CustomService
 
         void initCustomService();
 
-        void initAdvertisment();
-
-        void initCustomCharacteric();
-
         private:
-
         using TThis = CustomService;
 
         static void serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext );

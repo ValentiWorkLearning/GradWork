@@ -471,6 +471,16 @@ macro(nRF5x_addAppFDS)
 
 endmacro(nRF5x_addAppFDS)
 
+macro(nRF5x_addSensorSimulator)
+        include_directories(
+                "${NRF5_SDK_PATH}/components/libraries/sensorsim"
+        )
+
+        list(APPEND SDK_SOURCE_FILES
+                "${NRF5_SDK_PATH}/components/libraries/sensorsim/sensorsim.c"
+        )
+endmacro(nRF5x_addSensorSimulator)
+
 # adds NFC library
 # macro(nRF5x_addNFC)
 #     # NFC includes

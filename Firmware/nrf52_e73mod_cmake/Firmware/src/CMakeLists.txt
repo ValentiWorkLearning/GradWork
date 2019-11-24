@@ -33,8 +33,11 @@ nRF5x_addBSP(TRUE FALSE FALSE)
 nRF5x_addBLEGATT()
 nRF5x_addBLEPeerManager()
 nRF5x_addAppFDS()
+nRF5x_addSensorSimulator()
 
 nRF5x_addBLEService(ble_lbs)
+nRF5x_addBLEService(ble_bas)
+
 
 add_definitions(-DCONFIG_GPIO_AS_PINRESET)
 add_definitions(-DLoggerUart)
@@ -59,6 +62,9 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/spi/spi_wrapper.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/service_providers/sp_fake_services_creator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/logger/logger_service_impl.cpp
 )
 
@@ -68,4 +74,5 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/logger
+    ${CMAKE_CURRENT_LIST_DIR}/service_providers
 )

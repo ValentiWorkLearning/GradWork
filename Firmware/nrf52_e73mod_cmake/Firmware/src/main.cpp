@@ -1,13 +1,7 @@
-#include <cstdint>
-#include <string>
-
 
 #include "nrf_delay.h"
 #include "nrf.h"
 #include "boards.h"
-
-#include "app_uart.h"
-#include "app_error.h"
 #include "bsp.h"
 
 #include "drivers/display/display_st7789v_constants.hpp"
@@ -20,6 +14,8 @@
 
 #include "logger/logger_service.hpp"
 
+#include "service_providers/ih/sp_ibattery_service.hpp"
+#include "service_providers/sp_fake_services_creator.hpp"
 
 int main(void)
 {
@@ -37,6 +33,17 @@ int main(void)
     );
 
     auto bleStackKeeper = Ble::Stack::createBleStackKeeper();
+
+    auto fakeServiceProvider = ServiceProviders::getFakeServiceCreator();
+    auto batteryService = fakeServiceProvider->getBatteryService();
+    auto& batteryServiceBle = bleStackKeeper->getBatteryService();
+
+    batteryService->onBatteryLevelChangedSig.connect(
+        [ &batteryServiceBle ]( std::uint8_t _newBatteryValue )
+        {
+            batteryServiceBle.onBatteryLevelChanged( _newBatteryValue );
+        }
+    );
 
     nrf_delay_ms(230);
 

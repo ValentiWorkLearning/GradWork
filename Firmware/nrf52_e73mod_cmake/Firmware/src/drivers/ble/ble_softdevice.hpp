@@ -29,6 +29,8 @@
 #include "nrf_ble_qwr.h"
 #include "nrf_pwr_mgmt.h"
 
+#include "ble_battery_service.hpp"
+
 namespace Ble::CustomService
 {
     class CustomService;
@@ -46,6 +48,12 @@ public:
 
     BleStackKeeper();
     ~BleStackKeeper() = default;
+
+public:
+
+    Ble::BatteryService::BatteryLevelService& getBatteryService();
+
+    const Ble::BatteryService::BatteryLevelService& getBatteryService() const;
 
 private:
 
@@ -104,9 +112,11 @@ private:
     void deleteBonds();
 
 private:
+
     std::uint16_t m_connectionHandle;
 
     std::unique_ptr<Ble::CustomService::CustomService> m_customService;
+    std::unique_ptr<Ble::BatteryService::BatteryLevelService> m_batteryService;
 };
 
 std::unique_ptr<BleStackKeeper> createBleStackKeeper();

@@ -23,8 +23,6 @@ CustomService::CustomService()
 {
     initEventHandler();
     initCustomService();
-    initAdvertisment();
-    initCustomCharacteric();
 }
 
 void CustomService::initEventHandler()
@@ -106,16 +104,6 @@ void CustomService::initCustomService()
     );
 
     APP_ERROR_CHECK( errCode );
-
-}
-
-void CustomService::initCustomCharacteric()
-{
-
-}
-
-void CustomService::initAdvertisment()
-{
 
 }
 
