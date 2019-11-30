@@ -98,11 +98,11 @@ extern "C" {
 // #define SPIS_SCK_PIN    29  // SPI SCK signal.
 
 #define SPIM0_SCK_PIN   28  // SPI clock GPIO pin number.
-#define SPIM0_MOSI_PIN  29  // SPI Master Out Slave In GPIO pin number.
+#define SPIM0_MOSI_PIN  27  // SPI Master Out Slave In GPIO pin number.
 #define SPIM0_MISO_PIN  2   // SPI Master In Slave Out GPIO pin number.
 #define SPIM0_SS_PIN    30  // SPI Slave Select GPIO pin number.
 
-#define DISP_DC_PIN     27  // Display Data Command Select GPIO pin number.
+#define DISP_DC_PIN     26  // Display Data Command Select GPIO pin number.
 #define DISP_RST        31  // Dis[play reset GPIO pin number.
 
 #define SPIM1_SCK_PIN   2   // SPI clock GPIO pin number.
