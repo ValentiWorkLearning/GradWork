@@ -47,6 +47,8 @@ private:
 
     void initBleStack();
 
+    void initGraphicsStack();
+
 private:
 
     std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;

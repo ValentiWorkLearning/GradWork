@@ -98,7 +98,7 @@ void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt
 {
     if ( _pEvent->evt_id == NRF_BLE_GATT_EVT_ATT_MTU_UPDATED )
     {
-        Logger::Instance().logDebug(
+        Logger::Instance().logDebugEndl(
             "GATT ATT MTU on connection 0x%x changed to %d."
         );
         // NRF_LOG_INFO("GATT ATT MTU on connection 0x%x changed to %d.",
@@ -152,7 +152,7 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
     switch (_pBleEvent->header.evt_id)
     {
         case BLE_GAP_EVT_DISCONNECTED:
-            Logger::Instance().logDebug("Disconnected.");
+            Logger::Instance().logDebugEndl("Disconnected.");
             // LED indication will be changed when advertising starts.
             break;
 
@@ -169,7 +169,7 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
 
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
         {
-            Logger::Instance().logDebug( "PHY update request." );
+            Logger::Instance().logDebugEndl( "PHY update request." );
 
             ble_gap_phys_t const phys =
             {
@@ -183,7 +183,7 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
 
         case BLE_GATTC_EVT_TIMEOUT:
             // Disconnect on GATT Client timeout event.
-            Logger::Instance().logDebug( "GATT Client Timeout." );
+            Logger::Instance().logDebugEndl( "GATT Client Timeout." );
 
             errCode = sd_ble_gap_disconnect(
                     _pBleEvent->evt.gattc_evt.conn_handle
@@ -251,7 +251,7 @@ void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )
     switch ( _pAdvertisingEvent )
     {
         case BLE_ADV_EVT_FAST:
-            Logger::Instance().logDebug( "Fast advertising." );
+            Logger::Instance().logDebugEndl( "Fast advertising." );
             // errorCode = bsp_indication_set(BSP_INDICATE_ADVERTISING);
             APP_ERROR_CHECK(errorCode);
             break;
@@ -364,12 +364,12 @@ void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
     {
         case PM_EVT_BONDED_PEER_CONNECTED:
         {
-            Logger::Instance().logDebug(  "Connected to a previously bonded device." );
+            Logger::Instance().logDebugEndl(  "Connected to a previously bonded device." );
         } break;
 
         case PM_EVT_CONN_SEC_SUCCEEDED:
         {
-            Logger::Instance().logDebug(  "Connection secured: role: %d, conn_handle: 0x%x, procedure: %d." );
+            Logger::Instance().logDebugEndl(  "Connection secured: role: %d, conn_handle: 0x%x, procedure: %d." );
             //              ble_conn_state_role( _pPeerEvent->conn_handle ),
             //              _pPeerEvent->conn_handle,
             //              _pPeerEvent->params.conn_sec_succeeded.procedure );
@@ -467,7 +467,7 @@ void BleStackKeeper::deleteBonds()
 {
     ret_code_t errCode{};
 
-    Logger::Instance().logDebug( "Erase bonds!" );
+    Logger::Instance().logDebugEndl( "Erase bonds!" );
 
     errCode = pm_peers_delete();
     APP_ERROR_CHECK( errCode );

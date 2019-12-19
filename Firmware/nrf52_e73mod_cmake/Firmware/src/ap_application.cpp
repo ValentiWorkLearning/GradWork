@@ -1,11 +1,18 @@
 #include "ap_application.hpp"
 
+#include "graphics/lvgl/lvgl.h"
+
+#include "CallbackConnector.hpp"
+#include "logger_service.hpp"
+
+
 Application::Application()
 {
     initBoard();
     initInterfaces();
     initPeripheral();
     initServices();
+    initGraphicsStack();
     initBleStack();
 }
 
@@ -21,7 +28,7 @@ Application::initBoard()
     /* Configure board. */
     bsp_board_init( BSP_INIT_LEDS );
 
-    Logger::Instance().logDebug( "Hello from E73 Mod Board!" );
+    Logger::Instance().logDebugEndl( "Hello from E73 Mod Board!" );
 
     ret_code_t errorCode{};
 
@@ -89,16 +96,50 @@ Application::runDisplayTest()
 
 }
 
+void
+Application::initGraphicsStack()
+{
+    auto lvglLoggerCallback = cbc::obtain_connector(
+        []( lv_log_level_t level, const char * file, long unsigned int line, const char * dsc )
+        {
+            switch( level )
+            {
+                case LV_LOG_LEVEL_ERROR:
+                    Logger::Instance().logDebug( "[ERROR]:" );
+                break;
+                case LV_LOG_LEVEL_WARN:
+                    Logger::Instance().logDebug( "[WARNING]:" );
+                break;
+                case LV_LOG_LEVEL_INFO:
+                    Logger::Instance().logDebug( "[INFO]:" );
+                break;
+                case LV_LOG_LEVEL_TRACE:
+                    Logger::Instance().logDebug( "[TRACE]:" );
+                break;
+
+                default:
+                    Logger::Instance().logDebug( "[LVGL_LOG]:" );
+            }
+            Logger::Instance().logDebug( "File:"  );
+            Logger::Instance().logDebug( file );
+            Logger::Instance().logDebug( ":" );
+            Logger::Instance().logDebugEndl( dsc );
+        }
+    );
+
+    lv_log_register_print_cb( lvglLoggerCallback );
+    lv_init();
+}
 
 void
 Application::runApplicationLoop()
 {
     /* Toggle LEDs. */
+    Logger::Instance().logDebugEndl( "Led toggle..." );
     auto ledToggler =
     []( size_t _delayTime )
     {
         bsp_board_led_invert(0);
-        Logger::Instance().logDebug( "Led toggle..." );
         nrf_delay_ms( _delayTime );
     };
 

@@ -9,6 +9,8 @@ public:
 
     static Logger& Instance();
 
+    void logDebugEndl( std::string_view _toLog );
+
     void logDebug( std::string_view _toLog );
 
 private:

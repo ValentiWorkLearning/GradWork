@@ -5,8 +5,8 @@ set (TARGET_NAME lvgl_lib)
 add_library( ${TARGET_NAME} STATIC )
 
 
-set(CMAKE_C_STANDARD 11)#C11
-set(CMAKE_CXX_STANDARD 17)#C17
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 target_include_directories(
@@ -118,8 +118,3 @@ target_sources(
     "lvgl/src/lv_themes/lv_theme_templ.c"
     "lvgl/src/lv_themes/lv_theme_zen.c"
 )
-#You have to compile it into a static library first
-# file(GLOB_RECURSE LIBLVGL "lvgl/*.c")
-# file(GLOB_RECURSE LIBDRIVERS "lv_drivers/*.c")
-# add_library(lvgl STATIC ${LIBLVGL})
-# add_library(drivers STATIC ${LIBDRIVERS})

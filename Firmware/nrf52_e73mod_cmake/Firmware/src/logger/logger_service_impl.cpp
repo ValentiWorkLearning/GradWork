@@ -28,9 +28,15 @@ public:
         m_loggerHider->initLogInterface();
     }
 
+    void logDebugEndl( std::string_view _toLog )
+    {
+        m_loggerHider->logDebug( _toLog );
+        m_loggerHider->logDebug( CaretReset );
+    };
+
     void logDebug( std::string_view _toLog )
     {
-        m_loggerHider->logString( _toLog );
+        m_loggerHider->logDebug( _toLog );
     };
 
 
@@ -38,7 +44,9 @@ public:
     {
         virtual ~ILoggerHider() = default;
 
-        virtual void logString( std::string_view _toLog ) const = 0;
+        virtual void logDebugEndl( std::string_view _toLog ) const = 0;
+
+        virtual void logDebug( std::string_view _toLog ) const = 0;
 
         virtual void initLogInterface()= 0;
 
@@ -56,10 +64,15 @@ public:
         {
         }
 
-        void logString( std::string_view _toLog ) const override
+        void logDebugEndl( std::string_view _toLog ) const override
         {
             m_logger.logString( _toLog );
             m_logger.logString( CaretReset );
+        }
+
+        void logDebug( std::string_view _toLog ) const override
+        {
+            m_logger.logString( _toLog );
         }
 
         void initLogInterface()
@@ -196,6 +209,11 @@ Logger& Logger::Instance()
 {
     static Logger intance;
     return intance;
+}
+
+void Logger::logDebugEndl( std::string_view _toLog )
+{
+    m_pLoggerImpl->logDebugEndl( _toLog );
 }
 
 void Logger::logDebug( std::string_view _toLog )
