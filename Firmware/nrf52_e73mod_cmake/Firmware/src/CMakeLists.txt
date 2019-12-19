@@ -54,6 +54,9 @@ include_directories(${NRF_PROJECT_DEVICE_PATH}/board-pinout)
 
 nRF5x_addExecutable(${TARGET_NAME} "${SOURCE_FILES}")
 
+
+add_subdirectory ("graphics")
+
 target_sources(
     ${TARGET_NAME}
     PRIVATE
@@ -76,4 +79,9 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/logger
     ${CMAKE_CURRENT_LIST_DIR}/service_providers
+)
+
+target_link_libraries(
+    ${TARGET_NAME}
+    lvgl_lib
 )
