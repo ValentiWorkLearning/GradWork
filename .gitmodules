@@ -1,0 +1,3 @@
+[submodule "Firmware/nrf52_e73mod_cmake/Firmware/src/graphics/lvgl"]
+	path = Firmware/nrf52_e73mod_cmake/Firmware/src/graphics/lvgl
+	url = https://github.com/littlevgl/lvgl.git
