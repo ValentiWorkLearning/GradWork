@@ -9,8 +9,8 @@
 
 namespace FrameBuffer
 {
-    using RowType = std::array<DisplayDriver::EncodedColor,120 >;
-    using FrameBufferType = std::array<RowType,120>; 
+    using RowType = std::array<DisplayDriver::EncodedColor,1 >;
+    using FrameBufferType = std::array<RowType,1>; 
 
 class DisplayBuffer
 {
@@ -23,12 +23,6 @@ public:
     static CoordsPair getFrameBufferCoords( std::uint16_t _realDisplayX, std::uint16_t _realDisplayY );
 
 public:
-
-    void drawPixel(
-            std::uint8_t _x
-        ,   std::uint8_t _y
-        ,   DisplayDriver::Colors _color
-    );
 
     void fillColor( DisplayDriver::Colors _color );
 

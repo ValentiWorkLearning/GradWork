@@ -4,16 +4,6 @@
 namespace FrameBuffer
 {
 
-void DisplayBuffer::drawPixel(
-        std::uint8_t _x
-    ,   std::uint8_t _y
-    ,   DisplayDriver::Colors _color
-)
-{
-    DisplayFrameBuffer[ _x ][ _y ] =  DisplayDriver::toEncodedColor( _color );
-    m_changedRowsBegin = m_changedRowsEnd = _y;
-}
-
 void DisplayBuffer::fillColor( DisplayDriver::Colors _color )
 {
     fillRectangle( 0,0,120,120,_color );
@@ -36,7 +26,7 @@ void DisplayBuffer::fillRectangle(
     {
         for( std::uint8_t j{_y}; j< _height; ++j )
         {
-            drawPixel( i,j,_color );
+            // drawPixel( i,j,_color );
         }
     }
 

@@ -1,10 +1,7 @@
 #include "ap_application.hpp"
 
-#include "graphics/lvgl/lvgl.h"
-
-#include "CallbackConnector.hpp"
 #include "logger_service.hpp"
-
+#include "graphics/gs_lvgl_service.hpp"
 
 Application::Application()
 {
@@ -46,13 +43,6 @@ Application::initServices()
 void
 Application::initPeripheral()
 {
-
-    m_displayDriver = DisplayDriver::createDisplayDriver(
-            m_displaySpiInstance.get()
-        ,   DisplayDriver::St7789v::Disp208_240::Width
-        ,   DisplayDriver::St7789v::Disp208_240::Height
-    );
-
 }
 
 void
@@ -73,62 +63,39 @@ Application::initBleStack()
 void
 Application::runDisplayTest()
 {
-    m_displayDriver->fillColor( DisplayDriver::Colors::BLACK );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::WHITE );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::RED );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::GREEN );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::BLUE );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::CYAN );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::MAGENTA );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::YELLOW );
-    nrf_delay_ms(120);
-    m_displayDriver->fillColor( DisplayDriver::Colors::ORANGE );
-    nrf_delay_ms(120);
-    m_displayDriver->fillRectangle( 40,40,20,20,DisplayDriver::Colors::BLACK );
-    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::BLACK );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::WHITE );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::RED );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::GREEN );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::BLUE );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::CYAN );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::MAGENTA );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::YELLOW );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillColor( DisplayDriver::Colors::ORANGE );
+//    nrf_delay_ms(120);
+//    m_displayDriver->fillRectangle( 40,40,20,20,DisplayDriver::Colors::BLACK );
+//    nrf_delay_ms(120);
 
 }
 
 void
 Application::initGraphicsStack()
 {
-    auto lvglLoggerCallback = cbc::obtain_connector(
-        []( lv_log_level_t level, const char * file, long unsigned int line, const char * dsc )
-        {
-            switch( level )
-            {
-                case LV_LOG_LEVEL_ERROR:
-                    Logger::Instance().logDebug( "[ERROR]:" );
-                break;
-                case LV_LOG_LEVEL_WARN:
-                    Logger::Instance().logDebug( "[WARNING]:" );
-                break;
-                case LV_LOG_LEVEL_INFO:
-                    Logger::Instance().logDebug( "[INFO]:" );
-                break;
-                case LV_LOG_LEVEL_TRACE:
-                    Logger::Instance().logDebug( "[TRACE]:" );
-                break;
-
-                default:
-                    Logger::Instance().logDebug( "[LVGL_LOG]:" );
-            }
-            Logger::Instance().logDebug( "File:"  );
-            Logger::Instance().logDebug( file );
-            Logger::Instance().logDebug( ":" );
-            Logger::Instance().logDebugEndl( dsc );
-        }
+    m_graphicsService =  Graphics::createGraphicsService(
+        DisplayDriver::createDisplayDriver(
+                m_displaySpiInstance.get()
+            ,   DisplayDriver::St7789v::Disp208_240::Width
+            ,   DisplayDriver::St7789v::Disp208_240::Height
+        )
     );
-
-    lv_log_register_print_cb( lvglLoggerCallback );
-    lv_init();
 }
 
 void

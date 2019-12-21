@@ -15,6 +15,8 @@
 
 #include "logger/logger_service.hpp"
 
+#include "graphics/gs_lvgl_service.hpp"
+
 #include "service_providers/ih/sp_ibattery_service.hpp"
 #include "service_providers/sp_fake_services_creator.hpp"
 
@@ -52,9 +54,8 @@ private:
 private:
 
     std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
-    std::unique_ptr<DisplayDriver::St7789V> m_displayDriver;
     std::unique_ptr<Ble::Stack::BleStackKeeper> m_bleStackKeeper;
     std::unique_ptr<ServiceProviders::IServiceCreator> m_fakeServiceProvider;
     std::unique_ptr<ServiceProviders::BatteryService::IBatteryLevelAppService> m_batteryLevelService;
-
+    std::unique_ptr<Graphics::LvglGraphicsService> m_graphicsService;
 };

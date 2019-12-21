@@ -3,6 +3,7 @@
 #include <memory>
 #include <cstdint>
 
+#include "display/display_idisplay.hpp"
 #include "display/display_st7789v_constants.hpp"
 #include "display_framebuffer_keeper.hpp"
 
@@ -19,6 +20,7 @@ namespace DisplayDriver
 {
 
 class St7789V
+        :   public IDisplayDriver
 {
 
 public:
@@ -29,29 +31,21 @@ public:
         ,   std::uint16_t _height
     );
 
-    ~St7789V() = default;
+    ~St7789V() override  = default;
 
-    void turnOn();
+    void turnOn() override;
 
-    void turnOff();
-
-
-    void drawPixel(
-            std::uint16_t _x
-        ,   std::uint16_t _y
-        ,   DisplayDriver::Colors _color
-    );
+    void turnOff() override;
 
     void fillColor( DisplayDriver::Colors _color );
-
 
     void fillRectangle(
             std::uint16_t _x
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-        ,   DisplayDriver::Colors _color
-    );
+        ,   IDisplayDriver::TColor _color
+    ) override;
 
 private:
 

@@ -162,13 +162,13 @@ void St7789V::turnOff()
 
 void St7789V::fillColor( DisplayDriver::Colors _color )
 {
-    fillRectangle(
-            0
-        ,   0
-        ,   m_width
-        ,   m_height
-        ,   _color
-    );
+//    fillRectangle(
+//            0
+//        ,   0
+//        ,   m_width
+//        ,   m_height
+//        ,   _color
+//    );
 }
 
 
@@ -177,7 +177,7 @@ void St7789V::fillRectangle(
     ,   std::uint16_t _y
     ,   std::uint16_t _width
     ,   std::uint16_t _height
-    ,   DisplayDriver::Colors _color
+    ,   IDisplayDriver::TColor _colorToFill
 )
 {
     if((_x >= m_width) || (_y >= m_height )) return;
@@ -191,19 +191,19 @@ void St7789V::fillRectangle(
         ,   _y + _height - 1
     );
 
-    auto[ mappedX, mappedY ] =
-        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x, _y );
+//    auto[ mappedX, mappedY ] =
+//        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x, _y );
 
-    auto [ mappedWidth, mappedHeight ] =
-        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x + _width, _y + _height );
+//    auto [ mappedWidth, mappedHeight ] =
+//        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x + _width, _y + _height );
 
-    m_frameBuffer->fillRectangle(
-            mappedX
-        ,   mappedY
-        ,   mappedWidth
-        ,   mappedHeight
-        ,   _color
-    );
+//    m_frameBuffer->fillRectangle(
+//            mappedX
+//        ,   mappedY
+//        ,   mappedWidth
+//        ,   mappedHeight
+//        ,   _color
+//    );
 
     sendCommand( DisplayReg::RAMWR );
 
@@ -292,21 +292,6 @@ void St7789V::setAddrWindow(
         ,   static_cast<std::uint8_t>( ya )
     );
     
-    m_pBusPtr->runQueue();
-}
-
-void St7789V::drawPixel(
-        std::uint16_t _x
-    ,   std::uint16_t _y
-    ,   DisplayDriver::Colors _color
-)
-{
-    setAddrWindow( _x, _y, _x+1, _y+1 );
-
-    m_frameBuffer->drawPixel( _x,_y,_color );
-    
-    startFrameBufferTransimission();
-
     m_pBusPtr->runQueue();
 }
 

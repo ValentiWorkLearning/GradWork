@@ -40,7 +40,7 @@ public:
 
 public:
 
-    static constexpr std::uint16_t DmaBufferSize = 240;
+    static constexpr std::uint16_t DmaBufferSize = 255;
     using DmaBufferType = std::vector<std::uint8_t>;
 
     std::uint16_t getDmaBufferSize();
