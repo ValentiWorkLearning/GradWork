@@ -61,32 +61,6 @@ Application::initBleStack()
 }
 
 void
-Application::runDisplayTest()
-{
-//    m_displayDriver->fillColor( DisplayDriver::Colors::BLACK );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::WHITE );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::RED );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::GREEN );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::BLUE );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::CYAN );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::MAGENTA );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::YELLOW );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillColor( DisplayDriver::Colors::ORANGE );
-//    nrf_delay_ms(120);
-//    m_displayDriver->fillRectangle( 40,40,20,20,DisplayDriver::Colors::BLACK );
-//    nrf_delay_ms(120);
-
-}
-
-void
 Application::initGraphicsStack()
 {
     m_graphicsService =  Graphics::createGraphicsService(

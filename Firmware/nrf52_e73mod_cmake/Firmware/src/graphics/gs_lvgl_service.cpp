@@ -4,7 +4,7 @@
 
 #include "CallbackConnector.hpp"
 #include "logger_service.hpp"
-
+#include "nrf_delay.h"
 
 namespace Graphics
 {
@@ -56,7 +56,7 @@ LvglGraphicsService::runTest()
 lv_color_t * buf_p = buf;
 uint16_t x, y;
 for(y = 0; y < BUF_H; y++) {
-    lv_color_t c = lv_color_mix(LV_COLOR_BLUE, LV_COLOR_RED, (y * 255) / BUF_H);
+    lv_color_t c = lv_color_mix(LV_COLOR_NAVY, LV_COLOR_PURPLE, (y * 255) / BUF_H);
     for(x = 0; x < BUF_W; x++){
         (*buf_p) =  c;
         buf_p++;
@@ -64,13 +64,63 @@ for(y = 0; y < BUF_H; y++) {
 }
 
 lv_area_t a;
-a.x1 = 40;
+a.x1 = 50;
 a.y1 = 40;
 a.x2 = a.x1 + BUF_W - 1;
 a.y2 = a.y1 + BUF_H - 1;
 
 m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-//m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+
+nrf_delay_ms( 15 );
+
+a.x1 = 70;
+a.y1 = 60;
+a.x2 = a.x1 + BUF_W - 1;
+a.y2 = a.y1 + BUF_H - 1;
+
+m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+
+nrf_delay_ms( 15 );
+
+a.x1 = 90;
+a.y1 = 80;
+a.x2 = a.x1 + BUF_W - 1;
+a.y2 = a.y1 + BUF_H - 1;
+
+m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+
+nrf_delay_ms( 15 );
+a.x1 = 110;
+a.y1 = 100;
+a.x2 = a.x1 + BUF_W - 1;
+a.y2 = a.y1 + BUF_H - 1;
+
+m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+
+nrf_delay_ms( 15 );
+a.x1 = 130;
+a.y1 = 80;
+a.x2 = a.x1 + BUF_W - 1;
+a.y2 = a.y1 + BUF_H - 1;
+
+m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+
+nrf_delay_ms( 15 );
+a.x1 = 150;
+a.y1 = 60;
+a.x2 = a.x1 + BUF_W - 1;
+a.y2 = a.y1 + BUF_H - 1;
+
+m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+
+nrf_delay_ms( 15 );
+a.x1 = 170;
+a.y1 = 40;
+a.x2 = a.x1 + BUF_W - 1;
+a.y2 = a.y1 + BUF_H - 1;
+
+m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+
 }
 
 void

@@ -84,6 +84,7 @@
         "bitset": "cpp",
         "queue": "cpp",
         "string_view": "cpp",
-        "iostream": "cpp"
+        "iostream": "cpp",
+        "random": "cpp"
     }
 }

@@ -36,8 +36,6 @@ public:
 
     void turnOff() override;
 
-    void fillColor( DisplayDriver::Colors _color );
-
     void fillRectangle(
             std::uint16_t _x
         ,   std::uint16_t _y

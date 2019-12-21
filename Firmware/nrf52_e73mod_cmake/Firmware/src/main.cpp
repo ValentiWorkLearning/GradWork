@@ -4,7 +4,6 @@ int main(void)
 {
     Application mainApp;
 
-    mainApp.runDisplayTest();
     mainApp.runApplicationLoop();
 
     return 0;

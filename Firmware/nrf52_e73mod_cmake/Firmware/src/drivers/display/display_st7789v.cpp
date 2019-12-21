@@ -152,18 +152,6 @@ void St7789V::turnOff()
     sendCommand( DisplayReg::DISPOFF );
 }
 
-void St7789V::fillColor( DisplayDriver::Colors _color )
-{
-//    fillRectangle(
-//            0
-//        ,   0
-//        ,   m_width
-//        ,   m_height
-//        ,   _color
-//    );
-}
-
-
 void St7789V::fillRectangle(
         std::uint16_t _x
     ,   std::uint16_t _y
@@ -172,10 +160,14 @@ void St7789V::fillRectangle(
     ,   IDisplayDriver::TColor* _colorToFill
 )
 {
-    if((_x >= m_width) || (_y >= m_height )) return;
-    if((_x + _width - 1) >= m_width) _width = m_width - _x;
-    if((_y + _height - 1) >= m_height) _height = m_height - _y;
+    // TODO be careful here;
+    // if((_x >= m_width) || (_y >= m_height )) return;
+    // if((_x + _width - 1) >= m_width) _width = m_width - _x;
+    // if((_y + _height - 1) >= m_height) _height = m_height - _y;
 
+    if( (_x >= m_width) || (_y >= m_height )) return;
+    if( _width >= m_width) _width = m_width - _x;
+    if( _height>= m_height) _height = m_height - _y;
 
     constexpr size_t DmaBufferSize = Interface::Spi::SpiBus::DmaBufferSize;
 
@@ -186,12 +178,11 @@ void St7789V::fillRectangle(
     const size_t FullDmaTransactionsCount =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) )  / DmaBufferSize;
     const size_t ChunkedTransactionsCount = ( BytesSquare* sizeof ( IDisplayDriver::TColor ) )  % DmaBufferSize;
 
-    //FIXEME!
     setAddrWindow(
             _x
         ,   _y
-        ,   _x + _width - 1
-        ,   _y + _height - 1
+        ,   _width
+        ,   _height
     );
 
     sendCommand( DisplayReg::RAMWR );
@@ -228,17 +219,11 @@ void St7789V::fillRectangle(
     if( ChunkedTransactionsCount > 0 )
     {
         Interface::Spi::Transaction chunkTransmission{};
-        chunkTransmission.beforeTransaction =
-            [ this ]
-            {
-                setDcPin();
-            };
-
         chunkTransmission.transactionAction =
             [this, _colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
             {
                 m_pBusPtr->sendChunk(
-                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + DmaBufferSize * FullDmaTransactionsCount
+                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + DmaBufferSize * getTransitionOffset()
                     ,   ChunkedTransactionsCount
                 );
             };
@@ -260,13 +245,15 @@ void St7789V::setAddrWindow(
         ,   std::uint16_t _height
 )
 {
-    // TODO remove this shit ant RTFM. dirty place.
-    _x =40; // +=m_columnStart;
-    _y= 40 + m_rowStart;// +=m_rowStart;
-    _width = 20;
-    _height = 100;
-    uint32_t xa = ((uint32_t)_x << 16) | (_x+_width-1);
-    int32_t ya = ((uint32_t)_y << 16) | (_y+_height-1); 
+    // TODO be careful here;
+    std::uint16_t width = _width - _x;
+    std::uint16_t height = _height - _y;
+
+    std::uint16_t correctedX = _x + m_columnStart;
+    std::uint16_t correctedY = _y + m_rowStart;
+
+    uint32_t xa = ((uint32_t)correctedX << 16) | ( correctedX + width);// (_x+_width-1);
+    int32_t ya = ((uint32_t)correctedY << 16) | ( correctedY +  height); //(_y+_height-1); 
 
     sendCommand(
             DisplayReg::CASET

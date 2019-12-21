@@ -35,8 +35,6 @@ public:
 
     void runApplicationLoop();
 
-    void runDisplayTest();
-
 private:
 
     void initInterfaces();
