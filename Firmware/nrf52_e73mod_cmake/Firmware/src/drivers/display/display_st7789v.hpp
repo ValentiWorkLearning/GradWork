@@ -44,7 +44,7 @@ public:
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-        ,   IDisplayDriver::TColor _color
+        ,   IDisplayDriver::TColor* _color
     ) override;
 
 private:
@@ -80,14 +80,6 @@ private:
 
 private:
 
-    void startFrameBufferTransimission();
-
-    void transmitRestBuffer();
-
-    void fillTranasctionBuffer();
-
-private:
-
     void initGpio();
 
     void resetDcPin();
@@ -95,25 +87,18 @@ private:
     void setDcPin();
 
 private:
+    std::uint32_t m_completedTransitionsCount;
+    std::uint32_t getTransitionOffset();
 
-    static Interface::Spi::SpiBus::DmaBufferType DmaSwapBuffer;
-
-    bool m_isSwapBufferReady;
-    Simple::Signal<void()> onSwapBufferReady;
+private:
 
     std::uint8_t m_columnStart;
     std::uint8_t m_rowStart;
 
     const std::uint16_t m_width;
     const std::uint16_t m_height;
-    
-    size_t m_transactionStartedId;
-    size_t m_transactionCompletedId;
-    size_t m_dmaSwapBuferReady;
 
     Interface::Spi::SpiBus* m_pBusPtr;
-
-    std::unique_ptr<FrameBuffer::DisplayBuffer>m_frameBuffer;
 };
 
 std::unique_ptr<St7789V>

@@ -29,14 +29,43 @@ LvglGraphicsService::LvglGraphicsService(
     auto hardwareDriverCallback = cbc::obtain_connector(
       [ this ]( lv_disp_drv_t* _displayDriver, const lv_area_t* _fillArea, lv_color_t* _colorFill )
       {
-            // do something
-            // connect buffer is transmitted  to lv_disp_flush_ready(disp);
+            m_hardwareDisplayDriver->fillRectangle(
+                    _fillArea->x1
+                ,   _fillArea->y1
+                ,   _fillArea->x2
+                ,   _fillArea->y2
+                ,   reinterpret_cast<std::uint16_t*>( _colorFill )
+            );
       }
     );
 
     m_glDisplayDriver.flush_cb = hardwareDriverCallback;
 
     m_glDisplay = lv_disp_drv_register( &m_glDisplayDriver );
+}
+
+void
+LvglGraphicsService::runTest()
+{
+#define BUF_W 20
+#define BUF_H 10
+lv_color_t buf[BUF_W * BUF_H];
+lv_color_t * buf_p = buf;
+uint16_t x, y;
+for(y = 0; y < BUF_H; y++) {
+    lv_color_t c = lv_color_mix(LV_COLOR_BLUE, LV_COLOR_RED, (y * 255) / BUF_H);
+    for(x = 0; x < BUF_W; x++){
+        (*buf_p) =  c;
+        buf_p++;
+    }
+}
+
+lv_area_t a;
+a.x1 = 10;
+a.y1 = 40;
+a.x2 = a.x1 + BUF_W - 1;
+a.y2 = a.y1 + BUF_H - 1;
+m_glDisplayDriver.flush_cb(nullptr, &a, buf);
 }
 
 void

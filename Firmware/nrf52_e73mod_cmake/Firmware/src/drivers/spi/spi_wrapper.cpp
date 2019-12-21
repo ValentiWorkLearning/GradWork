@@ -65,16 +65,22 @@ void SpiBus::spimEventHandler(
 {
     if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
     {
-        m_isTransactionCompleted = true;
-
-        onTransactionCompleted.emit();
-
         if( !m_transactionsQueue.empty() )
         {
+
+            if( m_transactionsQueue.front().repeatsCount != 0 )
+            {
+                --m_transactionsQueue.front().repeatsCount;
+                m_transactionsQueue.front().transactionAction();
+                return;
+            }
+
             if( m_transactionsQueue.front().afterTransaction )
                 m_transactionsQueue.front().afterTransaction();
 
             m_transactionsQueue.pop();
+            m_isTransactionCompleted = true;
+            onTransactionCompleted.emit();
 
             runQueue();
         }
@@ -134,14 +140,30 @@ void SpiBus::performTransaction( uint16_t _dataSize )
     APP_ERROR_CHECK( transmissionError );
 }
 
+void SpiBus::sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )
+{
+    m_isTransactionCompleted = false;
+
+    nrfx_spim_xfer_desc_t xferDesc =
+        NRFX_SPIM_XFER_TX(
+                _pBuffer
+            ,   _bufferSize
+        );
+
+    onTransactionStarted.emit();
+
+    nrfx_err_t transmissionError = nrfx_spim_xfer(
+            &m_spiHandle
+        ,   &xferDesc
+        ,   0
+    );
+
+    APP_ERROR_CHECK( transmissionError );
+}
+
 SpiBus::DmaBufferType& SpiBus::getDmaBuffer()
 {
     return SpiBus::DmaArray;
-}
-
-void SpiBus::sendFullDmaArray()
-{
-    performTransaction( DmaBufferSize );
 }
 
 };

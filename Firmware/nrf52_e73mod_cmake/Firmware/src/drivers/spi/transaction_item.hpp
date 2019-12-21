@@ -10,6 +10,8 @@ struct Transaction
     std::function<void()> beforeTransaction;
     std::function<void()> afterTransaction;
     std::function<void()> transactionAction;
+
+    size_t repeatsCount;
 };
 
 };

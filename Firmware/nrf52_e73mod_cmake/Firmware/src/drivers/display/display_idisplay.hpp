@@ -19,7 +19,7 @@ public:
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-        ,   TColor _colorToFill
+        ,   TColor* _colorToFill
     ) = 0;
 
     virtual void turnOn() = 0;

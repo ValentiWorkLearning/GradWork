@@ -52,7 +52,7 @@ public:
     template< typename TSequenceContainter>
     void sendChunk( const TSequenceContainter& _arrayToTransmit );
 
-    void sendFullDmaArray();
+    void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize );
 
     DmaBufferType& getDmaBuffer();
 

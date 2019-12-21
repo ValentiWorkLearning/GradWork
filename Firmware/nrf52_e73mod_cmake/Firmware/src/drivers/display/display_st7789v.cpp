@@ -8,9 +8,6 @@
 
 #include <array>
 
-// Based on Adafruit's implementation: https://github.com/adafruit/Adafruit-ST7735-Library/
-// Thanks eax.me : https://github.com/afiskon/stm32-st7735/blob/master/st7735/st7735.c
-
 namespace DisplayReg = DisplayDriver::St7789vRegisters;
 
 namespace DisplayDriver
@@ -22,19 +19,14 @@ St7789V::St7789V(
         ,   std::uint16_t _height
     )
     :   
-        m_isSwapBufferReady{ false }
-    ,   m_width{ _width }
+        m_width{ _width }
     ,   m_height { _height }
-    ,   m_transactionStartedId{}
-    ,   m_transactionCompletedId{}
-    ,   m_dmaSwapBuferReady{}
     ,   m_pBusPtr{ _busPtr }
+    ,   m_completedTransitionsCount{}
 {
     initGpio();
     initDisplay();
     initColumnRow( _width, _height );
-
-    m_frameBuffer = FrameBuffer::createFrameBuffer();
 }
 
 void
@@ -177,12 +169,20 @@ void St7789V::fillRectangle(
     ,   std::uint16_t _y
     ,   std::uint16_t _width
     ,   std::uint16_t _height
-    ,   IDisplayDriver::TColor _colorToFill
+    ,   IDisplayDriver::TColor* _colorToFill
 )
 {
     if((_x >= m_width) || (_y >= m_height )) return;
     if((_x + _width - 1) >= m_width) _width = m_width - _x;
     if((_y + _height - 1) >= m_height) _height = m_height - _y;
+
+    std::uint16_t areaXSize = _x + _width;
+    std::uint16_t areaYSize = _y + _height;
+
+    constexpr size_t DmaBufferSize = Interface::Spi::SpiBus::DmaBufferSize;
+
+    const size_t FullDmaTransactionsCount = ( areaXSize * areaYSize * 2 ) / DmaBufferSize;
+    const size_t ChunkedTransactionsCount = ( areaXSize * areaYSize * 2 ) % DmaBufferSize;
 
     setAddrWindow(
             _x
@@ -191,77 +191,82 @@ void St7789V::fillRectangle(
         ,   _y + _height - 1
     );
 
-//    auto[ mappedX, mappedY ] =
-//        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x, _y );
-
-//    auto [ mappedWidth, mappedHeight ] =
-//        FrameBuffer::DisplayBuffer::getFrameBufferCoords( _x + _width, _y + _height );
-
-//    m_frameBuffer->fillRectangle(
-//            mappedX
-//        ,   mappedY
-//        ,   mappedWidth
-//        ,   mappedHeight
-//        ,   _color
-//    );
-
     sendCommand( DisplayReg::RAMWR );
 
-    startFrameBufferTransimission();
+    if( FullDmaTransactionsCount > 0 )
+    {
+        Interface::Spi::Transaction fullTransaction;
+        fullTransaction.beforeTransaction =
+            [ this ]
+            {
+                setDcPin();
+            };
+
+        m_completedTransitionsCount = 0;
+
+        fullTransaction.transactionAction =
+            [this, &_colorToFill]
+            {
+                m_pBusPtr->sendChunk(
+                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + DmaBufferSize
+                            *   getTransitionOffset()
+                    ,   DmaBufferSize
+                );
+            };
+
+        if( FullDmaTransactionsCount > 1 )
+            fullTransaction.repeatsCount = FullDmaTransactionsCount;
+
+        m_pBusPtr->addTransaction( std::move( fullTransaction ) );
+    }
+
+    if( ChunkedTransactionsCount > 0 )
+    {
+        Interface::Spi::Transaction chunkTransmission;
+        chunkTransmission.beforeTransaction =
+            [ this ]
+            {
+                setDcPin();
+            };
+
+        chunkTransmission.transactionAction =
+            [this, &_colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
+            {
+                m_pBusPtr->sendChunk(
+                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + DmaBufferSize * FullDmaTransactionsCount
+                    ,   ChunkedTransactionsCount
+                );
+            };
+        m_pBusPtr->addTransaction( std::move( chunkTransmission ) );
+    }
 
     m_pBusPtr->runQueue();
 }
 
-void St7789V::startFrameBufferTransimission()
+std::uint32_t St7789V::getTransitionOffset()
 {
-    m_transactionStartedId = m_pBusPtr->onTransactionStarted.connect(
-            [ this ]
-            {
-                fillTranasctionBuffer();
-            }
-        ,   m_transactionStartedId
-    );
-
-    m_transactionCompletedId = m_pBusPtr->onTransactionCompleted.connect(
-            [ this ]
-            {
-                setDcPin();
-                transmitRestBuffer();
-            }
-        ,   m_transactionCompletedId
-    );
+    return ++m_completedTransitionsCount;
 }
 
-void St7789V::transmitRestBuffer()
-{
-    if( m_frameBuffer->isAllBufferTransmitted() )
-    {
-        m_pBusPtr->onTransactionStarted.disconnect( m_transactionStartedId );
-        m_pBusPtr->onTransactionCompleted.disconnect( m_transactionCompletedId );
-        return;
-    }
+//void St7789V::startFrameBufferTransimission()
+//{
+//    m_transactionStartedId = m_pBusPtr->onTransactionStarted.connect(
+//            [ this ]
+//            {
+//                fillTranasctionBuffer();
+//            }
+//        ,   m_transactionStartedId
+//    );
 
-    if( m_isSwapBufferReady )
-    {
-        Interface::Spi::SpiBus::DmaBufferType& dmaArray { m_pBusPtr->getDmaBuffer() };
-        dmaArray.swap( DmaSwapBuffer );
-        m_pBusPtr->sendFullDmaArray();
-    }
-    else
-    {
-        m_dmaSwapBuferReady = onSwapBufferReady.connect(
-                [ this ]
-                {
-                    Interface::Spi::SpiBus::DmaBufferType& dmaArray { m_pBusPtr->getDmaBuffer() };
-                    dmaArray.swap( DmaSwapBuffer );
-                    m_pBusPtr->sendFullDmaArray();
-
-                    onSwapBufferReady.disconnect( m_dmaSwapBuferReady );
-                }
-            ,   m_dmaSwapBuferReady
-        );
-    }
-}
+//    m_transactionCompletedId = m_pBusPtr->onTransactionCompleted.connect(
+//            [ this ]
+//            {
+//                setDcPin();
+//                transmitRestBuffer();
+//            }
+//        ,   m_transactionCompletedId
+//    );
+//}
 
 void St7789V::setAddrWindow(
             std::uint16_t _x
@@ -292,7 +297,6 @@ void St7789V::setAddrWindow(
         ,   static_cast<std::uint8_t>( ya )
     );
     
-    m_pBusPtr->runQueue();
 }
 
 void St7789V::initGpio()
@@ -311,36 +315,33 @@ void St7789V::setDcPin()
     nrf_gpio_pin_set( DISP_DC_PIN );
 }
 
-void St7789V::fillTranasctionBuffer()
-{
-    m_isSwapBufferReady = false;
+//void St7789V::fillTranasctionBuffer()
+//{
+//    m_isSwapBufferReady = false;
 
-    const FrameBuffer::RowType& rowToTransmit{ m_frameBuffer->getNextTransmissionRow() };
+//    const FrameBuffer::RowType& rowToTransmit{ m_frameBuffer->getNextTransmissionRow() };
 
-    std::uint16_t dmaBufferIndex{};
+//    std::uint16_t dmaBufferIndex{};
 
-    for( DisplayDriver::EncodedColor pixel: rowToTransmit )
-    {
-        using TUnderlyingColor = std::underlying_type_t<DisplayDriver::Colors>;
+//    for( DisplayDriver::EncodedColor pixel: rowToTransmit )
+//    {
+//        using TUnderlyingColor = std::underlying_type_t<DisplayDriver::Colors>;
 
-        DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
-        TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
+//        DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
+//        TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
 
-        std::uint8_t msbColor = underlyingColor >> 8;
-        std::uint8_t lsbColor = underlyingColor & 0xFF;
+//        std::uint8_t msbColor = underlyingColor >> 8;
+//        std::uint8_t lsbColor = underlyingColor & 0xFF;
 
-        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
-        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
-        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
-        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
-    }
-    m_isSwapBufferReady = true;
-    onSwapBufferReady.emit();
+//        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
+//        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
+//        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
+//        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
+//    }
+//    m_isSwapBufferReady = true;
+//    onSwapBufferReady.emit();
 
-}
-
-Interface::Spi::SpiBus::DmaBufferType
-DisplayDriver::St7789V::St7789V::DmaSwapBuffer( Interface::Spi::SpiBus::DmaBufferSize );
+//}
 
 std::unique_ptr<St7789V>
 createDisplayDriver(
