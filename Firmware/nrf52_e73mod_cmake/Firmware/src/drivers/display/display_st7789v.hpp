@@ -5,7 +5,6 @@
 
 #include "display/display_idisplay.hpp"
 #include "display/display_st7789v_constants.hpp"
-#include "display_framebuffer_keeper.hpp"
 
 #include "spi/spi_wrapper.hpp"
 

@@ -96,7 +96,7 @@ Application::initGraphicsStack()
             ,   DisplayDriver::St7789v::Disp208_240::Height
         )
     );
-    //m_graphicsService->runTest();
+    m_graphicsService->runTest();
 }
 
 void

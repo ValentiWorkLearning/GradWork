@@ -96,7 +96,7 @@ void St7789V::sendChunk(
 {
     std::array chunk = { _chunkArgs... };
 
-    Interface::Spi::Transaction chunkTransaction;
+    Interface::Spi::Transaction chunkTransaction{};
 
     chunkTransaction.beforeTransaction =
         [ this ]
@@ -176,14 +176,17 @@ void St7789V::fillRectangle(
     if((_x + _width - 1) >= m_width) _width = m_width - _x;
     if((_y + _height - 1) >= m_height) _height = m_height - _y;
 
-    std::uint16_t areaXSize = _x + _width;
-    std::uint16_t areaYSize = _y + _height;
 
     constexpr size_t DmaBufferSize = Interface::Spi::SpiBus::DmaBufferSize;
 
-    const size_t FullDmaTransactionsCount = ( areaXSize * areaYSize * 2 ) / DmaBufferSize;
-    const size_t ChunkedTransactionsCount = ( areaXSize * areaYSize * 2 ) % DmaBufferSize;
+    const size_t BytesSizeX = ( _width - _x );
+    const size_t BytesSizeY = ( _height - _y );
+    const size_t BytesSquare = BytesSizeX *  BytesSizeY;
 
+    const size_t FullDmaTransactionsCount =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) )  / DmaBufferSize;
+    const size_t ChunkedTransactionsCount = ( BytesSquare* sizeof ( IDisplayDriver::TColor ) )  % DmaBufferSize;
+
+    //FIXEME!
     setAddrWindow(
             _x
         ,   _y
@@ -195,7 +198,7 @@ void St7789V::fillRectangle(
 
     if( FullDmaTransactionsCount > 0 )
     {
-        Interface::Spi::Transaction fullTransaction;
+        Interface::Spi::Transaction fullTransaction{};
         fullTransaction.beforeTransaction =
             [ this ]
             {
@@ -205,12 +208,14 @@ void St7789V::fillRectangle(
         m_completedTransitionsCount = 0;
 
         fullTransaction.transactionAction =
-            [this, &_colorToFill]
+            [this, _colorToFill]
             {
+                std::uint32_t addrOffset = Interface::Spi::SpiBus::DmaBufferSize
+                            *   getTransitionOffset();
+
                 m_pBusPtr->sendChunk(
-                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + DmaBufferSize
-                            *   getTransitionOffset()
-                    ,   DmaBufferSize
+                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + addrOffset
+                    ,   Interface::Spi::SpiBus::DmaBufferSize
                 );
             };
 
@@ -230,7 +235,7 @@ void St7789V::fillRectangle(
             };
 
         chunkTransmission.transactionAction =
-            [this, &_colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
+            [this, _colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
             {
                 m_pBusPtr->sendChunk(
                         reinterpret_cast<const std::uint8_t*>( _colorToFill ) + DmaBufferSize * FullDmaTransactionsCount
@@ -245,28 +250,8 @@ void St7789V::fillRectangle(
 
 std::uint32_t St7789V::getTransitionOffset()
 {
-    return ++m_completedTransitionsCount;
+    return m_completedTransitionsCount++;
 }
-
-//void St7789V::startFrameBufferTransimission()
-//{
-//    m_transactionStartedId = m_pBusPtr->onTransactionStarted.connect(
-//            [ this ]
-//            {
-//                fillTranasctionBuffer();
-//            }
-//        ,   m_transactionStartedId
-//    );
-
-//    m_transactionCompletedId = m_pBusPtr->onTransactionCompleted.connect(
-//            [ this ]
-//            {
-//                setDcPin();
-//                transmitRestBuffer();
-//            }
-//        ,   m_transactionCompletedId
-//    );
-//}
 
 void St7789V::setAddrWindow(
             std::uint16_t _x
@@ -275,11 +260,13 @@ void St7789V::setAddrWindow(
         ,   std::uint16_t _height
 )
 {
-    _x +=m_columnStart;
-    _y +=m_rowStart;
-
+    // TODO remove this shit ant RTFM. dirty place.
+    _x =40; // +=m_columnStart;
+    _y= 40 + m_rowStart;// +=m_rowStart;
+    _width = 20;
+    _height = 100;
     uint32_t xa = ((uint32_t)_x << 16) | (_x+_width-1);
-    uint32_t ya = ((uint32_t)_y << 16) | (_y+_height-1); 
+    int32_t ya = ((uint32_t)_y << 16) | (_y+_height-1); 
 
     sendCommand(
             DisplayReg::CASET
@@ -314,34 +301,6 @@ void St7789V::setDcPin()
 {
     nrf_gpio_pin_set( DISP_DC_PIN );
 }
-
-//void St7789V::fillTranasctionBuffer()
-//{
-//    m_isSwapBufferReady = false;
-
-//    const FrameBuffer::RowType& rowToTransmit{ m_frameBuffer->getNextTransmissionRow() };
-
-//    std::uint16_t dmaBufferIndex{};
-
-//    for( DisplayDriver::EncodedColor pixel: rowToTransmit )
-//    {
-//        using TUnderlyingColor = std::underlying_type_t<DisplayDriver::Colors>;
-
-//        DisplayDriver::Colors decodedColor = DisplayDriver::fromEncodedColor( pixel );
-//        TUnderlyingColor underlyingColor = static_cast<TUnderlyingColor>( decodedColor );
-
-//        std::uint8_t msbColor = underlyingColor >> 8;
-//        std::uint8_t lsbColor = underlyingColor & 0xFF;
-
-//        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
-//        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
-//        DmaSwapBuffer[ dmaBufferIndex++ ] = msbColor;
-//        DmaSwapBuffer[ dmaBufferIndex++ ] = lsbColor;
-//    }
-//    m_isSwapBufferReady = true;
-//    onSwapBufferReady.emit();
-
-//}
 
 std::unique_ptr<St7789V>
 createDisplayDriver(

@@ -44,12 +44,15 @@ LvglGraphicsService::LvglGraphicsService(
     m_glDisplay = lv_disp_drv_register( &m_glDisplayDriver );
 }
 
+#define BUF_W 20
+#define BUF_H 100
+
+
+static lv_color_t buf[BUF_W * BUF_H];
 void
 LvglGraphicsService::runTest()
 {
-#define BUF_W 20
-#define BUF_H 10
-lv_color_t buf[BUF_W * BUF_H];
+
 lv_color_t * buf_p = buf;
 uint16_t x, y;
 for(y = 0; y < BUF_H; y++) {
@@ -61,11 +64,13 @@ for(y = 0; y < BUF_H; y++) {
 }
 
 lv_area_t a;
-a.x1 = 10;
+a.x1 = 40;
 a.y1 = 40;
 a.x2 = a.x1 + BUF_W - 1;
 a.y2 = a.y1 + BUF_H - 1;
+
 m_glDisplayDriver.flush_cb(nullptr, &a, buf);
+//m_glDisplayDriver.flush_cb(nullptr, &a, buf);
 }
 
 void
