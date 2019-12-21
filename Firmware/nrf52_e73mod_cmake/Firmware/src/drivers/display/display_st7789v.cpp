@@ -55,7 +55,7 @@ void St7789V::sendCommand(
         std::uint8_t _command
 )
 {
-    Interface::Spi::Transaction commandTransaction;
+    Interface::Spi::Transaction commandTransaction{};
 
     commandTransaction.beforeTransaction =
         [ this ]
@@ -222,7 +222,7 @@ void St7789V::fillRectangle(
 
     if( ChunkedTransactionsCount > 0 )
     {
-        Interface::Spi::Transaction chunkTransmission;
+        Interface::Spi::Transaction chunkTransmission{};
         chunkTransmission.beforeTransaction =
             [ this ]
             {
