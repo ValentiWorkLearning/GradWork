@@ -213,6 +213,10 @@ void St7789V::fillRectangle(
         if( FullDmaTransactionsCount > 1 )
             fullTransaction.repeatsCount = FullDmaTransactionsCount;
 
+        if( ChunkedTransactionsCount == 0 )
+            fullTransaction.afterTransaction = 
+                [this] { onRectArreaFilled.emit(); };
+
         m_pBusPtr->addTransaction( std::move( fullTransaction ) );
     }
 
@@ -227,6 +231,9 @@ void St7789V::fillRectangle(
                     ,   ChunkedTransactionsCount
                 );
             };
+            chunkTransmission.afterTransaction = 
+                [this] { onRectArreaFilled.emit(); };
+
         m_pBusPtr->addTransaction( std::move( chunkTransmission ) );
     }
 

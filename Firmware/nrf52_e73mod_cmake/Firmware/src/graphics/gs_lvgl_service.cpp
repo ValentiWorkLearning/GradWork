@@ -36,6 +36,13 @@ LvglGraphicsService::LvglGraphicsService(
                 ,   _fillArea->y2
                 ,   reinterpret_cast<std::uint16_t*>( _colorFill )
             );
+            m_hardwareDisplayDriver->onRectArreaFilled.connect(
+                [this,_displayDriver]
+                {
+                    lv_disp_flush_ready( _displayDriver );
+                    lv_log_add( LV_LOG_LEVEL_TRACE, __FILE__, __LINE__, "display flush ready" );
+                }
+            );
       }
     );
 
@@ -54,10 +61,9 @@ LvglGraphicsService::runTest()
 {
 
 lv_color_t * buf_p = buf;
-uint16_t x, y;
-for(y = 0; y < BUF_H; y++) {
-    lv_color_t c = lv_color_mix(LV_COLOR_NAVY, LV_COLOR_PURPLE, (y * 255) / BUF_H);
-    for(x = 0; x < BUF_W; x++){
+for(uint16_t y = 0; y < BUF_H; y++) {
+    lv_color_t c = lv_color_mix(LV_COLOR_RED, LV_COLOR_PURPLE, (y * 255) / BUF_H);
+    for(uint16_t x = 0; x < BUF_W; x++){
         (*buf_p) =  c;
         buf_p++;
     }
