@@ -70,6 +70,7 @@ Application::initGraphicsStack()
             ,   DisplayDriver::St7789v::Disp208_240::Height
         )
     );
+    nrf_delay_ms( 100 );
     m_graphicsService->runTest();
 }
 
