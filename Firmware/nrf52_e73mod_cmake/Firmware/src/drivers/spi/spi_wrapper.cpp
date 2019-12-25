@@ -2,6 +2,7 @@
 #include "pca10040.h"
 #include "CallbackConnector.hpp"
 
+#include <cassert>
 #include <array>
 
 #define SPI_INSTANCE  0
@@ -68,15 +69,17 @@ void SpiBus::spimEventHandler(
         if( !m_transactionsQueue.empty() )
         {
 
-            if( m_transactionsQueue.front().repeatsCount != 0 )
+            auto& frontItem = m_transactionsQueue.front();
+
+            if( frontItem.repeatsCount != 0 )
             {
-                --m_transactionsQueue.front().repeatsCount;
-                m_transactionsQueue.front().transactionAction();
+                --frontItem.repeatsCount;
+                frontItem.transactionAction();
                 return;
             }
 
-            if( m_transactionsQueue.front().afterTransaction )
-                m_transactionsQueue.front().afterTransaction();
+            if( frontItem.afterTransaction )
+                frontItem.afterTransaction();
 
             m_transactionsQueue.pop();
             m_isTransactionCompleted = true;
@@ -92,20 +95,28 @@ std::uint16_t SpiBus::getDmaBufferSize()
     return SpiBus::DmaArray.size();
 }
 
-void SpiBus::addTransaction( Transaction && _item )
+void SpiBus::addTransaction( Transaction&& _item )
 {
     m_transactionsQueue.push( std::move( _item ) );
 }
 
 void SpiBus::runQueue()
 {
+    assert(m_isTransactionCompleted);
     if( !m_transactionsQueue.empty() && m_isTransactionCompleted )
     {
+        assert( m_transactionsQueue.front().transactionAction );
+
         if( m_transactionsQueue.front().beforeTransaction )
             m_transactionsQueue.front().beforeTransaction();
 
         m_transactionsQueue.front().transactionAction();
     }
+}
+
+size_t SpiBus::getQueueSize()const
+{
+    return m_transactionsQueue.size();
 }
 
 void SpiBus::sendData( std::uint8_t _data )
@@ -129,8 +140,6 @@ void SpiBus::performTransaction( uint16_t _dataSize )
             ,   _dataSize
         );
 
-    onTransactionStarted.emit();
-    
     nrfx_err_t transmissionError = nrfx_spim_xfer(
             &m_spiHandle
         ,   &xferDesc
@@ -149,8 +158,6 @@ void SpiBus::sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )
                 _pBuffer
             ,   _bufferSize
         );
-
-    onTransactionStarted.emit();
 
     nrfx_err_t transmissionError = nrfx_spim_xfer(
             &m_spiHandle

@@ -187,6 +187,8 @@ void St7789V::fillRectangle(
 
     sendCommand( DisplayReg::RAMWR );
 
+    m_completedTransitionsCount = 0;
+
     if( FullDmaTransactionsCount > 0 )
     {
         Interface::Spi::Transaction fullTransaction{};
@@ -195,8 +197,6 @@ void St7789V::fillRectangle(
             {
                 setDcPin();
             };
-
-        m_completedTransitionsCount = 0;
 
         fullTransaction.transactionAction =
             [this, _colorToFill]
@@ -215,7 +215,11 @@ void St7789V::fillRectangle(
 
         if( ChunkedTransactionsCount == 0 )
             fullTransaction.afterTransaction = 
-                [this] { onRectArreaFilled.emit(); };
+                [this]
+                {
+                    onRectArreaFilled.emit();
+                    resetDcPin();
+                };
 
         m_pBusPtr->addTransaction( std::move( fullTransaction ) );
     }
@@ -232,11 +236,16 @@ void St7789V::fillRectangle(
                 );
             };
             chunkTransmission.afterTransaction = 
-                [this] { onRectArreaFilled.emit(); };
+                [this]
+                {
+                    onRectArreaFilled.emit();
+                    resetDcPin();
+                };
 
         m_pBusPtr->addTransaction( std::move( chunkTransmission ) );
     }
 
+    size_t queueSize = m_pBusPtr->getQueueSize();
     m_pBusPtr->runQueue();
 }
 

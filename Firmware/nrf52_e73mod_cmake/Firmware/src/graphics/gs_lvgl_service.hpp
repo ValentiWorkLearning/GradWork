@@ -35,8 +35,13 @@ private:
     static TColorBuf dispFrameBufSecond;
 
 private:
+    static constexpr std::uint32_t LvglNotificationTime = 15;
+    static constexpr std::uint32_t LvgTaskTime = 1000;
+private:
 
     void initLvglLogger();
+
+    void initGfxTimer();
 
 private:
 

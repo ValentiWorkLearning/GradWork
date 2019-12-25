@@ -56,14 +56,15 @@ public:
 
     DmaBufferType& getDmaBuffer();
 
-    Simple::Signal<void()> onTransactionStarted;
     Simple::Signal<void()> onTransactionCompleted;
 
 public:
 
-    void addTransaction( Transaction && _item );
+    void addTransaction( Transaction&& _item );
 
     void runQueue();
+
+    size_t getQueueSize() const;
 
 private:
 
