@@ -11,7 +11,6 @@
 namespace
 {
     APP_TIMER_DEF(m_gfxEllapsedTimerId);
-    APP_TIMER_DEF(m_gfxTaskTimerId);
 }
 
 namespace Graphics
@@ -62,6 +61,11 @@ LvglGraphicsService::LvglGraphicsService(
     initGfxTimer();
 }
 
+void LvglGraphicsService::executeGlTask()
+{
+    lv_task_handler();
+}
+
 void LvglGraphicsService::initGfxTimer()
 {
     ret_code_t errorCode{};
@@ -70,13 +74,6 @@ void LvglGraphicsService::initGfxTimer()
         [ this ]( void * _pContext )
         {
             lv_tick_inc( LvglNotificationTime );
-        }
-    );
-
-    auto gfxTaskCallback = cbc::obtain_connector(
-        [ this ]( void * _pContext )
-        {
-            lv_task_handler();
         }
     );
 
@@ -90,20 +87,6 @@ void LvglGraphicsService::initGfxTimer()
     errorCode = app_timer_start(
                 m_gfxEllapsedTimerId
             ,   APP_TIMER_TICKS( LvglNotificationTime )
-            ,   nullptr
-        );
-    APP_ERROR_CHECK( errorCode );
-
-    errorCode = app_timer_create(
-                &m_gfxTaskTimerId
-            ,   APP_TIMER_MODE_REPEATED
-            ,   gfxTaskCallback
-        );
-    APP_ERROR_CHECK( errorCode );
-
-    errorCode = app_timer_start(
-                m_gfxTaskTimerId
-            ,   APP_TIMER_TICKS( LvgTaskTime )
             ,   nullptr
         );
     APP_ERROR_CHECK( errorCode );
@@ -124,7 +107,7 @@ LvglGraphicsService::runTest()
     lv_obj_t * label1 =  lv_label_create(scr, NULL);
 
     /*Modify the Label's text*/
-    lv_label_set_text(label1, "H");
+    lv_label_set_text(label1, "Hello world");
 
     /* Align the Label to the center
      * NULL means align on parent (which is the screen now)

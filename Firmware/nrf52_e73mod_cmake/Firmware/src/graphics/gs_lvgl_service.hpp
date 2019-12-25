@@ -24,6 +24,8 @@ public:
 
     void runTest();
 
+    void executeGlTask();
+
 private:
 
     static constexpr size_t DispHorRes = LV_HOR_RES_MAX*10;

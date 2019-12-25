@@ -89,5 +89,6 @@ Application::runApplicationLoop()
     while (true)
     {
         ledToggler( 300 );
+        m_graphicsService->executeGlTask();
     }
 }
