@@ -211,7 +211,7 @@ void St7789V::fillRectangle(
             };
 
         if( FullDmaTransactionsCount > 1 )
-            fullTransaction.repeatsCount = FullDmaTransactionsCount;
+            fullTransaction.repeatsCount = FullDmaTransactionsCount+1;
 
         if( ChunkedTransactionsCount == 0 )
             fullTransaction.afterTransaction = 

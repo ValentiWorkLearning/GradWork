@@ -95,22 +95,34 @@ void LvglGraphicsService::initGfxTimer()
 void
 LvglGraphicsService::runTest()
 {
+    // lv_obj_t * scr = lv_disp_get_scr_act(nullptr);
 
-    lv_obj_t * scr = lv_disp_get_scr_act(nullptr);
+    // lv_theme_t* pTheme = lv_theme_material_init(0, NULL);
+    // lv_theme_set_current(pTheme);
 
-    lv_theme_t* pTheme = lv_theme_material_init(0, NULL);
-    lv_theme_set_current(pTheme);
+    // lv_obj_t* list = lv_list_create(scr, nullptr);
+    // lv_obj_set_height(list, 2 * lv_obj_get_height(scr) / 3);
+    // lv_obj_align(list, nullptr, LV_ALIGN_IN_TOP_MID, 0, LV_DPI / 4 + 5);
 
-    lv_obj_t* list = lv_list_create(scr, nullptr);
-    lv_obj_set_height(list, 2 * lv_obj_get_height(scr) / 3);
-    lv_obj_align(list, nullptr, LV_ALIGN_IN_TOP_MID, 0, LV_DPI / 4 + 5);
+    // lv_obj_t* list_btn{nullptr};
+    // list_btn = lv_list_add_btn(list, LV_SYMBOL_WIFI, "WiFi");
 
-    lv_obj_t* list_btn{nullptr};
-    list_btn = lv_list_add_btn(list, LV_SYMBOL_WIFI, "WiFi");
+    // list_btn = lv_list_add_btn(list, LV_SYMBOL_GPS, "GPS");
+    // list_btn = lv_list_add_btn(list, LV_SYMBOL_BLUETOOTH, "Bluetooth");
+    // list_btn = lv_list_add_btn(list, LV_SYMBOL_AUDIO, "Sound");
 
-    list_btn = lv_list_add_btn(list, LV_SYMBOL_GPS, "GPS");
-    list_btn = lv_list_add_btn(list, LV_SYMBOL_BLUETOOTH, "Bluetooth");
-    list_btn = lv_list_add_btn(list, LV_SYMBOL_AUDIO, "Sound");
+     lv_obj_t * scr = lv_disp_get_scr_act(NULL);     /*Get the current screen*/
+
+    /*Create a Label on the currently active screen*/
+    lv_obj_t * label1 =  lv_label_create(scr, NULL);
+
+    /*Modify the Label's text*/
+    lv_label_set_text(label1, "21:39");
+
+    /* Align the Label to the center
+     * NULL means align on parent (which is the screen now)
+     * 0, 0 at the end means an x, y offset after alignment*/
+    lv_obj_align(label1, NULL, LV_ALIGN_CENTER, 0, 0);
 }
 
 void
