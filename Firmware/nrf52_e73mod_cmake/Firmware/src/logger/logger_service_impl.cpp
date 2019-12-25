@@ -8,7 +8,7 @@
 #include "boards.h"
 
 #include "CallbackConnector.hpp"
-
+#include "SEGGER_RTT.h"
 #include <atomic>
 #include <type_traits>
 
@@ -192,6 +192,23 @@ public:
     }
 };
 
+
+class SeggerRttLog
+{
+
+public:
+
+    void initLogInterface()
+    {
+
+    }
+
+    void logString( std::string_view _toLog ) const
+    {
+        SEGGER_RTT_WriteString( 0, _toLog.data() );
+    }
+};
+
 struct LoggerImplChoise
 {
 
@@ -199,6 +216,8 @@ struct LoggerImplChoise
     using TLoggerImpl = UartLogger;
 #elif defined(LoggerSwo)
     using TLoggerImpl = SwoLogger;
+#elif defined(LoggerSegger)
+    using TLoggerImpl = SeggerRttLog;
 #else
     using TLoggerImpl = std::void_t<>;
 #endif

@@ -40,7 +40,7 @@ nRF5x_addBLEService(ble_bas)
 
 
 add_definitions(-DCONFIG_GPIO_AS_PINRESET)
-add_definitions(-DLoggerUart)
+add_definitions(-DLoggerSegger)
 
 # usually you would include files in this directory here, like so:
 #include_directories(.)
