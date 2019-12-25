@@ -92,95 +92,25 @@ void LvglGraphicsService::initGfxTimer()
     APP_ERROR_CHECK( errorCode );
 }
 
-#define BUF_W 20
-#define BUF_H 100
-
-
-static lv_color_t buf[BUF_W * BUF_H];
 void
 LvglGraphicsService::runTest()
 {
 
-    lv_obj_t * scr = lv_disp_get_scr_act(NULL);     /*Get the current screen*/
+    lv_obj_t * scr = lv_disp_get_scr_act(nullptr);
 
-    /*Create a Label on the currently active screen*/
-    lv_obj_t * label1 =  lv_label_create(scr, NULL);
+    lv_theme_t* pTheme = lv_theme_material_init(0, NULL);
+    lv_theme_set_current(pTheme);
 
-    /*Modify the Label's text*/
-    lv_label_set_text(label1, "Hello world");
+    lv_obj_t* list = lv_list_create(scr, nullptr);
+    lv_obj_set_height(list, 2 * lv_obj_get_height(scr) / 3);
+    lv_obj_align(list, nullptr, LV_ALIGN_IN_TOP_MID, 0, LV_DPI / 4 + 5);
 
-    /* Align the Label to the center
-     * NULL means align on parent (which is the screen now)
-     * 0, 0 at the end means an x, y offset after alignment*/
-    lv_obj_align(label1, NULL, LV_ALIGN_CENTER, 0, 0);
+    lv_obj_t* list_btn{nullptr};
+    list_btn = lv_list_add_btn(list, LV_SYMBOL_WIFI, "WiFi");
 
-// lv_color_t * buf_p = buf;
-// for(uint16_t y = 0; y < BUF_H; y++) {
-//     lv_color_t c = lv_color_mix(LV_COLOR_RED, LV_COLOR_PURPLE, (y * 255) / BUF_H);
-//     for(uint16_t x = 0; x < BUF_W; x++){
-//         (*buf_p) =  c;
-//         buf_p++;
-//     }
-// }
-
-// lv_area_t a;
-// a.x1 = 50;
-// a.y1 = 40;
-// a.x2 = a.x1 + BUF_W - 1;
-// a.y2 = a.y1 + BUF_H - 1;
-
-// m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-
-// nrf_delay_ms( 15 );
-
-// a.x1 = 70;
-// a.y1 = 60;
-// a.x2 = a.x1 + BUF_W - 1;
-// a.y2 = a.y1 + BUF_H - 1;
-
-// m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-
-// nrf_delay_ms( 15 );
-
-// a.x1 = 90;
-// a.y1 = 80;
-// a.x2 = a.x1 + BUF_W - 1;
-// a.y2 = a.y1 + BUF_H - 1;
-
-// m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-
-// nrf_delay_ms( 15 );
-// a.x1 = 110;
-// a.y1 = 100;
-// a.x2 = a.x1 + BUF_W - 1;
-// a.y2 = a.y1 + BUF_H - 1;
-
-// m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-
-// nrf_delay_ms( 15 );
-// a.x1 = 130;
-// a.y1 = 80;
-// a.x2 = a.x1 + BUF_W - 1;
-// a.y2 = a.y1 + BUF_H - 1;
-
-// m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-
-// nrf_delay_ms( 15 );
-// a.x1 = 150;
-// a.y1 = 60;
-// a.x2 = a.x1 + BUF_W - 1;
-// a.y2 = a.y1 + BUF_H - 1;
-
-// m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-
-// nrf_delay_ms( 15 );
-// a.x1 = 170;
-// a.y1 = 40;
-// a.x2 = a.x1 + BUF_W - 1;
-// a.y2 = a.y1 + BUF_H - 1;
-
-// m_glDisplayDriver.flush_cb(nullptr, &a, buf);
-
+    list_btn = lv_list_add_btn(list, LV_SYMBOL_GPS, "GPS");
+    list_btn = lv_list_add_btn(list, LV_SYMBOL_BLUETOOTH, "Bluetooth");
+    list_btn = lv_list_add_btn(list, LV_SYMBOL_AUDIO, "Sound");
 }
 
 void

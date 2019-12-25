@@ -227,6 +227,12 @@ void St7789V::fillRectangle(
     if( ChunkedTransactionsCount > 0 )
     {
         Interface::Spi::Transaction chunkTransmission{};
+        chunkTransmission.beforeTransaction =
+            [ this ]
+            {
+                setDcPin();
+            };
+
         chunkTransmission.transactionAction =
             [this, _colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
             {
