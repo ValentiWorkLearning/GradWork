@@ -9,6 +9,7 @@
 
 #include "CallbackConnector.hpp"
 
+#include <atomic>
 #include <type_traits>
 
 namespace
@@ -66,23 +67,37 @@ public:
 
         void logDebugEndl( std::string_view _toLog ) const override
         {
-            m_logger.logString( _toLog );
-            m_logger.logString( CaretReset );
+            while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
+            {
+                m_logger.logString( _toLog );
+                m_logger.logString( CaretReset );
+
+                m_loggerReady.clear( std::memory_order_release );
+            }
         }
 
         void logDebug( std::string_view _toLog ) const override
         {
-            m_logger.logString( _toLog );
+            while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
+            {
+                m_logger.logString( _toLog );
+                m_loggerReady.clear( std::memory_order_release );
+            }
         }
 
         void initLogInterface()
         {
-            m_logger.initLogInterface();
+            while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
+            {
+                m_logger.initLogInterface();
+                m_loggerReady.clear( std::memory_order_release );
+            }
         }
 
         ~LoggerTempateImpl()override = default;
 
     private:
+        mutable std::atomic_flag m_loggerReady;
         TLoggerHider m_logger;
     };
 
