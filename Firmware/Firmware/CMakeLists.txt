@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.12)
 set(NRF_TARGET nrf52)
 
 if (NOT DEFINED ARM_NONE_EABI_TOOLCHAIN_PATH)
-	set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_none_eabi")
+	set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_none_eabi_9_2_1")
 endif ()
 
 set(NRF5_SDK_PATH $ENV{NRF5_SDK_PATH})

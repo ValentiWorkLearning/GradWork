@@ -264,18 +264,18 @@ macro(nRF5x_setup)
             "${NRF5_SDK_PATH}/components/ble/nrf_ble_qwr/nrf_ble_qwr.c"
             )
 
-    # adds target for erasing and flashing the board with a softdevice
-    add_custom_target(FLASH_SOFTDEVICE ALL
-            COMMAND ${NRFJPROG} --program ${SOFTDEVICE_PATH} -f ${NRF_TARGET} --sectorerase
-            COMMAND sleep 0.5s
-            COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
-            COMMENT "flashing SoftDevice"
-            )
+#     # adds target for erasing and flashing the board with a softdevice
+#     add_custom_target(FLASH_SOFTDEVICE ALL
+#             COMMAND ${NRFJPROG} --program ${SOFTDEVICE_PATH} -f ${NRF_TARGET} --sectorerase
+#             COMMAND sleep 0.5s
+#             COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
+#             COMMENT "flashing SoftDevice"
+#             )
 
-    add_custom_target(FLASH_ERASE ALL
-            COMMAND ${NRFJPROG} --eraseall -f ${NRF_TARGET}
-            COMMENT "erasing flashing"
-            )
+#     add_custom_target(FLASH_ERASE ALL
+#             COMMAND ${NRFJPROG} --eraseall -f ${NRF_TARGET}
+#             COMMENT "erasing flashing"
+#             )
 
     if(${CMAKE_HOST_SYSTEM_NAME} STREQUAL "Darwin")
         set(TERMINAL "open")
@@ -310,14 +310,14 @@ macro(nRF5x_addExecutable EXECUTABLE_NAME SOURCE_FILES)
             COMMAND ${CMAKE_OBJCOPY} -O ihex ${EXECUTABLE_NAME}.out "${EXECUTABLE_NAME}.hex"
             COMMENT "post build steps for ${EXECUTABLE_NAME}")
 
-    # custom target for flashing the board
-    add_custom_target("FLASH_${EXECUTABLE_NAME}" ALL
-            DEPENDS ${EXECUTABLE_NAME}
-            COMMAND ${NRFJPROG} --program ${EXECUTABLE_NAME}.hex -f ${NRF_TARGET} --sectorerase
-            COMMAND sleep 0.5s
-            COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
-            COMMENT "flashing ${EXECUTABLE_NAME}.hex"
-            )
+#     # custom target for flashing the board
+#     add_custom_target("FLASH_${EXECUTABLE_NAME}" ALL
+#             DEPENDS ${EXECUTABLE_NAME}
+#             COMMAND ${NRFJPROG} --program ${EXECUTABLE_NAME}.hex -f ${NRF_TARGET} --sectorerase
+#             COMMAND sleep 0.5s
+#             COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
+#             COMMENT "flashing ${EXECUTABLE_NAME}.hex"
+#             )
 
 endmacro()
 
