@@ -236,8 +236,11 @@ void St7789V::fillRectangle(
         chunkTransmission.transactionAction =
             [this, _colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
             {
+                const size_t transmissionOffset = FullDmaTransactionsCount > 1
+                    ?   DmaBufferSize * getTransitionOffset() : 0;
+
                 m_pBusPtr->sendChunk(
-                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + DmaBufferSize * getTransitionOffset()
+                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + transmissionOffset
                     ,   ChunkedTransactionsCount
                 );
             };
@@ -251,7 +254,6 @@ void St7789V::fillRectangle(
         m_pBusPtr->addTransaction( std::move( chunkTransmission ) );
     }
 
-    size_t queueSize = m_pBusPtr->getQueueSize();
     m_pBusPtr->runQueue();
 }
 
