@@ -7,3 +7,6 @@
 [submodule "Simulator/graphics/lvgl"]
 	path = Simulator/graphics/lvgl
 	url = https://github.com/littlevgl/lvgl.git
+[submodule "Simulator/graphics/lv_drivers"]
+	path = Simulator/graphics/lv_drivers
+	url = https://github.com/littlevgl/lv_drivers.git

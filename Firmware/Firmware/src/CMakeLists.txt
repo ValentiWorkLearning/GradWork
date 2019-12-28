@@ -66,6 +66,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/RobotoBold40px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/lvgl_ui.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/sp_fake_services_creator.cpp

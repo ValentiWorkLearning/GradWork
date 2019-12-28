@@ -13,6 +13,7 @@ add_subdirectory("graphics/SDL-mirror")
 add_executable(
     ${TARGET_NAME}
     ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/widgets_layer/lvgl_ui.cpp
 )
 
 target_compile_definitions(
@@ -25,6 +26,7 @@ target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     "graphics/SDL-mirror/include"
+    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/widgets_layer
 )
 
 target_link_libraries(
