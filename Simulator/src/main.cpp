@@ -1,5 +1,8 @@
-#include <SDL.h>
-#include <Windows.h>
+#include <thread>
+#include <chrono>
+
+#pragma warning( push, 0 )
+#pragma warning( disable : 4576 )
 
 #include "lvgl/lvgl.h"
 #include "lv_drivers/display/monitor.h"
@@ -8,14 +11,11 @@
 
 #include "lvgl_ui.hpp"
 
-#pragma warning( disable : 4576 )
+#pragma warning( pop )
 
-static void hal_init(void);
-static int tick_thread(void *data);
+void initHal();
 
 static lv_indev_t * kb_indev;
-
-void demoCreate();
 
 int main(  )
 {
@@ -23,15 +23,18 @@ int main(  )
     lv_init();
 
     /*Initialize the HAL for LittlevGL*/
-    hal_init();
+    initHal();
 
-    demoCreate();
+    LvglUi::createWidgetsDemo();
 
-    while (1) {
+    while (true)
+    {
         /* Periodically call the lv_task handler.
         * It could be done in a timer interrupt or an OS task too.*/
         lv_task_handler();
-        Sleep(10);       /*Just to let the system breathe */
+        std::this_thread::sleep_for(
+            std::chrono::milliseconds(5)
+        );
     }
 
 
@@ -39,7 +42,7 @@ int main(  )
 }
 
 
-static void hal_init(void)
+static void initHal(void)
 {
     /* Add a display
     * Use the 'monitor' driver which creates window on PC's monitor to simulate a display*/
@@ -78,21 +81,18 @@ static void hal_init(void)
     /* Tick init.
     * You have to call 'lv_tick_inc()' in every milliseconds
     * Create an SDL thread to do this*/
-    SDL_CreateThread(tick_thread, "tick", NULL);
-}
+    auto tickThread = std::thread(
+        []
+        {
+            while (true)
+            {
+                lv_tick_inc(5);
+                std::this_thread::sleep_for(
+                    std::chrono::milliseconds(5)
+                );
+            }
 
-
-static int tick_thread(void *data)
-{
-    while (1) {
-        lv_tick_inc(5);
-        SDL_Delay(5);   /*Sleep for 1 millisecond*/
-    }
-
-    return 0;
-}
-
-void demoCreate()
-{
-    LvglUi::createWidgetsDemo();
+        }
+    );
+    tickThread.detach();
 }

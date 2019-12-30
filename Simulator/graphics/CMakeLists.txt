@@ -6,8 +6,6 @@ add_library( ${TARGET_NAME} STATIC )
 
 
 set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 target_include_directories(
     ${TARGET_NAME}
@@ -43,9 +41,7 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
-target_sources(
-    ${TARGET_NAME}
-    PRIVATE
+set ( TARGET_SOURCE_LIST
     "lvgl/src/lv_core/lv_debug.c"
     "lvgl/src/lv_core/lv_disp.c"
     "lvgl/src/lv_core/lv_group.c"
@@ -151,10 +147,18 @@ target_sources(
     "lv_drivers/indev/mousewheel.c"
     "lv_drivers/indev/XPT2046.c"
     "lv_drivers/win_drv.c"
-
 )
 
-SET_SOURCE_FILES_PROPERTIES( file1.c PROPERTIES LANGUAGE CXX )
+target_sources(
+    ${TARGET_NAME}
+    PRIVATE
+    ${TARGET_SOURCE_LIST}
+)
+
+set_source_files_properties(
+    ${TARGET_SOURCE_LIST}
+    PROPERTIES LANGUAGE C
+)
 
 target_include_directories(
     ${TARGET_NAME}
