@@ -111,10 +111,11 @@ void createWidgetsDemo()
 
 
     static lv_style_t hoursLabelStyle;
-    lv_style_copy( &hoursLabelStyle, &lv_style_transp_tight );         /*Copy a built-in style as a starting point*/
+    lv_style_copy( &hoursLabelStyle, &lv_style_plain_color );
 
     lv_obj_t* pHoursLabel = lv_label_create( pScreen, nullptr );
     hoursLabelStyle.text.font = &lv_font_roboto_28;
+    hoursLabelStyle.text.color = lv_color_make( 0x00, 0x00, 0x00 );
 
     lv_label_set_style( pHoursLabel, LV_LABEL_STYLE_MAIN, &hoursLabelStyle );
     lv_obj_align(
@@ -131,7 +132,7 @@ void createWidgetsDemo()
     static lv_style_t minutesLabelStyle;
     lv_obj_t* pMinutesLabel = lv_label_create( pScreen, nullptr );
 
-    lv_style_copy( &minutesLabelStyle, &lv_style_transp_tight );
+    lv_style_copy( &minutesLabelStyle, &lv_style_plain_color );
     minutesLabelStyle.text.font = &lv_font_roboto_28;
     minutesLabelStyle.text.color = lv_color_make(0xFF, 0xFF, 0xFF);
 
