@@ -4,6 +4,8 @@ set (TARGET_NAME WatchSim )
 
 project(FirmwareSimulator)
 
+
+
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
@@ -27,6 +29,12 @@ target_include_directories(
     PUBLIC
     "graphics/SDL-mirror/include"
     ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/widgets_layer
+)
+
+set_target_properties(
+    ${TARGET_NAME}
+    PROPERTIES
+    CXX_STANDARD 17
 )
 
 target_link_libraries(
