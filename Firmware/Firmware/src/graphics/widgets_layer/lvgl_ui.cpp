@@ -61,9 +61,8 @@ auto drawInyan( lv_obj_t* _parent )
     pYanStyle.body.main_color = lv_color_make( 0xFF, 0xFF, 0xFF );
     pYanStyle.body.grad_color = pYanStyle.body.main_color;
 
-    lv_obj_t* pIny = createAlignedRect( LV_ALIGN_IN_RIGHT_MID, &pInyStyle );
+    lv_obj_t* pIny = createAlignedRect(LV_ALIGN_IN_RIGHT_MID, &pInyStyle);
     lv_obj_t* pYan = createAlignedRect( LV_ALIGN_IN_LEFT_MID, &pYanStyle );
-
 
     auto createAlignedCircle = [ _parent ](auto _aligmentType, const lv_style_t* _style)
     {
@@ -115,7 +114,7 @@ auto drawClocks( lv_obj_t* _parent )
         ,   nullptr
         ,   LV_ALIGN_IN_TOP_MID
         ,   0
-        ,   UiConstants::Display::Height / 3.25f
+        ,   static_cast<lv_coord_t>( UiConstants::Display::Height / 3.25f )
     );
 
     lv_label_set_text( pHoursLabel, "11" );
@@ -181,7 +180,12 @@ void createWidgetsDemo()
 
     lv_obj_t* pTileView;
     pTileView = lv_tileview_create( lv_scr_act(), nullptr );
-    lv_tileview_set_valid_positions( pTileView, validPos.data() , validPos.size() );
+    lv_tileview_set_valid_positions(
+            pTileView
+        ,   validPos.data()
+        ,   static_cast<std::uint16_t>( validPos.size() )
+    );
+
     lv_tileview_set_edge_flash( pTileView, false );
 
     lv_obj_t* tileClock = lv_obj_create( pTileView, nullptr );
@@ -202,50 +206,22 @@ void createWidgetsDemo()
         ,   clockTileWidgets
     );
 
-    /*Tile2: a list*/
-    lv_obj_t* list = lv_list_create(pTileView, NULL);
-    lv_obj_set_size(list, LV_HOR_RES, LV_VER_RES);
-    lv_obj_set_pos(list, 0, LV_VER_RES);
-    lv_list_set_scroll_propagation(list, true);
-    lv_list_set_sb_mode(list, LV_SB_MODE_OFF);
-    lv_tileview_add_element(pTileView, list);
+    /*Tile2: a back menu*/
+    lv_obj_t* tileOptions = lv_obj_create( pTileView, nullptr );
+    lv_obj_set_size( tileOptions, LV_HOR_RES, LV_VER_RES );
+    lv_obj_set_style( tileOptions, &lv_style_plain );
+    lv_obj_set_pos(tileOptions, 0, LV_VER_RES);
+    lv_tileview_add_element(pTileView, tileOptions);
 
-    lv_obj_t* list_btn;
-    list_btn = lv_list_add_btn(list, NULL, "One");
-    lv_tileview_add_element(pTileView, list_btn);
+    auto iniYanReversed = drawInyan( tileOptions );
 
-    list_btn = lv_list_add_btn(list, NULL, "Two");
-    lv_tileview_add_element(pTileView, list_btn);
-
-    list_btn = lv_list_add_btn(list, NULL, "Three");
-    lv_tileview_add_element(pTileView, list_btn);
-
-    list_btn = lv_list_add_btn(list, NULL, "Four");
-    lv_tileview_add_element(pTileView, list_btn);
-
-    list_btn = lv_list_add_btn(list, NULL, "Five");
-    lv_tileview_add_element(pTileView, list_btn);
-
-    list_btn = lv_list_add_btn(list, NULL, "Six");
-    lv_tileview_add_element(pTileView, list_btn);
-
-    list_btn = lv_list_add_btn(list, NULL, "Seven");
-    lv_tileview_add_element(pTileView, list_btn);
-
-    list_btn = lv_list_add_btn(list, NULL, "Eight");
-    lv_tileview_add_element(pTileView, list_btn);
-
-    ///*Tile3: a button*/
-    //lv_obj_t* tile3 = lv_obj_create(pTileView, tile1);
-    //lv_obj_set_pos(tile3, LV_HOR_RES, LV_VER_RES);
-    //lv_tileview_add_element(pTileView, tile3);
-
-    //lv_obj_t* btn = lv_btn_create(tile3, NULL);
-    //lv_obj_align(btn, NULL, LV_ALIGN_CENTER, 0, 0);
-
-    //label = lv_label_create(btn, NULL);
-    //lv_label_set_text(label, "Button");
-
+    Utils::Meta::tupleApply(
+            [&pTileView]( lv_obj_t* _pOptionsWidget )
+            {
+                lv_tileview_add_element( pTileView, _pOptionsWidget );
+            }
+        ,   iniYanReversed
+    );
 }
 
 }
