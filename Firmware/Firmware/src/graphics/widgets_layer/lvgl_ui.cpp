@@ -2,6 +2,9 @@
 #include "../fonts/RobotoBold40px.hpp"
 
 #include <cstdint>
+#include <tuple>
+#include <array>
+#include <utility>
 
 #include "lvgl.h"
 
@@ -11,15 +14,30 @@ namespace UiConstants::Display
     static const std::uint32_t Height = LV_VER_RES;
 }
 
+namespace Utils::Meta
+{
+    template<typename Callable, typename Tuple, std::size_t... Is >
+    constexpr auto tupleApplyImpl( Callable&& _toCall, const Tuple& _tuple, std::index_sequence<Is...> )
+    {
+        return (_toCall( std::get<Is>( _tuple ) ), ...);
+    }
+
+    template<typename Callable, typename ... ArgsList >
+    constexpr auto tupleApply( Callable&& _toCall , const std::tuple<ArgsList...>& _tuple )
+    {
+        return tupleApplyImpl( std::forward<Callable>( _toCall ), _tuple, std::index_sequence_for<ArgsList...>{} );
+    }
+}
+
 namespace
 {
 
-void drawInyan()
+auto drawInyan( lv_obj_t* _parent )
 {
-    auto createAlignedRect = []( auto _aligmentType, const lv_style_t* _style )
+    auto createAlignedRect = [_parent]( auto _aligmentType, const lv_style_t* _style )
     {
         lv_obj_t* pObject{ nullptr };
-        pObject = lv_obj_create( lv_scr_act(), nullptr );
+        pObject = lv_obj_create( _parent, nullptr );
         lv_obj_set_size(
             pObject
             , UiConstants::Display::Width / 2
@@ -47,9 +65,9 @@ void drawInyan()
     lv_obj_t* pYan = createAlignedRect( LV_ALIGN_IN_LEFT_MID, &pYanStyle );
 
 
-    auto createAlignedCircle = [](auto _aligmentType, const lv_style_t* _style)
+    auto createAlignedCircle = [ _parent ](auto _aligmentType, const lv_style_t* _style)
     {
-        lv_obj_t* pCircle = lv_obj_create(lv_scr_act(), nullptr);
+        lv_obj_t* pCircle = lv_obj_create( _parent, nullptr );
 
         lv_obj_set_size(
                 pCircle
@@ -79,34 +97,15 @@ void drawInyan()
     lv_obj_t* pInyCircle = createAlignedCircle( LV_ALIGN_IN_BOTTOM_MID, &pInyCircleStyle );
     lv_obj_t* pYanCircle = createAlignedCircle( LV_ALIGN_IN_TOP_MID, &pYanCircleStyle );
 
+    return std::tuple( pIny, pInyCircle, pYan, pYanCircle );
 }
 
-}
-
-namespace LvglUi
+auto drawClocks( lv_obj_t* _parent )
 {
-
-void createWidgetsDemo()
-{
-
-    //lv_theme_t* pTheme = lv_theme_mono_init(0, nullptr);
-    lv_theme_t* pTheme = lv_theme_material_init(0, nullptr);
-    lv_theme_set_current(pTheme);
-
-    lv_obj_t* pScreen = lv_disp_get_scr_act(nullptr);     /*Get the current screen*/
-
-    drawInyan();
-
-  /*  lv_obj_t * preload = lv_preload_create(lv_scr_act(), nullptr);
-    lv_preload_set_spin_time(preload, 10000);
-    lv_obj_set_size(preload, 240, 240);
-    lv_obj_align(preload, nullptr, LV_ALIGN_CENTER, 0, 0);*/
-
-
     static lv_style_t hoursLabelStyle;
     lv_style_copy( &hoursLabelStyle, &lv_style_plain_color );
 
-    lv_obj_t* pHoursLabel = lv_label_create( pScreen, nullptr );
+    lv_obj_t* pHoursLabel = lv_label_create( _parent, nullptr );
     hoursLabelStyle.text.font = &RobotoFont40px;
     hoursLabelStyle.text.color = lv_color_make( 0x00, 0x00, 0x00 );
 
@@ -123,7 +122,7 @@ void createWidgetsDemo()
 
 
     static lv_style_t minutesLabelStyle;
-    lv_obj_t* pMinutesLabel = lv_label_create( pScreen, nullptr );
+    lv_obj_t* pMinutesLabel = lv_label_create( _parent, nullptr );
 
     lv_style_copy( &minutesLabelStyle, &lv_style_plain_color );
     minutesLabelStyle.text.font = &RobotoFont40px;
@@ -142,7 +141,7 @@ void createWidgetsDemo()
 
 
     static lv_style_t secondsLabelStyle;
-    lv_obj_t* pSecondsLabel = lv_label_create( pScreen, nullptr );
+    lv_obj_t* pSecondsLabel = lv_label_create( _parent, nullptr );
 
     lv_style_copy( &secondsLabelStyle, &minutesLabelStyle );
     secondsLabelStyle.text.font = &lv_font_roboto_16;
@@ -157,6 +156,96 @@ void createWidgetsDemo()
     );
 
     lv_label_set_text( pSecondsLabel, "27" );
+
+    return std::tuple( pHoursLabel, pMinutesLabel, pSecondsLabel );
+}
+
+}
+
+namespace LvglUi
+{
+
+void createWidgetsDemo()
+{
+
+    //lv_theme_t* pTheme = lv_theme_mono_init(0, nullptr);
+    lv_theme_t* pTheme = lv_theme_material_init( 0, nullptr );
+    lv_theme_set_current( pTheme );
+
+    static std::array<lv_point_t, 3> validPos
+        = {
+                lv_point_t{ 0, 0 }
+            ,   lv_point_t{ 0, 1 }
+            ,   lv_point_t{ 1, 1 }
+        };
+
+    lv_obj_t* pTileView;
+    pTileView = lv_tileview_create( lv_scr_act(), nullptr );
+    lv_tileview_set_valid_positions( pTileView, validPos.data() , validPos.size() );
+    lv_tileview_set_edge_flash( pTileView, true );
+
+    lv_obj_t* tileClock = lv_obj_create( pTileView, nullptr );
+    lv_obj_set_size( tileClock, LV_HOR_RES, LV_VER_RES );
+    lv_obj_set_style( tileClock, &lv_style_plain );
+
+    /*Clock Tile: just labels*/
+    auto iniYan = drawInyan( tileClock );
+    auto clocks = drawClocks( tileClock );
+    auto clockTileWidgets = std::tuple_cat( iniYan, clocks );
+    lv_tileview_add_element( pTileView, tileClock );
+
+    Utils::Meta::tupleApply(
+            [&pTileView]( lv_obj_t* _pClockWidget )
+            {
+                lv_tileview_add_element( pTileView , _pClockWidget );
+            }
+        ,   clockTileWidgets
+    );
+
+    /*Tile2: a list*/
+    lv_obj_t* list = lv_list_create(pTileView, NULL);
+    lv_obj_set_size(list, LV_HOR_RES, LV_VER_RES);
+    lv_obj_set_pos(list, 0, LV_VER_RES);
+    lv_list_set_scroll_propagation(list, true);
+    lv_list_set_sb_mode(list, LV_SB_MODE_OFF);
+    lv_tileview_add_element(pTileView, list);
+
+    lv_obj_t* list_btn;
+    list_btn = lv_list_add_btn(list, NULL, "One");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    list_btn = lv_list_add_btn(list, NULL, "Two");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    list_btn = lv_list_add_btn(list, NULL, "Three");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    list_btn = lv_list_add_btn(list, NULL, "Four");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    list_btn = lv_list_add_btn(list, NULL, "Five");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    list_btn = lv_list_add_btn(list, NULL, "Six");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    list_btn = lv_list_add_btn(list, NULL, "Seven");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    list_btn = lv_list_add_btn(list, NULL, "Eight");
+    lv_tileview_add_element(pTileView, list_btn);
+
+    ///*Tile3: a button*/
+    //lv_obj_t* tile3 = lv_obj_create(pTileView, tile1);
+    //lv_obj_set_pos(tile3, LV_HOR_RES, LV_VER_RES);
+    //lv_tileview_add_element(pTileView, tile3);
+
+    //lv_obj_t* btn = lv_btn_create(tile3, NULL);
+    //lv_obj_align(btn, NULL, LV_ALIGN_CENTER, 0, 0);
+
+    //label = lv_label_create(btn, NULL);
+    //lv_label_set_text(label, "Button");
+
 }
 
 }
