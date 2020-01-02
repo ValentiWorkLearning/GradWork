@@ -9,6 +9,8 @@ project(FirmwareSimulator)
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
+list(APPEND EXTRA_LIBS vcruntime user32 gdi32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32)
+
 add_compile_options(/wd4576)
 
 if (MSVC_VERSION GREATER_EQUAL "1900")

@@ -182,7 +182,7 @@ void createWidgetsDemo()
     lv_obj_t* pTileView;
     pTileView = lv_tileview_create( lv_scr_act(), nullptr );
     lv_tileview_set_valid_positions( pTileView, validPos.data() , validPos.size() );
-    lv_tileview_set_edge_flash( pTileView, true );
+    lv_tileview_set_edge_flash( pTileView, false );
 
     lv_obj_t* tileClock = lv_obj_create( pTileView, nullptr );
     lv_obj_set_size( tileClock, LV_HOR_RES, LV_VER_RES );
