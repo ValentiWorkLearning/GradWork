@@ -2,4 +2,4 @@
 
 #include <lvgl/lvgl.h>
 
-LV_FONT_DECLARE(RobotoBold40px);
+LV_FONT_DECLARE(RobotoFont40px);

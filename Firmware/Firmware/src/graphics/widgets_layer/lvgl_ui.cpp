@@ -1,16 +1,9 @@
 #include "lvgl_ui.hpp"
+#include "../fonts/RobotoBold40px.hpp"
 
 #include <cstdint>
 
-#pragma warning( push, 0 )
-#pragma warning( disable : 4576 )
-
-extern "C"
-{
-    #include "lvgl.h"
-}
-
-#pragma warning( pop )
+#include "lvgl.h"
 
 namespace UiConstants::Display
 {
@@ -114,7 +107,7 @@ void createWidgetsDemo()
     lv_style_copy( &hoursLabelStyle, &lv_style_plain_color );
 
     lv_obj_t* pHoursLabel = lv_label_create( pScreen, nullptr );
-    hoursLabelStyle.text.font = &lv_font_roboto_28;
+    hoursLabelStyle.text.font = &RobotoFont40px;
     hoursLabelStyle.text.color = lv_color_make( 0x00, 0x00, 0x00 );
 
     lv_label_set_style( pHoursLabel, LV_LABEL_STYLE_MAIN, &hoursLabelStyle );
@@ -122,8 +115,8 @@ void createWidgetsDemo()
             pHoursLabel
         ,   nullptr
         ,   LV_ALIGN_IN_TOP_MID
-        ,   UiConstants::Display::Width / 8
-        ,   UiConstants::Display::Height / 3
+        ,   0
+        ,   UiConstants::Display::Height / 3.25f
     );
 
     lv_label_set_text( pHoursLabel, "11" );
@@ -133,7 +126,7 @@ void createWidgetsDemo()
     lv_obj_t* pMinutesLabel = lv_label_create( pScreen, nullptr );
 
     lv_style_copy( &minutesLabelStyle, &lv_style_plain_color );
-    minutesLabelStyle.text.font = &lv_font_roboto_28;
+    minutesLabelStyle.text.font = &RobotoFont40px;
     minutesLabelStyle.text.color = lv_color_make(0xFF, 0xFF, 0xFF);
 
     lv_label_set_style( pMinutesLabel, LV_LABEL_STYLE_MAIN, &minutesLabelStyle );
@@ -141,7 +134,7 @@ void createWidgetsDemo()
             pMinutesLabel
         ,   nullptr
         ,   LV_ALIGN_CENTER
-        ,   UiConstants::Display::Width / 8
+        ,   0
         ,   UiConstants::Display::Height / 8
     );
 

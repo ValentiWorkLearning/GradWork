@@ -1,17 +1,12 @@
 #include <thread>
 #include <chrono>
 
-#pragma warning( push, 0 )
-#pragma warning( disable : 4576 )
-
 #include "lvgl/lvgl.h"
 #include "lv_drivers/display/monitor.h"
 #include "lv_drivers/indev/mouse.h"
 #include "lv_drivers/indev/keyboard.h"
 
 #include "lvgl_ui.hpp"
-
-#pragma warning( pop )
 
 void initHal();
 
