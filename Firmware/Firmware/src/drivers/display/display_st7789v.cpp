@@ -138,7 +138,7 @@ void St7789V::initColumnRow(
     )
     {
         m_columnStart = 0;
-        m_rowStart = 0;
+        m_rowStart = 40;
     }
 }
 
