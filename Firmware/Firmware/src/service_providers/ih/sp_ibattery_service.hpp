@@ -21,17 +21,15 @@ class IBatteryLevelAppService
 
 public:
 
-    virtual void setMeasurmentPeriod( const std::chrono::seconds _measurementPeriod ) = 0;
+    virtual ~IBatteryLevelAppService() = default;
+
+public:
 
     virtual std::chrono::seconds getMeasurmentPeriod() const = 0;
 
-    virtual ~IBatteryLevelAppService() = default;
+    virtual void startBatteryMeasure() = 0;
 
     Simple::Signal<void(std::uint8_t)> onBatteryLevelChangedSig;
-
-protected:
-
-    virtual void measureBatteryLevel() = 0;
 
 };
 

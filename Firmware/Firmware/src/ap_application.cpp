@@ -78,6 +78,8 @@ Application::initGraphicsStack()
 void
 Application::runApplicationLoop()
 {
+    m_batteryLevelService->startBatteryMeasure();
+
     /* Toggle LEDs. */
     Logger::Instance().logDebugEndl( "Led toggle..." );
     auto ledToggler =
