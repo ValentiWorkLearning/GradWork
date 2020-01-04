@@ -4,6 +4,7 @@
 #include "ih/sp_iservice_creator.hpp"
 
 #include "battery/sp_battery_service_fake.hpp"
+#include "heartrate/sp_heartrate_service_fake.hpp"
 
 namespace ServiceProviders
 {
@@ -14,6 +15,12 @@ FakeServiceCreator::getBatteryService()
     return std::make_unique<BatteryService::BatteryServiceFake>(
         BatteryService::Settings::MeasurmentPeriod
     );
+}
+
+std::unique_ptr<HeartrateService::IHeartrateService>
+FakeServiceCreator::getHeartrateService()
+{
+    return std::make_unique<HeartrateService::HeartrateServiceFake>();
 }
 
 std::unique_ptr<IServiceCreator> getFakeServiceCreator()

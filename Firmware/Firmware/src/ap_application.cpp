@@ -38,6 +38,7 @@ Application::initServices()
 {
     m_fakeServiceProvider = ServiceProviders::getFakeServiceCreator();
     m_batteryLevelService = m_fakeServiceProvider->getBatteryService();
+    m_heartrateService = m_fakeServiceProvider->getHeartrateService();
 }
 
 void

@@ -2,11 +2,6 @@
 
 #include "ih/sp_iservice_creator.hpp"
 
-namespace ServiceProviders::BatteryService
-{
-    class IBatteryLevelAppService;
-}
-
 namespace ServiceProviders
 {
 
@@ -18,6 +13,9 @@ public:
 
     [[nodiscard]] std::unique_ptr<BatteryService::IBatteryLevelAppService>
     getBatteryService() override;
+
+    [[nodiscard]] std::unique_ptr<HeartrateService::IHeartrateService>
+    getHeartrateService() override;
 
     ~FakeServiceCreator()override = default;
 

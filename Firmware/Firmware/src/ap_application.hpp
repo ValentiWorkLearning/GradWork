@@ -17,8 +17,10 @@
 
 #include "graphics/gs_lvgl_service.hpp"
 
-#include "service_providers/ih/sp_ibattery_service.hpp"
 #include "service_providers/sp_fake_services_creator.hpp"
+
+#include "service_providers/ih/sp_ibattery_service.hpp"
+#include "service_providers/ih/sp_iheartrate_service.hpp"
 
 #include "Noncopyable.hpp"
 
@@ -55,5 +57,6 @@ private:
     std::unique_ptr<Ble::Stack::BleStackKeeper> m_bleStackKeeper;
     std::unique_ptr<ServiceProviders::IServiceCreator> m_fakeServiceProvider;
     std::unique_ptr<ServiceProviders::BatteryService::IBatteryLevelAppService> m_batteryLevelService;
+    std::unique_ptr<ServiceProviders::HeartrateService::IHeartrateService> m_heartrateService;
     std::unique_ptr<Graphics::LvglGraphicsService> m_graphicsService;
 };
