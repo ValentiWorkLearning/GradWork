@@ -5,7 +5,7 @@
 #include <cassert>
 #include <array>
 
-#define SPI_INSTANCE  0
+#define SPI_INSTANCE  2
 
 namespace Interface::Spi
 {
@@ -30,10 +30,10 @@ SpiBus::SpiBus(
 
     nrfx_spim_config_t spiConfig{};
 
-    spiConfig.sck_pin        = SPIM0_SCK_PIN;
-    spiConfig.mosi_pin       = SPIM0_MOSI_PIN;
-    spiConfig.miso_pin       = SPIM0_MISO_PIN;
-    spiConfig.ss_pin         = SPIM0_SS_PIN;
+    spiConfig.sck_pin        = SPIM2_SCK_PIN;
+    spiConfig.mosi_pin       = SPIM2_MOSI_PIN;
+    spiConfig.miso_pin       = SPIM2_MISO_PIN;
+    spiConfig.ss_pin         = SPIM2_SS_PIN;
     spiConfig.ss_active_high = false;
     spiConfig.irq_priority   = NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY;
     spiConfig.orc            = 0xFF;

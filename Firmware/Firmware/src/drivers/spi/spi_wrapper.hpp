@@ -15,12 +15,12 @@ namespace Interface::Spi
 
 namespace SpiInstance
 {
-    struct M0
+    struct M2
     {
-        static constexpr std::uint8_t ClockPin = SPIM0_SCK_PIN;
-        static constexpr std::uint8_t MisoPin = SPIM0_MISO_PIN;
-        static constexpr std::uint8_t MosiPin = SPIM0_MOSI_PIN;
-        static constexpr std::uint8_t SlaveSelectPin = SPIM0_SS_PIN;
+        static constexpr std::uint8_t ClockPin = SPIM2_SCK_PIN;
+        static constexpr std::uint8_t MisoPin = SPIM2_MISO_PIN;
+        static constexpr std::uint8_t MosiPin = SPIM2_MOSI_PIN;
+        static constexpr std::uint8_t SlaveSelectPin = SPIM2_SS_PIN;
     };
 };
 

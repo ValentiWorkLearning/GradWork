@@ -97,23 +97,30 @@ extern "C" {
 // #define SPIS_MOSI_PIN   25  // SPI MOSI signal.
 // #define SPIS_SCK_PIN    29  // SPI SCK signal.
 
-#define SPIM0_SCK_PIN   28  // SPI clock GPIO pin number.
-#define SPIM0_MOSI_PIN  27  // SPI Master Out Slave In GPIO pin number.
-#define SPIM0_MISO_PIN  2   // SPI Master In Slave Out GPIO pin number.
-#define SPIM0_SS_PIN    30  // SPI Slave Select GPIO pin number.
+#define SPIM2_SCK_PIN   28  // SPI clock GPIO pin number.
+#define SPIM2_MOSI_PIN  27  // SPI Master Out Slave In GPIO pin number.
+#define SPIM2_MISO_PIN  2   // SPI Master In Slave Out GPIO pin number.
+#define SPIM2_SS_PIN    30  // SPI Slave Select GPIO pin number.
 
 #define DISP_DC_PIN     26  // Display Data Command Select GPIO pin number.
 #define DISP_RST        31  // Dis[play reset GPIO pin number.
+
+#define MPU_SCL_PIN     8    // SCL signal pin
+#define MPU_SDA_PIN     7    // SDA signal pin
+#define MPU_ADO_PIN     11   // MP_ADO_PIN
+
+#define HEARTRATE_SCL_PIN     24    // SCL signal pin
+#define HEARTRATE_SDA_PIN     23    // SDA signal pin
 
 #define SPIM1_SCK_PIN   2   // SPI clock GPIO pin number.
 #define SPIM1_MOSI_PIN  3   // SPI Master Out Slave In GPIO pin number.
 #define SPIM1_MISO_PIN  4   // SPI Master In Slave Out GPIO pin number.
 #define SPIM1_SS_PIN    5   // SPI Slave Select GPIO pin number.
 
-#define SPIM2_SCK_PIN   12  // SPI clock GPIO pin number.
-#define SPIM2_MOSI_PIN  13  // SPI Master Out Slave In GPIO pin number.
-#define SPIM2_MISO_PIN  14  // SPI Master In Slave Out GPIO pin number.
-#define SPIM2_SS_PIN    15  // SPI Slave Select GPIO pin number.
+// #define SPIM2_SCK_PIN   12  // SPI clock GPIO pin number.
+// #define SPIM2_MOSI_PIN  13  // SPI Master Out Slave In GPIO pin number.
+// #define SPIM2_MISO_PIN  14  // SPI Master In Slave Out GPIO pin number.
+// #define SPIM2_SS_PIN    15  // SPI Slave Select GPIO pin number.
 
 // serialization APPLICATION board - temp. setup for running serialized MEMU tests
 #define SER_APP_RX_PIN              23    // UART RX pin number.
@@ -146,8 +153,6 @@ extern "C" {
 
 
 // Arduino board mappings
-// #define ARDUINO_SCL_PIN             27    // SCL signal pin
-#define ARDUINO_SDA_PIN             26    // SDA signal pin
 #define ARDUINO_AREF_PIN            2     // Aref pin
 #define ARDUINO_13_PIN              25    // Digital pin 13
 #define ARDUINO_12_PIN              24    // Digital pin 12

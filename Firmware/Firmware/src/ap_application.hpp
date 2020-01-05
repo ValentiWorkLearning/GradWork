@@ -51,6 +51,8 @@ private:
 
     void initGraphicsStack();
 
+    void runTwiTest();
+
 private:
 
     std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
