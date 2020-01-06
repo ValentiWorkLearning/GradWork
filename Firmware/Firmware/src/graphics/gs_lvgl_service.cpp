@@ -49,7 +49,27 @@ LvglGraphicsService::LvglGraphicsService(
       }
     );
 
+
+    auto monitorCallback = cbc::obtain_connector(
+        []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
+        {
+            std::array<char, 10> str{};
+            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),time); ec == std::errc() )
+            {
+                Logger::Instance().logDebug("Refresh time:");
+                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
+            }
+
+            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),px ); ec == std::errc() )
+            {
+                Logger::Instance().logDebug("Refreshed pixels:");
+                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
+            }
+        }
+    );
+
     m_glDisplayDriver.flush_cb = hardwareDriverCallback;
+    m_glDisplayDriver.monitor_cb = monitorCallback;
 
     m_glDisplay = lv_disp_drv_register( &m_glDisplayDriver );
 
@@ -57,7 +77,6 @@ LvglGraphicsService::LvglGraphicsService(
         [this]
         {
             lv_disp_flush_ready( &m_glDisplayDriver );
-            //lv_log_add( LV_LOG_LEVEL_TRACE, __FILE__, __LINE__, "display flush ready" );
         }
     );
 
