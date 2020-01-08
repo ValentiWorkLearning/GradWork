@@ -6,19 +6,31 @@
 
 - [x] Integration with ST7789V display driver
 
-- [ ] BLE custom service
+- [x] LVGL library porting
+
+- [x] BLE custom service
 
 - [ ] Time displaying ( RTC )
 
-- [ ] Battery level displaying
+- [ ] Time synchronization over BLE Service
+
+- [x] Battery level displaying BLE
+
+- [ ] Battery level displaying Display
 
 - [ ] Accelerometer clock sleep out
 
 - [ ] Energy-Save mode
 
-- [ ] Alarms support( Android integration )
+  
 
-- [ ] Notifications from Android device( Android integration )
+  ###### Android integration:
+
+- [ ] Alarms support
+
+- [ ] Notifications from Android device
+
+- [ ] Music switching over Android device
 
   
 
@@ -34,9 +46,9 @@
 
 - [x] KiCad as CAD system for PCB
 
-- [ ] Player control ( Pause/Stop/Play/Next/Previous song )
-
 - [ ] I2S micro for audiomessages
+
+- [ ] Research lightweight inter-processor communication
 
 ## **Part list:**
 
@@ -74,7 +86,7 @@ http://www.kosmodrom.com.ua/el.php?name=TXS0108EPWR
 
 LTC4054ES5-4.2
 
-http://www.kosmodrom.com.ua/prodlist.php?name=%CF%F0%E5%EE%E1%F0%E0%E7%EE%E2%E0%F2%E5%EB%FC%20%E8%ED%F2%E5%F0%F4%E5%E9%F1%EE%E2&page=1
+http://www.kosmodrom.com.ua/el.php?name=LTC4054ES5-4.2
 
 **LDO**
 
@@ -95,4 +107,18 @@ https://kicad.github.io/symbols/RF_Module
 - MPU-9250
 
 [https://www.snapeda.com/parts/MPU-9250/TDK%20InvenSense/view-part/](https://www.snapeda.com/parts/MPU-9250/TDK InvenSense/view-part/)
+
+
+
+#### Software dependencies:
+
+* LVGL - https://github.com/littlevgl/lvgl - open-source embedded GUI library
+* Callback connector - library for wrapping C++ class members into C-style callback 
+
+https://github.com/Toxa-man/CallbackConnector 
+
+* Lightweight C++ signals for small systems  https://github.com/larspensjo/SimpleSignal
+* SDL-mirror - is used by Simulator subproject https://github.com/spurious/SDL-mirror
+
+
 
