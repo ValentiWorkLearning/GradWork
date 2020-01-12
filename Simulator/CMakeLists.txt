@@ -65,7 +65,6 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/logger
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/service_providers
 )
 
