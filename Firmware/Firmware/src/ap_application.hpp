@@ -1,18 +1,5 @@
 #pragma once
 
-#include "nrf_delay.h"
-#include "nrf.h"
-#include "boards.h"
-#include "bsp.h"
-
-#include "drivers/display/display_st7789v_constants.hpp"
-#include "drivers/display/display_st7789v.hpp"
-
-#include "drivers/spi/spi_wrapper.hpp"
-
-#include "drivers/ble/ble_custom_service.hpp"
-#include "drivers/ble/ble_softdevice.hpp"
-
 #include "logger/logger_service.hpp"
 
 #include "graphics/gs_lvgl_service.hpp"
@@ -24,6 +11,13 @@
 
 #include "Noncopyable.hpp"
 
+#if defined (USE_BLE_SERVICES)
+namespace Ble::Stack
+{
+    class BleStackKeeper;
+}
+#endif
+
 class Application
 {
 
@@ -31,7 +25,7 @@ public:
 
     Application();
 
-    ~Application() = default;
+    ~Application();
 
 public:
 
@@ -55,8 +49,10 @@ private:
 
 private:
 
-    std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
+#if defined (USE_BLE_SERVICES)
     std::unique_ptr<Ble::Stack::BleStackKeeper> m_bleStackKeeper;
+#endif
+
     std::unique_ptr<ServiceProviders::IServiceCreator> m_fakeServiceProvider;
     std::unique_ptr<ServiceProviders::BatteryService::IBatteryLevelAppService> m_batteryLevelService;
     std::unique_ptr<ServiceProviders::HeartrateService::IHeartrateService> m_heartrateService;

@@ -1,9 +1,9 @@
 #pragma once
 
-#include "display/display_idisplay.hpp"
-
 #include "lvgl.h"
 #include "lv_conf.h"
+
+#include "gs_platform_layer.hpp"
 
 #include <array>
 #include <memory>
@@ -17,7 +17,7 @@ class LvglGraphicsService
 public:
 
     LvglGraphicsService(
-            std::unique_ptr<DisplayDriver::IDisplayDriver>&& _displayDriver
+            std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
         );
 
     ~LvglGraphicsService();
@@ -37,24 +37,18 @@ private:
     static TColorBuf dispFrameBufSecond;
 
 private:
-    static constexpr std::uint32_t LvglNotificationTime = 15;
-    static constexpr std::uint32_t LvgTaskTime = 1000;
-private:
 
     void initLvglLogger();
 
-    void initGfxTimer();
-
 private:
 
-    std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
-
-    lv_disp_drv_t m_glDisplayDriver;
     lv_disp_t* m_glDisplay;
+    std::unique_ptr<Graphics::PlatformBackend> m_pPlatformBackend;
+    lv_disp_drv_t m_glDisplayDriver;
 };
 
 std::unique_ptr<LvglGraphicsService> createGraphicsService(
-        std::unique_ptr<DisplayDriver::IDisplayDriver>&& _displayDriver
+        std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
     );
 
 };

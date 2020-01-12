@@ -1,9 +1,22 @@
 #include "ap_application.hpp"
 
+#if defined (USE_BLE_SERVICES)
+    #include "drivers/ble/ble_custom_service.hpp"
+    #include "drivers/ble/ble_softdevice.hpp"
+#endif
+
+#if defined (USE_DEVICE_SPECIFIC)
+#include "nrf_delay.h"
+#include "nrf.h"
+#include "boards.h"
+#include "bsp.h"
+#include "nrf_drv_twi.h"
+#endif
+
 #include "logger_service.hpp"
 #include "graphics/gs_lvgl_service.hpp"
+#include "graphics/gs_platform_layer.hpp"
 
-#include "nrf_drv_twi.h"
 
 Application::Application()
 {
@@ -15,15 +28,19 @@ Application::Application()
     initBleStack();
 }
 
+Application::~Application() = default;
+
 void
 Application::initInterfaces()
 {
-    m_displaySpiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M2>();
+
 }
 
 void
 Application::initBoard()
 {
+
+#if defined (USE_DEVICE_SPECIFIC)
     /* Configure board. */
     bsp_board_init( BSP_INIT_LEDS );
 
@@ -33,6 +50,8 @@ Application::initBoard()
 
     errorCode = app_timer_init();
     APP_ERROR_CHECK( errorCode );
+#endif
+
 }
 
 void
@@ -51,6 +70,8 @@ Application::initPeripheral()
 void
 Application::initBleStack()
 {
+
+#if defined (USE_BLE_SERVICES)
     m_bleStackKeeper = Ble::Stack::createBleStackKeeper();
 
     auto& batteryServiceBle = m_bleStackKeeper->getBatteryService();
@@ -61,25 +82,24 @@ Application::initBleStack()
                 batteryServiceBle.onBatteryLevelChanged( _newBatteryValue );
         }
     );
+#endif
+
 }
 
 void
 Application::initGraphicsStack()
 {
-    m_graphicsService =  Graphics::createGraphicsService(
-        DisplayDriver::createDisplayDriver(
-                m_displaySpiInstance.get()
-            ,   DisplayDriver::St7789v::Disp208_240::Width
-            ,   DisplayDriver::St7789v::Disp208_240::Height
-        )
+    m_graphicsService = Graphics::createGraphicsService(
+        Graphics::createPlatformBackend()
     );
-    nrf_delay_ms( 100 );
+
     m_graphicsService->runTest();
 }
 
 void
 Application::runTwiTest()
 {
+#if defined (USE_DEVICE_SPECIFIC)
     static const nrf_drv_twi_t m_twiHeartrate = NRF_DRV_TWI_INSTANCE(0);
     static const nrf_drv_twi_t m_twiMpu = NRF_DRV_TWI_INSTANCE(1);
 
@@ -129,12 +149,15 @@ Application::runTwiTest()
 
     if (errorCode == NRF_SUCCESS)
         Logger::Instance().logDebugEndl( "Max30102 detected on address 0x57" );
+#endif
 }
 
 void
 Application::runApplicationLoop()
 {
     m_batteryLevelService->startBatteryMeasure();
+    
+    #if defined (USE_DEVICE_SPECIFIC)
     runTwiTest();
     /* Toggle LEDs. */
     Logger::Instance().logDebugEndl( "Led toggle..." );
@@ -144,10 +167,12 @@ Application::runApplicationLoop()
         bsp_board_led_invert(0);
         nrf_delay_ms( _delayTime );
     };
-
+    #endif
     while (true)
     {
+    #if defined (USE_DEVICE_SPECIFIC)
         ledToggler( 300 );
+    #endif
         m_graphicsService->executeGlTask();
     }
 }

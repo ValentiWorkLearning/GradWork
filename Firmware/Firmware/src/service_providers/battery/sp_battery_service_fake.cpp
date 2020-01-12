@@ -60,6 +60,8 @@ public:
         APP_ERROR_CHECK( errorCode );
     }
 
+private:
+
     void measureBatteryLevel()
     {
         std::uint8_t measuredBatteryLevel =
@@ -138,6 +140,58 @@ private:
 
 #endif
 
+#ifdef USE_DESKTOP_SIMULATOR
+
+namespace ServiceProviders::BatteryService
+{
+
+class BatteryServiceFake::BatterySimulatorImpl
+{
+
+public:
+
+    BatterySimulatorImpl(
+            const std::chrono::seconds _measurePeriod
+        ,   const IBatteryLevelAppService* _pBatService
+    )
+        : m_measuringPeriod{ _measurePeriod }
+        , m_pBatService{ _pBatService }
+    {
+        initSimulator();
+        initTimer();
+    }
+
+public:
+
+    std::chrono::seconds getMeasurmentPeriod() const
+    {
+        return m_measuringPeriod;
+    }
+
+    void startSimulation()
+    {
+    }
+
+private:
+
+    void initSimulator()
+    {
+    }
+
+    void initTimer()
+    {
+    }
+
+private:
+
+    std::uint8_t m_batteryLevel;
+
+    const std::chrono::seconds m_measuringPeriod;
+
+    const IBatteryLevelAppService* m_pBatService;
+};
+}
+#endif
 
 namespace ServiceProviders::BatteryService
 {

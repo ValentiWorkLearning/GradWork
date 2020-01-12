@@ -40,7 +40,6 @@ nRF5x_addBLEService(ble_bas)
 
 
 add_definitions(-DCONFIG_GPIO_AS_PINRESET)
-add_definitions(-DLoggerSegger -DUSE_NRFSDK_SIMULATOR )
 
 # usually you would include files in this directory here, like so:
 #include_directories(.)
@@ -57,6 +56,16 @@ nRF5x_addExecutable(${TARGET_NAME} "${SOURCE_FILES}")
 
 add_subdirectory ("graphics")
 
+target_compile_definitions(
+    ${TARGET_NAME}
+    PRIVATE
+    USE_ST7789V_BACKEND
+    USE_NRFSDK_SIMULATOR
+    USE_BLE_SERVICES
+    USE_DEVICE_SPECIFIC
+    LoggerSegger
+)
+
 target_sources(
     ${TARGET_NAME}
     PRIVATE
@@ -68,6 +77,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/RobotoFont40px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/lvgl_ui.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_platform_layer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/heartrate/sp_heartrate_service_fake.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/sp_fake_services_creator.cpp

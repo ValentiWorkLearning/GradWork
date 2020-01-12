@@ -30,26 +30,43 @@ endif()
 add_subdirectory ("graphics")
 add_subdirectory("graphics/SDL-mirror")
 
+set (FIRMWARE_SRC_DIR "/../Firmware/Firmware/src/")
+
 add_executable(
     ${TARGET_NAME}
     ${CMAKE_CURRENT_LIST_DIR}/src/main.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/widgets_layer/lvgl_ui.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/fonts/RobotoFont40px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/lvgl_ui.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/RobotoFont40px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/gs_platform_layer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/gs_lvgl_service.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/service_providers/battery/sp_battery_service_fake.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/service_providers/heartrate/sp_heartrate_service_fake.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/service_providers/sp_fake_services_creator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/logger/logger_service_impl.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/ap_application.cpp
 )
 
 target_compile_definitions(
     ${TARGET_NAME}
     PUBLIC
     SDL_MAIN_HANDLED
+    USE_DESKTOP_SIMULATOR
+    USE_WINSDL_BACKEND
+    LoggerDesktop
 )
 
 target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     "graphics/SDL-mirror/include"
-    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/widgets_layer
-    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/fonts
-    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/utils
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/utils
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/logger
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/service_providers
 )
 
 target_link_libraries(

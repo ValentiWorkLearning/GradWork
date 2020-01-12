@@ -1,16 +1,47 @@
 #include "logger_service.hpp"
 
+#include "CallbackConnector.hpp"
+#include <atomic>
+#include <type_traits>
+
+#if defined(LoggerUart) 
+#include "nrf.h"
+#include "boards.h"
 #include "app_uart.h"
 #include "app_error.h"
 #include "bsp.h"
-
+#elif defined(LoggerSwo)
 #include "nrf.h"
 #include "boards.h"
-
-#include "CallbackConnector.hpp"
+#include "app_uart.h"
+#include "app_error.h"
+#include "bsp.h"
+#elif defined(LoggerSegger)
 #include "SEGGER_RTT.h"
-#include <atomic>
-#include <type_traits>
+#elif defined(LoggerDesktop)
+#include <iostream>
+#endif
+
+struct UartLogger;
+struct SwoLogger;
+struct SeggerRttLog;
+struct DesktopLogger;
+
+struct LoggerImplChoise
+{
+
+#if defined (LoggerUart)
+    using TLoggerImpl = UartLogger;
+#elif defined(LoggerSwo)
+    using TLoggerImpl = SwoLogger;
+#elif defined(LoggerSegger)
+    using TLoggerImpl = SeggerRttLog;
+#elif defined(LoggerDesktop)
+    using TLoggerImpl = DesktopLogger;
+#else
+    using TLoggerImpl = std::void_t<>;
+#endif
+};
 
 namespace
 {
@@ -105,6 +136,7 @@ private:
     std::unique_ptr<ILoggerHider> m_loggerHider;
 };
 
+#if defined (LoggerUart)
 class UartLogger
 {
 
@@ -168,8 +200,9 @@ private:
         }
     }
 };
+#endif
 
-
+#if defined (LoggerSwo)
 class SwoLogger
 {
 
@@ -191,8 +224,10 @@ public:
             ITM_SendChar( ch );
     }
 };
+#endif
 
 
+#if defined (LoggerSegger)
 class SeggerRttLog
 {
 
@@ -208,27 +243,31 @@ public:
         SEGGER_RTT_WriteString( 0, _toLog.data() );
     }
 };
-
-struct LoggerImplChoise
-{
-
-#if defined (LoggerUart)
-    using TLoggerImpl = UartLogger;
-#elif defined(LoggerSwo)
-    using TLoggerImpl = SwoLogger;
-#elif defined(LoggerSegger)
-    using TLoggerImpl = SeggerRttLog;
-#else
-    using TLoggerImpl = std::void_t<>;
 #endif
 
+#if defined (LoggerDesktop)
+class DesktopLogger
+{
+
+public:
+
+    void initLogInterface()
+    {
+
+    }
+
+    void logString(std::string_view _toLog) const
+    {
+        std::cout << _toLog;
+    }
 };
+#endif
 
 Logger::Logger()
 {
     static_assert(
             !std::is_same_v<LoggerImplChoise::TLoggerImpl , std::void_t<> >
-        ,   "TLoggerImpl is std::void_t. Probably you forgot to choise between LoggerUart or LoggerSwo macro"
+        ,   "TLoggerImpl is std::void_t. Probably you forgot to choise between LoggerUart/LoggerSwo/LoggerSegger/LoggerDesktop macro"
     );
 
     m_pLoggerImpl = std::make_unique<LoggerImpl>(

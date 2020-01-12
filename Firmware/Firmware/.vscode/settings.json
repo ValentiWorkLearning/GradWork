@@ -85,6 +85,9 @@
         "queue": "cpp",
         "string_view": "cpp",
         "iostream": "cpp",
-        "random": "cpp"
+        "random": "cpp",
+        "charconv": "cpp",
+        "map": "cpp",
+        "xtree": "cpp"
     }
 }
