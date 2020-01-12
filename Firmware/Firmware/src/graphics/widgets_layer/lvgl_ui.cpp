@@ -2,31 +2,15 @@
 #include "../fonts/RobotoBold40px.hpp"
 
 #include <cstdint>
-#include <tuple>
-#include <array>
-#include <utility>
-
 #include "lvgl.h"
+
+#include "MetaUtils.hpp"
+
 
 namespace UiConstants::Display
 {
     static const std::uint32_t Width = LV_HOR_RES;
     static const std::uint32_t Height = LV_VER_RES;
-}
-
-namespace Utils::Meta
-{
-    template<typename Callable, typename Tuple, std::size_t... Is >
-    constexpr auto tupleApplyImpl( Callable&& _toCall, const Tuple& _tuple, std::index_sequence<Is...> )
-    {
-        return (_toCall( std::get<Is>( _tuple ) ), ...);
-    }
-
-    template<typename Callable, typename ... ArgsList >
-    constexpr auto tupleApply( Callable&& _toCall , const std::tuple<ArgsList...>& _tuple )
-    {
-        return tupleApplyImpl( std::forward<Callable>( _toCall ), _tuple, std::index_sequence_for<ArgsList...>{} );
-    }
 }
 
 namespace
@@ -198,7 +182,7 @@ void createWidgetsDemo()
     auto clockTileWidgets = std::tuple_cat( iniYan, clocks );
     lv_tileview_add_element( pTileView, tileClock );
 
-    Utils::Meta::tupleApply(
+    Meta::tupleApply(
             [&pTileView]( lv_obj_t* _pClockWidget )
             {
                 lv_tileview_add_element( pTileView , _pClockWidget );
@@ -215,7 +199,7 @@ void createWidgetsDemo()
 
     auto iniYanReversed = drawInyan( tileOptions );
 
-    Utils::Meta::tupleApply(
+    Meta::tupleApply(
             [&pTileView]( lv_obj_t* _pOptionsWidget )
             {
                 lv_tileview_add_element( pTileView, _pOptionsWidget );
