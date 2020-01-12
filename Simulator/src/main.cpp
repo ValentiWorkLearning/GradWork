@@ -48,7 +48,7 @@ static void initHal(void)
 
     static lv_disp_buf_t disp_buf1;
     static lv_color_t buf1_1[LV_HOR_RES_MAX*LV_VER_RES_MAX];
-    lv_disp_buf_init(&disp_buf1, buf1_1, NULL, LV_HOR_RES_MAX*LV_VER_RES_MAX);
+    lv_disp_buf_init(&disp_buf1, buf1_1, nullptr, LV_HOR_RES_MAX*LV_VER_RES_MAX);
 
     disp_drv.buffer = &disp_buf1;
     disp_drv.flush_cb = monitor_flush;

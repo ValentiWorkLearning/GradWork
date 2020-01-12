@@ -49,6 +49,7 @@ target_include_directories(
     "graphics/SDL-mirror/include"
     ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/widgets_layer
     ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/graphics/fonts
+    ${CMAKE_CURRENT_LIST_DIR}/../Firmware/Firmware/src/utils
 )
 
 target_link_libraries(
