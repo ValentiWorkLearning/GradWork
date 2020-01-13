@@ -4,7 +4,7 @@ set (TARGET_NAME WatchSim )
 
 project(FirmwareSimulator)
 
-
+find_package(Boost 1.68.0)
 
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -59,6 +59,7 @@ target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     "graphics/SDL-mirror/include"
+    ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer
@@ -72,4 +73,5 @@ target_link_libraries(
     ${TARGET_NAME}
     SDL2
     lvgl_lib
+    ${Boost_LIBRARIES}
 )
