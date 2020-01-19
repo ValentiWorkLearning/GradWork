@@ -1,11 +1,17 @@
 #include "lvgl_ui.hpp"
 #include "../fonts/RobotoBold40px.hpp"
+#include "../icons/HeartrateIcon.h"
 
-#include <cstdint>
 #include "lvgl.h"
 
 #include "MetaUtils.hpp"
+#include "CallbackConnector.hpp"
 
+#include <random>
+#include <charconv>
+#include <system_error>
+#include <string_view>
+#include <cstdint>
 
 namespace UiConstants::Display
 {
@@ -143,6 +149,64 @@ auto drawClocks( lv_obj_t* _parent )
     return std::tuple( pHoursLabel, pMinutesLabel, pSecondsLabel );
 }
 
+auto drawHeartrate( lv_obj_t* _parent )
+{
+    lv_obj_t* pHeartRateIcon = lv_img_create( _parent, nullptr );
+    lv_img_set_src( pHeartRateIcon, &HeartrateIcon );
+    lv_obj_align( pHeartRateIcon, nullptr, LV_ALIGN_IN_TOP_MID, 0, 20 );
+
+
+    static lv_style_t pHeartRateStyle;
+    lv_obj_t* pHeartRateLabel = lv_label_create( _parent, nullptr );
+
+    lv_style_copy( &pHeartRateStyle, &lv_style_plain_color );
+    pHeartRateStyle.text.font = &RobotoFont40px;
+    pHeartRateStyle.text.color = lv_color_make( 0xFF, 0xFF, 0xFF );
+
+    lv_label_set_style( pHeartRateLabel, LV_LABEL_STYLE_MAIN, &pHeartRateStyle );
+    lv_obj_align(
+            pHeartRateLabel
+        ,   nullptr
+        ,   LV_ALIGN_CENTER
+        ,   0
+        ,   UiConstants::Display::Height / 8
+    );
+
+
+    lv_label_set_text( pHeartRateLabel, "..." );
+
+    std::random_device randomDev;
+    std::mt19937 generator(randomDev() );
+
+    std::uniform_int_distribution<> dis( 60, 120 );
+
+    auto randomHeartrateGenerator = cbc::obtain_connector(
+        [ pHeartRateLabel,dis, generator](lv_task_t* _pTask) mutable
+        {
+            std::int32_t heartRateValue{ dis( generator ) };
+
+            constexpr size_t LabelSize = 4;
+            std::array<char, LabelSize> str{};
+
+            if (auto [p, ec] = std::to_chars( str.data(), str.data() + str.size(), heartRateValue );
+                ec == std::errc())
+            lv_label_set_text(
+                    pHeartRateLabel
+                ,   std::string_view( str.data(), p - str.data() ).data()
+            );
+        }
+    );
+
+    lv_task_t* pTaskSwitch = lv_task_create(
+            randomHeartrateGenerator
+        ,   600
+        ,   LV_TASK_PRIO_MID
+        ,   nullptr
+    );
+
+    return std::tuple( pHeartRateIcon, pHeartRateLabel );
+}
+
 }
 
 namespace LvglUi
@@ -191,20 +255,40 @@ void createWidgetsDemo()
     );
 
     /*Tile2: a back menu*/
-    lv_obj_t* tileOptions = lv_obj_create( pTileView, nullptr );
-    lv_obj_set_size( tileOptions, LV_HOR_RES, LV_VER_RES );
-    lv_obj_set_style( tileOptions, &lv_style_plain );
-    lv_obj_set_pos(tileOptions, 0, LV_VER_RES);
-    lv_tileview_add_element(pTileView, tileOptions);
+    lv_obj_t* tileHeartrate = lv_obj_create( pTileView, nullptr );
+    lv_obj_set_size( tileHeartrate, LV_HOR_RES, LV_VER_RES );
+    lv_obj_set_style( tileHeartrate, &lv_style_plain );
+    lv_obj_set_pos(tileHeartrate, 0, LV_VER_RES);
+    lv_tileview_add_element( pTileView, tileHeartrate );
 
-    auto iniYanReversed = drawInyan( tileOptions );
+    auto iniYanReversed = drawInyan( tileHeartrate );
+    auto heartRateWidgets = drawHeartrate( tileHeartrate );
+    auto heartRateTile = std::tuple_cat( iniYanReversed, heartRateWidgets );
+
 
     Meta::tupleApply(
             [&pTileView]( lv_obj_t* _pOptionsWidget )
             {
                 lv_tileview_add_element( pTileView, _pOptionsWidget );
             }
-        ,   iniYanReversed
+        , heartRateTile
+    );
+
+    auto switcherTask = cbc::obtain_connector(
+            [pTileView]( lv_task_t* _pTask )
+        {
+            static bool activeScreen{ false };
+
+            lv_tileview_set_tile_act(pTileView, 0, activeScreen, true);
+            activeScreen = !activeScreen;
+        }
+    );
+
+    lv_task_t* pTaskSwitch = lv_task_create(
+            switcherTask
+        ,   4500
+        ,   LV_TASK_PRIO_MID
+        ,   nullptr
     );
 }
 

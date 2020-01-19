@@ -75,6 +75,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/RobotoFont40px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/icons/HeartrateIcon.c
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/lvgl_ui.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_platform_layer.cpp
