@@ -6,6 +6,7 @@
 #include "nrf_delay.h"
 #include "pca10040.h"
 
+#include "logger_service.hpp"
 #include <array>
 
 namespace DisplayReg = DisplayDriver::St7789vRegisters;
@@ -254,6 +255,25 @@ void St7789V::fillRectangle(
         m_pBusPtr->addTransaction( std::move( chunkTransmission ) );
     }
 
+    Logger::Instance().logDebugEndl(
+        "Full transactions:"
+    );
+    Logger::Instance().logDebugEndl(
+        std::to_string(FullDmaTransactionsCount)
+    );
+    Logger::Instance().logDebugEndl(
+        "Chuncked transactions:"
+    );
+    Logger::Instance().logDebugEndl(
+        std::to_string(ChunkedTransactionsCount)
+    );
+    Logger::Instance().logDebugEndl(
+         "Square:"
+    );
+    Logger::Instance().logDebugEndl(
+         std::to_string(BytesSquare)
+    );
+    
     m_pBusPtr->runQueue();
 }
 

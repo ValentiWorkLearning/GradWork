@@ -88,6 +88,7 @@
         "random": "cpp",
         "charconv": "cpp",
         "map": "cpp",
-        "xtree": "cpp"
+        "xtree": "cpp",
+        "any": "cpp"
     }
 }

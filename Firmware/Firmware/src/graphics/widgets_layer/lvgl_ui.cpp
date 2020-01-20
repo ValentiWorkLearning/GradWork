@@ -13,6 +13,9 @@
 #include <string_view>
 #include <cstdint>
 
+#include <any>
+#include <type_traits>
+
 namespace UiConstants::Display
 {
     static const std::uint32_t Width = LV_HOR_RES;
@@ -173,36 +176,36 @@ auto drawHeartrate( lv_obj_t* _parent )
     );
 
 
-    lv_label_set_text( pHeartRateLabel, "..." );
+    lv_label_set_text( pHeartRateLabel, "76" );
 
-    std::random_device randomDev;
-    std::mt19937 generator(randomDev() );
+    //std::random_device randomDev;
+    //std::mt19937 generator(randomDev() );
 
-    std::uniform_int_distribution<> dis( 60, 120 );
+    //std::uniform_int_distribution<> dis( 60, 120 );
 
-    auto randomHeartrateGenerator = cbc::obtain_connector(
-        [ pHeartRateLabel,dis, generator](lv_task_t* _pTask) mutable
-        {
-            std::int32_t heartRateValue{ dis( generator ) };
+    //auto randomHeartrateGenerator = cbc::obtain_connector(
+    //    [ pHeartRateLabel,dis, generator](lv_task_t* _pTask) mutable
+    //    {
+    //        std::int32_t heartRateValue{ dis( generator ) };
 
-            constexpr size_t LabelSize = 4;
-            std::array<char, LabelSize> str{};
+    //        constexpr size_t LabelSize = 4;
+    //        std::array<char, LabelSize> str{};
 
-            if (auto [p, ec] = std::to_chars( str.data(), str.data() + str.size(), heartRateValue );
-                ec == std::errc())
-            lv_label_set_text(
-                    pHeartRateLabel
-                ,   std::string_view( str.data(), p - str.data() ).data()
-            );
-        }
-    );
+    //        if (auto [p, ec] = std::to_chars( str.data(), str.data() + str.size(), heartRateValue );
+    //            ec == std::errc())
+    //        lv_label_set_text(
+    //                pHeartRateLabel
+    //            ,   std::string_view( str.data(), p - str.data() ).data()
+    //        );
+    //    }
+    //);
 
-    lv_task_t* pTaskSwitch = lv_task_create(
-            randomHeartrateGenerator
-        ,   600
-        ,   LV_TASK_PRIO_MID
-        ,   nullptr
-    );
+    //lv_task_t* pTaskSwitch = lv_task_create(
+    //        randomHeartrateGenerator
+    //    ,   600
+    //    ,   LV_TASK_PRIO_MID
+    //    ,   nullptr
+    //);
 
     return std::tuple( pHeartRateIcon, pHeartRateLabel );
 }
@@ -240,56 +243,114 @@ void createWidgetsDemo()
     lv_obj_set_size( tileClock, LV_HOR_RES, LV_VER_RES );
     lv_obj_set_style( tileClock, &lv_style_plain );
 
-    /*Clock Tile: just labels*/
-    auto iniYan = drawInyan( tileClock );
-    auto clocks = drawClocks( tileClock );
-    auto clockTileWidgets = std::tuple_cat( iniYan, clocks );
-    lv_tileview_add_element( pTileView, tileClock );
+    auto createClockTile = [pTileView, tileClock]
+    {
 
-    Meta::tupleApply(
-            [&pTileView]( lv_obj_t* _pClockWidget )
-            {
-                lv_tileview_add_element( pTileView , _pClockWidget );
-            }
-        ,   clockTileWidgets
-    );
+        /*Clock Tile: just labels*/
+        auto iniYan = drawInyan( tileClock );
+        auto clocks = drawClocks( tileClock );
+        auto clockTileWidgets = std::tuple_cat( iniYan, clocks );
+        lv_tileview_add_element( pTileView, tileClock );
 
-    /*Tile2: a back menu*/
+        Meta::tupleApply(
+                [&pTileView]( lv_obj_t* _pClockWidget )
+                {
+                    lv_tileview_add_element( pTileView , _pClockWidget );
+                }
+            ,   clockTileWidgets
+        );
+
+        return clockTileWidgets;
+    };
+
+        /*Tile2: a back menu*/
     lv_obj_t* tileHeartrate = lv_obj_create( pTileView, nullptr );
     lv_obj_set_size( tileHeartrate, LV_HOR_RES, LV_VER_RES );
     lv_obj_set_style( tileHeartrate, &lv_style_plain );
-    lv_obj_set_pos(tileHeartrate, 0, LV_VER_RES);
+    lv_obj_set_pos( tileHeartrate, 0, LV_VER_RES);
     lv_tileview_add_element( pTileView, tileHeartrate );
 
-    auto iniYanReversed = drawInyan( tileHeartrate );
-    auto heartRateWidgets = drawHeartrate( tileHeartrate );
-    auto heartRateTile = std::tuple_cat( iniYanReversed, heartRateWidgets );
+    auto heartrateCreator = [pTileView, tileHeartrate]
+    {
+
+        auto iniYanReversed = drawInyan( tileHeartrate );
+        auto heartRateWidgets = drawHeartrate( tileHeartrate );
+        auto heartRateTile = std::tuple_cat( iniYanReversed, heartRateWidgets );
 
 
-    Meta::tupleApply(
-            [&pTileView]( lv_obj_t* _pOptionsWidget )
-            {
-                lv_tileview_add_element( pTileView, _pOptionsWidget );
-            }
-        , heartRateTile
-    );
+        Meta::tupleApply(
+                [&pTileView]( lv_obj_t* _pOptionsWidget )
+                {
+                    lv_tileview_add_element( pTileView, _pOptionsWidget );
+                }
+            , heartRateTile
+        );
 
+        return heartRateTile;
+    };
+
+    
     auto switcherTask = cbc::obtain_connector(
-            [pTileView]( lv_task_t* _pTask )
+            [pTileView, heartrateCreator, createClockTile]( lv_task_t* _pTask )
         {
-            static bool activeScreen{ false };
+            static bool activeScreen{ true };
+            static std::any pActiveScreenTuple;
 
-            lv_tileview_set_tile_act(pTileView, 0, activeScreen, true);
+            using THeartrateCall = std::invoke_result_t<decltype( heartrateCreator )>;
+            using ClockTileCall = std::invoke_result_t<decltype( createClockTile )>;
+
+
+            if( activeScreen )
+            {   
+                if(!pActiveScreenTuple.has_value() )
+                    pActiveScreenTuple = createClockTile();
+                else
+                {
+                    auto pSreenDeinit = std::any_cast<THeartrateCall>( pActiveScreenTuple );
+
+                    Meta::tupleApply(
+                        [](lv_obj_t* _pWidget)
+                        {
+                            lv_obj_del( _pWidget );
+                        }
+                        ,   pSreenDeinit
+                    );
+                    pActiveScreenTuple = createClockTile();
+                }
+            }
+            else
+            {
+                if ( !pActiveScreenTuple.has_value() )
+                    pActiveScreenTuple = heartrateCreator();
+                else
+                {
+                    auto pSreenDeinit = std::any_cast< ClockTileCall>( pActiveScreenTuple );
+
+                    Meta::tupleApply(
+                        [](lv_obj_t* _pWidget)
+                        {
+                            lv_obj_del_async( _pWidget );
+                        }
+                        ,   pSreenDeinit
+                    );
+                    pActiveScreenTuple = heartrateCreator();
+                }
+            }
             activeScreen = !activeScreen;
+            lv_tileview_set_tile_act(pTileView, 0, activeScreen, true);
+
         }
     );
 
+    switcherTask(nullptr);
+
     lv_task_t* pTaskSwitch = lv_task_create(
             switcherTask
-        ,   4500
+        ,   5500
         ,   LV_TASK_PRIO_MID
         ,   nullptr
     );
+    //lv_task_once( pTaskSwitch );
 }
 
 }
