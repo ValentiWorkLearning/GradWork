@@ -34,16 +34,15 @@ class PlatformBackend::PlatformBackendImpl
 public:
 
     PlatformBackendImpl()
+        :   m_displaySpiInstance { Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M2>() }
+        ,   m_hardwareDisplayDriver{
+                DisplayDriver::createDisplayDriver(
+                        m_displaySpiInstance.get()
+                    ,   DisplayDriver::St7789v::Disp208_240::Width
+                    ,   DisplayDriver::St7789v::Disp208_240::Height
+                )
+            }
     {
-        m_displaySpiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M2>();
-
-        m_hardwareDisplayDriver =
-            DisplayDriver::createDisplayDriver(
-                    m_displaySpiInstance.get()
-                ,   DisplayDriver::St7789v::Disp208_240::Width
-                ,   DisplayDriver::St7789v::Disp208_240::Height
-            );
-
         nrf_delay_ms( InitDelayTime );
     }
 
@@ -103,10 +102,8 @@ public:
     }
 
 private:
-
-    std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
     std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
-
+    std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
 };
 }
 #endif

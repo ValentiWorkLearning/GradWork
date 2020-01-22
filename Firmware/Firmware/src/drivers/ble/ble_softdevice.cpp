@@ -118,7 +118,8 @@ void BleStackKeeper::bleStackInit()
     ret_code_t errCode{};
 
     errCode = nrf_sdh_enable_request();
-
+    APP_ERROR_CHECK( errCode );
+    
     std::uint32_t ramStart{};
 
     // Configure the BLE stack using the default settings.

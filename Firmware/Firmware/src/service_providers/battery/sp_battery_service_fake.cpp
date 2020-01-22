@@ -35,7 +35,8 @@ public:
                 const std::chrono::seconds _measurePeriod
             ,   const IBatteryLevelAppService* _pBatService
         )
-        :   m_measuringPeriod{ _measurePeriod }
+        :   m_batteryLevel{ FakeSettings::FakeMinBatteryLevel }
+        ,   m_measuringPeriod{ _measurePeriod }
         ,   m_pBatService{ _pBatService }
     {
         initSimulator();

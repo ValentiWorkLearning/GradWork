@@ -16,7 +16,7 @@ class LvglGraphicsService
 
 public:
 
-    LvglGraphicsService(
+    explicit LvglGraphicsService(
             std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
         );
 
