@@ -54,7 +54,7 @@ class Logger::LoggerImpl
 public:
 
     template< typename TLoggerType>
-    LoggerImpl( TLoggerType&& _logger )
+    explicit LoggerImpl( TLoggerType&& _logger )
         :   m_loggerHider{ std::make_unique<LoggerTempateImpl<TLoggerType>>( std::forward<TLoggerType>( _logger ) ) }
     {
         m_loggerHider->initLogInterface();
@@ -91,7 +91,7 @@ public:
 
     public:
 
-        LoggerTempateImpl( TLoggerHider&& _loggerConcrete )
+        explicit LoggerTempateImpl( TLoggerHider&& _loggerConcrete )
             :   m_logger{ std::forward<TLoggerHider>( _loggerConcrete ) }
         {
         }
