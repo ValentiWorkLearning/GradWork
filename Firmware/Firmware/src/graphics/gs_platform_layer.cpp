@@ -38,8 +38,8 @@ public:
         ,   m_hardwareDisplayDriver{
                 DisplayDriver::createDisplayDriver(
                         m_displaySpiInstance.get()
-                    ,   DisplayDriver::St7789v::Disp208_240::Width
-                    ,   DisplayDriver::St7789v::Disp208_240::Height
+                    ,   DisplayDriver::St7789v::Disp240_320::Width
+                    ,   DisplayDriver::St7789v::Disp240_320::Height
                 )
             }
     {

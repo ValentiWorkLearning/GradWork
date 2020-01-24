@@ -20,7 +20,22 @@ namespace UiConstants::Display
 {
     static const std::uint32_t Width = LV_HOR_RES;
     static const std::uint32_t Height = LV_VER_RES;
+
 }
+
+namespace UiConstants::Theme::Dark
+{
+    static const lv_color_t MainDarkColor = lv_color_make(0x00, 0x33, 0x33);
+    static const lv_color_t MainLightColor = lv_color_make(0x99, 0xCC, 0xCC);
+}
+
+namespace UiConstants::Theme::Light
+{
+    static const lv_color_t MainDarkColor = lv_color_make(0x00, 0x00, 0x00);
+    static const lv_color_t MainLightColor = lv_color_make(0xFF, 0xFF, 0xFF);
+}
+
+namespace UiTheme = UiConstants::Theme::Dark;
 
 namespace
 {
@@ -32,9 +47,9 @@ auto drawInyan( lv_obj_t* _parent )
         lv_obj_t* pObject{ nullptr };
         pObject = lv_obj_create( _parent, nullptr );
         lv_obj_set_size(
-            pObject
-            , UiConstants::Display::Width / 2
-            , UiConstants::Display::Height
+                pObject
+            ,   UiConstants::Display::Width
+            ,   UiConstants::Display::Height / 2
         );
 
         lv_obj_set_style( pObject, _style );
@@ -47,15 +62,15 @@ auto drawInyan( lv_obj_t* _parent )
     static lv_style_t pYanStyle;
 
     lv_style_copy( &pInyStyle, &lv_style_plain_color );
-    pInyStyle.body.main_color = lv_color_make( 0x00,0x00,0x00 );
+    pInyStyle.body.main_color = UiTheme::MainDarkColor;
     pInyStyle.body.grad_color = pInyStyle.body.main_color;
 
     lv_style_copy(&pYanStyle, &lv_style_plain_color);
-    pYanStyle.body.main_color = lv_color_make( 0xFF, 0xFF, 0xFF );
+    pYanStyle.body.main_color = UiTheme::MainLightColor;
     pYanStyle.body.grad_color = pYanStyle.body.main_color;
 
-    lv_obj_t* pIny = createAlignedRect(LV_ALIGN_IN_RIGHT_MID, &pInyStyle);
-    lv_obj_t* pYan = createAlignedRect( LV_ALIGN_IN_LEFT_MID, &pYanStyle );
+    lv_obj_t* pIny = createAlignedRect(LV_ALIGN_IN_BOTTOM_MID, &pInyStyle);
+    lv_obj_t* pYan = createAlignedRect( LV_ALIGN_IN_TOP_MID, &pYanStyle );
 
     auto createAlignedCircle = [ _parent ](auto _aligmentType, const lv_style_t* _style)
     {
@@ -76,67 +91,68 @@ auto drawInyan( lv_obj_t* _parent )
     static lv_style_t pInyCircleStyle;
     lv_style_copy( &pInyCircleStyle, &lv_style_plain_color );
    
-    pInyCircleStyle.body.main_color = lv_color_make(0x00, 0x00, 0x00);
+    pInyCircleStyle.body.main_color = UiTheme::MainDarkColor;
     pInyCircleStyle.body.grad_color = pInyStyle.body.main_color;
     pInyCircleStyle.body.radius = LV_RADIUS_CIRCLE;
 
     static lv_style_t pYanCircleStyle;
 
     lv_style_copy( &pYanCircleStyle, &pInyCircleStyle );
-    pYanCircleStyle.body.main_color = lv_color_make(0xFF, 0xFF, 0xFF);
+    pYanCircleStyle.body.main_color = UiTheme::MainLightColor;
     pYanCircleStyle.body.grad_color = pYanCircleStyle.body.main_color;
 
-    lv_obj_t* pInyCircle = createAlignedCircle( LV_ALIGN_IN_BOTTOM_MID, &pInyCircleStyle );
-    lv_obj_t* pYanCircle = createAlignedCircle( LV_ALIGN_IN_TOP_MID, &pYanCircleStyle );
+    lv_obj_t* pInyCircle = createAlignedCircle( LV_ALIGN_IN_RIGHT_MID, &pInyCircleStyle );
+    lv_obj_t* pYanCircle = createAlignedCircle( LV_ALIGN_IN_LEFT_MID, &pYanCircleStyle );
 
     return std::tuple( pIny, pInyCircle, pYan, pYanCircle );
 }
 
 auto drawClocks( lv_obj_t* _parent )
 {
+    // Draw clocks label
     static lv_style_t hoursLabelStyle;
     lv_style_copy( &hoursLabelStyle, &lv_style_plain_color );
 
     lv_obj_t* pHoursLabel = lv_label_create( _parent, nullptr );
-    hoursLabelStyle.text.font = &RobotoFont40px;
-    hoursLabelStyle.text.color = lv_color_make( 0x00, 0x00, 0x00 );
+    hoursLabelStyle.text.font = &LcdNova72px;
+    hoursLabelStyle.text.color = UiTheme::MainDarkColor;
 
     lv_label_set_style( pHoursLabel, LV_LABEL_STYLE_MAIN, &hoursLabelStyle );
     lv_obj_align(
             pHoursLabel
         ,   nullptr
-        ,   LV_ALIGN_IN_TOP_MID
+        ,   LV_ALIGN_IN_LEFT_MID
+        ,   UiConstants::Display::Width / 7
         ,   0
-        ,   static_cast<lv_coord_t>( UiConstants::Display::Height / 3.25f )
     );
 
-    lv_label_set_text( pHoursLabel, "11" );
+    lv_label_set_text( pHoursLabel, "00" );
 
-
+    // Draw minutes label
     static lv_style_t minutesLabelStyle;
     lv_obj_t* pMinutesLabel = lv_label_create( _parent, nullptr );
 
     lv_style_copy( &minutesLabelStyle, &lv_style_plain_color );
-    minutesLabelStyle.text.font = &RobotoFont40px;
-    minutesLabelStyle.text.color = lv_color_make(0xFF, 0xFF, 0xFF);
+    minutesLabelStyle.text.font = &LcdNova72px;
+    minutesLabelStyle.text.color = UiTheme::MainLightColor;
 
     lv_label_set_style( pMinutesLabel, LV_LABEL_STYLE_MAIN, &minutesLabelStyle );
     lv_obj_align(
             pMinutesLabel
         ,   nullptr
-        ,   LV_ALIGN_CENTER
+        ,   LV_ALIGN_IN_RIGHT_MID
+        ,   UiConstants::Display::Width / 6
         ,   0
-        ,   UiConstants::Display::Height / 8
     );
 
-    lv_label_set_text( pMinutesLabel, "27" );
+    lv_label_set_text( pMinutesLabel, "22" );
 
-
+    // Draw seconds label
     static lv_style_t secondsLabelStyle;
     lv_obj_t* pSecondsLabel = lv_label_create( _parent, nullptr );
 
     lv_style_copy( &secondsLabelStyle, &minutesLabelStyle );
-    secondsLabelStyle.text.font = &lv_font_roboto_16;
+    secondsLabelStyle.text.font = &LcdNova16px;
 
     lv_label_set_style( pSecondsLabel, LV_LABEL_STYLE_MAIN, &secondsLabelStyle );
     lv_obj_align(
@@ -147,9 +163,105 @@ auto drawClocks( lv_obj_t* _parent )
         ,   UiConstants::Display::Height / 3 + UiConstants::Display::Height / 24
     );
 
-    lv_label_set_text( pSecondsLabel, "27" );
+    lv_label_set_text( pSecondsLabel, ":27" );
 
-    return std::tuple( pHoursLabel, pMinutesLabel, pSecondsLabel );
+    // Draw month/day/year label
+    lv_obj_t* pMmDdYearLabel = lv_label_create(_parent, nullptr);
+
+    lv_label_set_style( pMmDdYearLabel, LV_LABEL_STYLE_MAIN, &secondsLabelStyle );
+    lv_label_set_text( pMmDdYearLabel, "JAN/20/2020" );
+
+
+    lv_obj_align(
+            pMmDdYearLabel
+        ,   nullptr
+        ,   LV_ALIGN_IN_RIGHT_MID
+        ,   - static_cast<int>( UiConstants::Display::Width / 8 )
+        ,   static_cast<int>( UiConstants::Display::Height / 4.5f )
+    );
+
+    // Draw weeekday label
+    static lv_style_t weekDayStyle;
+    lv_style_copy( &weekDayStyle, &hoursLabelStyle );
+    weekDayStyle.text.font = &LcdNova40px;
+    weekDayStyle.text.color = UiTheme::MainDarkColor;
+
+    lv_obj_t* pWeekDayLabel = lv_label_create( _parent, nullptr );
+
+    lv_label_set_style( pWeekDayLabel, LV_LABEL_STYLE_MAIN, &weekDayStyle );
+    lv_label_set_text( pWeekDayLabel, "MONDAY" );
+
+
+    lv_obj_align(
+            pWeekDayLabel
+        ,   nullptr
+        ,   LV_ALIGN_IN_TOP_MID
+        ,   0
+        ,   UiConstants::Display::Height / 15
+    );
+
+    // Draw checked arc
+    constexpr std::uint8_t ArcSize = 20;
+
+    static lv_style_t arcCurrentStyle;
+    lv_style_copy( &arcCurrentStyle, &lv_style_plain );
+    arcCurrentStyle.line.color = UiTheme::MainLightColor;
+    arcCurrentStyle.line.width = 2;
+
+    lv_obj_t* pCurrentArc = lv_arc_create( _parent, nullptr );
+    lv_arc_set_style( pCurrentArc, LV_ARC_STYLE_MAIN, &arcCurrentStyle );
+
+
+    lv_arc_set_angles( pCurrentArc, 0, 360 );
+    lv_obj_set_size( pCurrentArc, ArcSize, ArcSize );
+    lv_obj_align(
+            pCurrentArc
+        ,   nullptr
+        ,   LV_ALIGN_IN_BOTTOM_MID
+        ,   -static_cast<int>( UiConstants::Display::Width / 8 )
+        ,   -static_cast<int>( UiConstants::Display::Height / 10 )
+    );
+
+    // Draw unchecked arcs
+    static lv_style_t pUncheckedBoxItem;
+
+    lv_style_copy( &pUncheckedBoxItem, &lv_style_plain );
+    pUncheckedBoxItem.body.main_color = UiTheme::MainLightColor;
+    pUncheckedBoxItem.body.grad_color = pUncheckedBoxItem.body.main_color;
+    pUncheckedBoxItem.body.radius = LV_RADIUS_CIRCLE;
+
+    lv_obj_t* pSecondArc = lv_obj_create( _parent, nullptr );
+    lv_obj_set_size( pSecondArc, ArcSize, ArcSize );
+    lv_obj_set_style( pSecondArc, &pUncheckedBoxItem );
+    lv_obj_align(
+            pSecondArc
+        ,   nullptr
+        ,   LV_ALIGN_IN_BOTTOM_MID
+        ,   0
+        ,   -static_cast<int>( UiConstants::Display::Height / 10 )
+    );
+
+    lv_obj_t* pThirdArc = lv_obj_create( _parent, nullptr );
+    lv_obj_set_size( pThirdArc, ArcSize, ArcSize );
+    lv_obj_set_style( pThirdArc, &pUncheckedBoxItem );
+    lv_obj_align(
+            pThirdArc
+        ,   nullptr
+        ,   LV_ALIGN_IN_BOTTOM_MID
+        ,   static_cast<int>( UiConstants::Display::Width / 8 )
+        ,   -static_cast<int>( UiConstants::Display::Height / 10 )
+    );
+
+    return std::tuple(
+            pHoursLabel
+        ,   pMinutesLabel
+        ,   pSecondsLabel
+        ,   pMmDdYearLabel
+        ,   pWeekDayLabel
+        ,   pCurrentArc
+        ,   pSecondArc
+        ,   pThirdArc
+    );
 }
 
 auto drawHeartrate( lv_obj_t* _parent )
@@ -163,8 +275,8 @@ auto drawHeartrate( lv_obj_t* _parent )
     lv_obj_t* pHeartRateLabel = lv_label_create( _parent, nullptr );
 
     lv_style_copy( &pHeartRateStyle, &lv_style_plain_color );
-    pHeartRateStyle.text.font = &RobotoFont40px;
-    pHeartRateStyle.text.color = lv_color_make( 0xFF, 0xFF, 0xFF );
+    pHeartRateStyle.text.font = &LcdNova72px;
+    pHeartRateStyle.text.color = UiTheme::MainLightColor;
 
     lv_label_set_style( pHeartRateLabel, LV_LABEL_STYLE_MAIN, &pHeartRateStyle );
     lv_obj_align(
@@ -346,11 +458,10 @@ void createWidgetsDemo()
 
     lv_task_t* pTaskSwitch = lv_task_create(
             switcherTask
-        ,   5500
+        ,   4500
         ,   LV_TASK_PRIO_MID
         ,   nullptr
     );
-    //lv_task_once( pTaskSwitch );
 }
 
 }

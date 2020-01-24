@@ -255,14 +255,14 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
 
 /* Robot fonts with bpp = 4
  * https://fonts.google.com/specimen/Roboto  */
-#define LV_FONT_ROBOTO_12    1
-#define LV_FONT_ROBOTO_16    1
-#define LV_FONT_ROBOTO_22    1
-#define LV_FONT_ROBOTO_28    1
+#define LV_FONT_ROBOTO_12    0
+#define LV_FONT_ROBOTO_16    0
+#define LV_FONT_ROBOTO_22    0
+#define LV_FONT_ROBOTO_28    0
 
 /*Pixel perfect monospace font
  * http://pelulamu.net/unscii/ */
-#define LV_FONT_UNSCII_8     1
+#define LV_FONT_UNSCII_8     0
 
 /* Optionally declare your custom fonts here.
  * You can use these fonts as default font too
@@ -270,10 +270,11 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
  * #define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(my_font_1) \
  *                                LV_FONT_DECLARE(my_font_2)
  */
-#define LV_FONT_CUSTOM_DECLARE
-
+#define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(LcdNova16px) \
+                               LV_FONT_DECLARE(LcdNova40px) \
+                               LV_FONT_DECLARE(LcdNova72px)
 /*Always set a default font from the built-in fonts*/
-#define LV_FONT_DEFAULT        &lv_font_roboto_16
+#define LV_FONT_DEFAULT        &LcdNova16px
 
 /*Declare the type of the user data of fonts (can be e.g. `void *`, `int`, `struct`)*/
 typedef void * lv_font_user_data_t;

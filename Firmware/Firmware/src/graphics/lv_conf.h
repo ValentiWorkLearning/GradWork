@@ -303,13 +303,13 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
 /* Robot fonts with bpp = 4
  * https://fonts.google.com/specimen/Roboto  */
 #define LV_FONT_ROBOTO_12    0
-#define LV_FONT_ROBOTO_16    1
+#define LV_FONT_ROBOTO_16    0
 #define LV_FONT_ROBOTO_22    0
-#define LV_FONT_ROBOTO_28    1
+#define LV_FONT_ROBOTO_28    0
 
 /* Demonstrate special features */
-#define LV_FONT_ROBOTO_12_SUBPX 1
-#define LV_FONT_ROBOTO_28_COMPRESSED 1  /*bpp = 3*/
+#define LV_FONT_ROBOTO_12_SUBPX 0
+#define LV_FONT_ROBOTO_28_COMPRESSED 0  /*bpp = 3*/
 
 /*Pixel perfect monospace font
  * http://pelulamu.net/unscii/ */
@@ -321,10 +321,11 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
  * #define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(my_font_1) \
  *                                LV_FONT_DECLARE(my_font_2)
  */
-#define LV_FONT_CUSTOM_DECLARE
-
+#define LV_FONT_CUSTOM_DECLARE  LV_FONT_DECLARE(LcdNova16px) \
+                                LV_FONT_DECLARE(LcdNova40px) \
+                                LV_FONT_DECLARE(LcdNova72px)
 /*Always set a default font from the built-in fonts*/
-#define LV_FONT_DEFAULT        &lv_font_roboto_16
+#define LV_FONT_DEFAULT        &LcdNova16px
 
 /* Enable it if you have fonts with a lot of characters.
  * The limit depends on the font size, font face and bpp
