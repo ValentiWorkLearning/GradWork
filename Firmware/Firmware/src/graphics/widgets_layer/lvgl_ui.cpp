@@ -35,7 +35,13 @@ namespace UiConstants::Theme::Light
     static const lv_color_t MainLightColor = lv_color_make(0xFF, 0xFF, 0xFF);
 }
 
-namespace UiTheme = UiConstants::Theme::Dark;
+namespace UiConstants::Theme::Pastele
+{
+    static const lv_color_t MainDarkColor = lv_color_make(0x00, 0x00, 0x00);
+    static const lv_color_t MainLightColor = lv_color_make(0xCC, 0xCC, 0xCC);
+}
+
+namespace UiTheme = UiConstants::Theme::Pastele;
 
 namespace
 {
