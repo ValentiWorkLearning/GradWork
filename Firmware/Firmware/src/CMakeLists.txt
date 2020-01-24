@@ -75,6 +75,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova16px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova36px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova40px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova72px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/icons/HeartrateIcon.c
