@@ -7,6 +7,8 @@
 #include "MetaUtils.hpp"
 #include "CallbackConnector.hpp"
 
+#include "IconFont.hpp"
+
 #include <random>
 #include <charconv>
 #include <system_error>
@@ -129,7 +131,7 @@ auto drawClocks( lv_obj_t* _parent )
         ,   nullptr
         ,   LV_ALIGN_IN_LEFT_MID
         ,   UiConstants::Display::Width / 7
-        ,   0
+        ,   UiConstants::Display::Height / 30
     );
 
     lv_label_set_text( pHoursLabel, "00" );
@@ -148,7 +150,7 @@ auto drawClocks( lv_obj_t* _parent )
         ,   nullptr
         ,   LV_ALIGN_IN_RIGHT_MID
         ,   UiConstants::Display::Width / 6
-        ,   0
+        ,   UiConstants::Display::Height / 30
     );
 
     lv_label_set_text( pMinutesLabel, "22" );
@@ -166,7 +168,7 @@ auto drawClocks( lv_obj_t* _parent )
         ,   nullptr
         ,   LV_ALIGN_IN_TOP_RIGHT
         ,   0
-        ,   UiConstants::Display::Height / 3 + UiConstants::Display::Height / 24
+        ,   UiConstants::Display::Height / 3 + UiConstants::Display::Height / 20
     );
 
     lv_label_set_text( pSecondsLabel, ":27" );
@@ -207,7 +209,7 @@ auto drawClocks( lv_obj_t* _parent )
     );
 
     // Draw checked arc
-    constexpr std::uint8_t ArcSize = 20;
+    constexpr std::uint8_t ArcSize = 14;
 
     static lv_style_t arcCurrentStyle;
     lv_style_copy( &arcCurrentStyle, &lv_style_plain );
@@ -217,14 +219,13 @@ auto drawClocks( lv_obj_t* _parent )
     lv_obj_t* pCurrentArc = lv_arc_create( _parent, nullptr );
     lv_arc_set_style( pCurrentArc, LV_ARC_STYLE_MAIN, &arcCurrentStyle );
 
-
     lv_arc_set_angles( pCurrentArc, 0, 360 );
     lv_obj_set_size( pCurrentArc, ArcSize, ArcSize );
     lv_obj_align(
             pCurrentArc
         ,   nullptr
         ,   LV_ALIGN_IN_BOTTOM_MID
-        ,   -static_cast<int>( UiConstants::Display::Width / 8 )
+        ,   -static_cast<int>( UiConstants::Display::Width / 12 )
         ,   -static_cast<int>( UiConstants::Display::Height / 10 )
     );
 
@@ -254,9 +255,60 @@ auto drawClocks( lv_obj_t* _parent )
             pThirdArc
         ,   nullptr
         ,   LV_ALIGN_IN_BOTTOM_MID
-        ,   static_cast<int>( UiConstants::Display::Width / 8 )
+        ,   static_cast<int>( UiConstants::Display::Width / 12 )
         ,   -static_cast<int>( UiConstants::Display::Height / 10 )
     );
+
+
+    // Draw battery icon
+    lv_obj_t* batteryLabel = lv_label_create(_parent, nullptr);
+
+    static lv_style_t iconStyleLight;
+    lv_style_copy(&iconStyleLight, &hoursLabelStyle);
+    iconStyleLight.text.font = &IconFont;
+    iconStyleLight.text.color = UiTheme::MainLightColor;
+    lv_obj_set_style( batteryLabel, &iconStyleLight);
+    lv_label_set_text( batteryLabel, IconFontSymbols::Battery::Battery90Percent.data() );
+
+   lv_obj_align(
+            batteryLabel
+        ,   nullptr
+        ,   LV_ALIGN_IN_TOP_RIGHT
+        ,   -static_cast<int>( UiConstants::Display::Width / 7 )
+        ,   static_cast<int>( UiConstants::Display::Height / 4 ) + static_cast<int>(UiConstants::Display::Height / 22)
+    );
+
+    // Draw battery percentage
+   lv_obj_t* batteryPercentageLabel = lv_label_create(_parent, nullptr);
+   lv_obj_set_style( batteryPercentageLabel, &secondsLabelStyle );
+   lv_label_set_text( batteryPercentageLabel, "90%" );
+   
+   lv_obj_align(
+            batteryPercentageLabel
+        ,   nullptr
+        ,   LV_ALIGN_IN_TOP_RIGHT
+        ,   -static_cast<int>(UiConstants::Display::Width / 4)
+        ,   static_cast<int>(UiConstants::Display::Height / 4) + static_cast<int>(UiConstants::Display::Height / 20)
+    );
+
+   
+   static lv_style_t iconStyleDark;
+   lv_style_copy( &iconStyleDark, &iconStyleLight );
+   iconStyleDark.text.color = UiTheme::MainDarkColor;
+
+    // Draw bluetooth enable
+   lv_obj_t* bluetoothEnable = lv_label_create( _parent, nullptr );
+   lv_obj_set_style( bluetoothEnable, &iconStyleDark);
+   lv_label_set_text( bluetoothEnable, IconFontSymbols::Bluetooth::BluetoothEnabled.data() );
+   
+   lv_obj_align(
+            bluetoothEnable
+        ,   nullptr
+        ,   LV_ALIGN_IN_TOP_LEFT
+        ,   static_cast<int>(UiConstants::Display::Width / 6)
+        ,   static_cast<int>(UiConstants::Display::Height/ 3.5f)
+    );
+
 
     return std::tuple(
             pHoursLabel
@@ -267,6 +319,9 @@ auto drawClocks( lv_obj_t* _parent )
         ,   pCurrentArc
         ,   pSecondArc
         ,   pThirdArc
+        ,   batteryLabel
+        ,   batteryPercentageLabel
+        ,   bluetoothEnable
     );
 }
 
@@ -281,7 +336,7 @@ auto drawHeartrate( lv_obj_t* _parent )
     lv_obj_t* pHeartRateLabel = lv_label_create( _parent, nullptr );
 
     lv_style_copy( &pHeartRateStyle, &lv_style_plain_color );
-    pHeartRateStyle.text.font = &LcdNova72px;
+    pHeartRateStyle.text.font = &LcdNova68px;
     pHeartRateStyle.text.color = UiTheme::MainLightColor;
 
     lv_label_set_style( pHeartRateLabel, LV_LABEL_STYLE_MAIN, &pHeartRateStyle );
@@ -447,7 +502,7 @@ void createWidgetsDemo()
                     Meta::tupleApply(
                         [](lv_obj_t* _pWidget)
                         {
-                            lv_obj_del_async( _pWidget );
+                            lv_obj_del( _pWidget );
                         }
                         ,   pSreenDeinit
                     );
@@ -464,7 +519,7 @@ void createWidgetsDemo()
 
     lv_task_t* pTaskSwitch = lv_task_create(
             switcherTask
-        ,   4500
+        ,   14500
         ,   LV_TASK_PRIO_MID
         ,   nullptr
     );

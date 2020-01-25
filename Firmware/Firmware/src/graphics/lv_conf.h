@@ -324,7 +324,9 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
 #define LV_FONT_CUSTOM_DECLARE  LV_FONT_DECLARE(LcdNova16px) \
                                 LV_FONT_DECLARE(LcdNova36px) \
                                 LV_FONT_DECLARE(LcdNova40px) \
-                                LV_FONT_DECLARE(LcdNova72px)
+                                LV_FONT_DECLARE(LcdNova68px) \
+                                LV_FONT_DECLARE(LcdNova72px) \
+                                LV_FONT_DECLARE(IconFont)
 /*Always set a default font from the built-in fonts*/
 #define LV_FONT_DEFAULT        &LcdNova16px
 
