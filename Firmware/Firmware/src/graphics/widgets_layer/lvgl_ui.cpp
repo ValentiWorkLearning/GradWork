@@ -444,7 +444,7 @@ void createWidgetsDemo()
     static std::array<lv_point_t, 3> validPos
         = {
                 lv_point_t{ 0, 0 }
-            ,   lv_point_t{ 0, 1 }
+            ,   lv_point_t{ 1, 0 }
             ,   lv_point_t{ 1, 1 }
         };
 
@@ -486,7 +486,7 @@ void createWidgetsDemo()
     lv_obj_t* tileHeartrate = lv_obj_create( pTileView, nullptr );
     lv_obj_set_size( tileHeartrate, LV_HOR_RES, LV_VER_RES );
     lv_obj_set_style( tileHeartrate, &lv_style_plain );
-    lv_obj_set_pos( tileHeartrate, 0, LV_VER_RES);
+    lv_obj_set_pos( tileHeartrate, LV_HOR_RES, 0);
     lv_tileview_add_element( pTileView, tileHeartrate );
 
     auto heartrateCreator = [pTileView, tileHeartrate]
@@ -556,7 +556,7 @@ void createWidgetsDemo()
                 }
             }
             activeScreen = !activeScreen;
-            lv_tileview_set_tile_act(pTileView, 0, activeScreen, true);
+            lv_tileview_set_tile_act(pTileView, activeScreen,0 , true);
 
         }
     );
