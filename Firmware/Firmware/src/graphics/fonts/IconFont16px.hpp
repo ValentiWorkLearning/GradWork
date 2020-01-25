@@ -14,3 +14,8 @@ namespace IconFontSymbols::Bluetooth
 {
     const std::string_view BluetoothEnabled   = "\xEF\x89\x85";
 }
+
+namespace IconFontSymbols::Health
+{
+    const std::string_view HeartIcon = "\xEF\x89\x86";
+}

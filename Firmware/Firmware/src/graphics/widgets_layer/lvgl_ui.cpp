@@ -7,7 +7,7 @@
 #include "MetaUtils.hpp"
 #include "CallbackConnector.hpp"
 
-#include "IconFont.hpp"
+#include "IconFont16px.hpp"
 
 #include <random>
 #include <charconv>
@@ -265,7 +265,7 @@ auto drawClocks( lv_obj_t* _parent )
 
     static lv_style_t iconStyleLight;
     lv_style_copy(&iconStyleLight, &hoursLabelStyle);
-    iconStyleLight.text.font = &IconFont;
+    iconStyleLight.text.font = &IconFont16px;
     iconStyleLight.text.color = UiTheme::MainLightColor;
     lv_obj_set_style( batteryLabel, &iconStyleLight);
     lv_label_set_text( batteryLabel, IconFontSymbols::Battery::Battery90Percent.data() );
@@ -327,29 +327,71 @@ auto drawClocks( lv_obj_t* _parent )
 
 auto drawHeartrate( lv_obj_t* _parent )
 {
-    lv_obj_t* pHeartRateIcon = lv_img_create( _parent, nullptr );
-    lv_img_set_src( pHeartRateIcon, &HeartrateIcon );
-    lv_obj_align( pHeartRateIcon, nullptr, LV_ALIGN_IN_TOP_MID, 0, 20 );
 
+    // Draw weeekday label
+    static lv_style_t healthTitleStyle;
+    lv_style_copy( &healthTitleStyle, &lv_style_plain );
+    healthTitleStyle.text.font = &LcdNova36px;
+    healthTitleStyle.text.color = UiTheme::MainDarkColor;
 
-    static lv_style_t pHeartRateStyle;
-    lv_obj_t* pHeartRateLabel = lv_label_create( _parent, nullptr );
+    lv_obj_t* pHealthMainLabel = lv_label_create( _parent, nullptr );
 
-    lv_style_copy( &pHeartRateStyle, &lv_style_plain_color );
-    pHeartRateStyle.text.font = &LcdNova68px;
-    pHeartRateStyle.text.color = UiTheme::MainLightColor;
-
-    lv_label_set_style( pHeartRateLabel, LV_LABEL_STYLE_MAIN, &pHeartRateStyle );
+    lv_label_set_style( pHealthMainLabel, LV_LABEL_STYLE_MAIN, &healthTitleStyle);
+    lv_label_set_text( pHealthMainLabel, "HEALTH" );
     lv_obj_align(
-            pHeartRateLabel
+            pHealthMainLabel
         ,   nullptr
-        ,   LV_ALIGN_CENTER
+        ,   LV_ALIGN_IN_TOP_MID
         ,   0
-        ,   UiConstants::Display::Height / 8
+        ,   UiConstants::Display::Height / 15
     );
 
 
-    lv_label_set_text( pHeartRateLabel, "76" );
+    static lv_style_t iconStyleLight;
+    lv_style_copy( &iconStyleLight, &lv_style_plain );
+    iconStyleLight.text.font = &IconFont16px;
+    iconStyleLight.text.color = UiTheme::MainLightColor;
+
+    static lv_style_t iconStyleDark;
+    lv_style_copy(&iconStyleDark, &iconStyleLight);
+    iconStyleDark.text.color = UiTheme::MainDarkColor;
+
+    
+    lv_obj_t* pHeartIcon = lv_label_create( _parent, nullptr );
+
+    lv_label_set_style( pHeartIcon, LV_LABEL_STYLE_MAIN, &iconStyleDark );
+    lv_label_set_text( pHeartIcon, IconFontSymbols::Health::HeartIcon.data() );
+    lv_obj_align(
+            pHeartIcon
+        ,   pHealthMainLabel
+        ,   LV_ALIGN_OUT_BOTTOM_MID
+        ,   0
+        ,   0
+    );
+
+    //lv_obj_t* pHeartRateIcon = lv_img_create( _parent, nullptr );
+    //lv_img_set_src( pHeartRateIcon, &HeartrateIcon );
+    //lv_obj_align( pHeartRateIcon, nullptr, LV_ALIGN_IN_TOP_MID, 0, 20 );
+
+
+    //static lv_style_t pHeartRateStyle;
+    //lv_obj_t* pHeartRateLabel = lv_label_create( _parent, nullptr );
+
+    //lv_style_copy( &pHeartRateStyle, &lv_style_plain_color );
+    //pHeartRateStyle.text.font = &LcdNova68px;
+    //pHeartRateStyle.text.color = UiTheme::MainLightColor;
+
+    //lv_label_set_style( pHeartRateLabel, LV_LABEL_STYLE_MAIN, &pHeartRateStyle );
+    //lv_obj_align(
+    //        pHeartRateLabel
+    //    ,   nullptr
+    //    ,   LV_ALIGN_CENTER
+    //    ,   0
+    //    ,   UiConstants::Display::Height / 8
+    //);
+
+
+    //lv_label_set_text( pHeartRateLabel, "76" );
 
     //std::random_device randomDev;
     //std::mt19937 generator(randomDev() );
@@ -380,7 +422,11 @@ auto drawHeartrate( lv_obj_t* _parent )
     //    ,   nullptr
     //);
 
-    return std::tuple( pHeartRateIcon, pHeartRateLabel );
+    return std::tuple(
+            pHealthMainLabel
+        ,   pHeartIcon
+        /*,   pHeartRateLabel*/
+    );
 }
 
 }
@@ -519,7 +565,7 @@ void createWidgetsDemo()
 
     lv_task_t* pTaskSwitch = lv_task_create(
             switcherTask
-        ,   14500
+        ,   4500
         ,   LV_TASK_PRIO_MID
         ,   nullptr
     );
