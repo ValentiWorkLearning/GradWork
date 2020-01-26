@@ -148,7 +148,7 @@ auto drawClocks( lv_obj_t* _parent )
             pMinutesLabel
         ,   nullptr
         ,   LV_ALIGN_CENTER
-        ,   UiConstants::Display::Width / 14
+        ,   UiConstants::Display::Width / 20
         ,   UiConstants::Display::Height / 30
     );
 
