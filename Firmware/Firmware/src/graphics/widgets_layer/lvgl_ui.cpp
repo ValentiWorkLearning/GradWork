@@ -122,7 +122,7 @@ auto drawClocks( lv_obj_t* _parent )
     lv_style_copy( &hoursLabelStyle, &lv_style_plain_color );
 
     lv_obj_t* pHoursLabel = lv_label_create( _parent, nullptr );
-    hoursLabelStyle.text.font = &LcdNova72px;
+    hoursLabelStyle.text.font = &LcdNova68px;
     hoursLabelStyle.text.color = UiTheme::MainDarkColor;
 
     lv_label_set_style( pHoursLabel, LV_LABEL_STYLE_MAIN, &hoursLabelStyle );
@@ -134,26 +134,25 @@ auto drawClocks( lv_obj_t* _parent )
         ,   UiConstants::Display::Height / 30
     );
 
-    lv_label_set_text( pHoursLabel, "00" );
+    lv_label_set_text( pHoursLabel, "22" );
 
     // Draw minutes label
     static lv_style_t minutesLabelStyle;
     lv_obj_t* pMinutesLabel = lv_label_create( _parent, nullptr );
 
-    lv_style_copy( &minutesLabelStyle, &lv_style_plain_color );
-    minutesLabelStyle.text.font = &LcdNova72px;
+    lv_style_copy( &minutesLabelStyle, &hoursLabelStyle);
     minutesLabelStyle.text.color = UiTheme::MainLightColor;
 
     lv_label_set_style( pMinutesLabel, LV_LABEL_STYLE_MAIN, &minutesLabelStyle );
     lv_obj_align(
             pMinutesLabel
         ,   nullptr
-        ,   LV_ALIGN_IN_RIGHT_MID
-        ,   UiConstants::Display::Width / 6
+        ,   LV_ALIGN_CENTER
+        ,   UiConstants::Display::Width / 14
         ,   UiConstants::Display::Height / 30
     );
 
-    lv_label_set_text( pMinutesLabel, "22" );
+    lv_label_set_text( pMinutesLabel, "18" );
 
     // Draw seconds label
     static lv_style_t secondsLabelStyle;
