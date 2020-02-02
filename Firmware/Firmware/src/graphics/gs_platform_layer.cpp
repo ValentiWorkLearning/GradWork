@@ -38,8 +38,8 @@ public:
         ,   m_hardwareDisplayDriver{
                 DisplayDriver::createDisplayDriver(
                         m_displaySpiInstance.get()
-                    ,   DisplayDriver::St7789v::Disp208_240::Width
-                    ,   DisplayDriver::St7789v::Disp208_240::Height
+                    ,   DisplayDriver::St7789v::Disp240_320::Width
+                    ,   DisplayDriver::St7789v::Disp240_320::Height
                 )
             }
     {
@@ -102,8 +102,10 @@ public:
     }
 
 private:
-    std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
+
     std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
+    std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
+
 };
 }
 #endif

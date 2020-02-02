@@ -74,7 +74,11 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/RobotoFont40px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova16px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova36px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova40px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova68px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/IconFont16px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/icons/HeartrateIcon.c
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/lvgl_ui.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp
@@ -92,7 +96,9 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/logger
-    ${CMAKE_CURRENT_LIST_DIR}/graphics
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/icons
     ${CMAKE_CURRENT_LIST_DIR}/service_providers
 )
 
