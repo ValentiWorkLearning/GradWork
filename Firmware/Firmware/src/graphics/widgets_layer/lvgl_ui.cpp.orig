@@ -1,5 +1,6 @@
 #include "lvgl_ui.hpp"
 #include "../fonts/RobotoBold40px.hpp"
+#include "../icons/HeartrateIcon.h"
 
 #include "lvgl.h"
 
@@ -209,6 +210,38 @@ auto drawClocks( lv_obj_t* _parent )
     // Draw checked arc
     constexpr std::uint8_t ArcSize = 14;
 
+<<<<<<< HEAD
+    lv_label_set_text( pHeartRateLabel, "76" );
+
+    //std::random_device randomDev;
+    //std::mt19937 generator(randomDev() );
+
+    //std::uniform_int_distribution<> dis( 60, 120 );
+
+    //auto randomHeartrateGenerator = cbc::obtain_connector(
+    //    [ pHeartRateLabel,dis, generator](lv_task_t* _pTask) mutable
+    //    {
+    //        std::int32_t heartRateValue{ dis( generator ) };
+
+    //        constexpr size_t LabelSize = 4;
+    //        std::array<char, LabelSize> str{};
+
+    //        if (auto [p, ec] = std::to_chars( str.data(), str.data() + str.size(), heartRateValue );
+    //            ec == std::errc())
+    //        lv_label_set_text(
+    //                pHeartRateLabel
+    //            ,   std::string_view( str.data(), p - str.data() ).data()
+    //        );
+    //    }
+    //);
+
+    //lv_task_t* pTaskSwitch = lv_task_create(
+    //        randomHeartrateGenerator
+    //    ,   600
+    //    ,   LV_TASK_PRIO_MID
+    //    ,   nullptr
+    //);
+=======
     static lv_style_t arcCurrentStyle;
     lv_style_copy( &arcCurrentStyle, &lv_style_plain );
     arcCurrentStyle.line.color = UiTheme::MainLightColor;
@@ -343,6 +376,7 @@ auto drawHeartrate( lv_obj_t* _parent )
         ,   0
         ,   UiConstants::Display::Height / 15
     );
+>>>>>>> master
 
 
     static lv_style_t iconStyleLight;
@@ -484,7 +518,11 @@ void createWidgetsDemo()
     lv_obj_t* tileHeartrate = lv_obj_create( pTileView, nullptr );
     lv_obj_set_size( tileHeartrate, LV_HOR_RES, LV_VER_RES );
     lv_obj_set_style( tileHeartrate, &lv_style_plain );
+<<<<<<< HEAD
+    lv_obj_set_pos( tileHeartrate, 0, LV_VER_RES);
+=======
     lv_obj_set_pos( tileHeartrate, LV_HOR_RES, 0);
+>>>>>>> master
     lv_tileview_add_element( pTileView, tileHeartrate );
 
     auto heartrateCreator = [pTileView, tileHeartrate]
@@ -546,7 +584,11 @@ void createWidgetsDemo()
                     Meta::tupleApply(
                         [](lv_obj_t* _pWidget)
                         {
+<<<<<<< HEAD
+                            lv_obj_del_async( _pWidget );
+=======
                             lv_obj_del( _pWidget );
+>>>>>>> master
                         }
                         ,   pSreenDeinit
                     );
@@ -554,7 +596,11 @@ void createWidgetsDemo()
                 }
             }
             activeScreen = !activeScreen;
+<<<<<<< HEAD
+            lv_tileview_set_tile_act(pTileView, 0, activeScreen, true);
+=======
             lv_tileview_set_tile_act(pTileView, activeScreen,0 , true);
+>>>>>>> master
 
         }
     );
@@ -563,10 +609,11 @@ void createWidgetsDemo()
 
     lv_task_t* pTaskSwitch = lv_task_create(
             switcherTask
-        ,   4500
+        ,   5500
         ,   LV_TASK_PRIO_MID
         ,   nullptr
     );
+    //lv_task_once( pTaskSwitch );
 }
 
 }

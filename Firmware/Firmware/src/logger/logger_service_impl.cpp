@@ -22,10 +22,10 @@
 #include <iostream>
 #endif
 
-struct UartLogger;
-struct SwoLogger;
-struct SeggerRttLog;
-struct DesktopLogger;
+class UartLogger;
+class SwoLogger;
+class SeggerRttLog;
+class DesktopLogger;
 
 struct LoggerImplChoise
 {

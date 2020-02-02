@@ -8,6 +8,11 @@
 #include <array>
 #include <memory>
 
+namespace Graphics::MainWindow
+{
+    class IGsMainWindow;
+};
+
 namespace Graphics
 {
 
@@ -26,6 +31,12 @@ public:
 
     void executeGlTask();
 
+public:
+
+    Graphics::MainWindow::IGsMainWindow& getMainWindow();
+
+    Graphics::MainWindow::IGsMainWindow& getMainWindow() const;
+
 private:
 
     static constexpr size_t DispHorRes = LV_HOR_RES_MAX*10;
@@ -40,10 +51,17 @@ private:
 
     void initLvglLogger();
 
+    void initDisplayDriver();
+
+    void initMainWindow();
+
 private:
 
     lv_disp_t* m_glDisplay;
+
     std::unique_ptr<Graphics::PlatformBackend> m_pPlatformBackend;
+    std::unique_ptr<Graphics::MainWindow::IGsMainWindow> m_pMainWindow;
+
     lv_disp_drv_t m_glDisplayDriver;
 };
 

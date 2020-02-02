@@ -93,6 +93,12 @@ Application::initGraphicsStack()
         Graphics::createPlatformBackend()
     );
 
+    // auto& pMainWindow = m_graphicsService->getMainWindow();
+
+    // pMainWindow->addPage( //0,watch page );
+    // pMainWindow->addPage( //1,health page );
+    // pMainWindow->addPage( //2,player page );
+
     m_graphicsService->runTest();
 }
 

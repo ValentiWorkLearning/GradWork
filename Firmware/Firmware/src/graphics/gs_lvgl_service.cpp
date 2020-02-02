@@ -7,6 +7,8 @@
 
 #include "widgets_layer/lvgl_ui.hpp"
 
+#include"gs_main_window.hpp"
+
 namespace Graphics
 {
 
@@ -15,42 +17,8 @@ LvglGraphicsService::LvglGraphicsService(
         )   :   m_pPlatformBackend{ std::move( _platformBackend ) }
 {
     initLvglLogger();
-    lv_init();
-    
-    lv_disp_buf_init(
-                    &displayBuffer
-                ,   &dispFrameBufFirst
-                ,   &dispFrameBufSecond
-                ,   DispHorRes
-            );
-
-    lv_disp_drv_init( &m_glDisplayDriver );
-    m_glDisplayDriver.buffer = &displayBuffer;
-
-    auto monitorCallback = cbc::obtain_connector(
-        []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
-        {
-            std::array<char, 10> str{};
-            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),time); ec == std::errc() )
-            {
-                Logger::Instance().logDebug("Refresh time:");
-                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
-            }
-
-            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),px ); ec == std::errc() )
-            {
-                Logger::Instance().logDebug("Refreshed pixels:");
-                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
-            }
-        }
-    );
-
-    m_glDisplayDriver.monitor_cb = monitorCallback;
-    m_pPlatformBackend->platformDependentInit( &m_glDisplayDriver );
-
-    m_glDisplay = lv_disp_drv_register( &m_glDisplayDriver );
-
-    m_pPlatformBackend->initPlatformGfxTimer();
+    initDisplayDriver();
+    initMainWindow();
 }
 
 void LvglGraphicsService::executeGlTask()
@@ -97,6 +65,66 @@ LvglGraphicsService::initLvglLogger()
     );
 
     lv_log_register_print_cb( lvglLoggerCallback );
+}
+
+void
+LvglGraphicsService::initDisplayDriver()
+{
+    lv_init();
+
+    lv_disp_buf_init(
+                    &displayBuffer
+                ,   &dispFrameBufFirst
+                ,   &dispFrameBufSecond
+                ,   DispHorRes
+            );
+
+    lv_disp_drv_init( &m_glDisplayDriver );
+    m_glDisplayDriver.buffer = &displayBuffer;
+
+    auto monitorCallback = cbc::obtain_connector(
+        []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
+        {
+            std::array<char, 10> str{};
+            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),time); ec == std::errc() )
+            {
+                Logger::Instance().logDebug("Refresh time:");
+                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
+            }
+
+            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),px ); ec == std::errc() )
+            {
+                Logger::Instance().logDebug("Refreshed pixels:");
+                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
+            }
+        }
+    );
+
+    m_glDisplayDriver.monitor_cb = monitorCallback;
+    m_pPlatformBackend->platformDependentInit( &m_glDisplayDriver );
+
+    m_glDisplay = lv_disp_drv_register( &m_glDisplayDriver );
+
+    m_pPlatformBackend->initPlatformGfxTimer();
+}
+
+void
+LvglGraphicsService::initMainWindow()
+{
+    m_pMainWindow = Graphics::MainWindow::createMainWindow();
+    // TODO create the lvlg task for ellaped event processing
+}
+
+Graphics::MainWindow::IGsMainWindow&
+LvglGraphicsService::getMainWindow()
+{
+    return *m_pMainWindow;
+}
+
+Graphics::MainWindow::IGsMainWindow&
+LvglGraphicsService::getMainWindow() const
+{
+    return *m_pMainWindow;
 }
 
 LvglGraphicsService::~LvglGraphicsService() = default;
