@@ -23,6 +23,7 @@ public:
 
 private:
     // list of an lvgl widgets
+    // widgetVC
 };
 
 };

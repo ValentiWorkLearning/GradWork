@@ -36,7 +36,12 @@ void PageViewObject::show()
 
 void PageViewObject::hide()
 {
-
+    executeForEachWidget(
+        []( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
+        {
+                _pWidget->hide();
+        }
+    );
 }
 
 void PageViewObject::executeForEachWidget(
