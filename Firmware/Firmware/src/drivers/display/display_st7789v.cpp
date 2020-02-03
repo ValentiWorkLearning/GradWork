@@ -19,10 +19,10 @@ St7789V::St7789V(
         ,   std::uint16_t _height
     )
     :   
-        m_width{ _width }
+        m_completedTransitionsCount{}
+    ,   m_width{ _width }
     ,   m_height { _height }
     ,   m_pBusPtr{ _busPtr }
-    ,   m_completedTransitionsCount{}
 {
     initGpio();
     initDisplay();

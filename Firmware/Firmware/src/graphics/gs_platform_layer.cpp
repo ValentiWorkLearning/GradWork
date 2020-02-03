@@ -103,8 +103,8 @@ public:
 
 private:
 
-    std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
     std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
+    std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
 
 };
 }
