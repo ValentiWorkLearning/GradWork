@@ -162,7 +162,7 @@ typedef void * lv_fs_drv_user_data_t;
  *========================*/
 
 /* 1: Enable indexed (palette) images */
-#define LV_IMG_CF_INDEXED       0
+#define LV_IMG_CF_INDEXED       1
 
 /* 1: Enable alpha indexed images */
 #define LV_IMG_CF_ALPHA         0

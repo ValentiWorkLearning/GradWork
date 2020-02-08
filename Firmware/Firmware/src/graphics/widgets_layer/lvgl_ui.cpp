@@ -17,6 +17,9 @@
 #include <any>
 #include <type_traits>
 
+#include "timetoJaba.h"
+#include "takeJaba.h"
+
 namespace UiConstants::Display
 {
     static const std::uint32_t Width = LV_HOR_RES;
@@ -116,315 +119,323 @@ auto drawInyan( lv_obj_t* _parent )
 
 auto drawClocks( lv_obj_t* _parent )
 {
-    // Draw clocks label
-    static lv_style_t hoursLabelStyle;
-    lv_style_copy( &hoursLabelStyle, &lv_style_plain_color );
+    lv_obj_t* img1 = lv_img_create(lv_scr_act(), NULL);
+    lv_img_set_src(img1, &timeToJaba);
+    lv_obj_align(img1, NULL, LV_ALIGN_CENTER, 0, 0);
+    return std::make_tuple(img1);
+   // // Draw clocks label
+   // static lv_style_t hoursLabelStyle;
+   // lv_style_copy( &hoursLabelStyle, &lv_style_plain_color );
 
-    lv_obj_t* pHoursLabel = lv_label_create( _parent, nullptr );
-    hoursLabelStyle.text.font = &LcdNova68px;
-    hoursLabelStyle.text.color = UiTheme::MainDarkColor;
+   // lv_obj_t* pHoursLabel = lv_label_create( _parent, nullptr );
+   // hoursLabelStyle.text.font = &LcdNova68px;
+   // hoursLabelStyle.text.color = UiTheme::MainDarkColor;
 
-    lv_label_set_style( pHoursLabel, LV_LABEL_STYLE_MAIN, &hoursLabelStyle );
-    lv_obj_align(
-            pHoursLabel
-        ,   nullptr
-        ,   LV_ALIGN_IN_LEFT_MID
-        ,   UiConstants::Display::Width / 7
-        ,   UiConstants::Display::Height / 30
-    );
+   // lv_label_set_style( pHoursLabel, LV_LABEL_STYLE_MAIN, &hoursLabelStyle );
+   // lv_obj_align(
+   //         pHoursLabel
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_LEFT_MID
+   //     ,   UiConstants::Display::Width / 7
+   //     ,   UiConstants::Display::Height / 30
+   // );
 
-    lv_label_set_text( pHoursLabel, "22" );
+   // lv_label_set_text( pHoursLabel, "22" );
 
-    // Draw minutes label
-    static lv_style_t minutesLabelStyle;
-    lv_obj_t* pMinutesLabel = lv_label_create( _parent, nullptr );
+   // // Draw minutes label
+   // static lv_style_t minutesLabelStyle;
+   // lv_obj_t* pMinutesLabel = lv_label_create( _parent, nullptr );
 
-    lv_style_copy( &minutesLabelStyle, &hoursLabelStyle);
-    minutesLabelStyle.text.color = UiTheme::MainLightColor;
+   // lv_style_copy( &minutesLabelStyle, &hoursLabelStyle);
+   // minutesLabelStyle.text.color = UiTheme::MainLightColor;
 
-    lv_label_set_style( pMinutesLabel, LV_LABEL_STYLE_MAIN, &minutesLabelStyle );
-    lv_obj_align(
-            pMinutesLabel
-        ,   nullptr
-        ,   LV_ALIGN_CENTER
-        ,   UiConstants::Display::Width / 20
-        ,   UiConstants::Display::Height / 30
-    );
+   // lv_label_set_style( pMinutesLabel, LV_LABEL_STYLE_MAIN, &minutesLabelStyle );
+   // lv_obj_align(
+   //         pMinutesLabel
+   //     ,   nullptr
+   //     ,   LV_ALIGN_CENTER
+   //     ,   UiConstants::Display::Width / 20
+   //     ,   UiConstants::Display::Height / 30
+   // );
 
-    lv_label_set_text( pMinutesLabel, "18" );
+   // lv_label_set_text( pMinutesLabel, "18" );
 
-    // Draw seconds label
-    static lv_style_t secondsLabelStyle;
-    lv_obj_t* pSecondsLabel = lv_label_create( _parent, nullptr );
+   // // Draw seconds label
+   // static lv_style_t secondsLabelStyle;
+   // lv_obj_t* pSecondsLabel = lv_label_create( _parent, nullptr );
 
-    lv_style_copy( &secondsLabelStyle, &minutesLabelStyle );
-    secondsLabelStyle.text.font = &LcdNova16px;
+   // lv_style_copy( &secondsLabelStyle, &minutesLabelStyle );
+   // secondsLabelStyle.text.font = &LcdNova16px;
 
-    lv_label_set_style( pSecondsLabel, LV_LABEL_STYLE_MAIN, &secondsLabelStyle );
-    lv_obj_align(
-            pSecondsLabel
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_RIGHT
-        ,   0
-        ,   UiConstants::Display::Height / 3 + UiConstants::Display::Height / 20
-    );
+   // lv_label_set_style( pSecondsLabel, LV_LABEL_STYLE_MAIN, &secondsLabelStyle );
+   // lv_obj_align(
+   //         pSecondsLabel
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_TOP_RIGHT
+   //     ,   0
+   //     ,   UiConstants::Display::Height / 3 + UiConstants::Display::Height / 20
+   // );
 
-    lv_label_set_text( pSecondsLabel, ":27" );
+   // lv_label_set_text( pSecondsLabel, ":27" );
 
-    // Draw month/day/year label
-    lv_obj_t* pMmDdYearLabel = lv_label_create(_parent, nullptr);
+   // // Draw month/day/year label
+   // lv_obj_t* pMmDdYearLabel = lv_label_create(_parent, nullptr);
 
-    lv_label_set_style( pMmDdYearLabel, LV_LABEL_STYLE_MAIN, &secondsLabelStyle );
-    lv_label_set_text( pMmDdYearLabel, "JAN/20/2020" );
-
-
-    lv_obj_align(
-            pMmDdYearLabel
-        ,   nullptr
-        ,   LV_ALIGN_IN_RIGHT_MID
-        ,   - static_cast<int>( UiConstants::Display::Width / 8 )
-        ,   static_cast<int>( UiConstants::Display::Height / 4.5f )
-    );
-
-    // Draw weeekday label
-    static lv_style_t weekDayStyle;
-    lv_style_copy( &weekDayStyle, &hoursLabelStyle );
-    weekDayStyle.text.font = &LcdNova36px;
-    weekDayStyle.text.color = UiTheme::MainDarkColor;
-
-    lv_obj_t* pWeekDayLabel = lv_label_create( _parent, nullptr );
-
-    lv_label_set_style( pWeekDayLabel, LV_LABEL_STYLE_MAIN, &weekDayStyle );
-    lv_label_set_text( pWeekDayLabel, "MONDAY" );
+   // lv_label_set_style( pMmDdYearLabel, LV_LABEL_STYLE_MAIN, &secondsLabelStyle );
+   // lv_label_set_text( pMmDdYearLabel, "JAN/20/2020" );
 
 
-    lv_obj_align(
-            pWeekDayLabel
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_MID
-        ,   0
-        ,   UiConstants::Display::Height / 15
-    );
+   // lv_obj_align(
+   //         pMmDdYearLabel
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_RIGHT_MID
+   //     ,   - static_cast<int>( UiConstants::Display::Width / 8 )
+   //     ,   static_cast<int>( UiConstants::Display::Height / 4.5f )
+   // );
 
-    // Draw checked arc
-    constexpr std::uint8_t ArcSize = 14;
+   // // Draw weeekday label
+   // static lv_style_t weekDayStyle;
+   // lv_style_copy( &weekDayStyle, &hoursLabelStyle );
+   // weekDayStyle.text.font = &LcdNova36px;
+   // weekDayStyle.text.color = UiTheme::MainDarkColor;
 
-    static lv_style_t arcCurrentStyle;
-    lv_style_copy( &arcCurrentStyle, &lv_style_plain );
-    arcCurrentStyle.line.color = UiTheme::MainLightColor;
-    arcCurrentStyle.line.width = 2;
+   // lv_obj_t* pWeekDayLabel = lv_label_create( _parent, nullptr );
 
-    lv_obj_t* pCurrentArc = lv_arc_create( _parent, nullptr );
-    lv_arc_set_style( pCurrentArc, LV_ARC_STYLE_MAIN, &arcCurrentStyle );
-
-    lv_arc_set_angles( pCurrentArc, 0, 360 );
-    lv_obj_set_size( pCurrentArc, ArcSize, ArcSize );
-    lv_obj_align(
-            pCurrentArc
-        ,   nullptr
-        ,   LV_ALIGN_IN_BOTTOM_MID
-        ,   -static_cast<int>( UiConstants::Display::Width / 12 )
-        ,   -static_cast<int>( UiConstants::Display::Height / 10 )
-    );
-
-    // Draw unchecked arcs
-    static lv_style_t pUncheckedBoxItem;
-
-    lv_style_copy( &pUncheckedBoxItem, &lv_style_plain );
-    pUncheckedBoxItem.body.main_color = UiTheme::MainLightColor;
-    pUncheckedBoxItem.body.grad_color = pUncheckedBoxItem.body.main_color;
-    pUncheckedBoxItem.body.radius = LV_RADIUS_CIRCLE;
-
-    lv_obj_t* pSecondArc = lv_obj_create( _parent, nullptr );
-    lv_obj_set_size( pSecondArc, ArcSize, ArcSize );
-    lv_obj_set_style( pSecondArc, &pUncheckedBoxItem );
-    lv_obj_align(
-            pSecondArc
-        ,   nullptr
-        ,   LV_ALIGN_IN_BOTTOM_MID
-        ,   0
-        ,   -static_cast<int>( UiConstants::Display::Height / 10 )
-    );
-
-    lv_obj_t* pThirdArc = lv_obj_create( _parent, nullptr );
-    lv_obj_set_size( pThirdArc, ArcSize, ArcSize );
-    lv_obj_set_style( pThirdArc, &pUncheckedBoxItem );
-    lv_obj_align(
-            pThirdArc
-        ,   nullptr
-        ,   LV_ALIGN_IN_BOTTOM_MID
-        ,   static_cast<int>( UiConstants::Display::Width / 12 )
-        ,   -static_cast<int>( UiConstants::Display::Height / 10 )
-    );
+   // lv_label_set_style( pWeekDayLabel, LV_LABEL_STYLE_MAIN, &weekDayStyle );
+   // lv_label_set_text( pWeekDayLabel, "MONDAY" );
 
 
-    // Draw battery icon
-    lv_obj_t* batteryLabel = lv_label_create(_parent, nullptr);
+   // lv_obj_align(
+   //         pWeekDayLabel
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_TOP_MID
+   //     ,   0
+   //     ,   UiConstants::Display::Height / 15
+   // );
 
-    static lv_style_t iconStyleLight;
-    lv_style_copy(&iconStyleLight, &hoursLabelStyle);
-    iconStyleLight.text.font = &IconFont16px;
-    iconStyleLight.text.color = UiTheme::MainLightColor;
-    lv_obj_set_style( batteryLabel, &iconStyleLight);
-    lv_label_set_text( batteryLabel, IconFontSymbols::Battery::Battery90Percent.data() );
+   // // Draw checked arc
+   // constexpr std::uint8_t ArcSize = 14;
 
-   lv_obj_align(
-            batteryLabel
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_RIGHT
-        ,   -static_cast<int>( UiConstants::Display::Width / 7 )
-        ,   static_cast<int>( UiConstants::Display::Height / 4 ) + static_cast<int>(UiConstants::Display::Height / 22)
-    );
+   // static lv_style_t arcCurrentStyle;
+   // lv_style_copy( &arcCurrentStyle, &lv_style_plain );
+   // arcCurrentStyle.line.color = UiTheme::MainLightColor;
+   // arcCurrentStyle.line.width = 2;
 
-    // Draw battery percentage
-   lv_obj_t* batteryPercentageLabel = lv_label_create(_parent, nullptr);
-   lv_obj_set_style( batteryPercentageLabel, &secondsLabelStyle );
-   lv_label_set_text( batteryPercentageLabel, "90%" );
-   
-   lv_obj_align(
-            batteryPercentageLabel
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_RIGHT
-        ,   -static_cast<int>(UiConstants::Display::Width / 4)
-        ,   static_cast<int>(UiConstants::Display::Height / 4) + static_cast<int>(UiConstants::Display::Height / 20)
-    );
+   // lv_obj_t* pCurrentArc = lv_arc_create( _parent, nullptr );
+   // lv_arc_set_style( pCurrentArc, LV_ARC_STYLE_MAIN, &arcCurrentStyle );
 
-   
-   static lv_style_t iconStyleDark;
-   lv_style_copy( &iconStyleDark, &iconStyleLight );
-   iconStyleDark.text.color = UiTheme::MainDarkColor;
+   // lv_arc_set_angles( pCurrentArc, 0, 360 );
+   // lv_obj_set_size( pCurrentArc, ArcSize, ArcSize );
+   // lv_obj_align(
+   //         pCurrentArc
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_BOTTOM_MID
+   //     ,   -static_cast<int>( UiConstants::Display::Width / 12 )
+   //     ,   -static_cast<int>( UiConstants::Display::Height / 10 )
+   // );
 
-    // Draw bluetooth enable
-   lv_obj_t* bluetoothEnable = lv_label_create( _parent, nullptr );
-   lv_obj_set_style( bluetoothEnable, &iconStyleDark);
-   lv_label_set_text( bluetoothEnable, IconFontSymbols::Bluetooth::BluetoothEnabled.data() );
-   
-   lv_obj_align(
-            bluetoothEnable
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_LEFT
-        ,   static_cast<int>(UiConstants::Display::Width / 6)
-        ,   static_cast<int>(UiConstants::Display::Height/ 3.5f)
-    );
+   // // Draw unchecked arcs
+   // static lv_style_t pUncheckedBoxItem;
+
+   // lv_style_copy( &pUncheckedBoxItem, &lv_style_plain );
+   // pUncheckedBoxItem.body.main_color = UiTheme::MainLightColor;
+   // pUncheckedBoxItem.body.grad_color = pUncheckedBoxItem.body.main_color;
+   // pUncheckedBoxItem.body.radius = LV_RADIUS_CIRCLE;
+
+   // lv_obj_t* pSecondArc = lv_obj_create( _parent, nullptr );
+   // lv_obj_set_size( pSecondArc, ArcSize, ArcSize );
+   // lv_obj_set_style( pSecondArc, &pUncheckedBoxItem );
+   // lv_obj_align(
+   //         pSecondArc
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_BOTTOM_MID
+   //     ,   0
+   //     ,   -static_cast<int>( UiConstants::Display::Height / 10 )
+   // );
+
+   // lv_obj_t* pThirdArc = lv_obj_create( _parent, nullptr );
+   // lv_obj_set_size( pThirdArc, ArcSize, ArcSize );
+   // lv_obj_set_style( pThirdArc, &pUncheckedBoxItem );
+   // lv_obj_align(
+   //         pThirdArc
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_BOTTOM_MID
+   //     ,   static_cast<int>( UiConstants::Display::Width / 12 )
+   //     ,   -static_cast<int>( UiConstants::Display::Height / 10 )
+   // );
 
 
-    return std::tuple(
-            pHoursLabel
-        ,   pMinutesLabel
-        ,   pSecondsLabel
-        ,   pMmDdYearLabel
-        ,   pWeekDayLabel
-        ,   pCurrentArc
-        ,   pSecondArc
-        ,   pThirdArc
-        ,   batteryLabel
-        ,   batteryPercentageLabel
-        ,   bluetoothEnable
-    );
+   // // Draw battery icon
+   // lv_obj_t* batteryLabel = lv_label_create(_parent, nullptr);
+
+   // static lv_style_t iconStyleLight;
+   // lv_style_copy(&iconStyleLight, &hoursLabelStyle);
+   // iconStyleLight.text.font = &IconFont16px;
+   // iconStyleLight.text.color = UiTheme::MainLightColor;
+   // lv_obj_set_style( batteryLabel, &iconStyleLight);
+   // lv_label_set_text( batteryLabel, IconFontSymbols::Battery::Battery90Percent.data() );
+
+   //lv_obj_align(
+   //         batteryLabel
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_TOP_RIGHT
+   //     ,   -static_cast<int>( UiConstants::Display::Width / 7 )
+   //     ,   static_cast<int>( UiConstants::Display::Height / 4 ) + static_cast<int>(UiConstants::Display::Height / 22)
+   // );
+
+   // // Draw battery percentage
+   //lv_obj_t* batteryPercentageLabel = lv_label_create(_parent, nullptr);
+   //lv_obj_set_style( batteryPercentageLabel, &secondsLabelStyle );
+   //lv_label_set_text( batteryPercentageLabel, "90%" );
+   //
+   //lv_obj_align(
+   //         batteryPercentageLabel
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_TOP_RIGHT
+   //     ,   -static_cast<int>(UiConstants::Display::Width / 4)
+   //     ,   static_cast<int>(UiConstants::Display::Height / 4) + static_cast<int>(UiConstants::Display::Height / 20)
+   // );
+
+   //
+   //static lv_style_t iconStyleDark;
+   //lv_style_copy( &iconStyleDark, &iconStyleLight );
+   //iconStyleDark.text.color = UiTheme::MainDarkColor;
+
+   // // Draw bluetooth enable
+   //lv_obj_t* bluetoothEnable = lv_label_create( _parent, nullptr );
+   //lv_obj_set_style( bluetoothEnable, &iconStyleDark);
+   //lv_label_set_text( bluetoothEnable, IconFontSymbols::Bluetooth::BluetoothEnabled.data() );
+   //
+   //lv_obj_align(
+   //         bluetoothEnable
+   //     ,   nullptr
+   //     ,   LV_ALIGN_IN_TOP_LEFT
+   //     ,   static_cast<int>(UiConstants::Display::Width / 6)
+   //     ,   static_cast<int>(UiConstants::Display::Height/ 3.5f)
+   // );
+
+
+   // return std::tuple(
+   //         pHoursLabel
+   //     ,   pMinutesLabel
+   //     ,   pSecondsLabel
+   //     ,   pMmDdYearLabel
+   //     ,   pWeekDayLabel
+   //     ,   pCurrentArc
+   //     ,   pSecondArc
+   //     ,   pThirdArc
+   //     ,   batteryLabel
+   //     ,   batteryPercentageLabel
+   //     ,   bluetoothEnable
+   // );
 }
 
 auto drawHeartrate( lv_obj_t* _parent )
 {
+    lv_obj_t* img2 = lv_img_create(lv_scr_act(), NULL);
+    lv_img_set_src(img2, &takeJaba);
+    lv_obj_align(img2, NULL, LV_ALIGN_CENTER, 0, 0);
+    return std::make_tuple(img2);
 
-    // Draw weeekday label
-    static lv_style_t healthTitleStyle;
-    lv_style_copy( &healthTitleStyle, &lv_style_plain );
-    healthTitleStyle.text.font = &LcdNova36px;
-    healthTitleStyle.text.color = UiTheme::MainDarkColor;
+    //// Draw weeekday label
+    //static lv_style_t healthTitleStyle;
+    //lv_style_copy( &healthTitleStyle, &lv_style_plain );
+    //healthTitleStyle.text.font = &LcdNova36px;
+    //healthTitleStyle.text.color = UiTheme::MainDarkColor;
 
-    lv_obj_t* pHealthMainLabel = lv_label_create( _parent, nullptr );
+    //lv_obj_t* pHealthMainLabel = lv_label_create( _parent, nullptr );
 
-    lv_label_set_style( pHealthMainLabel, LV_LABEL_STYLE_MAIN, &healthTitleStyle);
-    lv_label_set_text( pHealthMainLabel, "HEALTH" );
-    lv_obj_align(
-            pHealthMainLabel
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_MID
-        ,   0
-        ,   UiConstants::Display::Height / 15
-    );
-
-
-    static lv_style_t iconStyleLight;
-    lv_style_copy( &iconStyleLight, &lv_style_plain );
-    iconStyleLight.text.font = &IconFont16px;
-    iconStyleLight.text.color = UiTheme::MainLightColor;
-
-    static lv_style_t iconStyleDark;
-    lv_style_copy(&iconStyleDark, &iconStyleLight);
-    iconStyleDark.text.color = UiTheme::MainDarkColor;
-
-    
-    lv_obj_t* pHeartIcon = lv_label_create( _parent, nullptr );
-
-    lv_label_set_style( pHeartIcon, LV_LABEL_STYLE_MAIN, &iconStyleDark );
-    lv_label_set_text( pHeartIcon, IconFontSymbols::Health::HeartIcon.data() );
-    lv_obj_align(
-            pHeartIcon
-        ,   pHealthMainLabel
-        ,   LV_ALIGN_OUT_BOTTOM_MID
-        ,   0
-        ,   0
-    );
-
-    //lv_obj_t* pHeartRateIcon = lv_img_create( _parent, nullptr );
-    //lv_img_set_src( pHeartRateIcon, &HeartrateIcon );
-    //lv_obj_align( pHeartRateIcon, nullptr, LV_ALIGN_IN_TOP_MID, 0, 20 );
-
-
-    //static lv_style_t pHeartRateStyle;
-    //lv_obj_t* pHeartRateLabel = lv_label_create( _parent, nullptr );
-
-    //lv_style_copy( &pHeartRateStyle, &lv_style_plain_color );
-    //pHeartRateStyle.text.font = &LcdNova68px;
-    //pHeartRateStyle.text.color = UiTheme::MainLightColor;
-
-    //lv_label_set_style( pHeartRateLabel, LV_LABEL_STYLE_MAIN, &pHeartRateStyle );
+    //lv_label_set_style( pHealthMainLabel, LV_LABEL_STYLE_MAIN, &healthTitleStyle);
+    //lv_label_set_text( pHealthMainLabel, "HEALTH" );
     //lv_obj_align(
-    //        pHeartRateLabel
+    //        pHealthMainLabel
     //    ,   nullptr
-    //    ,   LV_ALIGN_CENTER
+    //    ,   LV_ALIGN_IN_TOP_MID
     //    ,   0
-    //    ,   UiConstants::Display::Height / 8
+    //    ,   UiConstants::Display::Height / 15
     //);
 
 
-    //lv_label_set_text( pHeartRateLabel, "76" );
+    //static lv_style_t iconStyleLight;
+    //lv_style_copy( &iconStyleLight, &lv_style_plain );
+    //iconStyleLight.text.font = &IconFont16px;
+    //iconStyleLight.text.color = UiTheme::MainLightColor;
 
-    //std::random_device randomDev;
-    //std::mt19937 generator(randomDev() );
+    //static lv_style_t iconStyleDark;
+    //lv_style_copy(&iconStyleDark, &iconStyleLight);
+    //iconStyleDark.text.color = UiTheme::MainDarkColor;
 
-    //std::uniform_int_distribution<> dis( 60, 120 );
+    //
+    //lv_obj_t* pHeartIcon = lv_label_create( _parent, nullptr );
 
-    //auto randomHeartrateGenerator = cbc::obtain_connector(
-    //    [ pHeartRateLabel,dis, generator](lv_task_t* _pTask) mutable
-    //    {
-    //        std::int32_t heartRateValue{ dis( generator ) };
-
-    //        constexpr size_t LabelSize = 4;
-    //        std::array<char, LabelSize> str{};
-
-    //        if (auto [p, ec] = std::to_chars( str.data(), str.data() + str.size(), heartRateValue );
-    //            ec == std::errc())
-    //        lv_label_set_text(
-    //                pHeartRateLabel
-    //            ,   std::string_view( str.data(), p - str.data() ).data()
-    //        );
-    //    }
+    //lv_label_set_style( pHeartIcon, LV_LABEL_STYLE_MAIN, &iconStyleDark );
+    //lv_label_set_text( pHeartIcon, IconFontSymbols::Health::HeartIcon.data() );
+    //lv_obj_align(
+    //        pHeartIcon
+    //    ,   pHealthMainLabel
+    //    ,   LV_ALIGN_OUT_BOTTOM_MID
+    //    ,   0
+    //    ,   0
     //);
 
-    //lv_task_t* pTaskSwitch = lv_task_create(
-    //        randomHeartrateGenerator
-    //    ,   600
-    //    ,   LV_TASK_PRIO_MID
-    //    ,   nullptr
-    //);
+    ////lv_obj_t* pHeartRateIcon = lv_img_create( _parent, nullptr );
+    ////lv_img_set_src( pHeartRateIcon, &HeartrateIcon );
+    ////lv_obj_align( pHeartRateIcon, nullptr, LV_ALIGN_IN_TOP_MID, 0, 20 );
 
-    return std::tuple(
-            pHealthMainLabel
-        ,   pHeartIcon
-        /*,   pHeartRateLabel*/
-    );
+
+    ////static lv_style_t pHeartRateStyle;
+    ////lv_obj_t* pHeartRateLabel = lv_label_create( _parent, nullptr );
+
+    ////lv_style_copy( &pHeartRateStyle, &lv_style_plain_color );
+    ////pHeartRateStyle.text.font = &LcdNova68px;
+    ////pHeartRateStyle.text.color = UiTheme::MainLightColor;
+
+    ////lv_label_set_style( pHeartRateLabel, LV_LABEL_STYLE_MAIN, &pHeartRateStyle );
+    ////lv_obj_align(
+    ////        pHeartRateLabel
+    ////    ,   nullptr
+    ////    ,   LV_ALIGN_CENTER
+    ////    ,   0
+    ////    ,   UiConstants::Display::Height / 8
+    ////);
+
+
+    ////lv_label_set_text( pHeartRateLabel, "76" );
+
+    ////std::random_device randomDev;
+    ////std::mt19937 generator(randomDev() );
+
+    ////std::uniform_int_distribution<> dis( 60, 120 );
+
+    ////auto randomHeartrateGenerator = cbc::obtain_connector(
+    ////    [ pHeartRateLabel,dis, generator](lv_task_t* _pTask) mutable
+    ////    {
+    ////        std::int32_t heartRateValue{ dis( generator ) };
+
+    ////        constexpr size_t LabelSize = 4;
+    ////        std::array<char, LabelSize> str{};
+
+    ////        if (auto [p, ec] = std::to_chars( str.data(), str.data() + str.size(), heartRateValue );
+    ////            ec == std::errc())
+    ////        lv_label_set_text(
+    ////                pHeartRateLabel
+    ////            ,   std::string_view( str.data(), p - str.data() ).data()
+    ////        );
+    ////    }
+    ////);
+
+    ////lv_task_t* pTaskSwitch = lv_task_create(
+    ////        randomHeartrateGenerator
+    ////    ,   600
+    ////    ,   LV_TASK_PRIO_MID
+    ////    ,   nullptr
+    ////);
+
+    //return std::tuple(
+    //        pHealthMainLabel
+    //    ,   pHeartIcon
+    //    /*,   pHeartRateLabel*/
+    //);
 }
 
 }
