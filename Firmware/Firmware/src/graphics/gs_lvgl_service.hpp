@@ -13,6 +13,16 @@ namespace Graphics::MainWindow
     class IGsMainWindow;
 };
 
+namespace Graphics::Widgets
+{
+    class IBatteryWidget;
+}
+
+namespace Graphics
+{
+    class IEventHandler;
+}
+
 namespace Graphics
 {
 
@@ -61,8 +71,13 @@ private:
 
     std::unique_ptr<Graphics::PlatformBackend> m_pPlatformBackend;
     std::unique_ptr<Graphics::MainWindow::IGsMainWindow> m_pMainWindow;
+    lv_task_t* m_pMainWindowTick;
+
+    std::shared_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
+    std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
 
     lv_disp_drv_t m_glDisplayDriver;
+
 };
 
 std::unique_ptr<LvglGraphicsService> createGraphicsService(

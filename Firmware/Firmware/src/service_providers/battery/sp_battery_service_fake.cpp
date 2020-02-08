@@ -143,6 +143,12 @@ private:
 
 #ifdef USE_DESKTOP_SIMULATOR
 
+#include <thread>
+#include <atomic>
+#include <mutex>
+#include <condition_variable>
+#include <random>
+
 namespace ServiceProviders::BatteryService
 {
 
@@ -158,10 +164,16 @@ public:
         :
             m_batteryLevel{ FakeSettings::FakeMinBatteryLevel }
         ,   m_measuringPeriod{ _measurePeriod }
-        , m_pBatService{ _pBatService }
+        ,   m_pBatService{ _pBatService }
+        ,   m_isStopped{ true }
     {
         initSimulator();
-        initTimer();
+    }
+
+    ~BatterySimulatorImpl()
+    {
+        if( m_simulatorThread.joinable() )
+            m_simulatorThread.join();
     }
 
 public:
@@ -173,21 +185,46 @@ public:
 
     void startSimulation()
     {
+        m_startMeasureNotifier.notify_one();
     }
 
 private:
 
     void initSimulator()
     {
-    }
+        m_isStopped.store( false );
+        m_simulatorThread = std::thread(
+            [this]
+            {
+                std::random_device radnomDevice;
+                std::mt19937 generator( radnomDevice());
+                std::uniform_int_distribution<> dis( 10, 100 );
 
-    void initTimer()
-    {
+                std::unique_lock locker( m_simulationStartMarker );
+                m_startMeasureNotifier.wait( locker );
+
+                while( !m_isStopped.load() )
+                {
+                    std::this_thread::sleep_for( m_measuringPeriod );
+                    m_batteryLevel.store( dis( generator ) );
+
+                    if ( m_pBatService )
+                        m_pBatService->onBatteryLevelChangedSig.emit( m_batteryLevel );
+                }
+            }
+       );
     }
 
 private:
 
-    std::uint8_t m_batteryLevel;
+    std::thread m_simulatorThread;
+
+    std::mutex m_simulationStartMarker;
+
+    std::atomic<std::uint8_t> m_batteryLevel;
+    std::atomic_bool m_isStopped;
+
+    std::condition_variable m_startMeasureNotifier;
 
     const std::chrono::seconds m_measuringPeriod;
 

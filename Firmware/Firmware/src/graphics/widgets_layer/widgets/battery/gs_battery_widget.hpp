@@ -35,7 +35,7 @@ private:
     // list of an lvgl widgets
 
     // widgetVC
-    //std::weak_ptr<IEventHandler> m_batteryWidgetHandler;
+    std::weak_ptr<IEventHandler> m_batteryWidgetHandler;
 };
 
 std::shared_ptr<IBatteryWidget> createBatteryWidget();

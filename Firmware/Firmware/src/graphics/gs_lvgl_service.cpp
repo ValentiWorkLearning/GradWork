@@ -23,6 +23,7 @@ namespace Graphics
 LvglGraphicsService::LvglGraphicsService(
             std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
         )   :   m_pPlatformBackend{ std::move( _platformBackend ) }
+            ,   m_pMainWindowTick{nullptr}
 {
     initLvglLogger();
     initDisplayDriver();
@@ -123,15 +124,29 @@ LvglGraphicsService::initMainWindow()
     // TODO create the lvlg task for ellaped event processing
 
 
-    auto pBatteryWidget = Widgets::createBatteryWidget();
-    auto pBatteryWidgetController = Widgets::createBatteryWidgetHandler( pBatteryWidget );
+    m_pBatteryWidget = Widgets::createBatteryWidget();
+    m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget ) );
 
     m_pMainWindow->getEventDispatcher().subscribe(
             Events::EventGroup::Battery
-        ,   [ &pBatteryWidgetController ]( const Events::TEvent& _event )
+        ,   [ this]( const Events::TEvent& _event )
         {
-            pBatteryWidgetController->handleEvent( _event );
+            m_pBatteryWidgetController->handleEvent( _event );
         }
+    );
+
+    auto mainWindowTimer = cbc::obtain_connector(
+        [this](lv_task_t* _pTask)
+        {
+            m_pMainWindow->handleEventTimerEllapsed();
+        }
+    );
+
+    m_pMainWindowTick = lv_task_create(
+            mainWindowTimer
+        ,   50
+        ,   LV_TASK_PRIO_MID
+        ,   nullptr
     );
 }
 

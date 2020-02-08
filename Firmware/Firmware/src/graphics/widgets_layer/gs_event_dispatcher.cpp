@@ -1,5 +1,7 @@
 #include "gs_event_dispatcher.hpp"
 
+#include <algorithm>
+
 namespace Graphics::Events
 {
 
