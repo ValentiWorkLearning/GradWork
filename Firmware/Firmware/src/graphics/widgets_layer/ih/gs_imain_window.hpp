@@ -6,9 +6,10 @@ namespace Graphics::Views
     class IPageViewObject;
 }
 
-namespace EventDispatcher::Events
+namespace Graphics::Events
 {
-    struct Event{};
+    struct TEvent;
+    class EventDispatcher;
 }
 
 namespace Graphics::MainWindow
@@ -21,11 +22,13 @@ public:
 
     virtual ~IGsMainWindow() = default;
 
-    virtual void handleEvent( const EventDispatcher::Events::Event& _tEvent ) = 0;
+    virtual void handleEvent( const Events::TEvent& _tEvent ) = 0;
 
     virtual void addPage( std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd ) = 0;
 
     virtual void handleEventTimerEllapsed() = 0;
+
+    virtual Events::EventDispatcher& getEventDispatcher() = 0;
 };
 
 };

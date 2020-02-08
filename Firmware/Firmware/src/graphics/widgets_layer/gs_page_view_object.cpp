@@ -1,6 +1,9 @@
 #include "gs_page_view_object.hpp"
 
-#include "widgets/gs_battery_widget.hpp"
+#include "ih/gs_events.hpp"
+
+#include "widgets/battery/gs_battery_widget.hpp"
+#include "widgets/battery/gs_battery_handler.hpp"
 
 #include <algorithm>
 
@@ -14,15 +17,15 @@ void PageViewObject::addWidget(
     m_pWidgetsStorage.push_back( _pWidget );
 }
 
-void PageViewObject::handleEvent( const EventDispatcher::Events::Event& _tEvent )
-{
-    executeForEachWidget(
-        [&_tEvent]( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
-        {
-                _pWidget->handleEvent( _tEvent );
-        }
-    );
-}
+//void PageViewObject::handleEvent( const Events::TEvent& _tEvent )
+//{
+//    executeForEachWidget(
+//        [&_tEvent]( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
+//        {
+//                _pWidget->getEventHandler().handleEvent( _tEvent );
+//        }
+//    );
+//}
 
 void PageViewObject::show()
 {

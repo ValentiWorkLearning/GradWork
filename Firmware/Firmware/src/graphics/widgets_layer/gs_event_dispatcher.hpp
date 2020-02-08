@@ -1,42 +1,29 @@
 #pragma once
 
+#include "gs_events.hpp"
+
 #include <any>
 #include <functional>
-#include <queue>
+#include <deque>
 #include <unordered_map>
+#include <memory>
 
-namespace Graphics
-{
+#include "gs_events.hpp"
+#include "Noncopyable.hpp"
 
-enum class EventGroup
+namespace Graphics::Events
 {
-        Battery
-    ,   Heartrate
-    ,   BleDevice
-    ,   Gesture
-    ,   HardwareButtons
-    ,   DateTime
-};
-
-struct EventType
-{
-};
-
-struct TEvent
-{
-    EventGroup eventGroup;
-    EventType eventType;
-    std::any eventData;
-}
 
 class EventDispatcher
+    :   private Utils::noncopyable
 {
 
 public:
 
     using TEventHandler = std::function<void( const TEvent& )>;
+    using SubscriberStorage = std::vector<TEventHandler>;
 
-    void subscribe( EventGroup, const TEventHandler& _handler );
+    void subscribe( EventGroup _eventGroup, const TEventHandler& _handler );
  
     void postEvent( TEvent&& _eventToProcess );
 
@@ -44,12 +31,10 @@ public:
 
 private:
 
-    void processOverlappedEvents();
-
-private:
-
-    std::unordered_map<EventGroup,TEventHandler> m_eventsMap;
-    std::queue<TEvent> m_eventsQueue;
+    std::unordered_map<EventGroup,SubscriberStorage> m_eventsMap;
+    std::deque<TEvent> m_eventsQueue;
 };
+
+std::unique_ptr<EventDispatcher> createEventDispatcher();
 
 }

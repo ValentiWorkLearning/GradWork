@@ -2,12 +2,20 @@
 
 #include "lvgl.h"
 
-#include "CallbackConnector.hpp"
-#include "logger_service.hpp"
+#include "gs_main_window.hpp"
+#include "gs_event_dispatcher.hpp"
 
 #include "widgets_layer/lvgl_ui.hpp"
 
-#include"gs_main_window.hpp"
+#include "widgets_layer/ih/gs_ievent_handler.hpp"
+
+#include "widgets_layer/widgets/battery/gs_battery_handler.hpp"
+#include "widgets_layer/widgets/battery/gs_battery_widget.hpp"
+
+
+#include "CallbackConnector.hpp"
+#include "logger_service.hpp"
+
 
 namespace Graphics
 {
@@ -113,6 +121,18 @@ LvglGraphicsService::initMainWindow()
 {
     m_pMainWindow = Graphics::MainWindow::createMainWindow();
     // TODO create the lvlg task for ellaped event processing
+
+
+    auto pBatteryWidget = Widgets::createBatteryWidget();
+    auto pBatteryWidgetController = Widgets::createBatteryWidgetHandler( pBatteryWidget );
+
+    m_pMainWindow->getEventDispatcher().subscribe(
+            Events::EventGroup::Battery
+        ,   [ &pBatteryWidgetController ]( const Events::TEvent& _event )
+        {
+            pBatteryWidgetController->handleEvent( _event );
+        }
+    );
 }
 
 Graphics::MainWindow::IGsMainWindow&

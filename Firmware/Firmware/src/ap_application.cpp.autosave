@@ -17,8 +17,8 @@
 #include "graphics/gs_lvgl_service.hpp"
 #include "graphics/gs_platform_layer.hpp"
 
-#include "graphics/widgets_layer/ih/gs_imain_window.hpp"
-#include "graphics/widgets_layer/gs_event_dispatcher.hpp"
+#include "graphics/widgets_layer/widgets/battery/gs_battery_widget.hpp"
+#include "graphics/widgets_layer/widgets/battery/gs_battery_handler.hpp"
 
 Application::Application()
 {
@@ -96,19 +96,9 @@ Application::initGraphicsStack()
     );
 
     auto& pMainWindow = m_graphicsService->getMainWindow();
-
-    m_batteryLevelService->onBatteryLevelChangedSig.connect(
-        [ &pMainWindow ]( std::uint8_t _newBatteryValue )
-        {
-            pMainWindow.getEventDispatcher().postEvent(
-                {       Graphics::Events::EventGroup::Battery
-                    ,   Graphics::Events::TBatteryEvents::BatteryLevelChanged
-                    ,   _newBatteryValue
-                }
-            );
-        }
-    );
-
+    auto pBatteryWidgetController = 
+    auto pBatteryWidget = BatteryWidget::createWidget();
+    auto& pBatteryWidgetObserver = pBatteryWidget->eventObserver;
     // pMainWindow->getEventDispatcher.subscribe( EventDispatcher::EventGroup::Battery, pBatteryWidgetObserver );
 
     // auto pBleWidget = BluetoothWidget::createWidget();

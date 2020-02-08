@@ -1,10 +1,5 @@
 #pragma once
 
-namespace EventDispatcher::Events
-{
-    struct Event;
-};
-
 namespace Graphics::Views
 {
     class IPageViewObject;
@@ -12,6 +7,9 @@ namespace Graphics::Views
 
 namespace Graphics::Widgets
 {
+
+class IEventHandler;
+
 class IWidgetObject
 {
 
@@ -21,7 +19,9 @@ public:
 
 public:
 
-    virtual void handleEvent( const EventDispatcher::Events::Event& _tEvent ) = 0;
+    virtual IEventHandler& getEventHandler() = 0;
+
+    virtual IEventHandler& getEventHandler() const = 0;
 
     virtual void show() = 0;
 

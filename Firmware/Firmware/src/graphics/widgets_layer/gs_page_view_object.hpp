@@ -5,6 +5,11 @@
 #include <vector>
 #include <functional>
 
+namespace Graphics::Events
+{
+    struct TEvent;
+}
+
 namespace Graphics::Views
 {
 
@@ -18,7 +23,9 @@ public:
 
     void addWidget( const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget ) override;
 
-    void handleEvent( const EventDispatcher::Events::Event& _tEvent ) override;
+    IEventHandler& getEventHandler() override;
+
+    IEventHandler& getEventHandler() const override;
 
     void show() override;
 
