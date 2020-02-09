@@ -4,6 +4,8 @@
 #include <utility>
 #include <tuple>
 #include <utility>
+#include <memory>
+#include <functional>
 
 namespace Meta
 {
@@ -30,5 +32,11 @@ constexpr auto tupleApply( Callable&& _toCall , const std::tuple<ArgsList...>& _
 {
     return tupleApplyImpl( std::forward<Callable>( _toCall ), _tuple, std::index_sequence_for<ArgsList...>{} );
 }
+
+template <auto DeleterFunction>
+using CustomDeleter = std::integral_constant<decltype(DeleterFunction), DeleterFunction>;
+
+template <typename ManagedType, auto Functor>
+using PointerWrapper = std::unique_ptr<ManagedType, CustomDeleter<Functor>>;
 
 };

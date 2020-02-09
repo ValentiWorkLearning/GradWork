@@ -2,6 +2,10 @@
 
 #include "gs_ibattery_widget.hpp"
 
+#include "lvgl.h"
+
+#include "MetaUtils.hpp"
+
 #include <memory>
 
 namespace Graphics::Widgets
@@ -17,10 +21,6 @@ public:
 
     ~BatteryWidget() override = default;
 
-    IEventHandler& getEventHandler() override;
-
-    IEventHandler& getEventHandler() const override;
-
 public:
 
     void show() override ;
@@ -33,9 +33,9 @@ public:
 
 private:
     // list of an lvgl widgets
-
+    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryIcon;
+    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryLabel;
     // widgetVC
-    std::weak_ptr<IEventHandler> m_batteryWidgetHandler;
 };
 
 std::shared_ptr<IBatteryWidget> createBatteryWidget();
