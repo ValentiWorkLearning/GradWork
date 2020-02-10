@@ -42,8 +42,24 @@ ThemeController::getMainThemeColor( Color _fromColor )
     }
 }
 
-ThemeController::ThemeController(const ColorTheme _initialColorTheme)
+std::uint32_t ThemeController::getDisplayWidth() const
+{
+    return m_displayWidth;
+}
+
+std::uint32_t ThemeController::getDisplayHeight() const
+{
+    return m_displayHeight;
+}
+
+ThemeController::ThemeController(
+            const ColorTheme _initialColorTheme
+        ,   std::uint32_t _displayWidth
+        ,   std::uint32_t _displayHeight
+    )
     :   m_activeTheme{ _initialColorTheme }
+    ,   m_displayWidth{ _displayWidth }
+    ,   m_displayHeight{ _displayHeight }
 {
     initColorsAccrodingToTheme( m_activeTheme );
 }
@@ -126,9 +142,17 @@ void ThemeController::initColorsAccrodingToTheme(ColorTheme _theme)
 
 
 std::shared_ptr<IThemeController>
-createThemeController( const ColorTheme _initialColorTheme )
+createThemeController(
+        const ColorTheme _initialColorTheme
+    ,   std::uint32_t _displayWidth
+    ,   std::uint32_t _displayHeight
+)
 {
-    return std::make_shared<ThemeController>( _initialColorTheme );
+    return std::make_shared<ThemeController>(
+            _initialColorTheme
+        ,   _displayWidth
+        ,   _displayHeight
+    );
 }
 
 }

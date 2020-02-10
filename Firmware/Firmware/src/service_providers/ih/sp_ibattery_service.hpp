@@ -7,7 +7,7 @@
 namespace ServiceProviders::BatteryService::Settings
 {
     using namespace std::chrono_literals;
-    constexpr std::chrono::seconds MeasurmentPeriod = 2s;
+    constexpr std::chrono::seconds MeasurmentPeriod = 1s;
 
     constexpr std::uint8_t MinBatteryLevel = 0;
     constexpr std::uint8_t MaxBatteryLevel = 100;

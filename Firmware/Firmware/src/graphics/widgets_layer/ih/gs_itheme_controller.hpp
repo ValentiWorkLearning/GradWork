@@ -38,6 +38,10 @@ class IThemeController
 
     virtual lv_color_t getMainThemeColor(Color _fontColor) = 0;
 
+    virtual std::uint32_t getDisplayWidth() const = 0;
+
+    virtual std::uint32_t getDisplayHeight() const = 0;
+
     public:
 
     Simple::Signal<void()> onThemeChanged;

@@ -40,6 +40,8 @@ public:
 
     Events::EventDispatcher& getEventDispatcher() override;
 
+    std::weak_ptr<Theme::IThemeController> getThemeController() const override;
+
 private:
 
     void initBackground();

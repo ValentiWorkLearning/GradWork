@@ -11,7 +11,11 @@ class ThemeController
 
 public:
 
-    explicit ThemeController( const ColorTheme _initialColorTheme );
+    explicit ThemeController(
+            const ColorTheme _initialColorTheme
+        ,   std::uint32_t _displayWidth
+        ,   std::uint32_t _displayHeight
+    );
 
     void setActiveTheme( ColorTheme _themeToSet ) override;
 
@@ -20,6 +24,10 @@ public:
     lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor ) override;
 
     lv_color_t getMainThemeColor( Color _fontColor ) override;
+
+    std::uint32_t getDisplayWidth() const override;
+
+    std::uint32_t getDisplayHeight() const override;
 
 public:
 
@@ -33,11 +41,18 @@ private:
 
     ColorTheme m_activeTheme;
 
+    const std::uint32_t m_displayWidth;
+    const std::uint32_t m_displayHeight;
+
     lv_color_t m_mainThemeDarkColor;
     lv_color_t m_mainThemeLightColor;
 
 };
 
-std::shared_ptr<IThemeController> createThemeController( const ColorTheme _initialColorTheme );
+std::shared_ptr<IThemeController> createThemeController(
+        const ColorTheme _initialColorTheme
+    ,   std::uint32_t _displayWidth
+    ,   std::uint32_t _displayHeight
+);
 
 }

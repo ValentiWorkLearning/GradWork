@@ -12,6 +12,11 @@ namespace Graphics::Events
     class EventDispatcher;
 }
 
+namespace Graphics::Theme
+{
+    class IThemeController;
+}
+
 namespace Graphics::MainWindow
 {
 
@@ -29,6 +34,8 @@ public:
     virtual void handleEventTimerEllapsed() = 0;
 
     virtual Events::EventDispatcher& getEventDispatcher() = 0;
+
+    virtual std::weak_ptr<Theme::IThemeController> getThemeController() const = 0;
 };
 
 };

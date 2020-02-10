@@ -86,6 +86,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_event_dispatcher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_widget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_handler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_view.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_platform_layer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp

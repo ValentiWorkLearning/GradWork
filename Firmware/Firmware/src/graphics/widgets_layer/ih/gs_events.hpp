@@ -6,23 +6,21 @@
 namespace Graphics::Events
 {
 
-enum class EventGroup;
+enum class EventGroup
+{
+    Battery
+    , Heartrate
+    , BleDevice
+    , Gesture
+    , HardwareButtons
+    , DateTime
+};
 
 struct TEvent
 {
     EventGroup eventGroup;
     std::any eventType;
     std::any eventData;
-};
-
-enum class EventGroup
-{
-        Battery
-    ,   Heartrate
-    ,   BleDevice
-    ,   Gesture
-    ,   HardwareButtons
-    ,   DateTime
 };
 
 enum class TEventKind

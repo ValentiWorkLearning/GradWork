@@ -23,10 +23,6 @@ public:
 
     void addWidget( const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget ) override;
 
-    IEventHandler& getEventHandler() override;
-
-    IEventHandler& getEventHandler() const override;
-
     void show() override;
 
     void hide() override;

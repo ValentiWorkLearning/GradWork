@@ -11,7 +11,13 @@ namespace Graphics::MainWindow
 
 GsMainWindow::GsMainWindow()
     :   m_pEventsDispatcher{ std::move( Events::createEventDispatcher() ) }
-    ,   m_pThemeController{ std::move( Theme::createThemeController( Theme::ColorTheme::Pastele ) ) }
+    ,   m_pThemeController{ std::move( Theme::createThemeController(
+                    Theme::ColorTheme::Pastele
+                ,   Width
+                ,   Height
+                )
+            )
+        }
 {
     initBackground();
 }
@@ -109,6 +115,11 @@ void GsMainWindow::initBackground()
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()
 {
     return *m_pEventsDispatcher;
+}
+
+std::weak_ptr<Theme::IThemeController> GsMainWindow::getThemeController() const
+{
+    return m_pThemeController;
 }
 
 std::unique_ptr<IGsMainWindow> createMainWindow()

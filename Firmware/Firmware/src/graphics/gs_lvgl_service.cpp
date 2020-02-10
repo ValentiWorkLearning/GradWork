@@ -12,6 +12,8 @@
 #include "widgets_layer/widgets/battery/gs_battery_handler.hpp"
 #include "widgets_layer/widgets/battery/gs_battery_widget.hpp"
 
+#include "widgets_layer/pages/clock_page/gs_clock_page_view.hpp"
+
 
 #include "CallbackConnector.hpp"
 #include "logger_service.hpp"
@@ -124,7 +126,7 @@ LvglGraphicsService::initMainWindow()
     // TODO create the lvlg task for ellaped event processing
 
 
-    m_pBatteryWidget = Widgets::createBatteryWidget();
+    m_pBatteryWidget = Widgets::createBatteryWidget( m_pMainWindow->getThemeController() );
     m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget ) );
 
     m_pMainWindow->getEventDispatcher().subscribe(
@@ -134,6 +136,12 @@ LvglGraphicsService::initMainWindow()
             m_pBatteryWidgetController->handleEvent( _event );
         }
     );
+
+    auto pClockPage = Views::createClockWatchView();
+    pClockPage->addWidget( m_pBatteryWidget );
+
+    m_pMainWindow->addPage( std::move( pClockPage ) );
+
 
     auto mainWindowTimer = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
