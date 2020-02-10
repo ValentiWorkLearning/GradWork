@@ -82,6 +82,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/lvgl_ui.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_page_view_object.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_main_window.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_theme_controller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_event_dispatcher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_widget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_handler.cpp

@@ -17,16 +17,6 @@ void PageViewObject::addWidget(
     m_pWidgetsStorage.push_back( _pWidget );
 }
 
-//void PageViewObject::handleEvent( const Events::TEvent& _tEvent )
-//{
-//    executeForEachWidget(
-//        [&_tEvent]( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
-//        {
-//                _pWidget->getEventHandler().handleEvent( _tEvent );
-//        }
-//    );
-//}
-
 void PageViewObject::show()
 {
     executeForEachWidget(

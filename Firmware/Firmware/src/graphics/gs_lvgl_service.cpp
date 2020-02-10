@@ -38,7 +38,7 @@ void LvglGraphicsService::executeGlTask()
 void
 LvglGraphicsService::runTest()
 {
-    LvglUi::createWidgetsDemo();
+    //LvglUi::createWidgetsDemo();
 }
 
 void
