@@ -160,19 +160,14 @@ void St7789V::fillRectangle(
     ,   IDisplayDriver::TColor* _colorToFill
 )
 {
-    // TODO be careful here;
-    // if((_x >= m_width) || (_y >= m_height )) return;
-    // if((_x + _width - 1) >= m_width) _width = m_width - _x;
-    // if((_y + _height - 1) >= m_height) _height = m_height - _y;
-
     if( (_x >= m_width) || (_y >= m_height )) return;
     if( _width >= m_width) _width = m_width - _x;
     if( _height>= m_height) _height = m_height - _y;
 
     constexpr size_t DmaBufferSize = Interface::Spi::SpiBus::DmaBufferSize;
 
-    const size_t BytesSizeX = ( _width - _x );
-    const size_t BytesSizeY = ( _height - _y );
+    const size_t BytesSizeX = ( _width - _x + 1 );
+    const size_t BytesSizeY = ( _height - _y + 1);
     const size_t BytesSquare = BytesSizeX *  BytesSizeY;
 
     const size_t FullDmaTransactionsCount =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) )  / DmaBufferSize;
@@ -211,10 +206,7 @@ void St7789V::fillRectangle(
             };
 
         if( FullDmaTransactionsCount > 1 )
-        {
-            fullTransaction.repeatsCount = FullDmaTransactionsCount % 2 == 0 ?
-                FullDmaTransactionsCount + 1 : FullDmaTransactionsCount;
-        }
+            fullTransaction.repeatsCount = FullDmaTransactionsCount - 1;
 
         if( ChunkedTransactionsCount == 0 )
             fullTransaction.afterTransaction = 
