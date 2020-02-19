@@ -40,7 +40,7 @@ void BatteryWidgetHandler::handleEvent( const Events::TEvent& _event )
 	switch ( _event.eventGroup )
 	{
 	case Events::EventGroup::Battery:
-		if( auto pBatteryWidget = m_pBatteryWidget.lock(); pBatteryWidget )
+		if( auto pBatteryWidget = m_pBatteryWidget.lock(); pBatteryWidget && pBatteryWidget->isVisible() )
 		{
 			pBatteryWidget->setBatteryLevelPercentage( batteryValue );
 			pBatteryWidget->setBatteryStatus( toBatteryStatus( batteryValue ) );

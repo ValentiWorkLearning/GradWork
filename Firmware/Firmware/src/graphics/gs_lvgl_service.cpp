@@ -142,6 +142,8 @@ LvglGraphicsService::initMainWindow()
 
     m_pMainWindow->addPage( std::move( pClockPage ) );
 
+    const size_t initialPageIndex{};
+    m_pMainWindow->setPageActive( initialPageIndex );
 
     auto mainWindowTimer = cbc::obtain_connector(
         [this](lv_task_t* _pTask)

@@ -31,6 +31,8 @@ public:
 
     virtual void addPage( std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd ) = 0;
 
+    virtual void setPageActive( const size_t _activePageIndex ) = 0;
+
     virtual void handleEventTimerEllapsed() = 0;
 
     virtual Events::EventDispatcher& getEventDispatcher() = 0;

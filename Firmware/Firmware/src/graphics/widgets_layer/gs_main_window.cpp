@@ -6,11 +6,15 @@
 
 #include "gs_theme_controller.hpp"
 
+#include "gs_ipage_view_object.hpp"
+
 namespace Graphics::MainWindow
 {
 
 GsMainWindow::GsMainWindow()
-    :   m_pEventsDispatcher{ std::move( Events::createEventDispatcher() ) }
+    :
+        m_currentPageIndex{}
+    ,   m_pEventsDispatcher{ std::move( Events::createEventDispatcher() ) }
     ,   m_pThemeController{ std::move( Theme::createThemeController(
                     Theme::ColorTheme::Pastele
                 ,   Width
@@ -29,6 +33,14 @@ void GsMainWindow::addPage(
     )
 {
     m_pagesStorage.push_back( std::move( _toAdd ) );
+    m_pagesStorage.back()->hide();
+}
+
+void GsMainWindow::setPageActive( const size_t _activePageIndex )
+{
+    m_pagesStorage.at( m_currentPageIndex )->hide();
+    m_currentPageIndex = _activePageIndex;
+    m_pagesStorage.at( m_currentPageIndex )->show();
 }
 
 void GsMainWindow::handleEvent( const Events::TEvent& _tEvent )

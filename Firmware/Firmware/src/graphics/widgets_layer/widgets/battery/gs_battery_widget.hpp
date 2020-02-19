@@ -31,9 +31,11 @@ public:
 
 public:
 
-    void show() override ;
+    void show() override;
 
     void hide() override;
+
+    bool isVisible()const override;
 
     void setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel ) override;
 
@@ -46,6 +48,8 @@ private:
     void initBatteryIcon();
 
 private:
+
+    bool m_isVisible;
 
     lv_style_t m_bateryIconStyle;
     lv_style_t m_batteryLabelStyle;

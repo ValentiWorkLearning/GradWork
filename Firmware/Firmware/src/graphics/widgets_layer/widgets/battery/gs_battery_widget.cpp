@@ -10,15 +10,16 @@ namespace Graphics::Widgets
 
 BatteryWidget::BatteryWidget( std::weak_ptr<Theme::IThemeController> _themeController )
     :   m_pThemeController{ _themeController }
+    ,   m_isVisible{ false }
 {
-
-    initBatteryIcon();
-    initBatteryPercentageLabel();
 }
 
 void BatteryWidget::show()
 {
+    initBatteryIcon();
+    initBatteryPercentageLabel();
 
+    m_isVisible = true;
 }
 
 void BatteryWidget::setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel )
@@ -117,6 +118,15 @@ void BatteryWidget::initBatteryIcon()
 
 void BatteryWidget::hide()
 {
+    m_pBatteryIcon.reset();
+    m_pBatteryLabel.reset();
+
+    m_isVisible = false;
+}
+
+bool BatteryWidget::isVisible() const
+{
+    return m_isVisible;
 }
 
 std::shared_ptr<IBatteryWidget> createBatteryWidget(

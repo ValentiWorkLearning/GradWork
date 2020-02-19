@@ -36,6 +36,8 @@ public:
 
     void addPage( std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd ) override;
 
+    void setPageActive( const size_t _activePageIndex ) override;
+
     void handleEventTimerEllapsed() override;
 
     Events::EventDispatcher& getEventDispatcher() override;
@@ -55,6 +57,8 @@ private:
 
     using TPagePtr = std::unique_ptr<Graphics::Views::IPageViewObject>;
     using TPagesStorage = std::vector<TPagePtr>;
+
+    size_t m_currentPageIndex;
 
     std::unique_ptr<Events::EventDispatcher> m_pEventsDispatcher;
     std::shared_ptr<Theme::IThemeController> m_pThemeController;
