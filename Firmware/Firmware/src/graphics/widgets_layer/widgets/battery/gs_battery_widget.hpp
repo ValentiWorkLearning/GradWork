@@ -43,9 +43,19 @@ public:
 
 private:
 
-    void initBatteryPercentageLabel();
+    void initStyles();
 
-    void initBatteryIcon();
+    void initBatteryPercentageLabel(
+            lv_obj_t* _parentObject
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    );
+
+    void initBatteryIcon(
+            lv_obj_t* _parentObject
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    );
 
 private:
 

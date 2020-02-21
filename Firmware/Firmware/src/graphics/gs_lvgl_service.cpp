@@ -137,7 +137,7 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
-    auto pClockPage = Views::createClockWatchView();
+    auto pClockPage = Views::createClockWatchView( m_pMainWindow->getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget );
 
     m_pMainWindow->addPage( std::move( pClockPage ) );

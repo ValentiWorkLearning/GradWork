@@ -10,6 +10,12 @@
 namespace Graphics::Views
 {
 
+PageViewObject::PageViewObject( std::weak_ptr<Theme::IThemeController> _themeController )
+    :   m_pThemeController{ _themeController }
+    ,   m_isPageVisible{ false }
+{
+}
+
 void PageViewObject::addWidget(
     const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget
 )
@@ -35,6 +41,16 @@ void PageViewObject::hide()
                 _pWidget->hide();
         }
     );
+}
+
+bool PageViewObject::isVisible() const
+{
+    return m_isPageVisible;
+}
+
+std::shared_ptr<Theme::IThemeController> PageViewObject::getThemeController()
+{
+    return m_pThemeController.lock();
 }
 
 void PageViewObject::executeForEachWidget(

@@ -19,7 +19,11 @@ class PageViewObject
 
 public:
 
-    PageViewObject() = default;
+    PageViewObject( std::weak_ptr<Theme::IThemeController> _themeController );
+
+    ~PageViewObject()override = default;
+
+public:
 
     void addWidget( const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget ) override;
 
@@ -27,9 +31,9 @@ public:
 
     void hide() override;
 
-    ~PageViewObject() = default;
+    bool isVisible()const override;
 
-private:
+    std::shared_ptr<Theme::IThemeController> getThemeController() override;
 
 private:
 
@@ -37,6 +41,11 @@ private:
 
     using TWidgetsStorage = std::vector<std::shared_ptr<Graphics::Widgets::IWidgetObject> >;
     TWidgetsStorage m_pWidgetsStorage;
+
+private:
+
+    bool m_isPageVisible;
+    std::weak_ptr<Theme::IThemeController> m_pThemeController;
 };
 
 };

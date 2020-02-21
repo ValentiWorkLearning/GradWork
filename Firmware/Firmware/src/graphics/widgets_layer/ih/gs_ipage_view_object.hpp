@@ -7,6 +7,11 @@ namespace Graphics::Widgets
     class IWidgetObject;
 }
 
+namespace Graphics::Theme
+{
+    class IThemeController;
+}
+
 namespace Graphics::Views
 {
 
@@ -26,6 +31,10 @@ public:
     virtual void show() = 0;
 
     virtual void hide() = 0;
+
+    virtual bool isVisible() const = 0;
+
+    virtual std::shared_ptr<Theme::IThemeController> getThemeController() = 0;
 };
 
 };
