@@ -62,6 +62,7 @@ Application::initServices()
     m_fakeServiceProvider = ServiceProviders::getFakeServiceCreator();
     m_batteryLevelService = m_fakeServiceProvider->getBatteryService();
     m_heartrateService = m_fakeServiceProvider->getHeartrateService();
+    m_dateTimeService = m_fakeServiceProvider->getDateTimeService();
 }
 
 void
@@ -104,6 +105,18 @@ Application::initGraphicsStack()
                 {       Graphics::Events::EventGroup::Battery
                     ,   Graphics::Events::TBatteryEvents::BatteryLevelChanged
                     ,   _newBatteryValue
+                }
+            );
+        }
+    );
+
+    m_dateTimeService->onDateTimeChanged.connect(
+        [&pMainWindow]( const TimeWrapper& _newTime )
+        {
+            pMainWindow.getEventDispatcher().postEvent(
+                {       Graphics::Events::EventGroup::DateTime
+                    ,   Graphics::Events::TDateTimeEvents::DateTimeChanged
+                    ,   _newTime
                 }
             );
         }
@@ -194,7 +207,8 @@ void
 Application::runApplicationLoop()
 {
     m_batteryLevelService->startBatteryMeasure();
-    
+    m_dateTimeService->launchService();
+
     #if defined (USE_DEVICE_SPECIFIC)
     runTwiTest();
     /* Toggle LEDs. */

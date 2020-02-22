@@ -89,6 +89,12 @@
         "charconv": "cpp",
         "map": "cpp",
         "xtree": "cpp",
-        "any": "cpp"
+        "any": "cpp",
+        "codecvt": "cpp",
+        "locale": "cpp",
+        "xlocbuf": "cpp",
+        "xlocmes": "cpp",
+        "xlocmon": "cpp",
+        "xloctime": "cpp"
     }
 }

@@ -8,12 +8,12 @@ namespace Graphics::Events
 
 enum class EventGroup
 {
-    Battery
-    , Heartrate
-    , BleDevice
-    , Gesture
-    , HardwareButtons
-    , DateTime
+        Battery
+    ,   Heartrate
+    ,   BleDevice
+    ,   Gesture
+    ,   HardwareButtons
+    ,   DateTime
 };
 
 struct TEvent
@@ -48,6 +48,13 @@ enum class THeartRateEvents
     ,   MeasureCompleted
     ,   MeasureFailed
     ,   HeartRateEventsEnd
+};
+
+enum class TDateTimeEvents
+{
+        DateTimeEventsBegin = enumConvert<THeartRateEvents>( THeartRateEvents::HeartRateEventsEnd )
+    ,   DateTimeChanged
+    ,   DateTimeEventsEnd
 };
 
 }

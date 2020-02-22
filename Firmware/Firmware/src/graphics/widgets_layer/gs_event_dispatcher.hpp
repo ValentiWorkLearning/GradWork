@@ -7,6 +7,7 @@
 #include <deque>
 #include <unordered_map>
 #include <memory>
+#include <atomic>
 
 #include "gs_events.hpp"
 #include "Noncopyable.hpp"
@@ -33,6 +34,8 @@ private:
 
     std::unordered_map<EventGroup,SubscriberStorage> m_eventsMap;
     std::deque<TEvent> m_eventsQueue;
+
+    std::atomic_flag locker = ATOMIC_FLAG_INIT;
 };
 
 std::unique_ptr<EventDispatcher> createEventDispatcher();

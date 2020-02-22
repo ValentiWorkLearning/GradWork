@@ -12,6 +12,11 @@ namespace ServiceProviders::HeartrateService
     class IHeartrateService;
 }
 
+namespace ServiceProviders::DateTimeService
+{
+    class IDateTimeService;
+}
+
 namespace ServiceProviders
 {
 
@@ -25,6 +30,9 @@ public:
 
     [[nodiscard]] virtual std::unique_ptr<HeartrateService::IHeartrateService>
     getHeartrateService() = 0;
+
+    [[nodiscard]] virtual std::unique_ptr<DateTimeService::IDateTimeService>
+    getDateTimeService() = 0;
 
     virtual ~IServiceCreator() = default;
 };

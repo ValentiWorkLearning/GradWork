@@ -91,6 +91,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_platform_layer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/heartrate/sp_heartrate_service_fake.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/service_providers/datetime/sp_datetime_service_fake.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/sp_fake_services_creator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/logger/logger_service_impl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ap_application.cpp

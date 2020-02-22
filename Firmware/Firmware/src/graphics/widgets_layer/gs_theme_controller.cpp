@@ -40,6 +40,7 @@ ThemeController::getMainThemeColor( Color _fromColor )
     default:
         break;
     }
+    return m_mainThemeDarkColor;
 }
 
 std::uint32_t ThemeController::getDisplayWidth() const

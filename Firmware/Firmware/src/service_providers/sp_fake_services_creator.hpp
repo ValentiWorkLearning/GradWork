@@ -17,6 +17,9 @@ public:
     [[nodiscard]] std::unique_ptr<HeartrateService::IHeartrateService>
     getHeartrateService() override;
 
+    [[nodiscard]] std::unique_ptr<DateTimeService::IDateTimeService>
+    getDateTimeService() override;
+
     ~FakeServiceCreator()override = default;
 
 };
