@@ -1,5 +1,6 @@
 #pragma once
 
+#include "gs_iclock_page_view.hpp"
 #include "gs_page_view_object.hpp"
 
 #include "lvgl.h"
@@ -10,7 +11,7 @@ namespace Graphics::Views
 {
 
 class ClockWatch
-    :   public PageViewObject
+    :   public PageViewObject<IClockWatchPage>
 {
 
 public:
@@ -24,6 +25,16 @@ public:
     void show() override;
 
     void hide() override;
+
+    void setHours( std::string_view _newHoursValue ) override;
+
+    void setMinutes( std::string_view _newMinutesValue ) override;
+
+    void setSeconds( std::string_view _newSecondsValue ) override;
+
+    void setWeekday( std::string_view _newWeekDay ) override;
+
+    void setFullDate( std::string_view _fullDate ) override;
 
 private:
 
@@ -64,7 +75,7 @@ private:
 };
 
 
-std::unique_ptr<IPageViewObject> createClockWatchView(
+std::shared_ptr<IClockWatchPage> createClockWatchView(
     std::weak_ptr<Theme::IThemeController> _themeController
 );
 

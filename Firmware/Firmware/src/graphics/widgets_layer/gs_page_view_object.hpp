@@ -13,13 +13,17 @@ namespace Graphics::Events
 namespace Graphics::Views
 {
 
+template< typename ConcretePageView >
 class PageViewObject
-    :   public IPageViewObject
+    :   public ConcretePageView
 {
 
 public:
 
-    PageViewObject( std::weak_ptr<Theme::IThemeController> _themeController );
+    explicit PageViewObject(
+            std::weak_ptr<Theme::IThemeController> _themeController
+        ,   std::string_view _pageName
+    );
 
     ~PageViewObject()override = default;
 
@@ -30,6 +34,8 @@ public:
     void show() override;
 
     void hide() override;
+
+    std::string_view getPageName() const override;
 
     bool isVisible()const override;
 
@@ -45,6 +51,7 @@ private:
 private:
 
     bool m_isPageVisible;
+    std::string_view m_pageName;
     std::weak_ptr<Theme::IThemeController> m_pThemeController;
 };
 

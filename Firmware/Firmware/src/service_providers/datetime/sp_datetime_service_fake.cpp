@@ -72,8 +72,7 @@ private:
                     TimeWrapper tempWrapper = m_timeWrapper.load( std::memory_order_acquire );
                     tempWrapper.addSecond();
                     m_timeWrapper.store( tempWrapper, std::memory_order_release );
-
-                    m_pDateTimeService->onDateTimeChanged.emit( m_timeWrapper );
+                    m_pDateTimeService->onDateTimeChanged.emit( tempWrapper );
                 }
             }
        );

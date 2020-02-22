@@ -13,7 +13,7 @@
 #include "widgets_layer/widgets/battery/gs_battery_widget.hpp"
 
 #include "widgets_layer/pages/clock_page/gs_clock_page_view.hpp"
-
+#include "widgets_layer/pages/clock_page/gs_clock_page_handler.hpp"
 
 #include "CallbackConnector.hpp"
 #include "logger_service.hpp"
@@ -140,10 +140,20 @@ LvglGraphicsService::initMainWindow()
     auto pClockPage = Views::createClockWatchView( m_pMainWindow->getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget );
 
+    m_pClockPageController = std::move( Views::createPageWatchHandler( pClockPage ) );
+
+    m_pMainWindow->getEventDispatcher().subscribe(
+            Events::EventGroup::DateTime
+        ,   [ this]( const Events::TEvent& _event )
+        {
+            m_pClockPageController->handleEvent( _event );
+        }
+    );
+
+
     m_pMainWindow->addPage( std::move( pClockPage ) );
 
-    const size_t initialPageIndex{};
-    m_pMainWindow->setPageActive( initialPageIndex );
+    m_pMainWindow->setPageActive( Views::IClockWatchPage::ClockPageName );
 
     auto mainWindowTimer = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
@@ -155,6 +165,25 @@ LvglGraphicsService::initMainWindow()
     m_pMainWindowTick = lv_task_create(
             mainWindowTimer
         ,   50
+        ,   LV_TASK_PRIO_MID
+        ,   nullptr
+    );
+
+    auto pageToggle = cbc::obtain_connector(
+        [this](lv_task_t* _pTask)
+        {
+            auto pageObject = m_pMainWindow->getPage( Views::IClockWatchPage::ClockPageName );
+            if( pageObject->isVisible() )
+                pageObject->hide();
+            else {
+                pageObject->show();
+            }
+        }
+    );
+
+    m_pMainWindowTick = lv_task_create(
+            pageToggle
+        ,   4100
         ,   LV_TASK_PRIO_MID
         ,   nullptr
     );

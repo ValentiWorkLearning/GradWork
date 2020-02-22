@@ -13,7 +13,7 @@ namespace Graphics::MainWindow
 
 GsMainWindow::GsMainWindow()
     :
-        m_currentPageIndex{}
+        m_currentPageName{}
     ,   m_pEventsDispatcher{ std::move( Events::createEventDispatcher() ) }
     ,   m_pThemeController{ std::move( Theme::createThemeController(
                     Theme::ColorTheme::Pastele
@@ -29,18 +29,29 @@ GsMainWindow::GsMainWindow()
 GsMainWindow::~GsMainWindow() = default;
 
 void GsMainWindow::addPage(
-        std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd
+        std::shared_ptr<Graphics::Views::IPageViewObject>&& _toAdd
     )
 {
-    m_pagesStorage.push_back( std::move( _toAdd ) );
-    m_pagesStorage.back()->hide();
+    auto localShared { std::move( _toAdd ) };
+    auto pageName{ localShared->getPageName() };
+    m_pagesStorage.insert( {pageName,localShared } );
+
+    localShared->hide();
 }
 
-void GsMainWindow::setPageActive( const size_t _activePageIndex )
+void GsMainWindow::setPageActive( std::string_view _pageName )
 {
-    m_pagesStorage.at( m_currentPageIndex )->hide();
-    m_currentPageIndex = _activePageIndex;
-    m_pagesStorage.at( m_currentPageIndex )->show();
+    if( !m_currentPageName.empty() )
+        m_pagesStorage.at( m_currentPageName )->hide();
+
+    m_currentPageName = _pageName;
+    m_pagesStorage.at( m_currentPageName )->show();
+}
+
+std::shared_ptr<Graphics::Views::IPageViewObject>
+GsMainWindow::getPage( std::string_view _pageName )
+{
+    return m_pagesStorage.at( _pageName );
 }
 
 void GsMainWindow::handleEvent( const Events::TEvent& _tEvent )

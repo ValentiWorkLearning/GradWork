@@ -1,6 +1,7 @@
 #pragma once
 
 #include <memory>
+#include <string>
 
 namespace Graphics::Widgets
 {
@@ -33,6 +34,8 @@ public:
     virtual void hide() = 0;
 
     virtual bool isVisible() const = 0;
+
+    virtual std::string_view getPageName() const = 0;
 
     virtual std::shared_ptr<Theme::IThemeController> getThemeController() = 0;
 };

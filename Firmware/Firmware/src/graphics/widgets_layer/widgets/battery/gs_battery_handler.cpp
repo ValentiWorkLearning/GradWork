@@ -34,6 +34,10 @@ void BatteryWidgetHandler::handleEvent( const Events::TEvent& _event )
 {
 	// TODO move this to baseHandler, replace to virtual functions like
 	// Handle BatteryEvent, Handle HeartRateEvent
+	// Think about metatype resistartion through using std::variant<TEvent1, TEvent2,TEvent...>
+	// Or fo instance consider using static visitor idiom for decalring possible visitable types like
+	// EventHandlerVisitor<TEvent1,TEvent2,TEvent3>
+
 	Events::TBatteryEvents batEvents = std::any_cast<Events::TBatteryEvents>( _event.eventType );
 	std::uint8_t batteryValue = std::any_cast<std::uint8_t>( _event.eventData );
 

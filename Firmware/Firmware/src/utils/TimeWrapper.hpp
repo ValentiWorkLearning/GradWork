@@ -6,29 +6,29 @@
 #include <chrono>
 
 constexpr std::array Months = {
-        "January"
-    ,   "Febuary"
-    ,   "March"
-    ,   "April"
-    ,   "May"
-    ,   "June"
-    ,   "July"
-    ,   "August"
-    ,   "September"
-    ,   "November"
-    ,   "December"
-    ,   "Undefined"
+        "JAN"
+    ,   "FEB"
+    ,   "MAR"
+    ,   "APR"
+    ,   "MAY"
+    ,   "JUN"
+    ,   "JUL"
+    ,   "AUG"
+    ,   "SEP"
+    ,   "NOV"
+    ,   "DEC"
+    ,   "UND"
 };
 
 constexpr std::array WeekDays = {
-        "Sunday"
-    ,   "Monday"
-    ,   "Tuesday"
-    ,   "Wednesday"
-    ,   "Thursday"
-    ,   "Friday"
-    ,   "Saturday"
-    ,   "Invalid"
+        "SUNDAY"
+    ,   "MONDAY"
+    ,   "TUESDAY"
+    ,   "WEDNESDAY"
+    ,   "THURSDAY"
+    ,   "FRIDAY"
+    ,   "SATURDAY"
+    ,   "INVALID"
 };
 
 class TimeWrapper
@@ -50,7 +50,9 @@ public:
 
     std::chrono::hours getHours() const;
 
-    std::uint8_t getDay() const;
+    std::uint8_t getWeekday() const;
+
+    std::uint8_t getMonthDay() const;
 
     std::uint8_t getMonth()const;
 
@@ -101,18 +103,18 @@ TimeWrapper::getWeekDayString() const
 
 inline std::chrono::seconds TimeWrapper::getSeconds() const
 {
-    return std::chrono::seconds();
+    return std::chrono::seconds( m_internalTm.tm_sec );
 }
 
 
 inline std::chrono::minutes TimeWrapper::getMinutes() const
 {
-    return std::chrono::minutes();
+    return std::chrono::minutes( m_internalTm.tm_min );
 }
 
 inline std::chrono::hours TimeWrapper::getHours() const
 {
-    return std::chrono::hours();
+    return std::chrono::hours( m_internalTm.tm_hour );
 }
 
 inline std::uint8_t TimeWrapper::getMonth() const
@@ -120,9 +122,14 @@ inline std::uint8_t TimeWrapper::getMonth() const
     return m_internalTm.tm_mon;
 }
 
-inline std::uint8_t TimeWrapper::getDay() const
+inline std::uint8_t TimeWrapper::getMonthDay() const
 {
-    return m_internalTm.tm_mon;
+    return m_internalTm.tm_mday;
+}
+
+inline std::uint8_t TimeWrapper::getWeekday() const
+{
+    return m_internalTm.tm_wday + 1;
 }
 
 inline std::uint16_t

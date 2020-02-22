@@ -7,23 +7,32 @@
 
 #include <algorithm>
 
+#include "pages/clock_page/gs_iclock_page_view.hpp"
+
 namespace Graphics::Views
 {
 
-PageViewObject::PageViewObject( std::weak_ptr<Theme::IThemeController> _themeController )
-    :   m_pThemeController{ _themeController }
-    ,   m_isPageVisible{ false }
+template< typename ConcretePageView >
+PageViewObject<ConcretePageView>::PageViewObject(
+        std::weak_ptr<Theme::IThemeController> _themeController
+    ,   std::string_view _pageName
+    )
+    :   m_isPageVisible{ false }
+    ,   m_pageName{ _pageName }
+    ,   m_pThemeController{ _themeController }
 {
 }
 
-void PageViewObject::addWidget(
+template< typename ConcretePageView >
+void PageViewObject<ConcretePageView>::addWidget(
     const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget
 )
 {
     m_pWidgetsStorage.push_back( _pWidget );
 }
 
-void PageViewObject::show()
+template< typename ConcretePageView >
+void PageViewObject<ConcretePageView >::show()
 {
     executeForEachWidget(
         []( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
@@ -31,9 +40,11 @@ void PageViewObject::show()
                 _pWidget->show();
         }
     );
+    m_isPageVisible = true;
 }
 
-void PageViewObject::hide()
+template< typename ConcretePageView >
+void PageViewObject<ConcretePageView>::hide()
 {
     executeForEachWidget(
         []( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
@@ -41,19 +52,30 @@ void PageViewObject::hide()
                 _pWidget->hide();
         }
     );
+    m_isPageVisible = false;
 }
 
-bool PageViewObject::isVisible() const
+template<typename ConcretePageView>
+std::string_view PageViewObject<ConcretePageView>::getPageName() const
+{
+    return m_pageName;
+}
+
+template< typename ConcretePageView >
+bool PageViewObject<ConcretePageView>::isVisible() const
 {
     return m_isPageVisible;
 }
 
-std::shared_ptr<Theme::IThemeController> PageViewObject::getThemeController()
+template< typename ConcretePageView >
+std::shared_ptr<Theme::IThemeController>
+PageViewObject<ConcretePageView>::getThemeController()
 {
     return m_pThemeController.lock();
 }
 
-void PageViewObject::executeForEachWidget(
+template< typename ConcretePageView >
+void PageViewObject<ConcretePageView>::executeForEachWidget(
     std::function<void(std::shared_ptr<Graphics::Widgets::IWidgetObject>&)> _toCall
 )
 {
@@ -63,5 +85,7 @@ void PageViewObject::executeForEachWidget(
         ,   _toCall
     );
 }
+
+template class PageViewObject<typename IClockWatchPage>;
 
 };

@@ -7,6 +7,8 @@
 #include "MetaUtils.hpp"
 
 #include <vector>
+#include <string>
+#include <map>
 
 namespace Graphics::Events
 {
@@ -34,9 +36,14 @@ public:
 
     void handleEvent( const Events::TEvent& _tEvent ) override;
 
-    void addPage( std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd ) override;
+    void addPage(
+        std::shared_ptr<Graphics::Views::IPageViewObject>&& _toAdd
+    ) override;
 
-    void setPageActive( const size_t _activePageIndex ) override;
+    void setPageActive( std::string_view _pageName ) override;
+
+    std::shared_ptr<Graphics::Views::IPageViewObject>
+        getPage( std::string_view _pageName ) override;
 
     void handleEventTimerEllapsed() override;
 
@@ -55,10 +62,10 @@ private:
 
 private:
 
-    using TPagePtr = std::unique_ptr<Graphics::Views::IPageViewObject>;
-    using TPagesStorage = std::vector<TPagePtr>;
+    using TPagePtr = std::shared_ptr<Graphics::Views::IPageViewObject>;
+    using TPagesStorage = std::map<std::string_view,TPagePtr>;
 
-    size_t m_currentPageIndex;
+    std::string_view m_currentPageName;
 
     std::unique_ptr<Events::EventDispatcher> m_pEventsDispatcher;
     std::shared_ptr<Theme::IThemeController> m_pThemeController;

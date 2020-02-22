@@ -75,6 +75,7 @@ private:
 
     std::shared_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
     std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
+    std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
 
     lv_disp_drv_t m_glDisplayDriver;
 

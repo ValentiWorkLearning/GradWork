@@ -5,7 +5,7 @@ namespace Graphics::Views
 {
 
 ClockWatch::ClockWatch( std::weak_ptr<Theme::IThemeController> _themeController )
-	:	PageViewObject{ _themeController }
+	:	PageViewObject<IClockWatchPage>{ _themeController, IClockWatchPage::ClockPageName }
 {
 	initStyles();
 }
@@ -27,11 +27,11 @@ void ClockWatch::show()
 	initFullDateLabel( parent, DisplayWidth, DisplayHeight );
 	initWeekDayLabel( parent, DisplayWidth, DisplayHeight );
 
-	lv_label_set_text(m_pHoursLabel.get(), "22");
-	lv_label_set_text(m_pMinutesLabel.get(), "18");
-	lv_label_set_text(m_pSecondsLabel.get(), ":27");
-	lv_label_set_text(m_pFullDateLabel.get(), "JAN/20/2020");
-	lv_label_set_text(m_pWeekDayLabel.get(), "MONDAY");
+	lv_label_set_text( m_pHoursLabel.get(), "00" );
+	lv_label_set_text( m_pMinutesLabel.get(), "00" );
+	lv_label_set_text( m_pSecondsLabel.get(), ":00" );
+	lv_label_set_text( m_pFullDateLabel.get(), "../../...." );
+	lv_label_set_text( m_pWeekDayLabel.get(), "........................." );
 }
 
 void ClockWatch::hide()
@@ -43,6 +43,31 @@ void ClockWatch::hide()
 	m_pSecondsLabel.reset();
 	m_pFullDateLabel.reset();
 	m_pWeekDayLabel.reset();
+}
+
+void ClockWatch::setHours( std::string_view _newHoursValue )
+{
+	lv_label_set_text( m_pHoursLabel.get(),_newHoursValue.data() );
+}
+
+void ClockWatch::setMinutes( std::string_view _newMinutesValue )
+{
+	lv_label_set_text( m_pMinutesLabel.get(), _newMinutesValue.data() );
+}
+
+void ClockWatch::setSeconds( std::string_view _newSecondsValue )
+{
+	lv_label_set_text( m_pSecondsLabel.get(), _newSecondsValue.data() );
+}
+
+void ClockWatch::setWeekday( std::string_view _newWeekDay )
+{
+	lv_label_set_text( m_pWeekDayLabel.get(), _newWeekDay.data() );
+}
+
+void ClockWatch::setFullDate( std::string_view _fullDate )
+{
+	lv_label_set_text( m_pFullDateLabel.get(), _fullDate.data() );
 }
 
 void ClockWatch::initStyles()
@@ -120,6 +145,14 @@ void ClockWatch::initClockLabels(
 		,	LV_LABEL_STYLE_MAIN
 		,	&m_secondsLabelStyle
 	);
+
+	lv_obj_align(
+			m_pSecondsLabel.get()
+		,	nullptr
+		,	LV_ALIGN_IN_TOP_RIGHT
+		,	0
+		,	DisplayHeight / 3 + DisplayHeight / 20
+	);
 }
 
 void ClockWatch::initFullDateLabel(
@@ -140,7 +173,7 @@ void ClockWatch::initFullDateLabel(
 			m_pFullDateLabel.get()
 		,	nullptr
 		,	LV_ALIGN_IN_RIGHT_MID
-		,	- static_cast<int>( _displayWidth / 8 )
+		,	- static_cast<int>( _displayWidth / 3 )
 		,	static_cast<int>( _displayHeight / 4.5f )
 	);
 }
@@ -162,17 +195,17 @@ void ClockWatch::initWeekDayLabel(
 			m_pWeekDayLabel.get()
 		,	nullptr
 		,	LV_ALIGN_IN_TOP_MID
-		,	0
+		,	-( _displayWidth / 6 )
 		,	_displayHeight / 15
 	);
 }
 
 
-std::unique_ptr<IPageViewObject> createClockWatchView(
+std::shared_ptr<IClockWatchPage> createClockWatchView(
 	std::weak_ptr<Theme::IThemeController> _themeController
 )
 {
-	return std::make_unique<ClockWatch>( _themeController );
+	return std::make_shared<ClockWatch>( _themeController );
 }
 
 }

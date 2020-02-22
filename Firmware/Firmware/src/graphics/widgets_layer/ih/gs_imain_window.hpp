@@ -1,5 +1,6 @@
 #pragma once
 #include <memory>
+#include <string>
 
 namespace Graphics::Views
 {
@@ -27,11 +28,18 @@ public:
 
     virtual ~IGsMainWindow() = default;
 
+public:
+
     virtual void handleEvent( const Events::TEvent& _tEvent ) = 0;
 
-    virtual void addPage( std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd ) = 0;
+    virtual void addPage(
+        std::shared_ptr<Graphics::Views::IPageViewObject>&& _toAdd
+    ) = 0;
 
-    virtual void setPageActive( const size_t _activePageIndex ) = 0;
+    virtual void setPageActive( std::string_view _pageName ) = 0;
+
+    virtual std::shared_ptr<Graphics::Views::IPageViewObject>
+        getPage(std::string_view _pageName) = 0;
 
     virtual void handleEventTimerEllapsed() = 0;
 
