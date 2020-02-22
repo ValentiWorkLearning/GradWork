@@ -86,6 +86,6 @@ void PageViewObject<ConcretePageView>::executeForEachWidget(
     );
 }
 
-template class PageViewObject<typename IClockWatchPage>;
+template class PageViewObject<typename Views::IClockWatchPage>;
 
 };

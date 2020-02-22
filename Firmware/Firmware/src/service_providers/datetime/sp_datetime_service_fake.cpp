@@ -5,6 +5,103 @@
 
 #ifdef USE_NRFSDK_SIMULATOR
 
+#include "app_timer.h"
+#include "app_error.h"
+
+#include "sensorsim.h"
+
+namespace
+{
+    /**< Battery timer. */
+    APP_TIMER_DEF(m_clockSimulatorTimer);
+}
+
+namespace ServiceProviders::DateTimeService
+{
+
+class DateTimeServiceFake::DatetimeSimulatorImpl
+{
+
+public:
+
+    DatetimeSimulatorImpl(
+            const IDateTimeService* _pAppService
+    )
+        :   m_pDateTimeService{ _pAppService }
+    {
+        initSimulator();
+    }
+
+    ~DatetimeSimulatorImpl()
+    {
+    }
+
+public:
+
+    void launchService()
+    {
+        ret_code_t errorCode{};
+        errorCode = app_timer_start(
+                m_clockSimulatorTimer
+            ,   convertToTimerTicks( std::chrono::seconds(1) )
+            ,   nullptr
+        );
+        APP_ERROR_CHECK( errorCode );
+    }
+
+    void calibrateSource()
+    {
+    }
+
+    void syncronizeWithBleDts()
+    {
+    }
+
+private:
+
+    void initSimulator()
+    {
+        ret_code_t errorCode{};
+
+        auto timerExpiredCallback = cbc::obtain_connector(
+            [ this ]( void * _pContext )
+            {
+                return timerExpiredHandler( _pContext );
+            }
+        );
+
+        errorCode = app_timer_create(
+                &m_clockSimulatorTimer
+            ,   APP_TIMER_MODE_REPEATED
+            ,   timerExpiredCallback
+        );
+        APP_ERROR_CHECK( errorCode );
+    }
+
+    void timerExpiredHandler( void * _pContext )
+    {
+       m_timeWrapper.addSecond();
+       m_pDateTimeService->onDateTimeChanged.emit( m_timeWrapper );
+    }
+
+private:
+
+    std::uint32_t convertToTimerTicks( std::chrono::seconds _interval )
+    {
+        std::chrono::milliseconds msValue = std::chrono::duration_cast<std::chrono::milliseconds>( _interval );
+        std::uint32_t timerTicksValue = APP_TIMER_TICKS( msValue.count() );
+
+        return timerTicksValue;
+    }
+
+private:
+
+    TimeWrapper m_timeWrapper;
+
+    const IDateTimeService* m_pDateTimeService;
+};
+}
+
 
 #endif
 
