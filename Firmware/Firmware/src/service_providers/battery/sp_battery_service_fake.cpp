@@ -4,8 +4,8 @@
 
 namespace FakeSettings
 {
-    static constexpr std::uint8_t BatteryIncrement = 1;
-    static constexpr std::uint8_t FakeMinBatteryLevel = 65;
+    static constexpr std::uint8_t BatteryIncrement = 10;
+    static constexpr std::uint8_t FakeMinBatteryLevel = 0;
     static constexpr std::uint8_t FakeMaxBatteryLevel = 100;
 }
 

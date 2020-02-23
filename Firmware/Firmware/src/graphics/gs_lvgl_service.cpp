@@ -181,12 +181,12 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
-    m_pMainWindowTick = lv_task_create(
+    /*m_pMainWindowTick = lv_task_create(
             pageToggle
         ,   4100
         ,   LV_TASK_PRIO_MID
         ,   nullptr
-    );
+    );*/
 }
 
 Graphics::MainWindow::IGsMainWindow&

@@ -38,6 +38,8 @@ public:
 
     TimeWrapper();
 
+    //TimeWrapper(std::string_view _yyyyMMDDHHMN, char _sep = '/', char _timeSep = ':');
+
     explicit TimeWrapper(const std::tm& _tm);
 
     std::string_view getMonthString() const;
@@ -74,6 +76,34 @@ inline TimeWrapper::TimeWrapper()
     std::time_t currentTime = std::time( nullptr );
     m_internalTm = *std::localtime( &currentTime );
 }
+
+
+//inline TimeWrapper::TimeWrapper(std::string_view _yyyyMMDDHHMN, char _sep, char _timeSep)
+//{
+//    char sep1{}, sep2{}, sep3{}, sep4{};
+//    std::int32_t year{}, month{}, day{}, hour{}, min{};
+//
+//    int nMatched = sscanf(
+//            _yyyyMMDDHHMN.data()
+//        ,   "%d%c %d%c %d%c %d%c %d"
+//        ,   &year
+//        ,   &sep1
+//        ,   &month
+//        ,   &sep2
+//        ,   &day
+//        ,   &sep3
+//        ,   &hour
+//        ,   &sep4
+//        ,   &min
+//    );
+//    std::tm currentTm{};
+//    currentTm.tm_year = year;
+//    currentTm.tm_mon = month;
+//    currentTm.tm_mday = day;
+//    currentTm.tm_hour = hour;
+//    currentTm.tm_min = min;
+//    m_internalTm = currentTm;
+//}
 
 inline TimeWrapper::TimeWrapper( const std::tm& _tm )
     :   m_internalTm{ _tm }
