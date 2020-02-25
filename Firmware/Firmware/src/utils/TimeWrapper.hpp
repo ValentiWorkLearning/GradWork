@@ -21,13 +21,13 @@ constexpr std::array Months = {
 };
 
 constexpr std::array WeekDays = {
-        "SUNDAY"
-    ,   "MONDAY"
-    ,   "TUESDAY"
-    ,   "WEDNESDAY"
-    ,   "THURSDAY"
-    ,   "FRIDAY"
-    ,   "SATURDAY"
+        "SUN"
+    ,   "MON"
+    ,   "TUE"
+    ,   "WED"
+    ,   "THU"
+    ,   "FRI"
+    ,   "SAT"
     ,   "INVALID"
 };
 

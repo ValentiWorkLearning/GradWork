@@ -31,7 +31,7 @@ void ClockWatch::show()
 	lv_label_set_text( m_pMinutesLabel.get(), "00" );
 	lv_label_set_text( m_pSecondsLabel.get(), ":00" );
 	lv_label_set_text( m_pFullDateLabel.get(), "../../...." );
-	lv_label_set_text( m_pWeekDayLabel.get(), "........................." );
+	lv_label_set_text( m_pWeekDayLabel.get(), "........." );
 }
 
 void ClockWatch::hide()
@@ -195,7 +195,7 @@ void ClockWatch::initWeekDayLabel(
 			m_pWeekDayLabel.get()
 		,	nullptr
 		,	LV_ALIGN_IN_TOP_MID
-		,	-( _displayWidth / 6 )
+		,	static_cast<int>( _displayWidth / 24 )
 		,	_displayHeight / 15
 	);
 }
