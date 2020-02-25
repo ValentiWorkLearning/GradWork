@@ -9,8 +9,8 @@ namespace Graphics::Widgets
 {
 
 BatteryWidget::BatteryWidget( std::weak_ptr<Theme::IThemeController> _themeController )
-    :   m_pThemeController{ _themeController }
-    ,   m_isVisible{ false }
+    :   m_isVisible{ false }
+    ,   m_pThemeController{ _themeController }
 {
     initStyles();
 }
@@ -134,8 +134,13 @@ void BatteryWidget::initBatteryIcon(
 
 void BatteryWidget::hide()
 {
-    m_pBatteryIcon.reset();
-    m_pBatteryLabel.reset();
+    Meta::tupleApply(
+            []( auto&& _nodeToReset ){ _nodeToReset.reset(); }
+        ,   std::forward_as_tuple(
+                m_pBatteryIcon
+            ,   m_pBatteryLabel
+        )
+    );
 
     m_isVisible = false;
 }

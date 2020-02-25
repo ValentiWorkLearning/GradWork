@@ -38,11 +38,16 @@ void ClockWatch::hide()
 {
 	PageViewObject::hide();
 
-	m_pHoursLabel.reset();
-	m_pMinutesLabel.reset();
-	m_pSecondsLabel.reset();
-	m_pFullDateLabel.reset();
-	m_pWeekDayLabel.reset();
+	Meta::tupleApply(
+			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
+		,	std::forward_as_tuple(
+				m_pHoursLabel
+			,	m_pMinutesLabel
+			,	m_pSecondsLabel
+			,	m_pFullDateLabel
+			,	m_pWeekDayLabel
+		)
+	);
 }
 
 void ClockWatch::setHours( std::string_view _newHoursValue )
