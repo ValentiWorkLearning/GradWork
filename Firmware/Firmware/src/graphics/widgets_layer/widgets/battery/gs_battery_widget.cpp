@@ -9,17 +9,18 @@ namespace Graphics::Widgets
 {
 
 BatteryWidget::BatteryWidget( std::weak_ptr<Theme::IThemeController> _themeController )
-    :   m_isVisible{ false }
-    ,   m_pThemeController{ _themeController }
+    :   WidgetBaseObj<IBatteryWidget>{ _themeController }
 {
     initStyles();
 }
 
 void BatteryWidget::show()
 {
+    WidgetBaseObj::show();
+
     auto parent = lv_disp_get_scr_act( nullptr );
 
-    auto pThemeProvider = m_pThemeController.lock();
+    auto pThemeProvider = WidgetBaseObj::getThemeController().lock();
     if (!pThemeProvider)
         return;
 
@@ -29,12 +30,11 @@ void BatteryWidget::show()
     initBatteryIcon( parent, DisplayWidth, DisplayHeight );
     initBatteryPercentageLabel( parent, DisplayWidth, DisplayHeight );
 
-    m_isVisible = true;
 }
 
 void BatteryWidget::initStyles()
 {
-    auto pThemeProvider = m_pThemeController.lock();
+    auto pThemeProvider = WidgetBaseObj::getThemeController().lock();
     if (!pThemeProvider )
         return;
 
@@ -134,6 +134,8 @@ void BatteryWidget::initBatteryIcon(
 
 void BatteryWidget::hide()
 {
+    WidgetBaseObj::hide();
+
     Meta::tupleApply(
             []( auto&& _nodeToReset ){ _nodeToReset.reset(); }
         ,   std::forward_as_tuple(
@@ -141,13 +143,6 @@ void BatteryWidget::hide()
             ,   m_pBatteryLabel
         )
     );
-
-    m_isVisible = false;
-}
-
-bool BatteryWidget::isVisible() const
-{
-    return m_isVisible;
 }
 
 std::shared_ptr<IBatteryWidget> createBatteryWidget(

@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gs_ipages_switch.hpp"
+#include "gs_widget_base_obj.hpp"
 
 #include "lvgl.h"
 
@@ -10,18 +11,11 @@
 #include <memory>
 
 
-namespace Graphics::Theme
-{
-    class IThemeController;
-}
-
 namespace Graphics::Widgets
 {
 
-class IWidgetEventHandler;
-
 class PagesSwitch
-    :   public IPagesSwitch
+    :   public WidgetBaseObj<IPagesSwitch>
 {
 
 public:
@@ -36,7 +30,11 @@ public:
 
     void hide() override;
 
-    bool isVisible()const override;
+public:
+
+    void mapPageToIndex(std::string_view pageName, const std::uint8_t _pageIndex) override;
+
+    void setActivePage(const std::uint8_t pageIndex) override;
 
 private:
 
@@ -56,16 +54,12 @@ private:
 
 private:
 
-    bool m_isVisible;
-
     lv_style_t m_checkedPointStyle;
     lv_style_t m_uncheckedPointStyle;
 
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pFirstPage;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pSecondPage;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pThirdPage;
-
-    std::weak_ptr<Theme::IThemeController> m_pThemeController;
 
 };
 

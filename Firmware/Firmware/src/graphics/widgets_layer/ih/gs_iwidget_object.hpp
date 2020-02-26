@@ -1,14 +1,19 @@
 #pragma once
 
+#include <memory>
+
 namespace Graphics::Views
 {
     class IPageViewObject;
 };
 
+namespace Graphics::Theme
+{
+    class IThemeController;
+}
+
 namespace Graphics::Widgets
 {
-
-class IEventHandler;
 
 class IWidgetObject
 {
@@ -24,6 +29,10 @@ public:
     virtual void hide() = 0;
 
     virtual bool isVisible() const = 0;
+
+public:
+
+    virtual std::weak_ptr<Graphics::Theme::IThemeController> getThemeController() const = 0;
 };
 
 };

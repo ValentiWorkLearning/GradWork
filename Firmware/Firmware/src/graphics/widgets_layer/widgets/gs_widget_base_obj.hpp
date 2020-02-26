@@ -1,14 +1,13 @@
 #pragma once
 
-#include "ih/gs_iwidget_object.hpp"
-
 #include "lvgl.h"
+
+#include "ih/gs_iwidget_object.hpp"
 
 #include "MetaUtils.hpp"
 
 #include <string>
 #include <memory>
-
 
 namespace Graphics::Widgets
 {
@@ -20,7 +19,7 @@ class WidgetBaseObj
 
 public:
 
-    WidgetBaseObj( std::weak_ptr<Theme::IThemeController> _themeController );
+    WidgetBaseObj( std::weak_ptr<Theme::IThemeController> _themeController )
 
 public:
 
@@ -29,10 +28,6 @@ public:
     void hide() override;
 
     bool isVisible()const override;
-
-public:
-
-    std::weak_ptr<Theme::IThemeController> getThemeController() const override;
 
 private:
 

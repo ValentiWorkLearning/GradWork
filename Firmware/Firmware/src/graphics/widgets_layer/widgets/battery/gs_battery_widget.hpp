@@ -1,6 +1,7 @@
 #pragma once
 
 #include "gs_ibattery_widget.hpp"
+#include "gs_widget_base_impl.hpp"
 
 #include "lvgl.h"
 
@@ -20,7 +21,7 @@ namespace Graphics::Widgets
 class IWidgetEventHandler;
 
 class BatteryWidget
-    :   public IBatteryWidget
+    :   public WidgetBaseObj<IBatteryWidget>
 {
 
 public:
@@ -34,8 +35,6 @@ public:
     void show() override;
 
     void hide() override;
-
-    bool isVisible()const override;
 
     void setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel ) override;
 
@@ -59,8 +58,6 @@ private:
 
 private:
 
-    bool m_isVisible;
-
     lv_style_t m_bateryIconStyle;
     lv_style_t m_batteryLabelStyle;
 
@@ -68,8 +65,6 @@ private:
 
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryIcon;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryLabel;
-
-    std::weak_ptr<Theme::IThemeController> m_pThemeController;
 
 };
 
