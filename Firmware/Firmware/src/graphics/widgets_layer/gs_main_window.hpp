@@ -20,6 +20,18 @@ namespace Graphics::Theme
     class IThemeController;
 }
 
+
+namespace Graphics::Widgets
+{
+    class IBatteryWidget;
+    class IPagesSwitch;
+}
+
+namespace Graphics
+{
+    class IEventHandler;
+}
+
 namespace Graphics::MainWindow
 {
 
@@ -55,6 +67,8 @@ private:
 
     void initBackground();
 
+    void initWatchPage();
+
 private:
 
     static const inline std::uint32_t Width = LV_HOR_RES;
@@ -83,6 +97,14 @@ private:
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pInyCircle;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYan;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYanCircle;
+
+private:
+
+    std::shared_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
+    std::shared_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
+    std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
+    std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
+
 };
 
 std::unique_ptr<IGsMainWindow> createMainWindow();

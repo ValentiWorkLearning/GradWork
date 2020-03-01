@@ -5,20 +5,10 @@
 #include "gs_main_window.hpp"
 #include "gs_event_dispatcher.hpp"
 
-#include "widgets_layer/lvgl_ui.hpp"
-
-#include "widgets_layer/ih/gs_ievent_handler.hpp"
-
-#include "widgets_layer/widgets/battery/gs_battery_handler.hpp"
-#include "widgets_layer/widgets/battery/gs_battery_widget.hpp"
-
-#include "widgets_layer/pages/clock_page/gs_clock_page_view.hpp"
-#include "widgets_layer/pages/clock_page/gs_clock_page_handler.hpp"
-
-#include "widgets_layer/widgets/pages_switch/gs_pages_switch.hpp"
-
 #include "CallbackConnector.hpp"
 #include "logger_service.hpp"
+
+#include "widgets_layer/pages/clock_page/gs_iclock_page_view.hpp"
 
 
 namespace Graphics
@@ -126,45 +116,6 @@ LvglGraphicsService::initMainWindow()
 {
     m_pMainWindow = Graphics::MainWindow::createMainWindow();
     // TODO create the lvlg task for ellaped event processing
-
-
-    m_pBatteryWidget = Widgets::createBatteryWidget( m_pMainWindow->getThemeController() );
-    m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget ) );
-
-    m_pMainWindow->getEventDispatcher().subscribe(
-            Events::EventGroup::Battery
-        ,   [ this]( const Events::TEvent& _event )
-        {
-            m_pBatteryWidgetController->handleEvent( _event );
-        }
-    );
-
-    m_pPagesSwitch = Widgets::createPagesSwitch(m_pMainWindow->getThemeController());
-
-    m_pMainWindow->onActivePageChanged.connect(
-        [this]( std::string_view _activePage ){
-            m_pPagesSwitch->setActivePage( _activePage );
-        }
-    );
-
-    auto pClockPage = Views::createClockWatchView( m_pMainWindow->getThemeController() );
-    pClockPage->addWidget( m_pBatteryWidget );
-    pClockPage->addWidget( m_pPagesSwitch );
-
-    m_pClockPageController = std::move( Views::createPageWatchHandler( pClockPage ) );
-
-    m_pMainWindow->getEventDispatcher().subscribe(
-            Events::EventGroup::DateTime
-        ,   [ this]( const Events::TEvent& _event )
-        {
-            m_pClockPageController->handleEvent( _event );
-        }
-    );
-
-
-    m_pMainWindow->addPage( std::move( pClockPage ) );
-
-    m_pMainWindow->setPageActive( Views::IClockWatchPage::ClockPageName );
 
     auto mainWindowTimer = cbc::obtain_connector(
         [this](lv_task_t* _pTask)

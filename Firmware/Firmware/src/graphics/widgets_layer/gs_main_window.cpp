@@ -8,6 +8,14 @@
 
 #include "gs_ipage_view_object.hpp"
 
+#include "ih/gs_ievent_handler.hpp"
+#include "widgets/battery/gs_battery_handler.hpp"
+#include "widgets/battery/gs_battery_widget.hpp"
+#include "pages/clock_page/gs_clock_page_view.hpp"
+#include "pages/clock_page/gs_clock_page_handler.hpp"
+#include "widgets/pages_switch/gs_pages_switch.hpp"
+
+
 namespace Graphics::MainWindow
 {
 
@@ -24,6 +32,7 @@ GsMainWindow::GsMainWindow()
         }
 {
     initBackground();
+    initWatchPage();
 }
 
 GsMainWindow::~GsMainWindow() = default;
@@ -135,6 +144,45 @@ void GsMainWindow::initBackground()
 
     m_pInyCircle.reset( createAlignedCircle( LV_ALIGN_IN_RIGHT_MID, &m_iniCircleStyle ) );
     m_pYanCircle.reset( createAlignedCircle( LV_ALIGN_IN_LEFT_MID, &m_yanCircleStyle ) );
+}
+
+void GsMainWindow::initWatchPage()
+{
+    m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
+    m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget ) );
+
+    getEventDispatcher().subscribe(
+            Events::EventGroup::Battery
+        ,   [ this]( const Events::TEvent& _event )
+        {
+            m_pBatteryWidgetController->handleEvent( _event );
+        }
+    );
+
+    m_pPagesSwitch = Widgets::createPagesSwitch( getThemeController() );
+
+    onActivePageChanged.connect(
+        [this]( std::string_view _activePage ){
+            m_pPagesSwitch->setActivePage( _activePage );
+        }
+    );
+
+    auto pClockPage = Views::createClockWatchView( getThemeController() );
+    pClockPage->addWidget( m_pBatteryWidget );
+    pClockPage->addWidget( m_pPagesSwitch );
+
+    m_pClockPageController = std::move( Views::createPageWatchHandler( pClockPage ) );
+
+    getEventDispatcher().subscribe(
+            Events::EventGroup::DateTime
+        ,   [ this]( const Events::TEvent& _event )
+        {
+            m_pClockPageController->handleEvent( _event );
+        }
+    );
+
+    addPage( std::move( pClockPage ) );
+    setPageActive( Views::IClockWatchPage::ClockPageName );
 }
 
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()
