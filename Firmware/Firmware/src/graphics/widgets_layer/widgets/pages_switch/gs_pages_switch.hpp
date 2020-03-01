@@ -37,7 +37,7 @@ public:
 
 public:
 
-    void setActivePage(std::string_view pageName) override;
+    void setActivePage( std::string_view _pageName ) override;
 
 private:
 

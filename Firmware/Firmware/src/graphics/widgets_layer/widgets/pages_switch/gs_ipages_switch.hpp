@@ -14,7 +14,7 @@ class IPagesSwitch
 
 public:
 
-    virtual void setActivePage(std ::string_view pageName ) = 0;
+    virtual void setActivePage( std::string_view _pageName ) = 0;
 };
 
 };

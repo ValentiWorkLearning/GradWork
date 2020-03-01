@@ -2,6 +2,8 @@
 
 #include "ih/gs_itheme_controller.hpp"
 
+#include "pages/clock_page/gs_iclock_page_view.hpp"
+
 namespace Graphics::Widgets
 {
 
@@ -35,9 +37,27 @@ void PagesSwitch::hide()
 	);
 }
 
-void PagesSwitch::setActivePage(std::string_view pageName)
+void PagesSwitch::setActivePage( std::string_view _pageName )
 {
 
+	if( _pageName == Views::IClockWatchPage::ClockPageName )
+	{
+		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle );
+		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+	}
+	else if( _pageName == "NONE" )
+	{
+		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle );
+		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+	}
+	else if ( _pageName == "NONENONE" )
+	{
+		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle);
+	}
 }
 
 void PagesSwitch::initStyles()

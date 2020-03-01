@@ -2,6 +2,8 @@
 #include <memory>
 #include <string>
 
+#include "SimpleSignal.hpp"
+
 namespace Graphics::Views
 {
     class IPageViewObject;
@@ -46,6 +48,11 @@ public:
     virtual Events::EventDispatcher& getEventDispatcher() = 0;
 
     virtual std::weak_ptr<Theme::IThemeController> getThemeController() const = 0;
+
+public:
+
+    Simple::Signal<void(std::string_view)> onActivePageChanged;
+
 };
 
 };

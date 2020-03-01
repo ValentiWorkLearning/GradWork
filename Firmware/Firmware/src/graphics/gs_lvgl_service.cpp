@@ -141,6 +141,12 @@ LvglGraphicsService::initMainWindow()
 
     m_pPagesSwitch = Widgets::createPagesSwitch(m_pMainWindow->getThemeController());
 
+    m_pMainWindow->onActivePageChanged.connect(
+        [this]( std::string_view _activePage ){
+            m_pPagesSwitch->setActivePage( _activePage );
+        }
+    );
+
     auto pClockPage = Views::createClockWatchView( m_pMainWindow->getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget );
     pClockPage->addWidget( m_pPagesSwitch );

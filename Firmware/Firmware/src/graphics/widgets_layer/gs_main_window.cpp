@@ -46,6 +46,8 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
 
     m_currentPageName = _pageName;
     m_pagesStorage.at( m_currentPageName )->show();
+
+    onActivePageChanged.emit( m_currentPageName );
 }
 
 std::shared_ptr<Graphics::Views::IPageViewObject>
