@@ -10,6 +10,11 @@
 #include <string>
 #include <memory>
 
+namespace Graphics::Theme
+{
+    class IThemeController;
+}
+
 
 namespace Graphics::Widgets
 {
@@ -32,9 +37,7 @@ public:
 
 public:
 
-    void mapPageToIndex(std::string_view pageName, const std::uint8_t _pageIndex) override;
-
-    void setActivePage(const std::uint8_t pageIndex) override;
+    void setActivePage(std::string_view pageName) override;
 
 private:
 
@@ -54,6 +57,10 @@ private:
 
 private:
 
+    static constexpr std::uint8_t ArcSize = 14;
+
+private:
+
     lv_style_t m_checkedPointStyle;
     lv_style_t m_uncheckedPointStyle;
 
@@ -63,7 +70,7 @@ private:
 
 };
 
-std::shared_ptr<IBatteryWidget> createBatteryWidget(
+std::shared_ptr<IPagesSwitch> createPagesSwitch(
     std::weak_ptr<Theme::IThemeController> _themeController
 );
 

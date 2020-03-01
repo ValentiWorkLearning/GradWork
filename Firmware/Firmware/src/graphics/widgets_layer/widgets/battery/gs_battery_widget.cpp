@@ -18,14 +18,7 @@ void BatteryWidget::show()
 {
     WidgetBaseObj::show();
 
-    auto parent = lv_disp_get_scr_act( nullptr );
-
-    auto pThemeProvider = WidgetBaseObj::getThemeController().lock();
-    if (!pThemeProvider)
-        return;
-
-    const std::uint32_t DisplayWidth { pThemeProvider->getDisplayWidth() };
-    const std::uint32_t DisplayHeight { pThemeProvider->getDisplayHeight() };
+    const auto[parent, DisplayWidth, DisplayHeight ] = WidgetBaseObj::getShowParams();
 
     initBatteryIcon( parent, DisplayWidth, DisplayHeight );
     initBatteryPercentageLabel( parent, DisplayWidth, DisplayHeight );

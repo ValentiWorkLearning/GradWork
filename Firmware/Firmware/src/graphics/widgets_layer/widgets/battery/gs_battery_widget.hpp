@@ -1,7 +1,7 @@
 #pragma once
 
 #include "gs_ibattery_widget.hpp"
-#include "gs_widget_base_impl.hpp"
+#include "gs_widget_base_obj.hpp"
 
 #include "lvgl.h"
 

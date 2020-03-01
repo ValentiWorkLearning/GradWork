@@ -15,6 +15,8 @@
 #include "widgets_layer/pages/clock_page/gs_clock_page_view.hpp"
 #include "widgets_layer/pages/clock_page/gs_clock_page_handler.hpp"
 
+#include "widgets_layer/widgets/pages_switch/gs_pages_switch.hpp"
+
 #include "CallbackConnector.hpp"
 #include "logger_service.hpp"
 
@@ -137,8 +139,11 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
+    m_pPagesSwitch = Widgets::createPagesSwitch(m_pMainWindow->getThemeController());
+
     auto pClockPage = Views::createClockWatchView( m_pMainWindow->getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget );
+    pClockPage->addWidget( m_pPagesSwitch );
 
     m_pClockPageController = std::move( Views::createPageWatchHandler( pClockPage ) );
 
@@ -181,12 +186,12 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
-    /*m_pMainWindowTick = lv_task_create(
+    m_pMainWindowTick = lv_task_create(
             pageToggle
         ,   4100
         ,   LV_TASK_PRIO_MID
         ,   nullptr
-    );*/
+    );
 }
 
 Graphics::MainWindow::IGsMainWindow&

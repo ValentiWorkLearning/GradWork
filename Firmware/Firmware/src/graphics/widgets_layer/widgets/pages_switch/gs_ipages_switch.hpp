@@ -14,9 +14,7 @@ class IPagesSwitch
 
 public:
 
-    virtual void mapPageToIndex( std::string_view pageName, const std::uint8_t _pageIndex ) = 0;
-
-    virtual void setActivePage( const std::uint8_t pageIndex ) = 0;
+    virtual void setActivePage(std ::string_view pageName ) = 0;
 };
 
 };

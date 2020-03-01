@@ -16,6 +16,7 @@ namespace Graphics::MainWindow
 namespace Graphics::Widgets
 {
     class IBatteryWidget;
+    class IPagesSwitch;
 }
 
 namespace Graphics
@@ -74,6 +75,7 @@ private:
     lv_task_t* m_pMainWindowTick;
 
     std::shared_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
+    std::shared_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
     std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
     std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
 

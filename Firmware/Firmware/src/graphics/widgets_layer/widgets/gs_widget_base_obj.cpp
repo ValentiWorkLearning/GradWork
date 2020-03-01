@@ -1,4 +1,4 @@
-#include "gs_widget_base_impl.hpp"
+#include "gs_widget_base_obj.hpp"
 
 #include "ih/gs_events.hpp"
 #include "ih/gs_itheme_controller.hpp"
@@ -40,6 +40,24 @@ WidgetBaseObj<TBaseWidgetInterface>::isVisible()const
 {
     return m_isWidgetVisible;
 }
+
+template< typename TBaseWidgetInterface >
+typename WidgetBaseObj<TBaseWidgetInterface>::ShowParams
+WidgetBaseObj<TBaseWidgetInterface>::getShowParams()
+{
+    auto pThemeProvider = getThemeController().lock();
+    if (!pThemeProvider)
+        return {};
+
+    auto parent = lv_disp_get_scr_act(nullptr);
+
+    return WidgetBaseObj<TBaseWidgetInterface>::ShowParams{
+            parent
+        ,   pThemeProvider->getDisplayWidth()
+        ,   pThemeProvider->getDisplayHeight()
+    };
+}
+
 template<typename TBaseWidgetInterface>
 std::weak_ptr<Theme::IThemeController>
 WidgetBaseObj<TBaseWidgetInterface>::getThemeController() const
