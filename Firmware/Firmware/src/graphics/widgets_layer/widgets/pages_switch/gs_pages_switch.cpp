@@ -3,6 +3,7 @@
 #include "ih/gs_itheme_controller.hpp"
 
 #include "pages/clock_page/gs_iclock_page_view.hpp"
+#include "pages/health_page/gs_ihealth_page_view.hpp"
 
 namespace Graphics::Widgets
 {
@@ -46,7 +47,7 @@ void PagesSwitch::setActivePage( std::string_view _pageName )
 		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
 		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
 	}
-	else if( _pageName == "NONE" )
+	else if( _pageName == Views::IHealthWatchPage::HealthPageName ) // TODO migrate to labels/ objects
 	{
 		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
 		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle );
@@ -72,17 +73,16 @@ void PagesSwitch::initStyles()
 		Theme::Color::MainThemeLight
 	);
 	m_checkedPointStyle.line.width = 2;
-	m_uncheckedPointStyle.body.radius = LV_RADIUS_CIRCLE;
-
+	m_checkedPointStyle.body.radius = LV_RADIUS_CIRCLE;
 
 	lv_style_copy( &m_uncheckedPointStyle, &lv_style_plain );
 
-	m_uncheckedPointStyle.body.main_color = pThemeProvider->getMainThemeColor(
+	m_uncheckedPointStyle.line.color= pThemeProvider->getMainThemeColor(
 		Theme::Color::MainThemeLight
 	);
 
-	m_uncheckedPointStyle.body.grad_color = m_uncheckedPointStyle.body.main_color;
-	m_uncheckedPointStyle.body.radius = LV_RADIUS_CIRCLE;
+	m_uncheckedPointStyle.line.width = 10;
+	m_checkedPointStyle.body.radius = LV_RADIUS_CIRCLE;
 }
 
 void PagesSwitch::initCheckedPages(
@@ -111,19 +111,24 @@ void PagesSwitch::initUncheckedPages(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pSecondPage.reset( lv_obj_create( _parentObject, nullptr ));
+	m_pSecondPage.reset( lv_arc_create(_parentObject, nullptr ) );
+	lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+
+	lv_arc_set_angles( m_pSecondPage.get(), 0, 360 );
 	lv_obj_set_size( m_pSecondPage.get(), ArcSize, ArcSize );
-	lv_obj_set_style( m_pSecondPage.get(), &m_uncheckedPointStyle );
 	lv_obj_align(
 			m_pSecondPage.get()
 		,	nullptr
 		,	LV_ALIGN_IN_BOTTOM_MID
 		,	0
-		,	-static_cast<int>( _displayHeight / 10)
+		,	-static_cast<int>(_displayHeight / 10)
 	);
 
-	m_pThirdPage.reset( lv_obj_create( _parentObject, nullptr) );
+	m_pThirdPage.reset( lv_arc_create( _parentObject, nullptr) );
 
+	lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle);
+
+	lv_arc_set_angles( m_pThirdPage.get(), 0, 360);
 	lv_obj_set_size( m_pThirdPage.get(), ArcSize, ArcSize);
 	lv_obj_set_style( m_pThirdPage.get(), &m_uncheckedPointStyle );
 	lv_obj_align(

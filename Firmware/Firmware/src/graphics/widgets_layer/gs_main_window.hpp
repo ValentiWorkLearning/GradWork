@@ -69,6 +69,8 @@ private:
 
     void initWatchPage();
 
+    void initHealthPage();
+
 private:
 
     static const inline std::uint32_t Width = LV_HOR_RES;

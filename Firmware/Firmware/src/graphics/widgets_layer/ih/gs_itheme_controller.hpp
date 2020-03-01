@@ -20,9 +20,10 @@ namespace Graphics::Theme
 
     enum class FontSize
     {
-            small   //  16px
-        ,   medium  //  36px
-        ,   large   //  40px
+            extra_small //12px
+        ,   small   //  16px
+        ,   normal  // 20px
+        ,   large   //  36px
         ,   x_large //  68px
     };
 

@@ -9,12 +9,18 @@
 #include "gs_ipage_view_object.hpp"
 
 #include "ih/gs_ievent_handler.hpp"
+
 #include "widgets/battery/gs_battery_handler.hpp"
 #include "widgets/battery/gs_battery_widget.hpp"
-#include "pages/clock_page/gs_clock_page_view.hpp"
-#include "pages/clock_page/gs_clock_page_handler.hpp"
+
 #include "widgets/pages_switch/gs_pages_switch.hpp"
 
+#include "pages/clock_page/gs_clock_page_view.hpp"
+#include "pages/clock_page/gs_clock_page_handler.hpp"
+
+#include "pages/health_page/gs_health_page_view.hpp"
+
+#include "lvgl_ui.hpp"
 
 namespace Graphics::MainWindow
 {
@@ -33,6 +39,7 @@ GsMainWindow::GsMainWindow()
 {
     initBackground();
     initWatchPage();
+    initHealthPage();
 }
 
 GsMainWindow::~GsMainWindow() = default;
@@ -183,6 +190,17 @@ void GsMainWindow::initWatchPage()
 
     addPage( std::move( pClockPage ) );
     setPageActive( Views::IClockWatchPage::ClockPageName );
+}
+
+void GsMainWindow::initHealthPage()
+{
+    auto pHealthPage = Views::createHeartrateWatchView( getThemeController() );
+
+    pHealthPage->addWidget( m_pBatteryWidget );
+    pHealthPage->addWidget( m_pPagesSwitch );
+    addPage( std::move( pHealthPage ) );
+
+    setPageActive( Views::IHealthWatchPage::HealthPageName );
 }
 
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()

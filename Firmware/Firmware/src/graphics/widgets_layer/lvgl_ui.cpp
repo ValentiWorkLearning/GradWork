@@ -189,7 +189,7 @@ auto drawClocks( lv_obj_t* _parent )
     // Draw weeekday label
     static lv_style_t weekDayStyle;
     lv_style_copy( &weekDayStyle, &hoursLabelStyle );
-    weekDayStyle.text.font = &LcdNova36px;
+    /*weekDayStyle.text.font = &LcdNova36px;*/
     weekDayStyle.text.color = UiTheme::MainDarkColor;
 
     lv_obj_t* pWeekDayLabel = lv_label_create( _parent, nullptr );
@@ -329,8 +329,8 @@ auto drawHeartrate( lv_obj_t* _parent )
     // Draw weeekday label
     static lv_style_t healthTitleStyle;
     lv_style_copy( &healthTitleStyle, &lv_style_plain );
-    healthTitleStyle.text.font = &LcdNova36px;
-    healthTitleStyle.text.color = UiTheme::MainDarkColor;
+    /*healthTitleStyle.text.font = &LcdNova36px;
+    healthTitleStyle.text.color = UiTheme::MainDarkColor;*/
 
     lv_obj_t* pHealthMainLabel = lv_label_create( _parent, nullptr );
 

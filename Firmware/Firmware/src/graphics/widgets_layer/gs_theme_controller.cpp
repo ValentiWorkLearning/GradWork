@@ -98,14 +98,17 @@ ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor )
 
     switch (_fontStyle)
     {
+    case Graphics::Theme::FontSize::extra_small:
+        fontStyle.text.font = &LcdNova12px;
+        break;
     case Graphics::Theme::FontSize::small:
         fontStyle.text.font = &LcdNova16px;
         break;
-    case Graphics::Theme::FontSize::medium:
-        fontStyle.text.font = &LcdNova36px;
+    case Graphics::Theme::FontSize::normal:
+        fontStyle.text.font = &LcdNova30px;
         break;
     case Graphics::Theme::FontSize::large:
-        fontStyle.text.font = &LcdNova40px;
+        fontStyle.text.font = &LcdNova36px;
         break;
     case Graphics::Theme::FontSize::x_large:
         fontStyle.text.font = &LcdNova68px;

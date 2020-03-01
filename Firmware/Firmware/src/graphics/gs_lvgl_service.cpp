@@ -9,7 +9,7 @@
 #include "logger_service.hpp"
 
 #include "widgets_layer/pages/clock_page/gs_iclock_page_view.hpp"
-
+#include "widgets_layer/pages/health_page/gs_ihealth_page_view.hpp"
 
 namespace Graphics
 {
@@ -134,11 +134,16 @@ LvglGraphicsService::initMainWindow()
     auto pageToggle = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
         {
-            auto pageObject = m_pMainWindow->getPage( Views::IClockWatchPage::ClockPageName );
-            if( pageObject->isVisible() )
-                pageObject->hide();
+            auto pageWatchObject = m_pMainWindow->getPage( Views::IClockWatchPage::ClockPageName );
+            auto pageHealth = m_pMainWindow->getPage( Views::IHealthWatchPage::HealthPageName );
+            if (pageWatchObject->isVisible())
+            {
+                pageWatchObject->hide();
+                pageHealth->show();
+            }
             else {
-                pageObject->show();
+                pageHealth->hide();
+                pageWatchObject->show();
             }
         }
     );

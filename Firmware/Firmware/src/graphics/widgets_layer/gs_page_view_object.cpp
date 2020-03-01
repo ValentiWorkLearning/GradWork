@@ -8,6 +8,7 @@
 #include <algorithm>
 
 #include "pages/clock_page/gs_iclock_page_view.hpp"
+#include "pages/health_page/gs_ihealth_page_view.hpp"
 
 namespace Graphics::Views
 {
@@ -87,5 +88,6 @@ void PageViewObject<ConcretePageView>::executeForEachWidget(
 }
 
 template class PageViewObject<typename Views::IClockWatchPage>;
+template class PageViewObject<typename Views::IHealthWatchPage>;
 
 };
