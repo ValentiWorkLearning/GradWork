@@ -134,17 +134,13 @@ LvglGraphicsService::initMainWindow()
     auto pageToggle = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
         {
-            auto pageWatchObject = m_pMainWindow->getPage( Views::IClockWatchPage::ClockPageName );
-            auto pageHealth = m_pMainWindow->getPage( Views::IHealthWatchPage::HealthPageName );
-            if (pageWatchObject->isVisible())
-            {
-                pageWatchObject->hide();
-                pageHealth->show();
-            }
-            else {
-                pageHealth->hide();
-                pageWatchObject->show();
-            }
+            static bool toggle{ false };
+            m_pMainWindow->setPageActive(
+                toggle
+                ?   Views::IClockWatchPage::ClockPageName
+                :   Views::IHealthWatchPage::HealthPageName
+            );
+            toggle = !toggle;
         }
     );
 

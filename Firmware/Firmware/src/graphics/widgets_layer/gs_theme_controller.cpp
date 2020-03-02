@@ -79,12 +79,20 @@ ThemeController::setActiveTheme( ColorTheme _themeToSet )
 };
 
 lv_style_t
-ThemeController::getIconsFont( Color _fontColor )
+ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor )
 {
     lv_style_t iconsFont{};
     lv_style_copy( &iconsFont,&lv_style_plain_color );
 
-    iconsFont.text.font = &IconFont16px;
+    switch (_fontStyle)
+    {
+    case Graphics::Theme::FontSize::small:
+        iconsFont.text.font = &IconFont16px;
+        break;
+    case Graphics::Theme::FontSize::normal:
+        iconsFont.text.font = &IconFont35px;
+        break;
+    }
     iconsFont.text.color = getMainThemeColor( _fontColor );
 
     return  iconsFont;

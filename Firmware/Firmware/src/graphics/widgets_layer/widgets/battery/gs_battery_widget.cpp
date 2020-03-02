@@ -37,7 +37,8 @@ void BatteryWidget::initStyles()
     );
 
     m_bateryIconStyle = pThemeProvider->getIconsFont(
-        Theme::Color::MainThemeLight
+            Theme::FontSize::small
+        ,   Theme::Color::MainThemeLight
     );
 
 }

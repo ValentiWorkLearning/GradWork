@@ -70,6 +70,7 @@ private:
     lv_style_t m_mainFontDark;
     lv_style_t m_tooltipsStyleDark;
     lv_style_t m_tooltipsStyleLight;
+    lv_style_t m_stepsIconStyle;
 
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pHealthPageLabel;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pHealthPageIcon;

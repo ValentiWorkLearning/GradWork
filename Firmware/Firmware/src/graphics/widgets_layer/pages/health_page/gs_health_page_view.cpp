@@ -3,6 +3,7 @@
 #include "ih/gs_itheme_controller.hpp"
 
 #include "IconFont16px.hpp"
+#include "IconFont35px.hpp"
 
 namespace Graphics::Views
 {
@@ -45,6 +46,7 @@ void HealthPage::hide()
 			,	m_pHeartBeatsTooltip
 			,	m_pStepsLabel
 			,	m_pStepsTooltip
+			,	m_pStepsIcon
 			,	m_pKcalLabel
 			,	m_pKcalTooltip
 		)
@@ -90,7 +92,13 @@ void HealthPage::initStyles()
 	);
 
 	m_healthPageIconStyle = pThemeProvider->getIconsFont(
-		Theme::Color::MainThemeDark
+			Theme::FontSize::small
+		,	Theme::Color::MainThemeDark
+	);
+
+	m_stepsIconStyle = pThemeProvider->getIconsFont(
+			Theme::FontSize::normal
+		,	Theme::Color::MainThemeLight
 	);
 
 	m_tooltipsStyleDark = pThemeProvider->getFontStyle(
@@ -233,6 +241,18 @@ void HealthPage::initStepsCounter(
 		,	_displayWidth / 24
 		,	0
 	);
+
+	m_pStepsIcon.reset( lv_label_create(_parentObject, nullptr ) );
+	lv_obj_set_style( m_pStepsIcon.get(), &m_stepsIconStyle );
+    lv_label_set_text( m_pStepsIcon.get(), IconFontSymbols::Steps::StepsIcon.data() );
+
+    lv_obj_align(
+			m_pStepsIcon.get()
+        ,   nullptr
+        ,   LV_ALIGN_CENTER
+        ,   static_cast<int>( _displayWidth / 10 )
+        ,	-static_cast<int>(_displayHeight / 48 )
+    );
 }
 
 

@@ -57,7 +57,7 @@ private:
 
 private:
 
-    static constexpr std::uint8_t ArcSize = 14;
+    static constexpr std::uint8_t ArcSize = 16;
 
 private:
 
