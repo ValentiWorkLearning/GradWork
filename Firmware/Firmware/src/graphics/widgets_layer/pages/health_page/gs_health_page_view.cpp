@@ -44,6 +44,7 @@ void HealthPage::hide()
 			,	m_pHealthPageIcon
 			,	m_pHeartBeatsLabel
 			,	m_pHeartBeatsTooltip
+			,	m_pPulseIcon
 			,	m_pStepsLabel
 			,	m_pStepsTooltip
 			,	m_pStepsIcon
@@ -110,6 +111,14 @@ void HealthPage::initStyles()
 			Theme::FontSize::extra_small
 		,	Theme::Color::MainThemeLight
 	);
+
+	lv_style_copy( &m_pulseLineStyle, &lv_style_plain );
+
+	m_pulseLineStyle.line.color = pThemeProvider->getMainThemeColor(
+		Theme::Color::MainThemeDark
+	);
+	m_pulseLineStyle.line.width = 3;
+	m_pulseLineStyle.line.rounded = 1;
 }
 
 void HealthPage::initPageTitle(
@@ -159,7 +168,7 @@ void HealthPage::initHeartrateWidgets(
 			m_pHeartBeatsLabel.get()
 		,	nullptr
 		,	LV_ALIGN_IN_LEFT_MID
-		,	_displayWidth / 5 - _displayWidth / 24
+		,	_displayWidth / 4  - _displayWidth / 60
 		,	-static_cast<int>( _displayHeight / 24 )
 	);
 
@@ -172,8 +181,21 @@ void HealthPage::initHeartrateWidgets(
 			m_pHeartBeatsTooltip.get()
 		,	m_pHeartBeatsLabel.get()
 		,	LV_ALIGN_OUT_BOTTOM_LEFT
-		,	_displayWidth / 30
 		,	0
+		,	0
+	);
+
+	m_pPulseIcon.reset( lv_line_create(_parentObject, nullptr ) );
+
+	lv_line_set_points( m_pPulseIcon.get(), CardioIconPoints.data(), CardioIconPoints.size() );
+	lv_line_set_style( m_pPulseIcon.get(), LV_LINE_STYLE_MAIN, &m_pulseLineStyle );
+
+	lv_obj_align(
+			m_pPulseIcon.get()
+		,	nullptr
+		,	LV_ALIGN_IN_LEFT_MID
+		,	0
+		,	-static_cast<int>( _displayHeight / 25 )
 	);
 }
 

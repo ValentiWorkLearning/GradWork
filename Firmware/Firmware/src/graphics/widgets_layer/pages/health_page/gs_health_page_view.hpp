@@ -6,6 +6,7 @@
 #include "lvgl.h"
 
 #include "MetaUtils.hpp"
+#include <array>
 
 namespace Graphics::Views
 {
@@ -61,6 +62,21 @@ private:
     );
 
 private:
+    static constexpr std::size_t PointsCount = 6;
+    static constexpr std::uint8_t LineWidth = 3;
+    static constexpr std::uint8_t LineRounded = 2;
+
+    static constexpr std::array<lv_point_t, PointsCount> CardioIconPoints =
+        {
+                lv_point_t{ 7, 20 }
+            ,   lv_point_t{ 15, 20 }
+            ,   lv_point_t{ 20, 0 }
+            ,   lv_point_t{ 30, 40 }
+            ,   lv_point_t{ 35, 20 }
+            ,   lv_point_t{ 42, 20 }
+        };
+
+private:
 
     lv_style_t m_mainLabelStyleDark;
     lv_style_t m_mainLabelStyleLight;
@@ -72,12 +88,15 @@ private:
     lv_style_t m_tooltipsStyleLight;
     lv_style_t m_stepsIconStyle;
 
+    lv_style_t m_pulseLineStyle;
+
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pHealthPageLabel;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pHealthPageIcon;
 
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pHeartBeatsLabel;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pHeartBeatsTooltip;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pHeartBeatsIcon;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pPulseIcon;
 
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pStepsLabel;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pStepsIcon;
