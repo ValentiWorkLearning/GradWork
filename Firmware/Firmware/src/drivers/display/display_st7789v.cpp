@@ -231,7 +231,7 @@ void St7789V::fillRectangle(
         chunkTransmission.transactionAction =
             [this, _colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
             {
-                const size_t transmissionOffset = FullDmaTransactionsCount > 1
+                const size_t transmissionOffset = FullDmaTransactionsCount >= 1
                     ?   DmaBufferSize * getTransitionOffset() : 0;
 
                 m_pBusPtr->sendChunk(
