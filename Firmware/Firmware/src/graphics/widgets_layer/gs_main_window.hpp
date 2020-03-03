@@ -25,6 +25,7 @@ namespace Graphics::Widgets
 {
     class IBatteryWidget;
     class IPagesSwitch;
+    class IBluetoothWidget;
 }
 
 namespace Graphics
@@ -104,6 +105,7 @@ private:
 
     std::shared_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
     std::shared_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
+    std::shared_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
     std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
     std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
 

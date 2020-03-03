@@ -5,7 +5,7 @@
 
 #include "battery/gs_ibattery_widget.hpp"
 #include "pages_switch/gs_ipages_switch.hpp"
-
+#include "bluetooth/gs_ibluetooth_widget.hpp"
 
 namespace Graphics::Widgets
 {
@@ -69,5 +69,6 @@ WidgetBaseObj<TBaseWidgetInterface>::getThemeController() const
 
 template class WidgetBaseObj<typename Widgets::IBatteryWidget>;
 template class WidgetBaseObj<typename Widgets::IPagesSwitch>;
+template class WidgetBaseObj<typename Widgets::IBluetoothWidget>;
 
 };

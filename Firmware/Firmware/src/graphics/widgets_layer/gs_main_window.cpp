@@ -14,6 +14,7 @@
 #include "widgets/battery/gs_battery_widget.hpp"
 
 #include "widgets/pages_switch/gs_pages_switch.hpp"
+#include "widgets/bluetooth/gs_bluetooth_widget.hpp"
 
 #include "pages/clock_page/gs_clock_page_view.hpp"
 #include "pages/clock_page/gs_clock_page_handler.hpp"
@@ -167,6 +168,7 @@ void GsMainWindow::initWatchPage()
     );
 
     m_pPagesSwitch = Widgets::createPagesSwitch( getThemeController() );
+    m_pBluetoothWidget = Widgets::createBluetoothWidget( getThemeController() );
 
     onActivePageChanged.connect(
         [this]( std::string_view _activePage ){
@@ -177,6 +179,7 @@ void GsMainWindow::initWatchPage()
     auto pClockPage = Views::createClockWatchView( getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget );
     pClockPage->addWidget( m_pPagesSwitch );
+    pClockPage->addWidget( m_pBluetoothWidget );
 
     m_pClockPageController = std::move( Views::createPageWatchHandler( pClockPage ) );
 
@@ -198,6 +201,8 @@ void GsMainWindow::initHealthPage()
 
     pHealthPage->addWidget( m_pBatteryWidget );
     pHealthPage->addWidget( m_pPagesSwitch );
+    pHealthPage->addWidget( m_pBluetoothWidget );
+
     addPage( std::move( pHealthPage ) );
 
     setPageActive( Views::IHealthWatchPage::HealthPageName );
