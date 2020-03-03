@@ -106,7 +106,7 @@ LvglGraphicsService::initDisplayDriver()
     m_glDisplayDriver.monitor_cb = monitorCallback;
     m_pPlatformBackend->platformDependentInit( &m_glDisplayDriver );
 
-    m_glDisplay = lv_disp_drv_register( &m_glDisplayDriver );
+    m_glDisplay.reset( lv_disp_drv_register( &m_glDisplayDriver ) );
 
     m_pPlatformBackend->initPlatformGfxTimer();
 }
@@ -124,11 +124,12 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
-    m_pMainWindowTick = lv_task_create(
-            mainWindowTimer
-        ,   50
-        ,   LV_TASK_PRIO_MID
-        ,   nullptr
+    m_pMainWindowTick.reset( lv_task_create(
+                mainWindowTimer
+            ,   50
+            ,   LV_TASK_PRIO_MID
+            ,   nullptr
+        )
     );
 
     auto pageToggle = cbc::obtain_connector(
@@ -144,11 +145,13 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
-    m_pMainWindowTick = lv_task_create(
-            pageToggle
-        ,   4100
-        ,   LV_TASK_PRIO_MID
-        ,   nullptr
+    m_pPageSwitch.reset(
+        lv_task_create(
+                pageToggle
+            ,   4100
+            ,   LV_TASK_PRIO_MID
+            ,   nullptr
+        )
     );
 }
 

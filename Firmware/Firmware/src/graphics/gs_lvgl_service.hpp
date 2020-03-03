@@ -8,6 +8,8 @@
 #include <array>
 #include <memory>
 
+#include "MetaUtils.hpp"
+
 namespace Graphics::MainWindow
 {
     class IGsMainWindow;
@@ -57,11 +59,13 @@ private:
 
 private:
 
-    lv_disp_t* m_glDisplay;
+    Meta::PointerWrapper<lv_disp_t,lv_disp_remove> m_glDisplay;
 
     std::unique_ptr<Graphics::PlatformBackend> m_pPlatformBackend;
     std::unique_ptr<Graphics::MainWindow::IGsMainWindow> m_pMainWindow;
-    lv_task_t* m_pMainWindowTick;
+
+    Meta::PointerWrapper<lv_task_t,lv_task_del> m_pMainWindowTick;
+    Meta::PointerWrapper<lv_task_t, lv_task_del> m_pPageSwitch;
 
     lv_disp_drv_t m_glDisplayDriver;
 
