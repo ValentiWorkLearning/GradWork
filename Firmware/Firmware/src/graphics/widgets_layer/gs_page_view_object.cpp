@@ -9,6 +9,7 @@
 
 #include "pages/clock_page/gs_iclock_page_view.hpp"
 #include "pages/health_page/gs_ihealth_page_view.hpp"
+#include "pages/player_page/gs_iplayer_page_view.hpp"
 
 namespace Graphics::Views
 {
@@ -89,5 +90,6 @@ void PageViewObject<ConcretePageView>::executeForEachWidget(
 
 template class PageViewObject<typename Views::IClockWatchPage>;
 template class PageViewObject<typename Views::IHealthWatchPage>;
+template class PageViewObject<typename Views::IPlayerWatchPage>;
 
 };

@@ -21,6 +21,8 @@
 
 #include "pages/health_page/gs_health_page_view.hpp"
 
+#include "pages/player_page/gs_player_page_view.hpp"
+
 #include "lvgl_ui.hpp"
 
 namespace Graphics::MainWindow
@@ -41,6 +43,7 @@ GsMainWindow::GsMainWindow()
     initBackground();
     initWatchPage();
     initHealthPage();
+    initPlayerPage();
 }
 
 GsMainWindow::~GsMainWindow() = default;
@@ -206,6 +209,19 @@ void GsMainWindow::initHealthPage()
     addPage( std::move( pHealthPage ) );
 
     setPageActive( Views::IHealthWatchPage::HealthPageName );
+}
+
+void GsMainWindow::initPlayerPage()
+{
+    auto pPlayerPage = Views::createPlayerWatchView( getThemeController() );
+
+    pPlayerPage->addWidget(m_pBatteryWidget);
+    pPlayerPage->addWidget(m_pPagesSwitch);
+    pPlayerPage->addWidget(m_pBluetoothWidget);
+
+    addPage(std::move( pPlayerPage ));
+
+    setPageActive( Views::IPlayerWatchPage::PlayerPageName );
 }
 
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()

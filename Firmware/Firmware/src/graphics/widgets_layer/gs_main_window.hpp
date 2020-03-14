@@ -72,6 +72,8 @@ private:
 
     void initHealthPage();
 
+    void initPlayerPage();
+
 private:
 
     static const inline std::uint32_t Width = LV_HOR_RES;
@@ -106,6 +108,7 @@ private:
     std::shared_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
     std::shared_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
     std::shared_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
+
     std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
     std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
 
