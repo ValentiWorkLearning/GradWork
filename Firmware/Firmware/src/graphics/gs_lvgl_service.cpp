@@ -10,6 +10,8 @@
 
 #include "widgets_layer/pages/clock_page/gs_iclock_page_view.hpp"
 #include "widgets_layer/pages/health_page/gs_ihealth_page_view.hpp"
+#include "widgets_layer/pages/player_page/gs_iplayer_page_view.hpp"
+
 
 namespace Graphics
 {
@@ -132,16 +134,42 @@ LvglGraphicsService::initMainWindow()
         )
     );
 
+    m_pMainWindow->setPageActive(
+        Views::IClockWatchPage::ClockPageName
+    );
+
     auto pageToggle = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
         {
-            static bool toggle{ false };
+            static std::uint8_t toggle{ 0 };
+            std::string_view pageToSet{};
+
+            switch (toggle)
+            {
+            case 0:
+                pageToSet = Views::IClockWatchPage::ClockPageName;
+                ++toggle;
+                break;
+            case 1:
+                pageToSet = Views::IHealthWatchPage::HealthPageName;
+                ++toggle;
+                break;
+            case 2:
+                pageToSet = Views::IPlayerWatchPage::PlayerPageName;
+                ++toggle;
+                break;
+            case 3:
+                toggle = 0;
+                pageToSet = Views::IClockWatchPage::ClockPageName;
+                break;
+            default:
+                toggle = 0;
+                pageToSet = Views::IClockWatchPage::ClockPageName;
+                break;
+            }
             m_pMainWindow->setPageActive(
-                toggle
-                ?   Views::IClockWatchPage::ClockPageName
-                :   Views::IHealthWatchPage::HealthPageName
+                pageToSet
             );
-            toggle = !toggle;
         }
     );
 

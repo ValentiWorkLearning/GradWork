@@ -195,7 +195,6 @@ void GsMainWindow::initWatchPage()
     );
 
     addPage( std::move( pClockPage ) );
-    setPageActive( Views::IClockWatchPage::ClockPageName );
 }
 
 void GsMainWindow::initHealthPage()
@@ -207,8 +206,6 @@ void GsMainWindow::initHealthPage()
     pHealthPage->addWidget( m_pBluetoothWidget );
 
     addPage( std::move( pHealthPage ) );
-
-    setPageActive( Views::IHealthWatchPage::HealthPageName );
 }
 
 void GsMainWindow::initPlayerPage()
@@ -220,8 +217,6 @@ void GsMainWindow::initPlayerPage()
     pPlayerPage->addWidget(m_pBluetoothWidget);
 
     addPage(std::move( pPlayerPage ));
-
-    setPageActive( Views::IPlayerWatchPage::PlayerPageName );
 }
 
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()

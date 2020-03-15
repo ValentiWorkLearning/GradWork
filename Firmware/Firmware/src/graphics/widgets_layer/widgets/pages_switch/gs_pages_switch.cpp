@@ -4,6 +4,7 @@
 
 #include "pages/clock_page/gs_iclock_page_view.hpp"
 #include "pages/health_page/gs_ihealth_page_view.hpp"
+#include "pages/player_page/gs_iplayer_page_view.hpp"
 
 namespace Graphics::Widgets
 {
@@ -53,7 +54,7 @@ void PagesSwitch::setActivePage( std::string_view _pageName )
 		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle );
 		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
 	}
-	else if ( _pageName == "NONENONE" )
+	else if ( _pageName == Views::IPlayerWatchPage::PlayerPageName )
 	{
 		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
 		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
