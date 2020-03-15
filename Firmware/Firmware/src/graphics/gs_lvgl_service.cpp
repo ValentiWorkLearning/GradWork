@@ -32,12 +32,6 @@ void LvglGraphicsService::executeGlTask()
 }
 
 void
-LvglGraphicsService::runTest()
-{
-    //LvglUi::createWidgetsDemo();
-}
-
-void
 LvglGraphicsService::initLvglLogger()
 {
 

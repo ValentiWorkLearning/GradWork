@@ -144,7 +144,6 @@ Application::initGraphicsStack()
     // pMainWindow->addPage( //1,health page );
     // pMainWindow->addPage( //2,player page );
 
-    m_graphicsService->runTest();
 }
 
 void

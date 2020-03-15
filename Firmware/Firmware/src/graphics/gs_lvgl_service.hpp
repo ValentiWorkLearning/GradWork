@@ -29,8 +29,6 @@ public:
 
     ~LvglGraphicsService();
 
-    void runTest();
-
     void executeGlTask();
 
 public:
