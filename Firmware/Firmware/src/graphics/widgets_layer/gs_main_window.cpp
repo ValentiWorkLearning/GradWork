@@ -61,6 +61,9 @@ void GsMainWindow::addPage(
 
 void GsMainWindow::setPageActive( std::string_view _pageName )
 {
+    if ( getPage( _pageName )->isVisible() )
+        return;
+
     if( !m_currentPageName.empty() )
         m_pagesStorage.at( m_currentPageName )->hide();
 

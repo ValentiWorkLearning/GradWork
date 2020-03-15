@@ -147,15 +147,15 @@ LvglGraphicsService::initMainWindow()
             switch (toggle)
             {
             case 0:
-                pageToSet = Views::IClockWatchPage::ClockPageName;
-                ++toggle;
-                break;
-            case 1:
                 pageToSet = Views::IHealthWatchPage::HealthPageName;
                 ++toggle;
                 break;
-            case 2:
+            case 1:
                 pageToSet = Views::IPlayerWatchPage::PlayerPageName;
+                ++toggle;
+                break;
+            case 2:
+                pageToSet = Views::IClockWatchPage::ClockPageName;
                 ++toggle;
                 break;
             case 3:
