@@ -17,7 +17,7 @@ class HealthPage
 
 public:
 
-    explicit HealthPage( std::weak_ptr<Theme::IThemeController> _themeController );
+    explicit HealthPage( const Theme::IThemeController* _themeController );
 
     ~HealthPage() override = default;
 
@@ -107,8 +107,8 @@ private:
 };
 
 
-std::shared_ptr<IHealthWatchPage> createHeartrateWatchView(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IHealthWatchPage> createHeartrateWatchView(
+    const Theme::IThemeController* _themeController
 );
 
 }

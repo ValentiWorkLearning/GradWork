@@ -12,7 +12,7 @@ namespace Graphics::Widgets
 
 template< typename TBaseWidgetInterface >
 WidgetBaseObj<TBaseWidgetInterface>::WidgetBaseObj(
-        std::weak_ptr<Theme::IThemeController> _themeController
+        const Theme::IThemeController* _themeController
     )
     :   m_isWidgetVisible{ false }
     ,   m_pThemeController{ _themeController }
@@ -45,7 +45,7 @@ template< typename TBaseWidgetInterface >
 typename WidgetBaseObj<TBaseWidgetInterface>::ShowParams
 WidgetBaseObj<TBaseWidgetInterface>::getShowParams()
 {
-    auto pThemeProvider = getThemeController().lock();
+    auto pThemeProvider = getThemeController();
     if (!pThemeProvider)
         return {};
 
@@ -59,7 +59,7 @@ WidgetBaseObj<TBaseWidgetInterface>::getShowParams()
 }
 
 template<typename TBaseWidgetInterface>
-std::weak_ptr<Theme::IThemeController>
+const Theme::IThemeController*
 WidgetBaseObj<TBaseWidgetInterface>::getThemeController() const
 {
     return m_pThemeController;

@@ -19,11 +19,11 @@ public:
 
     void setActiveTheme( ColorTheme _themeToSet ) override;
 
-    lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor ) override;
+    lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor )const override;
 
-    lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor ) override;
+    lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor )const override;
 
-    lv_color_t getMainThemeColor( Color _fontColor ) override;
+    lv_color_t getMainThemeColor( Color _fontColor )const override;
 
     std::uint32_t getDisplayWidth() const override;
 
@@ -49,7 +49,7 @@ private:
 
 };
 
-std::shared_ptr<IThemeController> createThemeController(
+std::unique_ptr<IThemeController> createThemeController(
         const ColorTheme _initialColorTheme
     ,   std::uint32_t _displayWidth
     ,   std::uint32_t _displayHeight

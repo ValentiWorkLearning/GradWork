@@ -8,7 +8,7 @@
 namespace Graphics::Widgets
 {
 
-BatteryWidget::BatteryWidget( std::weak_ptr<Theme::IThemeController> _themeController )
+BatteryWidget::BatteryWidget( const Theme::IThemeController* _themeController )
     :   WidgetBaseObj<IBatteryWidget>{ _themeController }
 {
     initStyles();
@@ -27,7 +27,7 @@ void BatteryWidget::show()
 
 void BatteryWidget::initStyles()
 {
-    auto pThemeProvider = WidgetBaseObj::getThemeController().lock();
+    auto pThemeProvider = WidgetBaseObj::getThemeController();
     if (!pThemeProvider )
         return;
 
@@ -139,11 +139,11 @@ void BatteryWidget::hide()
     );
 }
 
-std::shared_ptr<IBatteryWidget> createBatteryWidget(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IBatteryWidget> createBatteryWidget(
+    const Theme::IThemeController* _themeController
 )
 {
-    return std::make_shared<BatteryWidget>( _themeController );
+    return std::make_unique<BatteryWidget>( _themeController );
 }
 
 

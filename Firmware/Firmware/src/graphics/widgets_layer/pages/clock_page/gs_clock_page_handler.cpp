@@ -7,7 +7,7 @@
 namespace Graphics::Views
 {
 
-ClockPageHandler::ClockPageHandler( std::weak_ptr<IClockWatchPage> _clockPageView )
+ClockPageHandler::ClockPageHandler( IClockWatchPage* _clockPageView )
     :   m_pClockWatchView{ _clockPageView }
     ,   m_lastReceivedTime{ std::tm{} }
 	,	forceUpdateAfterVisibilityChange{false}
@@ -25,7 +25,7 @@ void ClockPageHandler::handleEvent( const Events::TEvent& _event )
 	Events::TDateTimeEvents dateTimeEvents { std::any_cast<Events::TDateTimeEvents>( _event.eventType ) };
 	TimeWrapper newDateTime { std::any_cast<TimeWrapper>( _event.eventData ) };
 
-	auto pClockView { m_pClockWatchView.lock() };
+	auto pClockView { m_pClockWatchView };
 	if (!pClockView)
 		return;
 
@@ -96,7 +96,7 @@ std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat)
 }
 
 std::unique_ptr<Graphics::IEventHandler>
-createPageWatchHandler( std::weak_ptr<IClockWatchPage> _clockPage )
+createPageWatchHandler( IClockWatchPage* _clockPage )
 {
 	return std::make_unique<ClockPageHandler>( _clockPage );
 }

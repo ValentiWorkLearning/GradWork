@@ -26,7 +26,7 @@ class BatteryWidget
 
 public:
 
-    explicit BatteryWidget( std::weak_ptr<Theme::IThemeController> _themeController );
+    explicit BatteryWidget( const Theme::IThemeController* _themeController );
 
     ~BatteryWidget() override = default;
 
@@ -68,8 +68,8 @@ private:
 
 };
 
-std::shared_ptr<IBatteryWidget> createBatteryWidget(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IBatteryWidget> createBatteryWidget(
+   const Theme::IThemeController* _themeController
 );
 
 };

@@ -33,11 +33,11 @@ class IThemeController
 
     virtual void setActiveTheme( ColorTheme _themeToSet ) = 0;
 
-    virtual lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor ) = 0;
+    virtual lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor )const = 0;
 
-    virtual lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor ) = 0;
+    virtual lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor )const = 0;
 
-    virtual lv_color_t getMainThemeColor(Color _fontColor) = 0;
+    virtual lv_color_t getMainThemeColor(Color _fontColor) const = 0;
 
     virtual std::uint32_t getDisplayWidth() const = 0;
 

@@ -4,7 +4,7 @@
 namespace Graphics::Views
 {
 
-ClockWatch::ClockWatch( std::weak_ptr<Theme::IThemeController> _themeController )
+ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )
 	:	PageViewObject<IClockWatchPage>{ _themeController, IClockWatchPage::ClockPageName }
 {
 	initStyles();
@@ -206,11 +206,11 @@ void ClockWatch::initWeekDayLabel(
 }
 
 
-std::shared_ptr<IClockWatchPage> createClockWatchView(
-	std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IClockWatchPage> createClockWatchView(
+	const Theme::IThemeController* _themeController
 )
 {
-	return std::make_shared<ClockWatch>( _themeController );
+	return std::make_unique<ClockWatch>( _themeController );
 }
 
 }

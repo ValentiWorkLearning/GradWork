@@ -27,7 +27,7 @@ public:
 
 public:
 
-    virtual void addWidget( const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget ) = 0;
+    virtual void addWidget( Graphics::Widgets::IWidgetObject* _pWidget ) = 0;
 
     virtual void show() = 0;
 
@@ -37,7 +37,7 @@ public:
 
     virtual std::string_view getPageName() const = 0;
 
-    virtual std::shared_ptr<Theme::IThemeController> getThemeController() = 0;
+    virtual const Theme::IThemeController* getThemeController() const = 0;
 };
 
 };

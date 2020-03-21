@@ -26,7 +26,7 @@ class BluetoothWidget
 
 public:
 
-    explicit BluetoothWidget( std::weak_ptr<Theme::IThemeController> _themeController );
+    explicit BluetoothWidget( const Theme::IThemeController* _themeController );
 
     ~BluetoothWidget() override = default;
 
@@ -56,8 +56,8 @@ private:
 
 };
 
-std::shared_ptr<IBluetoothWidget> createBluetoothWidget(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IBluetoothWidget> createBluetoothWidget(
+    const Theme::IThemeController* _themeController
 );
 
 };

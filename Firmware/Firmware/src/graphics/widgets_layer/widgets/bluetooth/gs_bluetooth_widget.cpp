@@ -8,7 +8,7 @@
 namespace Graphics::Widgets
 {
 
-BluetoothWidget::BluetoothWidget( std::weak_ptr<Theme::IThemeController> _themeController )
+BluetoothWidget::BluetoothWidget( const Theme::IThemeController* _themeController )
     :   WidgetBaseObj<IBluetoothWidget>{ _themeController }
 {
     initStyles();
@@ -26,7 +26,7 @@ void BluetoothWidget::show()
 
 void BluetoothWidget::initStyles()
 {
-    auto pThemeProvider = WidgetBaseObj::getThemeController().lock();
+    auto pThemeProvider = WidgetBaseObj::getThemeController();
     if (!pThemeProvider )
         return;
 
@@ -78,11 +78,11 @@ void BluetoothWidget::setBluetoothStatus(BluetoothStatus _iconToSet)
 {
 }
 
-std::shared_ptr<IBluetoothWidget> createBluetoothWidget(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IBluetoothWidget> createBluetoothWidget(
+    const Theme::IThemeController* _themeController
 )
 {
-    return std::make_shared<BluetoothWidget>( _themeController );
+    return std::make_unique<BluetoothWidget>( _themeController );
 }
 
 

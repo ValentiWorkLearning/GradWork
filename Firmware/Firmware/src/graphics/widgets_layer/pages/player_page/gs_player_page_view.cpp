@@ -8,7 +8,7 @@
 namespace Graphics::Views
 {
 
-PlayerPage::PlayerPage( std::weak_ptr<Theme::IThemeController> _themeController )
+PlayerPage::PlayerPage( const Theme::IThemeController* _themeController )
 	:	PageViewObject<IPlayerWatchPage>{ _themeController, IPlayerWatchPage::PlayerPageName }
 {
 	initStyles();
@@ -67,10 +67,10 @@ void PlayerPage::initPageTitle(lv_obj_t* _parentObject, const std::uint32_t _dis
 {
 }
 
-std::shared_ptr<IPlayerWatchPage>
-createPlayerWatchView( std::weak_ptr<Theme::IThemeController> _themeController )
+std::unique_ptr<IPlayerWatchPage>
+createPlayerWatchView( const Theme::IThemeController* _themeController )
 {
-	return std::make_shared<PlayerPage>( _themeController );
+	return std::make_unique<PlayerPage>( _themeController );
 }
 
 }

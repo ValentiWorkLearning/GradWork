@@ -27,7 +27,7 @@ namespace Graphics::Theme
 {
 
 lv_color_t
-ThemeController::getMainThemeColor( Color _fromColor )
+ThemeController::getMainThemeColor( Color _fromColor ) const
 {
     switch (_fromColor)
     {
@@ -79,7 +79,7 @@ ThemeController::setActiveTheme( ColorTheme _themeToSet )
 };
 
 lv_style_t
-ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor )
+ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
 {
     lv_style_t iconsFont{};
     lv_style_copy( &iconsFont,&lv_style_plain_color );
@@ -99,7 +99,7 @@ ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor )
 };
 
 lv_style_t
-ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor )
+ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const
 {
     lv_style_t fontStyle{};
     lv_style_copy( &fontStyle, &lv_style_plain_color );
@@ -153,14 +153,14 @@ void ThemeController::initColorsAccrodingToTheme(ColorTheme _theme)
 }
 
 
-std::shared_ptr<IThemeController>
+std::unique_ptr<IThemeController>
 createThemeController(
         const ColorTheme _initialColorTheme
     ,   std::uint32_t _displayWidth
     ,   std::uint32_t _displayHeight
 )
 {
-    return std::make_shared<ThemeController>(
+    return std::make_unique<ThemeController>(
             _initialColorTheme
         ,   _displayWidth
         ,   _displayHeight

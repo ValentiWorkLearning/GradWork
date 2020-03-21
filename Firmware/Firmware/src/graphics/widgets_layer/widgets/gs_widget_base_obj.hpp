@@ -20,7 +20,7 @@ class WidgetBaseObj
 
 public:
 
-    WidgetBaseObj( std::weak_ptr<Theme::IThemeController> _themeController );
+    WidgetBaseObj( const Theme::IThemeController* _themeController );
 
 public:
 
@@ -32,7 +32,7 @@ public:
 
 public:
 
-    std::weak_ptr<Theme::IThemeController> getThemeController() const override;
+    const Theme::IThemeController* getThemeController() const override;
 
 protected:
 
@@ -49,7 +49,7 @@ private:
 
     bool m_isWidgetVisible;
 
-    std::weak_ptr<Theme::IThemeController> m_pThemeController;
+    const Theme::IThemeController* m_pThemeController;
 };
 
 }

@@ -16,7 +16,7 @@ namespace Graphics::Views
 
 template< typename ConcretePageView >
 PageViewObject<ConcretePageView>::PageViewObject(
-        std::weak_ptr<Theme::IThemeController> _themeController
+        const Theme::IThemeController* _themeController
     ,   std::string_view _pageName
     )
     :   m_isPageVisible{ false }
@@ -27,7 +27,7 @@ PageViewObject<ConcretePageView>::PageViewObject(
 
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::addWidget(
-    const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget
+    Graphics::Widgets::IWidgetObject* _pWidget
 )
 {
     m_pWidgetsStorage.push_back( _pWidget );
@@ -37,7 +37,7 @@ template< typename ConcretePageView >
 void PageViewObject<ConcretePageView >::show()
 {
     executeForEachWidget(
-        []( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
+        []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
                 _pWidget->show();
         }
@@ -49,7 +49,7 @@ template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::hide()
 {
     executeForEachWidget(
-        []( std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget )
+        []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
                 _pWidget->hide();
         }
@@ -70,15 +70,15 @@ bool PageViewObject<ConcretePageView>::isVisible() const
 }
 
 template< typename ConcretePageView >
-std::shared_ptr<Theme::IThemeController>
-PageViewObject<ConcretePageView>::getThemeController()
+const Theme::IThemeController*
+PageViewObject<ConcretePageView>::getThemeController() const
 {
-    return m_pThemeController.lock();
+    return m_pThemeController;
 }
 
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::executeForEachWidget(
-    std::function<void(std::shared_ptr<Graphics::Widgets::IWidgetObject>&)> _toCall
+    std::function<void(Graphics::Widgets::IWidgetObject*)> _toCall
 )
 {
     std::for_each(

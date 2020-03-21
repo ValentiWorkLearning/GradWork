@@ -9,7 +9,7 @@
 namespace Graphics::Widgets
 {
 
-PagesSwitch::PagesSwitch( std::weak_ptr<Theme::IThemeController> _themeController )
+PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
 	:	WidgetBaseObj<IPagesSwitch>{ _themeController }
 {
 	initStyles();
@@ -64,7 +64,7 @@ void PagesSwitch::setActivePage( std::string_view _pageName )
 
 void PagesSwitch::initStyles()
 {
-	auto pThemeProvider = WidgetBaseObj::getThemeController().lock();
+	auto pThemeProvider = WidgetBaseObj::getThemeController();
 	if (!pThemeProvider)
 		return;
 
@@ -143,10 +143,10 @@ void PagesSwitch::initUncheckedPages(
 
 
 
-std::shared_ptr<IPagesSwitch>
-createPagesSwitch(std::weak_ptr<Theme::IThemeController> _themeController)
+std::unique_ptr<IPagesSwitch>
+createPagesSwitch(const Theme::IThemeController* _themeController)
 {
-	return std::make_shared<PagesSwitch>( _themeController );
+	return std::make_unique<PagesSwitch>( _themeController );
 }
 
 }

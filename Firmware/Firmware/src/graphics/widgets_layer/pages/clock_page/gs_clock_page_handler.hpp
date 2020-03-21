@@ -16,7 +16,7 @@ class ClockPageHandler
 
 public:
 
-    explicit ClockPageHandler( std::weak_ptr<IClockWatchPage> _clockPageView );
+    explicit ClockPageHandler( IClockWatchPage* _clockPageView );
 
     ~ClockPageHandler() override = default;
 
@@ -39,10 +39,10 @@ private:
     TimeWrapper m_lastReceivedTime;
     std::string m_fullDateString;
 
-    std::weak_ptr<IClockWatchPage> m_pClockWatchView;
+    IClockWatchPage* m_pClockWatchView;
 };
 
 std::unique_ptr<Graphics::IEventHandler>
-createPageWatchHandler( std::weak_ptr<IClockWatchPage> _clockPage);
+createPageWatchHandler( IClockWatchPage* _clockPage);
 
 };

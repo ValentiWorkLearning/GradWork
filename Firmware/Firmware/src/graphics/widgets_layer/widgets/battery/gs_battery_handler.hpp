@@ -14,7 +14,7 @@ class BatteryWidgetHandler
 
 public:
 
-    explicit BatteryWidgetHandler( std::weak_ptr<IBatteryWidget> _bateryWidget );
+    explicit BatteryWidgetHandler( IBatteryWidget* _bateryWidget );
 
     ~BatteryWidgetHandler() override = default;
 
@@ -24,10 +24,10 @@ public:
 
 private:
 
-    std::weak_ptr<IBatteryWidget> m_pBatteryWidget;
+    IBatteryWidget* m_pBatteryWidget;
 };
 
 std::unique_ptr<Graphics::IEventHandler>
-createBatteryWidgetHandler( std::weak_ptr<IBatteryWidget> );
+createBatteryWidgetHandler( IBatteryWidget* );
 
 };

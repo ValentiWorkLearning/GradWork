@@ -49,19 +49,21 @@ GsMainWindow::GsMainWindow()
 GsMainWindow::~GsMainWindow() = default;
 
 void GsMainWindow::addPage(
-        std::shared_ptr<Graphics::Views::IPageViewObject>&& _toAdd
+        std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd
     )
 {
     auto localShared { std::move( _toAdd ) };
     auto pageName{ localShared->getPageName() };
-    m_pagesStorage.insert( {pageName,localShared } );
 
     localShared->hide();
+
+    m_pagesStorage.insert( {pageName,std::move( localShared )} );
+
 }
 
 void GsMainWindow::setPageActive( std::string_view _pageName )
 {
-    if ( getPage( _pageName )->isVisible() )
+    if ( getPage( _pageName ).isVisible() )
         return;
 
     if( !m_currentPageName.empty() )
@@ -73,10 +75,10 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
     onActivePageChanged.emit( m_currentPageName );
 }
 
-std::shared_ptr<Graphics::Views::IPageViewObject>
-GsMainWindow::getPage( std::string_view _pageName )
+Graphics::Views::IPageViewObject&
+GsMainWindow::getPage( std::string_view _pageName )const
 {
-    return m_pagesStorage.at( _pageName );
+    return *m_pagesStorage.at( _pageName );
 }
 
 void GsMainWindow::handleEvent( const Events::TEvent& _tEvent )
@@ -163,7 +165,7 @@ void GsMainWindow::initBackground()
 void GsMainWindow::initWatchPage()
 {
     m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
-    m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget ) );
+    m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget.get() ) );
 
     getEventDispatcher().subscribe(
             Events::EventGroup::Battery
@@ -183,11 +185,11 @@ void GsMainWindow::initWatchPage()
     );
 
     auto pClockPage = Views::createClockWatchView( getThemeController() );
-    pClockPage->addWidget( m_pBatteryWidget );
-    pClockPage->addWidget( m_pPagesSwitch );
-    pClockPage->addWidget( m_pBluetoothWidget );
+    pClockPage->addWidget( m_pBatteryWidget.get() );
+    pClockPage->addWidget( m_pPagesSwitch.get() );
+    pClockPage->addWidget( m_pBluetoothWidget.get() );
 
-    m_pClockPageController = std::move( Views::createPageWatchHandler( pClockPage ) );
+    m_pClockPageController = Views::createPageWatchHandler( pClockPage.get() );
 
     getEventDispatcher().subscribe(
             Events::EventGroup::DateTime
@@ -204,9 +206,9 @@ void GsMainWindow::initHealthPage()
 {
     auto pHealthPage = Views::createHeartrateWatchView( getThemeController() );
 
-    pHealthPage->addWidget( m_pBatteryWidget );
-    pHealthPage->addWidget( m_pPagesSwitch );
-    pHealthPage->addWidget( m_pBluetoothWidget );
+    pHealthPage->addWidget( m_pBatteryWidget.get() );
+    pHealthPage->addWidget( m_pPagesSwitch.get());
+    pHealthPage->addWidget( m_pBluetoothWidget.get());
 
     addPage( std::move( pHealthPage ) );
 }
@@ -215,9 +217,9 @@ void GsMainWindow::initPlayerPage()
 {
     auto pPlayerPage = Views::createPlayerWatchView( getThemeController() );
 
-    pPlayerPage->addWidget(m_pBatteryWidget);
-    pPlayerPage->addWidget(m_pPagesSwitch);
-    pPlayerPage->addWidget(m_pBluetoothWidget);
+    pPlayerPage->addWidget(m_pBatteryWidget.get());
+    pPlayerPage->addWidget(m_pPagesSwitch.get());
+    pPlayerPage->addWidget(m_pBluetoothWidget.get());
 
     addPage(std::move( pPlayerPage ));
 }
@@ -227,9 +229,9 @@ Events::EventDispatcher& GsMainWindow::getEventDispatcher()
     return *m_pEventsDispatcher;
 }
 
-std::weak_ptr<Theme::IThemeController> GsMainWindow::getThemeController() const
+const Theme::IThemeController* GsMainWindow::getThemeController() const
 {
-    return m_pThemeController;
+    return m_pThemeController.get();
 }
 
 std::unique_ptr<IGsMainWindow> createMainWindow()

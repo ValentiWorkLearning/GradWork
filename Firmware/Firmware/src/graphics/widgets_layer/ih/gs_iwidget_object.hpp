@@ -32,7 +32,7 @@ public:
 
 public:
 
-    virtual std::weak_ptr<Graphics::Theme::IThemeController> getThemeController() const = 0;
+    virtual const Graphics::Theme::IThemeController* getThemeController() const = 0;
 };
 
 };

@@ -24,7 +24,7 @@ namespace
 namespace Graphics::Widgets
 {
 
-BatteryWidgetHandler::BatteryWidgetHandler( std::weak_ptr<IBatteryWidget> _bateryWidget )
+BatteryWidgetHandler::BatteryWidgetHandler( IBatteryWidget* _bateryWidget )
     :   m_pBatteryWidget{ _bateryWidget }
 {
 
@@ -44,7 +44,7 @@ void BatteryWidgetHandler::handleEvent( const Events::TEvent& _event )
 	switch ( _event.eventGroup )
 	{
 	case Events::EventGroup::Battery:
-		if( auto pBatteryWidget = m_pBatteryWidget.lock(); pBatteryWidget && pBatteryWidget->isVisible() )
+		if( auto pBatteryWidget = m_pBatteryWidget; pBatteryWidget && pBatteryWidget->isVisible() )
 		{
 			pBatteryWidget->setBatteryLevelPercentage( batteryValue );
 			pBatteryWidget->setBatteryStatus( toBatteryStatus( batteryValue ) );
@@ -56,7 +56,7 @@ void BatteryWidgetHandler::handleEvent( const Events::TEvent& _event )
 }
 
 std::unique_ptr<Graphics::IEventHandler>
-createBatteryWidgetHandler( std::weak_ptr<IBatteryWidget> _batteryWidget)
+createBatteryWidgetHandler( IBatteryWidget* _batteryWidget)
 {
     return std::make_unique<BatteryWidgetHandler>( _batteryWidget );
 }

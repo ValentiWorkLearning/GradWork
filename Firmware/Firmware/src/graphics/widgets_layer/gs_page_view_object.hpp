@@ -21,7 +21,7 @@ class PageViewObject
 public:
 
     explicit PageViewObject(
-            std::weak_ptr<Theme::IThemeController> _themeController
+            const Theme::IThemeController* _themeController
         ,   std::string_view _pageName
     );
 
@@ -29,7 +29,7 @@ public:
 
 public:
 
-    void addWidget( const std::shared_ptr<Graphics::Widgets::IWidgetObject>& _pWidget ) override;
+    void addWidget( Graphics::Widgets::IWidgetObject* _pWidget ) override;
 
     void show() override;
 
@@ -39,20 +39,20 @@ public:
 
     bool isVisible()const override;
 
-    std::shared_ptr<Theme::IThemeController> getThemeController() override;
+    const Theme::IThemeController* getThemeController() const override;
 
 private:
 
-    void executeForEachWidget(  std::function<void(std::shared_ptr<Graphics::Widgets::IWidgetObject>&)> _toCall );
+    void executeForEachWidget(  std::function<void(Graphics::Widgets::IWidgetObject*)> _toCall );
 
-    using TWidgetsStorage = std::vector<std::shared_ptr<Graphics::Widgets::IWidgetObject> >;
+    using TWidgetsStorage = std::vector<Graphics::Widgets::IWidgetObject*>;
     TWidgetsStorage m_pWidgetsStorage;
 
 private:
 
     bool m_isPageVisible;
     std::string_view m_pageName;
-    std::weak_ptr<Theme::IThemeController> m_pThemeController;
+    const Theme::IThemeController* m_pThemeController;
 };
 
 };

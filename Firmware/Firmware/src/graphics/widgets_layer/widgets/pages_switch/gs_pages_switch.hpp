@@ -25,7 +25,7 @@ class PagesSwitch
 
 public:
 
-    explicit PagesSwitch( std::weak_ptr<Theme::IThemeController> _themeController );
+    explicit PagesSwitch( const Theme::IThemeController* _themeController );
 
     ~PagesSwitch() override = default;
 
@@ -70,8 +70,8 @@ private:
 
 };
 
-std::shared_ptr<IPagesSwitch> createPagesSwitch(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IPagesSwitch> createPagesSwitch(
+    const Theme::IThemeController* _themeController
 );
 
 };

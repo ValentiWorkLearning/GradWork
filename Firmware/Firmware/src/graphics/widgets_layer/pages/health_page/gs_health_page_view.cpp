@@ -8,7 +8,7 @@
 namespace Graphics::Views
 {
 
-HealthPage::HealthPage( std::weak_ptr<Theme::IThemeController> _themeController )
+HealthPage::HealthPage( const Theme::IThemeController* _themeController )
 	:	PageViewObject<IHealthWatchPage>{ _themeController, IHealthWatchPage::HealthPageName }
 {
 	initStyles();
@@ -273,10 +273,10 @@ void HealthPage::initStepsCounter(
 }
 
 
-std::shared_ptr<IHealthWatchPage>
-createHeartrateWatchView( std::weak_ptr<Theme::IThemeController> _themeController )
+std::unique_ptr<IHealthWatchPage>
+createHeartrateWatchView( const Theme::IThemeController* _themeController )
 {
-	return std::make_shared<HealthPage>( _themeController );
+	return std::make_unique<HealthPage>( _themeController );
 }
 
 }

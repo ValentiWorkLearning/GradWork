@@ -16,7 +16,7 @@ class ClockWatch
 
 public:
 
-    explicit ClockWatch( std::weak_ptr<Theme::IThemeController> _themeController );
+    explicit ClockWatch( const Theme::IThemeController* _themeController );
 
     ~ClockWatch() override = default;
 
@@ -75,8 +75,8 @@ private:
 };
 
 
-std::shared_ptr<IClockWatchPage> createClockWatchView(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IClockWatchPage> createClockWatchView(
+    const Theme::IThemeController* _themeController
 );
 
 }

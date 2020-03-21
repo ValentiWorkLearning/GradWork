@@ -16,7 +16,7 @@ class PlayerPage
 
 public:
 
-    explicit PlayerPage( std::weak_ptr<Theme::IThemeController> _themeController );
+    explicit PlayerPage( const Theme::IThemeController* _themeController );
 
     ~PlayerPage() override = default;
 
@@ -49,8 +49,8 @@ private:
 };
 
 
-std::shared_ptr<IPlayerWatchPage> createPlayerWatchView(
-    std::weak_ptr<Theme::IThemeController> _themeController
+std::unique_ptr<IPlayerWatchPage> createPlayerWatchView(
+    const Theme::IThemeController* _themeController
 );
 
 }
