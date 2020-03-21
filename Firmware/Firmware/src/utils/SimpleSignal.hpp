@@ -75,30 +75,17 @@ private:
   /*copy-ctor*/ ProtoSignal (const ProtoSignal&) = delete;
   ProtoSignal&  operator=   (const ProtoSignal&) = delete;
 
-  using CallbackSlot = std::shared_ptr<CbFunction>;
+  using CallbackSlot = std::unique_ptr<CbFunction>;
   using CallbackList = std::vector<CallbackSlot>;
-  using LastConnectedCallback  = std::pair<size_t,CallbackSlot>;
 
   CallbackList callback_list_;
-  LastConnectedCallback last_connected_;
 
   size_t add_cb(const CbFunction& cb, size_t _callbackId = std::numeric_limits<size_t>::max() )
   {
-
-    if( last_connected_.first == _callbackId && _callbackId != 0 )
-    {
-        callback_list_.push_back( last_connected_.second );
-        return last_connected_.first;
-    }
-    else
-    {
-      auto callback = std::make_shared<CbFunction>(cb);
-      auto callback_id = size_t ( callback.get() );
-
-      callback_list_.emplace_back( callback );
-      last_connected_ = { callback_id,callback };
-      return callback_id;
-    }
+      auto callback = std::make_unique<CbFunction>(cb);
+      size_t callbackId = reinterpret_cast<size_t>(callback.get());
+      callback_list_.emplace_back( std::move(callback) );
+      return callbackId;
   }
 
   bool remove_cb(size_t id)
