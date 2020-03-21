@@ -9,12 +9,22 @@ void EventDispatcher::subscribe( EventGroup _eventGroup, const TEventHandler& _h
 {
     while ( locker.test_and_set( std::memory_order_acquire ) );
 
-    if( auto it = m_eventsMap.find( _eventGroup ); it != m_eventsMap.end() )
+    auto it = std::find_if(
+            m_eventsMap.begin()
+        ,   m_eventsMap.end()
+        ,   [_eventGroup]( const auto& _toCompare )
+        {
+            const auto& [event, storage] = _toCompare;
+            return _eventGroup == event;
+        }
+    );
+
+    if( it != m_eventsMap.end() )
     {
         it->second.emplace_back( _handler );
     }
     else{
-        m_eventsMap.insert( { _eventGroup, { _handler } } );
+        m_eventsMap.push_back( { _eventGroup, { _handler } } );
     }
 
     locker.clear( std::memory_order_release );
@@ -34,7 +44,16 @@ void EventDispatcher::processEventQueue()
 
     for( const auto& event : m_eventsQueue )
     {
-        if( auto it = m_eventsMap.find( event.eventGroup ); it != m_eventsMap.end() )
+        auto it = std::find_if(
+                m_eventsMap.begin()
+            ,   m_eventsMap.end()
+            ,   [eventGroup = event.eventGroup]( const auto& _toCompare )
+            {
+                const auto& [event, storage] = _toCompare;
+                return eventGroup == event;
+            }
+        );
+        if( it != m_eventsMap.end() )
         {
             std::for_each(
                     it->second.cbegin()

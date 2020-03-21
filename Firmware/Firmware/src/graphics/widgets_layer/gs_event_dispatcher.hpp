@@ -4,8 +4,7 @@
 
 #include <any>
 #include <functional>
-#include <deque>
-#include <unordered_map>
+#include <vector>
 #include <memory>
 #include <atomic>
 
@@ -32,8 +31,8 @@ public:
 
 private:
 
-    std::unordered_map<EventGroup,SubscriberStorage> m_eventsMap;
-    std::deque<TEvent> m_eventsQueue;
+    std::vector<std::pair<EventGroup,SubscriberStorage>> m_eventsMap;
+    std::vector<TEvent> m_eventsQueue;
 
     std::atomic_flag locker = ATOMIC_FLAG_INIT;
 };
