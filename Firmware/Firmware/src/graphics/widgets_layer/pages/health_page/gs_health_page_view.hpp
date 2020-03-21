@@ -79,7 +79,6 @@ private:
 private:
 
     lv_style_t m_mainLabelStyleDark;
-    lv_style_t m_mainLabelStyleLight;
     lv_style_t m_healthPageIconStyle;
 
     lv_style_t m_mainFontLight;

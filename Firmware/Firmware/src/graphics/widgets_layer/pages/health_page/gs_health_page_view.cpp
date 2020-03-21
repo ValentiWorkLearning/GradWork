@@ -77,11 +77,6 @@ void HealthPage::initStyles()
 		,	Theme::Color::MainThemeDark
 	);
 
-	m_mainLabelStyleLight = pThemeProvider->getFontStyle(
-			Theme::FontSize::large
-		,	Theme::Color::MainThemeLight
-	);
-
 	m_mainFontDark = pThemeProvider->getFontStyle(
 			Theme::FontSize::normal
 		,	Theme::Color::MainThemeDark
