@@ -143,11 +143,9 @@ Application::initGraphicsStack()
     // pMainWindow->addPage( //0,watch page );
     // pMainWindow->addPage( //1,health page );
     // pMainWindow->addPage( //2,player page );
-
 }
 
-void
-Application::runTwiTest()
+void Application::runTwiTest()
 {
 #if defined (USE_DEVICE_SPECIFIC)
     static const nrf_drv_twi_t m_twiHeartrate = NRF_DRV_TWI_INSTANCE(0);
@@ -202,8 +200,7 @@ Application::runTwiTest()
 #endif
 }
 
-void
-Application::runApplicationLoop()
+void Application::runApplicationLoop()
 {
     m_batteryLevelService->startBatteryMeasure();
     m_dateTimeService->launchService();

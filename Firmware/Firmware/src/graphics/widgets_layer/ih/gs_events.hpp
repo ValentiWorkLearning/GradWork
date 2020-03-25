@@ -36,14 +36,14 @@ constexpr auto enumConvert( TToConvert _valueToConvert )
 
 enum class TBatteryEvents
 {
-        BatteryEventsStart = enumConvert<TEventKind>(TEventKind::EventBegin)
+        BatteryEventsStart = TEventKind::EventBegin
     ,   BatteryLevelChanged
     ,   BatteryEventsEnd
 };
 
 enum class THeartRateEvents
 {
-        HeartRateEventsBegin = enumConvert<TBatteryEvents>( TBatteryEvents::BatteryEventsEnd )
+        HeartRateEventsBegin = TBatteryEvents::BatteryEventsEnd
     ,   MeasureStarted
     ,   MeasureCompleted
     ,   MeasureFailed
@@ -52,7 +52,7 @@ enum class THeartRateEvents
 
 enum class TDateTimeEvents
 {
-        DateTimeEventsBegin = enumConvert<THeartRateEvents>( THeartRateEvents::HeartRateEventsEnd )
+        DateTimeEventsBegin = THeartRateEvents::HeartRateEventsEnd
     ,   DateTimeChanged
     ,   DateTimeEventsEnd
 };
