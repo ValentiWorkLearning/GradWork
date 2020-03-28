@@ -1,9 +1,12 @@
 #pragma once
 
-#include <ble.h>
+#include "ih/ih_ible_softdevice.hpp"
 #include "Noncopyable.hpp"
 
 #include <memory>
+
+
+#include <ble.h>
 
 #include "nrf_ble_qwr.h"
 
@@ -31,6 +34,8 @@
 
 #include "ble_battery_service.hpp"
 
+#include "SimpleSignal.hpp"
+
 namespace Ble::CustomService
 {
     class CustomService;
@@ -41,7 +46,7 @@ namespace Ble::Stack
 
 
 class BleStackKeeper
-    :   private Utils::noncopyable
+    :   public IBleSoftDevice
 {
 
 public:
@@ -51,9 +56,9 @@ public:
 
 public:
 
-    Ble::BatteryService::BatteryLevelService& getBatteryService();
+    Ble::BatteryService::BatteryLevelService& getBatteryService() override;
 
-    const Ble::BatteryService::BatteryLevelService& getBatteryService() const;
+    const Ble::BatteryService::BatteryLevelService& getBatteryService() const override;
 
 private:
 

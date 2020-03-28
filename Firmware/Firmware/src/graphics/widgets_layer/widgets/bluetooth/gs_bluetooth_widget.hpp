@@ -48,10 +48,12 @@ private:
         ,   const std::uint32_t _displayHeight
     );
 
+    BluetoothStatus getCurrentStatus() const;
+
 private:
 
     lv_style_t m_bluetoothIconStyle;
-
+    BluetoothStatus m_currentStatus;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBluetoothIcon;
 
 };

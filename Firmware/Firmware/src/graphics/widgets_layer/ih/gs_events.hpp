@@ -57,4 +57,12 @@ enum class TDateTimeEvents
     ,   DateTimeEventsEnd
 };
 
+enum class TBleClientEvents
+{
+        BleClientEventsBegin = enumConvert<TDateTimeEvents>( TDateTimeEvents::DateTimeEventsEnd )
+    ,   DeviceConnected
+    ,   DeviceDisconnected
+    ,   BleClientEventsEnd
+};
+
 }

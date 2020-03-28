@@ -68,6 +68,8 @@ private:
 
     void initBackground();
 
+    void initWidgets();
+
     void initWatchPage();
 
     void initHealthPage();
@@ -110,6 +112,7 @@ private:
     std::unique_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
 
     std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
+    std::unique_ptr<Graphics::IEventHandler> m_pBluetoothWidgetController;
     std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
 
 };

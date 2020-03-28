@@ -10,18 +10,23 @@ namespace Graphics::Widgets
 
 BluetoothWidget::BluetoothWidget( const Theme::IThemeController* _themeController )
     :   WidgetBaseObj<IBluetoothWidget>{ _themeController }
+    ,   m_currentStatus{ BluetoothStatus::Disconnected }
 {
     initStyles();
 }
 
 void BluetoothWidget::show()
 {
-    WidgetBaseObj::show();
+    auto CurrentStatus = getCurrentStatus();
 
-    const auto[parent, DisplayWidth, DisplayHeight ] = WidgetBaseObj::getShowParams();
-
-    initBluetoothIcon( parent, DisplayWidth, DisplayHeight );
-
+    if( CurrentStatus != BluetoothStatus::Disconnected )
+    {
+        WidgetBaseObj::show();
+    
+        const auto[ parent, DisplayWidth, DisplayHeight ] = WidgetBaseObj::getShowParams();
+    
+        initBluetoothIcon( parent, DisplayWidth, DisplayHeight );
+    }
 }
 
 void BluetoothWidget::initStyles()
@@ -64,18 +69,31 @@ void BluetoothWidget::initBluetoothIcon(
 
 void BluetoothWidget::hide()
 {
-    WidgetBaseObj::hide();
 
+    WidgetBaseObj::hide();
+    
     Meta::tupleApply(
             []( auto&& _nodeToReset ){ _nodeToReset.reset(); }
         ,   std::forward_as_tuple(
-                m_pBluetoothIcon
+            m_pBluetoothIcon
         )
     );
 }
 
 void BluetoothWidget::setBluetoothStatus(BluetoothStatus _iconToSet)
 {
+    m_currentStatus = _iconToSet;
+
+    if( _iconToSet == BluetoothStatus::Connected )
+        show();
+    else
+        hide();
+}
+
+IBluetoothWidget::BluetoothStatus
+BluetoothWidget::getCurrentStatus() const
+{
+    return m_currentStatus;
 }
 
 std::unique_ptr<IBluetoothWidget> createBluetoothWidget(

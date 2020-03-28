@@ -14,6 +14,8 @@
 #include "widgets/battery/gs_battery_widget.hpp"
 
 #include "widgets/pages_switch/gs_pages_switch.hpp"
+
+#include "widgets/bluetooth/gs_bluetooth_widget_handler.hpp"
 #include "widgets/bluetooth/gs_bluetooth_widget.hpp"
 
 #include "pages/clock_page/gs_clock_page_view.hpp"
@@ -41,6 +43,7 @@ GsMainWindow::GsMainWindow()
         }
 {
     initBackground();
+    initWidgets();
     initWatchPage();
     initHealthPage();
     initPlayerPage();
@@ -162,27 +165,40 @@ void GsMainWindow::initBackground()
     m_pYanCircle.reset( createAlignedCircle( LV_ALIGN_IN_LEFT_MID, &m_yanCircleStyle ) );
 }
 
-void GsMainWindow::initWatchPage()
+void GsMainWindow::initWidgets()
 {
     m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
+    m_pPagesSwitch = Widgets::createPagesSwitch( getThemeController() );
+    m_pBluetoothWidget = Widgets::createBluetoothWidget( getThemeController() );
+
+    m_pBluetoothWidgetController = std::move( Widgets::createBluetoothWidgetHandler( m_pBluetoothWidget.get() ) );
     m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget.get() ) );
 
     getEventDispatcher().subscribe(
+            Events::EventGroup::BleDevice
+        ,   [this]( const Events::TEvent& _event )
+        {
+            m_pBluetoothWidgetController->handleEvent( _event );
+        }
+    );
+
+    getEventDispatcher().subscribe(
             Events::EventGroup::Battery
-        ,   [ this]( const Events::TEvent& _event )
+        ,   [this]( const Events::TEvent& _event )
         {
             m_pBatteryWidgetController->handleEvent( _event );
         }
     );
-
-    m_pPagesSwitch = Widgets::createPagesSwitch( getThemeController() );
-    m_pBluetoothWidget = Widgets::createBluetoothWidget( getThemeController() );
 
     onActivePageChanged.connect(
         [this]( std::string_view _activePage ){
             m_pPagesSwitch->setActivePage( _activePage );
         }
     );
+}
+
+void GsMainWindow::initWatchPage()
+{
 
     auto pClockPage = Views::createClockWatchView( getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget.get() );

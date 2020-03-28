@@ -12,6 +12,7 @@
 #include "widgets_layer/pages/health_page/gs_ihealth_page_view.hpp"
 #include "widgets_layer/pages/player_page/gs_iplayer_page_view.hpp"
 
+#include "gs_events.hpp"
 
 namespace Graphics
 {

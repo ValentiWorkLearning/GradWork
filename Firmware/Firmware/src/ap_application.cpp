@@ -85,6 +85,21 @@ Application::initBleStack()
                 batteryServiceBle.onBatteryLevelChanged( _newBatteryValue );
         }
     );
+
+    auto& pMainWindow = m_graphicsService->getMainWindow();
+    m_bleStackKeeper->onConnected.connect(
+        [&pMainWindow]
+        {
+            pMainWindow.getEventDispatcher().postEvent(
+                {
+                        Graphics::Events::EventGroup::BleDevice
+                    ,   Graphics::Events::TBleClientEvents::DeviceConnected
+                    ,   std::nullopt
+                }
+            );
+        }
+    );
+
 #endif
 
 }
@@ -121,29 +136,6 @@ Application::initGraphicsStack()
             );
         }
     );
-
-    // pMainWindow->getEventDispatcher.subscribe( EventDispatcher::EventGroup::Battery, pBatteryWidgetObserver );
-
-    // auto pBleWidget = BluetoothWidget::createWidget();
-    // auto& pBleWidgetObserver = pBleWidget->eventObserver;
-
-    // pMainWindow->getEventDispatcher.subscribe( EventDispatcher::EventGroup::Ble, pBleWidgetObserver );
-
-    // auto& pMainWindowObserver = pMainWindow->eventObserver;
-    // pMainWindow->getEventDispatcher.subscribe( EventDispatcher::EventGroup::HardwareButtons, pMainWindowObserver );
-    // pMainWindow->getEventDispatcher.subscribe( EventDispatcher::EventGroup::Gesture, pMainWindowObserver );
-
-
-    // auto pPlayerPage = PlayerPage::createPlayerPage();
-    // auto& pPlayerPageObserver = pPlayerPage->eventObserver;
-
-    // pMainWindow->getEventDispatcher.subscribe( EventDispatcher::EventGroup::HardwareButtons, pPlayerPageObserver );
-    // pMainWindow->getEventDispatcher.subscribe( EventDispatcher::EventGroup::Gesture, pPlayerPageObserver );
-
-    // pMainWindow->addPage( //0,watch page );
-    // pMainWindow->addPage( //1,health page );
-    // pMainWindow->addPage( //2,player page );
-
 }
 
 void
