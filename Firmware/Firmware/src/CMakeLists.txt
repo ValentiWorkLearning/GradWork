@@ -56,6 +56,9 @@ nRF5x_addExecutable(${TARGET_NAME} "${SOURCE_FILES}")
 
 add_subdirectory ("graphics")
 
+set (3RDPARTY_DIR "../../../3rdparty")
+add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
+
 target_compile_definitions(
     ${TARGET_NAME}
     PRIVATE
@@ -108,6 +111,7 @@ target_sources(
 target_include_directories(
     ${TARGET_NAME}
     PUBLIC
+    ${3RDPARTY_DIR}/etl
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/logger
@@ -123,4 +127,5 @@ target_include_directories(
 target_link_libraries(
     ${TARGET_NAME}
     lvgl_lib
+    etl
 )

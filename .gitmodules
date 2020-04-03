@@ -10,3 +10,6 @@
 [submodule "Simulator/graphics/lv_drivers"]
 	path = Simulator/graphics/lv_drivers
 	url = https://github.com/littlevgl/lv_drivers.git
+[submodule "3rdparty/etl"]
+	path = 3rdparty/etl
+	url = https://github.com/ETLCPP/etl.git

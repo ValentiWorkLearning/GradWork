@@ -27,10 +27,14 @@ if (MSVC_VERSION GREATER_EQUAL "1900")
     endif()
 endif()
 
+
 add_subdirectory ("graphics")
 add_subdirectory("graphics/SDL-mirror")
 
 set (FIRMWARE_SRC_DIR "/../Firmware/Firmware/src/")
+
+set (3RDPARTY_DIR "../3rdparty")
+add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
 add_executable(
     ${TARGET_NAME}
@@ -80,6 +84,7 @@ target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     "graphics/SDL-mirror/include"
+    ${3RDPARTY_DIR}/etl
     ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers
@@ -98,5 +103,6 @@ target_link_libraries(
     ${TARGET_NAME}
     SDL2
     lvgl_lib
+    etl
     ${Boost_LIBRARIES}
 )

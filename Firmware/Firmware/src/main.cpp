@@ -1,4 +1,5 @@
 #include "ap_application.hpp"
+#include <etl/memory.h>
 
 int main(void)
 {
