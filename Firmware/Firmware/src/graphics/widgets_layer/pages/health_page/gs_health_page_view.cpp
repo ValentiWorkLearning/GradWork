@@ -182,7 +182,12 @@ void HealthPage::initHeartrateWidgets(
 
 	m_pPulseIcon.reset( lv_line_create(_parentObject, nullptr ) );
 
-	lv_line_set_points( m_pPulseIcon.get(), CardioIconPoints.data(), CardioIconPoints.size() );
+	lv_line_set_points(
+			m_pPulseIcon.get()
+		,	CardioIconPoints.data()
+		,	static_cast<std::uint16_t>(CardioIconPoints.size())
+	);
+
 	lv_line_set_style( m_pPulseIcon.get(), LV_LINE_STYLE_MAIN, &m_pulseLineStyle );
 
 	lv_obj_align(
