@@ -6,13 +6,17 @@
 #include <memory>
 #include <functional>
 #include <list>
-#include <vector>
+//#include <vector>
 #include <algorithm>
 #include <string>
+#include <etl/vector.h>
 
 #include  "logger_service.hpp"
 
 namespace Simple {
+
+template<typename Type, const size_t StorageSize = 3>
+using TStorageType = etl::vector<Type, StorageSize>;
 
 namespace Lib {
 
@@ -95,7 +99,7 @@ struct ExecuteLaterPool
     }
 private:
 
-    std::vector<std::function<void()>> executionQueue;
+    TStorageType<std::function<void()>> executionQueue;
 };
 
 /// ProtoSignal template specialised for the callback signature and collector.
@@ -111,7 +115,7 @@ private:
   ProtoSignal&  operator=   (const ProtoSignal&) = delete;
 
   using CallbackSlot = std::unique_ptr<CbFunction>;
-  using CallbackList = std::vector<CallbackSlot>;
+  using CallbackList = TStorageType<CallbackSlot>;
 
   CallbackList callback_list_;
 
@@ -259,7 +263,7 @@ private:
 /// CollectorVector returns the result of the all signal handlers from a signal emission in a std::vector.
 template<typename Result>
 struct CollectorVector {
-  using CollectorResult = std::vector<Result>;
+  using CollectorResult = TStorageType<Result>;
   const CollectorResult&        result ()       { return result_; }
   inline bool
   operator() (Result r)

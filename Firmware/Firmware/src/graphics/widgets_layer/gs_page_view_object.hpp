@@ -3,6 +3,8 @@
 #include "ih/gs_ipage_view_object.hpp"
 
 #include <vector>
+#include <etl/vector.h>
+
 #include <functional>
 
 namespace Graphics::Events
@@ -45,7 +47,8 @@ private:
 
     void executeForEachWidget(  std::function<void(Graphics::Widgets::IWidgetObject*)> _toCall );
 
-    using TWidgetsStorage = std::vector<Graphics::Widgets::IWidgetObject*>;
+    static constexpr int WidgetsQuantity = 3;
+    using TWidgetsStorage = etl::vector<Graphics::Widgets::IWidgetObject*,WidgetsQuantity>;
     TWidgetsStorage m_pWidgetsStorage;
 
 private:
