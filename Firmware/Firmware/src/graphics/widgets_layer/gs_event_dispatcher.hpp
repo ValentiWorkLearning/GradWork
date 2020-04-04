@@ -11,6 +11,8 @@
 #include "gs_events.hpp"
 #include "Noncopyable.hpp"
 
+#include <etl/vector.h>
+
 namespace Graphics::Events
 {
 
@@ -21,7 +23,9 @@ class EventDispatcher
 public:
 
     using TEventHandler = std::function<void( const TEvent& )>;
-    using SubscriberStorage = std::vector<TEventHandler>;
+
+    static constexpr inline int MaxSubscriberLimit = 3;
+    using SubscriberStorage = etl::vector<TEventHandler,MaxSubscriberLimit>;
 
     void subscribe( EventGroup _eventGroup, const TEventHandler& _handler );
  
@@ -31,8 +35,12 @@ public:
 
 private:
 
-    std::vector<std::pair<EventGroup,SubscriberStorage>> m_eventsMap;
-    std::vector<TEvent> m_eventsQueue;
+    static constexpr inline int EventsCount =
+        Events::enumConvert<EventGroup>( EventGroup::EventGroupEnd );
+    static constexpr inline int EventPoolSize = 16;
+
+    etl::vector<std::pair<EventGroup,SubscriberStorage>,EventsCount> m_eventsMap;
+    etl::vector<TEvent,EventPoolSize> m_eventsQueue;
 
     std::atomic_flag locker = ATOMIC_FLAG_INIT;
 };

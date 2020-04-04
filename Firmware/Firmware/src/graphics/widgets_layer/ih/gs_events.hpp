@@ -14,6 +14,7 @@ enum class EventGroup
     ,   Gesture
     ,   HardwareButtons
     ,   DateTime
+    ,   EventGroupEnd
 };
 
 struct TEvent

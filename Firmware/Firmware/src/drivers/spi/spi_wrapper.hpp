@@ -9,6 +9,7 @@
 
 #include <queue>
 #include <memory>
+#include <etl/vector.h>
 
 namespace Interface::Spi
 {
@@ -41,7 +42,7 @@ public:
 public:
 
     static constexpr std::uint16_t DmaBufferSize = 255;
-    using DmaBufferType = std::vector<std::uint8_t>;
+    using DmaBufferType = etl::vector<std::uint8_t,DmaBufferSize>;
 
     std::uint16_t getDmaBufferSize();
 
