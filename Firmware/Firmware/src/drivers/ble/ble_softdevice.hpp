@@ -116,6 +116,7 @@ private:
 
 private:
 
+    bool m_isConnected;
     std::uint16_t m_connectionHandle;
 
     std::unique_ptr<Ble::CustomService::CustomService> m_customService;

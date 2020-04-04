@@ -38,7 +38,8 @@ namespace Ble::Stack
 
 
 BleStackKeeper::BleStackKeeper()
-    :   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
+    :   m_isConnected{ false }
+    ,   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
 {
     bleStackInit();
     initGapModule();
@@ -156,11 +157,13 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
     {
         case BLE_GAP_EVT_DISCONNECTED:
             Logger::Instance().logDebugEndl("Disconnected.");
+            m_isConnected = false;
             // LED indication will be changed when advertising starts.
             break;
 
         case BLE_GAP_EVT_CONNECTED:
             Logger::Instance().logDebugEndl("Connected");
+            m_isConnected = true;
             //NRF_LOG_INFO("Connected.");
             //errCode = bsp_indication_set( BSP_INDICATE_CONNECTED );
             APP_ERROR_CHECK( errCode );
@@ -256,6 +259,8 @@ void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )
     {
         case BLE_ADV_EVT_FAST:
             Logger::Instance().logDebugEndl( "Fast advertising." );
+            if( !m_isConnected )
+                onDisconnected.emitLater();
             // errorCode = bsp_indication_set(BSP_INDICATE_ADVERTISING);
             APP_ERROR_CHECK(errorCode);
             break;
