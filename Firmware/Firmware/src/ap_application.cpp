@@ -20,6 +20,8 @@
 #include "graphics/widgets_layer/ih/gs_imain_window.hpp"
 #include "graphics/widgets_layer/gs_event_dispatcher.hpp"
 
+#include "SimpleSignal.hpp"
+
 Application::Application()
 {
     initBoard();
@@ -94,6 +96,19 @@ Application::initBleStack()
                 {
                         Graphics::Events::EventGroup::BleDevice
                     ,   Graphics::Events::TBleClientEvents::DeviceConnected
+                    ,   std::nullopt
+                }
+            );
+        }
+    );
+
+    m_bleStackKeeper->onDisconnected.connect(
+        [&pMainWindow]
+        {
+            pMainWindow.getEventDispatcher().postEvent(
+                {
+                        Graphics::Events::EventGroup::BleDevice
+                    ,   Graphics::Events::TBleClientEvents::DeviceDisconnected
                     ,   std::nullopt
                 }
             );
@@ -217,5 +232,7 @@ Application::runApplicationLoop()
         ledToggler( 300 );
     #endif
         m_graphicsService->executeGlTask();
+
+        Simple::Lib::ExecuteLaterPool::Instance().processQueue();
     }
 }

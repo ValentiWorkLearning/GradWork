@@ -8,6 +8,9 @@
 #include <list>
 #include <vector>
 #include <algorithm>
+#include <string>
+
+#include  "logger_service.hpp"
 
 namespace Simple {
 
@@ -61,6 +64,38 @@ struct CollectorInvocation<Collector, void (Args...)> {
   {
     cbf (args...); return collector();
   }
+};
+
+struct ExecuteLaterPool
+{
+    static ExecuteLaterPool& Instance()
+    {
+        static ExecuteLaterPool executePool;
+        return executePool;
+    }
+
+    template< typename Function, typename ... Args >
+    auto pushToLater( Function&& function, Args&& ... _argList )
+    {
+        executionQueue.push_back(
+            [this,localFunction = function, _argList...]
+            {
+                localFunction(_argList...);
+            }
+        );
+    }
+
+    void processQueue()
+    {
+      for( auto& signalItem : executionQueue )
+      {
+            signalItem();
+      }
+      executionQueue.clear();
+    }
+private:
+
+    std::vector<std::function<void()>> executionQueue;
 };
 
 /// ProtoSignal template specialised for the callback signature and collector.
@@ -128,6 +163,17 @@ public:
     }
     return collector.result();
   }
+
+  void emitLater(Args ... args )
+  {
+      ExecuteLaterPool::Instance().pushToLater(
+          [this,args... ]
+          {
+              emit(args...);
+          }
+      );
+  }
+
   // Number of connected slots.
   std::size_t
   size () const

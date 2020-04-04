@@ -101,6 +101,8 @@ void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt
         Logger::Instance().logDebugEndl(
             "GATT ATT MTU on connection 0x%x changed to %d."
         );
+
+        onConnected.emitLater();
         // NRF_LOG_INFO("GATT ATT MTU on connection 0x%x changed to %d.",
         //              p_evt->conn_handle,
         //              p_evt->params.att_mtu_effective);
@@ -139,7 +141,7 @@ void BleStackKeeper::bleStackInit()
             m_bleObserver
         ,   StackConstants::ObserverPriority
         ,   bleEventHandlerLink
-        ,   nullptr
+        ,   this
     );
 }
 
@@ -154,11 +156,11 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
     {
         case BLE_GAP_EVT_DISCONNECTED:
             Logger::Instance().logDebugEndl("Disconnected.");
-            onDisconnected.emit();
             // LED indication will be changed when advertising starts.
             break;
 
         case BLE_GAP_EVT_CONNECTED:
+            Logger::Instance().logDebugEndl("Connected");
             //NRF_LOG_INFO("Connected.");
             //errCode = bsp_indication_set( BSP_INDICATE_CONNECTED );
             APP_ERROR_CHECK( errCode );
@@ -167,7 +169,6 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
             errCode = nrf_ble_qwr_conn_handle_assign( &m_qwr, m_connectionHandle );
 
             APP_ERROR_CHECK( errCode );
-            onConnected.emit();
             break;
 
         case BLE_GAP_EVT_PHY_UPDATE_REQUEST:
