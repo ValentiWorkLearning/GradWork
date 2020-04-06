@@ -9,7 +9,10 @@
 
 #include <queue>
 #include <memory>
+#include <atomic>
+
 #include <etl/vector.h>
+#include <etl/queue.h>
 
 namespace Interface::Spi
 {
@@ -78,11 +81,19 @@ private:
 
 private:
 
-    volatile bool m_isTransactionCompleted;
+    std::atomic<bool> m_isTransactionCompleted;
     nrfx_spim_t m_spiHandle;
 
+    static constexpr inline int QueueSize = 32;
+
+    using TTransactionStorage = etl::queue<
+            Transaction
+        ,   QueueSize
+        ,   etl::memory_model::MEMORY_MODEL_SMALL
+    >;
+
     static DmaBufferType DmaArray;
-    std::queue<Transaction> m_transactionsQueue;
+    TTransactionStorage m_transactionsQueue;
 };
 
 template< typename TSpiInstance >
