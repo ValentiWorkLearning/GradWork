@@ -121,7 +121,7 @@ private:
 #include "lv_drivers/indev/mouse.h"
 #include "lv_drivers/indev/keyboard.h"
 
-#include <boost/format.hpp>
+#include <fmt/format.h>
 
 namespace Graphics
 {
@@ -185,21 +185,20 @@ public:
 
     void memoryMonitor(lv_task_t* _param)
     {
-        boost::ignore_unused( _param );
+        static_cast<void>( _param );
 
         lv_mem_monitor_t moninor{};
         lv_mem_monitor( &moninor );
 
         Logger::Instance().logDebugEndl(
-            boost::str(
-                boost::format(
-                    "Used: %1% , %2%%% fragmentation: %3%, biggest free: %4%"
-                )   %   static_cast<std::uint32_t>( moninor.total_size - moninor.free_size )
-                    %   static_cast<std::uint32_t>( moninor.used_pct )
-                    %   static_cast<std::uint32_t>( moninor.frag_pct )
-                    %   static_cast<std::uint32_t>( moninor.free_biggest_size )
-            )
-        );
+                fmt::format(
+                    "Used: {} , {}% fragmentation: {}, biggest free: {}"
+                 ,   static_cast<std::uint32_t>( moninor.total_size - moninor.free_size )
+                 ,   static_cast<std::uint32_t>( moninor.used_pct )
+                 ,   static_cast<std::uint32_t>( moninor.frag_pct )
+                 ,   static_cast<std::uint32_t>( moninor.free_biggest_size )
+                )
+            );
     }
 
     void executeLvTaskHandler()

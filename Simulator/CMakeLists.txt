@@ -85,6 +85,7 @@ target_include_directories(
     PUBLIC
     "graphics/SDL-mirror/include"
     ${3RDPARTY_DIR}/etl
+    ${3RDPARTY_DIR}/fmt
     ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers
@@ -104,5 +105,6 @@ target_link_libraries(
     SDL2
     lvgl_lib
     etl
+    fmt
     ${Boost_LIBRARIES}
 )

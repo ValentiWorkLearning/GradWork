@@ -13,3 +13,6 @@
 [submodule "3rdparty/etl"]
 	path = 3rdparty/etl
 	url = https://github.com/ETLCPP/etl.git
+[submodule "3rdparty/fmt"]
+	path = 3rdparty/fmt
+	url = https://github.com/fmtlib/fmt.git
