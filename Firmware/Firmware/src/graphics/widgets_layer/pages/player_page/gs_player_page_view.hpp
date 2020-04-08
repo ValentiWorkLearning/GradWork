@@ -40,11 +40,23 @@ private:
         ,   const std::uint32_t _displayHeight
     );
 
+    void initPlayIcon(
+            lv_obj_t* _parentObject
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+   );
+
 private:
 
     lv_style_t m_mainLabelStyleDark;
+    lv_style_t m_melodyIconStyle;
+    lv_style_t m_playIconStyleDark;
+    lv_style_t m_playIconStyleLight;
 
-    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pKcalTooltip;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pageTitle;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_melodyIcon;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pPlayIconFirst;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pPlayIconSecond;
 
 };
 

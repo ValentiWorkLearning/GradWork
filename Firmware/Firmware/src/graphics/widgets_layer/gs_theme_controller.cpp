@@ -92,6 +92,9 @@ ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
     case Graphics::Theme::FontSize::normal:
         iconsFont.text.font = &IconFont35px;
         break;
+    case Graphics::Theme::FontSize::large:
+        iconsFont.text.font = &PlayerIcons40px;
+        break;
     }
     iconsFont.text.color = getMainThemeColor( _fontColor );
 
@@ -111,6 +114,9 @@ ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const
         break;
     case Graphics::Theme::FontSize::small:
         fontStyle.text.font = &LcdNova16px;
+        break;
+    case Graphics::Theme::FontSize::below_normal:
+        fontStyle.text.font = &LcdNova24px;
         break;
     case Graphics::Theme::FontSize::normal:
         fontStyle.text.font = &LcdNova30px;
