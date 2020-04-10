@@ -3,7 +3,7 @@
 #include "ih/gs_itheme_controller.hpp"
 
 #include "IconFont35px.hpp"
-#include "PlayerIcons40px.hpp"
+#include "PlayerIcons62px.hpp"
 
 namespace Graphics::Views
 {
@@ -126,7 +126,7 @@ void PlayerPage::initPlayIcon(
 		m_pPlayIconSecond.get()
 		,	nullptr
 		,	LV_ALIGN_CENTER
-		,	_displayWidth / 40
+		,	7
 		,	0
 	);
 
@@ -138,9 +138,10 @@ void PlayerPage::initPlayIcon(
 			m_pPlayIconFirst.get()
 		,	nullptr
 		,	LV_ALIGN_IN_LEFT_MID
-		,	_displayWidth / 2 - _displayWidth / 24
-		,	-8
+		,	_displayWidth / 3 +  _displayWidth / 20
+		,	0
 	);
+
 }
 
 std::unique_ptr<IPlayerWatchPage>

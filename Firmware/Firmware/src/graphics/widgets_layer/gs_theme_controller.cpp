@@ -93,7 +93,7 @@ ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
         iconsFont.text.font = &IconFont35px;
         break;
     case Graphics::Theme::FontSize::large:
-        iconsFont.text.font = &PlayerIcons40px;
+        iconsFont.text.font = &PlayerIcons62px;
         break;
     }
     iconsFont.text.color = getMainThemeColor( _fontColor );
