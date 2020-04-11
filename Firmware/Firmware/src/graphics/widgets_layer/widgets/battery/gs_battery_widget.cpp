@@ -10,6 +10,7 @@ namespace Graphics::Widgets
 
 BatteryWidget::BatteryWidget( const Theme::IThemeController* _themeController )
     :   WidgetBaseObj<IBatteryWidget>{ _themeController }
+    ,   m_labelText{ "92%" }
 {
     initStyles();
 }
@@ -90,7 +91,7 @@ void BatteryWidget::initBatteryPercentageLabel(
     const std::uint32_t DisplayWidth { _displayWidth };
     const std::uint32_t DisplayHeight { _displayHeight };
 
-    lv_label_set_text(m_pBatteryLabel.get(), "92%");
+    lv_label_set_text(m_pBatteryLabel.get(), m_labelText.data() );
 
     lv_obj_align(
             m_pBatteryLabel.get()
