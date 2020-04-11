@@ -89,11 +89,14 @@ ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
     case Graphics::Theme::FontSize::small:
         iconsFont.text.font = &IconFont16px;
         break;
+    case Graphics::Theme::FontSize::below_normal:
+        iconsFont.text.font = &IconFont24px;
+        break;
     case Graphics::Theme::FontSize::normal:
         iconsFont.text.font = &IconFont35px;
         break;
     case Graphics::Theme::FontSize::large:
-        iconsFont.text.font = &PlayerIcons62px;
+        iconsFont.text.font = &PlayerIcons68px;
         break;
     }
     iconsFont.text.color = getMainThemeColor( _fontColor );

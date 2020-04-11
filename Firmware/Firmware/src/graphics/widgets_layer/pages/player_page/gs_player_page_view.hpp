@@ -46,6 +46,18 @@ private:
         ,   const std::uint32_t _displayHeight
    );
 
+    void initNextSongIcon(
+            lv_obj_t* _parentObject
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    );
+
+    void initPrevSongIcon(
+            lv_obj_t* _parentObject
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    );
+
 private:
 
     lv_style_t m_mainLabelStyleDark;
@@ -57,6 +69,12 @@ private:
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_melodyIcon;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pPlayIconFirst;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pPlayIconSecond;
+
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pSwitchPreviousSongArrow;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pSwitchPreviousSongLine;
+
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pSwitchNextSongArrow;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pSwitchNextSongLine;
 
 };
 

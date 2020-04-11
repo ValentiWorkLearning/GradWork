@@ -277,8 +277,9 @@ typedef void * lv_indev_drv_user_data_t;            /*Type of user data in the i
                                LV_FONT_DECLARE(LcdNova36px) \
                                LV_FONT_DECLARE(LcdNova68px) \
                                LV_FONT_DECLARE(IconFont16px) \
+                                LV_FONT_DECLARE(IconFont24px) \
                                LV_FONT_DECLARE(IconFont35px) \
-                               LV_FONT_DECLARE(PlayerIcons62px)
+                               LV_FONT_DECLARE(PlayerIcons68px)
 /*Always set a default font from the built-in fonts*/
 #define LV_FONT_DEFAULT        &LcdNova16px
 
