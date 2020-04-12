@@ -1,10 +1,9 @@
 EESchema Schematic File Version 4
-LIBS:WatchBorad-cache
-EELAYER 26 0
+EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 1 1
+Sheet 1 2
 Title ""
 Date ""
 Rev ""
@@ -15,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L RF_Module:E73-2G4M04S-52832 U1
+L WatchBorad-rescue:E73-2G4M04S-52832-RF_Module U1
 U 1 1 5D87721B
 P 2600 2950
 F 0 "U1" H 2600 1264 50  0000 C CNN
@@ -26,7 +25,7 @@ F 3 "http://www.cdebyte.com/en/downpdf.aspx?id=243" H 2600 3400 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L W25Q16BVSSIG:W25Q16BVSSIG U3
+L WatchBorad-rescue:W25Q16BVSSIG-W25Q16BVSSIG U3
 U 1 1 5D87735B
 P 11650 1500
 F 0 "U3" H 11650 2170 50  0000 C CNN
@@ -98,7 +97,7 @@ F 3 "" H 12900 1700 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Hirose_connectors:FH26-13S-0.3SHW(05) U2
+L WatchBorad-rescue:FH26-13S-0.3SHW(05)-Hirose_connectors U2
 U 1 1 5D877F18
 P 8050 3450
 F 0 "U2" H 8200 3575 50  0000 C CNN
@@ -109,7 +108,7 @@ F 3 "" H 8050 3450 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 $Comp
-L TXS0108E:TXS0108E IC1
+L WatchBorad-rescue:TXS0108E-TXS0108E IC1
 U 1 1 5D8780E1
 P 7900 1650
 F 0 "IC1" H 7900 2417 50  0000 C CNN
@@ -974,7 +973,7 @@ Wire Notes Line
 Text Notes 12700 2200 0    50   ~ 0
 SPI FLASH Memory\n
 $Comp
-L MPU-9250:MPU-9250 U8
+L WatchBorad-rescue:MPU-9250-MPU-9250 U8
 U 1 1 5DDDC579
 P 7300 5550
 F 0 "U8" H 7300 6515 50  0000 C CNN
@@ -2302,4 +2301,12 @@ F 3 "~" H 1200 8350 50  0001 C CNN
 	1    1200 8350
 	1    0    0    -1  
 $EndComp
+$Sheet
+S 11050 7050 1700 900 
+U 5EA4867C
+F0 "VM" 50
+F1 "VibrationMotor.sch" 50
+F2 "VCC_motor" I L 11050 7200 50 
+F3 "Enable_motor" I L 11050 7725 50 
+$EndSheet
 $EndSCHEMATC
