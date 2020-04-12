@@ -4,5 +4,5 @@
   (lib (name W25Q16BVSSIG)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/W25Q16BVSSIG/W25Q16BVSSIG.mod)(options "")(descr ""))
   (lib (name TXS0108E)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/TXS0108E/TXS0108E.mod)(options "")(descr ""))
   (lib (name BU6655NUX-TR)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/BU6655NUX-TR/BU6655NUX-TR.mod)(options "")(descr ""))
-  (lib (name MotorsLocalLib)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/Footprints/MotorsLocalLib.pretty)(options "")(descr ""))
+  (lib (name MotorsLocalLib)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/VibrationMotor/MotorsLocalLib.pretty)(options "")(descr ""))
 )

@@ -6,6 +6,6 @@
   (lib (name TXS0108E)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/TXS0108E/TXS0108E.lib)(options "")(descr ""))
   (lib (name W25Q16BVSSIG)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/W25Q16BVSSIG/W25Q16BVSSIG.lib)(options "")(descr ""))
   (lib (name WatchBorad-rescue)(type Legacy)(uri ${KIPRJMOD}/WatchBorad-rescue.lib)(options "")(descr ""))
-  (lib (name MosfetLocal)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/Symbols/MOSFETLocalLib.lib)(options "")(descr ""))
-  (lib (name MotorLocal)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/Symbols/MotorLocalLib.lib)(options "")(descr ""))
+  (lib (name MosfetLocal)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/Mosfet/MOSFETLocalLib.lib)(options "")(descr ""))
+  (lib (name MotorLocal)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/VibrationMotor/MotorLocalLib.lib)(options "")(descr ""))
 )
