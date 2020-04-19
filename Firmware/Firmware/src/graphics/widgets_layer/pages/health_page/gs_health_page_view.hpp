@@ -27,6 +27,10 @@ public:
 
     void hide() override;
 
+    void reloadStyle() override;
+
+public:
+
     void setStepsCount(std::uint8_t _newStepsValue) override;
 
     void setHeartrate(std::uint8_t _newHeartrateValue) override;

@@ -26,6 +26,10 @@ public:
 
     void hide() override;
 
+    void reloadStyle() override;
+
+public:
+
     void setHours( std::string_view _newHoursValue ) override;
 
     void setMinutes( std::string_view _newMinutesValue ) override;

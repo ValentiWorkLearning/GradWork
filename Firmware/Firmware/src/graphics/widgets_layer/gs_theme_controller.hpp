@@ -19,6 +19,10 @@ public:
 
     void setActiveTheme( ColorTheme _themeToSet ) override;
 
+    ColorTheme getActiveTheme()const override;
+
+public:
+
     lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor )const override;
 
     lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor )const override;

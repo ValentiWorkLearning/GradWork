@@ -35,6 +35,8 @@ public:
 
     void hide() override;
 
+    void reloadStyle()override;
+
 public:
 
     void setActivePage( std::string_view _pageName ) override;

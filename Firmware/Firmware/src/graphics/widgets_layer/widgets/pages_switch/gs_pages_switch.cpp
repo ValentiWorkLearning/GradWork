@@ -39,6 +39,11 @@ void PagesSwitch::hide()
 	);
 }
 
+void PagesSwitch::reloadStyle()
+{
+	initStyles();
+}
+
 void PagesSwitch::setActivePage( std::string_view _pageName )
 {
 

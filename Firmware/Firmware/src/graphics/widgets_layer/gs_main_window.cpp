@@ -1,4 +1,5 @@
 #include "gs_main_window.hpp"
+#include "gs_main_window.hpp"
 #include "gs_page_view_object.hpp"
 
 #include "gs_events.hpp"
@@ -35,7 +36,7 @@ GsMainWindow::GsMainWindow()
         m_currentPageName{}
     ,   m_pEventsDispatcher{ std::move( Events::createEventDispatcher() ) }
     ,   m_pThemeController{ std::move( Theme::createThemeController(
-                    Theme::ColorTheme::Pastele
+                    Theme::ColorTheme::Night
                 ,   Width
                 ,   Height
                 )
@@ -47,6 +48,7 @@ GsMainWindow::GsMainWindow()
     initWatchPage();
     initHealthPage();
     initPlayerPage();
+    initMainWindowSubscriptions();
 }
 
 GsMainWindow::~GsMainWindow() = default;
@@ -82,6 +84,13 @@ Graphics::Views::IPageViewObject&
 GsMainWindow::getPage( std::string_view _pageName )const
 {
     return *m_pagesStorage.at( _pageName );
+}
+
+void GsMainWindow::forEachPage(TPageWalker _pageWalker)
+{
+    for (auto& [pageName, page] : m_pagesStorage) {
+        _pageWalker( *page );
+    }
 }
 
 void GsMainWindow::handleEvent( const Events::TEvent& _tEvent )
@@ -240,12 +249,30 @@ void GsMainWindow::initPlayerPage()
     addPage(std::move( pPlayerPage ));
 }
 
+void GsMainWindow::initMainWindowSubscriptions()
+{
+    m_pThemeController->onThemeChanged.connect(
+        [this] {
+            initBackground();
+            auto& activePage = getPage(m_currentPageName);
+            activePage.hide();
+            activePage.reloadStyle();
+            activePage.show();
+        }
+    );
+}
+
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()
 {
     return *m_pEventsDispatcher;
 }
 
 const Theme::IThemeController* GsMainWindow::getThemeController() const
+{
+    return m_pThemeController.get();
+}
+
+Theme::IThemeController* GsMainWindow::getThemeController()
 {
     return m_pThemeController.get();
 }

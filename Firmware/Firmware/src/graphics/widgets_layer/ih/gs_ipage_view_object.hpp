@@ -35,6 +35,10 @@ public:
 
     virtual bool isVisible() const = 0;
 
+    virtual void reloadStyle() = 0;
+
+public:
+
     virtual std::string_view getPageName() const = 0;
 
     virtual const Theme::IThemeController* getThemeController() const = 0;

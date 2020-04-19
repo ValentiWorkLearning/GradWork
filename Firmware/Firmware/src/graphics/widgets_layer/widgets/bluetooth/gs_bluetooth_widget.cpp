@@ -29,6 +29,11 @@ void BluetoothWidget::show()
     }
 }
 
+void BluetoothWidget::reloadStyle()
+{
+    initStyles();
+}
+
 void BluetoothWidget::initStyles()
 {
     auto pThemeProvider = WidgetBaseObj::getThemeController();

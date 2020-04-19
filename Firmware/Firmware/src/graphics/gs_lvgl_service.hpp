@@ -64,6 +64,7 @@ private:
 
     Meta::PointerWrapper<lv_task_t,lv_task_del> m_pMainWindowTick;
     Meta::PointerWrapper<lv_task_t, lv_task_del> m_pPageSwitch;
+    Meta::PointerWrapper<lv_task_t, lv_task_del> m_pthemeChangeSwitch;
 
     lv_disp_drv_t m_glDisplayDriver;
 

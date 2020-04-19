@@ -43,11 +43,19 @@ public:
     virtual Graphics::Views::IPageViewObject&
         getPage(std::string_view _pageName)const = 0;
 
+    using TPageWalker = std::function<void(Graphics::Views::IPageViewObject&)>;
+
+    virtual void forEachPage(TPageWalker _pageWalker) = 0;
+
+public:
+
     virtual void handleEventTimerEllapsed() = 0;
 
     virtual Events::EventDispatcher& getEventDispatcher() = 0;
 
     virtual const Theme::IThemeController* getThemeController() const = 0;
+
+    virtual Theme::IThemeController* getThemeController() = 0;
 
 public:
 

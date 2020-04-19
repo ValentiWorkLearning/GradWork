@@ -36,6 +36,10 @@ public:
 
     void hide() override;
 
+    void reloadStyle() override;
+
+public:
+
     void setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel ) override;
 
     void setBatteryStatus( BatteryStatus _iconToSet ) override;

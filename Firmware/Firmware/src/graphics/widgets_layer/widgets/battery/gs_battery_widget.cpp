@@ -26,6 +26,11 @@ void BatteryWidget::show()
 
 }
 
+void BatteryWidget::reloadStyle()
+{
+    initStyles();
+}
+
 void BatteryWidget::initStyles()
 {
     auto pThemeProvider = WidgetBaseObj::getThemeController();

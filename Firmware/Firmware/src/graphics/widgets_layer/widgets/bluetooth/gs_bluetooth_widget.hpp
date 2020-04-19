@@ -36,6 +36,10 @@ public:
 
     void hide() override;
 
+    void reloadStyle() override;
+
+public:
+
     void setBluetoothStatus( BluetoothStatus _iconToSet ) override;
 
 private:

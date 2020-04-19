@@ -26,6 +26,10 @@ public:
 
     void hide() override;
 
+    void reloadStyle() override;
+
+public:
+
     void setPause() override;
 
     void setPlaying() override;

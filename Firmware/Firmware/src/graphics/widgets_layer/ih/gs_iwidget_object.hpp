@@ -30,6 +30,8 @@ public:
 
     virtual bool isVisible() const = 0;
 
+    virtual void reloadStyle() = 0;
+
 public:
 
     virtual const Graphics::Theme::IThemeController* getThemeController() const = 0;

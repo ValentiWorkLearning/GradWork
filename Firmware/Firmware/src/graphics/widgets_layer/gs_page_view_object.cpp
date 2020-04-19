@@ -36,6 +36,9 @@ void PageViewObject<ConcretePageView>::addWidget(
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView >::show()
 {
+    if( m_isPageVisible )
+        return;
+
     executeForEachWidget(
         []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
@@ -48,6 +51,9 @@ void PageViewObject<ConcretePageView >::show()
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::hide()
 {
+    if( !m_isPageVisible )
+        return;
+
     executeForEachWidget(
         []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
@@ -55,6 +61,17 @@ void PageViewObject<ConcretePageView>::hide()
         }
     );
     m_isPageVisible = false;
+}
+
+template< typename ConcretePageView >
+void PageViewObject<ConcretePageView>::reloadStyle()
+{
+    executeForEachWidget(
+        []( Graphics::Widgets::IWidgetObject* _pWidget )
+        {
+            _pWidget->reloadStyle();
+        }
+    );
 }
 
 template<typename ConcretePageView>

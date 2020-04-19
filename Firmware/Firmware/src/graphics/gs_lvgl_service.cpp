@@ -8,6 +8,8 @@
 #include "CallbackConnector.hpp"
 #include "logger_service.hpp"
 
+#include "ih/gs_itheme_controller.hpp"
+
 #include "widgets_layer/pages/clock_page/gs_iclock_page_view.hpp"
 #include "widgets_layer/pages/health_page/gs_ihealth_page_view.hpp"
 #include "widgets_layer/pages/player_page/gs_iplayer_page_view.hpp"
@@ -168,10 +170,35 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
+    auto themeChange = cbc::obtain_connector(
+        [this](lv_task_t* _pTask)
+        {
+            auto themeController = getMainWindow().getThemeController();
+            auto activeTheme = themeController->getActiveTheme();
+            if (activeTheme == Theme::ColorTheme::Night)
+            {
+                themeController->setActiveTheme( Theme::ColorTheme::Pastele );
+            }
+            else {
+                themeController->setActiveTheme(Theme::ColorTheme::Night);
+            }
+                
+        }
+    );
+
     m_pPageSwitch.reset(
         lv_task_create(
                 pageToggle
             ,   4100
+            ,   LV_TASK_PRIO_MID
+            ,   nullptr
+        )
+    );
+
+    m_pthemeChangeSwitch.reset(
+        lv_task_create(
+                themeChange
+            ,   2000
             ,   LV_TASK_PRIO_MID
             ,   nullptr
         )

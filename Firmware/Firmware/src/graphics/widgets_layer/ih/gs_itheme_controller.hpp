@@ -30,9 +30,14 @@ namespace Graphics::Theme
 
 class IThemeController
 {
-    public:
+
+public:
 
     virtual void setActiveTheme( ColorTheme _themeToSet ) = 0;
+
+    virtual ColorTheme getActiveTheme()const  = 0;
+
+public:
 
     virtual lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor )const = 0;
 

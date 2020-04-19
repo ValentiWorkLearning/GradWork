@@ -50,6 +50,13 @@ void ClockWatch::hide()
 	);
 }
 
+void ClockWatch::reloadStyle()
+{
+	PageViewObject::reloadStyle();
+	initStyles();
+}
+
+
 void ClockWatch::setHours( std::string_view _newHoursValue )
 {
 	lv_label_set_text( m_pHoursLabel.get(),_newHoursValue.data() );

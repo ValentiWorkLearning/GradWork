@@ -76,7 +76,12 @@ ThemeController::setActiveTheme( ColorTheme _themeToSet )
 
         onThemeChanged.emit();
     }
-};
+}
+ColorTheme ThemeController::getActiveTheme() const
+{
+    return m_activeTheme;
+}
+;
 
 lv_style_t
 ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const

@@ -54,6 +54,12 @@ void HealthPage::hide()
 	);
 }
 
+void HealthPage::reloadStyle()
+{
+	PageViewObject::reloadStyle();
+	initStyles();
+}
+
 void HealthPage::setStepsCount(std::uint8_t _newStepsValue)
 {
 }

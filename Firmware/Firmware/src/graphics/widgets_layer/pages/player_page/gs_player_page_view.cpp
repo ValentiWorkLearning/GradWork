@@ -52,6 +52,12 @@ void PlayerPage::hide()
 	);
 }
 
+void PlayerPage::reloadStyle()
+{
+	PageViewObject::reloadStyle();
+	initStyles();
+}
+
 void PlayerPage::setPause()
 {
 }

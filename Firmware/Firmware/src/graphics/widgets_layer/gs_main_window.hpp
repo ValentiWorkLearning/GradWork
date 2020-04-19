@@ -58,11 +58,17 @@ public:
     Graphics::Views::IPageViewObject&
         getPage( std::string_view _pageName )const override;
 
+    void forEachPage(TPageWalker _pageWalker) override;
+
+public:
+
     void handleEventTimerEllapsed() override;
 
     Events::EventDispatcher& getEventDispatcher() override;
 
     const Theme::IThemeController* getThemeController() const override;
+
+    Theme::IThemeController* getThemeController() override;
 
 private:
 
@@ -75,6 +81,8 @@ private:
     void initHealthPage();
 
     void initPlayerPage();
+
+    void initMainWindowSubscriptions();
 
 private:
 

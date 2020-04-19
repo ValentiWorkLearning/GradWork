@@ -37,6 +37,10 @@ public:
 
     void hide() override;
 
+    void reloadStyle() override;
+
+public:
+
     std::string_view getPageName() const override;
 
     bool isVisible()const override;
