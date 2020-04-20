@@ -10,7 +10,8 @@ namespace Graphics::Widgets
 
 BatteryWidget::BatteryWidget( const Theme::IThemeController* _themeController )
     :   WidgetBaseObj<IBatteryWidget>{ _themeController }
-    ,   m_labelText{ "92%" }
+    ,   m_labelText{ "90%" }
+    ,   m_currentStatus{ Graphics::Widgets::IBatteryWidget::BatteryStatus::Charged90Percents }
 {
     initStyles();
 }
@@ -80,6 +81,8 @@ void BatteryWidget::setBatteryStatus( BatteryStatus _iconToSet )
     default:
         break;
     }
+
+    m_currentStatus = _iconToSet;
 }
 
 void BatteryWidget::initBatteryPercentageLabel(
@@ -120,7 +123,7 @@ void BatteryWidget::initBatteryIcon(
     const std::uint32_t DisplayHeight{ _displayHeight };
 
     lv_obj_set_style( m_pBatteryIcon.get(), &m_bateryIconStyle );
-    lv_label_set_text( m_pBatteryIcon.get(), IconFontSymbols::Battery::BatteryCharged.data());
+    setBatteryStatus( m_currentStatus );
 
     lv_obj_align(
             m_pBatteryIcon.get()

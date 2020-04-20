@@ -62,6 +62,8 @@ private:
         ,   const std::uint32_t _displayHeight
     );
 
+    void restoreLabelsText();
+
 private:
 
     lv_style_t m_hoursLabelStyle;
@@ -69,6 +71,12 @@ private:
     lv_style_t m_secondsLabelStyle;
     lv_style_t m_fullDateStyle;
     lv_style_t m_weekDayStyle;
+
+    std::string m_hoursValue;
+    std::string m_minutesValue;
+    std::string m_secondsValue;
+    std::string m_weekdayValue;
+    std::string m_fulldateValue;
 
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pHoursLabel;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pMinutesLabel;

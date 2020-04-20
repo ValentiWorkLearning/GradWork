@@ -6,6 +6,11 @@ namespace Graphics::Views
 
 ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )
 	:	PageViewObject<IClockWatchPage>{ _themeController, IClockWatchPage::ClockPageName }
+	,	m_hoursValue{ "00" }
+	,	m_minutesValue{ "00" }
+	,	m_secondsValue{ ":00" }
+	,	m_weekdayValue{ "........." }
+	,	m_fulldateValue{ "../../...." }
 {
 	initStyles();
 }
@@ -27,11 +32,7 @@ void ClockWatch::show()
 	initFullDateLabel( parent, DisplayWidth, DisplayHeight );
 	initWeekDayLabel( parent, DisplayWidth, DisplayHeight );
 
-	lv_label_set_text( m_pHoursLabel.get(), "00" );
-	lv_label_set_text( m_pMinutesLabel.get(), "00" );
-	lv_label_set_text( m_pSecondsLabel.get(), ":00" );
-	lv_label_set_text( m_pFullDateLabel.get(), "../../...." );
-	lv_label_set_text( m_pWeekDayLabel.get(), "........." );
+	restoreLabelsText();
 }
 
 void ClockWatch::hide()
@@ -59,27 +60,32 @@ void ClockWatch::reloadStyle()
 
 void ClockWatch::setHours( std::string_view _newHoursValue )
 {
-	lv_label_set_text( m_pHoursLabel.get(),_newHoursValue.data() );
+	m_hoursValue = _newHoursValue;
+	lv_label_set_text( m_pHoursLabel.get(), m_hoursValue.c_str() );
 }
 
 void ClockWatch::setMinutes( std::string_view _newMinutesValue )
 {
-	lv_label_set_text( m_pMinutesLabel.get(), _newMinutesValue.data() );
+	m_minutesValue = _newMinutesValue;
+	lv_label_set_text( m_pMinutesLabel.get(), m_minutesValue.c_str() );
 }
 
 void ClockWatch::setSeconds( std::string_view _newSecondsValue )
 {
-	lv_label_set_text( m_pSecondsLabel.get(), _newSecondsValue.data() );
+	m_secondsValue = _newSecondsValue;
+	lv_label_set_text( m_pSecondsLabel.get(), m_secondsValue.c_str() );
 }
 
 void ClockWatch::setWeekday( std::string_view _newWeekDay )
 {
-	lv_label_set_text( m_pWeekDayLabel.get(), _newWeekDay.data() );
+	m_weekdayValue = _newWeekDay;
+	lv_label_set_text( m_pWeekDayLabel.get(), m_weekdayValue.c_str() );
 }
 
 void ClockWatch::setFullDate( std::string_view _fullDate )
 {
-	lv_label_set_text( m_pFullDateLabel.get(), _fullDate.data() );
+	m_fulldateValue = _fullDate;
+	lv_label_set_text( m_pFullDateLabel.get(), m_fulldateValue.c_str() );
 }
 
 void ClockWatch::initStyles()
@@ -210,6 +216,15 @@ void ClockWatch::initWeekDayLabel(
 		,	static_cast<int>( _displayWidth / 24 )
 		,	_displayHeight / 15
 	);
+}
+
+void ClockWatch::restoreLabelsText()
+{
+	lv_label_set_text( m_pHoursLabel.get(), m_hoursValue.c_str() );
+	lv_label_set_text( m_pMinutesLabel.get(), m_minutesValue.c_str() );
+	lv_label_set_text( m_pSecondsLabel.get(), m_secondsValue.c_str() );
+	lv_label_set_text( m_pFullDateLabel.get(), m_fulldateValue.c_str() );
+	lv_label_set_text( m_pWeekDayLabel.get(), m_weekdayValue.c_str() );
 }
 
 
