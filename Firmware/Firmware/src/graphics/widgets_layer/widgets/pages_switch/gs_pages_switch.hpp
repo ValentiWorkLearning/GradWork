@@ -66,6 +66,8 @@ private:
     lv_style_t m_checkedPointStyle;
     lv_style_t m_uncheckedPointStyle;
 
+    std::string_view m_activePageName;
+
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pFirstPage;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pSecondPage;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pThirdPage;

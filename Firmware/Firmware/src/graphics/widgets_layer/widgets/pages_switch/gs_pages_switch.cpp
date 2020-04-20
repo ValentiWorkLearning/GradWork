@@ -11,6 +11,7 @@ namespace Graphics::Widgets
 
 PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
 	:	WidgetBaseObj<IPagesSwitch>{ _themeController }
+	,	m_activePageName{}
 {
 	initStyles();
 }
@@ -23,6 +24,7 @@ void PagesSwitch::show()
 
 	initCheckedPages( parent, DisplayWidth, DisplayHeight );
 	initUncheckedPages( parent, DisplayWidth, DisplayHeight );
+	setActivePage( m_activePageName );
 }
 
 void PagesSwitch::hide()
@@ -46,7 +48,6 @@ void PagesSwitch::reloadStyle()
 
 void PagesSwitch::setActivePage( std::string_view _pageName )
 {
-
 	if( _pageName == Views::IClockWatchPage::ClockPageName )
 	{
 		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle );
@@ -65,6 +66,7 @@ void PagesSwitch::setActivePage( std::string_view _pageName )
 		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
 		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle);
 	}
+	m_activePageName = _pageName;
 }
 
 void PagesSwitch::initStyles()
