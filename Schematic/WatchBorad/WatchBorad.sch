@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A3 16535 11693
 encoding utf-8
-Sheet 1 2
+Sheet 1 4
 Title ""
 Date ""
 Rev ""
@@ -2308,5 +2308,18 @@ F0 "VM" 50
 F1 "VibrationMotor.sch" 50
 F2 "VCC_motor" I L 11050 7200 50 
 F3 "Enable_motor" I L 11050 7725 50 
+$EndSheet
+$Sheet
+S 11725 5550 1375 625 
+U 5E9B1DCE
+F0 "MCU" 50
+F1 "MCU.sch" 50
+$EndSheet
+$Sheet
+S 13875 6300 1200 725 
+U 5E9C1C3A
+F0 "PowerSupply" 50
+F1 "PowerSupply.sch" 50
+F2 "V1V8" O R 15075 6475 50 
 $EndSheet
 $EndSCHEMATC
