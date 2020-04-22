@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 2
+Sheet 2 4
 Title ""
 Date ""
 Rev ""
@@ -19,7 +19,7 @@ U 1 1 5E9679A5
 P 7250 3075
 F 0 "M?" H 7400 3025 50  0000 L CNN
 F 1 "Motor_DC" V 7425 2825 50  0001 L CNN
-F 2 "MotorsLocalLib:4x4x11" H 7250 2985 50  0001 C CNN
+F 2 "LocalFootprints:VibrationMorot4x4x11" H 7250 2985 50  0001 C CNN
 F 3 "https://www.aliexpress.com/item/32844746278.html?spm=a2g0o.productlist.0.0.24ef228a6Cfn5S&algo_pvid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25&algo_expid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25-0&btsid=0b8b15c915866028623212205ec781&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_" H 7250 2985 50  0001 C CNN
 	1    7250 3075
 	1    0    0    -1  
@@ -92,7 +92,7 @@ U 1 1 5E966959
 P 6150 3700
 F 0 "TP?" H 6208 3772 50  0000 L CNN
 F 1 "TestPoint" H 6208 3727 50  0001 L CNN
-F 2 "" H 6350 3700 50  0001 C CNN
+F 2 "testpoints:testpoint" H 6350 3700 50  0001 C CNN
 F 3 "~" H 6350 3700 50  0001 C CNN
 	1    6150 3700
 	1    0    0    -1  
