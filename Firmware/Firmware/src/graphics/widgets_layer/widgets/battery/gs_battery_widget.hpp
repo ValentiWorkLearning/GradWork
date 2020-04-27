@@ -65,8 +65,9 @@ private:
     lv_style_t m_bateryIconStyle;
     lv_style_t m_batteryLabelStyle;
 
-    BatteryStatus m_currentStatus;
     std::string m_labelText;
+
+    BatteryStatus m_currentStatus;
 
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryIcon;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryLabel;
