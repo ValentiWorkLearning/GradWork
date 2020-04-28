@@ -105,9 +105,12 @@ void St7789V::sendChunk(
         };
     
     chunkTransaction.transactionAction =
-        [ this, chunk ]
+        [ this, chunkToSend = std::move( chunk ) ]
         {
-            m_pBusPtr->sendChunk( chunk );
+            m_pBusPtr->sendChunk(
+                    reinterpret_cast<const std::uint8_t*>( chunkToSend.data() )
+                ,   chunkToSend.size()
+            );
         };
 
     chunkTransaction.afterTransaction =

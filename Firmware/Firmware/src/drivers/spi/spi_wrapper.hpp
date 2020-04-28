@@ -53,9 +53,6 @@ public:
 
     void sendData( std::uint8_t _data );
 
-    template< typename TSequenceContainter>
-    void sendChunk( const TSequenceContainter& _arrayToTransmit );
-
     void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize );
 
     DmaBufferType& getDmaBuffer();
@@ -105,20 +102,6 @@ std::unique_ptr<SpiBus> createSpiBus()
         ,   TSpiInstance::MosiPin
         ,   TSpiInstance::SlaveSelectPin
     );
-}
-
-template< typename TSequenceContainter>
-void SpiBus::sendChunk( const TSequenceContainter& _arrayToTransmit )
-{
-    while( m_isTransactionCompleted )
-    {
-        std::copy(
-                std::begin( _arrayToTransmit )
-            ,   std::end( _arrayToTransmit )
-            ,   std::begin( SpiBus::DmaArray )
-        );
-        performTransaction( _arrayToTransmit.size() );
-    }
 }
 
 } // namespace Interface
