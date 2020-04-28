@@ -4,6 +4,8 @@
 
 #include "gs_iclock_page_view.hpp"
 
+#include <charconv>
+
 namespace Graphics::Views
 {
 
@@ -79,20 +81,45 @@ bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck)
 std::string
 Graphics::Views::ClockPageHandler::formatToFullDate( const TimeWrapper& _toFormat )
 {
+    constexpr std::uint8_t arraySize = 5;
+    std::array<char, arraySize> tempStr{};
+
+	auto fastConvert = [&tempStr]( std::uint16_t _value )
+	{
+		auto [p, ec] = std::to_chars(
+            	tempStr.data()
+        	,   tempStr.data() + tempStr.size()
+        	,   _value
+    	);
+
+		return std::string_view( tempStr.data(), p - tempStr.data() );
+	};
+
 	std::string toReturn{ _toFormat.getMonthString() };
 	toReturn += '/';
-	toReturn += std::to_string( _toFormat.getMonthDay() );
+	toReturn += fastConvert( _toFormat.getMonthDay() );
 	toReturn += '/';
-	toReturn += std::to_string( _toFormat.getYear() );
+	toReturn += fastConvert( _toFormat.getYear() );
 
 	return toReturn;
 }
 
 std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat)
 {
+	constexpr std::uint8_t arraySize = 4;
+    std::array<char, arraySize> tempStr{};
+
+    auto [p, ec] = std::to_chars(
+            tempStr.data()
+        ,   tempStr.data() + tempStr.size()
+        ,   _toFormat
+    );
+
+    auto digits = std::string_view( tempStr.data(), p - tempStr.data() );
+
 	if( _toFormat < 10 )
-		return '0' + std::to_string( _toFormat );
-	return std::to_string( _toFormat );
+		return ":0" + std::string( digits.data() );
+	return ":" + std::string( digits.data() );
 }
 
 std::unique_ptr<Graphics::IEventHandler>

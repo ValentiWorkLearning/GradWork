@@ -30,15 +30,15 @@ public:
 
 public:
 
-    void setHours( std::string_view _newHoursValue ) override;
+    void setHours( const std::string& _newHoursValue ) override;
 
-    void setMinutes( std::string_view _newMinutesValue ) override;
+    void setMinutes( const std::string& _newMinutesValue ) override;
 
-    void setSeconds( std::string_view _newSecondsValue ) override;
+    void setSeconds( const std::string& _newSecondsValue ) override;
 
     void setWeekday( std::string_view _newWeekDay ) override;
 
-    void setFullDate( std::string_view _fullDate ) override;
+    void setFullDate( const std::string& _fullDate ) override;
 
 private:
 

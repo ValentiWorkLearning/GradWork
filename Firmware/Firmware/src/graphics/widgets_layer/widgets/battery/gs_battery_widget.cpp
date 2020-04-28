@@ -55,7 +55,17 @@ void BatteryWidget::setBatteryLevelPercentage( const std::uint8_t _newBatteryLev
     if( _newBatteryLevel == 100 )
         m_labelText = "  ";
 
-    m_labelText = std::to_string(_newBatteryLevel) + '%';
+    constexpr std::uint8_t arraySize = 4;
+    std::array<char, arraySize> tempStr{};
+
+    auto [p, ec] = std::to_chars(
+            tempStr.data()
+        ,   tempStr.data() + tempStr.size()
+        ,   _newBatteryLevel
+    );
+
+    m_labelText = std::string_view( tempStr.data(), p - tempStr.data() );
+    m_labelText += '%';
     lv_label_set_text( m_pBatteryLabel.get(), m_labelText.c_str() );
 }
 

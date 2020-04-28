@@ -58,19 +58,19 @@ void ClockWatch::reloadStyle()
 }
 
 
-void ClockWatch::setHours( std::string_view _newHoursValue )
+void ClockWatch::setHours( const std::string& _newHoursValue )
 {
 	m_hoursValue = _newHoursValue;
 	lv_label_set_text( m_pHoursLabel.get(), m_hoursValue.c_str() );
 }
 
-void ClockWatch::setMinutes( std::string_view _newMinutesValue )
+void ClockWatch::setMinutes( const std::string& _newMinutesValue )
 {
 	m_minutesValue = _newMinutesValue;
 	lv_label_set_text( m_pMinutesLabel.get(), m_minutesValue.c_str() );
 }
 
-void ClockWatch::setSeconds( std::string_view _newSecondsValue )
+void ClockWatch::setSeconds( const std::string& _newSecondsValue )
 {
 	m_secondsValue = _newSecondsValue;
 	lv_label_set_text( m_pSecondsLabel.get(), m_secondsValue.c_str() );
@@ -82,7 +82,7 @@ void ClockWatch::setWeekday( std::string_view _newWeekDay )
 	lv_label_set_text( m_pWeekDayLabel.get(), m_weekdayValue.c_str() );
 }
 
-void ClockWatch::setFullDate( std::string_view _fullDate )
+void ClockWatch::setFullDate( const std::string& _fullDate )
 {
 	m_fulldateValue = _fullDate;
 	lv_label_set_text( m_pFullDateLabel.get(), m_fulldateValue.c_str() );

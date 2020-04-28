@@ -13,15 +13,15 @@ class IClockWatchPage
 
 public:
 
-    virtual void setHours( std::string_view _newHoursValue ) = 0;
+    virtual void setHours( const std::string& _newHoursValue ) = 0;
 
-    virtual void setMinutes( std::string_view _newMinutesValue ) = 0;
+    virtual void setMinutes( const std::string& _newMinutesValue ) = 0;
 
-    virtual void setSeconds( std::string_view _newSecondsValue ) = 0;
+    virtual void setSeconds( const std::string& _newSecondsValue ) = 0;
 
     virtual void setWeekday( std::string_view _newWeekDay ) = 0;
 
-    virtual void setFullDate( std::string_view _fullDate ) = 0;
+    virtual void setFullDate( const std::string& _fullDate ) = 0;
 
 public:
 
