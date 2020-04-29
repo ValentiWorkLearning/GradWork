@@ -132,11 +132,11 @@ public:
 
     PlatformBackendImpl()
     {
-        monitor_init();
     }
 
     void platformDependentInit(lv_disp_drv_t* _displayDriver)
     {
+        monitor_init();
         _displayDriver->flush_cb = monitor_flush;
     }
 
