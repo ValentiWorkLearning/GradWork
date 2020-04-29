@@ -198,9 +198,7 @@ namespace ServiceProviders::DateTimeService
 {
 
 DateTimeServiceFake::DateTimeServiceFake( )
-    :   m_pDatetimeSimImpl{
-            std::make_unique<DatetimeSimulatorImpl>( this )
-        }
+    :   m_pDatetimeSimImpl{ this }
 {
 }
 

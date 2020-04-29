@@ -2,6 +2,9 @@
 
 #include "ih/sp_idatetime_service.hpp"
 
+#include "FastPimpl.hpp"
+#include "Platform.hpp"
+
 namespace ServiceProviders::DateTimeService
 {
 
@@ -25,8 +28,13 @@ public:
 
 private:
 
+    static constexpr inline  std::size_t kImplSize =  Platform::DateTimeImplSize;
+    static constexpr inline  std::size_t kImplAlignment = Platform::DateTimeAlignment;
+
+private:
+
     class DatetimeSimulatorImpl;
-    std::unique_ptr<DatetimeSimulatorImpl> m_pDatetimeSimImpl;
+    Utils::FastPimpl<DatetimeSimulatorImpl,kImplSize,kImplAlignment> m_pDatetimeSimImpl;
 };
 
 }
