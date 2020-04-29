@@ -86,7 +86,7 @@ macro(nRF5x_setup)
 
     # compiler/assambler/linker flags
     set(CMAKE_C_FLAGS "${COMMON_FLAGS}")
-    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -O2")
+    set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Os")
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
     set(CMAKE_CXX_FLAGS "${COMMON_FLAGS}")
     set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
