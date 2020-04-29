@@ -8,8 +8,8 @@ namespace Platform
     static constexpr size_t LogerImplSize = 1;
     static constexpr size_t LogerImplAlignment = 1;
 
-    static constexpr size_t GraphicsBackendSize = 1;
-    static constexpr size_t GraphicsBackendAlignment = 1;
+    static constexpr size_t GraphicsBackendSize = 16;
+    static constexpr size_t GraphicsBackendAlignment = 8;
 
     static constexpr size_t DateTimeImplSize = 224;
     static constexpr size_t DateTimeAlignment = 8;

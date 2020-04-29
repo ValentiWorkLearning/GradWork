@@ -3,6 +3,9 @@
 #include <memory>
 #include "lvgl.h"
 
+#include "FastPimpl.hpp"
+#include "Platform.hpp"
+
 namespace Graphics
 {
 
@@ -23,8 +26,11 @@ public:
 
 private:
 
+    static constexpr inline std::size_t kImplSize = Platform::GraphicsBackendSize;
+    static constexpr inline std::size_t kImplAlignment = Platform::GraphicsBackendAlignment;
+
     class PlatformBackendImpl;
-    std::unique_ptr<PlatformBackendImpl> m_pBackendImpl;
+    Utils::FastPimpl<PlatformBackendImpl,kImplSize,kImplAlignment> m_pBackendImpl;
 };
 
 std::unique_ptr<PlatformBackend> createPlatformBackend();

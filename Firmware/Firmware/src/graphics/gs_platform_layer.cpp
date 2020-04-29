@@ -142,7 +142,7 @@ public:
 
     void initPlatformGfxTimer()
     {
-        auto tickThread = std::thread(
+        auto m_tickThread = std::thread(
             []
             {
                 while (true)
@@ -155,7 +155,7 @@ public:
 
             }
         );
-        tickThread.detach();
+        m_tickThread.detach();
         desktopPlatformInit();
     }
 
@@ -210,19 +210,14 @@ public:
     }
 
 private:
-
+    std::thread m_tickThread;
 };
 }
 #endif
 
 namespace Graphics
 {
-PlatformBackend::PlatformBackend()
-    :   m_pBackendImpl{
-        std::make_unique<PlatformBackendImpl>()
-    }
-{
-}
+PlatformBackend::PlatformBackend() = default;
 
 PlatformBackend::~PlatformBackend() = default;
 
