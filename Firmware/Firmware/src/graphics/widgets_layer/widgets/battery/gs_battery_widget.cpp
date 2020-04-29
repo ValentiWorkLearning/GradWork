@@ -4,6 +4,7 @@
 #include "ih/gs_itheme_controller.hpp"
 
 #include "IconFont16px.hpp"
+#include <charconv>
 
 namespace Graphics::Widgets
 {

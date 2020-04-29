@@ -22,125 +22,31 @@
 #include <iostream>
 #endif
 
-class UartLogger;
-class SwoLogger;
-class SeggerRttLog;
-class DesktopLogger;
-
-struct LoggerImplChoise
-{
-
-#if defined (LoggerUart)
-    using TLoggerImpl = UartLogger;
-#elif defined(LoggerSwo)
-    using TLoggerImpl = SwoLogger;
-#elif defined(LoggerSegger)
-    using TLoggerImpl = SeggerRttLog;
-#elif defined(LoggerDesktop)
-    using TLoggerImpl = DesktopLogger;
-#else
-    using TLoggerImpl = std::void_t<>;
-#endif
-};
-
 namespace
 {
     std::string_view CaretReset = "\r\n";
 }
+
+#if defined (LoggerUart)
 
 class Logger::LoggerImpl
 {
 
 public:
 
-    template< typename TLoggerType>
-    explicit LoggerImpl( TLoggerType&& _logger )
-        :   m_loggerHider{ std::make_unique<LoggerTempateImpl<TLoggerType>>( std::forward<TLoggerType>( _logger ) ) }
+    LoggerImpl()
     {
-        m_loggerHider->initLogInterface();
+        initLogInterface();
     }
 
-    void logDebugEndl( std::string_view _toLog )
+    void logString( std::string_view _toLog ) const
     {
-        m_loggerHider->logDebug( _toLog );
-        m_loggerHider->logDebug( CaretReset );
-    };
+        for( const auto ch : _toLog )
+           app_uart_put( static_cast<std::uint8_t>( ch ) );
+    }
 
-    void logDebug( std::string_view _toLog )
-    {
-        m_loggerHider->logDebug( _toLog );
-    };
-
-
-    struct ILoggerHider
-    {
-        virtual ~ILoggerHider() = default;
-
-        virtual void logDebugEndl( std::string_view _toLog ) const = 0;
-
-        virtual void logDebug( std::string_view _toLog ) const = 0;
-
-        virtual void initLogInterface()= 0;
-
-    };
-
-    template< typename TLoggerHider >
-    class LoggerTempateImpl
-        :   public ILoggerHider
-    {
-
-    public:
-
-        explicit LoggerTempateImpl( TLoggerHider&& _loggerConcrete )
-            :   m_logger{ std::forward<TLoggerHider>( _loggerConcrete ) }
-        {
-        }
-
-        void logDebugEndl( std::string_view _toLog ) const override
-        {
-            while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
-            {
-                m_logger.logString( _toLog );
-                m_logger.logString( CaretReset );
-
-                m_loggerReady.clear( std::memory_order_release );
-            }
-        }
-
-        void logDebug( std::string_view _toLog ) const override
-        {
-            while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
-            {
-                m_logger.logString( _toLog );
-                m_loggerReady.clear( std::memory_order_release );
-            }
-        }
-
-        void initLogInterface()
-        {
-            while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
-            {
-                m_logger.initLogInterface();
-                m_loggerReady.clear( std::memory_order_release );
-            }
-        }
-
-        ~LoggerTempateImpl()override = default;
-
-    private:
-        mutable std::atomic_flag m_loggerReady;
-        TLoggerHider m_logger;
-    };
 
 private:
-    std::unique_ptr<ILoggerHider> m_loggerHider;
-};
-
-#if defined (LoggerUart)
-class UartLogger
-{
-
-public:
 
     void initLogInterface()
     {
@@ -176,12 +82,6 @@ public:
         APP_ERROR_CHECK( errorCode );
     }
 
-    void logString( std::string_view _toLog ) const
-    {
-        for( const auto ch : _toLog )
-           app_uart_put( static_cast<std::uint8_t>( ch ) );
-    }
-
 private:
 
     static constexpr std::uint16_t TxSize = 256;        /**< UART TX buffer size. */
@@ -203,11 +103,25 @@ private:
 #endif
 
 #if defined (LoggerSwo)
-class SwoLogger
+class Logger::LoggerImpl
 {
 
 public:
 
+    LoggerImpl()
+    {
+        initLogInterface();
+    }
+
+public:
+
+    void logString( std::string_view _toLog ) const
+    {
+        for( const auto ch : _toLog )
+            ITM_SendChar( ch );
+    }
+
+private:
     void initLogInterface()
     {
         NRF_CLOCK->TRACECONFIG =
@@ -217,26 +131,15 @@ public:
         ITM->TCR |= 1;
         ITM->TER |= 1;
     }
-
-    void logString( std::string_view _toLog ) const
-    {
-        for( const auto ch : _toLog )
-            ITM_SendChar( ch );
-    }
 };
 #endif
 
 
 #if defined (LoggerSegger)
-class SeggerRttLog
+class Logger::LoggerImpl
 {
 
 public:
-
-    void initLogInterface()
-    {
-
-    }
 
     void logString( std::string_view _toLog ) const
     {
@@ -246,16 +149,10 @@ public:
 #endif
 
 #if defined (LoggerDesktop)
-class DesktopLogger
+class Logger::LoggerImpl
 {
 
 public:
-
-    void initLogInterface()
-    {
-
-    }
-
     void logString(std::string_view _toLog) const
     {
         std::cout << _toLog;
@@ -263,18 +160,8 @@ public:
 };
 #endif
 
-Logger::Logger()
-{
-    static_assert(
-            !std::is_same_v<LoggerImplChoise::TLoggerImpl , std::void_t<> >
-        ,   "TLoggerImpl is std::void_t. Probably you forgot to choise between LoggerUart/LoggerSwo/LoggerSegger/LoggerDesktop macro"
-    );
 
-    m_pLoggerImpl = std::make_unique<LoggerImpl>(
-                std::forward<LoggerImplChoise::TLoggerImpl>( LoggerImplChoise::TLoggerImpl()
-            )
-        );
-}
+Logger::Logger() = default;
 
 Logger::~Logger() = default;
 
@@ -286,10 +173,20 @@ Logger& Logger::Instance()
 
 void Logger::logDebugEndl( std::string_view _toLog )
 {
-    m_pLoggerImpl->logDebugEndl( _toLog );
+    while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
+    {
+        m_pLoggerImpl->logString( _toLog );
+        m_pLoggerImpl->logString( CaretReset );
+
+        m_loggerReady.clear( std::memory_order_release );
+    }
 }
 
 void Logger::logDebug( std::string_view _toLog )
 {
-    m_pLoggerImpl->logDebug( _toLog );
+    while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
+    {
+        m_pLoggerImpl->logString( _toLog );
+        m_loggerReady.clear( std::memory_order_release );
+    }
 }

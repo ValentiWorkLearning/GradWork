@@ -11,8 +11,6 @@
 #include <string>
 #include <etl/vector.h>
 
-#include  "logger_service.hpp"
-
 namespace Simple {
 
 template<typename Type, const size_t StorageSize = 3>
