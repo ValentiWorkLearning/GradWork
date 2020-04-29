@@ -29,14 +29,14 @@ nRF5x_addAppFIFO()
 nRF5x_addAppTimer()
 nRF5x_addAppUART()
 nRF5x_addAppButton()
-nRF5x_addBSP(TRUE FALSE FALSE)
-nRF5x_addBLEGATT()
-nRF5x_addBLEPeerManager()
-nRF5x_addAppFDS()
-nRF5x_addSensorSimulator()
+nRF5x_addBSP(TRUE FALSE FALSE) # without this text size is 11 480, with this - 11 760
+nRF5x_addBLEGATT() # with this text size = 11784
+nRF5x_addBLEPeerManager() #with this text size is
+nRF5x_addAppFDS() # 34312
+nRF5x_addSensorSimulator() # still 34312
 
-nRF5x_addBLEService(ble_lbs)
-nRF5x_addBLEService(ble_bas)
+nRF5x_addBLEService(ble_lbs) #still 34312
+nRF5x_addBLEService(ble_bas) # increased to 34332
 
 
 add_definitions(-DCONFIG_GPIO_AS_PINRESET)
@@ -101,11 +101,11 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_handler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/health_page/gs_health_page_view.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/player_page/gs_player_page_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_platform_layer.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp # increase to 42664
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_platform_layer.cpp # increase to 41864
+    ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp # increase to 41960
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/heartrate/sp_heartrate_service_fake.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/service_providers/datetime/sp_datetime_service_fake.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/service_providers/datetime/sp_datetime_service_fake.cpp # increase to 42158
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/sp_fake_services_creator.cpp
     ${CMAKE_CURRENT_LIST_DIR}/logger/logger_service_impl.cpp
     ${CMAKE_CURRENT_LIST_DIR}/ap_application.cpp
