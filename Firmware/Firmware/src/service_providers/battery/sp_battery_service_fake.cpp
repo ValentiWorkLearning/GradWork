@@ -237,7 +237,9 @@ namespace ServiceProviders::BatteryService
 {
 
 BatteryServiceFake::BatteryServiceFake( std::chrono::seconds _measurementPeriod )
-    :   m_pBatterySimImpl{ _measurementPeriod , this }
+    :   m_pBatterySimImpl{
+            std::make_unique<BatterySimulatorImpl>( _measurementPeriod , this )
+        }
 {
 }
 
