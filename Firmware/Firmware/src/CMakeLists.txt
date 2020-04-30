@@ -77,6 +77,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/winbondflash/winbond_flash.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova12px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova16px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova24px.cpp

@@ -22,6 +22,9 @@
 
 #include "SimpleSignal.hpp"
 
+#include "drivers/spi/spi_wrapper.hpp"
+#include "drivers/winbondflash/winbond_flash.hpp"
+
 Application::Application()
 {
     initBoard();
@@ -70,6 +73,11 @@ Application::initServices()
 void
 Application::initPeripheral()
 {
+    auto pSpiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M1>();
+    auto pWindbondFlash= ExternalFlash::createFlashDriver(
+        pSpiInstance.get()
+    );
+    pWindbondFlash->onBlockWriteCompleted.emit();
 }
 
 void
@@ -157,8 +165,8 @@ void
 Application::runTwiTest()
 {
 #if defined (USE_DEVICE_SPECIFIC)
-    static const nrf_drv_twi_t m_twiHeartrate = NRF_DRV_TWI_INSTANCE(0);
-    static const nrf_drv_twi_t m_twiMpu = NRF_DRV_TWI_INSTANCE(1);
+    // static const nrf_drv_twi_t m_twiHeartrate = NRF_DRV_TWI_INSTANCE(0);
+    static const nrf_drv_twi_t m_twiMpu = NRF_DRV_TWI_INSTANCE(0);
 
     ret_code_t errorCode{};
 
@@ -187,25 +195,25 @@ Application::runTwiTest()
         Logger::Instance().logDebugEndl( "MPU9250 detected on address 0x69" );
 
 
-    const nrf_drv_twi_config_t twiHeartConfig = {
-       .scl                = HEARTRATE_SCL_PIN,
-       .sda                = HEARTRATE_SDA_PIN,
-       .frequency          = NRF_DRV_TWI_FREQ_100K,
-       .interrupt_priority = APP_IRQ_PRIORITY_HIGH,
-       .clear_bus_init     = false
-    };
+    // const nrf_drv_twi_config_t twiHeartConfig = {
+    //    .scl                = HEARTRATE_SCL_PIN,
+    //    .sda                = HEARTRATE_SDA_PIN,
+    //    .frequency          = NRF_DRV_TWI_FREQ_100K,
+    //    .interrupt_priority = APP_IRQ_PRIORITY_HIGH,
+    //    .clear_bus_init     = false
+    // };
 
-    errorCode = nrf_drv_twi_init( &m_twiHeartrate, &twiHeartConfig, nullptr, nullptr );
-    APP_ERROR_CHECK( errorCode );
+    // errorCode = nrf_drv_twi_init( &m_twiHeartrate, &twiHeartConfig, nullptr, nullptr );
+    // APP_ERROR_CHECK( errorCode );
 
-    nrf_drv_twi_enable( &m_twiHeartrate );
+    // nrf_drv_twi_enable( &m_twiHeartrate );
 
-    constexpr std::uint8_t Max30102Addr = 0x57;
+    // constexpr std::uint8_t Max30102Addr = 0x57;
 
-    errorCode = nrf_drv_twi_rx( &m_twiHeartrate, Max30102Addr, &SampleData, sizeof( SampleData ) );
+    // errorCode = nrf_drv_twi_rx( &m_twiHeartrate, Max30102Addr, &SampleData, sizeof( SampleData ) );
 
-    if (errorCode == NRF_SUCCESS)
-        Logger::Instance().logDebugEndl( "Max30102 detected on address 0x57" );
+    // if (errorCode == NRF_SUCCESS)
+    //     Logger::Instance().logDebugEndl( "Max30102 detected on address 0x57" );
 #endif
 }
 

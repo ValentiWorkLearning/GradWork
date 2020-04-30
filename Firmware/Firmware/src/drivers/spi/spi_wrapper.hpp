@@ -19,6 +19,17 @@ namespace Interface::Spi
 
 namespace SpiInstance
 {
+    struct M1
+    {
+        static constexpr std::uint8_t ClockPin = SPIM1_SCK_PIN;
+        static constexpr std::uint8_t MisoPin = SPIM1_MISO_PIN;
+        static constexpr std::uint8_t MosiPin = SPIM1_MOSI_PIN;
+        static constexpr std::uint8_t SlaveSelectPin = SPIM1_SS_PIN;
+
+        static constexpr std::uint32_t Register = NRF_SPIM1_BASE;
+        static constexpr uint8_t DriverInstance = NRFX_SPIM1_INST_IDX;
+    };
+
     struct M2
     {
         static constexpr std::uint8_t ClockPin = SPIM2_SCK_PIN;
@@ -60,6 +71,8 @@ public:
 
     void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize );
 
+    void receiveChunk( std::uint8_t* _pBuffer, const size_t _bufferSize );
+
     DmaBufferType& getDmaBuffer();
 
     Simple::Signal<void()> onTransactionCompleted;
@@ -94,7 +107,7 @@ private:
         ,   etl::memory_model::MEMORY_MODEL_SMALL
     >;
 
-    static DmaBufferType DmaArray;
+    DmaBufferType DmaArray;
     TTransactionStorage m_transactionsQueue;
 };
 

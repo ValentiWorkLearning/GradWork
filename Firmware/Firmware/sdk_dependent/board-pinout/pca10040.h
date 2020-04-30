@@ -112,10 +112,10 @@ extern "C" {
 #define HEARTRATE_SCL_PIN     24    // SCL signal pin
 #define HEARTRATE_SDA_PIN     23    // SDA signal pin
 
-#define SPIM1_SCK_PIN   2   // SPI clock GPIO pin number.
-#define SPIM1_MOSI_PIN  3   // SPI Master Out Slave In GPIO pin number.
+#define SPIM1_SCK_PIN   5   // SPI clock GPIO pin number.
+#define SPIM1_MOSI_PIN  6   // SPI Master Out Slave In GPIO pin number.
 #define SPIM1_MISO_PIN  4   // SPI Master In Slave Out GPIO pin number.
-#define SPIM1_SS_PIN    5   // SPI Slave Select GPIO pin number.
+#define SPIM1_SS_PIN    3   // SPI Slave Select GPIO pin number.
 
 // #define SPIM2_SCK_PIN   12  // SPI clock GPIO pin number.
 // #define SPIM2_MOSI_PIN  13  // SPI Master Out Slave In GPIO pin number.

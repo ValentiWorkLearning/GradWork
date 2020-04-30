@@ -8,9 +8,6 @@
 namespace Interface::Spi
 {
 
-SpiBus::DmaBufferType
-SpiBus::DmaArray ( SpiBus::DmaBufferSize );
-
 SpiBus::SpiBus(
             std::uint8_t _clockPin
         ,   std::uint8_t _misoPin
@@ -168,9 +165,28 @@ void SpiBus::sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )
     APP_ERROR_CHECK( transmissionError );
 }
 
+void SpiBus::receiveChunk( std::uint8_t* _pBuffer, const size_t _bufferSize )
+{
+    m_isTransactionCompleted = false;
+
+    nrfx_spim_xfer_desc_t xferDesc =
+        NRFX_SPIM_XFER_RX(
+                _pBuffer
+            ,   _bufferSize
+        );
+
+    nrfx_err_t transmissionError = nrfx_spim_xfer(
+            &m_spiHandle
+        ,   &xferDesc
+        ,   0
+    );
+
+    APP_ERROR_CHECK( transmissionError );
+}
+
 SpiBus::DmaBufferType& SpiBus::getDmaBuffer()
 {
-    return SpiBus::DmaArray;
+    return DmaArray;
 }
 
 };
