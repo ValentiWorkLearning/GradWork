@@ -118,8 +118,8 @@ std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat)
     auto digits = std::string_view( tempStr.data(), p - tempStr.data() );
 
 	if( _toFormat < 10 )
-		return ":0" + std::string( digits.data() );
-	return ":" + std::string( digits.data() );
+		return "0" + std::string( digits.data() );
+	return std::string( digits.data() );
 }
 
 std::unique_ptr<Graphics::IEventHandler>
