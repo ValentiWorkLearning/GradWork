@@ -5,8 +5,6 @@
 #include <cassert>
 #include <array>
 
-#define SPI_INSTANCE  2
-
 namespace Interface::Spi
 {
 
@@ -18,6 +16,8 @@ SpiBus::SpiBus(
         ,   std::uint8_t _misoPin
         ,   std::uint8_t _mosiPin
         ,   std::uint8_t _chipSelectPin
+        ,   std::uint32_t _pRegister
+        ,   std::uint8_t _driverInstance
     )
     :   m_isTransactionCompleted{ true }
 {
@@ -26,14 +26,14 @@ SpiBus::SpiBus(
     // TInstanceEnum instanceId = static_cast<TInstanceEnum>( _spiInstance );
     // NRFX_SPIM0_INST_IDX;
 
-    m_spiHandle = NRFX_SPIM_INSTANCE( SPI_INSTANCE );
+    m_spiHandle = { reinterpret_cast<NRF_SPIM_Type*>(_pRegister), _driverInstance };
 
     nrfx_spim_config_t spiConfig{};
 
-    spiConfig.sck_pin        = SPIM2_SCK_PIN;
-    spiConfig.mosi_pin       = SPIM2_MOSI_PIN;
-    spiConfig.miso_pin       = SPIM2_MISO_PIN;
-    spiConfig.ss_pin         = SPIM2_SS_PIN;
+    spiConfig.sck_pin        = _clockPin;
+    spiConfig.mosi_pin       = _mosiPin;
+    spiConfig.miso_pin       = _misoPin;
+    spiConfig.ss_pin         = _chipSelectPin;
     spiConfig.ss_active_high = false;
     spiConfig.irq_priority   = NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY;
     spiConfig.orc            = 0xFF;

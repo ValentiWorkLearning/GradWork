@@ -25,6 +25,9 @@ namespace SpiInstance
         static constexpr std::uint8_t MisoPin = SPIM2_MISO_PIN;
         static constexpr std::uint8_t MosiPin = SPIM2_MOSI_PIN;
         static constexpr std::uint8_t SlaveSelectPin = SPIM2_SS_PIN;
+
+        static constexpr std::uint32_t Register = NRF_SPIM2_BASE;
+        static constexpr uint8_t DriverInstance = NRFX_SPIM2_INST_IDX;
     };
 };
 
@@ -38,6 +41,8 @@ public:
         ,   std::uint8_t _misoPin
         ,   std::uint8_t _mosiPin
         ,   std::uint8_t _chipSelectPin
+        ,   std::uint32_t _pRegister
+        ,   std::uint8_t _driverInstance
     );
 
     ~SpiBus() = default;
@@ -101,6 +106,8 @@ std::unique_ptr<SpiBus> createSpiBus()
         ,   TSpiInstance::MisoPin
         ,   TSpiInstance::MosiPin
         ,   TSpiInstance::SlaveSelectPin
+        ,   TSpiInstance::Register
+        ,   TSpiInstance::DriverInstance
     );
 }
 
