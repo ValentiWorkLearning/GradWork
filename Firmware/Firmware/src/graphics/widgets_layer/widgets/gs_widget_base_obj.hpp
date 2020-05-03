@@ -20,7 +20,7 @@ class WidgetBaseObj
 
 public:
 
-    WidgetBaseObj( const Theme::IThemeController* _themeController );
+    explicit WidgetBaseObj( const Theme::IThemeController* _themeController );
 
 public:
 
