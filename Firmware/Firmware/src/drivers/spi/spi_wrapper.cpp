@@ -17,13 +17,12 @@ SpiBus::SpiBus(
         ,   std::uint8_t _driverInstance
     )
     :   m_isTransactionCompleted{ true }
+    ,   m_spiHandle{  reinterpret_cast<NRF_SPIM_Type*>(_pRegister), _driverInstance }
 {
 
     // using TInstanceEnum = std::underlying_type_t< SpiInstance >;
     // TInstanceEnum instanceId = static_cast<TInstanceEnum>( _spiInstance );
     // NRFX_SPIM0_INST_IDX;
-
-    m_spiHandle = { reinterpret_cast<NRF_SPIM_Type*>(_pRegister), _driverInstance };
 
     nrfx_spim_config_t spiConfig{};
 
