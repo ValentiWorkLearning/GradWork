@@ -11,6 +11,10 @@
 #include "boards.h"
 #include "bsp.h"
 #include "nrf_drv_twi.h"
+
+#include "drivers/spi/spi_wrapper.hpp"
+#include "drivers/winbondflash/winbond_flash.hpp"
+
 #endif
 
 #include "logger_service.hpp"
@@ -22,8 +26,6 @@
 
 #include "SimpleSignal.hpp"
 
-#include "drivers/spi/spi_wrapper.hpp"
-#include "drivers/winbondflash/winbond_flash.hpp"
 
 Application::Application()
 {
@@ -73,11 +75,13 @@ Application::initServices()
 void
 Application::initPeripheral()
 {
+#if defined (USE_DEVICE_SPECIFIC)
     auto pSpiInstance = Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M1>();
     auto pWindbondFlash= ExternalFlash::createFlashDriver(
         pSpiInstance.get()
     );
     pWindbondFlash->onBlockWriteCompleted.emit();
+#endif
 }
 
 void
