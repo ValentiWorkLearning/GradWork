@@ -24,7 +24,7 @@ class DateTimeServiceFake::DatetimeSimulatorImpl
 
 public:
 
-    DatetimeSimulatorImpl(
+    explicit DatetimeSimulatorImpl(
             const IDateTimeService* _pAppService
     )
         :   m_pDateTimeService{ _pAppService }
@@ -120,7 +120,7 @@ class DateTimeServiceFake::DatetimeSimulatorImpl
 
 public:
 
-    DatetimeSimulatorImpl(
+    explicit DatetimeSimulatorImpl(
             const IDateTimeService* _pAppService
     )
         :   m_pDateTimeService{ _pAppService }

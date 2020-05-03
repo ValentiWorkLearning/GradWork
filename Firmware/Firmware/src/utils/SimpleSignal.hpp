@@ -136,7 +136,7 @@ private:
 
 public:
   /// ProtoSignal constructor, connects default callback if non-nullptr.
-  ProtoSignal (const CbFunction &method)
+  explicit ProtoSignal (const CbFunction &method)
   {
     if (method)
       add_cb(method);
