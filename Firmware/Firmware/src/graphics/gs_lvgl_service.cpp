@@ -37,9 +37,8 @@ void LvglGraphicsService::executeGlTask()
 void
 LvglGraphicsService::initLvglLogger()
 {
-
     auto lvglLoggerCallback = cbc::obtain_connector(
-        []( lv_log_level_t level, const char * file, std::uint32_t line, const char * dsc )
+        []( lv_log_level_t level, const char * file, std::uint32_t line, const char * functionName, const char* dsc)
         {
             switch( level )
             {
@@ -62,6 +61,8 @@ LvglGraphicsService::initLvglLogger()
             Logger::Instance().logDebug( "File:"  );
             Logger::Instance().logDebug( file );
             Logger::Instance().logDebug( ":" );
+            Logger::Instance().logDebug(":functon");
+            Logger::Instance().logDebug(functionName);
             Logger::Instance().logDebugEndl( dsc );
         }
     );

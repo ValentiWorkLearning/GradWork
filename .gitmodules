@@ -7,9 +7,11 @@
 [submodule "Simulator/graphics/lvgl"]
 	path = Simulator/graphics/lvgl
 	url = https://github.com/littlevgl/lvgl.git
+	branch = dev-7.0
 [submodule "Simulator/graphics/lv_drivers"]
 	path = Simulator/graphics/lv_drivers
 	url = https://github.com/littlevgl/lv_drivers.git
+	branch = dev-7.0
 [submodule "3rdparty/etl"]
 	path = 3rdparty/etl
 	url = https://github.com/ETLCPP/etl.git
