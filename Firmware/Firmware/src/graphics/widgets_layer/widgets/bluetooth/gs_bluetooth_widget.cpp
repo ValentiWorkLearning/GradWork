@@ -11,6 +11,7 @@ namespace Graphics::Widgets
 BluetoothWidget::BluetoothWidget( const Theme::IThemeController* _themeController )
     :   WidgetBaseObj<IBluetoothWidget>{ _themeController }
     ,   m_currentStatus{ BluetoothStatus::Disconnected }
+    ,   m_bluetoothIconStyle{}
 {
     initStyles();
 }
@@ -59,7 +60,7 @@ void BluetoothWidget::initBluetoothIcon(
     const std::uint32_t DisplayWidth{ _displayWidth };
     const std::uint32_t DisplayHeight{ _displayHeight };
 
-    lv_obj_set_style( m_pBluetoothIcon.get(), &m_bluetoothIconStyle );
+    lv_obj_add_style( m_pBluetoothIcon.get(), LV_OBJ_PART_MAIN,&m_bluetoothIconStyle );
     lv_label_set_text( m_pBluetoothIcon.get(), IconFontSymbols::Bluetooth::BluetoothEnabled.data() );
 
     lv_obj_align(

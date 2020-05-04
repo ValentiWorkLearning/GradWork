@@ -120,13 +120,13 @@ private:
 
 private:
 
-    //std::unique_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
-    //std::unique_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
-    //std::unique_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
+    std::unique_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
+    std::unique_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
+    std::unique_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
 
-    //std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
-    //std::unique_ptr<Graphics::IEventHandler> m_pBluetoothWidgetController;
-    //std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
+    std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
+    std::unique_ptr<Graphics::IEventHandler> m_pBluetoothWidgetController;
+    std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
 
 };
 

@@ -26,8 +26,6 @@
 
 #include "pages/player_page/gs_player_page_view.hpp"
 
-#include "lvgl.h"
-
 namespace Graphics::MainWindow
 {
 
@@ -173,7 +171,7 @@ void GsMainWindow::initBackground()
     lv_style_copy( &m_yanCircleStyle, &m_iniCircleStyle );
 
     lv_style_set_bg_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
-    lv_style_set_border_color(&m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight);
+    lv_style_set_border_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
     lv_style_set_bg_grad_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
 
     m_pInyCircle.reset( createAlignedCircle( LV_ALIGN_IN_RIGHT_MID, &m_iniCircleStyle ) );
@@ -182,7 +180,7 @@ void GsMainWindow::initBackground()
 
 void GsMainWindow::initWidgets()
 {
- /*   m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
+    m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
     m_pPagesSwitch = Widgets::createPagesSwitch( getThemeController() );
     m_pBluetoothWidget = Widgets::createBluetoothWidget( getThemeController() );
 
@@ -209,7 +207,7 @@ void GsMainWindow::initWidgets()
         [this]( std::string_view _activePage ){
             m_pPagesSwitch->setActivePage( _activePage );
         }
-    );*/
+    );
 }
 
 void GsMainWindow::initMask()
@@ -227,23 +225,22 @@ void GsMainWindow::initMask()
 
 void GsMainWindow::initWatchPage()
 {
+    auto pClockPage = Views::createClockWatchView( getThemeController() );
+    pClockPage->addWidget( m_pBatteryWidget.get() );
+    pClockPage->addWidget( m_pPagesSwitch.get() );
+    pClockPage->addWidget( m_pBluetoothWidget.get() );
 
-    //auto pClockPage = Views::createClockWatchView( getThemeController() );
-    //pClockPage->addWidget( m_pBatteryWidget.get() );
-    //pClockPage->addWidget( m_pPagesSwitch.get() );
-    //pClockPage->addWidget( m_pBluetoothWidget.get() );
+    m_pClockPageController = Views::createPageWatchHandler( pClockPage.get() );
 
-    //m_pClockPageController = Views::createPageWatchHandler( pClockPage.get() );
+    getEventDispatcher().subscribe(
+            Events::EventGroup::DateTime
+        ,   [ this]( const Events::TEvent& _event )
+        {
+            m_pClockPageController->handleEvent( _event );
+        }
+    );
 
-    //getEventDispatcher().subscribe(
-    //        Events::EventGroup::DateTime
-    //    ,   [ this]( const Events::TEvent& _event )
-    //    {
-    //        m_pClockPageController->handleEvent( _event );
-    //    }
-    //);
-
-    //addPage( std::move( pClockPage ) );
+    addPage( std::move( pClockPage ) );
 }
 
 void GsMainWindow::initHealthPage()

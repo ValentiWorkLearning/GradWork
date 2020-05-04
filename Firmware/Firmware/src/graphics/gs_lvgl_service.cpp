@@ -132,10 +132,10 @@ LvglGraphicsService::initMainWindow()
         )
     );
 
-    /*m_pMainWindow->setPageActive(
+    m_pMainWindow->setPageActive(
         Views::IClockWatchPage::ClockPageName
     );
-
+    /*
     auto pageToggle = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
         {

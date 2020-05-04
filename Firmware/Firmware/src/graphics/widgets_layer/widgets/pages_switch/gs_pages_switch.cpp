@@ -12,6 +12,8 @@ namespace Graphics::Widgets
 PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
 	:	WidgetBaseObj<IPagesSwitch>{ _themeController }
 	,	m_activePageName{}
+	,	m_checkedPointStyle{}
+	,	m_uncheckedPointStyle{}
 {
 	initStyles();
 }
@@ -50,21 +52,21 @@ void PagesSwitch::setActivePage( std::string_view _pageName )
 {
 	if( _pageName == Views::IClockWatchPage::ClockPageName )
 	{
-		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle );
-		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
-		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+		lv_obj_add_style( m_pFirstPage.get(), LV_ARC_PART_BG, &m_checkedPointStyle );
+		lv_obj_add_style( m_pSecondPage.get(), LV_ARC_PART_BG, &m_uncheckedPointStyle );
+		lv_obj_add_style( m_pThirdPage.get(), LV_ARC_PART_BG, &m_uncheckedPointStyle );
 	}
 	else if( _pageName == Views::IHealthWatchPage::HealthPageName ) // TODO migrate to labels/ objects
 	{
-		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
-		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle );
-		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+		lv_obj_add_style( m_pFirstPage.get(), LV_ARC_PART_BG, &m_uncheckedPointStyle );
+		lv_obj_add_style( m_pSecondPage.get(), LV_ARC_PART_BG, &m_checkedPointStyle );
+		lv_obj_add_style( m_pThirdPage.get(), LV_ARC_PART_BG, &m_uncheckedPointStyle );
 	}
 	else if ( _pageName == Views::IPlayerWatchPage::PlayerPageName )
 	{
-		lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
-		lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
-		lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle);
+		lv_obj_add_style( m_pFirstPage.get(), LV_ARC_PART_BG, &m_uncheckedPointStyle );
+		lv_obj_add_style( m_pSecondPage.get(), LV_ARC_PART_BG, &m_uncheckedPointStyle );
+		lv_obj_add_style( m_pThirdPage.get(), LV_ARC_PART_BG, &m_checkedPointStyle);
 	}
 	m_activePageName = _pageName;
 }
@@ -75,22 +77,26 @@ void PagesSwitch::initStyles()
 	if (!pThemeProvider)
 		return;
 
-	lv_style_copy( &m_checkedPointStyle, &lv_style_plain );
+	const auto ThemeDark = pThemeProvider->getMainThemeColor(
+			Theme::Color::MainThemeDark
+		);
+	const auto ThemeLight = pThemeProvider->getMainThemeColor(
+			Theme::Color::MainThemeLight
+		);
 
-	m_checkedPointStyle.line.color = pThemeProvider->getMainThemeColor(
-		Theme::Color::MainThemeLight
-	);
-	m_checkedPointStyle.line.width = 2;
-	m_checkedPointStyle.body.radius = LV_RADIUS_CIRCLE;
+	lv_style_set_border_color( &m_checkedPointStyle, LV_STATE_DEFAULT, ThemeLight );
+	lv_style_set_bg_color( &m_checkedPointStyle, LV_STATE_DEFAULT, ThemeDark );
+	lv_style_set_line_color( &m_checkedPointStyle, LV_STATE_DEFAULT, ThemeLight );
+	lv_style_set_line_width( &m_checkedPointStyle, LV_STATE_DEFAULT, 2);
+	lv_style_set_radius( &m_checkedPointStyle, LV_STATE_DEFAULT, LV_RADIUS_CIRCLE );
 
-	lv_style_copy( &m_uncheckedPointStyle, &lv_style_plain );
 
-	m_uncheckedPointStyle.line.color= pThemeProvider->getMainThemeColor(
-		Theme::Color::MainThemeLight
-	);
-
-	m_uncheckedPointStyle.line.width = 10;
-	m_checkedPointStyle.body.radius = LV_RADIUS_CIRCLE;
+	
+	lv_style_set_border_color( &m_uncheckedPointStyle, LV_STATE_DEFAULT, ThemeLight );
+	lv_style_set_bg_color( &m_uncheckedPointStyle, LV_STATE_DEFAULT, ThemeLight );
+	lv_style_set_line_color( &m_uncheckedPointStyle, LV_STATE_DEFAULT, ThemeLight );
+	lv_style_set_line_width( &m_uncheckedPointStyle, LV_STATE_DEFAULT, 10 );
+	lv_style_set_radius( &m_uncheckedPointStyle, LV_STATE_DEFAULT, LV_RADIUS_CIRCLE );
 }
 
 void PagesSwitch::initCheckedPages(
@@ -100,7 +106,7 @@ void PagesSwitch::initCheckedPages(
 )
 {
 	m_pFirstPage.reset( lv_arc_create(_parentObject, nullptr ) );
-	lv_arc_set_style( m_pFirstPage.get(), LV_ARC_STYLE_MAIN, &m_checkedPointStyle);
+	lv_obj_add_style(m_pFirstPage.get(), LV_ARC_PART_BG, &m_checkedPointStyle);
 
 	lv_arc_set_angles( m_pFirstPage.get(), 0, 360 );
 	lv_obj_set_size( m_pFirstPage.get(), ArcSize, ArcSize );
@@ -120,7 +126,7 @@ void PagesSwitch::initUncheckedPages(
 )
 {
 	m_pSecondPage.reset( lv_arc_create(_parentObject, nullptr ) );
-	lv_arc_set_style( m_pSecondPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle );
+	lv_obj_add_style( m_pSecondPage.get(), LV_ARC_PART_INDIC, &m_uncheckedPointStyle );
 
 	lv_arc_set_angles( m_pSecondPage.get(), 0, 360 );
 	lv_obj_set_size( m_pSecondPage.get(), ArcSize, ArcSize );
@@ -134,11 +140,9 @@ void PagesSwitch::initUncheckedPages(
 
 	m_pThirdPage.reset( lv_arc_create( _parentObject, nullptr) );
 
-	lv_arc_set_style( m_pThirdPage.get(), LV_ARC_STYLE_MAIN, &m_uncheckedPointStyle);
-
 	lv_arc_set_angles( m_pThirdPage.get(), 0, 360);
 	lv_obj_set_size( m_pThirdPage.get(), ArcSize, ArcSize);
-	lv_obj_set_style( m_pThirdPage.get(), &m_uncheckedPointStyle );
+	lv_obj_add_style( m_pThirdPage.get(), LV_ARC_PART_BG, &m_uncheckedPointStyle );
 	lv_obj_align(
 			m_pThirdPage.get()
 		,	nullptr
