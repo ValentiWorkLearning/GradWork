@@ -152,12 +152,6 @@ set ( TARGET_SOURCE_LIST
     "lvgl/src/lv_widgets/lv_textarea.c"
     "lvgl/src/lv_widgets/lv_tileview.c"
     "lvgl/src/lv_widgets/lv_win.c"
-    "lvgl/tests/lv_test_assert.c"
-    "lvgl/tests/lv_test_core/lv_test_core.c"
-    "lvgl/tests/lv_test_core/lv_test_obj.c"
-    "lvgl/tests/lv_test_core/lv_test_style.c"
-    "lvgl/tests/lv_test_main.c"
-    "lvgl/tests/lv_test_objx/lv_test_cont.c"
 
     "lv_drivers/display/fbdev.c"
     "lv_drivers/display/monitor.c"

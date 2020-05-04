@@ -74,6 +74,8 @@ private:
 
     void initBackground();
 
+    void initMask();
+
     void initWidgets();
 
     void initWatchPage();
@@ -107,21 +109,24 @@ private:
     lv_style_t m_yanStyle;
     lv_style_t m_iniCircleStyle;
     lv_style_t m_yanCircleStyle;
+    lv_area_t maskArea;
+    lv_draw_mask_radius_param_t radiusParam;
 
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pIny;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pInyCircle;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYan;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYanCircle;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pObjMask;
 
 private:
 
-    std::unique_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
-    std::unique_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
-    std::unique_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
+    //std::unique_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
+    //std::unique_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
+    //std::unique_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
 
-    std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
-    std::unique_ptr<Graphics::IEventHandler> m_pBluetoothWidgetController;
-    std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
+    //std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
+    //std::unique_ptr<Graphics::IEventHandler> m_pBluetoothWidgetController;
+    //std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;
 
 };
 

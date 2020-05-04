@@ -52,16 +52,16 @@ add_executable(
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_main_window.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_theme_controller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_event_dispatcher.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_widget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_handler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/pages_switch/gs_pages_switch.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/bluetooth/gs_bluetooth_widget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/bluetooth/gs_bluetooth_widget_handler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/gs_widget_base_obj.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_handler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/health_page/gs_health_page_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/player_page/gs_player_page_view.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_widget.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_handler.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/pages_switch/gs_pages_switch.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/bluetooth/gs_bluetooth_widget.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/bluetooth/gs_bluetooth_widget_handler.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/gs_widget_base_obj.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_view.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_handler.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/health_page/gs_health_page_view.cpp
+    # ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/pages/player_page/gs_player_page_view.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/gs_lvgl_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/gs_platform_layer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/service_providers/battery/sp_battery_service_fake.cpp
