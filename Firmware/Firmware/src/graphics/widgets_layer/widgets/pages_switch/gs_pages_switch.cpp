@@ -45,6 +45,7 @@ void PagesSwitch::hide()
 
 void PagesSwitch::reloadStyle()
 {
+	resetStyle();
 	initStyles();
 }
 
@@ -95,6 +96,17 @@ void PagesSwitch::initStyles()
 	lv_style_set_line_color( &m_uncheckedPointStyle, LV_STATE_DEFAULT, ThemeLight );
 	lv_style_set_line_width( &m_uncheckedPointStyle, LV_STATE_DEFAULT, 10 );
 	lv_style_set_radius( &m_uncheckedPointStyle, LV_STATE_DEFAULT, LV_RADIUS_CIRCLE );
+}
+
+void PagesSwitch::resetStyle()
+{
+	Meta::tupleApply(
+		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+				m_checkedPointStyle
+			,	m_uncheckedPointStyle
+		)
+	);
 }
 
 void PagesSwitch::initCheckedPages(

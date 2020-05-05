@@ -20,49 +20,6 @@ ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )
 	initStyles();
 }
 
-void ClockWatch::show()
-{
-	PageViewObject::show();
-
-	auto parent = lv_disp_get_scr_act( nullptr );
-
-	auto pThemeProvider = PageViewObject::getThemeController();
-	if (!pThemeProvider )
-		return;
-
-	const std::uint32_t DisplayWidth { pThemeProvider->getDisplayWidth() };
-	const std::uint32_t DisplayHeight { pThemeProvider->getDisplayHeight() };
-
-	initClockLabels( parent, DisplayWidth, DisplayHeight );
-	initFullDateLabel( parent, DisplayWidth, DisplayHeight );
-	initWeekDayLabel( parent, DisplayWidth, DisplayHeight );
-
-	restoreLabelsText();
-}
-
-void ClockWatch::hide()
-{
-	PageViewObject::hide();
-
-	Meta::tupleApply(
-			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
-		,	std::forward_as_tuple(
-				m_pHoursLabel
-			,	m_pMinutesLabel
-			,	m_pSecondsLabel
-			,	m_pFullDateLabel
-			,	m_pWeekDayLabel
-		)
-	);
-}
-
-void ClockWatch::reloadStyle()
-{
-	PageViewObject::reloadStyle();
-	initStyles();
-}
-
-
 void ClockWatch::setHours( const std::string& _newHoursValue )
 {
 	m_hoursValue = _newHoursValue;
@@ -93,6 +50,20 @@ void ClockWatch::setFullDate( const std::string& _fullDate )
 	lv_label_set_text( m_pFullDateLabel.get(), m_fulldateValue.c_str() );
 }
 
+void ClockWatch::resetStyle()
+{
+	Meta::tupleApply(
+		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+				m_hoursLabelStyle
+			,	m_minutesLabelStyle
+			,	m_secondsLabelStyle
+			,	m_fullDateStyle
+			,	m_weekDayStyle
+		)
+	);
+}
+
 void ClockWatch::initStyles()
 {
 	auto pThemeProvider = PageViewObject::getThemeController();
@@ -119,6 +90,33 @@ void ClockWatch::initStyles()
 	m_weekDayStyle = pThemeProvider->getFontStyle(
 			Theme::FontSize::large
 		,	Theme::Color::MainThemeDark
+	);
+}
+
+void ClockWatch::initPageWidgets(
+		lv_obj_t* _parent
+	,	 const std::uint32_t _displayWidth
+	,	const std::uint32_t _displayHeight
+	)
+{
+	initClockLabels( _parent, _displayWidth, _displayHeight );
+	initFullDateLabel( _parent, _displayWidth, _displayHeight );
+	initWeekDayLabel( _parent, _displayWidth, _displayHeight );
+
+	restoreLabelsText();
+}
+
+void ClockWatch::unloadWidgets()
+{
+	Meta::tupleApply(
+			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
+		,	std::forward_as_tuple(
+				m_pHoursLabel
+			,	m_pMinutesLabel
+			,	m_pSecondsLabel
+			,	m_pFullDateLabel
+			,	m_pWeekDayLabel
+		)
 	);
 }
 

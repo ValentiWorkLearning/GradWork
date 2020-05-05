@@ -18,56 +18,25 @@ PlayerPage::PlayerPage( const Theme::IThemeController* _themeController )
 	initStyles();
 }
 
-void PlayerPage::show()
-{
-	PageViewObject::show();
-
-	auto parent = lv_disp_get_scr_act( nullptr );
-
-	auto pThemeProvider = PageViewObject::getThemeController();
-	if (!pThemeProvider )
-		return;
-
-	const std::uint32_t DisplayWidth { pThemeProvider->getDisplayWidth() };
-	const std::uint32_t DisplayHeight { pThemeProvider->getDisplayHeight() };
-
-	initPageTitle( parent, DisplayWidth, DisplayHeight );
-	initPlayIcon( parent, DisplayWidth, DisplayHeight );
-	initPrevSongIcon( parent, DisplayWidth, DisplayHeight );
-	initNextSongIcon( parent, DisplayWidth, DisplayHeight );
-}
-
-void PlayerPage::hide()
-{
-	PageViewObject::hide();
-
-	Meta::tupleApply(
-			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
-		,	std::forward_as_tuple(
-				m_pageTitle
-			,	m_melodyIcon
-			,	m_pPlayIconFirst
-			,	m_pPlayIconSecond
-			,	m_pSwitchPreviousSongArrow
-			,	m_pSwitchPreviousSongLine
-			,	m_pSwitchNextSongArrow
-			,	m_pSwitchNextSongLine
-		)
-	);
-}
-
-void PlayerPage::reloadStyle()
-{
-	PageViewObject::reloadStyle();
-	initStyles();
-}
-
 void PlayerPage::setPause()
 {
 }
 
 void PlayerPage::setPlaying()
 {
+}
+
+void PlayerPage::resetStyle()
+{
+	Meta::tupleApply(
+		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+				m_mainLabelStyleDark
+			,	m_melodyIconStyle
+			,	m_playIconStyleDark
+			,	m_playIconStyleLight
+		)
+	);
 }
 
 void PlayerPage::initStyles()
@@ -95,6 +64,35 @@ void PlayerPage::initStyles()
 		,	Theme::Color::MainThemeLight
 	);
 
+}
+
+void PlayerPage::initPageWidgets(
+		lv_obj_t* _parent
+	,	const std::uint32_t _displayWidth
+	,	const std::uint32_t _displayHeight
+	)
+{
+	initPageTitle( _parent, _displayWidth, _displayHeight );
+	initPlayIcon( _parent, _displayWidth, _displayHeight );
+	initPrevSongIcon( _parent, _displayWidth, _displayHeight );
+	initNextSongIcon( _parent, _displayWidth, _displayHeight );
+}
+
+void PlayerPage::unloadWidgets()
+{
+	Meta::tupleApply(
+			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
+		,	std::forward_as_tuple(
+				m_pageTitle
+			,	m_melodyIcon
+			,	m_pPlayIconFirst
+			,	m_pPlayIconSecond
+			,	m_pSwitchPreviousSongArrow
+			,	m_pSwitchPreviousSongLine
+			,	m_pSwitchNextSongArrow
+			,	m_pSwitchNextSongLine
+		)
+	);
 }
 
 void PlayerPage::initPageTitle(

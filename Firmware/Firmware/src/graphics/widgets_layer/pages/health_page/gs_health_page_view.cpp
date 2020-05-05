@@ -19,32 +19,22 @@ HealthPage::HealthPage( const Theme::IThemeController* _themeController )
     ,	m_stepsIconStyle{}
     ,	m_pulseLineStyle{}
 {
-	initStyles();
 }
 
-void HealthPage::show()
+void HealthPage::initPageWidgets(
+		lv_obj_t* _parent
+    ,   const std::uint32_t _displayWidth
+    ,   const std::uint32_t _displayHeight
+)
 {
-	PageViewObject::show();
-
-	auto parent = lv_disp_get_scr_act( nullptr );
-
-	auto pThemeProvider = PageViewObject::getThemeController();
-	if (!pThemeProvider )
-		return;
-
-	const std::uint32_t DisplayWidth { pThemeProvider->getDisplayWidth() };
-	const std::uint32_t DisplayHeight { pThemeProvider->getDisplayHeight() };
-
-	initHeartrateWidgets( parent, DisplayWidth, DisplayHeight );
-	initCalloriesCounter( parent, DisplayWidth, DisplayHeight );
-	initStepsCounter( parent, DisplayWidth, DisplayHeight );
-	initPageTitle( parent, DisplayWidth, DisplayHeight );
+	initHeartrateWidgets(_parent, _displayWidth, _displayHeight );
+	initCalloriesCounter(_parent, _displayWidth, _displayHeight );
+	initStepsCounter(_parent, _displayWidth, _displayHeight );
+	initPageTitle(_parent, _displayWidth, _displayHeight );
 }
 
-void HealthPage::hide()
+void HealthPage::unloadWidgets()
 {
-	PageViewObject::hide();
-
 	Meta::tupleApply(
 			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
 		,	std::forward_as_tuple(
@@ -60,12 +50,6 @@ void HealthPage::hide()
 			,	m_pKcalTooltip
 		)
 	);
-}
-
-void HealthPage::reloadStyle()
-{
-	PageViewObject::reloadStyle();
-	initStyles();
 }
 
 void HealthPage::setStepsCount(std::uint8_t _newStepsValue)
@@ -131,6 +115,24 @@ void HealthPage::initStyles()
 	lv_style_set_line_width(&m_pulseLineStyle, LV_STATE_DEFAULT, LineWidth);
 	lv_style_set_line_rounded(&m_pulseLineStyle, LV_STATE_DEFAULT, true);
 }
+
+void HealthPage::resetStyle()
+{
+	Meta::tupleApply(
+		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+				m_mainLabelStyleDark
+			,	m_healthPageIconStyle
+			,	m_mainFontLight
+			,	m_mainFontDark
+			,	m_tooltipsStyleDark
+			,	m_tooltipsStyleLight
+			,	m_stepsIconStyle
+			,	m_pulseLineStyle
+		)
+	);
+}
+
 
 void HealthPage::initPageTitle(
 		lv_obj_t* _parentObject

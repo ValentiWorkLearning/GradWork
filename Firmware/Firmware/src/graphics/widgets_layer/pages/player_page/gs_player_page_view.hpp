@@ -22,21 +22,25 @@ public:
 
 public:
 
-    void show() override;
-
-    void hide() override;
-
-    void reloadStyle() override;
-
-public:
-
     void setPause() override;
 
     void setPlaying() override;
 
-private:
+protected:
 
-    void initStyles();
+    void resetStyle() override;
+
+    void initStyles() override;
+
+    void initPageWidgets(
+            lv_obj_t* _parent
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    ) override;
+
+    void unloadWidgets() override;
+
+private:
 
     void initPageTitle(
             lv_obj_t* _parentObject

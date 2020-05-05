@@ -6,6 +6,7 @@
 #include <etl/vector.h>
 
 #include <functional>
+#include <lvgl.h>
 
 namespace Graphics::Events
 {
@@ -46,6 +47,20 @@ public:
     bool isVisible()const override;
 
     const Theme::IThemeController* getThemeController() const override;
+
+protected:
+
+    virtual void resetStyle() = 0;
+
+    virtual void initStyles() = 0;
+
+    virtual void initPageWidgets(
+            lv_obj_t* _parent
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    ) = 0;
+
+    virtual void unloadWidgets() = 0;
 
 private:
 
