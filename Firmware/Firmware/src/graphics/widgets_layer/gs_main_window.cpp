@@ -256,18 +256,18 @@ void GsMainWindow::initHealthPage()
 
 void GsMainWindow::initPlayerPage()
 {
-    //auto pPlayerPage = Views::createPlayerWatchView( getThemeController() );
+    auto pPlayerPage = Views::createPlayerWatchView( getThemeController() );
 
-    //pPlayerPage->addWidget(m_pBatteryWidget.get());
-    //pPlayerPage->addWidget(m_pPagesSwitch.get());
-    //pPlayerPage->addWidget(m_pBluetoothWidget.get());
+    pPlayerPage->addWidget(m_pBatteryWidget.get());
+    pPlayerPage->addWidget(m_pPagesSwitch.get());
+    pPlayerPage->addWidget(m_pBluetoothWidget.get());
 
-    //addPage(std::move( pPlayerPage ));
+    addPage(std::move( pPlayerPage ));
 }
 
 void GsMainWindow::initMainWindowSubscriptions()
 {
-    /*m_pThemeController->onThemeChanged.connect(
+    m_pThemeController->onThemeChanged.connect(
         [this] {
             initBackground();
             auto& activePage = getPage(m_currentPageName);
@@ -275,7 +275,7 @@ void GsMainWindow::initMainWindowSubscriptions()
             activePage.reloadStyle();
             activePage.show();
         }
-    );*/
+    );
 }
 
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()

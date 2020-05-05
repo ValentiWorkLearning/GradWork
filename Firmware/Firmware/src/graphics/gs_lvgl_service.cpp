@@ -133,9 +133,9 @@ LvglGraphicsService::initMainWindow()
     );
 
     m_pMainWindow->setPageActive(
-        Views::IHealthWatchPage::HealthPageName
+        Views::IClockWatchPage::ClockPageName
     );
-    /*
+    
     auto pageToggle = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
         {
@@ -169,7 +169,7 @@ LvglGraphicsService::initMainWindow()
                 pageToSet
             );
         }
-    );*/
+    );
 
     auto themeChange = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
@@ -187,14 +187,14 @@ LvglGraphicsService::initMainWindow()
         }
     );
 
-    //m_pPageSwitch.reset(
-    //    lv_task_create(
-    //            pageToggle
-    //        ,   4100
-    //        ,   LV_TASK_PRIO_MID
-    //        ,   nullptr
-    //    )
-    //);
+    m_pPageSwitch.reset(
+        lv_task_create(
+                pageToggle
+            ,   4100
+            ,   LV_TASK_PRIO_MID
+            ,   nullptr
+        )
+    );
 
     m_pthemeChangeSwitch.reset(
         lv_task_create(
