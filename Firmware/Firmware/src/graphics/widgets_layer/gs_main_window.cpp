@@ -245,13 +245,13 @@ void GsMainWindow::initWatchPage()
 
 void GsMainWindow::initHealthPage()
 {
-    //auto pHealthPage = Views::createHeartrateWatchView( getThemeController() );
+    auto pHealthPage = Views::createHeartrateWatchView( getThemeController() );
 
-    //pHealthPage->addWidget( m_pBatteryWidget.get() );
-    //pHealthPage->addWidget( m_pPagesSwitch.get());
-    //pHealthPage->addWidget( m_pBluetoothWidget.get());
+    pHealthPage->addWidget( m_pBatteryWidget.get() );
+    pHealthPage->addWidget( m_pPagesSwitch.get());
+    pHealthPage->addWidget( m_pBluetoothWidget.get());
 
-    //addPage( std::move( pHealthPage ) );
+    addPage( std::move( pHealthPage ) );
 }
 
 void GsMainWindow::initPlayerPage()

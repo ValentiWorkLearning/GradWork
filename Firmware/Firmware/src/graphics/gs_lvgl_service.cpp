@@ -133,7 +133,7 @@ LvglGraphicsService::initMainWindow()
     );
 
     m_pMainWindow->setPageActive(
-        Views::IClockWatchPage::ClockPageName
+        Views::IHealthWatchPage::HealthPageName
     );
     /*
     auto pageToggle = cbc::obtain_connector(
