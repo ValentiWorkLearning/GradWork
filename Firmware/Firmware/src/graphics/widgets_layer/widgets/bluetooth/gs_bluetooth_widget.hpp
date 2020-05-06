@@ -46,6 +46,8 @@ private:
 
     void initStyles();
 
+    void resetStyle();
+
     void initBluetoothIcon(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth

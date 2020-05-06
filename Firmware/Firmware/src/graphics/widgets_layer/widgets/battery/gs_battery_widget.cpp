@@ -30,6 +30,7 @@ void BatteryWidget::show()
 
 void BatteryWidget::reloadStyle()
 {
+    resetStyle();
     initStyles();
 }
 
@@ -49,6 +50,17 @@ void BatteryWidget::initStyles()
         ,   Theme::Color::MainThemeLight
     );
 
+}
+
+void BatteryWidget::resetStyle()
+{
+    Meta::tupleApply(
+		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+                m_batteryLabelStyle
+            ,   m_bateryIconStyle
+		)
+	);
 }
 
 void BatteryWidget::setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel )

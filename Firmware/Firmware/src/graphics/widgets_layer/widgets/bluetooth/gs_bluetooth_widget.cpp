@@ -32,6 +32,7 @@ void BluetoothWidget::show()
 
 void BluetoothWidget::reloadStyle()
 {
+    resetStyle();
     initStyles();
 }
 
@@ -46,6 +47,16 @@ void BluetoothWidget::initStyles()
         ,   Theme::Color::MainThemeDark
     );
 
+}
+
+void BluetoothWidget::resetStyle()
+{
+	Meta::tupleApply(
+		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+            m_bluetoothIconStyle
+		)
+	);
 }
 
 void BluetoothWidget::initBluetoothIcon(

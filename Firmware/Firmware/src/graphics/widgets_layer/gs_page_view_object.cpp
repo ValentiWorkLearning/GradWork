@@ -83,15 +83,14 @@ void PageViewObject<ConcretePageView>::hide()
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::reloadStyle()
 {
-    resetStyle();
-    initStyles();
-
+    hide();
     executeForEachWidget(
         []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
             _pWidget->reloadStyle();
         }
     );
+    show();
 }
 
 template<typename ConcretePageView>

@@ -78,6 +78,8 @@ private:
 
     void initBackground();
 
+    void resetBackgroundStyle();
+
     void initMask();
 
     void initWidgets();

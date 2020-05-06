@@ -26,6 +26,8 @@
 
 #include "pages/player_page/gs_player_page_view.hpp"
 
+#include "MetaUtils.hpp"
+
 namespace Graphics::MainWindow
 {
 
@@ -188,6 +190,19 @@ void GsMainWindow::initBackground()
     m_pYanCircle.reset( createAlignedCircle( LV_ALIGN_IN_LEFT_MID, &m_yanCircleStyle ) );
 }
 
+void GsMainWindow::resetBackgroundStyle()
+{
+    Meta::tupleApply(
+        [](auto&& _nodeToReset) { 	lv_style_reset(&_nodeToReset); }
+        , std::forward_as_tuple(
+                m_iniStyle
+            ,   m_yanStyle
+            ,    m_iniCircleStyle
+            ,    m_yanCircleStyle
+        )
+    );
+}
+
 void GsMainWindow::initWidgets()
 {
     m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
@@ -215,7 +230,7 @@ void GsMainWindow::initWidgets()
 
     onActivePageChanged.connect(
         [this]( std::string_view _activePage ){
-            //m_pPagesSwitch->setActivePage( _activePage );
+            m_pPagesSwitch->setActivePage( _activePage );
         }
     );
 }
@@ -236,9 +251,9 @@ void GsMainWindow::initMask()
 void GsMainWindow::initWatchPage()
 {
     auto pClockPage = Views::createClockWatchView( getThemeController() );
-    /*pClockPage->addWidget( m_pBatteryWidget.get() );
+    pClockPage->addWidget( m_pBatteryWidget.get() );
     pClockPage->addWidget( m_pPagesSwitch.get() );
-    pClockPage->addWidget( m_pBluetoothWidget.get() );*/
+    pClockPage->addWidget( m_pBluetoothWidget.get() );
 
     m_pClockPageController = Views::createPageWatchHandler( pClockPage.get() );
 
@@ -279,11 +294,10 @@ void GsMainWindow::initMainWindowSubscriptions()
 {
     m_pThemeController->onThemeChanged.connect(
         [this] {
+            resetBackgroundStyle();
             initBackground();
             auto& activePage = getPage(m_currentPageName);
-            activePage.hide();
             activePage.reloadStyle();
-            activePage.show();
         }
     );
 }
