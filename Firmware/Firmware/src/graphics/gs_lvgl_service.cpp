@@ -139,16 +139,7 @@ LvglGraphicsService::initMainWindow()
     auto pageToggle = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
         {
-            static bool isVisible{ true };
-            if (isVisible) {
-                m_pMainWindow->getActivePage().hide();
-                isVisible = false;
-            }
-            else {
-                m_pMainWindow->getActivePage().show();
-                isVisible = true;
-            }
-            /*static std::uint8_t toggle{ 0 };
+            static std::uint8_t toggle{ 0 };
             std::string_view pageToSet{};
 
             switch (toggle)
@@ -176,7 +167,7 @@ LvglGraphicsService::initMainWindow()
             }
             m_pMainWindow->setPageActive(
                 pageToSet
-            );*/
+            );
         }
     );
 
@@ -205,14 +196,14 @@ LvglGraphicsService::initMainWindow()
         )
     );
 
-   /* m_pthemeChangeSwitch.reset(
+    m_pthemeChangeSwitch.reset(
         lv_task_create(
                 themeChange
             ,   2000
             ,   LV_TASK_PRIO_MID
             ,   nullptr
         )
-    );*/
+    );
 }
 
 Graphics::MainWindow::IGsMainWindow&

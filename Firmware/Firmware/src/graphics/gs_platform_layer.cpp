@@ -177,7 +177,7 @@ public:
 
         lv_task_create(
                 memoryMonitorTask
-            ,   3000
+            ,   10
             ,   LV_TASK_PRIO_MID
             ,   nullptr
         );
