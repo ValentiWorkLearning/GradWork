@@ -53,7 +53,7 @@ void ClockWatch::setFullDate( const std::string& _fullDate )
 void ClockWatch::resetStyle()
 {
 	Meta::tupleApply(
-		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		[](auto&& _nodeToReset) { lv_style_reset( &_nodeToReset ); }
 		,   std::forward_as_tuple(
 				m_hoursLabelStyle
 			,	m_minutesLabelStyle

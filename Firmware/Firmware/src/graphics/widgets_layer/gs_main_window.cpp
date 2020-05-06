@@ -85,6 +85,16 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
     onActivePageChanged.emit( m_currentPageName );
 }
 
+Graphics::Views::IPageViewObject& GsMainWindow::getActivePage()
+{
+    return *m_pagesStorage.at( m_currentPageName );
+}
+
+Graphics::Views::IPageViewObject& GsMainWindow::getActivePage() const
+{
+    return *m_pagesStorage.at( m_currentPageName );
+}
+
 Graphics::Views::IPageViewObject&
 GsMainWindow::getPage( std::string_view _pageName )const
 {
@@ -205,7 +215,7 @@ void GsMainWindow::initWidgets()
 
     onActivePageChanged.connect(
         [this]( std::string_view _activePage ){
-            m_pPagesSwitch->setActivePage( _activePage );
+            //m_pPagesSwitch->setActivePage( _activePage );
         }
     );
 }
@@ -226,9 +236,9 @@ void GsMainWindow::initMask()
 void GsMainWindow::initWatchPage()
 {
     auto pClockPage = Views::createClockWatchView( getThemeController() );
-    pClockPage->addWidget( m_pBatteryWidget.get() );
+    /*pClockPage->addWidget( m_pBatteryWidget.get() );
     pClockPage->addWidget( m_pPagesSwitch.get() );
-    pClockPage->addWidget( m_pBluetoothWidget.get() );
+    pClockPage->addWidget( m_pBluetoothWidget.get() );*/
 
     m_pClockPageController = Views::createPageWatchHandler( pClockPage.get() );
 

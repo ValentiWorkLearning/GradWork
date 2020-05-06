@@ -55,6 +55,10 @@ public:
 
     void setPageActive( std::string_view _pageName ) override;
 
+    Graphics::Views::IPageViewObject& getActivePage() override;
+
+    Graphics::Views::IPageViewObject& getActivePage()const override;
+
     Graphics::Views::IPageViewObject&
         getPage( std::string_view _pageName )const override;
 

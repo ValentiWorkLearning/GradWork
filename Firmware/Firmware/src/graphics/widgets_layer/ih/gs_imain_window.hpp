@@ -40,6 +40,10 @@ public:
 
     virtual void setPageActive( std::string_view _pageName ) = 0;
 
+    virtual Graphics::Views::IPageViewObject& getActivePage() = 0;
+
+    virtual Graphics::Views::IPageViewObject& getActivePage() const = 0;
+
     virtual Graphics::Views::IPageViewObject&
         getPage(std::string_view _pageName)const = 0;
 
