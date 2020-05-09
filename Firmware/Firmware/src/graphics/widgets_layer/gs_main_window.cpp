@@ -149,11 +149,13 @@ void GsMainWindow::initBackground()
             Graphics::Theme::Color::MainThemeLight
         );
 
+    lv_style_set_bg_opa( &m_iniStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
     lv_style_set_bg_color( &m_iniStyle, LV_STATE_DEFAULT, MainThemeDark );
     lv_style_set_bg_grad_color( &m_iniStyle,LV_STATE_DEFAULT, MainThemeDark );
 
     lv_style_set_bg_color( &m_yanStyle, LV_STATE_DEFAULT, MainThemeLight );
     lv_style_set_bg_grad_color( &m_yanStyle, LV_STATE_DEFAULT, MainThemeLight );
+    lv_style_set_bg_opa( &m_yanStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
 
     m_pIny.reset( createAlignedRect(LV_ALIGN_IN_BOTTOM_MID, &m_iniStyle) );
     m_pYan.reset( createAlignedRect( LV_ALIGN_IN_TOP_MID, &m_yanStyle ) );
@@ -175,6 +177,7 @@ void GsMainWindow::initBackground()
         return pCircle;
     };
 
+    lv_style_set_bg_opa( &m_iniCircleStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
     lv_style_set_bg_color( &m_iniCircleStyle,LV_STATE_DEFAULT, MainThemeDark );
     lv_style_set_border_color( &m_iniCircleStyle, LV_STATE_DEFAULT, MainThemeDark );
     lv_style_set_bg_grad_color( &m_iniCircleStyle, LV_STATE_DEFAULT, MainThemeDark );
@@ -182,6 +185,7 @@ void GsMainWindow::initBackground()
 
     lv_style_copy( &m_yanCircleStyle, &m_iniCircleStyle );
 
+    lv_style_set_bg_opa( &m_yanCircleStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
     lv_style_set_bg_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
     lv_style_set_border_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
     lv_style_set_bg_grad_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );

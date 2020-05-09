@@ -61,12 +61,11 @@ private:
 
 private:
 
-    static constexpr std::uint8_t ArcSize = 16;
+    static constexpr inline std::uint8_t ArcSize = 16;
 
 private:
 
-    lv_style_t m_checkedPointStyle;
-    lv_style_t m_uncheckedPointStyle;
+    lv_style_t m_pointStyle;;
 
     std::string_view m_activePageName;
 
