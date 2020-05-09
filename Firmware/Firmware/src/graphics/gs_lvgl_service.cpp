@@ -87,18 +87,10 @@ LvglGraphicsService::initDisplayDriver()
     auto monitorCallback = cbc::obtain_connector(
         []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
         {
-            std::array<char, 10> str{};
-            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),time); ec == std::errc() )
-            {
-                Logger::Instance().logDebug("Refresh time:");
-                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
-            }
-
-            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),px ); ec == std::errc() )
-            {
-                Logger::Instance().logDebug("Refreshed pixels:");
-                Logger::Instance().logDebugEndl( std::string_view( str.data(), p - str.data() ) );
-            }
+            Logger::Instance().logDebug("Refresh time:");
+            Logger::Instance().logDebugEndl( time );
+            Logger::Instance().logDebug("Refreshed pixels:");
+            Logger::Instance().logDebugEndl( px );
         }
     );
 

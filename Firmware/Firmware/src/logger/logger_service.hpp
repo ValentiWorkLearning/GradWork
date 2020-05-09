@@ -18,6 +18,53 @@ public:
 
     void logDebug( std::string_view _toLog );
 
+    template< typename TToLog >
+    static constexpr bool IsStringType()
+    {
+        using TClearType = typename std::decay<TToLog>::type;
+        constexpr bool isStringType = std::is_same_v<TClearType,std::string >
+                ||  std::is_same_v<TClearType,std::string_view >
+                ||  std::is_same_v<TClearType,const char *>
+                || std::is_same_v<TClearType, char*>;
+        return isStringType;
+    }
+
+    template< typename TToLog >
+    void logDebugEndl( const TToLog& _toLog )
+    {
+
+        constexpr bool isString = IsStringType<TToLog>();
+        if constexpr ( !isString )
+        {
+            std::array<char, sizeof (TToLog)* 8> str{};
+            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(), _toLog); ec == std::errc() )
+            {
+                logDebugEndl( std::string_view( str.data(), p - str.data() ) );
+            }
+        }
+        else{
+            logDebugEndl( static_cast<std::string_view>(_toLog) );
+        }
+
+    }
+
+    template< typename TToLog>
+    void logDebug( const TToLog& _toLog )
+    {
+        constexpr bool isString = IsStringType<TToLog>();
+        if constexpr (!isString)
+        {
+            std::array<char, sizeof (TToLog)* 8> str{};
+            if( auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(),_toLog); ec == std::errc() )
+            {
+                logDebug( std::string_view( str.data(), p - str.data() ) );
+            }
+        }
+        else{
+            logDebug( static_cast<std::string_view>(_toLog) );
+        }
+    }
+
 private:
 
     Logger();
