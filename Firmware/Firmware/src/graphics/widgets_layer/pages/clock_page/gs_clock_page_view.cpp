@@ -6,6 +6,11 @@ namespace Graphics::Views
 
 ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )
 	:	PageViewObject<IClockWatchPage>{ _themeController, IClockWatchPage::ClockPageName }
+	,	m_hoursLabelStyle{}
+	,	m_minutesLabelStyle{}
+	,	m_secondsLabelStyle{}
+	,	m_fullDateStyle{}
+	,	m_weekDayStyle{}
 	,	m_hoursValue{ "00" }
 	,	m_minutesValue{ "00" }
 	,	m_secondsValue{ ":00" }
@@ -14,49 +19,6 @@ ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )
 {
 	initStyles();
 }
-
-void ClockWatch::show()
-{
-	PageViewObject::show();
-
-	auto parent = lv_disp_get_scr_act( nullptr );
-
-	auto pThemeProvider = PageViewObject::getThemeController();
-	if (!pThemeProvider )
-		return;
-
-	const std::uint32_t DisplayWidth { pThemeProvider->getDisplayWidth() };
-	const std::uint32_t DisplayHeight { pThemeProvider->getDisplayHeight() };
-
-	initClockLabels( parent, DisplayWidth, DisplayHeight );
-	initFullDateLabel( parent, DisplayWidth, DisplayHeight );
-	initWeekDayLabel( parent, DisplayWidth, DisplayHeight );
-
-	restoreLabelsText();
-}
-
-void ClockWatch::hide()
-{
-	PageViewObject::hide();
-
-	Meta::tupleApply(
-			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
-		,	std::forward_as_tuple(
-				m_pHoursLabel
-			,	m_pMinutesLabel
-			,	m_pSecondsLabel
-			,	m_pFullDateLabel
-			,	m_pWeekDayLabel
-		)
-	);
-}
-
-void ClockWatch::reloadStyle()
-{
-	PageViewObject::reloadStyle();
-	initStyles();
-}
-
 
 void ClockWatch::setHours( const std::string& _newHoursValue )
 {
@@ -88,6 +50,20 @@ void ClockWatch::setFullDate( const std::string& _fullDate )
 	lv_label_set_text( m_pFullDateLabel.get(), m_fulldateValue.c_str() );
 }
 
+void ClockWatch::resetStyle()
+{
+	Meta::tupleApply(
+		[](auto&& _nodeToReset) { lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+				m_hoursLabelStyle
+			,	m_minutesLabelStyle
+			,	m_secondsLabelStyle
+			,	m_fullDateStyle
+			,	m_weekDayStyle
+		)
+	);
+}
+
 void ClockWatch::initStyles()
 {
 	auto pThemeProvider = PageViewObject::getThemeController();
@@ -117,6 +93,33 @@ void ClockWatch::initStyles()
 	);
 }
 
+void ClockWatch::initPageWidgets(
+		lv_obj_t* _parent
+	,	 const std::uint32_t _displayWidth
+	,	const std::uint32_t _displayHeight
+	)
+{
+	initClockLabels( _parent, _displayWidth, _displayHeight );
+	initFullDateLabel( _parent, _displayWidth, _displayHeight );
+	initWeekDayLabel( _parent, _displayWidth, _displayHeight );
+
+	restoreLabelsText();
+}
+
+void ClockWatch::unloadWidgets()
+{
+	Meta::tupleApply(
+			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
+		,	std::forward_as_tuple(
+				m_pHoursLabel
+			,	m_pMinutesLabel
+			,	m_pSecondsLabel
+			,	m_pFullDateLabel
+			,	m_pWeekDayLabel
+		)
+	);
+}
+
 void ClockWatch::initClockLabels(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
@@ -128,9 +131,9 @@ void ClockWatch::initClockLabels(
 	const std::uint32_t DisplayHeight { _displayHeight };
 
 	m_pHoursLabel.reset( lv_label_create( parent, nullptr ) );
-	lv_label_set_style(
+	lv_obj_add_style(
 			m_pHoursLabel.get()
-		, 	LV_LABEL_STYLE_MAIN
+		, 	LV_LABEL_PART_MAIN
 		, 	&m_hoursLabelStyle
 	);
 
@@ -143,9 +146,9 @@ void ClockWatch::initClockLabels(
 	);
 
 	m_pMinutesLabel.reset( lv_label_create( parent, nullptr ) );
-	lv_label_set_style(
+	lv_obj_add_style(
 			m_pMinutesLabel.get()
-		,	LV_LABEL_STYLE_MAIN
+		,	LV_LABEL_PART_MAIN
 		,	&m_minutesLabelStyle
 	);
 
@@ -158,9 +161,9 @@ void ClockWatch::initClockLabels(
 	);
 
 	m_pSecondsLabel.reset( lv_label_create( parent, nullptr ) );
-	lv_label_set_style(
+	lv_obj_add_style(
 			m_pSecondsLabel.get()
-		,	LV_LABEL_STYLE_MAIN
+		,	LV_LABEL_PART_MAIN
 		,	&m_secondsLabelStyle
 	);
 
@@ -181,9 +184,9 @@ void ClockWatch::initFullDateLabel(
 {
 
 	m_pFullDateLabel.reset( lv_label_create( _parentObject, nullptr ) );
-	lv_label_set_style(
+	lv_obj_add_style(
 			m_pFullDateLabel.get()
-		, 	LV_LABEL_STYLE_MAIN
+		, 	LV_LABEL_PART_MAIN
 		, 	&m_fullDateStyle
 	);
 
@@ -203,9 +206,9 @@ void ClockWatch::initWeekDayLabel(
 )
 {
 	m_pWeekDayLabel.reset( lv_label_create( _parentObject, nullptr ) );
-	lv_label_set_style(
+	lv_obj_add_style(
 			m_pWeekDayLabel.get()
-		, 	LV_LABEL_STYLE_MAIN
+		, 	LV_LABEL_PART_MAIN
 		, 	&m_weekDayStyle
 	);
 

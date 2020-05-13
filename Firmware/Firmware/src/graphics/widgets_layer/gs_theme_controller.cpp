@@ -87,24 +87,24 @@ lv_style_t
 ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
 {
     lv_style_t iconsFont{};
-    lv_style_copy( &iconsFont,&lv_style_plain_color );
+    //lv_style_copy( &iconsFont,&lv_style_plain);
 
     switch (_fontStyle)
     {
     case Graphics::Theme::FontSize::small:
-        iconsFont.text.font = &IconFont16px;
+        lv_style_set_text_font(&iconsFont, LV_STATE_DEFAULT, &IconFont16px);
         break;
     case Graphics::Theme::FontSize::below_normal:
-        iconsFont.text.font = &IconFont24px;
+        lv_style_set_text_font(&iconsFont, LV_STATE_DEFAULT, &IconFont24px);
         break;
     case Graphics::Theme::FontSize::normal:
-        iconsFont.text.font = &IconFont35px;
+        lv_style_set_text_font(&iconsFont, LV_STATE_DEFAULT, &IconFont35px);
         break;
     case Graphics::Theme::FontSize::large:
-        iconsFont.text.font = &PlayerIcons68px;
+        lv_style_set_text_font(&iconsFont, LV_STATE_DEFAULT, &PlayerIcons68px);
         break;
     }
-    iconsFont.text.color = getMainThemeColor( _fontColor );
+    lv_style_set_text_color(&iconsFont, LV_STATE_DEFAULT, getMainThemeColor( _fontColor ) );
 
     return  iconsFont;
 };
@@ -113,33 +113,33 @@ lv_style_t
 ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const
 {
     lv_style_t fontStyle{};
-    lv_style_copy( &fontStyle, &lv_style_plain_color );
+    //lv_style_copy( &fontStyle, &lv_style_plain_color );
 
     switch (_fontStyle)
     {
     case Graphics::Theme::FontSize::extra_small:
-        fontStyle.text.font = &LcdNova12px;
+        lv_style_set_text_font(&fontStyle, LV_STATE_DEFAULT, &LcdNova12px);
         break;
     case Graphics::Theme::FontSize::small:
-        fontStyle.text.font = &LcdNova16px;
+        lv_style_set_text_font(&fontStyle, LV_STATE_DEFAULT, &LcdNova16px);
         break;
     case Graphics::Theme::FontSize::below_normal:
-        fontStyle.text.font = &LcdNova24px;
+        lv_style_set_text_font(&fontStyle, LV_STATE_DEFAULT, &LcdNova24px);
         break;
     case Graphics::Theme::FontSize::normal:
-        fontStyle.text.font = &LcdNova30px;
+        lv_style_set_text_font(&fontStyle, LV_STATE_DEFAULT, &LcdNova30px);
         break;
     case Graphics::Theme::FontSize::large:
-        fontStyle.text.font = &LcdNova36px;
+        lv_style_set_text_font(&fontStyle, LV_STATE_DEFAULT, &LcdNova36px);
         break;
     case Graphics::Theme::FontSize::x_large:
-        fontStyle.text.font = &LcdNova68px;
+        lv_style_set_text_font(&fontStyle, LV_STATE_DEFAULT, &LcdNova68px);
         break;
     default:
         break;
     }
 
-    fontStyle.text.color = getMainThemeColor( _fontColor );
+    lv_style_set_text_color(&fontStyle, LV_STATE_DEFAULT, getMainThemeColor(_fontColor));
 
     return fontStyle;
 }

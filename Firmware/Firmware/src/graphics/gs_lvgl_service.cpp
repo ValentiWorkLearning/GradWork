@@ -37,9 +37,8 @@ void LvglGraphicsService::executeGlTask()
 void
 LvglGraphicsService::initLvglLogger()
 {
-
     auto lvglLoggerCallback = cbc::obtain_connector(
-        []( lv_log_level_t level, const char * file, std::uint32_t line, const char * dsc )
+        []( lv_log_level_t level, const char * file, std::uint32_t line, const char * functionName, const char* dsc)
         {
             switch( level )
             {
@@ -62,6 +61,8 @@ LvglGraphicsService::initLvglLogger()
             Logger::Instance().logDebug( "File:"  );
             Logger::Instance().logDebug( file );
             Logger::Instance().logDebug( ":" );
+            Logger::Instance().logDebug(":functon");
+            Logger::Instance().logDebug(functionName);
             Logger::Instance().logDebugEndl( dsc );
         }
     );
@@ -77,7 +78,7 @@ LvglGraphicsService::initDisplayDriver()
     lv_disp_buf_init(
                     &displayBuffer
                 ,   &dispFrameBufFirst
-                ,   &dispFrameBufSecond
+                ,   nullptr
                 ,   DispHorRes
             );
 
@@ -94,7 +95,7 @@ LvglGraphicsService::initDisplayDriver()
         }
     );
 
-    m_glDisplayDriver.monitor_cb = monitorCallback;
+    //m_glDisplayDriver.monitor_cb = monitorCallback;
     m_pPlatformBackend->platformDependentInit( &m_glDisplayDriver );
 
     m_glDisplay.reset( lv_disp_drv_register( &m_glDisplayDriver ) );
@@ -126,7 +127,7 @@ LvglGraphicsService::initMainWindow()
     m_pMainWindow->setPageActive(
         Views::IClockWatchPage::ClockPageName
     );
-
+    
     auto pageToggle = cbc::obtain_connector(
         [this](lv_task_t* _pTask)
         {
@@ -215,9 +216,6 @@ lv_disp_buf_t LvglGraphicsService::displayBuffer{};
 
 LvglGraphicsService::TColorBuf
 LvglGraphicsService::dispFrameBufFirst{};
-
-LvglGraphicsService::TColorBuf
-LvglGraphicsService::dispFrameBufSecond{};
 
 std::unique_ptr<LvglGraphicsService>
 createGraphicsService(

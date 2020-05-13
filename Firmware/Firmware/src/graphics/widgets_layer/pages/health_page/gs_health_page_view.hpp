@@ -23,23 +23,27 @@ public:
 
 public:
 
-    void show() override;
-
-    void hide() override;
-
-    void reloadStyle() override;
-
-public:
-
     void setStepsCount(std::uint8_t _newStepsValue) override;
 
     void setHeartrate(std::uint8_t _newHeartrateValue) override;
 
     void setCalloriesCount(std::uint8_t _newCalloriesCount) override;
 
-private:
+protected:
 
-    void initStyles();
+    void resetStyle() override;
+
+    void initStyles() override;
+
+    void initPageWidgets(
+            lv_obj_t* _parent
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    ) override;
+
+    void unloadWidgets() override;
+
+private:
 
     void initPageTitle(
             lv_obj_t* _parentObject

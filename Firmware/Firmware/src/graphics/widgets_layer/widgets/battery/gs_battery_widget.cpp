@@ -30,6 +30,7 @@ void BatteryWidget::show()
 
 void BatteryWidget::reloadStyle()
 {
+    resetStyle();
     initStyles();
 }
 
@@ -49,6 +50,17 @@ void BatteryWidget::initStyles()
         ,   Theme::Color::MainThemeLight
     );
 
+}
+
+void BatteryWidget::resetStyle()
+{
+    Meta::tupleApply(
+		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
+		,   std::forward_as_tuple(
+                m_batteryLabelStyle
+            ,   m_bateryIconStyle
+		)
+	);
 }
 
 void BatteryWidget::setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel )
@@ -105,7 +117,7 @@ void BatteryWidget::initBatteryPercentageLabel(
 
     m_pBatteryLabel.reset( lv_label_create( _parentObject, nullptr) );
 
-    lv_obj_set_style( m_pBatteryLabel.get(), &m_batteryLabelStyle );
+    lv_obj_add_style( m_pBatteryLabel.get(), LV_OBJ_PART_MAIN,&m_batteryLabelStyle );
 
     const std::uint32_t DisplayWidth { _displayWidth };
     const std::uint32_t DisplayHeight { _displayHeight };
@@ -133,7 +145,7 @@ void BatteryWidget::initBatteryIcon(
     const std::uint32_t DisplayWidth{ _displayWidth };
     const std::uint32_t DisplayHeight{ _displayHeight };
 
-    lv_obj_set_style( m_pBatteryIcon.get(), &m_bateryIconStyle );
+    lv_obj_add_style( m_pBatteryIcon.get(), LV_OBJ_PART_MAIN,&m_bateryIconStyle );
     setBatteryStatus( m_currentStatus );
 
     lv_obj_align(

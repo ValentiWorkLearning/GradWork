@@ -55,6 +55,10 @@ public:
 
     void setPageActive( std::string_view _pageName ) override;
 
+    Graphics::Views::IPageViewObject& getActivePage() override;
+
+    Graphics::Views::IPageViewObject& getActivePage()const override;
+
     Graphics::Views::IPageViewObject&
         getPage( std::string_view _pageName )const override;
 
@@ -73,6 +77,10 @@ public:
 private:
 
     void initBackground();
+
+    void resetBackgroundStyle();
+
+    void initMask();
 
     void initWidgets();
 
@@ -107,11 +115,14 @@ private:
     lv_style_t m_yanStyle;
     lv_style_t m_iniCircleStyle;
     lv_style_t m_yanCircleStyle;
+    lv_area_t maskArea;
+    lv_draw_mask_radius_param_t radiusParam;
 
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pIny;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pInyCircle;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYan;
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYanCircle;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pObjMask;
 
 private:
 

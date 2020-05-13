@@ -21,14 +21,6 @@ public:
     ~ClockWatch() override = default;
 
 public:
-    
-    void show() override;
-
-    void hide() override;
-
-    void reloadStyle() override;
-
-public:
 
     void setHours( const std::string& _newHoursValue ) override;
 
@@ -40,9 +32,21 @@ public:
 
     void setFullDate( const std::string& _fullDate ) override;
 
-private:
+protected:
 
-    void initStyles();
+    void resetStyle() override;
+
+    void initStyles() override;
+
+    void initPageWidgets(
+            lv_obj_t* _parent
+        ,   const std::uint32_t _displayWidth
+        ,   const std::uint32_t _displayHeight
+    ) override;
+
+    void unloadWidgets() override;
+
+private:
 
     void initClockLabels(
             lv_obj_t* _parentObject

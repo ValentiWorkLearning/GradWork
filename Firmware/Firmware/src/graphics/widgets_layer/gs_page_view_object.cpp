@@ -11,6 +11,8 @@
 #include "pages/health_page/gs_ihealth_page_view.hpp"
 #include "pages/player_page/gs_iplayer_page_view.hpp"
 
+#include "gs_itheme_controller.hpp"
+
 namespace Graphics::Views
 {
 
@@ -39,6 +41,19 @@ void PageViewObject<ConcretePageView >::show()
     if( m_isPageVisible )
         return;
 
+    initStyles();
+
+    auto parent = lv_disp_get_scr_act( nullptr );
+
+	auto pThemeProvider = PageViewObject::getThemeController();
+	if (!pThemeProvider )
+		return;
+
+	const std::uint32_t DisplayWidth { pThemeProvider->getDisplayWidth() };
+	const std::uint32_t DisplayHeight { pThemeProvider->getDisplayHeight() };
+
+    initPageWidgets( parent, DisplayWidth, DisplayHeight );
+
     executeForEachWidget(
         []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
@@ -54,6 +69,8 @@ void PageViewObject<ConcretePageView>::hide()
     if( !m_isPageVisible )
         return;
 
+    unloadWidgets();
+    resetStyle();
     executeForEachWidget(
         []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
@@ -66,12 +83,14 @@ void PageViewObject<ConcretePageView>::hide()
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::reloadStyle()
 {
+    hide();
     executeForEachWidget(
         []( Graphics::Widgets::IWidgetObject* _pWidget )
         {
             _pWidget->reloadStyle();
         }
     );
+    show();
 }
 
 template<typename ConcretePageView>
