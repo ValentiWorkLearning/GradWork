@@ -45,7 +45,6 @@ private:
 
     static lv_disp_buf_t displayBuffer;
     static TColorBuf dispFrameBufFirst;
-    static TColorBuf dispFrameBufSecond;
 
 private:
 

@@ -78,7 +78,7 @@ LvglGraphicsService::initDisplayDriver()
     lv_disp_buf_init(
                     &displayBuffer
                 ,   &dispFrameBufFirst
-                ,   &dispFrameBufSecond
+                ,   nullptr
                 ,   DispHorRes
             );
 
@@ -216,9 +216,6 @@ lv_disp_buf_t LvglGraphicsService::displayBuffer{};
 
 LvglGraphicsService::TColorBuf
 LvglGraphicsService::dispFrameBufFirst{};
-
-LvglGraphicsService::TColorBuf
-LvglGraphicsService::dispFrameBufSecond{};
 
 std::unique_ptr<LvglGraphicsService>
 createGraphicsService(
