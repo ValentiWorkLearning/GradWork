@@ -99,7 +99,6 @@ set ( TARGET_SOURCE_LIST
     "lvgl/src/lv_misc/lv_area.c"
     "lvgl/src/lv_misc/lv_async.c"
     "lvgl/src/lv_misc/lv_bidi.c"
-    "lvgl/src/lv_misc/lv_circ.c"
     "lvgl/src/lv_misc/lv_color.c"
     "lvgl/src/lv_misc/lv_fs.c"
     "lvgl/src/lv_misc/lv_gc.c"
