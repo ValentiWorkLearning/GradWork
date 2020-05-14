@@ -4,9 +4,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master,dev/setup_ci ]
+    branches: [ master,dev/setup_ci,dev/develop ]
   pull_request:
-    branches: [ master,dev/setup_ci ]
+    branches: [ master,dev/setup_ci,dev/develop ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -36,8 +36,8 @@ jobs:
         cmakeBuildType: Debug
         buildWithCMake: true
 
-    - name: run a single line script
-      run: echo Hello, world!
+    # - name: run a single line script
+    #   run: echo Hello, world!
 
     # # Runs a set of commands using the runners shell
     # - name: Run a multi-line script
