@@ -142,7 +142,7 @@ public:
 
     void initPlatformGfxTimer()
     {
-        auto m_tickThread = std::thread(
+        m_tickThread = std::thread(
             []
             {
                 while (true)

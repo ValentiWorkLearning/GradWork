@@ -96,6 +96,10 @@
         "xlocmes": "cpp",
         "xlocmon": "cpp",
         "xloctime": "cpp",
-        "set": "cpp"
+        "set": "cpp",
+        "forward_list": "cpp",
+        "optional": "cpp",
+        "iomanip": "cpp",
+        "memory_resource": "cpp"
     }
 }
