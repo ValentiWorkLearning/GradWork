@@ -1,5 +1,5 @@
 # GradWork
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/08c0d7971b704b748f2d73a1324b52d2)](https://www.codacy.com/manual/kornienko-vr/GradWork?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ValentiWorkLearning/GradWork&amp;utm_campaign=Badge_Grade)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/08c0d7971b704b748f2d73a1324b52d2)](https://www.codacy.com/manual/kornienko-vr/GradWork?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=ValentiWorkLearning/GradWork&amp;utm_campaign=Badge_Grade)![CI](https://github.com/ValentiWorkLearning/GradWork/workflows/CI/badge.svg?branch=dev%2Fdevelop)
 
 Development board for smart-handwatch based on NRF52832 E73 module with C++17/CMake/VSCode based development flow
 
