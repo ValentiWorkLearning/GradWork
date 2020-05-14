@@ -23,7 +23,7 @@ jobs:
         submodules: 'true'
 
     #Install the latest cmake
-    -name : Get the latest CMake version
+    - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
 
     # Runs a single command using the runners shell
