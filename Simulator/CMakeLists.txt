@@ -4,7 +4,7 @@ set (TARGET_NAME WatchSim )
 
 project(FirmwareSimulator)
 
-find_package(Boost 1.68.0)
+#find_package(Boost 1.68.0)
 
 set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
@@ -109,5 +109,5 @@ target_link_libraries(
     lvgl_lib
     etl
     fmt
-    ${Boost_LIBRARIES}
+    #${Boost_LIBRARIES}
 )
