@@ -22,12 +22,22 @@ jobs:
       with:
         submodules: 'true'
 
-    # # Runs a single command using the runners shell
-    # - name: Run CMakeLists generation for MSVC
-    #   uses: lukka/run-cmake@v2
-    #   with:
-    #     cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-    #   run: echo Hello, world!
+    #Install the latest cmake
+    -name : Get the latest CMake version
+      uses: lukka/get-cmake@latest
+
+    # Runs a single command using the runners shell
+    - name: Run CMakeLists generation for MSVC compiler
+      uses: lukka/run-cmake@v2
+      with:
+        cmakeGenerator: VS16Win64
+        cmakeListsOrSettingsJson: CMakeListsTxtBasic
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/Firmware/CMakeLists.txt
+        cmakeBuildType: Debug
+        buildWithCMake: true
+
+    - name: run a single line script
+      run: echo Hello, world!
 
     # # Runs a set of commands using the runners shell
     # - name: Run a multi-line script
