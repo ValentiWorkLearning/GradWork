@@ -48,7 +48,6 @@ jobs:
           file-url: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip'
           file-name: 'Nrf52SDK.zip'
           location: './NordicSDK'
-
    - name: Print the file path
     run: echo "The file was downloaded to ${{ steps.download-nrf52sdk.outputs.file-path }}"
 
