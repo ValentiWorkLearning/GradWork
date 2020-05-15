@@ -63,7 +63,8 @@ jobs:
     
     - name: Unpack NordicSDK
       run: |
-        unzip nRF5SDK160098a08e2.zip
+        mkdir Nrf52SDK
+        unzip nRF5SDK160098a08e2.zip -d Nrf52SDK
 
     - name: Set up environment for build
       run: |
