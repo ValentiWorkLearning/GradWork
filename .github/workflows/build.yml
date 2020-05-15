@@ -66,10 +66,6 @@ jobs:
         mkdir Nrf52SDK
         unzip nRF5SDK160098a08e2.zip -d Nrf52SDK
 
-    - name: Set up environment for build
-      run: |
-        echo "export NRF5_SDK_PATH_ENV=${{ github.workspace }}/Nrf52SDK" >> ~/.bash_profile
-
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
       with:
@@ -77,7 +73,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtBasic
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DUSE_ENV_SDK_PATH=OFF -DNRF5_SDK_PATH_EXT=${{ github.workspace }}/Nrf52SDK'
+        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DUSE_ENV_SDK_PATH=OFF -DNRF5_SDK_PATH_EXT="${{ github.workspace }}/Nrf52SDK"'
         buildWithCMake: true
 
     # - name: run a single line script
