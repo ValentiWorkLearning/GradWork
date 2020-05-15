@@ -65,6 +65,7 @@ jobs:
       run: |
         unzip nRF5SDK160098a08e2.zip
         export NRF5_SDK_PATH_ENV=${{ github.workspace }}
+        env | grep NRF5_SDK_PATH_ENV
 
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
