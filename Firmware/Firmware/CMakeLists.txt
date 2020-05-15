@@ -11,7 +11,7 @@ endif ()
 
 if ( USE_ENV_SDK_PATH )
 	set(NRF5_SDK_PATH $ENV{NRF5_SDK_PATH_ENV})
-else
+else()
 	set(NRF5_SDK_PATH ${NRF5_SDK_PATH_EXT})
 endif()
 
