@@ -59,7 +59,7 @@ jobs:
     - name: Create additional directories
       run: |
         mkdir "NordicDir/SDK"
-        cd "NordicDir/SDK"
+        cd NordicDir/SDK
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
