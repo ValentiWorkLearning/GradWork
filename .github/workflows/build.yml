@@ -41,17 +41,16 @@ jobs:
       with:
         release: '9-2019-q4'
 
+    - name: Create additional directories
+        run: |
+          mkdir "${{ github.workspace }}\Nordic"
+          cd "${{ github.workspace }}\Nordic"
+
     - name: Get NRF52 16.0 SDK
-      uses: carlosperate/download-file-action@v1.0.3
+      uses: wei/wget@v1
       id: download-nrf52sdk
       with:
-          file-url: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip'
-          file-name: 'Nrf52SDK.zip'
-          location: '${{ github.workspace }}\NordicSDK'
-  - name: Unpack NRF52SDK
-      run: |
-        cd "${{ github.workspace }}\NordicSDK"
-        dir
+        args: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip'
 
     # - name: run a single line script
     #   run: echo Hello, world!
