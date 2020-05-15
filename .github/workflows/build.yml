@@ -41,10 +41,10 @@ jobs:
       with:
         release: '9-2019-q4'
 
-    - name: Create additional directories
-        run: |
-          mkdir "${{ github.workspace }}\Nordic"
-          cd "${{ github.workspace }}\Nordic"
+    # - name: Create additional directories
+    #     run: |
+    #       mkdir "${{ github.workspace }}\Nordic"
+    #       cd "${{ github.workspace }}\Nordic"
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
