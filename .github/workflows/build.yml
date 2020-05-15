@@ -64,7 +64,7 @@ jobs:
     - name: Unpack NordicSDK
       run: |
         unzip nRF5SDK160098a08e2.zip
-        export NRF5_SDK_PATH=${{ github.workspace }}
+        export NRF5_SDK_PATH_ENV=${{ github.workspace }}
 
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
@@ -73,6 +73,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtBasic
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
+        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF'
         buildWithCMake: true
 
     # - name: run a single line script
