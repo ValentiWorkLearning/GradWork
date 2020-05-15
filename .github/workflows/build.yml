@@ -26,7 +26,7 @@ jobs:
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
 
-    - name: Run CMakeLists generation for MSVC compiler
+    - name: Run CMakeLists build for MSVC compiler
       uses: lukka/run-cmake@v2
       with:
         cmakeGenerator: VS16Win64
@@ -65,7 +65,12 @@ jobs:
       run: |
         unzip nRF5SDK160098a08e2.zip
 
-    - name: Run CMakeLists generation for MSVC compiler
+    - name: Get current directory
+        run: |
+          pwd
+          ls -l
+
+    - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
       with:
         cmakeGenerator: UnixMakefiles
