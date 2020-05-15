@@ -9,6 +9,8 @@ if (NOT DEFINED ARM_NONE_EABI_TOOLCHAIN_PATH)
 	set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_none_eabi_9_2_1")
 endif ()
 
+set(NRF5_SDK_PATH "")
+
 if ( USE_ENV_SDK_PATH )
 	set(NRF5_SDK_PATH $ENV{NRF5_SDK_PATH_ENV})
 else()
