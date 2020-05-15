@@ -26,7 +26,6 @@ jobs:
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
 
-    # Runs a single command using the runners shell
     - name: Run CMakeLists generation for MSVC compiler
       uses: lukka/run-cmake@v2
       with:
@@ -65,6 +64,15 @@ jobs:
     - name: Unpack NordicSDK
       run: |
         unzip nRF5SDK160098a08e2.zip
+
+    - name: Run CMakeLists generation for MSVC compiler
+      uses: lukka/run-cmake@v2
+      with:
+        cmakeGenerator: UnixMakefiles
+        cmakeListsOrSettingsJson: CMakeListsTxtBasic
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/Firmware/CMakeLists.txt
+        cmakeBuildType: Debug
+        buildWithCMake: true
 
     # - name: run a single line script
     #   run: echo Hello, world!
