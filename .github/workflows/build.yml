@@ -64,6 +64,9 @@ jobs:
     - name: Unpack NordicSDK
       run: |
         unzip nRF5SDK160098a08e2.zip
+
+    - name: Set up environment for build
+      run: |
         export NRF5_SDK_PATH_ENV=${{ github.workspace }}
         env | grep NRF5_SDK_PATH_ENV
 
