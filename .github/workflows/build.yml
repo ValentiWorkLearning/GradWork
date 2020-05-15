@@ -43,7 +43,7 @@ jobs:
 
     - name: Create NRFSDK directories
         run: |
-            $SDK_DIRECTORY= "${{ github.workspace }}\NordicSDK"
+            $SDK_DIRECTORY="${{ github.workspace }}\NordicSDK"
             mkdir ${SDK_DIRECTORY}
   
     - name: Get NRF52 SDK
