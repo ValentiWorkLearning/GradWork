@@ -67,8 +67,7 @@ jobs:
 
     - name: Set up environment for build
       run: |
-        export NRF5_SDK_PATH_ENV=${{ github.workspace }}
-        env | grep NRF5_SDK_PATH_ENV
+        ls -l
 
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
