@@ -47,8 +47,7 @@ jobs:
       with:
           file-url: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip'
           file-name: 'Nrf52SDK.zip'
-          location: ${{ github.workspace }}\NordicSDK
-
+          location: '${{ github.workspace }}\NordicSDK'
   - name: Unpack NRF52SDK
       run: |
         cd "${{ github.workspace }}\NordicSDK"
