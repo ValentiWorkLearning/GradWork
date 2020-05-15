@@ -57,15 +57,14 @@ jobs:
         release: '9-2019-q4'
 
     - name: Create additional directories
-      run: |
+      run:
         mkdir "NordicDir/SDK"
-        cd NordicDir/SDK
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
       id: download-nrf52sdk
       with:
-        args: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip' -O nrf52sdk.zip
+        args: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip' -O "NordicDir/SDK/nrf52sdk.zip"
     
     - name: Unpack NordicSDK
       run: |
