@@ -8,7 +8,7 @@ endif ()
 
 set(NRF5_SDK_PATH $ENV{NRF5_SDK_PATH})
 
-option( EXECUTE_MCU_FLASHING "Execure binary flashingto target MCU", ON )
+option( EXECUTE_MCU_FLASHING "Execure binary flashingto target MCU" ON )
 
 if( EXECUTE_MCU_FLASHING )
 	set(NRFJPROG $ENV{NRFJPROG_PATH}/nrfjprog.exe )
