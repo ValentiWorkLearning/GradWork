@@ -41,15 +41,14 @@ jobs:
       with:
         release: '9-2019-q4'
 
-    - name: Download a file
-      uses: carlosperate/download-file-action@v1.0.3
-      id: download-nrf52sdk
-      with:
-        file-url: 'https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py'
-        file-name: 'new_filename.py'
-        location: './new-folder-to-be-created'
-- name: Print the file path
-    run: echo "The file was downloaded to ${{ steps.download-poetry.outputs.file-path }}"
+    - name: Create NRFSDK directories
+        run: |
+            $SDK_DIRECTORY= "${{ github.workspace }}\NordicSDK"
+            mkdir ${SDK_DIRECTORY}
+  
+    - name: Get NRF52 SDK
+      uses: wei/curl@v1
+      args: https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip --output ${SDK_DIRECTORY}\Nrf52SDK.zip
 
     # - name: run a single line script
     #   run: echo Hello, world!
