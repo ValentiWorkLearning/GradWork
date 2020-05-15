@@ -8,7 +8,11 @@ endif ()
 
 set(NRF5_SDK_PATH $ENV{NRF5_SDK_PATH})
 
-set(NRFJPROG $ENV{NRFJPROG_PATH}/nrfjprog.exe )
+option( EXECUTE_MCU_FLASHING "Execure binary flashingto target MCU", ON )
+
+if( EXECUTE_MCU_FLASHING )
+	set(NRFJPROG $ENV{NRFJPROG_PATH}/nrfjprog.exe )
+endif(EXECUTE_MCU_FLASHING)
 
 include("${CMAKE_CURRENT_LIST_DIR}/../CMake_nRF5x.cmake")
 
