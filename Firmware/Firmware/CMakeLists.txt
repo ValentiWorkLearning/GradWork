@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
+option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" ON )
+
 set(NRF_TARGET nrf52)
 
 if (NOT DEFINED ARM_NONE_EABI_TOOLCHAIN_PATH)
@@ -8,7 +10,6 @@ endif ()
 
 set(NRF5_SDK_PATH $ENV{NRF5_SDK_PATH_ENV})
 
-option( EXECUTE_MCU_FLASHING "Execure binary flashingto target MCU" ON )
 
 if( EXECUTE_MCU_FLASHING )
 	set(NRFJPROG $ENV{NRFJPROG_PATH}/nrfjprog.exe )
