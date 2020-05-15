@@ -80,6 +80,7 @@ macro(nRF5x_setup)
                 "${NRF5_SDK_PATH}/modules/nrfx/mdk/gcc_startup_nrf52.S"
                 )
         set(SOFTDEVICE_PATH "${NRF5_SDK_PATH}/components/softdevice/s132/hex/s132_nrf52_6.1.1_softdevice.hex")
+        #set(SOFTDEVICE_PATH "${NRF5_SDK_PATH}/additional_softdevices/s112nrf52701/s112_nrf52_7.0.1_softdevice.hex")
     endif ()
 
     set(COMMON_FLAGS "-MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums ${CPU_FLAGS}")
@@ -89,7 +90,7 @@ macro(nRF5x_setup)
     set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Os")
     set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -O3")
     set(CMAKE_CXX_FLAGS "${COMMON_FLAGS}")
-    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0")
+    set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Os")
     set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
     set(CMAKE_ASM_FLAGS "-MP -MD -std=c99 -x assembler-with-cpp")
     set(CMAKE_EXE_LINKER_FLAGS "-mthumb -mabi=aapcs -std=gnu++98 -std=c99 -L ${NRF5_SDK_PATH}/modules/nrfx/mdk -T${NRF5_LINKER_SCRIPT} ${CPU_FLAGS} -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm")
@@ -312,7 +313,7 @@ macro(nRF5x_addExecutable EXECUTABLE_NAME SOURCE_FILES)
             COMMAND ${CMAKE_OBJCOPY} -O ihex ${EXECUTABLE_NAME}.out "${EXECUTABLE_NAME}.hex"
             COMMENT "post build steps for ${EXECUTABLE_NAME}")
 
-    # custom target for flashing the board
+#     # custom target for flashing the board
 #     add_custom_target("FLASH_${EXECUTABLE_NAME}" ALL
 #             DEPENDS ${EXECUTABLE_NAME}
 #             COMMAND ${NRFJPROG} --program ${EXECUTABLE_NAME}.hex -f ${NRF_TARGET} --sectorerase
