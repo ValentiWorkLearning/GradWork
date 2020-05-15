@@ -44,6 +44,7 @@ jobs:
     - name: Get NRF52 SDK
       run: |
           $SDK_DIRECTORY=${{ github.workspace }}/NordicSDK
+          mkdir ${SDK_DIRECTORY}
           curl https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip -OutFile  ${SDK_DIRECTORY}/Nrf52SDK.zip
     # - name: run a single line script
     #   run: echo Hello, world!
