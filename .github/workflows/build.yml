@@ -57,9 +57,7 @@ jobs:
         release: '9-2019-q4'
 
     - name: Create additional directories
-      run: |
-        echo Add other actions to build,
-        echo test, and deploy your project.
+      run: mkdir "NordicDir/SDK"
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
