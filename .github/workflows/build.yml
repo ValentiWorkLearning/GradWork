@@ -60,11 +60,11 @@ jobs:
       uses: wei/wget@v1
       id: download-nrf52sdk
       with:
-        args: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip' -O nrf52sdk.zip
+        args: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip'
     
     - name: Unpack NordicSDK
       run: |
-        unzip nrf52sdk.zip
+        unzip nRF5SDK160098a08e2.zip
 
     # - name: run a single line script
     #   run: echo Hello, world!
