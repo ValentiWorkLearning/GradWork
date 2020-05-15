@@ -49,6 +49,9 @@ jobs:
           file-name: 'Nrf52SDK.zip'
           location: '${{ github.workspace }}\NordicSDK'
 
+  - name: Print the file path
+    run: echo "The file was downloaded to ${{ steps.download-poetry.outputs.file-path }}"
+
     # - name: run a single line script
     #   run: echo Hello, world!
 
