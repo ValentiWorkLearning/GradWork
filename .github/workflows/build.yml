@@ -57,7 +57,7 @@ jobs:
         release: '9-2019-q4'
 
     - name : Create additional directories
-        run:
+        run: |
           mkdir NordicSDK
           cd NordicSDK
 
