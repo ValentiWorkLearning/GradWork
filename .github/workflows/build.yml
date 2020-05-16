@@ -74,7 +74,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DUSE_ENV_SDK_PATH=OFF -USE_ENV_GCC_PATH=OFF -DNRF5_SDK_PATH_EXT=${{ github.workspace }}/Nrf52SDK -DGCC_TOOLCHAIN_EXT_PATH=${{ github.workspace }}/toolchain'
+        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DUSE_ENV_SDK_PATH=OFF -DUSE_ENV_GCC_PATH=OFF -DNRF5_SDK_PATH_EXT=${{ github.workspace }}/Nrf52SDK -DGCC_TOOLCHAIN_EXT_PATH=${{ github.workspace }}/toolchain'
         buildWithCMake: true
 
     - name: run a single line script
