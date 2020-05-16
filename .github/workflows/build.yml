@@ -66,6 +66,7 @@ jobs:
       run: |
         mkdir Nrf52SDK
         unzip nRF5SDK160098a08e2.zip -d Nrf52SDK
+        mv Nrf52SDK\components\boards\pca10040.h Nrf52SDK\components\boards\pca10040_1.h
 
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
