@@ -126,6 +126,7 @@ public:
         :   m_pDateTimeService{ _pAppService }
         ,   m_isStopped{ true }
     {
+        m_timeWrapper.store( TimeWrapper( "1971/01/9 13:24:43", '/', ':' ) );
         initSimulator();
     }
 
