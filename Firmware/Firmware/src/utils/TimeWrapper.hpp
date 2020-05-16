@@ -5,6 +5,8 @@
 #include <array>
 #include <chrono>
 
+#include "MetaUtils.hpp"
+
 constexpr std::array Months = {
         "JAN"
     ,   "FEB"
@@ -97,7 +99,9 @@ inline TimeWrapper::TimeWrapper(std::string_view _yyyyMMDDHHMN, char _sep, char 
         ,   &sep4
         ,   &sec
     );
-    
+
+    Meta::UnuseVar( nMatched );
+
     std::tm currentTm{};
     currentTm.tm_year = year - 1900;
     currentTm.tm_mon = month - 1 >=0? month - 1 : month;

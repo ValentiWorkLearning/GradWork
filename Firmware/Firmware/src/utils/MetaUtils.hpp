@@ -39,4 +39,10 @@ using CustomDeleter = std::integral_constant<decltype(DeleterFunction), DeleterF
 template <typename ManagedType, auto Functor>
 using PointerWrapper = std::unique_ptr<ManagedType, CustomDeleter<Functor>>;
 
+template<typename Unused>
+constexpr void UnuseVar(Unused && _toUnuse)
+{
+    static_cast<void>( _toUnuse );
+}
+
 };
