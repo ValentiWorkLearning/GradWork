@@ -5,7 +5,7 @@ if (NOT NRF5_SDK_PATH)
     message(FATAL_ERROR "The path to the nRF5 SDK (NRF5_SDK_PATH) must be set.")
 endif ()
 
-if (NOT NRFJPROG)
+if (NOT NRFJPROG AND EXECUTE_MCU_FLASHING )
     message(FATAL_ERROR "The path to the nrfjprog utility (NRFJPROG) must be set.")
 endif ()
 
