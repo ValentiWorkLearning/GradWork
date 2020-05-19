@@ -32,7 +32,8 @@
 #include "nrf_ble_qwr.h"
 #include "nrf_pwr_mgmt.h"
 
-#include "ble_battery_service.hpp"
+#include "ih/ih_ble_battery_service.hpp"
+#include "ih/ih_ble_service_factory.hpp"
 
 #include "SimpleSignal.hpp"
 
@@ -51,14 +52,14 @@ class BleStackKeeper
 
 public:
 
-    BleStackKeeper();
-    ~BleStackKeeper() = default;
+    BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
+    ~BleStackKeeper()override = default;
 
 public:
 
-    Ble::BatteryService::BatteryLevelService& getBatteryService() override;
+    Ble::BatteryService::IBatteryLevelService& getBatteryService() override;
 
-    const Ble::BatteryService::BatteryLevelService& getBatteryService() const override;
+    const Ble::BatteryService::IBatteryLevelService& getBatteryService() const override;
 
 private:
 
@@ -119,10 +120,12 @@ private:
     bool m_isConnected;
     std::uint16_t m_connectionHandle;
 
+    ServiceFactory::TBleFactoryPtr m_pServiceCreator;
     std::unique_ptr<Ble::CustomService::CustomService> m_customService;
-    std::unique_ptr<Ble::BatteryService::BatteryLevelService> m_batteryService;
+    Ble::ServiceFactory::IBleServiceFactory::TBatteryServicePtr m_batteryService;
 };
 
-std::unique_ptr<BleStackKeeper> createBleStackKeeper();
+std::unique_ptr<BleStackKeeper>
+createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
 
 };

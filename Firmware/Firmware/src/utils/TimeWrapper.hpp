@@ -83,7 +83,7 @@ inline TimeWrapper::TimeWrapper()
 inline TimeWrapper::TimeWrapper(std::string_view _yyyyMMDDHHMN, char _sep, char _timeSep)
 {
     char sep1{}, sep2{}, sep3{}, sep4{};
-    std::int32_t year{}, month{}, day{}, hour{}, min{}, sec{};
+    int year{}, month{}, day{}, hour{}, min{}, sec{};
 
     int nMatched = sscanf(
             _yyyyMMDDHHMN.data()

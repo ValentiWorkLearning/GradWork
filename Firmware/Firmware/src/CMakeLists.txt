@@ -77,6 +77,9 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ible_softdevice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/winbondflash/winbond_flash.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova12px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova16px.cpp
@@ -117,6 +120,8 @@ target_include_directories(
     PUBLIC
     ${3RDPARTY_DIR}/etl
     ${CMAKE_CURRENT_LIST_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/ih
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble
     ${CMAKE_CURRENT_LIST_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/logger
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer

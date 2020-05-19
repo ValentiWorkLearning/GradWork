@@ -1,3 +1,7 @@
+#pragma once
+
+#include "ih/ih_ble_battery_service.hpp"
+
 #include "ble.h"
 #include "ble_srv_common.h"
 #include "ble_bas.h"
@@ -16,15 +20,17 @@ namespace Ble::BatteryService
     static constexpr std::uint8_t InitialBatteryLevel = 100;
 
 class BatteryLevelService
-    :   private Utils::noncopyable
+    :   public IBatteryLevelService
 {
 
 public:
 
     BatteryLevelService();
-    ~BatteryLevelService() = default;
+    ~BatteryLevelService()override = default;
 
-    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel );
+public:
+
+    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel ) override;
 
 private:
 

@@ -35,11 +35,10 @@ private:
 private:
 
     bool forceUpdateAfterVisibilityChange;
+    IClockWatchPage* m_pClockWatchView;
 
     TimeWrapper m_lastReceivedTime;
     std::string m_fullDateString;
-
-    IClockWatchPage* m_pClockWatchView;
 };
 
 std::unique_ptr<Graphics::IEventHandler>

@@ -10,14 +10,9 @@
 #include "service_providers/ih/sp_iheartrate_service.hpp"
 #include "service_providers/ih/sp_idatetime_service.hpp"
 
-#include "Noncopyable.hpp"
+#include "drivers/ih/ih_ible_softdevice.hpp"
 
-#if defined (USE_BLE_SERVICES)
-namespace Ble::Stack
-{
-    class BleStackKeeper;
-}
-#endif
+#include "Noncopyable.hpp"
 
 class Application
 {
@@ -50,10 +45,7 @@ private:
 
 private:
 
-#if defined (USE_BLE_SERVICES)
-    std::unique_ptr<Ble::Stack::BleStackKeeper> m_bleStackKeeper;
-#endif
-
+    Ble::Stack::TSoftDevicePtr m_bleStackKeeper;
     std::unique_ptr<ServiceProviders::IServiceCreator> m_fakeServiceProvider;
     std::unique_ptr<ServiceProviders::BatteryService::IBatteryLevelAppService> m_batteryLevelService;
     std::unique_ptr<ServiceProviders::HeartrateService::IHeartrateService> m_heartrateService;

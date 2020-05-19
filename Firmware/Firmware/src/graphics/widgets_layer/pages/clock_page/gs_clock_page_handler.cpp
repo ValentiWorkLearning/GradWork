@@ -3,6 +3,7 @@
 #include "ih/gs_events.hpp"
 
 #include "gs_iclock_page_view.hpp"
+#include "MetaUtils.hpp"
 
 #include <charconv>
 
@@ -10,9 +11,9 @@ namespace Graphics::Views
 {
 
 ClockPageHandler::ClockPageHandler( IClockWatchPage* _clockPageView )
-    :   m_pClockWatchView{ _clockPageView }
+    :   forceUpdateAfterVisibilityChange{false}
+    ,   m_pClockWatchView{ _clockPageView }
     ,   m_lastReceivedTime{ std::tm{} }
-	,	forceUpdateAfterVisibilityChange{false}
 {
 }
 
@@ -26,6 +27,8 @@ void ClockPageHandler::handleEvent( const Events::TEvent& _event )
 
 	Events::TDateTimeEvents dateTimeEvents { std::any_cast<Events::TDateTimeEvents>( _event.eventType ) };
 	TimeWrapper newDateTime { std::any_cast<TimeWrapper>( _event.eventData ) };
+
+	Meta::UnuseVar( dateTimeEvents );
 
 	auto pClockView { m_pClockWatchView };
 	if (!pClockView)

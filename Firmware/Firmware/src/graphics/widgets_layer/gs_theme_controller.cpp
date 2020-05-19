@@ -103,6 +103,8 @@ ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
     case Graphics::Theme::FontSize::large:
         lv_style_set_text_font(&iconsFont, LV_STATE_DEFAULT, &PlayerIcons68px);
         break;
+    default:
+        assert(false);
     }
     lv_style_set_text_color(&iconsFont, LV_STATE_DEFAULT, getMainThemeColor( _fontColor ) );
 
@@ -136,6 +138,7 @@ ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const
         lv_style_set_text_font(&fontStyle, LV_STATE_DEFAULT, &LcdNova68px);
         break;
     default:
+        assert(false);
         break;
     }
 

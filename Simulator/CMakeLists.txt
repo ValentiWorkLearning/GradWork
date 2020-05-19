@@ -38,6 +38,9 @@ add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
 add_executable(
     ${TARGET_NAME}
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/factory_impl/ih_ible_softdevice.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/LcdNova12px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/LcdNova16px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/LcdNova24px.cpp

@@ -58,8 +58,8 @@ private:
 
 private:
 
-    lv_style_t m_bluetoothIconStyle;
     BluetoothStatus m_currentStatus;
+    lv_style_t m_bluetoothIconStyle;
     Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBluetoothIcon;
 
 };

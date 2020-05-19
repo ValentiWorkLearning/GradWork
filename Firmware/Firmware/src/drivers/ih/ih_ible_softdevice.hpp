@@ -1,8 +1,11 @@
+#pragma once
+
 #include "SimpleSignal.hpp"
+#include "ih/ih_ble_service_factory.hpp"
 
 namespace Ble::BatteryService
 {
-    class BatteryLevelService;    
+    class IBatteryLevelService;
 }
 
 namespace Ble::Stack
@@ -14,9 +17,13 @@ class IBleSoftDevice
 
 public:
 
-    virtual Ble::BatteryService::BatteryLevelService& getBatteryService() = 0;
+    virtual ~IBleSoftDevice() = default;
 
-    virtual const Ble::BatteryService::BatteryLevelService& getBatteryService() const = 0;
+public:
+
+    virtual Ble::BatteryService::IBatteryLevelService& getBatteryService() = 0;
+
+    virtual const Ble::BatteryService::IBatteryLevelService& getBatteryService() const = 0;
 
 public:
 
@@ -24,5 +31,10 @@ public:
     Simple::Signal<void()> onDisconnected;
 
 };
+
+using TSoftDevicePtr = std::unique_ptr<IBleSoftDevice>;
+[[nodiscard]]
+TSoftDevicePtr createSoftDevice( Ble::ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
+
 
 }

@@ -37,9 +37,10 @@ namespace Ble::Stack
 {
 
 
-BleStackKeeper::BleStackKeeper()
+BleStackKeeper::BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )
     :   m_isConnected{ false }
     ,   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
+    ,   m_pServiceCreator{ std::move( _pServiceCreator ) }
 {
     bleStackInit();
     initGapModule();
@@ -501,25 +502,26 @@ void BleStackKeeper::initServices()
     APP_ERROR_CHECK( errCode );
 
     m_customService = std::make_unique<CustomService::CustomService>();
-    m_batteryService = std::make_unique<BatteryService::BatteryLevelService>();
+    m_batteryService = m_pServiceCreator->getBatteryService();
 
 }
 
-Ble::BatteryService::BatteryLevelService&
+Ble::BatteryService::IBatteryLevelService&
 BleStackKeeper::getBatteryService()
 {
     return *m_batteryService.get();
 }
 
-const Ble::BatteryService::BatteryLevelService&
+const Ble::BatteryService::IBatteryLevelService&
 BleStackKeeper::getBatteryService() const
 {
     return *m_batteryService.get();
 }
 
-std::unique_ptr<BleStackKeeper> createBleStackKeeper()
+std::unique_ptr<BleStackKeeper>
+createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )
 {
-    return std::make_unique<BleStackKeeper>();
+    return std::make_unique<BleStackKeeper>( std::move( _pServiceCreator ) );
 }
 
 };

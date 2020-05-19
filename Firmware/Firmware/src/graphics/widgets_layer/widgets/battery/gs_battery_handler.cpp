@@ -3,7 +3,7 @@
 #include "widgets/battery/gs_ibattery_widget.hpp"
 
 #include "ih/gs_events.hpp"
-
+#include "MetaUtils.hpp"
 namespace
 {
 	Graphics::Widgets::IBatteryWidget::BatteryStatus toBatteryStatus( std::uint8_t _batteryValue )
@@ -39,6 +39,8 @@ void BatteryWidgetHandler::handleEvent( const Events::TEvent& _event )
 	// EventHandlerVisitor<TEvent1,TEvent2,TEvent3>
 
 	Events::TBatteryEvents batEvents = std::any_cast<Events::TBatteryEvents>( _event.eventType );
+	Meta::UnuseVar( batEvents );
+
 	std::uint8_t batteryValue = std::any_cast<std::uint8_t>( _event.eventData );
 
 	switch ( _event.eventGroup )

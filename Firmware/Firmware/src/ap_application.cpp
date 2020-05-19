@@ -1,5 +1,8 @@
 #include "ap_application.hpp"
 
+#include "ih/ih_ible_softdevice.hpp"
+#include "ih/ih_ble_service_factory.hpp"
+
 #if defined (USE_BLE_SERVICES)
     #include "drivers/ble/ble_custom_service.hpp"
     #include "drivers/ble/ble_softdevice.hpp"
@@ -26,6 +29,7 @@
 
 #include "SimpleSignal.hpp"
 
+#include <optional>
 
 Application::Application()
 {
@@ -88,8 +92,14 @@ void
 Application::initBleStack()
 {
 
-#if defined (USE_BLE_SERVICES)
-    m_bleStackKeeper = Ble::Stack::createBleStackKeeper();
+    m_bleStackKeeper = std::move(
+            Ble::Stack::createSoftDevice(
+                Ble::ServiceFactory::getBleServiceFactory()
+            )
+    );
+
+    if( !m_bleStackKeeper )
+        return;
 
     auto& batteryServiceBle = m_bleStackKeeper->getBatteryService();
 
@@ -126,9 +136,6 @@ Application::initBleStack()
             );
         }
     );
-
-#endif
-
 }
 
 void
