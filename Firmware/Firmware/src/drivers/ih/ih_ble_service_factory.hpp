@@ -8,7 +8,12 @@
 namespace Ble::BatteryService
 {
     class IBatteryLevelService;
-};
+}
+
+namespace Ble::DateTimeService
+{
+    class IDateTimeService;
+}
 
 namespace Ble::ServiceFactory
 {
@@ -21,8 +26,15 @@ class IBleServiceFactory
     virtual ~IBleServiceFactory() = default;
 
     public:
-    using TBatteryServicePtr = std::unique_ptr<Ble::BatteryService::IBatteryLevelService>;
+
+    template< typename TService >
+    using TServicePtr = std::unique_ptr<TService>;
+
+    using TBatteryServicePtr = TServicePtr<Ble::BatteryService::IBatteryLevelService>;
     [[nodiscard]] virtual TBatteryServicePtr getBatteryService() = 0;
+
+    using TDateTimeServicePtr = TServicePtr<Ble::DateTimeService::IDateTimeService>;
+    [[nodiscard]] virtual TDateTimeServicePtr getDateTimeService() = 0;
 
 };
 

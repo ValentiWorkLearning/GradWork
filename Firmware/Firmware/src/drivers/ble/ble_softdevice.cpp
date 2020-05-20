@@ -503,7 +503,7 @@ void BleStackKeeper::initServices()
 
     m_customService = std::make_unique<CustomService::CustomService>();
     m_batteryService = m_pServiceCreator->getBatteryService();
-
+    m_dateTimeService = m_pServiceCreator->getDateTimeService();
 }
 
 Ble::BatteryService::IBatteryLevelService&

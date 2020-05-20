@@ -4,6 +4,7 @@
 #if defined (USE_BLE_SERVICES)
 
 #include "ble/ble_battery_service.hpp"
+#include "ble/ble_datetime_service.hpp"
 
 #endif
 
@@ -23,14 +24,23 @@ public:
 public:
 
     [[nodiscard]] TBatteryServicePtr getBatteryService() override;
+    [[nodiscard]] TDateTimeServicePtr getDateTimeService() override;
 
 };
+
+[[nodiscard]] IBleServiceFactory::TDateTimeServicePtr
+NordicServiceFactory::getDateTimeService()
+{
+    return std::make_unique<Ble::DateTimeService::DateTimeServiceNordic>();
+}
 
 [[nodiscard]] IBleServiceFactory::TBatteryServicePtr
 NordicServiceFactory::getBatteryService()
 {
     return std::make_unique<Ble::BatteryService::BatteryLevelService>();
 }
+
+
 #endif
 
 TBleFactoryPtr getBleServiceFactory()

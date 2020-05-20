@@ -1,6 +1,11 @@
 #pragma once
 
 #include "ih/ih_ible_softdevice.hpp"
+#include "ih/ih_ble_battery_service.hpp"
+#include "ih/ih_ble_dts_service.hpp"
+#include "ih/ih_ble_service_factory.hpp"
+
+#include "SimpleSignal.hpp"
 #include "Noncopyable.hpp"
 
 #include <memory>
@@ -31,11 +36,6 @@
 #include "nrf_ble_gatt.h"
 #include "nrf_ble_qwr.h"
 #include "nrf_pwr_mgmt.h"
-
-#include "ih/ih_ble_battery_service.hpp"
-#include "ih/ih_ble_service_factory.hpp"
-
-#include "SimpleSignal.hpp"
 
 namespace Ble::CustomService
 {
@@ -123,6 +123,7 @@ private:
     ServiceFactory::TBleFactoryPtr m_pServiceCreator;
     std::unique_ptr<Ble::CustomService::CustomService> m_customService;
     Ble::ServiceFactory::IBleServiceFactory::TBatteryServicePtr m_batteryService;
+    Ble::ServiceFactory::IBleServiceFactory::TDateTimeServicePtr m_dateTimeService;
 };
 
 std::unique_ptr<BleStackKeeper>
