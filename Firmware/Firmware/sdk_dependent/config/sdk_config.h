@@ -111,6 +111,12 @@
 #define NRF_BLE_GATT_ENABLED 1
 #endif
 
+// <q> NRF_BLE_GATT_ENABLED  - ble_db_discovery - This module contains the APIs and types exposed by the DB Discovery module.
+#ifndef BLE_DB_DISCOVERY_ENABLED
+#define BLE_DB_DISCOVERY_ENABLED 1
+#endif
+
+
 // <e> NRF_BLE_QWR_ENABLED - nrf_ble_qwr - Queued writes support module (prepare/execute write)
 //==========================================================
 #ifndef NRF_BLE_QWR_ENABLED
@@ -311,7 +317,7 @@
  
 
 #ifndef BLE_CTS_C_ENABLED
-#define BLE_CTS_C_ENABLED 0
+#define BLE_CTS_C_ENABLED 1
 #endif
 
 // <q> BLE_DIS_ENABLED  - ble_dis - Device Information Service

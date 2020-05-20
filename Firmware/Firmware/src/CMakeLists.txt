@@ -30,14 +30,16 @@ nRF5x_addAppTimer()
 nRF5x_addAppUART()
 nRF5x_addAppButton()
 nRF5x_addBSP(TRUE FALSE FALSE) # without this text size is 11 480, with this - 11 760
+
 nRF5x_addBLEGATT() # with this text size = 11784
 nRF5x_addBLEPeerManager() #with this text size is
 nRF5x_addAppFDS() # 34312
 nRF5x_addSensorSimulator() # still 34312
+nRF5x_addBLEServiceDbDiscovery()
 
 nRF5x_addBLEService(ble_lbs) #still 34312
 nRF5x_addBLEService(ble_bas) # increased to 34332
-
+nRF5x_addBLEService(ble_cts_c)
 
 add_definitions(-DCONFIG_GPIO_AS_PINRESET)
 
@@ -77,6 +79,7 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_datetime_service.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ible_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp

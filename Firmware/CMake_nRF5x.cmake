@@ -434,6 +434,18 @@ macro(nRF5x_addBLEAdvertising)
 endmacro(nRF5x_addBLEAdvertising)
 
 # adds Bluetooth Low Energy advertising support library
+macro(nRF5x_addBLEServiceDbDiscovery)
+    include_directories(
+            "${NRF5_SDK_PATH}/components/ble/ble_db_discovery"
+    )
+
+    list(APPEND SDK_SOURCE_FILES
+            "${NRF5_SDK_PATH}/components/ble/ble_db_discovery/ble_db_discovery.c"
+            )
+
+endmacro(nRF5x_addBLEServiceDbDiscovery)
+
+# adds Bluetooth Low Energy peer manager
 macro(nRF5x_addBLEPeerManager)
     include_directories(
             "${NRF5_SDK_PATH}/components/ble/peer_manager"
