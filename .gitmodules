@@ -1,18 +1,18 @@
 [submodule "Firmware/Firmware/src/graphics/lvgl"]
 	path = Firmware/Firmware/src/graphics/lvgl
 	url = https://github.com/littlevgl/lvgl.git
-	branch = dev-7.0
+	branch = master
 [submodule "Simulator/graphics/SDL-mirror"]
 	path = Simulator/graphics/SDL-mirror
 	url = https://github.com/spurious/SDL-mirror.git
 [submodule "Simulator/graphics/lvgl"]
 	path = Simulator/graphics/lvgl
 	url = https://github.com/littlevgl/lvgl.git
-	branch = dev-7.0
+	branch = master
 [submodule "Simulator/graphics/lv_drivers"]
 	path = Simulator/graphics/lv_drivers
 	url = https://github.com/littlevgl/lv_drivers.git
-	branch = dev-7.0
+	branch = master
 [submodule "3rdparty/etl"]
 	path = 3rdparty/etl
 	url = https://github.com/ETLCPP/etl.git
