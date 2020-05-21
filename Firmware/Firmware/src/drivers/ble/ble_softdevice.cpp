@@ -528,7 +528,7 @@ BleStackKeeper::getDateTimeService()
 const Ble::DateTimeService::IDateTimeService&
 BleStackKeeper::getDateTimeService() const
 {
-    *m_dateTimeService.get();
+    return *m_dateTimeService.get();
 }
 
 std::unique_ptr<BleStackKeeper>
