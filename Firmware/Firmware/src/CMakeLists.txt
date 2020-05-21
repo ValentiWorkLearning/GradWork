@@ -36,6 +36,7 @@ nRF5x_addBLEPeerManager() #with this text size is
 nRF5x_addAppFDS() # 34312
 nRF5x_addSensorSimulator() # still 34312
 nRF5x_addBLEServiceDbDiscovery()
+nRF5x_addBLEGattQueue()
 
 nRF5x_addBLEService(ble_lbs) #still 34312
 nRF5x_addBLEService(ble_bas) # increased to 34332

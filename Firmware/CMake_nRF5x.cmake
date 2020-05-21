@@ -216,6 +216,7 @@ macro(nRF5x_setup)
             "${NRF5_SDK_PATH}/components/libraries/ringbuf/nrf_ringbuf.c"
             "${NRF5_SDK_PATH}/components/libraries/strerror/nrf_strerror.c"
             "${NRF5_SDK_PATH}/components/libraries/uart/retarget.c"
+            "${NRF5_SDK_PATH}/components/libraries/queue/nrf_queue.c"
             )
 
     # Segger RTT
@@ -444,6 +445,17 @@ macro(nRF5x_addBLEServiceDbDiscovery)
             )
 
 endmacro(nRF5x_addBLEServiceDbDiscovery)
+
+# adds LE GATT Queue (BGQ) module
+macro(nRF5x_addBLEGattQueue)
+    include_directories(
+            "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq"
+    )
+
+    list(APPEND SDK_SOURCE_FILES
+            "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq/nrf_ble_gq.c"
+            )
+endmacro(nRF5x_addBLEGattQueue)
 
 # adds Bluetooth Low Energy peer manager
 macro(nRF5x_addBLEPeerManager)
