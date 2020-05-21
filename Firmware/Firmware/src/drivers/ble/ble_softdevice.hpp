@@ -61,6 +61,10 @@ public:
 
     const Ble::BatteryService::IBatteryLevelService& getBatteryService() const override;
 
+    Ble::DateTimeService::IDateTimeService& getDateTimeService() override;
+
+    const Ble::DateTimeService::IDateTimeService& getDateTimeService() const override;
+
 private:
 
     void bleStackInit();

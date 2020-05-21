@@ -18,3 +18,13 @@ StubBatteryService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )
 }
 
 }
+
+namespace Ble::DateTimeService
+{
+
+StubDateTimeService::StubDateTimeService()
+{
+    Logger::Instance().logDebugEndl( "Initialized StubDateTimeService" );
+}
+
+}

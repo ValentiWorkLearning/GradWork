@@ -8,6 +8,11 @@ namespace Ble::BatteryService
     class IBatteryLevelService;
 }
 
+namespace Ble::DateTimeService
+{
+    class IDateTimeService;
+}
+
 namespace Ble::Stack
 {
 
@@ -24,6 +29,10 @@ public:
     virtual Ble::BatteryService::IBatteryLevelService& getBatteryService() = 0;
 
     virtual const Ble::BatteryService::IBatteryLevelService& getBatteryService() const = 0;
+
+    virtual Ble::DateTimeService::IDateTimeService& getDateTimeService() = 0;
+
+    virtual const Ble::DateTimeService::IDateTimeService& getDateTimeService() const = 0;
 
 public:
 

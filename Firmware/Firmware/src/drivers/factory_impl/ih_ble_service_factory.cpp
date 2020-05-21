@@ -61,7 +61,7 @@ public:
 [[nodiscard]] IBleServiceFactory::TDateTimeServicePtr
 DesktopFakeBleServiceFactory::getDateTimeService()
 {
-    return nullptr;
+    return std::make_unique<Ble::DateTimeService::StubDateTimeService>();
 }
 
 [[nodiscard]] IBleServiceFactory::TBatteryServicePtr

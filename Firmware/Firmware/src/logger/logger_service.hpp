@@ -26,7 +26,18 @@ public:
                 ||  std::is_same_v<TClearType,std::string_view >
                 ||  std::is_same_v<TClearType,const char *>
                 || std::is_same_v<TClearType, char*>;
+
         return isStringType;
+    }
+
+    template< typename TToLog >
+    static constexpr bool IsCharType()
+    {
+        using TClearType = typename std::decay<TToLog>::type;
+        constexpr bool isCharType = std::is_same_v<TClearType, std::uint8_t>
+            || std::is_same_v<TClearType, char>
+            || std::is_same_v<TClearType, unsigned char>;
+        return isCharType;
     }
 
     template< typename TToLog >
@@ -43,7 +54,10 @@ public:
             }
         }
         else{
-            logDebugEndl( static_cast<std::string_view>(_toLog) );
+            if constexpr( IsCharType<TToLog>() )
+                logDebugEndl( static_cast<std::int16_t>( _toLog ) );
+            else
+                logDebugEndl( static_cast<std::string_view>( _toLog ) );
         }
 
     }
@@ -61,7 +75,10 @@ public:
             }
         }
         else{
-            logDebug( static_cast<std::string_view>(_toLog) );
+            if constexpr ( IsCharType<TToLog>() )
+                logDebug( static_cast<std::int16_t>( _toLog ) );
+            else
+                logDebug( static_cast<std::string_view>( _toLog ) );
         }
     }
 

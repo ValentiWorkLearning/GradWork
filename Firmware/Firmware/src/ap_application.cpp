@@ -110,6 +110,8 @@ Application::initBleStack()
         }
     );
 
+    auto& dateTimeService = m_bleStackKeeper->getDateTimeService();
+
     auto& pMainWindow = m_graphicsService->getMainWindow();
     m_bleStackKeeper->onConnected.connect(
         [&pMainWindow]

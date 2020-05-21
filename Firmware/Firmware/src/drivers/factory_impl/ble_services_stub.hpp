@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ih/ih_ble_battery_service.hpp"
+#include "ih/ih_ble_dts_service.hpp"
 
 namespace Ble::BatteryService
 {
@@ -18,6 +19,24 @@ public:
 
     void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel ) override;
 
+};
+
+}
+
+
+namespace Ble::DateTimeService
+{
+class StubDateTimeService
+    :   public IDateTimeService
+{
+
+public:
+
+    StubDateTimeService();
+
+public:
+
+    virtual ~StubDateTimeService()override = default;
 };
 
 }

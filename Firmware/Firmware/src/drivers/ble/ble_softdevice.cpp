@@ -518,6 +518,19 @@ BleStackKeeper::getBatteryService() const
     return *m_batteryService.get();
 }
 
+
+Ble::DateTimeService::IDateTimeService&
+BleStackKeeper::getDateTimeService()
+{
+    return *m_dateTimeService.get();
+}
+
+const Ble::DateTimeService::IDateTimeService&
+BleStackKeeper::getDateTimeService() const
+{
+    *m_dateTimeService.get();
+}
+
 std::unique_ptr<BleStackKeeper>
 createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )
 {
