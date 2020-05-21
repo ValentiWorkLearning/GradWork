@@ -41,6 +41,7 @@ add_executable(
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/factory_impl/ih_ible_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/factory_impl/ble_services_stub.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/LcdNova12px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/LcdNova16px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/LcdNova24px.cpp
@@ -95,6 +96,7 @@ target_include_directories(
     ${Boost_INCLUDE_DIRS}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/drivers/ih
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/logger
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer
