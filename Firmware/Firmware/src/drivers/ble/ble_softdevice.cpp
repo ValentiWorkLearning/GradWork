@@ -531,7 +531,7 @@ BleStackKeeper::getDateTimeService() const
     return *m_dateTimeService.get();
 }
 
-std::unique_ptr<BleStackKeeper>
+std::unique_ptr<IBleSoftDevice>
 createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )
 {
     return std::make_unique<BleStackKeeper>( std::move( _pServiceCreator ) );

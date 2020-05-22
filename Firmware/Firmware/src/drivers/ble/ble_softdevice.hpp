@@ -130,7 +130,7 @@ private:
     Ble::ServiceFactory::IBleServiceFactory::TDateTimeServicePtr m_dateTimeService;
 };
 
-std::unique_ptr<BleStackKeeper>
+std::unique_ptr<IBleSoftDevice>
 createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
 
 };
