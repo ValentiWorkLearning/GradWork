@@ -65,6 +65,7 @@ add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 target_compile_definitions(
     ${TARGET_NAME}
     PRIVATE
+    S112
     USE_ST7789V_BACKEND
     USE_NRFSDK_SIMULATOR
     USE_BLE_SERVICES

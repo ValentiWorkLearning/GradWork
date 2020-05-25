@@ -14,7 +14,7 @@
                 "NRF52832_XXAA",
                 "NRF52_PAN_74",
                 "NRF_SD_BLE_API_VERSION=6",
-                "S132",
+                "S112",
                 "SOFTDEVICE_PRESENT",
                 "SWI_DISABLE0",
                 "USE_NRFSDK_SIMULATOR",
