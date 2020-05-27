@@ -37,6 +37,8 @@
 #include "nrf_ble_qwr.h"
 #include "nrf_pwr_mgmt.h"
 
+#include "ble_stack_constants.hpp"
+
 namespace Ble::CustomService
 {
     class CustomService;
@@ -86,6 +88,8 @@ private:
     void initPeerManager();
 
     void peerManagerEventHandler( pm_evt_t const* _pPeerEvent );
+
+    void peerListGet(pm_peer_id_t* _pPeers, uint32_t* pPeersSize);
 
 private:
 
@@ -138,7 +142,7 @@ private:
     Ble::ServiceFactory::IBleServiceFactory::TBatteryServicePtr m_batteryService;
     Ble::ServiceFactory::IBleServiceFactory::TDateTimeServicePtr m_dateTimeService;
 
-    using TPeersStorage = std::array<pm_peer_id_t,WhiteList::Size>;
+    using TPeersStorage = std::array<pm_peer_id_t,Ble::Stack::WhiteList::Size>;
 
     /**< List of peers currently in the whitelist. */
     TPeersStorage m_whitelistPeers;

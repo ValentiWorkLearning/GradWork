@@ -13,6 +13,10 @@
 #include "nrf_sdh_ble.h"
 #include "nrf_ble_qwr.h"
 
+#include "ble_db_discovery.h"
+
+#include "peer_manager.h"
+#include "peer_manager_handler.h"
 namespace
 {
     BLE_ADVERTISING_DEF( m_advertising );       /**< Advertising module instance. */
@@ -30,7 +34,7 @@ namespace
     static constexpr size_t UuidsCount = 1;
     static std::array<ble_uuid_t,UuidsCount> m_advertisingUuids =                   /**< Universally unique service identifiers. */
     {
-        { Ble::CustomService::ServiceUuid , Ble::CustomService::ServiceType }
+        {{ Ble::CustomService::ServiceUuid , Ble::CustomService::ServiceType }}
     };
 }
 
@@ -99,6 +103,8 @@ void BleStackKeeper::initGatt()
 
 void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt_t const * _pEvent )
 {
+    Meta::UnuseVar( _pGatt );
+
     if ( _pEvent->evt_id == NRF_BLE_GATT_EVT_ATT_MTU_UPDATED )
     {
         Logger::Instance().logDebugEndl(
@@ -406,6 +412,24 @@ void BleStackKeeper::initConnectionParams()
     APP_ERROR_CHECK( errCode );
 }
 
+void BleStackKeeper::peerListGet(pm_peer_id_t* _pPeers, uint32_t* _pPeersSize)
+{
+    pm_peer_id_t peerId{};
+    std::uint32_t peersToCopy{};
+
+    peersToCopy = (*_pPeersSize < BLE_GAP_WHITELIST_ADDR_MAX_COUNT) ?
+                     *_pPeersSize : BLE_GAP_WHITELIST_ADDR_MAX_COUNT;
+
+    peerId = pm_next_peer_id_get( PM_PEER_ID_INVALID );
+    *_pPeersSize = 0;
+
+    while ( ( peerId != PM_PEER_ID_INVALID) && ( peersToCopy-- ) )
+    {
+        _pPeers[(*_pPeersSize)++] = peerId;
+        peerId = pm_next_peer_id_get( peerId );
+    }
+}
+
 void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
 {
     ret_code_t errCode{};
@@ -420,8 +444,8 @@ void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
         case PM_EVT_CONN_SEC_SUCCEEDED:
         {
             m_peerId =  _pPeerEvent->peer_id;
-            errorCode  = ble_db_discovery_start( &m_bleDbDiscovery, _pPeerEvent->conn_handle );
-            APP_ERROR_CHECK( errorCode );
+            errCode  = ble_db_discovery_start( &m_bleDbDiscovery, _pPeerEvent->conn_handle );
+            APP_ERROR_CHECK( errCode );
 
         } break;
 
@@ -501,14 +525,14 @@ void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
                     m_whitelistPeers[m_whiteListPeerCount++] = m_peerId;
 
                     // The whitelist has been modified, update it in the Peer Manager.
-                    errorCode = pm_device_identities_list_set( m_whitelistPeers, m_whiteListPeerCount );
-                    if ( errorCode != NRF_ERROR_NOT_SUPPORTED )
+                    errCode = pm_device_identities_list_set( m_whitelistPeers.data(), m_whiteListPeerCount );
+                    if ( errCode != NRF_ERROR_NOT_SUPPORTED )
                     {
-                        APP_ERROR_CHECK( errorCode );
+                        APP_ERROR_CHECK( errCode );
                     }
 
-                    errorCode = pm_whitelist_set( m_whitelistPeers, m_whiteListPeerCount );
-                    APP_ERROR_CHECK( errorCode );
+                    errCode = pm_whitelist_set( m_whitelistPeers.data(), m_whiteListPeerCount );
+                    APP_ERROR_CHECK( errCode );
                 }
             }
         }
@@ -546,7 +570,7 @@ void BleStackKeeper::startAdvertising( EraseBondsConfig _eraseBonds )
         );
         m_whiteListPeerCount = m_whitelistPeers.size();
 
-        peer_list_get( m_whitelistPeers.data(), &m_whiteListPeerCount );
+        peerListGet( m_whitelistPeers.data(), &m_whiteListPeerCount );
 
         errCode = pm_whitelist_set( m_whitelistPeers.data(), m_whiteListPeerCount );
         APP_ERROR_CHECK( errCode );
