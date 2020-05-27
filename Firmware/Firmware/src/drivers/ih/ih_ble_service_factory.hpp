@@ -2,7 +2,7 @@
 
 #include "Noncopyable.hpp"
 #include "ih/ih_ble_battery_service.hpp"
-
+#include "ih/ih_ble_dts_service.hpp"
 #include <memory>
 
 namespace Ble::BatteryService
