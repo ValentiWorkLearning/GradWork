@@ -81,6 +81,8 @@ private:
 
     void initGatt();
 
+    void initDbDiscovery();
+
     void gattEventHandler( nrf_ble_gatt_t* p_gatt, nrf_ble_gatt_evt_t const* p_evt );
 
 private:

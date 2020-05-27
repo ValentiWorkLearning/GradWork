@@ -100,6 +100,7 @@
         "forward_list": "cpp",
         "optional": "cpp",
         "iomanip": "cpp",
-        "memory_resource": "cpp"
+        "memory_resource": "cpp",
+        "variant": "cpp"
     }
 }

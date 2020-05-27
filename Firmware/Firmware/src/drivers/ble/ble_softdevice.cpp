@@ -12,6 +12,7 @@
 #include "nrf_sdh.h"
 #include "nrf_sdh_ble.h"
 #include "nrf_ble_qwr.h"
+#include "nrf_ble_gq.h"
 
 #include "ble_db_discovery.h"
 
@@ -23,7 +24,11 @@ namespace
     NRF_BLE_QWR_DEF( m_qwr );                   /**< Context for the Queued Write module.*/
     NRF_BLE_GATT_DEF( m_gatt );                 /**< GATT module instance. */
     BLE_DB_DISCOVERY_DEF( m_bleDbDiscovery );   /**< DB discovery module instance. */
-
+    NRF_BLE_GQ_DEF(                             /**< BLE GATT Queue instance. */
+            m_bleGattQueue
+        ,   NRF_SDH_BLE_PERIPHERAL_LINK_COUNT
+        ,   NRF_BLE_GQ_QUEUE_SIZE
+    );
     //TODO: this uuids must be placed as constexpr uuids for custome services. This just for compilation.
     //Think about better solution :/
     //
@@ -50,6 +55,7 @@ BleStackKeeper::BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreato
     bleStackInit();
     initGapModule();
     initGatt();
+    initDbDiscovery();
     initServices();
     initAdvertising();
     initConnectionParams();
@@ -98,6 +104,24 @@ void BleStackKeeper::initGatt()
     );
 
     ret_code_t errorCode = nrf_ble_gatt_init( &m_gatt, gattEventCallback );
+    APP_ERROR_CHECK( errorCode );
+}
+
+void BleStackKeeper::initDbDiscovery()
+{
+    ble_db_discovery_init_t dbInit{};
+
+    auto dbDiscoveryCallback = cbc::obtain_connector(
+        [ this ]( ble_db_discovery_evt_t* _pEvent )
+        {
+            m_dateTimeService->handleDiscoveryEvent( _pEvent );
+        }
+    );
+
+    dbInit.evt_handler  = dbDiscoveryCallback;
+    dbInit.p_gatt_queue = &m_bleGattQueue;
+
+     ret_code_t errorCode = ble_db_discovery_init( &dbInit );
     APP_ERROR_CHECK( errorCode );
 }
 
@@ -159,13 +183,17 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
 {
     //copied as is from https://github.com/NordicPlayground/nRF52-Bluetooth-Course/blob/master/main.c
 
-        ret_code_t errCode { NRF_SUCCESS };
+    ret_code_t errCode { NRF_SUCCESS };
+
+    pm_handler_secure_on_connection( _pBleEvent );
 
     switch (_pBleEvent->header.evt_id)
     {
         case BLE_GAP_EVT_DISCONNECTED:
             Logger::Instance().logDebugEndl("Disconnected.");
             m_isConnected = false;
+
+            m_connectionHandle = BLE_CONN_HANDLE_INVALID;
             // LED indication will be changed when advertising starts.
             break;
 
@@ -621,7 +649,7 @@ void BleStackKeeper::initServices()
 
     m_customService = std::make_unique<CustomService::CustomService>();
     m_batteryService = m_pServiceCreator->getBatteryService();
-    m_dateTimeService = m_pServiceCreator->getDateTimeService();
+    m_dateTimeService = m_pServiceCreator->getDateTimeService( &m_bleGattQueue );
 }
 
 Ble::BatteryService::IBatteryLevelService&

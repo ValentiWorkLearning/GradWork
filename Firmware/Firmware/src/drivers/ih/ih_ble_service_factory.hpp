@@ -3,7 +3,9 @@
 #include "Noncopyable.hpp"
 #include "ih/ih_ble_battery_service.hpp"
 #include "ih/ih_ble_dts_service.hpp"
+
 #include <memory>
+#include <any>
 
 namespace Ble::BatteryService
 {
@@ -34,7 +36,7 @@ class IBleServiceFactory
     [[nodiscard]] virtual TBatteryServicePtr getBatteryService() = 0;
 
     using TDateTimeServicePtr = TServicePtr<Ble::DateTimeService::IDateTimeService>;
-    [[nodiscard]] virtual TDateTimeServicePtr getDateTimeService() = 0;
+    [[nodiscard]] virtual TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) = 0;
 
 };
 

@@ -1,6 +1,8 @@
 #include "ih/ih_ble_service_factory.hpp"
 #include "ih/ih_ble_battery_service.hpp"
 
+#include "MetaUtils.hpp"
+
 #if defined (USE_BLE_SERVICES)
 
 #include "ble/ble_battery_service.hpp"
@@ -26,14 +28,14 @@ public:
 public:
 
     [[nodiscard]] TBatteryServicePtr getBatteryService() override;
-    [[nodiscard]] TDateTimeServicePtr getDateTimeService() override;
+    [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) override;
 
 };
 
 [[nodiscard]] IBleServiceFactory::TDateTimeServicePtr
-NordicServiceFactory::getDateTimeService()
+NordicServiceFactory::getDateTimeService( const std::any& _gattQueue )
 {
-    return std::make_unique<Ble::DateTimeService::DateTimeServiceNordic>();
+    return std::make_unique<Ble::DateTimeService::DateTimeServiceNordic>( _gattQueue );
 }
 
 [[nodiscard]] IBleServiceFactory::TBatteryServicePtr
@@ -54,13 +56,14 @@ public:
 public:
 
     [[nodiscard]] TBatteryServicePtr getBatteryService() override;
-    [[nodiscard]] TDateTimeServicePtr getDateTimeService() override;
+    [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) override;
 };
 
 
 [[nodiscard]] IBleServiceFactory::TDateTimeServicePtr
-DesktopFakeBleServiceFactory::getDateTimeService()
+DesktopFakeBleServiceFactory::getDateTimeService( const std::any& _gattQueue )
 {
+    Meta::UnuseVar( _gattQueue );
     return std::make_unique<Ble::DateTimeService::StubDateTimeService>();
 }
 

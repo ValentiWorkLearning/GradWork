@@ -36,6 +36,10 @@ public:
 
 public:
 
+    void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )override;
+
+public:
+
     virtual ~StubDateTimeService()override = default;
 };
 

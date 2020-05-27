@@ -1,10 +1,11 @@
 #include "ble_datetime_service.hpp"
 
 #include "logger_service.hpp"
+#include "CallbackConnector.hpp"
 
 #include "app_error.h"
 #include "ble_cts_c.h"
-#include "CallbackConnector.hpp"
+#include "ble_db_discovery.h"
 
 namespace
 {
@@ -20,17 +21,18 @@ namespace
 namespace Ble::DateTimeService
 {
 
-DateTimeServiceNordic::DateTimeServiceNordic()
+DateTimeServiceNordic::DateTimeServiceNordic( const std::any& _pGattQueue )
 {
-    initService();
+    initService( _pGattQueue );
 }
 
 void
-DateTimeServiceNordic::initService()
+DateTimeServiceNordic::initService( const std::any& _pGattQueue )
 {
     ret_code_t errorCode{};
     ble_cts_c_init_t ctsInit{};
 
+    nrf_ble_gq_t* pGattQueue = std::any_cast<nrf_ble_gq_t*>( _pGattQueue );
 
     auto currentTimeServiceEventHandler = cbc::obtain_connector(
         [this](ble_cts_c_t* _currentTimeService, ble_cts_c_evt_t* _pEvent )
@@ -41,6 +43,7 @@ DateTimeServiceNordic::initService()
 
     ctsInit.evt_handler = currentTimeServiceEventHandler;
     ctsInit.error_handler = currentTimeServiceErrorHandler;
+    ctsInit.p_gatt_queue = pGattQueue;
     errorCode = ble_cts_c_init( &m_currentTimeService, &ctsInit );
     APP_ERROR_CHECK( errorCode );
 
@@ -92,4 +95,13 @@ DateTimeServiceNordic::serviceEventHandler( ble_cts_c_t * _pCurrentTimeService, 
             break;
     }
 }
+
+
+void
+DateTimeServiceNordic::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )
+{
+    ble_db_discovery_evt_t* pEvent = std::any_cast<ble_db_discovery_evt_t*>( _pBleDbDiscoveryEvent );
+    ble_cts_c_on_db_disc_evt( &m_currentTimeService, pEvent );
+}
+
 }

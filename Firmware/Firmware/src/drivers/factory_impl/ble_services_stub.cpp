@@ -1,5 +1,6 @@
 #include "ble_services_stub.hpp"
 
+#include "MetaUtils.hpp"
 #include "logger_service.hpp"
 
 namespace Ble::BatteryService
@@ -25,6 +26,13 @@ namespace Ble::DateTimeService
 StubDateTimeService::StubDateTimeService()
 {
     Logger::Instance().logDebugEndl( "Initialized StubDateTimeService" );
+}
+
+
+void
+StubDateTimeService::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )
+{
+    Meta::UnuseVar( _pBleDbDiscoveryEvent );
 }
 
 }
