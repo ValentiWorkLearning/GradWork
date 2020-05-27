@@ -65,7 +65,7 @@ private:
 
 private:
 
-    lv_style_t m_pointStyle;;
+    lv_style_t m_pointStyle;
 
     std::string_view m_activePageName;
 

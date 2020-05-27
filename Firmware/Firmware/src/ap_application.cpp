@@ -110,8 +110,6 @@ Application::initBleStack()
         }
     );
 
-    auto& dateTimeService = m_bleStackKeeper->getDateTimeService();
-
     auto& pMainWindow = m_graphicsService->getMainWindow();
     m_bleStackKeeper->onConnected.connect(
         [&pMainWindow]
@@ -134,6 +132,20 @@ Application::initBleStack()
                         Graphics::Events::EventGroup::BleDevice
                     ,   Graphics::Events::TBleClientEvents::DeviceDisconnected
                     ,   std::nullopt
+                }
+            );
+        }
+    );
+
+    auto& dateTimeService = m_bleStackKeeper->getDateTimeService();
+    dateTimeService.onDateTimeDiscovered.connect(
+        [&pMainWindow](const TimeWrapper& _newBleTime )
+        {
+            pMainWindow.getEventDispatcher().postEvent(
+                {
+                        Graphics::Events::EventGroup::DateTime
+                    ,   Graphics::Events::TDateTimeEvents::DateTimeChanged
+                    ,   _newBleTime
                 }
             );
         }

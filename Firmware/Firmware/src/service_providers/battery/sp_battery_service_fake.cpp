@@ -1,6 +1,7 @@
 #include "sp_battery_service_fake.hpp"
 
 #include "CallbackConnector.hpp"
+#include "MetaUtils.hpp"
 
 namespace FakeSettings
 {
@@ -82,6 +83,7 @@ private:
 
     void timerExpiredHandler( void * _pContext )
     {
+       Meta::UnuseVar( _pContext );
        measureBatteryLevel();
     }
 

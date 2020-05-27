@@ -11,8 +11,8 @@ namespace Graphics::Widgets
 
 PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
 	:	WidgetBaseObj<IPagesSwitch>{ _themeController }
+    ,	m_pointStyle{}
 	,	m_activePageName{}
-	,	m_pointStyle{}
 {
 	initStyles();
 }

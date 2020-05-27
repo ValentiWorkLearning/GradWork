@@ -5,6 +5,8 @@
 #include <cassert>
 #include <array>
 
+#include "MetaUtils.hpp"
+
 namespace Interface::Spi
 {
 
@@ -60,6 +62,8 @@ void SpiBus::spimEventHandler(
     ,   void* _pContext
 )
 {
+    Meta::UnuseVar( _pContext );
+
     if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
     {
         if( !m_transactionsQueue.empty() )
