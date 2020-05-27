@@ -122,12 +122,26 @@ private:
 private:
 
     bool m_isConnected;
+
+    /**< Handle of the current connection. */
     std::uint16_t m_connectionHandle;
+
+    /**< Number of peers currently in the whitelist. */
+    std::uint32_t m_whiteListPeerCount;
+
+    /**< Device reference handle to the current bonded central. */
+    pm_peer_id_t m_peerId;
+
 
     ServiceFactory::TBleFactoryPtr m_pServiceCreator;
     std::unique_ptr<Ble::CustomService::CustomService> m_customService;
     Ble::ServiceFactory::IBleServiceFactory::TBatteryServicePtr m_batteryService;
     Ble::ServiceFactory::IBleServiceFactory::TDateTimeServicePtr m_dateTimeService;
+
+    using TPeersStorage = std::array<pm_peer_id_t,WhiteList::Size>;
+
+    /**< List of peers currently in the whitelist. */
+    TPeersStorage m_whitelistPeers;
 };
 
 std::unique_ptr<IBleSoftDevice>

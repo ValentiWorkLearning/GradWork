@@ -47,3 +47,8 @@ namespace Ble::Stack::ConnectionParams
     constexpr std::uint32_t NextConnectionParamsUpdateDelay = APP_TIMER_TICKS(30000);                              /**< Time between each call to sd_ble_gap_conn_param_update after the first call (30 seconds). */
     constexpr std::uint8_t  MaxConnectionParamsUpdateCount = 3;                                                    /**< Number of attempts before giving up the connection parameter negotiation. */
 }
+
+namespace Ble::Stack::WhiteList
+{
+    constexpr std::uint32_t Size = BLE_GAP_WHITELIST_ADDR_MAX_COUNT;
+}

@@ -18,6 +18,7 @@ namespace
     BLE_ADVERTISING_DEF( m_advertising );       /**< Advertising module instance. */
     NRF_BLE_QWR_DEF( m_qwr );                   /**< Context for the Queued Write module.*/
     NRF_BLE_GATT_DEF( m_gatt );                 /**< GATT module instance. */
+    BLE_DB_DISCOVERY_DEF( m_bleDbDiscovery );   /**< DB discovery module instance. */
 
     //TODO: this uuids must be placed as constexpr uuids for custome services. This just for compilation.
     //Think about better solution :/
@@ -270,6 +271,45 @@ void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )
             //sleep_mode_enter();
             break;
 
+        case BLE_ADV_EVT_SLOW_WHITELIST:
+            Logger::Instance().logDebugEndl("Slow advertising with WhiteList");
+            //errorCode = bsp_indication_set( BSP_INDICATE_ADVERTISING_WHITELIST );
+            //APP_ERROR_CHECK( errorCode );
+            errorCode = ble_advertising_restart_without_whitelist( &m_advertising );
+            APP_ERROR_CHECK( errorCode );
+            break;
+
+        case BLE_ADV_EVT_WHITELIST_REQUEST:
+        {
+            using TBleGapAddr = std::array<ble_gap_addr_t,Stack::WhiteList::Size>;
+            using TBleGapIrk = std::array<ble_gap_irk_t,Stack::WhiteList::Size>;
+            TBleGapAddr whiteListAddrs {};
+            TBleGapIrk whiteListIrks {};
+
+            std::uint32_t AddrCount = Stack::WhiteList::Size;
+            std::uint32_t IrkCount = Stack::WhiteList::Size;
+
+            errorCode = pm_whitelist_get(
+                    whiteListAddrs.data()
+                ,   &AddrCount
+                ,   whiteListIrks.data()
+                ,   &IrkCount
+            );
+
+            APP_ERROR_CHECK( errorCode );
+            Logger::Instance().logDebugEndl( "pm_whitelist_get returns %d addr in whitelist and %d irk whitelist" );
+
+            // Apply the whitelist.
+            errorCode = ble_advertising_whitelist_reply(
+                    &m_advertising
+                ,   whiteListAddrs.data()
+                ,   AddrCount
+                ,   whiteListIrks.data()
+                ,   IrkCount
+            );
+            APP_ERROR_CHECK( errorCode );
+        }
+        break;
         default:
             break;
     }
@@ -379,10 +419,10 @@ void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
 
         case PM_EVT_CONN_SEC_SUCCEEDED:
         {
-            Logger::Instance().logDebugEndl(  "Connection secured: role: %d, conn_handle: 0x%x, procedure: %d." );
-            //              ble_conn_state_role( _pPeerEvent->conn_handle ),
-            //              _pPeerEvent->conn_handle,
-            //              _pPeerEvent->params.conn_sec_succeeded.procedure );
+            m_peerId =  _pPeerEvent->peer_id;
+            errorCode  = ble_db_discovery_start( &m_bleDbDiscovery, _pPeerEvent->conn_handle );
+            APP_ERROR_CHECK( errorCode );
+
         } break;
 
         case PM_EVT_CONN_SEC_FAILED:
@@ -445,8 +485,36 @@ void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
             APP_ERROR_CHECK( _pPeerEvent->params.error_unexpected.error );
         } break;
 
-        case PM_EVT_CONN_SEC_START:
         case PM_EVT_PEER_DATA_UPDATE_SUCCEEDED:
+        {
+            const bool IsUpdateSucceeded = 
+                      _pPeerEvent->params.peer_data_update_succeeded.flash_changed
+                 && ( _pPeerEvent->params.peer_data_update_succeeded.data_id == PM_PEER_DATA_ID_BONDING );
+
+            if ( IsUpdateSucceeded )
+            {
+                Logger::Instance().logDebugEndl("New Bond, add the peer to the whitelist if possible");
+
+                if ( m_whiteListPeerCount < BLE_GAP_WHITELIST_ADDR_MAX_COUNT )
+                {
+                    // Bonded to a new peer, add it to the whitelist.
+                    m_whitelistPeers[m_whiteListPeerCount++] = m_peerId;
+
+                    // The whitelist has been modified, update it in the Peer Manager.
+                    errorCode = pm_device_identities_list_set( m_whitelistPeers, m_whiteListPeerCount );
+                    if ( errorCode != NRF_ERROR_NOT_SUPPORTED )
+                    {
+                        APP_ERROR_CHECK( errorCode );
+                    }
+
+                    errorCode = pm_whitelist_set( m_whitelistPeers, m_whiteListPeerCount );
+                    APP_ERROR_CHECK( errorCode );
+                }
+            }
+        }
+        break;
+
+        case PM_EVT_CONN_SEC_START:
         case PM_EVT_PEER_DELETE_SUCCEEDED:
         case PM_EVT_LOCAL_DB_CACHE_APPLIED:
         case PM_EVT_LOCAL_DB_CACHE_APPLY_FAILED:
@@ -468,7 +536,33 @@ void BleStackKeeper::startAdvertising( EraseBondsConfig _eraseBonds )
     }
     else
     {
-        ret_code_t errCode = ble_advertising_start( &m_advertising, BLE_ADV_MODE_FAST );
+
+        ret_code_t errCode;
+
+        memset(
+                m_whitelistPeers.data()
+            ,   PM_PEER_ID_INVALID
+            ,   m_whitelistPeers.size()
+        );
+        m_whiteListPeerCount = m_whitelistPeers.size();
+
+        peer_list_get( m_whitelistPeers.data(), &m_whiteListPeerCount );
+
+        errCode = pm_whitelist_set( m_whitelistPeers.data(), m_whiteListPeerCount );
+        APP_ERROR_CHECK( errCode );
+
+        // Setup the device identies list.
+        // Some SoftDevices do not support this feature.
+        errCode = pm_device_identities_list_set(
+                m_whitelistPeers.data()
+            ,   m_whiteListPeerCount
+        );
+        if ( errCode != NRF_ERROR_NOT_SUPPORTED )
+        {
+            APP_ERROR_CHECK( errCode );
+        }
+
+        errCode = ble_advertising_start( &m_advertising, BLE_ADV_MODE_FAST );
         APP_ERROR_CHECK( errCode );
     }
 }
