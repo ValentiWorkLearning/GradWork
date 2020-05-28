@@ -10,17 +10,6 @@
 #include <string>
 #include <map>
 
-namespace Graphics::Events
-{
-    class EventDispatcher;
-}
-
-namespace Graphics::Theme
-{
-    class IThemeController;
-}
-
-
 namespace Graphics::Widgets
 {
     class IBatteryWidget;
@@ -37,12 +26,12 @@ namespace Graphics::MainWindow
 {
 
 class GsMainWindow
-    :   public IGsMainWindow
+    :   public IGsMainWindowModel
 {
 
 public:
 
-    GsMainWindow();
+    GsMainWindow( std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView );
     ~GsMainWindow() override;
 
 public:
@@ -76,12 +65,6 @@ public:
 
 private:
 
-    void initBackground();
-
-    void resetBackgroundStyle();
-
-    void initMask();
-
     void initWidgets();
 
     void initWatchPage();
@@ -94,38 +77,18 @@ private:
 
 private:
 
-    static const inline std::uint32_t Width = LV_HOR_RES;
-    static const inline std::uint32_t Height = LV_VER_RES;
-
-private:
-
     using TPagePtr = std::unique_ptr<Graphics::Views::IPageViewObject>;
     using TPagesStorage = std::map<std::string_view,TPagePtr>;
 
     std::string_view m_currentPageName;
 
     std::unique_ptr<Events::EventDispatcher> m_pEventsDispatcher;
-    std::unique_ptr<Theme::IThemeController> m_pThemeController;
 
     TPagesStorage m_pagesStorage;
 
 private:
 
-    lv_style_t m_iniStyle;
-    lv_style_t m_yanStyle;
-    lv_style_t m_iniCircleStyle;
-    lv_style_t m_yanCircleStyle;
-    lv_area_t maskArea;
-    lv_draw_mask_radius_param_t radiusParam;
-
-    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pIny;
-    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pInyCircle;
-    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYan;
-    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pYanCircle;
-    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pObjMask;
-
-private:
-
+    std::unique_ptr<Graphics::MainWindow::IMainWindowView> m_pMainWindowView;
     std::unique_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
     std::unique_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
     std::unique_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
@@ -136,6 +99,8 @@ private:
 
 };
 
-std::unique_ptr<IGsMainWindow> createMainWindow();
+std::unique_ptr<IGsMainWindowModel> createMainWindow(
+        std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+);
 
 };

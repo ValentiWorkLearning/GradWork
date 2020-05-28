@@ -3,6 +3,7 @@
 #include "lvgl.h"
 
 #include "gs_main_window.hpp"
+#include "gs_main_window_view.hpp"
 #include "gs_event_dispatcher.hpp"
 
 #include "CallbackConnector.hpp"
@@ -106,7 +107,8 @@ LvglGraphicsService::initDisplayDriver()
 void
 LvglGraphicsService::initMainWindow()
 {
-    m_pMainWindow = Graphics::MainWindow::createMainWindow();
+    auto pMainWindowView = Graphics::MainWindow::createMainWindowView();
+    m_pMainWindow = Graphics::MainWindow::createMainWindow( std::move( pMainWindowView ) );
     // TODO create the lvlg task for ellaped event processing
 
     auto mainWindowTimer = cbc::obtain_connector(
@@ -198,13 +200,13 @@ LvglGraphicsService::initMainWindow()
     );
 }
 
-Graphics::MainWindow::IGsMainWindow&
+Graphics::MainWindow::IGsMainWindowModel&
 LvglGraphicsService::getMainWindow()
 {
     return *m_pMainWindow;
 }
 
-Graphics::MainWindow::IGsMainWindow&
+Graphics::MainWindow::IGsMainWindowModel&
 LvglGraphicsService::getMainWindow() const
 {
     return *m_pMainWindow;

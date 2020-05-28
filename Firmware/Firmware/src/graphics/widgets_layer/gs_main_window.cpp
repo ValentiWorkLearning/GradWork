@@ -1,5 +1,4 @@
 #include "gs_main_window.hpp"
-#include "gs_main_window.hpp"
 #include "gs_page_view_object.hpp"
 
 #include "gs_events.hpp"
@@ -31,26 +30,14 @@
 namespace Graphics::MainWindow
 {
 
-GsMainWindow::GsMainWindow()
+GsMainWindow::GsMainWindow(
+            std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+        )
     :
         m_currentPageName{}
-    ,   m_pEventsDispatcher{ std::move( Events::createEventDispatcher() ) }
-    ,   m_pThemeController{ std::move( Theme::createThemeController(
-                    Theme::ColorTheme::Night
-                ,   Width
-                ,   Height
-                )
-            )
-        }
-    ,   m_iniStyle{}
-    ,   m_yanStyle{}
-    ,   m_iniCircleStyle{}
-    ,   m_yanCircleStyle{}
-    ,   maskArea{0,0,240,240}
-    ,   radiusParam{}
+    ,   m_pEventsDispatcher{ Events::createEventDispatcher() }
+    ,   m_pMainWindowView{ std::move( _pMainWindowView ) }
 {
-    initMask();
-    initBackground();
     initWidgets();
     initWatchPage();
     initHealthPage();
@@ -120,101 +107,14 @@ void GsMainWindow::handleEventTimerEllapsed()
     m_pEventsDispatcher->processEventQueue();
 }
 
-void GsMainWindow::initBackground()
-{
-
-    auto createAlignedRect = [this]( auto _aligmentType, lv_style_t* _style )
-    {
-        lv_obj_t* pObject{ nullptr };
-        auto parent = m_pObjMask.get();
-
-        pObject = lv_obj_create( parent, nullptr );
-        lv_obj_set_size(
-                pObject
-            ,   GsMainWindow::Width
-            ,   GsMainWindow::Height / 2
-        );
-
-        lv_obj_add_style( pObject,LV_OBJ_PART_MAIN, _style );
-        lv_obj_align( pObject, nullptr, _aligmentType, 0, 0 );
-
-        return pObject;
-    };
-
-
-    const auto MainThemeDark = m_pThemeController->getMainThemeColor(
-            Graphics::Theme::Color::MainThemeDark
-        );
-    const auto MainThemeLight = m_pThemeController->getMainThemeColor(
-            Graphics::Theme::Color::MainThemeLight
-        );
-
-    lv_style_set_bg_opa( &m_iniStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
-    lv_style_set_bg_color( &m_iniStyle, LV_STATE_DEFAULT, MainThemeDark );
-    lv_style_set_bg_grad_color( &m_iniStyle,LV_STATE_DEFAULT, MainThemeDark );
-
-    lv_style_set_bg_color( &m_yanStyle, LV_STATE_DEFAULT, MainThemeLight );
-    lv_style_set_bg_grad_color( &m_yanStyle, LV_STATE_DEFAULT, MainThemeLight );
-    lv_style_set_bg_opa( &m_yanStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
-
-    m_pIny.reset( createAlignedRect(LV_ALIGN_IN_BOTTOM_MID, &m_iniStyle) );
-    m_pYan.reset( createAlignedRect( LV_ALIGN_IN_TOP_MID, &m_yanStyle ) );
-
-    auto createAlignedCircle = [this](auto _aligmentType, lv_style_t* _style)
-    {
-        auto parent = m_pObjMask.get();
-        lv_obj_t* pCircle = lv_obj_create( parent, nullptr );
-
-        lv_obj_set_size(
-                pCircle
-            ,   GsMainWindow::Width / 2
-            ,   GsMainWindow::Height / 2
-        );
-
-        lv_obj_add_style( pCircle, LV_OBJ_PART_MAIN, _style );
-        lv_obj_align( pCircle, nullptr, _aligmentType, 0, 0);
-
-        return pCircle;
-    };
-
-    lv_style_set_bg_opa( &m_iniCircleStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
-    lv_style_set_bg_color( &m_iniCircleStyle,LV_STATE_DEFAULT, MainThemeDark );
-    lv_style_set_border_color( &m_iniCircleStyle, LV_STATE_DEFAULT, MainThemeDark );
-    lv_style_set_bg_grad_color( &m_iniCircleStyle, LV_STATE_DEFAULT, MainThemeDark );
-    lv_style_set_radius( &m_iniCircleStyle, LV_STATE_DEFAULT, LV_RADIUS_CIRCLE );
-
-    lv_style_copy( &m_yanCircleStyle, &m_iniCircleStyle );
-
-    lv_style_set_bg_opa( &m_yanCircleStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
-    lv_style_set_bg_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
-    lv_style_set_border_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
-    lv_style_set_bg_grad_color( &m_yanCircleStyle, LV_STATE_DEFAULT, MainThemeLight );
-
-    m_pInyCircle.reset( createAlignedCircle( LV_ALIGN_IN_RIGHT_MID, &m_iniCircleStyle ) );
-    m_pYanCircle.reset( createAlignedCircle( LV_ALIGN_IN_LEFT_MID, &m_yanCircleStyle ) );
-}
-
-void GsMainWindow::resetBackgroundStyle()
-{
-    Meta::tupleApply(
-        [](auto&& _nodeToReset) { 	lv_style_reset(&_nodeToReset); }
-        , std::forward_as_tuple(
-                m_iniStyle
-            ,   m_yanStyle
-            ,    m_iniCircleStyle
-            ,    m_yanCircleStyle
-        )
-    );
-}
-
 void GsMainWindow::initWidgets()
 {
     m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
     m_pPagesSwitch = Widgets::createPagesSwitch( getThemeController() );
     m_pBluetoothWidget = Widgets::createBluetoothWidget( getThemeController() );
 
-    m_pBluetoothWidgetController = std::move( Widgets::createBluetoothWidgetHandler( m_pBluetoothWidget.get() ) );
-    m_pBatteryWidgetController = std::move( Widgets::createBatteryWidgetHandler( m_pBatteryWidget.get() ) );
+    m_pBluetoothWidgetController = Widgets::createBluetoothWidgetHandler( m_pBluetoothWidget.get() );
+    m_pBatteryWidgetController = Widgets::createBatteryWidgetHandler( m_pBatteryWidget.get() );
 
     getEventDispatcher().subscribe(
             Events::EventGroup::BleDevice
@@ -237,19 +137,6 @@ void GsMainWindow::initWidgets()
             m_pPagesSwitch->setActivePage( _activePage );
         }
     );
-}
-
-void GsMainWindow::initMask()
-{
-
-    m_pObjMask.reset( lv_objmask_create( lv_disp_get_scr_act( nullptr ), nullptr ) );
-
-    const std::uint8_t RoundedArea = 240;
-    lv_obj_set_size( m_pObjMask.get(), RoundedArea, RoundedArea );
-    lv_obj_align( m_pObjMask.get(), nullptr, LV_ALIGN_CENTER, 0, 0 );
-
-    lv_draw_mask_radius_init( &radiusParam, &maskArea, LV_RADIUS_CIRCLE, false );
-    lv_objmask_add_mask( m_pObjMask.get(), &radiusParam );
 }
 
 void GsMainWindow::initWatchPage()
@@ -296,10 +183,10 @@ void GsMainWindow::initPlayerPage()
 
 void GsMainWindow::initMainWindowSubscriptions()
 {
-    m_pThemeController->onThemeChanged.connect(
+    m_pMainWindowView->getThemeController()->onThemeChanged.connect(
         [this] {
-            resetBackgroundStyle();
-            initBackground();
+            m_pMainWindowView->resetBackgroundStyle();
+            m_pMainWindowView->initBackground();
             auto& activePage = getPage(m_currentPageName);
             activePage.reloadStyle();
         }
@@ -313,17 +200,19 @@ Events::EventDispatcher& GsMainWindow::getEventDispatcher()
 
 const Theme::IThemeController* GsMainWindow::getThemeController() const
 {
-    return m_pThemeController.get();
+    return m_pMainWindowView->getThemeController();
 }
 
 Theme::IThemeController* GsMainWindow::getThemeController()
 {
-    return m_pThemeController.get();
+    return m_pMainWindowView->getThemeController();
 }
 
-std::unique_ptr<IGsMainWindow> createMainWindow()
+std::unique_ptr<IGsMainWindowModel> createMainWindow(
+        std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+    )
 {
-    return std::make_unique<GsMainWindow>();
+    return std::make_unique<GsMainWindow>( std::move( _pMainWindowView ) );
 }
 
 }

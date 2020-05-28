@@ -23,12 +23,12 @@ namespace Graphics::Theme
 namespace Graphics::MainWindow
 {
 
-class IGsMainWindow
+class IGsMainWindowModel
 {
 
 public:
 
-    virtual ~IGsMainWindow() = default;
+    virtual ~IGsMainWindowModel() = default;
 
 public:
 
@@ -65,6 +65,27 @@ public:
 
     Simple::Signal<void(std::string_view)> onActivePageChanged;
 
+};
+
+
+class IMainWindowView
+{
+
+public:
+
+    virtual ~IMainWindowView() = default;
+
+public:
+
+    virtual void initBackground() = 0;
+
+    virtual void resetBackgroundStyle() = 0;
+
+public:
+
+    virtual const Theme::IThemeController* getThemeController() const = 0;
+
+    virtual Theme::IThemeController* getThemeController() = 0;
 };
 
 };

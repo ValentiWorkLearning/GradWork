@@ -55,6 +55,7 @@ add_executable(
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/fonts/PlayerIcons68px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_page_view_object.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_main_window.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_main_window_view.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_theme_controller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/gs_event_dispatcher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/${FIRMWARE_SRC_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_widget.cpp

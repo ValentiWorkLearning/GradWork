@@ -12,7 +12,7 @@
 
 namespace Graphics::MainWindow
 {
-    class IGsMainWindow;
+    class IGsMainWindowModel;
 };
 
 namespace Graphics
@@ -33,9 +33,9 @@ public:
 
 public:
 
-    Graphics::MainWindow::IGsMainWindow& getMainWindow();
+    Graphics::MainWindow::IGsMainWindowModel& getMainWindow();
 
-    Graphics::MainWindow::IGsMainWindow& getMainWindow() const;
+    Graphics::MainWindow::IGsMainWindowModel& getMainWindow() const;
 
 private:
 
@@ -59,7 +59,7 @@ private:
     Meta::PointerWrapper<lv_disp_t,lv_disp_remove> m_glDisplay;
 
     std::unique_ptr<Graphics::PlatformBackend> m_pPlatformBackend;
-    std::unique_ptr<Graphics::MainWindow::IGsMainWindow> m_pMainWindow;
+    std::unique_ptr<Graphics::MainWindow::IGsMainWindowModel> m_pMainWindow;
 
     Meta::PointerWrapper<lv_task_t,lv_task_del> m_pMainWindowTick;
     Meta::PointerWrapper<lv_task_t, lv_task_del> m_pPageSwitch;
