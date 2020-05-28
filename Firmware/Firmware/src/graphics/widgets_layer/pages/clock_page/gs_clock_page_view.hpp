@@ -1,7 +1,7 @@
 #pragma once
 
-#include "gs_iclock_page_view.hpp"
-#include "gs_page_view_object.hpp"
+#include "ih/pages/gs_iclock_page_view.hpp"
+#include "widgets_layer/gs_page_view_object.hpp"
 
 #include "lvgl.h"
 

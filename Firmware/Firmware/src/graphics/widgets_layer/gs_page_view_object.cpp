@@ -1,17 +1,17 @@
 #include "gs_page_view_object.hpp"
 
 #include "ih/gs_events.hpp"
+#include "ih/gs_itheme_controller.hpp"
+
+#include "ih/pages/gs_iclock_page_view.hpp"
+#include "ih/pages/gs_ihealth_page_view.hpp"
+#include "ih/pages/gs_iplayer_page_view.hpp"
 
 #include "widgets/battery/gs_battery_widget.hpp"
 #include "widgets/battery/gs_battery_handler.hpp"
 
 #include <algorithm>
 
-#include "pages/clock_page/gs_iclock_page_view.hpp"
-#include "pages/health_page/gs_ihealth_page_view.hpp"
-#include "pages/player_page/gs_iplayer_page_view.hpp"
-
-#include "gs_itheme_controller.hpp"
 
 namespace Graphics::Views
 {

@@ -3,9 +3,9 @@
 #include "ih/gs_events.hpp"
 #include "ih/gs_itheme_controller.hpp"
 
-#include "battery/gs_ibattery_widget.hpp"
-#include "pages_switch/gs_ipages_switch.hpp"
-#include "bluetooth/gs_ibluetooth_widget.hpp"
+#include "ih/widgets/gs_ibattery_widget.hpp"
+#include "ih/widgets/gs_ipages_switch.hpp"
+#include "ih/widgets/gs_ibluetooth_widget.hpp"
 
 namespace Graphics::Widgets
 {

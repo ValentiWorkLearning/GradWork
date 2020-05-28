@@ -22,10 +22,10 @@
 
 #include "logger_service.hpp"
 #include "graphics/gs_lvgl_service.hpp"
-#include "graphics/gs_platform_layer.hpp"
+#include "graphics/platform/gs_platform_layer.hpp"
 
-#include "graphics/widgets_layer/ih/gs_imain_window.hpp"
-#include "graphics/widgets_layer/gs_event_dispatcher.hpp"
+#include "graphics/ih/gs_imain_window.hpp"
+#include "graphics/gs_event_dispatcher.hpp"
 
 #include "SimpleSignal.hpp"
 

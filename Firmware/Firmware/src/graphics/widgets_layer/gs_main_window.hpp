@@ -6,9 +6,9 @@
 
 #include "MetaUtils.hpp"
 
-#include <vector>
+#include "etl/vector.h"
+
 #include <string>
-#include <map>
 
 namespace Graphics::Widgets
 {
@@ -77,8 +77,9 @@ private:
 
 private:
 
+    static constexpr size_t PagesCount = 3;
     using TPagePtr = std::unique_ptr<Graphics::Views::IPageViewObject>;
-    using TPagesStorage = std::map<std::string_view,TPagePtr>;
+    using TPagesStorage = etl::vector<std::pair<std::string_view,TPagePtr>,PagesCount>;
 
     std::string_view m_currentPageName;
 

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gs_page_view_object.hpp"
+#include "ih/gs_ipage_view_object.hpp"
 
 #include <string>
 

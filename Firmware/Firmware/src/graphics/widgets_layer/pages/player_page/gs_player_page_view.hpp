@@ -1,6 +1,7 @@
 #pragma once
 
-#include "gs_iplayer_page_view.hpp"
+#include "ih/pages/gs_iplayer_page_view.hpp"
+#include "widgets_layer/gs_page_view_object.hpp"
 
 #include "lvgl.h"
 

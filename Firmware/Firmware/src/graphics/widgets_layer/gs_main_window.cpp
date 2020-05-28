@@ -1,12 +1,11 @@
 #include "gs_main_window.hpp"
 #include "gs_page_view_object.hpp"
 
-#include "gs_events.hpp"
+#include "ih/gs_events.hpp"
+#include "ih/gs_ipage_view_object.hpp"
 #include "gs_event_dispatcher.hpp"
 
 #include "gs_theme_controller.hpp"
-
-#include "gs_ipage_view_object.hpp"
 
 #include "ih/gs_ievent_handler.hpp"
 
@@ -56,7 +55,7 @@ void GsMainWindow::addPage(
 
     localShared->hide();
 
-    m_pagesStorage.insert( {pageName,std::move( localShared )} );
+    m_pagesStorage.push_back( {pageName,std::move( localShared )} );
 
 }
 

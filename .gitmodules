@@ -1,7 +1,3 @@
-[submodule "Firmware/Firmware/src/graphics/lvgl"]
-	path = Firmware/Firmware/src/graphics/lvgl
-	url = https://github.com/littlevgl/lvgl.git
-	branch = master
 [submodule "Simulator/graphics/SDL-mirror"]
 	path = Simulator/graphics/SDL-mirror
 	url = https://github.com/spurious/SDL-mirror.git
@@ -19,3 +15,6 @@
 [submodule "3rdparty/fmt"]
 	path = 3rdparty/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "Firmware/Firmware/src/graphics/lvgl_lib/lvgl"]
+	path = Firmware/Firmware/src/graphics/lvgl_lib/lvgl
+	url = https://github.com/littlevgl/lvgl.git

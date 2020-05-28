@@ -1,6 +1,6 @@
 #include "gs_battery_handler.hpp"
 
-#include "widgets/battery/gs_ibattery_widget.hpp"
+#include "ih/widgets/gs_ibattery_widget.hpp"
 
 #include "ih/gs_events.hpp"
 #include "MetaUtils.hpp"

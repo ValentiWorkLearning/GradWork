@@ -2,9 +2,9 @@
 
 #include "ih/gs_itheme_controller.hpp"
 
-#include "pages/clock_page/gs_iclock_page_view.hpp"
-#include "pages/health_page/gs_ihealth_page_view.hpp"
-#include "pages/player_page/gs_iplayer_page_view.hpp"
+#include "ih/pages/gs_iclock_page_view.hpp"
+#include "ih/pages/gs_ihealth_page_view.hpp"
+#include "ih/pages/gs_iplayer_page_view.hpp"
 
 namespace Graphics::Widgets
 {

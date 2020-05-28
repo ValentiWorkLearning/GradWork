@@ -2,8 +2,8 @@
 
 #include "ih/gs_itheme_controller.hpp"
 
-#include "IconFont24px.hpp"
-#include "PlayerIcons68px.hpp"
+#include "fonts/IconFont24px.hpp"
+#include "fonts/PlayerIcons68px.hpp"
 
 namespace Graphics::Views
 {

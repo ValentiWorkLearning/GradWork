@@ -56,7 +56,6 @@ include_directories(${NRF_PROJECT_DEVICE_PATH}/board-pinout)
 
 nRF5x_addExecutable(${TARGET_NAME} "${SOURCE_FILES}")
 
-
 add_subdirectory ("graphics")
 
 set (3RDPARTY_DIR "../../../3rdparty")
@@ -86,33 +85,6 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ible_softdevice.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
     ${CMAKE_CURRENT_LIST_DIR}/drivers/winbondflash/winbond_flash.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova12px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova16px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova24px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova30px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova36px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/LcdNova68px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/IconFont16px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/IconFont24px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/IconFont35px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts/PlayerIcons68px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_page_view_object.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_main_window.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_main_window_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_theme_controller.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/gs_event_dispatcher.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_widget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/battery/gs_battery_handler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/pages_switch/gs_pages_switch.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/bluetooth/gs_bluetooth_widget.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/bluetooth/gs_bluetooth_widget_handler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/gs_widget_base_obj.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/clock_page/gs_clock_page_handler.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/health_page/gs_health_page_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/pages/player_page/gs_player_page_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_lvgl_service.cpp # increase to 42664
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/gs_platform_layer.cpp # increase to 41864
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp # increase to 41960
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/heartrate/sp_heartrate_service_fake.cpp
     ${CMAKE_CURRENT_LIST_DIR}/service_providers/datetime/sp_datetime_service_fake.cpp # increase to 42158
@@ -125,22 +97,18 @@ target_include_directories(
     ${TARGET_NAME}
     PUBLIC
     ${3RDPARTY_DIR}/etl
+    ${CMAKE_CURRENT_LIST_DIR}/graphics
     ${CMAKE_CURRENT_LIST_DIR}/drivers
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ih
     ${CMAKE_CURRENT_LIST_DIR}/drivers/ble
     ${CMAKE_CURRENT_LIST_DIR}/utils
     ${CMAKE_CURRENT_LIST_DIR}/logger
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/ih
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets/battery
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts
-    ${CMAKE_CURRENT_LIST_DIR}/graphics/icons
     ${CMAKE_CURRENT_LIST_DIR}/service_providers
 )
 
 target_link_libraries(
     ${TARGET_NAME}
-    lvgl_lib
     etl
+    watch_graphics
+    lvgl_lib
 )

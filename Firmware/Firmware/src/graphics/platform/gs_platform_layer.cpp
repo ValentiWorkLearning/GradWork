@@ -11,9 +11,9 @@ namespace
 
 #if defined USE_ST7789V_BACKEND
 
-#include "display/display_idisplay.hpp"
-#include "display/display_st7789v.hpp"
-#include "spi/spi_wrapper.hpp"
+#include "../drivers/display/display_idisplay.hpp" // TODO Consider something better
+#include "../drivers/display/display_st7789v.hpp"
+#include "../drivers/spi/spi_wrapper.hpp"
 
 #include "nrf_delay.h"
 #include "app_timer.h"

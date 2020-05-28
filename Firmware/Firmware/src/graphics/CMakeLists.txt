@@ -1,137 +1,77 @@
 cmake_minimum_required(VERSION 3.10)
 
-set (TARGET_NAME lvgl_lib)
+set (TARGET_NAME watch_graphics)
 
 add_library( ${TARGET_NAME} STATIC )
 
+set (LOGGER_DIR "../logger")
+set (UTILS_DIR  "../utils")
+set (DRIVER_DIR "../drivers")
+add_subdirectory ("lvgl_lib")
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-#set_target_properties( ${TARGET_NAME} PROPERTIES LANGUAGE C)
+
+target_compile_definitions(
+    ${TARGET_NAME}
+    PRIVATE
+    USE_ST7789V_BACKEND
+)
 
 target_include_directories(
     ${TARGET_NAME}
     PUBLIC
-    "lvgl/"
-    "lvgl/src/"
-    "lvgl/src/lv_core/"
-    "lvgl/src/lv_draw/"
-    "lvgl/src/lv_font/"
-    "lvgl/src/lv_gpu/"
-    "lvgl/src/lv_hal/"
-    "lvgl/src/lv_misc/"
-    "lvgl/src/lv_themes/"
-    "lvgl/src/lv_widgets/"
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/ih/widgets
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/ih/pages
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts
+    ${CMAKE_CURRENT_LIST_DIR}/graphics/icons
+    ${UTILS_DIR}
+    ${LOGGER_DIR}
+    ${DRIVER_DIR}
+    ${DRIVER_DIR}/display
+    ${DRIVER_DIR}/spi
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
 target_sources(
     ${TARGET_NAME}
     PRIVATE
-    "lvgl/src/lv_core/lv_debug.c"
-    "lvgl/src/lv_core/lv_disp.c"
-    "lvgl/src/lv_core/lv_group.c"
-    "lvgl/src/lv_core/lv_indev.c"
-    "lvgl/src/lv_core/lv_obj.c"
-    "lvgl/src/lv_core/lv_refr.c"
-    "lvgl/src/lv_core/lv_style.c"
-    "lvgl/src/lv_draw/lv_draw_arc.c"
-    "lvgl/src/lv_draw/lv_draw_blend.c"
-    "lvgl/src/lv_draw/lv_draw_img.c"
-    "lvgl/src/lv_draw/lv_draw_label.c"
-    "lvgl/src/lv_draw/lv_draw_line.c"
-    "lvgl/src/lv_draw/lv_draw_mask.c"
-    "lvgl/src/lv_draw/lv_draw_rect.c"
-    "lvgl/src/lv_draw/lv_draw_triangle.c"
-    "lvgl/src/lv_draw/lv_img_buf.c"
-    "lvgl/src/lv_draw/lv_img_cache.c"
-    "lvgl/src/lv_draw/lv_img_decoder.c"
-    "lvgl/src/lv_font/lv_font.c"
-    # "lvgl/src/lv_font/lv_font_dejavu_16_persian_hebrew.c"
-    "lvgl/src/lv_font/lv_font_fmt_txt.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_12.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_12_subpx.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_14.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_16.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_18.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_20.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_22.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_24.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_26.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_28.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_28_compressed.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_30.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_32.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_34.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_36.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_38.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_40.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_42.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_44.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_46.c"
-    # "lvgl/src/lv_font/lv_font_montserrat_48.c"
-    # "lvgl/src/lv_font/lv_font_simsun_16_cjk.c"
-    # "lvgl/src/lv_font/lv_font_unscii_8.c"
-    "lvgl/src/lv_gpu/lv_gpu_stm32_dma2d.c"
-    "lvgl/src/lv_hal/lv_hal_disp.c"
-    "lvgl/src/lv_hal/lv_hal_indev.c"
-    "lvgl/src/lv_hal/lv_hal_tick.c"
-    "lvgl/src/lv_misc/lv_anim.c"
-    "lvgl/src/lv_misc/lv_area.c"
-    "lvgl/src/lv_misc/lv_async.c"
-    "lvgl/src/lv_misc/lv_bidi.c"
-    "lvgl/src/lv_misc/lv_color.c"
-    "lvgl/src/lv_misc/lv_fs.c"
-    "lvgl/src/lv_misc/lv_gc.c"
-    "lvgl/src/lv_misc/lv_ll.c"
-    "lvgl/src/lv_misc/lv_log.c"
-    "lvgl/src/lv_misc/lv_math.c"
-    "lvgl/src/lv_misc/lv_mem.c"
-    "lvgl/src/lv_misc/lv_printf.c"
-    "lvgl/src/lv_misc/lv_task.c"
-    "lvgl/src/lv_misc/lv_templ.c"
-    "lvgl/src/lv_misc/lv_txt.c"
-    "lvgl/src/lv_misc/lv_txt_ap.c"
-    "lvgl/src/lv_misc/lv_utils.c"
-    "lvgl/src/lv_themes/lv_theme.c"
-    "lvgl/src/lv_themes/lv_theme_empty.c"
-    "lvgl/src/lv_themes/lv_theme_material.c"
-    "lvgl/src/lv_themes/lv_theme_mono.c"
-    "lvgl/src/lv_themes/lv_theme_template.c"
-    "lvgl/src/lv_widgets/lv_arc.c"
-    "lvgl/src/lv_widgets/lv_bar.c"
-    "lvgl/src/lv_widgets/lv_btn.c"
-    "lvgl/src/lv_widgets/lv_btnmatrix.c"
-    "lvgl/src/lv_widgets/lv_calendar.c"
-    "lvgl/src/lv_widgets/lv_canvas.c"
-    "lvgl/src/lv_widgets/lv_chart.c"
-    "lvgl/src/lv_widgets/lv_checkbox.c"
-    "lvgl/src/lv_widgets/lv_cont.c"
-    "lvgl/src/lv_widgets/lv_cpicker.c"
-    "lvgl/src/lv_widgets/lv_dropdown.c"
-    "lvgl/src/lv_widgets/lv_gauge.c"
-    "lvgl/src/lv_widgets/lv_img.c"
-    "lvgl/src/lv_widgets/lv_imgbtn.c"
-    "lvgl/src/lv_widgets/lv_keyboard.c"
-    "lvgl/src/lv_widgets/lv_label.c"
-    "lvgl/src/lv_widgets/lv_led.c"
-    "lvgl/src/lv_widgets/lv_line.c"
-    "lvgl/src/lv_widgets/lv_linemeter.c"
-    "lvgl/src/lv_widgets/lv_list.c"
-    "lvgl/src/lv_widgets/lv_msgbox.c"
-    "lvgl/src/lv_widgets/lv_objmask.c"
-    "lvgl/src/lv_widgets/lv_objx_templ.c"
-    "lvgl/src/lv_widgets/lv_page.c"
-    "lvgl/src/lv_widgets/lv_roller.c"
-    "lvgl/src/lv_widgets/lv_slider.c"
-    "lvgl/src/lv_widgets/lv_spinbox.c"
-    "lvgl/src/lv_widgets/lv_spinner.c"
-    "lvgl/src/lv_widgets/lv_switch.c"
-    "lvgl/src/lv_widgets/lv_table.c"
-    "lvgl/src/lv_widgets/lv_tabview.c"
-    "lvgl/src/lv_widgets/lv_textarea.c"
-    "lvgl/src/lv_widgets/lv_tileview.c"
-    "lvgl/src/lv_widgets/lv_win.c"
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova12px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova16px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova24px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova30px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova36px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova68px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/IconFont16px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/IconFont24px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/IconFont35px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/fonts/PlayerIcons68px.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_page_view_object.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/battery/gs_battery_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/battery/gs_battery_handler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/pages_switch/gs_pages_switch.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/bluetooth/gs_bluetooth_widget.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/bluetooth/gs_bluetooth_widget_handler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/gs_widget_base_obj.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/clock_page/gs_clock_page_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/clock_page/gs_clock_page_handler.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/health_page/gs_health_page_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/player_page/gs_player_page_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_main_window.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_main_window_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/platform/gs_platform_layer.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gs_theme_controller.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gs_event_dispatcher.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/gs_lvgl_service.cpp
+)
+
+
+target_link_libraries(
+    ${TARGET_NAME}
+    lvgl_lib
+    etl
 )

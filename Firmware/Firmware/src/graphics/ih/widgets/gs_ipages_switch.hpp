@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gs_iwidget_object.hpp"
+#include "ih/gs_iwidget_object.hpp"
 
 #include <cstdint>
 #include <string>

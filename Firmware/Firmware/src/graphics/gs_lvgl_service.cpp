@@ -1,21 +1,21 @@
 #include "gs_lvgl_service.hpp"
 
-#include "lvgl.h"
+#include "ih/gs_events.hpp"
+#include "ih/gs_itheme_controller.hpp"
 
-#include "gs_main_window.hpp"
-#include "gs_main_window_view.hpp"
+#include "ih/pages/gs_iclock_page_view.hpp"
+#include "ih/pages/gs_ihealth_page_view.hpp"
+#include "ih/pages/gs_iplayer_page_view.hpp"
+
+#include "widgets_layer/gs_main_window.hpp"
+#include "widgets_layer/gs_main_window_view.hpp"
+
 #include "gs_event_dispatcher.hpp"
 
 #include "CallbackConnector.hpp"
 #include "logger_service.hpp"
 
-#include "ih/gs_itheme_controller.hpp"
-
-#include "widgets_layer/pages/clock_page/gs_iclock_page_view.hpp"
-#include "widgets_layer/pages/health_page/gs_ihealth_page_view.hpp"
-#include "widgets_layer/pages/player_page/gs_iplayer_page_view.hpp"
-
-#include "gs_events.hpp"
+#include "lvgl.h"
 
 namespace Graphics
 {

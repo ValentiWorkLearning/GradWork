@@ -1,6 +1,6 @@
 #pragma once
 
-#include "gs_events.hpp"
+#include "ih/gs_events.hpp"
 
 #include <any>
 #include <functional>
@@ -8,7 +8,6 @@
 #include <memory>
 #include <atomic>
 
-#include "gs_events.hpp"
 #include "Noncopyable.hpp"
 
 #include <etl/vector.h>

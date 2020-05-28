@@ -3,7 +3,7 @@
 #include "lvgl.h"
 #include "lv_conf.h"
 
-#include "gs_platform_layer.hpp"
+#include "platform/gs_platform_layer.hpp"
 
 #include <array>
 #include <memory>

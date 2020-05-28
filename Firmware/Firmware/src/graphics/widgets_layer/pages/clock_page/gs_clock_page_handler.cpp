@@ -1,8 +1,8 @@
 #include "gs_clock_page_handler.hpp"
 
 #include "ih/gs_events.hpp"
+#include "ih/pages/gs_iclock_page_view.hpp"
 
-#include "gs_iclock_page_view.hpp"
 #include "MetaUtils.hpp"
 
 #include <charconv>

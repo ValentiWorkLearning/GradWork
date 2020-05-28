@@ -2,7 +2,7 @@
 
 #include "ih/gs_events.hpp"
 
-#include "gs_ibluetooth_widget.hpp"
+#include "ih/widgets/gs_ibluetooth_widget.hpp"
 
 #include <cassert>
 

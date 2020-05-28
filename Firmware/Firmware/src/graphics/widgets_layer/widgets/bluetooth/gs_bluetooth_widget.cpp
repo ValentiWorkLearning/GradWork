@@ -1,9 +1,9 @@
 #include "gs_bluetooth_widget.hpp"
-#include "gs_events.hpp"
+#include "ih/gs_events.hpp"
 
 #include "ih/gs_itheme_controller.hpp"
 
-#include "IconFont16px.hpp"
+#include "fonts/IconFont16px.hpp"
 
 namespace Graphics::Widgets
 {
