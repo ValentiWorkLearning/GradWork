@@ -1,5 +1,6 @@
 #include "ble_desktop_softdevice.hpp"
 
+#include <optional>
 
 namespace Ble::Stack
 {
@@ -9,7 +10,7 @@ DesktopBleStackKeeper::DesktopBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _
     , m_pServiceCreator{ std::move(_pServiceCreator) }
 {
     m_batteryService = m_pServiceCreator->getBatteryService();
-    m_dateTimeService = m_pServiceCreator->getDateTimeService();
+    m_dateTimeService = m_pServiceCreator->getDateTimeService( std::nullopt );
 }
 
 Ble::BatteryService::IBatteryLevelService&
