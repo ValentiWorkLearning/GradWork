@@ -74,4 +74,5 @@ target_link_libraries(
     ${TARGET_NAME}
     lvgl_lib
     etl
+    stdc++
 )
