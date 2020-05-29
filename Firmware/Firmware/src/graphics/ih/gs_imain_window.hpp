@@ -42,9 +42,9 @@ public:
 
     virtual Graphics::Views::IPageViewObject& getActivePage() = 0;
 
-    virtual Graphics::Views::IPageViewObject& getActivePage() const = 0;
+    virtual const Graphics::Views::IPageViewObject& getActivePage() const = 0;
 
-    virtual Graphics::Views::IPageViewObject&
+    virtual const Graphics::Views::IPageViewObject&
         getPage(std::string_view _pageName)const = 0;
 
     using TPageWalker = std::function<void(Graphics::Views::IPageViewObject&)>;

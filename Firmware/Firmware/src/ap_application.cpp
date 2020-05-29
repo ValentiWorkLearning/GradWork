@@ -20,7 +20,6 @@
 
 #endif
 
-#include "logger_service.hpp"
 #include "graphics/gs_lvgl_service.hpp"
 #include "graphics/platform/gs_platform_layer.hpp"
 
@@ -28,6 +27,8 @@
 #include "graphics/gs_event_dispatcher.hpp"
 
 #include "SimpleSignal.hpp"
+
+#include "logger_service.hpp"
 
 #include <optional>
 

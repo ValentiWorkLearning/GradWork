@@ -26,6 +26,9 @@
 
 #include "MetaUtils.hpp"
 
+#include <memory>
+#include <algorithm>
+
 namespace Graphics::MainWindow
 {
 
@@ -65,28 +68,38 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
         return;
 
     if( !m_currentPageName.empty() )
-        m_pagesStorage.at( m_currentPageName )->hide();
+    {
+        auto pPagePtr = getPagePointer( m_currentPageName );
+        pPagePtr->hide();
+    }
 
     m_currentPageName = _pageName;
-    m_pagesStorage.at( m_currentPageName )->show();
+
+    auto pPagePtr = getPagePointer( m_currentPageName );
+    pPagePtr->show();
 
     onActivePageChanged.emit( m_currentPageName );
 }
 
-Graphics::Views::IPageViewObject& GsMainWindow::getActivePage()
-{
-    return *m_pagesStorage.at( m_currentPageName );
-}
-
-Graphics::Views::IPageViewObject& GsMainWindow::getActivePage() const
-{
-    return *m_pagesStorage.at( m_currentPageName );
-}
-
 Graphics::Views::IPageViewObject&
+GsMainWindow::getActivePage()
+{
+    auto pPagePtr = getPagePointer( m_currentPageName );
+    return *pPagePtr;
+}
+
+const Graphics::Views::IPageViewObject&
+GsMainWindow::getActivePage() const
+{
+    auto pPagePtr = getPagePointer( m_currentPageName );
+    return *pPagePtr;
+}
+
+const Graphics::Views::IPageViewObject&
 GsMainWindow::getPage( std::string_view _pageName )const
 {
-    return *m_pagesStorage.at( _pageName );
+    auto pPagePtr = getPagePointer( _pageName );
+    return *pPagePtr;
 }
 
 void GsMainWindow::forEachPage(TPageWalker _pageWalker)
@@ -186,10 +199,46 @@ void GsMainWindow::initMainWindowSubscriptions()
         [this] {
             m_pMainWindowView->resetBackgroundStyle();
             m_pMainWindowView->initBackground();
-            auto& activePage = getPage(m_currentPageName);
+            auto& activePage = getActivePage();
             activePage.reloadStyle();
         }
     );
+}
+
+Views::IPageViewObject*
+GsMainWindow::getPagePointer(std::string_view _pageName)
+{
+    auto it = std::find_if(
+        m_pagesStorage.begin()
+    ,   m_pagesStorage.end()
+    ,   [_pageName]( const auto& _pagePair )
+        {
+            const auto&[pageName, pagePtr] = _pagePair;
+            return pageName == _pageName;
+        }
+    );
+
+    if( it != m_pagesStorage.end() )
+        return it->second.get();
+    return nullptr;
+}
+
+const Graphics::Views::IPageViewObject*
+GsMainWindow::getPagePointer( std::string_view _pageName) const
+{
+    auto it = std::find_if(
+        m_pagesStorage.begin()
+    ,   m_pagesStorage.end()
+    ,   [_pageName]( const auto& _pagePair )
+        {
+            const auto&[pageName, pagePtr] = _pagePair;
+            return pageName == _pageName;
+        }
+    );
+
+    if( it != m_pagesStorage.end() )
+        return it->second.get();
+    return nullptr;
 }
 
 Events::EventDispatcher& GsMainWindow::getEventDispatcher()
@@ -197,7 +246,8 @@ Events::EventDispatcher& GsMainWindow::getEventDispatcher()
     return *m_pEventsDispatcher;
 }
 
-const Theme::IThemeController* GsMainWindow::getThemeController() const
+const Theme::IThemeController*
+GsMainWindow::getThemeController() const
 {
     return m_pMainWindowView->getThemeController();
 }

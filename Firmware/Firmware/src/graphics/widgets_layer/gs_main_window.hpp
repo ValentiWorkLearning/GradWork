@@ -46,10 +46,10 @@ public:
 
     Graphics::Views::IPageViewObject& getActivePage() override;
 
-    Graphics::Views::IPageViewObject& getActivePage()const override;
+    const Graphics::Views::IPageViewObject& getActivePage()const override;
 
-    Graphics::Views::IPageViewObject&
-        getPage( std::string_view _pageName )const override;
+    const Graphics::Views::IPageViewObject&
+    getPage( std::string_view _pageName )const override;
 
     void forEachPage(TPageWalker _pageWalker) override;
 
@@ -74,6 +74,10 @@ private:
     void initPlayerPage();
 
     void initMainWindowSubscriptions();
+
+    Graphics::Views::IPageViewObject* getPagePointer( std::string_view _pageName);
+
+    const Graphics::Views::IPageViewObject* getPagePointer( std::string_view _pageName) const;
 
 private:
 
