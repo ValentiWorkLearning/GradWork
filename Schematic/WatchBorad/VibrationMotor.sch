@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 2 4
+Sheet 2 5
 Title ""
 Date ""
 Rev ""
@@ -14,10 +14,10 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L MotorLocal:Motor_DC M?
+L MotorLocal:Motor_DC M1
 U 1 1 5E9679A5
 P 7250 3075
-F 0 "M?" H 7400 3025 50  0000 L CNN
+F 0 "M1" H 7400 3025 50  0000 L CNN
 F 1 "Motor_DC" V 7425 2825 50  0001 L CNN
 F 2 "LocalFootprints:VibrationMorot4x4x11" H 7250 2985 50  0001 C CNN
 F 3 "https://www.aliexpress.com/item/32844746278.html?spm=a2g0o.productlist.0.0.24ef228a6Cfn5S&algo_pvid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25&algo_expid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25-0&btsid=0b8b15c915866028623212205ec781&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_" H 7250 2985 50  0001 C CNN
@@ -31,10 +31,10 @@ Wire Wire Line
 Text HLabel 6000 2750 0    50   Input ~ 0
 VCC_motor
 $Comp
-L MosfetLocal:SL2300 VT?
+L MosfetLocal:SL2300 VT1
 U 1 1 5E950239
 P 7225 3700
-F 0 "VT?" H 7354 3700 50  0000 L CNN
+F 0 "VT1" H 7354 3700 50  0000 L CNN
 F 1 "SL2300" H 7355 3655 50  0001 L CNN
 F 2 "TO_SOT_Packages_SMD:SOT-23" H 7225 3700 50  0001 C CNN
 F 3 "https://datasheet.lcsc.com/szlcsc/1906271838_SLKORMICRO-Elec-SL2300_C350314.pdf" H 7225 3700 50  0001 C CNN
@@ -45,10 +45,10 @@ $EndComp
 Wire Wire Line
 	7250 3375 7250 3450
 $Comp
-L Device:R R?
+L Device:R R14
 U 1 1 5E95D4D2
 P 6950 4025
-F 0 "R?" H 7020 4071 50  0000 L CNN
+F 0 "R14" H 7020 4071 50  0000 L CNN
 F 1 "10k" H 7020 3980 50  0000 L CNN
 F 2 "Resistors_SMD:R_0603_HandSoldering" V 6880 4025 50  0001 C CNN
 F 3 "~" H 6950 4025 50  0001 C CNN
@@ -56,10 +56,10 @@ F 3 "~" H 6950 4025 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:R R?
+L Device:R R13
 U 1 1 5E95E60A
 P 6675 3700
-F 0 "R?" V 6468 3700 50  0000 C CNN
+F 0 "R13" V 6468 3700 50  0000 C CNN
 F 1 "330" V 6559 3700 50  0000 C CNN
 F 2 "Resistors_SMD:R_0603_HandSoldering" V 6605 3700 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 6675 3700 50  0001 C CNN
@@ -87,10 +87,10 @@ Wire Wire Line
 Wire Wire Line
 	7250 2750 6000 2750
 $Comp
-L Connector:TestPoint TP?
+L Connector:TestPoint TP1
 U 1 1 5E966959
 P 6150 3700
-F 0 "TP?" H 6208 3772 50  0000 L CNN
+F 0 "TP1" H 6208 3772 50  0000 L CNN
 F 1 "TestPoint" H 6208 3727 50  0001 L CNN
 F 2 "testpoints:testpoint" H 6350 3700 50  0001 C CNN
 F 3 "~" H 6350 3700 50  0001 C CNN
@@ -103,10 +103,10 @@ Wire Wire Line
 Text Notes 6275 2700 0    50   ~ 0
 Place the capacitor and the diode as close as physically possible
 $Comp
-L Device:C C?
+L Device:C C5
 U 1 1 5E969686
 P 7675 3150
-F 0 "C?" H 7790 3196 50  0000 L CNN
+F 0 "C5" H 7790 3196 50  0000 L CNN
 F 1 "100n X7R 16V" H 7450 3000 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0603_HandSoldering" H 7713 3000 50  0001 C CNN
 F 3 "~" H 7675 3150 50  0001 C CNN
@@ -114,10 +114,10 @@ F 3 "~" H 7675 3150 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L Device:D D?
+L Device:D D2
 U 1 1 5E96AA9C
 P 8050 3150
-F 0 "D?" V 8004 3229 50  0000 L CNN
+F 0 "D2" V 8004 3229 50  0000 L CNN
 F 1 "1A 20V" V 8095 3229 50  0000 L CNN
 F 2 "Diodes_SMD:D_SMA_Handsoldering" H 8050 3150 50  0001 C CNN
 F 3 "https://datasheet.lcsc.com/szlcsc/1901021833_Shandong-Jingdao-Microelectronics-SS12_C353243.pdf" H 8050 3150 50  0001 C CNN
