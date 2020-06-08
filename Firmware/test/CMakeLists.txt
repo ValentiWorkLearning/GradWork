@@ -12,7 +12,7 @@ set(PROJECT_SOURCES
 add_executable(nordic-template.elf ${PROJECT_SOURCES})
 target_link_libraries(
     nordic-template.elf
-    Nordic::Common
+    NordicSDK::Common
     # Nordic::Libraries
     # Nordic::Ble::Battery
     # Nordic::Ble::Dts

@@ -26,4 +26,4 @@ find_program(CMAKE_DEBUGGER NAMES ${NORDIC_TARGET_TRIPLET}-gdb PATHS ${TOOLCHAIN
 find_program(CMAKE_CPPFILT NAMES ${NORDIC_TARGET_TRIPLET}-c++filt PATHS ${TOOLCHAIN_BIN_PATH})
 
 
-include(nordic/sdk)
+#include(nordic/sdk)
