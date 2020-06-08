@@ -1,3 +1,4 @@
 .idea
 cmake-build-debug
 build-Firmware-ARM_Toolchain-Debug
+test/build
