@@ -7,22 +7,26 @@ find_package(NordicSDK COMPONENTS Common REQUIRED)
 
 include(CMakePrintHelpers)
 
-add_executable(nordic-template.elf ${PROJECT_SOURCES})
+set (NORDIC_TARGET nordic-template)
+
+add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
+set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
 target_link_options(
-    nordic-template.elf
+    nordic-template
     PUBLIC
     --specs=nano.specs -lc -lnosys -lm
+    -Wl,-Map=${NORDIC_TARGET}.map
 )
 
 target_sources(
-    nordic-template.elf
+    ${NORDIC_TARGET}
     PRIVATE
     main.c
 )
 
 target_link_options(
-    nordic-template.elf
+    ${NORDIC_TARGET}
     PRIVATE
     -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
 )
@@ -30,9 +34,11 @@ target_link_options(
 #cmake_print_properties( TARGETS nordic-template.elf PROPERTIES  LINK_DEPENDS )
 
 target_link_libraries(
-    nordic-template.elf
+    ${NORDIC_TARGET}
     NordicSDK::Common
     # Nordic::Libraries
     # Nordic::Ble::Battery
     # Nordic::Ble::Dts
 )
+
+createBinAndHexFiles( ${NORDIC_TARGET} )
