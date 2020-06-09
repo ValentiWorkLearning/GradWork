@@ -5,18 +5,16 @@ project(nordic-template C CXX ASM)
 
 find_package(NordicSDK COMPONENTS Common REQUIRED)
 
-include(CMakePrintHelpers)
-
 set (NORDIC_TARGET nordic-template)
-
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
 set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
 target_link_options(
-    nordic-template
+    ${NORDIC_TARGET}
     PUBLIC
     --specs=nano.specs -lc -lnosys -lm
     -Wl,-Map=${NORDIC_TARGET}.map
+    -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
 )
 
 target_sources(
@@ -24,14 +22,6 @@ target_sources(
     PRIVATE
     main.c
 )
-
-target_link_options(
-    ${NORDIC_TARGET}
-    PRIVATE
-    -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
-)
-
-#cmake_print_properties( TARGETS nordic-template.elf PROPERTIES  LINK_DEPENDS )
 
 target_link_libraries(
     ${NORDIC_TARGET}
@@ -41,4 +31,4 @@ target_link_libraries(
     # Nordic::Ble::Dts
 )
 
-createBinAndHexFiles( ${NORDIC_TARGET} )
+nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
