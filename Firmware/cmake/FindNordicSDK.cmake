@@ -238,6 +238,8 @@ target_link_options(
     ${CPU_FLAGS}
     -L${NRF5_SDK_PATH}/modules/nrfx/mdk
     -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm
+    -Wl,-Map=${NORDIC_TARGET}.map
+    -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
 )
 
 target_compile_options(

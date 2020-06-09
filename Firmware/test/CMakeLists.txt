@@ -9,14 +9,6 @@ set (NORDIC_TARGET nordic-template)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
 set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
-target_link_options(
-    ${NORDIC_TARGET}
-    PUBLIC
-    --specs=nano.specs -lc -lnosys -lm
-    -Wl,-Map=${NORDIC_TARGET}.map
-    -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
-)
-
 target_sources(
     ${NORDIC_TARGET}
     PRIVATE
