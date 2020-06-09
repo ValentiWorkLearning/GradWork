@@ -256,10 +256,105 @@ target_sources(
     ${NordicCommonSrc}
 )
 
-include (nordic_postbuild)
-
 list(APPEND NRFSDK_INCLUDES ${NordicCommonInc} )
 list(APPEND NRFSDK_SOURCES ${NordicCommonSrc} )
+
+include (CMakePrintHelpers)
+
+function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS_ON)
+    #cmake_print_variables( LIBRARY_NAME INCLUDES_LIST SOURCES_LIST )
+
+    add_library( ${LIBRARY_NAME} INTERFACE IMPORTED )
+
+    target_include_directories(
+        ${LIBRARY_NAME}
+        INTERFACE
+        ${INCLUDES_LIST}
+    )
+    target_sources(
+        ${LIBRARY_NAME}
+        INTERFACE
+        ${SOURCES_LIST}
+    )
+
+    list(APPEND NRFSDK_INCLUDES ${INCLUDES_LIST} )
+    list(APPEND NRFSDK_SOURCES ${SOURCES_LIST} )
+
+    target_link_libraries(
+        ${LIBRARY_NAME}
+        INTERFACE
+        ${DEPENDS_ON}
+    )
+endfunction(declareNordicSdkLibrary SOURCES_LIST DEPENDS_ON)
+
+
+#Common BLE library
+set (BLE_LIB_INC
+    "${NRF5_SDK_PATH}/components/ble"
+    "${NRF5_SDK_PATH}/components/ble/common"
+    "${NRF5_SDK_PATH}/components/ble/ble_advertising"
+    "${NRF5_SDK_PATH}/components/ble/ble_dtm"
+    "${NRF5_SDK_PATH}/components/ble/ble_link_ctx_manager"
+    "${NRF5_SDK_PATH}/components/ble/ble_racp"
+    "${NRF5_SDK_PATH}/components/ble/nrf_ble_qwr"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager"
+)
+
+set(BLE_LIB_SRC 
+    "${NRF5_SDK_PATH}/components/softdevice/common/nrf_sdh_ble.c"
+    "${NRF5_SDK_PATH}/components/ble/common/ble_advdata.c"
+    "${NRF5_SDK_PATH}/components/ble/common/ble_conn_params.c"
+    "${NRF5_SDK_PATH}/components/ble/common/ble_conn_state.c"
+    "${NRF5_SDK_PATH}/components/ble/common/ble_srv_common.c"
+    "${NRF5_SDK_PATH}/components/ble/ble_advertising/ble_advertising.c"
+    "${NRF5_SDK_PATH}/components/ble/ble_link_ctx_manager/ble_link_ctx_manager.c"
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_nus/ble_nus.c"
+    "${NRF5_SDK_PATH}/components/ble/nrf_ble_qwr/nrf_ble_qwr.c"
+)
+
+#Common BLE
+declareNordicSdkLibrary(
+    NordicSDK::Ble
+    "${BLE_LIB_INC}"
+    "${BLE_LIB_SRC}"
+    NordicSDK::Common
+)
+
+#Ble GATTsupport library
+declareNordicSdkLibrary(
+    NordicSDK::Ble::Gatt
+    "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt"
+    "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt/nrf_ble_gatt.c"
+    NordicSDK::Common
+)
+
+
+#App::Button
+declareNordicSdkLibrary(
+    NordicSDK::App::Button
+    "${NRF5_SDK_PATH}/components/libraries/button"
+    "${NRF5_SDK_PATH}/components/libraries/button/app_button.c"
+    NordicSDK::Common
+)
+
+#App::Button
+declareNordicSdkLibrary(
+    NordicSDK::App::Timer
+    "${NRF5_SDK_PATH}/components/libraries/timer"
+    "${NRF5_SDK_PATH}/components/libraries/timer/app_timer.c"
+    NordicSDK::Common
+)
+
+#LBSService
+declareNordicSdkLibrary(
+    NordicSDK::BleService::LBS
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_lbs"
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_lbs/ble_lbs.c"
+    NordicSDK::Common
+)
+
+
+include (nordic_postbuild)
 
 include(FindPackageHandleStandardArgs)
 

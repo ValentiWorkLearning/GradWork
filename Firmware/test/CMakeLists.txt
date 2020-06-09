@@ -3,7 +3,7 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/arm-gcc-toolchain.
 
 project(nordic-template C CXX ASM)
 
-find_package(NordicSDK COMPONENTS Common REQUIRED)
+find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
 
 set (NORDIC_TARGET nordic-template)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
@@ -18,6 +18,12 @@ target_sources(
 target_link_libraries(
     ${NORDIC_TARGET}
     NordicSDK::Common
+    NordicSDK::App::Button
+    NordicSDK::App::Timer
+
+    NordicSDK::Ble
+    NordicSDK::Ble::Gatt
+    NordicSDK::BleService::LBS
     # Nordic::Libraries
     # Nordic::Ble::Battery
     # Nordic::Ble::Dts
