@@ -131,6 +131,19 @@ list(
 )
 
 
+# Other external
+list(
+    APPEND NordicCommonInc
+    "${NRF5_SDK_PATH}/external/fprintf/"
+    "${NRF5_SDK_PATH}/external/utf_converter/"
+)
+
+# Segger RTT
+list(
+    APPEND NordicCommonInc
+    "${NRF5_SDK_PATH}/external/segger_rtt/"
+)
+
 list(APPEND NRFSDK_INCLUDES ${NordicCommonInc} )
 
 
@@ -185,6 +198,27 @@ list(
 )
 
 
+list(APPEND NordicCommonSrc
+    "${NRF5_SDK_PATH}/external/utf_converter/utf.c"
+    "${NRF5_SDK_PATH}/external/fprintf/nrf_fprintf.c"
+    "${NRF5_SDK_PATH}/external/fprintf/nrf_fprintf_format.c"
+)
+
+#Segger RTT
+list(APPEND NordicCommonSrc
+    "${NRF5_SDK_PATH}/external/segger_rtt/SEGGER_RTT_Syscalls_GCC.c"
+    "${NRF5_SDK_PATH}/external/segger_rtt/SEGGER_RTT.c"
+    "${NRF5_SDK_PATH}/external/segger_rtt/SEGGER_RTT_printf.c"
+)
+
+list(APPEND NordicCommonSrc
+    "${NRF5_SDK_PATH}/modules/nrfx/mdk/system_nrf52.c"
+    "${NRF5_SDK_PATH}/modules/nrfx/mdk/gcc_startup_nrf52.S"
+)
+
+set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
+set(COMMON_FLAGS -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums ${CPU_FLAGS})
+
 target_include_directories(
     NordicSDK::Common
     INTERFACE
@@ -197,12 +231,21 @@ target_compile_definitions(
     ${NordicCompileDefinitions}
 )
 
+
+target_link_options(
+    NordicSDK::Common
+    INTERFACE
+    ${CPU_FLAGS}
+    -L${NRF5_SDK_PATH}/modules/nrfx/mdk
+    -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm
+)
+
 target_compile_options(
     NordicSDK::Common INTERFACE
     --sysroot="${TOOLCHAIN_SYSROOT}"
-    -mthumb -mabi=aapcs -Wall -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16
     $<$<CONFIG:Debug>:-Og>
     $<$<CONFIG:Release>:-Os>
+    ${COMMON_FLAGS}
 )
 
 target_sources(

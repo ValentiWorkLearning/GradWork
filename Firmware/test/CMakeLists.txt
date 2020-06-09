@@ -5,11 +5,30 @@ project(nordic-template C CXX ASM)
 
 find_package(NordicSDK COMPONENTS Common REQUIRED)
 
-set(PROJECT_SOURCES
+include(CMakePrintHelpers)
+
+add_executable(nordic-template.elf ${PROJECT_SOURCES})
+
+target_link_options(
+    nordic-template.elf
+    PUBLIC
+    --specs=nano.specs -lc -lnosys -lm
+)
+
+target_sources(
+    nordic-template.elf
+    PRIVATE
     main.c
 )
 
-add_executable(nordic-template.elf ${PROJECT_SOURCES})
+target_link_options(
+    nordic-template.elf
+    PRIVATE
+    -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
+)
+
+#cmake_print_properties( TARGETS nordic-template.elf PROPERTIES  LINK_DEPENDS )
+
 target_link_libraries(
     nordic-template.elf
     NordicSDK::Common
