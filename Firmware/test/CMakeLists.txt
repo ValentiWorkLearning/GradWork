@@ -17,16 +17,24 @@ target_sources(
 
 target_link_libraries(
     ${NORDIC_TARGET}
+
     NordicSDK::Common
-    NordicSDK::App::Button
+
     NordicSDK::App::Timer
+    NordicSDK::App::Button
+
+    NordicSDK::App::FDS
+    NordicSDK::App::SensorSimulator
 
     NordicSDK::Ble
     NordicSDK::Ble::Gatt
+    NordicSDK::Ble::ServiceDbDiscovery
+
+    NordicSDK::Ble::PeerManager
+
     NordicSDK::BleService::LBS
-    # Nordic::Libraries
-    # Nordic::Ble::Battery
-    # Nordic::Ble::Dts
+    NordicSDK::BleService::BAS
+    NordicSDK::BleService::CTS_C
 )
 
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )

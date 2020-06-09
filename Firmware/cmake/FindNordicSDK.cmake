@@ -245,7 +245,7 @@ target_link_options(
 target_compile_options(
     NordicSDK::Common INTERFACE
     --sysroot="${TOOLCHAIN_SYSROOT}"
-    $<$<CONFIG:Debug>:-Og>
+    $<$<CONFIG:Debug>:-Os>
     $<$<CONFIG:Release>:-Os>
     ${COMMON_FLAGS}
 )
@@ -286,6 +286,36 @@ function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS
         ${DEPENDS_ON}
     )
 endfunction(declareNordicSdkLibrary SOURCES_LIST DEPENDS_ON)
+
+
+# app-level FDS (flash data storage) library
+set( APP_FSD_INC
+    "${NRF5_SDK_PATH}/components/libraries/fds"
+    "${NRF5_SDK_PATH}/components/libraries/fstorage"
+    "${NRF5_SDK_PATH}/components/libraries/experimental_section_vars"
+)
+
+set( APP_FSD_SRC
+    "${NRF5_SDK_PATH}/components/libraries/fds/fds.c"
+    "${NRF5_SDK_PATH}/components/libraries/fstorage/nrf_fstorage.c"
+    "${NRF5_SDK_PATH}/components/libraries/fstorage/nrf_fstorage_sd.c"
+    "${NRF5_SDK_PATH}/components/libraries/fstorage/nrf_fstorage_nvmc.c"
+)
+
+declareNordicSdkLibrary(
+    NordicSDK::App::FDS
+    "${APP_FSD_INC}"
+    "${APP_FSD_SRC}"
+    NordicSDK::Common
+)
+
+# app-level sensor simulator library
+declareNordicSdkLibrary(
+    NordicSDK::App::SensorSimulator
+    "${NRF5_SDK_PATH}/components/libraries/sensorsim"
+    "${NRF5_SDK_PATH}/components/libraries/sensorsim/sensorsim.c"
+    NordicSDK::Common
+)
 
 
 #Common BLE library
@@ -329,6 +359,40 @@ declareNordicSdkLibrary(
 )
 
 
+set(BLE_PEER_MANAGER_SRC
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/auth_status_tracker.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/gatt_cache_manager.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/gatts_cache_manager.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/id_manager.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/nrf_ble_lesc.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_data_storage.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_database.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_id.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_manager.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/peer_manager_handler.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/pm_buffer.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/security_dispatcher.c"
+    "${NRF5_SDK_PATH}/components/ble/peer_manager/security_manager.c"
+)
+
+#Ble GATTsupport library
+declareNordicSdkLibrary(
+    NordicSDK::Ble::PeerManager
+    "${NRF5_SDK_PATH}/components/ble/peer_manager"
+    "${BLE_PEER_MANAGER_SRC}"
+    NordicSDK::Common
+)
+
+
+# adds Bluetooth Low Energy service discovery support library
+declareNordicSdkLibrary(
+    NordicSDK::Ble::ServiceDbDiscovery
+    "${NRF5_SDK_PATH}/components/ble/ble_db_discovery"
+    "${NRF5_SDK_PATH}/components/ble/ble_db_discovery/ble_db_discovery.c"
+    NordicSDK::Common
+)
+
+
 #App::Button
 declareNordicSdkLibrary(
     NordicSDK::App::Button
@@ -353,6 +417,22 @@ declareNordicSdkLibrary(
     NordicSDK::Common
 )
 
+
+#BAS Service
+declareNordicSdkLibrary(
+    NordicSDK::BleService::BAS
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas"
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas/ble_bas.c"
+    NordicSDK::Common
+)
+
+#BAS Service
+declareNordicSdkLibrary(
+    NordicSDK::BleService::CTS_C
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c"
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c/ble_cts_c.c"
+    NordicSDK::Common
+)
 
 include (nordic_postbuild)
 
