@@ -9,10 +9,8 @@ set (UTILS_DIR  "../utils")
 set (DRIVER_DIR "../drivers")
 add_subdirectory ("lvgl_lib")
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+target_compile_features(${TARGET_NAME} PUBLIC cxx_std_17)
 
 target_compile_definitions(
     ${TARGET_NAME}
