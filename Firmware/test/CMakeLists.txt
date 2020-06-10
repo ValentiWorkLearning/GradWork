@@ -10,10 +10,16 @@ set (NORDIC_TARGET nordic-template)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
 set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
+#For ETL 3rd party set explicit C++ standart
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 set (3RDPARTY_DIR "../../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
+
 set( NORDIC_TARGET_SOURCES_PATH "../Firmware/src")
+
 add_subdirectory( ${NORDIC_TARGET_SOURCES_PATH}/graphics ${CMAKE_BINARY_DIR}/graphics_arm )
 
 target_compile_definitions(
