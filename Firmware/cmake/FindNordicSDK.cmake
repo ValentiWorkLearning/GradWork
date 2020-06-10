@@ -317,6 +317,37 @@ declareNordicSdkLibrary(
     NordicSDK::Common
 )
 
+# app-level scheduler
+declareNordicSdkLibrary(
+    NordicSDK::App::Scheduler
+    "${NRF5_SDK_PATH}/components/libraries/scheduler"
+    "${NRF5_SDK_PATH}/components/libraries/scheduler/app_scheduler.c"
+    NordicSDK::Common
+)
+
+# app-level FIFO
+declareNordicSdkLibrary(
+    NordicSDK::App::FIFO
+    "${NRF5_SDK_PATH}/components/libraries/fifo"
+    "${NRF5_SDK_PATH}/components/libraries/fifo/app_fifo.c"
+    NordicSDK::Common
+)
+
+#App::Button
+declareNordicSdkLibrary(
+    NordicSDK::App::Button
+    "${NRF5_SDK_PATH}/components/libraries/button"
+    "${NRF5_SDK_PATH}/components/libraries/button/app_button.c"
+    NordicSDK::Common
+)
+
+#App::Button
+declareNordicSdkLibrary(
+    NordicSDK::App::Timer
+    "${NRF5_SDK_PATH}/components/libraries/timer"
+    "${NRF5_SDK_PATH}/components/libraries/timer/app_timer.c"
+    NordicSDK::Common
+)
 
 #Common BLE library
 set (BLE_LIB_INC
@@ -358,6 +389,13 @@ declareNordicSdkLibrary(
     NordicSDK::Common
 )
 
+#Ble LE GATT Queue (BGQ) module
+declareNordicSdkLibrary(
+    NordicSDK::Ble::GattQueue
+    "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq"
+    "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq/nrf_ble_gq.c"
+    NordicSDK::Common
+)
 
 set(BLE_PEER_MANAGER_SRC
     "${NRF5_SDK_PATH}/components/ble/peer_manager/auth_status_tracker.c"
@@ -375,7 +413,7 @@ set(BLE_PEER_MANAGER_SRC
     "${NRF5_SDK_PATH}/components/ble/peer_manager/security_manager.c"
 )
 
-#Ble GATTsupport library
+#Ble Peer Manager library
 declareNordicSdkLibrary(
     NordicSDK::Ble::PeerManager
     "${NRF5_SDK_PATH}/components/ble/peer_manager"
@@ -392,22 +430,6 @@ declareNordicSdkLibrary(
     NordicSDK::Common
 )
 
-
-#App::Button
-declareNordicSdkLibrary(
-    NordicSDK::App::Button
-    "${NRF5_SDK_PATH}/components/libraries/button"
-    "${NRF5_SDK_PATH}/components/libraries/button/app_button.c"
-    NordicSDK::Common
-)
-
-#App::Button
-declareNordicSdkLibrary(
-    NordicSDK::App::Timer
-    "${NRF5_SDK_PATH}/components/libraries/timer"
-    "${NRF5_SDK_PATH}/components/libraries/timer/app_timer.c"
-    NordicSDK::Common
-)
 
 #LBSService
 declareNordicSdkLibrary(

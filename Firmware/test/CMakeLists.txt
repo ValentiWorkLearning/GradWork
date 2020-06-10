@@ -12,7 +12,13 @@ set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 target_sources(
     ${NORDIC_TARGET}
     PRIVATE
-    main.c
+    main.cpp
+)
+
+target_compile_options(
+    ${NORDIC_TARGET}
+    PRIVATE
+    -Os
 )
 
 target_link_libraries(
@@ -20,6 +26,8 @@ target_link_libraries(
 
     NordicSDK::Common
 
+    NordicSDK::App::Scheduler
+    NordicSDK::App::FIFO
     NordicSDK::App::Timer
     NordicSDK::App::Button
 
@@ -28,6 +36,7 @@ target_link_libraries(
 
     NordicSDK::Ble
     NordicSDK::Ble::Gatt
+    NordicSDK::Ble::GattQueue
     NordicSDK::Ble::ServiceDbDiscovery
 
     NordicSDK::Ble::PeerManager
