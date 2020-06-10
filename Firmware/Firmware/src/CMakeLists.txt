@@ -1,114 +1,51 @@
-cmake_minimum_required(VERSION 3.12)
+cmake_minimum_required(VERSION 3.8)
+set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake)
 
-project(E73DevBoard CXX ASM)
+project(nordic-template C CXX ASM)
 
-set (TARGET_NAME E73DevBoardBin)
+set ( NRF_SDK_DIRECTORY cmake/nordic )
+add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
+# find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
 
-# define some variables just for this example to determine file locations
-set(NRF_PROJECT_NAME ble_app_blinky)
-set(NRF_BOARD pca10040)
-set(NRF_SOFTDEVICE s132)
-
-
-# define some convenience variables to point to example project directories
-set(NRF_CMAKE_CURRENT_LIST ${CMAKE_CURRENT_LIST_DIR})
-
-set(NRF_PROJECT_PATH ${NRF_CMAKE_CURRENT_LIST}/..)
-#set(NRF_PROJECT_PATH ${NRF5_SDK_PATH}/examples/ble_peripheral/${NRF_PROJECT_NAME})
-
-set(NRF_PROJECT_DEVICE_PATH ${NRF_PROJECT_PATH}/sdk_dependent)
-#set(NRF_PROJECT_DEVICE_PATH ${NRF_PROJECT_PATH}/${NRF_BOARD}/${NRF_SOFTDEVICE})
-
-# you can specify the location of the linker script if desired instead of using a specific file name
-set( NRF5_LINKER_SCRIPT ${NRF_PROJECT_PATH}/sdk_dependent/gcc_nrf52.ld )
-
-nRF5x_setup()
-
-nRF5x_addAppScheduler()
-nRF5x_addAppFIFO()
-nRF5x_addAppTimer()
-nRF5x_addAppUART()
-nRF5x_addAppButton()
-nRF5x_addBSP(TRUE FALSE FALSE) # without this text size is 11 480, with this - 11 760
-
-nRF5x_addBLEGATT() # with this text size = 11784
-nRF5x_addBLEPeerManager() #with this text size is
-nRF5x_addAppFDS() # 34312
-nRF5x_addSensorSimulator() # still 34312
-nRF5x_addBLEServiceDbDiscovery()
-nRF5x_addBLEGattQueue()
-
-nRF5x_addBLEService(ble_lbs) #still 34312
-nRF5x_addBLEService(ble_bas) # increased to 34332
-nRF5x_addBLEService(ble_cts_c)
-
-add_definitions(-DCONFIG_GPIO_AS_PINRESET)
-
-# usually you would include files in this directory here, like so:
-#include_directories(.)
-list(APPEND SOURCE_FILES main.cpp)
-
-# for example projects we include the example source files
-message( "Config include inside:" ${NRF_PROJECT_DEVICE_PATH}/config)
-include_directories(${NRF_PROJECT_DEVICE_PATH}/config)
-include_directories(${NRF_PROJECT_DEVICE_PATH}/board-pinout)
-#list(APPEND SOURCE_FILES ${NRF_PROJECT_PATH}/main.c)
-
-nRF5x_addExecutable(${TARGET_NAME} "${SOURCE_FILES}")
-
-add_subdirectory ("graphics")
-
-set (3RDPARTY_DIR "../../../3rdparty")
-add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
-
-target_compile_definitions(
-    ${TARGET_NAME}
-    PRIVATE
-    S112
-    USE_ST7789V_BACKEND
-    USE_NRFSDK_SIMULATOR
-    USE_BLE_SERVICES
-    USE_DEVICE_SPECIFIC
-    LoggerSegger
-)
+set (NORDIC_TARGET nordic-template)
+add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
+set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
 target_sources(
-    ${TARGET_NAME}
+    ${NORDIC_TARGET}
     PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/display/display_st7789v.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/spi/spi_wrapper.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_softdevice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_custom_service.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_battery_service.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble/ble_datetime_service.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ible_softdevice.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/factory_impl/ih_ble_service_factory.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/winbondflash/winbond_flash.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/service_providers/battery/sp_battery_service_fake.cpp # increase to 41960
-    ${CMAKE_CURRENT_LIST_DIR}/service_providers/heartrate/sp_heartrate_service_fake.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/service_providers/datetime/sp_datetime_service_fake.cpp # increase to 42158
-    ${CMAKE_CURRENT_LIST_DIR}/service_providers/sp_fake_services_creator.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/logger/logger_service_impl.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/ap_application.cpp
+    main.cpp
 )
 
-target_include_directories(
-    ${TARGET_NAME}
-    PUBLIC
-    ${3RDPARTY_DIR}/etl
-    ${CMAKE_CURRENT_LIST_DIR}/graphics
-    ${CMAKE_CURRENT_LIST_DIR}/drivers
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/ih
-    ${CMAKE_CURRENT_LIST_DIR}/drivers/ble
-    ${CMAKE_CURRENT_LIST_DIR}/utils
-    ${CMAKE_CURRENT_LIST_DIR}/logger
-    ${CMAKE_CURRENT_LIST_DIR}/service_providers
+target_compile_options(
+    ${NORDIC_TARGET}
+    PRIVATE
+    -Os
 )
 
 target_link_libraries(
-    ${TARGET_NAME}
-    etl
-    watch_graphics
-    lvgl_lib
+    ${NORDIC_TARGET}
+
+    NordicSDK::Common
+
+    NordicSDK::App::Scheduler
+    NordicSDK::App::FIFO
+    NordicSDK::App::Timer
+    NordicSDK::App::Button
+
+    NordicSDK::App::FDS
+    NordicSDK::App::SensorSimulator
+
+    NordicSDK::Ble
+    NordicSDK::Ble::Gatt
+    NordicSDK::Ble::GattQueue
+    NordicSDK::Ble::ServiceDbDiscovery
+
+    NordicSDK::Ble::PeerManager
+
+    NordicSDK::BleService::LBS
+    NordicSDK::BleService::BAS
+    NordicSDK::BleService::CTSCLIENT
 )
+
+nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
