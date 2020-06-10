@@ -3,7 +3,8 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/../cmake/arm-gcc-toolchain.
 
 project(nordic-template C CXX ASM)
 
-find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
+add_subdirectory(../cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
+# find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
 
 set (NORDIC_TARGET nordic-template)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
@@ -43,7 +44,7 @@ target_link_libraries(
 
     NordicSDK::BleService::LBS
     NordicSDK::BleService::BAS
-    NordicSDK::BleService::CTS_C
+    NordicSDK::BleService::CTSCLIENT
 )
 
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )

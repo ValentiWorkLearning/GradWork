@@ -10,8 +10,8 @@ endif()
 set ( SDK_DEPENDENT_DIR "defdir" CACHE PATH "Directory for SDK-dependent files for configuration")
 set ( NRF52SOFTDEVICE "S132" CACHE STRING "SoftDevice version for NRF52 target")
 
-add_library( NordicSDK::Common INTERFACE IMPORTED )
-
+add_library( Common INTERFACE )
+add_library( NordicSDK::Common ALIAS Common)
 
 set ( NordicCompileDefinitions
     NRF52
@@ -220,20 +220,20 @@ set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
 set(COMMON_FLAGS -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums ${CPU_FLAGS})
 
 target_include_directories(
-    NordicSDK::Common
+    Common
     INTERFACE
     ${NordicCommonInc}
 )
 
 target_compile_definitions(
-    NordicSDK::Common
+    Common
     INTERFACE
     ${NordicCompileDefinitions}
 )
 
 
 target_link_options(
-    NordicSDK::Common
+    Common
     INTERFACE
     ${CPU_FLAGS}
     -L${NRF5_SDK_PATH}/modules/nrfx/mdk
@@ -243,7 +243,7 @@ target_link_options(
 )
 
 target_compile_options(
-    NordicSDK::Common INTERFACE
+    Common INTERFACE
     --sysroot="${TOOLCHAIN_SYSROOT}"
     $<$<CONFIG:Debug>:-Os>
     $<$<CONFIG:Release>:-Os>
@@ -251,7 +251,7 @@ target_compile_options(
 )
 
 target_sources(
-    NordicSDK::Common
+    Common
     INTERFACE
     ${NordicCommonSrc}
 )
@@ -264,15 +264,28 @@ include (CMakePrintHelpers)
 function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS_ON)
     #cmake_print_variables( LIBRARY_NAME INCLUDES_LIST SOURCES_LIST )
 
-    add_library( ${LIBRARY_NAME} INTERFACE IMPORTED )
+    set( LIBRARY_NAME_COPY ${LIBRARY_NAME} )
+    add_library( ${LIBRARY_NAME_COPY} INTERFACE )
+
+    string( FIND ${LIBRARY_NAME_COPY} "_" ALIAS_MARKER_INDEX )
+    if( NOT( ${ALIAS_MARKER_INDEX} EQUAL "-1" ) )
+        string(REPLACE "_" "::" ALIAS_CORRECTED ${LIBRARY_NAME_COPY} )
+    else()
+        set( ALIAS_CORRECTED ${LIBRARY_NAME_COPY} )
+    endif()
+
+    set( CORRECTED_ALIAS_NAME NordicSDK::${ALIAS_CORRECTED} )
+    cmake_print_variables( ${CORRECTED_ALIAS_NAME} )
+
+    add_library( NordicSDK::${ALIAS_CORRECTED} ALIAS ${LIBRARY_NAME_COPY})
 
     target_include_directories(
-        ${LIBRARY_NAME}
+        ${LIBRARY_NAME_COPY}
         INTERFACE
         ${INCLUDES_LIST}
     )
     target_sources(
-        ${LIBRARY_NAME}
+        ${LIBRARY_NAME_COPY}
         INTERFACE
         ${SOURCES_LIST}
     )
@@ -281,7 +294,7 @@ function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS
     list(APPEND NRFSDK_SOURCES ${SOURCES_LIST} )
 
     target_link_libraries(
-        ${LIBRARY_NAME}
+        ${LIBRARY_NAME_COPY}
         INTERFACE
         ${DEPENDS_ON}
     )
@@ -303,7 +316,7 @@ set( APP_FSD_SRC
 )
 
 declareNordicSdkLibrary(
-    NordicSDK::App::FDS
+    App_FDS
     "${APP_FSD_INC}"
     "${APP_FSD_SRC}"
     NordicSDK::Common
@@ -311,7 +324,7 @@ declareNordicSdkLibrary(
 
 # app-level sensor simulator library
 declareNordicSdkLibrary(
-    NordicSDK::App::SensorSimulator
+    App_SensorSimulator
     "${NRF5_SDK_PATH}/components/libraries/sensorsim"
     "${NRF5_SDK_PATH}/components/libraries/sensorsim/sensorsim.c"
     NordicSDK::Common
@@ -319,7 +332,7 @@ declareNordicSdkLibrary(
 
 # app-level scheduler
 declareNordicSdkLibrary(
-    NordicSDK::App::Scheduler
+    App_Scheduler
     "${NRF5_SDK_PATH}/components/libraries/scheduler"
     "${NRF5_SDK_PATH}/components/libraries/scheduler/app_scheduler.c"
     NordicSDK::Common
@@ -327,7 +340,7 @@ declareNordicSdkLibrary(
 
 # app-level FIFO
 declareNordicSdkLibrary(
-    NordicSDK::App::FIFO
+    App_FIFO
     "${NRF5_SDK_PATH}/components/libraries/fifo"
     "${NRF5_SDK_PATH}/components/libraries/fifo/app_fifo.c"
     NordicSDK::Common
@@ -335,7 +348,7 @@ declareNordicSdkLibrary(
 
 #App::Button
 declareNordicSdkLibrary(
-    NordicSDK::App::Button
+    App_Button
     "${NRF5_SDK_PATH}/components/libraries/button"
     "${NRF5_SDK_PATH}/components/libraries/button/app_button.c"
     NordicSDK::Common
@@ -343,7 +356,7 @@ declareNordicSdkLibrary(
 
 #App::Button
 declareNordicSdkLibrary(
-    NordicSDK::App::Timer
+    App_Timer
     "${NRF5_SDK_PATH}/components/libraries/timer"
     "${NRF5_SDK_PATH}/components/libraries/timer/app_timer.c"
     NordicSDK::Common
@@ -375,7 +388,7 @@ set(BLE_LIB_SRC
 
 #Common BLE
 declareNordicSdkLibrary(
-    NordicSDK::Ble
+    Ble
     "${BLE_LIB_INC}"
     "${BLE_LIB_SRC}"
     NordicSDK::Common
@@ -383,7 +396,7 @@ declareNordicSdkLibrary(
 
 #Ble GATTsupport library
 declareNordicSdkLibrary(
-    NordicSDK::Ble::Gatt
+    Ble_Gatt
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt"
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt/nrf_ble_gatt.c"
     NordicSDK::Common
@@ -391,7 +404,7 @@ declareNordicSdkLibrary(
 
 #Ble LE GATT Queue (BGQ) module
 declareNordicSdkLibrary(
-    NordicSDK::Ble::GattQueue
+    Ble_GattQueue
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq"
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq/nrf_ble_gq.c"
     NordicSDK::Common
@@ -415,7 +428,7 @@ set(BLE_PEER_MANAGER_SRC
 
 #Ble Peer Manager library
 declareNordicSdkLibrary(
-    NordicSDK::Ble::PeerManager
+    Ble_PeerManager
     "${NRF5_SDK_PATH}/components/ble/peer_manager"
     "${BLE_PEER_MANAGER_SRC}"
     NordicSDK::Common
@@ -424,7 +437,7 @@ declareNordicSdkLibrary(
 
 # adds Bluetooth Low Energy service discovery support library
 declareNordicSdkLibrary(
-    NordicSDK::Ble::ServiceDbDiscovery
+    Ble_ServiceDbDiscovery
     "${NRF5_SDK_PATH}/components/ble/ble_db_discovery"
     "${NRF5_SDK_PATH}/components/ble/ble_db_discovery/ble_db_discovery.c"
     NordicSDK::Common
@@ -433,7 +446,7 @@ declareNordicSdkLibrary(
 
 #LBSService
 declareNordicSdkLibrary(
-    NordicSDK::BleService::LBS
+    BleService_LBS
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_lbs"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_lbs/ble_lbs.c"
     NordicSDK::Common
@@ -442,7 +455,7 @@ declareNordicSdkLibrary(
 
 #BAS Service
 declareNordicSdkLibrary(
-    NordicSDK::BleService::BAS
+    BleService_BAS
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas/ble_bas.c"
     NordicSDK::Common
@@ -450,19 +463,19 @@ declareNordicSdkLibrary(
 
 #BAS Service
 declareNordicSdkLibrary(
-    NordicSDK::BleService::CTS_C
+    BleService_CTSCLIENT
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c/ble_cts_c.c"
     NordicSDK::Common
 )
 
-include (nordic_postbuild)
+include ( nordic/nordic_postbuild )
 
-include(FindPackageHandleStandardArgs)
+# include(FindPackageHandleStandardArgs)
 
-find_package_handle_standard_args(    NordicSDK
-    FOUND_VAR NordicSDK_FOUND
-    REQUIRED_VARS
-    NRFSDK_INCLUDES
-    NRFSDK_SOURCES
-)
+# find_package_handle_standard_args(    NordicSDK
+#     FOUND_VAR NordicSDK_FOUND
+#     REQUIRED_VARS
+#     NRFSDK_INCLUDES
+#     NRFSDK_SOURCES
+# )

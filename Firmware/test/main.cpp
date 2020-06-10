@@ -419,6 +419,8 @@ static void ble_evt_handler(ble_evt_t const * p_ble_evt, void * p_context)
             ble_gap_phys_t const phys =
             {
                 .tx_phys = BLE_GAP_PHY_AUTO,
+
+
                 .rx_phys = BLE_GAP_PHY_AUTO,
             };
             err_code = sd_ble_gap_phy_update(p_ble_evt->evt.gap_evt.conn_handle, &phys);
