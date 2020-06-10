@@ -5,6 +5,7 @@ project(nordic-template C CXX ASM)
 
 set ( NRF_SDK_DIRECTORY cmake/nordic )
 add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
+add_subdirectory(drivers)
 # find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
 
 set (NORDIC_TARGET nordic-template)
