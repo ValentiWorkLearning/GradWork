@@ -3,9 +3,13 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cma
 
 project(nordic-template C CXX ASM)
 
-set ( NRF_SDK_DIRECTORY cmake/nordic )
+set (3RDPARTY_DIR "../../../3rdparty")
+add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
+
 add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
 add_subdirectory(drivers)
+add_subdirectory(utils)
+
 # find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
 
 set (NORDIC_TARGET nordic-template)
@@ -29,24 +33,24 @@ target_link_libraries(
 
     NordicSDK::Common
 
-    NordicSDK::App::Scheduler
-    NordicSDK::App::FIFO
-    NordicSDK::App::Timer
-    NordicSDK::App::Button
+    # NordicSDK::App::Scheduler
+    # NordicSDK::App::FIFO
+    # NordicSDK::App::Timer
+    # NordicSDK::App::Button
 
-    NordicSDK::App::FDS
-    NordicSDK::App::SensorSimulator
+    # NordicSDK::App::FDS
+    # NordicSDK::App::SensorSimulator
 
-    NordicSDK::Ble
-    NordicSDK::Ble::Gatt
-    NordicSDK::Ble::GattQueue
-    NordicSDK::Ble::ServiceDbDiscovery
+    # NordicSDK::Ble
+    # NordicSDK::Ble::Gatt
+    # NordicSDK::Ble::GattQueue
+    # NordicSDK::Ble::ServiceDbDiscovery
 
-    NordicSDK::Ble::PeerManager
+    # NordicSDK::Ble::PeerManager
 
-    NordicSDK::BleService::LBS
-    NordicSDK::BleService::BAS
-    NordicSDK::BleService::CTSCLIENT
+    # NordicSDK::BleService::LBS
+    # NordicSDK::BleService::BAS
+    # NordicSDK::BleService::CTSCLIENT
 )
 
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )

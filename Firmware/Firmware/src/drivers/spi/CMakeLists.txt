@@ -5,13 +5,14 @@ add_library(
 
 target_include_directories(
     spi
-    INTERFACE
-    ${CMAKE_CURRENT_LIST_DIR}
-    ${NRF_SDK_DIRECTORY}
+    PUBLIC
+    NordicSDK::Common
+    UtilsLibrary
 )
 
 target_link_libraries(
     spi
-    INTERFACE
-    ${NRF_SDK_DIRECTORY}/NordicSDK::Common
+    PUBLIC
+    NordicSDK::Common
+    UtilsLibrary
 )

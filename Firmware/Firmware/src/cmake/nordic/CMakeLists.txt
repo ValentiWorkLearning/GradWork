@@ -275,7 +275,7 @@ function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS
     endif()
 
     set( CORRECTED_ALIAS_NAME NordicSDK::${ALIAS_CORRECTED} )
-    cmake_print_variables( ${CORRECTED_ALIAS_NAME} )
+    #cmake_print_variables( ${CORRECTED_ALIAS_NAME} )
 
     add_library( NordicSDK::${ALIAS_CORRECTED} ALIAS ${LIBRARY_NAME_COPY})
 
@@ -469,7 +469,7 @@ declareNordicSdkLibrary(
     NordicSDK::Common
 )
 
-include ( nordic/nordic_postbuild )
+include ( nordic_postbuild.cmake )
 
 # include(FindPackageHandleStandardArgs)
 
