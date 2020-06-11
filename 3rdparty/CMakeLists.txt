@@ -1,5 +1,9 @@
 #Thanks, Alexander-Degtyar/OpenGreenery https://github.com/Alexander-Degtyar/OpenGreenery/blob/master/lib/CMakeLists.txt
 
+set(CMAKE_C_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
 set( 3RD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR} )# Libs root path
 
 add_subdirectory( etl )

@@ -1,26 +1,24 @@
 add_library(
-    spi
-    spi_wrapper.cpp
+    gpio
+    gpio_pin.cpp
 )
 
 target_compile_features(
-    spi
+    gpio
     INTERFACE
     cxx_std_17
 )
 
 target_include_directories(
-    spi
+    gpio
     PRIVATE
     NordicSDK::Common
     UtilsLibrary
 )
 
 target_link_libraries(
-    spi
+    gpio
     PRIVATE
     NordicSDK::Common
     UtilsLibrary
-    drivers_ih
-    etl
 )

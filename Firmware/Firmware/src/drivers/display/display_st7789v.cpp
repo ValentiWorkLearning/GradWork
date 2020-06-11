@@ -1,7 +1,8 @@
 #include "display_st7789v.hpp"
 #include "display_st7789v_constants.hpp"
 
-#include "spi/transaction_item.hpp"
+#include "transaction_item.hpp"
+#include "spi_wrapper.hpp"
 
 #include "nrf_delay.h"
 #include "pca10040.h"
@@ -22,6 +23,8 @@ St7789V::St7789V(
         m_completedTransitionsCount{}
     ,   m_width{ _width }
     ,   m_height { _height }
+    ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output }
+    ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output }
     ,   m_pBusPtr{ _busPtr }
 {
     initGpio();
@@ -32,9 +35,11 @@ St7789V::St7789V(
 void
 St7789V::initDisplay()
 {
-    nrf_gpio_pin_clear( DISP_RST );
+    m_resetPin.reset();
+
     nrf_delay_ms( 100 );
-    nrf_gpio_pin_set( DISP_RST );
+
+    m_resetPin.set();
 
     sendCommand(    DisplayReg::SWRESET    );
     nrf_delay_ms( 150 );
@@ -295,20 +300,14 @@ void St7789V::setAddrWindow(
     
 }
 
-void St7789V::initGpio()
-{
-    nrf_gpio_cfg_output( DISP_RST );
-    nrf_gpio_cfg_output( DISP_DC_PIN );
-}
-
 void St7789V::resetDcPin()
 {
-    nrf_gpio_pin_clear( DISP_DC_PIN );
+    m_dcPin.reset();
 }
     
 void St7789V::setDcPin()
 {
-    nrf_gpio_pin_set( DISP_DC_PIN );
+    m_dcPin.set();
 }
 
 std::unique_ptr<St7789V>

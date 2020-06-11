@@ -3,10 +3,9 @@
 #include <memory>
 #include <cstdint>
 
-#include "display/display_idisplay.hpp"
-#include "display/display_st7789v_constants.hpp"
-
-#include "spi/spi_wrapper.hpp"
+#include "ih_display_idisplay.hpp"
+#include "display_st7789v_constants.hpp"
+#include "gpio_pin.hpp"
 
 #include "SimpleSignal.hpp"
 
@@ -95,6 +94,8 @@ private:
     const std::uint16_t m_width;
     const std::uint16_t m_height;
 
+    Gpio::GpioPin m_dcPin;
+    Gpio::GpioPin m_resetPin;
     Interface::Spi::SpiBus* m_pBusPtr;
 };
 

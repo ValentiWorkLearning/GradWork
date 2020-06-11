@@ -1,9 +1,9 @@
 #pragma once
 
-#include "nrfx_spim.h"
-#include "pca10040.h"
-
 #include "SimpleSignal.hpp"
+
+#include "FastPimpl.hpp"
+#include "Platform.hpp"
 
 #include "transaction_item.hpp"
 
@@ -19,27 +19,8 @@ namespace Interface::Spi
 
 namespace SpiInstance
 {
-    struct M1
-    {
-        static constexpr std::uint8_t ClockPin = SPIM1_SCK_PIN;
-        static constexpr std::uint8_t MisoPin = SPIM1_MISO_PIN;
-        static constexpr std::uint8_t MosiPin = SPIM1_MOSI_PIN;
-        static constexpr std::uint8_t SlaveSelectPin = SPIM1_SS_PIN;
-
-        static constexpr std::uint32_t Register = NRF_SPIM1_BASE;
-        static constexpr uint8_t DriverInstance = NRFX_SPIM1_INST_IDX;
-    };
-
-    struct M2
-    {
-        static constexpr std::uint8_t ClockPin = SPIM2_SCK_PIN;
-        static constexpr std::uint8_t MisoPin = SPIM2_MISO_PIN;
-        static constexpr std::uint8_t MosiPin = SPIM2_MOSI_PIN;
-        static constexpr std::uint8_t SlaveSelectPin = SPIM2_SS_PIN;
-
-        static constexpr std::uint32_t Register = NRF_SPIM2_BASE;
-        static constexpr uint8_t DriverInstance = NRFX_SPIM2_INST_IDX;
-    };
+    struct M1;
+    struct M2;
 };
 
 class SpiBus
@@ -85,19 +66,21 @@ public:
 
     size_t getQueueSize() const;
 
-private:
+    enum class TCompletedEvent
+    {
+            TransactionCompleted
+        ,   TranscationFailed
+        ,   Unknown
+    };
 
-    void spimEventHandler(
-            nrfx_spim_evt_t const* _pEvent
-        ,   void* _pContext
-    );
+    void handleEvent( TCompletedEvent _eventToHandle );
+
+private:
 
     void performTransaction( uint16_t _dataSize );
 
 private:
-
     std::atomic<bool> m_isTransactionCompleted;
-    nrfx_spim_t m_spiHandle;
 
     static constexpr inline int QueueSize = 32;
 
@@ -107,21 +90,17 @@ private:
         ,   etl::memory_model::MEMORY_MODEL_SMALL
     >;
 
+    static constexpr inline std::size_t kImplSize = Platform::SpiImplSize;
+    static constexpr inline std::size_t kImplAlignment = Platform::SpiImplAlignment;
+
+    class SpiBackendImpl;
+    Utils::FastPimpl<SpiBackendImpl,kImplSize,kImplAlignment> m_pSpiBackendImpl;
+
     DmaBufferType DmaArray;
     TTransactionStorage m_transactionsQueue;
 };
 
 template< typename TSpiInstance >
-std::unique_ptr<SpiBus> createSpiBus()
-{
-    return std::make_unique<SpiBus>(
-            TSpiInstance::ClockPin
-        ,   TSpiInstance::MisoPin
-        ,   TSpiInstance::MosiPin
-        ,   TSpiInstance::SlaveSelectPin
-        ,   TSpiInstance::Register
-        ,   TSpiInstance::DriverInstance
-    );
-}
+std::unique_ptr<SpiBus> createSpiBus();
 
 } // namespace Interface
