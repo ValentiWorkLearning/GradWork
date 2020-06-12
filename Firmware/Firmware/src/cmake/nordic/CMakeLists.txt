@@ -10,8 +10,6 @@ endif()
 set ( SDK_DEPENDENT_DIR "defdir" CACHE PATH "Directory for SDK-dependent files for configuration")
 set ( NRF52SOFTDEVICE "S132" CACHE STRING "SoftDevice version for NRF52 target")
 
-add_library( Common INTERFACE )
-add_library( NordicSDK::Common ALIAS Common)
 
 set ( NordicCompileDefinitions
     NRF52
@@ -219,22 +217,25 @@ list(APPEND NordicCommonSrc
 set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
 set(COMMON_FLAGS -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums ${CPU_FLAGS})
 
+add_library( Common STATIC ${NordicCommonSrc} ${NordicCommonInc})
+add_library( NordicSDK::Common ALIAS Common)
+
 target_include_directories(
     Common
-    INTERFACE
+    PUBLIC
     ${NordicCommonInc}
 )
 
 target_compile_definitions(
     Common
-    INTERFACE
+    PUBLIC
     ${NordicCompileDefinitions}
 )
 
 
 target_link_options(
     Common
-    INTERFACE
+    PUBLIC
     ${CPU_FLAGS}
     -L${NRF5_SDK_PATH}/modules/nrfx/mdk
     -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm
@@ -243,18 +244,18 @@ target_link_options(
 )
 
 target_compile_options(
-    Common INTERFACE
+    Common PUBLIC
     --sysroot="${TOOLCHAIN_SYSROOT}"
     $<$<CONFIG:Debug>:-Os>
     $<$<CONFIG:Release>:-Os>
     ${COMMON_FLAGS}
 )
 
-target_sources(
-    Common
-    INTERFACE
-    ${NordicCommonSrc}
-)
+# target_sources(
+#     Common
+#     PRIVATE
+#     ${NordicCommonSrc}
+# )
 
 list(APPEND NRFSDK_INCLUDES ${NordicCommonInc} )
 list(APPEND NRFSDK_SOURCES ${NordicCommonSrc} )
@@ -262,10 +263,31 @@ list(APPEND NRFSDK_SOURCES ${NordicCommonSrc} )
 include (CMakePrintHelpers)
 
 function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS_ON)
-    #cmake_print_variables( LIBRARY_NAME INCLUDES_LIST SOURCES_LIST )
 
+    set (TARGET_HEADER_LIST ${INCLUDES_LIST} )
     set( LIBRARY_NAME_COPY ${LIBRARY_NAME} )
-    add_library( ${LIBRARY_NAME_COPY} INTERFACE )
+
+    list(APPEND ${TARGET_HEADER_LIST} ${DEPENDS_ON})
+    cmake_print_variables( ${TARGET_HEADER_LIST} )
+    add_library( ${LIBRARY_NAME_COPY} STATIC ${SOURCES_LIST} ${TARGET_HEADER_LIST} )
+
+    target_include_directories(
+        ${LIBRARY_NAME}
+        PUBLIC
+        ${DEPENDS_ON}
+    )
+
+    target_compile_definitions(
+        ${LIBRARY_NAME}
+        PUBLIC
+        ${NordicCompileDefinitions}
+    )
+
+    target_link_libraries(
+        ${LIBRARY_NAME}
+        PUBLIC
+        ${DEPENDS_ON}
+    )
 
     string( FIND ${LIBRARY_NAME_COPY} "_" ALIAS_MARKER_INDEX )
     if( NOT( ${ALIAS_MARKER_INDEX} EQUAL "-1" ) )
@@ -279,25 +301,12 @@ function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS
 
     add_library( NordicSDK::${ALIAS_CORRECTED} ALIAS ${LIBRARY_NAME_COPY})
 
-    target_include_directories(
-        ${LIBRARY_NAME_COPY}
-        INTERFACE
-        ${INCLUDES_LIST}
-    )
-    target_sources(
-        ${LIBRARY_NAME_COPY}
-        INTERFACE
-        ${SOURCES_LIST}
-    )
+    # target_sources(
+    #     ${LIBRARY_NAME_COPY}
+    #     INTERFACE
+    #     ${SOURCES_LIST}
+    # )
 
-    list(APPEND NRFSDK_INCLUDES ${INCLUDES_LIST} )
-    list(APPEND NRFSDK_SOURCES ${SOURCES_LIST} )
-
-    target_link_libraries(
-        ${LIBRARY_NAME_COPY}
-        INTERFACE
-        ${DEPENDS_ON}
-    )
 endfunction(declareNordicSdkLibrary SOURCES_LIST DEPENDS_ON)
 
 
@@ -458,7 +467,7 @@ declareNordicSdkLibrary(
     BleService_BAS
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas/ble_bas.c"
-    NordicSDK::Common
+    NordicSDK::Ble
 )
 
 #BAS Service
