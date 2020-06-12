@@ -9,6 +9,7 @@ target_include_directories(
     UtilsLibrary
     ${DRIVER_ROOT_DIR}/spi
     ${DRIVER_ROOT_DIR}/ih
+    ${DRIVER_ROOT_DIR}/gpio
     ${CMAKE_CURRENT_LIST_DIR}
 )
 

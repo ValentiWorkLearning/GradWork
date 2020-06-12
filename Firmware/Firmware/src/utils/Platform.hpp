@@ -24,8 +24,8 @@ namespace Platform
     static constexpr size_t SpiImplSize = 12;
     static constexpr size_t SpiImplAlignment = 4;
 
-    static constexpr size_t GpioImplSize = 2;
-    static constexpr size_t GpioImplAlignment = 2;
+    static constexpr size_t GpioImplSize = 8;
+    static constexpr size_t GpioImplAlignment = 4;
 
     static constexpr size_t GraphicsBackendSize = 8;
     static constexpr size_t GraphicsBackendAlignment = 4;

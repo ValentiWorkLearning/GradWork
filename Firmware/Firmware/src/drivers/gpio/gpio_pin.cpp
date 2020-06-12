@@ -1,22 +1,26 @@
 #include "gpio_pin.hpp"
 #include "pca10040.h"
+#include "MetaUtils.hpp"
 
 namespace Gpio
 {
 
-class GpioPin::GpioPlatformImpl
+class GpioPin::GpioBackendImpl
 {
+    public:
 
-public:
-
-    GpioPlatformImpl( std::uint16_t _pinNumber, Gpio::Direction _pinDirection )
-        :   m_pinNumber{ _pinNumber }
+    GpioBackendImpl(
+            std::uint8_t _pinNumber
+        ,   Gpio::Direction _direction
+    )
+        :   m_pinDirection{ _direction }
+        ,   m_pinNumber{ _pinNumber }
     {
-        if( _pinDirection ==  Direction::Output )
+         if( _direction ==  Direction::Output )
             nrf_gpio_cfg_output( m_pinNumber );
     }
 
-public:
+    public:
 
     void set()
     {
@@ -28,32 +32,31 @@ public:
         nrf_gpio_pin_clear( m_pinNumber );
     }
 
-private:
-    std::uint16_t m_pinNumber;
+    private:
+
+    Gpio::Direction m_pinDirection;
+    std::uint8_t m_pinNumber;
 };
 
-GpioPin::GpioPin( std::uint16_t _pinNumber, Gpio::Direction _pinDirection )
-  :   m_pGpioBackendImpl{ _pinNumber, _pinDirection }
+GpioPin::GpioPin(
+            std::uint8_t _pinNumber
+        ,   Gpio::Direction _gpioDirection
+    )
+    :   m_pGpioBackendImpl{
+                _pinNumber
+            ,   _gpioDirection
+    }
 {
 }
 
-GpioPin::~GpioPin() = default;
-
-void
-GpioPin::set()
+void GpioPin::set()
 {
     m_pGpioBackendImpl->set();
 }
 
-void
-GpioPin::reset()
+void GpioPin::reset()
 {
     m_pGpioBackendImpl->reset();
 }
 
-GpioPin getGpioPin( std::uint16_t _pinNumber, Direction _pinDirection )
-{
-    return GpioPin( _pinNumber, _pinDirection );
-}
-
-}
+};
