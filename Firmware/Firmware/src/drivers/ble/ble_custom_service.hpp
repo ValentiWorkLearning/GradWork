@@ -3,12 +3,11 @@
 #include "ble.h"
 #include "ble_srv_common.h"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
+#include "utils/Noncopyable.hpp"
 
 #include <cstdint>
 #include <array>
-
-#include "Noncopyable.hpp"
 
 namespace Ble::CustomService
 {

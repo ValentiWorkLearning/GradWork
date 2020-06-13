@@ -1,13 +1,14 @@
 #pragma once
 
+#include "ih/drivers/ih_display_idisplay.hpp"
+#include "gpio/gpio_pin.hpp"
+
+#include "display_st7789v_constants.hpp"
+
+#include "utils/SimpleSignal.hpp"
+
 #include <memory>
 #include <cstdint>
-
-#include "ih_display_idisplay.hpp"
-#include "display_st7789v_constants.hpp"
-#include "gpio_pin.hpp"
-
-#include "SimpleSignal.hpp"
 
 namespace Interface::Spi
 {
@@ -24,12 +25,12 @@ class St7789V
 public:
 
     explicit St7789V(
-            Interface::Spi::SpiBus* _busPtr
+            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     );
 
-    ~St7789V() override  = default;
+    ~St7789V() override;
 
     void turnOn() override;
 
@@ -96,12 +97,12 @@ private:
 
     Gpio::GpioPin m_dcPin;
     Gpio::GpioPin m_resetPin;
-    Interface::Spi::SpiBus* m_pBusPtr;
+    std::unique_ptr<Interface::Spi::SpiBus> m_pBusPtr;
 };
 
 std::unique_ptr<St7789V>
 createDisplayDriver(
-        Interface::Spi::SpiBus* _busPtr
+        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height
 );

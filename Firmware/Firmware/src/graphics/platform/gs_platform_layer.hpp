@@ -3,8 +3,8 @@
 #include <memory>
 #include "lvgl.h"
 
-#include "FastPimpl.hpp"
-#include "Platform.hpp"
+#include "utils/FastPimpl.hpp"
+#include "utils/Platform.hpp"
 
 namespace Graphics
 {

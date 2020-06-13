@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SimpleSignal.hpp"
-#include "ih/ih_ble_service_factory.hpp"
+#include "utils/SimpleSignal.hpp"
+#include "ih/drivers/ih_ble_service_factory.hpp"
 
 namespace Ble::BatteryService
 {

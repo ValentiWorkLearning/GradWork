@@ -1,8 +1,16 @@
 #include "ble_battery_service.hpp"
+
+#include "ble.h"
+#include "ble_srv_common.h"
+#include "ble_bas.h"
+
 #include "app_error.h"
 
 namespace Ble::BatteryService
 {
+
+static constexpr std::uint16_t ServiceUuid = BLE_UUID_BATTERY_SERVICE;
+static constexpr std::uint8_t ServiceType = BLE_UUID_TYPE_BLE;
 
 BLE_BAS_DEF(m_bas);
 

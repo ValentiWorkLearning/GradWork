@@ -3,7 +3,7 @@
 #include "ih/widgets/gs_ibattery_widget.hpp"
 
 #include "ih/gs_events.hpp"
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 namespace
 {
 	Graphics::Widgets::IBatteryWidget::BatteryStatus toBatteryStatus( std::uint8_t _batteryValue )

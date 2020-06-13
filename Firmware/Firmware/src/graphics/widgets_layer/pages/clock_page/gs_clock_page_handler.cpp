@@ -3,7 +3,7 @@
 #include "ih/gs_events.hpp"
 #include "ih/pages/gs_iclock_page_view.hpp"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 #include <charconv>
 

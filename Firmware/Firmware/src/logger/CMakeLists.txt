@@ -12,7 +12,7 @@ target_compile_definitions(
 target_include_directories(
     logger_service
     PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}
+    ${CMAKE_CURRENT_LIST_DIR}/inc
     PRIVATE
     UtilsLibrary
 )

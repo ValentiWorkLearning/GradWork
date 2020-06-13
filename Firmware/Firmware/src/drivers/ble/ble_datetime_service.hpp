@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ih/ih_ble_dts_service.hpp"
+#include "ih/drivers/ih_ble_dts_service.hpp"
 
 #include "ble_cts_c.h"
 

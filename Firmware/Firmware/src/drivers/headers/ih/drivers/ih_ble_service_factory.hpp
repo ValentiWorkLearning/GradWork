@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Noncopyable.hpp"
-#include "ih/ih_ble_battery_service.hpp"
-#include "ih/ih_ble_dts_service.hpp"
+#include "utils/Noncopyable.hpp"
+#include "ih/drivers/ih_ble_battery_service.hpp"
+#include "ih/drivers/ih_ble_dts_service.hpp"
 
 #include <memory>
 #include <any>

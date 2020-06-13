@@ -1,9 +1,10 @@
-#include "display_st7789v.hpp"
+#include "inc/display/display_st7789v.hpp"
 #include "display_st7789v_constants.hpp"
 
-#include "transaction_item.hpp"
-#include "spi_wrapper.hpp"
-#include "delay_provider.hpp"
+#include "ih/drivers/transaction_item.hpp"
+
+#include "spi/spi_wrapper.hpp"
+#include "delay/delay_provider.hpp"
 
 #include "pca10040.h"
 
@@ -15,7 +16,7 @@ namespace DisplayDriver
 {
 
 St7789V::St7789V(
-            Interface::Spi::SpiBus* _busPtr
+            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     )
@@ -25,12 +26,14 @@ St7789V::St7789V(
     ,   m_height { _height }
     ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output) }
     ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
-    ,   m_pBusPtr{ _busPtr }
+    ,   m_pBusPtr{ std::move( _busPtr ) }
 {
     initGpio();
     initDisplay();
     initColumnRow( _width, _height );
 }
+
+St7789V::~St7789V()= default;
 
 void
 St7789V::initDisplay()
@@ -310,13 +313,13 @@ void St7789V::setDcPin()
 
 std::unique_ptr<St7789V>
 createDisplayDriver(
-        Interface::Spi::SpiBus* _busPtr
+        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height
 )
 {
     return std::make_unique<St7789V>(
-            _busPtr
+            std::move( _busPtr )
         ,   _width
         ,   _height
     );

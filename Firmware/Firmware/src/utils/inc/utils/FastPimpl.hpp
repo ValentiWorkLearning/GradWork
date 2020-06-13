@@ -1,5 +1,7 @@
 #pragma once
 #include <utility>
+#include <cstdint>
+#include <cstddef>
 #include <type_traits>
 
 // https://www.youtube.com/watch?v=_AkF8SpUV3k&t=994s

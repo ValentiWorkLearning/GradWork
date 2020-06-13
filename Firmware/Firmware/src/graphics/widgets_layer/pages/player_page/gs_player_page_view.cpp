@@ -2,6 +2,8 @@
 
 #include "ih/gs_itheme_controller.hpp"
 
+#include "utils/MetaUtils.hpp"
+
 #include "fonts/IconFont24px.hpp"
 #include "fonts/PlayerIcons68px.hpp"
 

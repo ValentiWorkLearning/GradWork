@@ -2,7 +2,7 @@
 #include <memory>
 #include <string>
 
-#include "SimpleSignal.hpp"
+#include "utils/SimpleSignal.hpp"
 
 namespace Graphics::Views
 {

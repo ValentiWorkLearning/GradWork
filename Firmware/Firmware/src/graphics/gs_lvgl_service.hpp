@@ -5,10 +5,10 @@
 
 #include "platform/gs_platform_layer.hpp"
 
+#include "utils/MetaUtils.hpp"
+
 #include <array>
 #include <memory>
-
-#include "MetaUtils.hpp"
 
 namespace Graphics::MainWindow
 {

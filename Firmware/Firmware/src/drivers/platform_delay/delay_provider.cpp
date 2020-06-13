@@ -1,5 +1,5 @@
 #pragma once
-#include "delay_provider.hpp"
+#include "inc/delay/delay_provider.hpp"
 
 #include "nrf_delay.h"
 

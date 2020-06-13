@@ -1,9 +1,7 @@
 #pragma once
 
-#include <cstddef>
-
-#include "FastPimpl.hpp"
-#include "Platform.hpp"
+#include "utils/FastPimpl.hpp"
+#include "utils/Platform.hpp"
 
 namespace Gpio
 {

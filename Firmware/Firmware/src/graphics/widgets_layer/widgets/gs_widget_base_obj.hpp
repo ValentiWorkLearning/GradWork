@@ -4,7 +4,7 @@
 
 #include "lvgl.h"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 #include <string>
 #include <memory>

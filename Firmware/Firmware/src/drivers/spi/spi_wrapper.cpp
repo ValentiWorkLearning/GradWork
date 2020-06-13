@@ -1,14 +1,15 @@
-#include "spi_wrapper.hpp"
+#include "inc/spi/spi_wrapper.hpp"
+
+#include "utils/CallbackConnector.hpp"
+#include "utils/MetaUtils.hpp"
+
 #include "pca10040.h"
 
-#include "CallbackConnector.hpp"
+#include "nrfx_spim.h"
 
 #include <cassert>
 #include <array>
 
-#include "MetaUtils.hpp"
-
-#include "nrfx_spim.h"
 
 namespace Interface::Spi
 {
@@ -177,6 +178,8 @@ SpiBus::SpiBus(
     }
 {
 }
+
+SpiBus::~SpiBus() = default;
 
 void
 SpiBus::handleEvent( TCompletedEvent _eventToHandle )

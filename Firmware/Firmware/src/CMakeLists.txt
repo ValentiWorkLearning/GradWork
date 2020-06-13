@@ -10,6 +10,7 @@ add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
 add_subdirectory(drivers)
 add_subdirectory(utils)
 add_subdirectory(logger)
+add_subdirectory(graphics)
 
 # find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
 

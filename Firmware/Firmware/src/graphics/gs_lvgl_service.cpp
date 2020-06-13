@@ -12,8 +12,8 @@
 
 #include "gs_event_dispatcher.hpp"
 
-#include "CallbackConnector.hpp"
-#include "logger_service.hpp"
+#include "utils/CallbackConnector.hpp"
+#include "logger/logger_service.hpp"
 
 #include "lvgl.h"
 

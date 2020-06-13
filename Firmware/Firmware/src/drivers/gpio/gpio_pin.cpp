@@ -1,6 +1,7 @@
-#include "gpio_pin.hpp"
+#include "inc/gpio/gpio_pin.hpp"
+
 #include "pca10040.h"
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 namespace Gpio
 {

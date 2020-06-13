@@ -1,7 +1,7 @@
 #pragma once
 #include "lvgl.h"
 
-#include "SimpleSignal.hpp"
+#include "utils/SimpleSignal.hpp"
 
 namespace Graphics::Theme
 {

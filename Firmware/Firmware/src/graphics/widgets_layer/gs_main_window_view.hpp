@@ -2,7 +2,7 @@
 #include "ih/gs_imain_window.hpp"
 #include "ih/gs_itheme_controller.hpp"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 namespace Graphics::MainWindow
 {

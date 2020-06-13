@@ -1,9 +1,10 @@
 #pragma once
 
 #include "ih/gs_ievent_handler.hpp"
-#include <memory>
 
-#include "TimeWrapper.hpp"
+#include "utils/TimeWrapper.hpp"
+
+#include <memory>
 
 namespace Graphics::Views
 {

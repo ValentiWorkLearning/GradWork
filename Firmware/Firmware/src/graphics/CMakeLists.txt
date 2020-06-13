@@ -4,21 +4,12 @@ set (TARGET_NAME watch_graphics)
 
 add_library( ${TARGET_NAME} STATIC )
 
-set (LOGGER_DIR "../logger")
-set (UTILS_DIR  "../utils")
-set (DRIVER_DIR "../drivers")
-add_subdirectory ("lvgl_lib")
+add_subdirectory (lvgl_lib)
+add_subdirectory (platform)
 
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-
-target_compile_definitions(
-    ${TARGET_NAME}
-    PRIVATE
-    USE_ST7789V_BACKEND
-)
 
 target_include_directories(
     ${TARGET_NAME}
@@ -29,11 +20,6 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/graphics/widgets_layer/widgets
     ${CMAKE_CURRENT_LIST_DIR}/graphics/fonts
     ${CMAKE_CURRENT_LIST_DIR}/graphics/icons
-    ${UTILS_DIR}
-    ${LOGGER_DIR}
-    ${DRIVER_DIR}
-    ${DRIVER_DIR}/display
-    ${DRIVER_DIR}/spi
     ${CMAKE_CURRENT_LIST_DIR}
 )
 
@@ -63,7 +49,6 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/player_page/gs_player_page_view.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_main_window.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_main_window_view.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/platform/gs_platform_layer.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gs_theme_controller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gs_event_dispatcher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gs_lvgl_service.cpp
@@ -72,7 +57,11 @@ target_sources(
 
 target_link_libraries(
     ${TARGET_NAME}
+    PRIVATE
     lvgl_lib
     etl
     stdc++
+    UtilsLibrary
+    logger_service
+    graphics_backend
 )

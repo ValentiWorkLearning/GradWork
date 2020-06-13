@@ -4,7 +4,7 @@
 #include "ih/gs_itheme_controller.hpp"
 #include "ih/gs_events.hpp"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 #include "etl/vector.h"
 

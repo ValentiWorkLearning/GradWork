@@ -1,13 +1,12 @@
 #pragma once
 
-#include "SimpleSignal.hpp"
+#include "ih/drivers/transaction_item.hpp"
 
-#include "FastPimpl.hpp"
-#include "Platform.hpp"
+#include "utils/SimpleSignal.hpp"
 
-#include "transaction_item.hpp"
+#include "utils/FastPimpl.hpp"
+#include "utils/Platform.hpp"
 
-#include <queue>
 #include <memory>
 #include <atomic>
 
@@ -37,7 +36,7 @@ public:
         ,   std::uint8_t _driverInstance
     );
 
-    ~SpiBus() = default;
+    ~SpiBus();
 
 public:
 

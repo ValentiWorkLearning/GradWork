@@ -24,7 +24,7 @@
 
 #include "pages/player_page/gs_player_page_view.hpp"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 #include <memory>
 #include <algorithm>

@@ -1,6 +1,7 @@
-#include "logger_service.hpp"
+#include "inc/logger/logger_service.hpp"
 
-#include "CallbackConnector.hpp"
+#include "utils/CallbackConnector.hpp"
+
 #include <atomic>
 #include <type_traits>
 

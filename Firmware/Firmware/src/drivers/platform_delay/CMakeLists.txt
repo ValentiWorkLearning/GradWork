@@ -11,6 +11,12 @@ target_compile_features(
 
 target_include_directories(
     platform_delay
+    PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/inc
+)
+
+target_include_directories(
+    platform_delay
     PRIVATE
     NordicSDK::Common
 )

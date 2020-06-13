@@ -1,7 +1,7 @@
 #include "ble_custom_service.hpp"
 
-#include "logger_service.hpp"
-#include "CallbackConnector.hpp"
+#include "logger/logger_service.hpp"
+#include "utils/CallbackConnector.hpp"
 
 #include "sdk_common.h"
 #include "ble_srv_common.h"

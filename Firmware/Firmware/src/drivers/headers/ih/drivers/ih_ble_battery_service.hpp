@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Noncopyable.hpp"
+#include "utils/Noncopyable.hpp"
 #include <cstdint>
 
 namespace Ble::BatteryService

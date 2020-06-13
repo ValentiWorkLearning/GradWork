@@ -11,6 +11,13 @@ target_compile_features(
 
 target_include_directories(
     gpio
+    PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/inc
+)
+
+
+target_include_directories(
+    gpio
     PRIVATE
     NordicSDK::Common
     UtilsLibrary

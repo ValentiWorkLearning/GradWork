@@ -5,7 +5,7 @@
 
 #include "lvgl.h"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 namespace Graphics::Views
 {

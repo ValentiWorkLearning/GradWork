@@ -2,13 +2,13 @@
 
 #include "ih/gs_events.hpp"
 
+#include "utils/Noncopyable.hpp"
+
 #include <any>
 #include <functional>
 #include <vector>
 #include <memory>
 #include <atomic>
-
-#include "Noncopyable.hpp"
 
 #include <etl/vector.h>
 

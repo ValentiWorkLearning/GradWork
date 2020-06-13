@@ -1,15 +1,14 @@
 #pragma once
 
-#include "ih/ih_ible_softdevice.hpp"
-#include "ih/ih_ble_battery_service.hpp"
-#include "ih/ih_ble_dts_service.hpp"
-#include "ih/ih_ble_service_factory.hpp"
+#include "ih/drivers/ih_ible_softdevice.hpp"
+#include "ih/drivers/ih_ble_battery_service.hpp"
+#include "ih/drivers/ih_ble_dts_service.hpp"
+#include "ih/drivers/ih_ble_service_factory.hpp"
 
-#include "SimpleSignal.hpp"
-#include "Noncopyable.hpp"
+#include "utils/SimpleSignal.hpp"
+#include "utils/Noncopyable.hpp"
 
 #include <memory>
-
 
 #include <ble.h>
 

@@ -1,7 +1,7 @@
 #include "ble_datetime_service.hpp"
 
-#include "logger_service.hpp"
-#include "CallbackConnector.hpp"
+#include "logger/logger_service.hpp"
+#include "utils/CallbackConnector.hpp"
 
 #include "app_error.h"
 #include "ble_cts_c.h"

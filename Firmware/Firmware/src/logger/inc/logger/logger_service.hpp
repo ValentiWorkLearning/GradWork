@@ -1,11 +1,12 @@
 #pragma once
+
+#include "utils/FastPimpl.hpp"
+#include "utils/Platform.hpp"
+
 #include <string_view>
 #include <memory>
 #include <charconv>
 #include <atomic>
-
-#include "FastPimpl.hpp"
-#include "Platform.hpp"
 
 class Logger
 {

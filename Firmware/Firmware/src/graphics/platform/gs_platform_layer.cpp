@@ -1,21 +1,18 @@
 #include "gs_platform_layer.hpp"
-#include "logger_service.hpp"
+#include "logger/logger_service.hpp"
 
 namespace
 {
     static constexpr std::uint32_t LvglNotificationTime = 15;
-    static constexpr std::uint32_t InitDelayTime = 100;
 }
 
-#include "CallbackConnector.hpp"
+#include "utils/CallbackConnector.hpp"
 
 #if defined USE_ST7789V_BACKEND
 
-#include "../drivers/display/display_idisplay.hpp" // TODO Consider something better
-#include "../drivers/display/display_st7789v.hpp"
-#include "../drivers/spi/spi_wrapper.hpp"
+#include "ih/drivers/ih_display_idisplay.hpp"
+#include "ih/drivers/ih_display_driver_creator.hpp"
 
-#include "nrf_delay.h"
 #include "app_timer.h"
 #include "nrf_drv_clock.h"
 
@@ -34,16 +31,10 @@ class PlatformBackend::PlatformBackendImpl
 public:
 
     PlatformBackendImpl()
-        :   m_displaySpiInstance { Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M2>() }
-        ,   m_hardwareDisplayDriver{
-                DisplayDriver::createDisplayDriver(
-                        m_displaySpiInstance.get()
-                    ,   DisplayDriver::St7789v::Disp240_320::Width
-                    ,   DisplayDriver::St7789v::Disp240_320::Height
-                )
+        :   m_hardwareDisplayDriver{
+                DisplayCreator::createDisplayDriver()
             }
     {
-        nrf_delay_ms( InitDelayTime );
     }
 
     void platformDependentInit( lv_disp_drv_t* _displayDriver )
@@ -102,8 +93,6 @@ public:
     }
 
 private:
-
-    std::unique_ptr<Interface::Spi::SpiBus> m_displaySpiInstance;
     std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
 
 };
