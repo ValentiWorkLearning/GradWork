@@ -19,12 +19,12 @@ class GpioPin
 
 public:
 
-    explicit GpioPin(
+    GpioPin(
             std::uint8_t _pinNumber
         ,   Gpio::Direction _gpioDirection
     );
 
-    ~GpioPin() = default;
+    ~GpioPin();
 
 public:
 
@@ -40,5 +40,7 @@ private:
     class GpioBackendImpl;
     Utils::FastPimpl<GpioBackendImpl,kImplSize,kImplAlignment> m_pGpioBackendImpl;
 };
+
+GpioPin getGpioPin ( std::uint8_t _pinNumber, Direction _pinDirection );
 
 } // namespace Gpio

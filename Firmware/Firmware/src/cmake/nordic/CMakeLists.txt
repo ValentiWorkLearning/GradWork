@@ -268,12 +268,14 @@ function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS
     set( LIBRARY_NAME_COPY ${LIBRARY_NAME} )
 
     list(APPEND ${TARGET_HEADER_LIST} ${DEPENDS_ON})
-    cmake_print_variables( ${TARGET_HEADER_LIST} )
+    #cmake_print_variables( ${TARGET_HEADER_LIST} ${INCLUDES_LIST})
     add_library( ${LIBRARY_NAME_COPY} STATIC ${SOURCES_LIST} ${TARGET_HEADER_LIST} )
 
     target_include_directories(
         ${LIBRARY_NAME}
         PUBLIC
+        ${INCLUDES_LIST}
+        PRIVATE
         ${DEPENDS_ON}
     )
 
@@ -408,7 +410,7 @@ declareNordicSdkLibrary(
     Ble_Gatt
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt"
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gatt/nrf_ble_gatt.c"
-    NordicSDK::Common
+    NordicSDK::Ble
 )
 
 #Ble LE GATT Queue (BGQ) module
@@ -416,7 +418,7 @@ declareNordicSdkLibrary(
     Ble_GattQueue
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq"
     "${NRF5_SDK_PATH}/components/ble/nrf_ble_gq/nrf_ble_gq.c"
-    NordicSDK::Common
+    NordicSDK::Ble::Gatt
 )
 
 set(BLE_PEER_MANAGER_SRC
@@ -440,7 +442,7 @@ declareNordicSdkLibrary(
     Ble_PeerManager
     "${NRF5_SDK_PATH}/components/ble/peer_manager"
     "${BLE_PEER_MANAGER_SRC}"
-    NordicSDK::Common
+    NordicSDK::Ble
 )
 
 
@@ -449,7 +451,7 @@ declareNordicSdkLibrary(
     Ble_ServiceDbDiscovery
     "${NRF5_SDK_PATH}/components/ble/ble_db_discovery"
     "${NRF5_SDK_PATH}/components/ble/ble_db_discovery/ble_db_discovery.c"
-    NordicSDK::Common
+    NordicSDK::Ble::GattQueue
 )
 
 
@@ -458,7 +460,7 @@ declareNordicSdkLibrary(
     BleService_LBS
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_lbs"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_lbs/ble_lbs.c"
-    NordicSDK::Common
+    NordicSDK::Ble
 )
 
 
@@ -475,7 +477,7 @@ declareNordicSdkLibrary(
     BleService_CTSCLIENT
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c/ble_cts_c.c"
-    NordicSDK::Common
+    NordicSDK::Ble::ServiceDbDiscovery
 )
 
 include ( nordic_postbuild.cmake )

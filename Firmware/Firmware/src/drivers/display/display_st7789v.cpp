@@ -3,8 +3,8 @@
 
 #include "transaction_item.hpp"
 #include "spi_wrapper.hpp"
+#include "delay_provider.hpp"
 
-#include "nrf_delay.h"
 #include "pca10040.h"
 
 #include <array>
@@ -23,8 +23,8 @@ St7789V::St7789V(
         m_completedTransitionsCount{}
     ,   m_width{ _width }
     ,   m_height { _height }
-    ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output }
-    ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output }
+    ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output) }
+    ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
     ,   m_pBusPtr{ _busPtr }
 {
     initGpio();
@@ -36,13 +36,11 @@ void
 St7789V::initDisplay()
 {
     m_resetPin.reset();
-
-    nrf_delay_ms( 100 );
-
+    Delay::waitFor( 100 );
     m_resetPin.set();
 
     sendCommand(    DisplayReg::SWRESET    );
-    nrf_delay_ms( 150 );
+    Delay::waitFor( 150 );
     sendCommand(    DisplayReg::SLPOUT     );
     sendCommand(    DisplayReg::COLMOD     , 0x55   );
     sendCommand(    DisplayReg::MADCTL     , 0x08   );

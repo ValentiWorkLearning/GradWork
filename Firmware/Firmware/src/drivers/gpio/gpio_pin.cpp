@@ -49,6 +49,8 @@ GpioPin::GpioPin(
 {
 }
 
+GpioPin::~GpioPin() = default;
+
 void GpioPin::set()
 {
     m_pGpioBackendImpl->set();
@@ -57,6 +59,11 @@ void GpioPin::set()
 void GpioPin::reset()
 {
     m_pGpioBackendImpl->reset();
+}
+
+GpioPin getGpioPin ( std::uint8_t _pinNumber, Direction _pinDirection )
+{
+    return GpioPin( _pinNumber,_pinDirection );
 }
 
 };
