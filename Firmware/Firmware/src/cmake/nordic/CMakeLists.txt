@@ -373,6 +373,22 @@ declareNordicSdkLibrary(
     NordicSDK::Common
 )
 
+#Bsp
+declareNordicSdkLibrary(
+    Bsp
+    "${NRF5_SDK_PATH}/components/libraries/bsp"
+    "${NRF5_SDK_PATH}/components/libraries/bsp/bsp.c"
+    NordicSDK::App::Button
+)
+
+#Bsp::BleButton
+declareNordicSdkLibrary(
+    Bsp_BleButton
+    "${NRF5_SDK_PATH}/components/libraries/bsp"
+    "${NRF5_SDK_PATH}/components/libraries/bsp/bsp_btn_ble.c"
+    NordicSDK::App::Button
+)
+
 #Common BLE library
 set (BLE_LIB_INC
     "${NRF5_SDK_PATH}/components/ble"
@@ -472,7 +488,7 @@ declareNordicSdkLibrary(
     NordicSDK::Ble
 )
 
-#BAS Service
+#CTS_C Service
 declareNordicSdkLibrary(
     BleService_CTSCLIENT
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c"
