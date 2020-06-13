@@ -1,7 +1,7 @@
 #include "sp_battery_service_fake.hpp"
 
-#include "CallbackConnector.hpp"
-#include "MetaUtils.hpp"
+#include "utils/CallbackConnector.hpp"
+#include "utils/MetaUtils.hpp"
 
 namespace FakeSettings
 {

@@ -1,6 +1,8 @@
 #include "gs_platform_layer.hpp"
 #include "logger/logger_service.hpp"
 
+#include "lvgl.h"
+
 namespace
 {
     static constexpr std::uint32_t LvglNotificationTime = 15;

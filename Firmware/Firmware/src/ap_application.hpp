@@ -4,15 +4,15 @@
 
 #include "graphics/gs_lvgl_service.hpp"
 
-#include "service_providers/sp_fake_services_creator.hpp"
+#include "sp_fake_services_creator.hpp"
 
-#include "service_providers/ih/sp_ibattery_service.hpp"
-#include "service_providers/ih/sp_iheartrate_service.hpp"
-#include "service_providers/ih/sp_idatetime_service.hpp"
+#include "ih/sp_ibattery_service.hpp"
+#include "ih/sp_iheartrate_service.hpp"
+#include "ih/sp_idatetime_service.hpp"
 
-#include "drivers/ih/ih_ible_softdevice.hpp"
+#include "ih/drivers/ih_ible_softdevice.hpp"
 
-#include "Noncopyable.hpp"
+#include "utils/Noncopyable.hpp"
 
 class Application
 {

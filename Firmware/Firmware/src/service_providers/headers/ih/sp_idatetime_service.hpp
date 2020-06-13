@@ -1,7 +1,7 @@
 #pragma once
 
-#include "SimpleSignal.hpp"
-#include <TimeWrapper.hpp>
+#include "utils/SimpleSignal.hpp"
+#include "utils/TimeWrapper.hpp"
 
 namespace ServiceProviders::DateTimeService::Settings
 {

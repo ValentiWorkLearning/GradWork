@@ -1,6 +1,6 @@
 #include "sp_datetime_service_fake.hpp"
 
-#include "CallbackConnector.hpp"
+#include "utils/CallbackConnector.hpp"
 
 
 #ifdef USE_NRFSDK_SIMULATOR

@@ -1,7 +1,7 @@
 #include "ap_application.hpp"
 
-#include "ih/ih_ible_softdevice.hpp"
-#include "ih/ih_ble_service_factory.hpp"
+#include "ih/drivers/ih_ible_softdevice.hpp"
+#include "ih/drivers/ih_ble_service_factory.hpp"
 
 #if defined (USE_BLE_SERVICES)
     #include "drivers/ble/ble_custom_service.hpp"
@@ -21,14 +21,12 @@
 #endif
 
 #include "graphics/gs_lvgl_service.hpp"
-#include "graphics/platform/gs_platform_layer.hpp"
-
 #include "graphics/ih/gs_imain_window.hpp"
 #include "graphics/gs_event_dispatcher.hpp"
 
-#include "SimpleSignal.hpp"
+#include "utils/SimpleSignal.hpp"
 
-#include "logger_service.hpp"
+#include "logger/logger_service.hpp"
 
 #include <optional>
 
@@ -156,9 +154,7 @@ Application::initBleStack()
 void
 Application::initGraphicsStack()
 {
-    m_graphicsService = Graphics::createGraphicsService(
-        Graphics::createPlatformBackend()
-    );
+    m_graphicsService = Graphics::createGraphicsService();
 
     auto& pMainWindow = m_graphicsService->getMainWindow();
 

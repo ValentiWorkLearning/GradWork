@@ -1,10 +1,11 @@
 #pragma once
 
 #include <memory>
-#include "lvgl.h"
 
 #include "utils/FastPimpl.hpp"
 #include "utils/Platform.hpp"
+
+#include "lvgl.h"
 
 namespace Graphics
 {

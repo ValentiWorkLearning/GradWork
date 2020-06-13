@@ -14,6 +14,7 @@ target_link_libraries(
     graphics_backend
     PRIVATE
     NordicSDK::Common
+    NordicSDK::App::Timer
     lvgl_lib
     UtilsLibrary
     logger_service

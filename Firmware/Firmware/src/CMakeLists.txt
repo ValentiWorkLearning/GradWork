@@ -11,8 +11,7 @@ add_subdirectory(drivers)
 add_subdirectory(utils)
 add_subdirectory(logger)
 add_subdirectory(graphics)
-
-# find_package(NordicSDK COMPONENTS Common Ble AppButton REQUIRED)
+add_subdirectory(service_providers)
 
 set (NORDIC_TARGET nordic-template)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
@@ -21,7 +20,9 @@ set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 target_sources(
     ${NORDIC_TARGET}
     PRIVATE
-    main.cpp
+    #main.cpp
+    main1.cpp
+    ap_application.cpp
 )
 
 target_compile_options(
@@ -32,7 +33,13 @@ target_compile_options(
 
 target_link_libraries(
     ${NORDIC_TARGET}
-
+    ble_services
+    logger_service
+    services_ih
+    drivers_ih
+    watch_graphics
+    watch_fake_services
+    UtilsLibrary
     NordicSDK::Common
 
     # NordicSDK::App::Scheduler
