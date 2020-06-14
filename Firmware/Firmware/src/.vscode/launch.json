@@ -9,14 +9,14 @@
         "request": "launch",
         "name": "Debug J-Link",
         "cwd": "${workspaceRoot}",
-        "executable": "${workspaceRoot}//build//src//E73DevBoardBin.out",
+        "executable": "${workspaceRoot}//build//theOpenWatch.out",
         "serverpath": "JLinkGDBServerCL.exe", 
         "servertype": "jlink",
         "device": "NRF52",
         "interface": "swd",
         "serialNumber": "", //if you have more than one J-Link probe add the serial number here 
         "runToMain": true,
-        "svdFile": "${workspaceRoot}//utils//nrf52.svd",
+        "svdFile": "${workspaceRoot}//nrf52_headers//nrf52.svd",
 
         "swoConfig": {
                 "source": "probe",

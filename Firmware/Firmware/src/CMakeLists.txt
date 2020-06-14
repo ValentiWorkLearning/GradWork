@@ -25,7 +25,7 @@ add_subdirectory(logger)
 add_subdirectory(graphics)
 add_subdirectory(service_providers)
 
-set (NORDIC_TARGET nordic-template)
+set (NORDIC_TARGET theOpenWatch)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
 set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
