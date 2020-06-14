@@ -8,8 +8,13 @@ else()
     file(TO_CMAKE_PATH "${NRF5_SDK_PATH}" NRF5_SDK_PATH)
 endif()
 
-set ( SDK_DEPENDENT_DIR "defdir" CACHE PATH "Directory for SDK-dependent files for configuration")
-set ( NRF52SOFTDEVICE "S132" CACHE STRING "SoftDevice version for NRF52 target")
+if( NOT NRF5_SDK_PATH)
+    set ( SDK_DEPENDENT_DIR "defdir" CACHE PATH "Directory for SDK-dependent files for configuration")
+endif()
+
+if( NOT NRF52SOFTDEVICE)
+    set ( NRF52SOFTDEVICE "S132" CACHE STRING "SoftDevice version for NRF52 target")
+endif()
 
 
 set ( NordicCompileDefinitions
