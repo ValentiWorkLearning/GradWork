@@ -8,6 +8,11 @@
 *.dll
 *.dylib
 
+.idea
+cmake-build-debug
+build-Firmware-ARM_Toolchain-Debug
+test/build
+
 #CMake gitignore
 CMakeLists.txt.user
 CMakeCache.txt
