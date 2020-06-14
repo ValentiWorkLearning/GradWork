@@ -3,11 +3,6 @@
 #include "ih/drivers/ih_ible_softdevice.hpp"
 #include "ih/drivers/ih_ble_service_factory.hpp"
 
-#if defined (USE_BLE_SERVICES)
-    #include "drivers/ble/ble_custom_service.hpp"
-    #include "drivers/ble/ble_softdevice.hpp"
-#endif
-
 #if defined (USE_DEVICE_SPECIFIC)
 #include "nrf_delay.h"
 #include "nrf.h"

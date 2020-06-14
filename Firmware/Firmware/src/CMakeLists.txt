@@ -1,4 +1,8 @@
 cmake_minimum_required(VERSION 3.8)
+
+set( NRF52SOFTDEVICE "S112" )
+set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
+
 set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake)
 
 project(nordic-template C CXX ASM)
@@ -6,7 +10,8 @@ project(nordic-template C CXX ASM)
 set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
 set(COMMON_FLAGS 
-    -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums ${CPU_FLAGS}
+    -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums 
+    ${CPU_FLAGS}
 )
 
 
@@ -27,9 +32,14 @@ set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 target_sources(
     ${NORDIC_TARGET}
     PRIVATE
-    #main.cpp
     main1.cpp
     ap_application.cpp
+)
+
+target_compile_definitions(
+    ${NORDIC_TARGET}
+    PRIVATE
+    USE_BLE_SERVICES
 )
 
 target_compile_options(
@@ -50,14 +60,5 @@ target_link_libraries(
     watch_fake_services
     UtilsLibrary
     NordicSDK::Common
-)
-
-target_link_options(
-    ${NORDIC_TARGET}
-    PRIVATE
-    -mthumb
-    -mabi=aapcs -std=gnu++17
-    -std=c99
-    -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm
 )
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )

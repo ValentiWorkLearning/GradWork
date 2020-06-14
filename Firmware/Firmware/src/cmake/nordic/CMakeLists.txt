@@ -2,7 +2,8 @@
 message("<FindNordicSDK.cmake>")
 
 if( NOT NRF5_SDK_PATH)
-    message(ERROR " NRF5_SDK_PATH isn't defined!")
+    set( NRF5_SDK_PATH "C:/Nordic_dev" )
+    message(WARNING " NRF5_SDK_PATH isn't defined, use default: ${NRF5_SDK_PATH}")
 else()
     file(TO_CMAKE_PATH "${NRF5_SDK_PATH}" NRF5_SDK_PATH)
 endif()
