@@ -15,3 +15,6 @@
 [submodule "3rdparty/fmt"]
 	path = 3rdparty/fmt
 	url = https://github.com/fmtlib/fmt.git
+[submodule "Firmware/graphics/lvgl_lib/lvgl"]
+	path = Firmware/graphics/lvgl_lib/lvgl
+	url = https://github.com/lvgl/lvgl.git
