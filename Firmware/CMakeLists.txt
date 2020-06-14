@@ -15,7 +15,7 @@ set(COMMON_FLAGS
 )
 
 
-set (3RDPARTY_DIR "../../../3rdparty")
+set (3RDPARTY_DIR "../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
 add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
