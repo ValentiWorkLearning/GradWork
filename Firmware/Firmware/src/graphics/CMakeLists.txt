@@ -54,7 +54,6 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/gs_lvgl_service.cpp
 )
 
-
 target_link_libraries(
     ${TARGET_NAME}
     PRIVATE
@@ -64,4 +63,18 @@ target_link_libraries(
     UtilsLibrary
     logger_service
     graphics_backend
+)
+
+target_link_options(
+    ${TARGET_NAME}
+    PUBLIC
+    ${CPU_FLAGS}
+)
+
+target_compile_options(
+    ${TARGET_NAME}
+    PUBLIC
+    $<$<CONFIG:Debug>:-Os>
+    $<$<CONFIG:Release>:-Os>
+    ${COMMON_FLAGS}
 )

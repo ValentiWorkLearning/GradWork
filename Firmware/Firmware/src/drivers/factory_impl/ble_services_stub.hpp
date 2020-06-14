@@ -1,7 +1,7 @@
 #pragma once
 
-#include "ih/ih_ble_battery_service.hpp"
-#include "ih/ih_ble_dts_service.hpp"
+#include "ih/drivers/ih_ble_battery_service.hpp"
+#include "ih/drivers/ih_ble_dts_service.hpp"
 
 namespace Ble::BatteryService
 {

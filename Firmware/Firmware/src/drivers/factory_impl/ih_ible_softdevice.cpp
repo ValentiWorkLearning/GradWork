@@ -1,4 +1,4 @@
-#include "ih/ih_ible_softdevice.hpp"
+#include "ih/drivers/ih_ible_softdevice.hpp"
 
 #if defined (USE_BLE_SERVICES)
 

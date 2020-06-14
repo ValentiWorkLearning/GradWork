@@ -1,4 +1,4 @@
-#include "ble_battery_service.hpp"
+#include "inc/ble/ble_battery_service.hpp"
 
 #include "ble.h"
 #include "ble_srv_common.h"

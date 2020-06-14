@@ -135,3 +135,17 @@ target_sources(
     "lvgl/src/lv_widgets/lv_tileview.c"
     "lvgl/src/lv_widgets/lv_win.c"
 )
+
+target_link_options(
+    ${TARGET_NAME}
+    PUBLIC
+    ${CPU_FLAGS}
+)
+
+target_compile_options(
+    ${TARGET_NAME}
+    PUBLIC
+    $<$<CONFIG:Debug>:-Os>
+    $<$<CONFIG:Release>:-Os>
+    ${COMMON_FLAGS}
+)

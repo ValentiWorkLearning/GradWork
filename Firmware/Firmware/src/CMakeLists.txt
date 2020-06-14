@@ -3,6 +3,13 @@ set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cma
 
 project(nordic-template C CXX ASM)
 
+set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
+set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
+set(COMMON_FLAGS 
+    -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums ${CPU_FLAGS}
+)
+
+
 set (3RDPARTY_DIR "../../../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
@@ -36,30 +43,21 @@ target_link_libraries(
     ble_services
     logger_service
     services_ih
+    ble_factory
     drivers_ih
     watch_graphics
+    graphics_backend
     watch_fake_services
     UtilsLibrary
     NordicSDK::Common
-
-    # NordicSDK::App::Scheduler
-    # NordicSDK::App::FIFO
-    # NordicSDK::App::Timer
-    # NordicSDK::App::Button
-
-    # NordicSDK::App::FDS
-    # NordicSDK::App::SensorSimulator
-
-    # NordicSDK::Ble
-    # NordicSDK::Ble::Gatt
-    # NordicSDK::Ble::GattQueue
-    # NordicSDK::Ble::ServiceDbDiscovery
-
-    # NordicSDK::Ble::PeerManager
-
-    # NordicSDK::BleService::LBS
-    # NordicSDK::BleService::BAS
-    # NordicSDK::BleService::CTSCLIENT
 )
 
+target_link_options(
+    ${NORDIC_TARGET}
+    PRIVATE
+    -mthumb
+    -mabi=aapcs -std=gnu++17
+    -std=c99
+    -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm
+)
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )

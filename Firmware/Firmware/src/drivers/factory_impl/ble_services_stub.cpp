@@ -1,7 +1,7 @@
 #include "ble_services_stub.hpp"
 
-#include "MetaUtils.hpp"
-#include "logger_service.hpp"
+#include "utils/MetaUtils.hpp"
+#include "logger/logger_service.hpp"
 
 namespace Ble::BatteryService
 {

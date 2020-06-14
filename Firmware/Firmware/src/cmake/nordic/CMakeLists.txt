@@ -214,9 +214,6 @@ list(APPEND NordicCommonSrc
     "${NRF5_SDK_PATH}/modules/nrfx/mdk/gcc_startup_nrf52.S"
 )
 
-set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
-set(COMMON_FLAGS -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums ${CPU_FLAGS})
-
 add_library( Common STATIC ${NordicCommonSrc} ${NordicCommonInc})
 add_library( NordicSDK::Common ALIAS Common)
 

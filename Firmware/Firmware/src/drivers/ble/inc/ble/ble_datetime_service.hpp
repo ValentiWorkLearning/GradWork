@@ -4,6 +4,7 @@
 
 #include "ble_cts_c.h"
 
+
 namespace Ble::DateTimeService
 {
 

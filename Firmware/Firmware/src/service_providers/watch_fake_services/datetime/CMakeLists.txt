@@ -24,3 +24,11 @@ target_link_libraries(
     NordicSDK::App::Timer
     UtilsLibrary
 )
+
+target_compile_options(
+    datetime_fake_service
+    PUBLIC
+    $<$<CONFIG:Debug>:-Os>
+    $<$<CONFIG:Release>:-Os>
+    ${COMMON_FLAGS}
+)

@@ -28,7 +28,6 @@ St7789V::St7789V(
     ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
     ,   m_pBusPtr{ std::move( _busPtr ) }
 {
-    initGpio();
     initDisplay();
     initColumnRow( _width, _height );
 }

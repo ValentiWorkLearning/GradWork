@@ -1,4 +1,4 @@
-#include "ble_desktop_softdevice.hpp"
+#include "inc/ble/ble_desktop_softdevice.hpp"
 
 #include <optional>
 

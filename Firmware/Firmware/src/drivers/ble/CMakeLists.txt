@@ -1,5 +1,7 @@
+set (TARGET_NAME ble_services )
+
 add_library(
-    ble_services
+    ${TARGET_NAME}
     ble_battery_service.cpp
     ble_custom_service.cpp
     ble_datetime_service.cpp
@@ -7,22 +9,25 @@ add_library(
 )
 
 target_compile_features(
-    ble_services
+    ${TARGET_NAME}
     INTERFACE
     cxx_std_17
 )
 
 target_include_directories(
-    ble_services
+    ${TARGET_NAME}
     PRIVATE
-    ${DRIVER_ROOT_DIR}
     UtilsLibrary
+    NordicSDK::BleService::CTSCLIENT
+    PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
 target_link_libraries(
-    ble_services
-    PRIVATE
+    ${TARGET_NAME}
+    PUBLIC
     NordicSDK::Ble
+    NordicSDK::App::FDS
     NordicSDK::Bsp::BleButton
     NordicSDK::Ble::PeerManager
     NordicSDK::Ble::ServiceDbDiscovery
@@ -32,4 +37,17 @@ target_link_libraries(
     etl
     drivers_ih
     logger_service
+)
+
+target_link_options(
+    ${TARGET_NAME}
+    PUBLIC
+    ${CPU_FLAGS}
+)
+
+target_compile_options(
+    ${TARGET_NAME}
+    PUBLIC
+    -Os
+    ${COMMON_FLAGS}
 )

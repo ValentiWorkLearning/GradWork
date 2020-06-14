@@ -1,7 +1,7 @@
-#include "ih/ih_ble_service_factory.hpp"
-#include "ih/ih_ble_battery_service.hpp"
+#include "ih/drivers/ih_ble_service_factory.hpp"
+#include "ih/drivers/ih_ble_battery_service.hpp"
 
-#include "MetaUtils.hpp"
+#include "utils/MetaUtils.hpp"
 
 #if defined (USE_BLE_SERVICES)
 

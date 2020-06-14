@@ -18,6 +18,7 @@ target_link_libraries(
     lvgl_lib
     UtilsLibrary
     logger_service
+    watch_display
     drivers_ih
     etl
 )

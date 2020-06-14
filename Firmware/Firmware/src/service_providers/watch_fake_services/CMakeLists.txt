@@ -24,4 +24,20 @@ target_link_libraries(
     UtilsLibrary
     etl
     battery_fake_service
+    datetime_fake_service
+    heartrate_fake_service
+)
+
+target_link_options(
+    watch_fake_services
+    PUBLIC
+    ${CPU_FLAGS}
+)
+
+target_compile_options(
+    watch_fake_services
+    PUBLIC
+    $<$<CONFIG:Debug>:-Os>
+    $<$<CONFIG:Release>:-Os>
+    ${COMMON_FLAGS}
 )

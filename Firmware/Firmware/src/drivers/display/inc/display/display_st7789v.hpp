@@ -77,8 +77,6 @@ private:
 
 private:
 
-    void initGpio();
-
     void resetDcPin();
 
     void setDcPin();
