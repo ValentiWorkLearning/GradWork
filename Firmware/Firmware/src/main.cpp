@@ -1,5 +1,11 @@
+#include "ap_application.hpp"
+#include <etl/memory.h>
+
 int main(void)
 {
-    for (;;);
+    Application mainApp;
+
+    mainApp.runApplicationLoop();
+
     return 0;
 }

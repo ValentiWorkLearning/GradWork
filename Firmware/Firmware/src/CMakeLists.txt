@@ -32,7 +32,7 @@ set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 target_sources(
     ${NORDIC_TARGET}
     PRIVATE
-    main1.cpp
+    main.cpp
     ap_application.cpp
 )
 
