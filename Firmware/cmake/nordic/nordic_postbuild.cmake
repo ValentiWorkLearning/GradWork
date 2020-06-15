@@ -18,8 +18,13 @@ function (nordicSdk_createBinAndHexFiles TARGET_NAME)
 endfunction()
 
 
-function( nordicSdk_flashSoftDevice SOFTDEVICE_PATH NRF_TARGET )
+if( EXECUTE_MCU_FLASHING )
+    find_program( NRFJPROG NAMES nrfjprog PATHS $ENV{NRFJPROG_PATH} )
+endif()
+
+function( nordicSdk_flashSoftDevice EXECUTABLE_NAME SOFTDEVICE_PATH NRF_TARGET )
     add_custom_target(FLASH_SOFTDEVICE ALL
+        DEPENDS ${EXECUTABLE_NAME}
         COMMAND ${NRFJPROG} --program ${SOFTDEVICE_PATH} -f ${NRF_TARGET} --sectorerase
         COMMAND sleep 0.5s
         COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}

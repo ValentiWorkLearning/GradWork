@@ -63,11 +63,11 @@ target_link_libraries(
     NordicSDK::Common
 )
 
-option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
+option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" ON )
 
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
 
 if( EXECUTE_MCU_FLASHING )
-    nordicSdk_flashSoftDevice( ${SOFTDEVICE_PATH} ${NRF_TARGET} )
+    nordicSdk_flashSoftDevice( ${NORDIC_TARGET} ${SOFTDEVICE_PATH} ${NRF_TARGET} )
     nordicSdk_flashFirmware( ${NORDIC_TARGET} )
 endif()
