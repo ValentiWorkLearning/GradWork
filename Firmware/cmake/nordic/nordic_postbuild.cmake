@@ -36,7 +36,7 @@ endfunction(nordicSdk_flashSoftDevice)
 
 function(nordicSdk_flashFirmware EXECUTABLE_NAME )
     add_custom_target("FLASH_${EXECUTABLE_NAME}" ALL
-        DEPENDS ${EXECUTABLE_NAME}
+        DEPENDS ${EXECUTABLE_NAME} FLASH_ERASE FLASH_SOFTDEVICE
         COMMAND ${NRFJPROG} --program ${EXECUTABLE_NAME}.hex -f ${NRF_TARGET} --sectorerase
         COMMAND sleep 0.5s
         COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
