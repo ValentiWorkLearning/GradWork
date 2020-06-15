@@ -33,6 +33,7 @@ set ( NordicCompileDefinitions
     NRF52_PAN_20
     NRF52_PAN_55
     BOARD_PCA10040
+    CONFIG_GPIO_AS_PINRESET
 )
 
 set (
@@ -54,12 +55,14 @@ if( NRF52SOFTDEVICE MATCHES "S132" )
         "${NRF5_SDK_PATH}/components/softdevice/s132/headers"
         "${NRF5_SDK_PATH}/components/softdevice/s132/headers/nrf52"
     )
+    set( SOFTDEVICE_PATH "${NRF5_SDK_PATH}/components/softdevice/s132/hex/s132_nrf52_7.0.1_softdevice.hex" PARENT_SCOPE )
 elseif ( NRF52SOFTDEVICE MATCHES "S112" )
     list( APPEND NordicCommonInc
         "${NRF5_SDK_PATH}/components/softdevice/s112/headers"
         "${NRF5_SDK_PATH}/components/softdevice/s112/headers/nrf52"
     )
 
+    set( SOFTDEVICE_PATH "${NRF5_SDK_PATH}/components/softdevice/s112/hex/s112_nrf52_7.0.1_softdevice.hex" PARENT_SCOPE )
     list( APPEND NordicCompileDefinitions
         SOFTDEVICE_PRESENT
         S112

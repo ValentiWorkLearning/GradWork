@@ -16,3 +16,27 @@ function (nordicSdk_createBinAndHexFiles TARGET_NAME)
         COMMENT "post build steps for ${TARGET_NAME}"
     )
 endfunction()
+
+
+function( nordicSdk_flashSoftDevice SOFTDEVICE_PATH NRF_TARGET )
+    add_custom_target(FLASH_SOFTDEVICE ALL
+        COMMAND ${NRFJPROG} --program ${SOFTDEVICE_PATH} -f ${NRF_TARGET} --sectorerase
+        COMMAND sleep 0.5s
+        COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
+        COMMENT "flashing SoftDevice"
+    )
+     add_custom_target(FLASH_ERASE ALL
+        COMMAND ${NRFJPROG} --eraseall -f ${NRF_TARGET}
+        COMMENT "erasing flashing"
+    )
+endfunction(nordicSdk_flashSoftDevice)
+
+function(nordicSdk_flashFirmware EXECUTABLE_NAME )
+    add_custom_target("FLASH_${EXECUTABLE_NAME}" ALL
+        DEPENDS ${EXECUTABLE_NAME}
+        COMMAND ${NRFJPROG} --program ${EXECUTABLE_NAME}.hex -f ${NRF_TARGET} --sectorerase
+        COMMAND sleep 0.5s
+        COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
+        COMMENT "flashing ${EXECUTABLE_NAME}.hex"
+    )
+endfunction(nordicSdk_flashFirmware )

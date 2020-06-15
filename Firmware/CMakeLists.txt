@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
+set( NRF_TARGET "nrf52" )
 set( NRF52SOFTDEVICE "S112" )
 set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
 
@@ -61,4 +62,12 @@ target_link_libraries(
     UtilsLibrary
     NordicSDK::Common
 )
+
+option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
+
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
+
+if( EXECUTE_MCU_FLASHING )
+    nordicSdk_flashSoftDevice( ${SOFTDEVICE_PATH} ${NRF_TARGET} )
+    nordicSdk_flashFirmware( ${NORDIC_TARGET} )
+endif()
