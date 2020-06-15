@@ -29,8 +29,6 @@ public:
 
 private:
 
-    void initInterfaces();
-
     void initBoard();
 
     void initServices();
@@ -40,8 +38,6 @@ private:
     void initBleStack();
 
     void initGraphicsStack();
-
-    void runTwiTest();
 
 private:
 

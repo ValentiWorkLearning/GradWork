@@ -41,12 +41,13 @@ target_compile_definitions(
     ${NORDIC_TARGET}
     PRIVATE
     USE_BLE_SERVICES
+    USE_DEVICE_SPECIFIC
 )
 
 target_compile_options(
     ${NORDIC_TARGET}
     PRIVATE
-    -Os
+    -O0
 )
 
 target_link_libraries(
@@ -60,6 +61,8 @@ target_link_libraries(
     graphics_backend
     watch_fake_services
     UtilsLibrary
+    i2c
+    watchboard
     NordicSDK::Common
 )
 
@@ -68,6 +71,6 @@ option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" ON )
 nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
 
 if( EXECUTE_MCU_FLASHING )
-    nordicSdk_flashSoftDevice( ${NORDIC_TARGET} ${SOFTDEVICE_PATH} ${NRF_TARGET} )
+    nordicSdk_flashSoftDevice( ${SOFTDEVICE_PATH} ${NRF_TARGET} )
     nordicSdk_flashFirmware( ${NORDIC_TARGET} )
 endif()

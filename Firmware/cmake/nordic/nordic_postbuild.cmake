@@ -20,15 +20,15 @@ endfunction()
 
 find_program( NRFJPROG NAMES nrfjprog PATHS $ENV{NRFJPROG_PATH} )
 
-function( nordicSdk_flashSoftDevice EXECUTABLE_NAME SOFTDEVICE_PATH NRF_TARGET )
+function( nordicSdk_flashSoftDevice SOFTDEVICE_PATH NRF_TARGET )
     add_custom_target(FLASH_SOFTDEVICE ALL
-        DEPENDS ${EXECUTABLE_NAME}
         COMMAND ${NRFJPROG} --program ${SOFTDEVICE_PATH} -f ${NRF_TARGET} --sectorerase
-        COMMAND sleep 0.5s
+        COMMAND sleep 1s
         COMMAND ${NRFJPROG} --reset -f ${NRF_TARGET}
         COMMENT "flashing SoftDevice"
     )
-     add_custom_target(FLASH_ERASE ALL
+    add_custom_target(FLASH_ERASE ALL
+        COMMAND sleep 0.5s
         COMMAND ${NRFJPROG} --eraseall -f ${NRF_TARGET}
         COMMENT "erasing flashing"
     )
