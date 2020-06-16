@@ -73,9 +73,9 @@ jobs:
       with:
         cmakeGenerator: UnixMakefiles
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/Firmware/CMakeLists.txt
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DUSE_ENV_SDK_PATH=OFF -DUSE_ENV_GCC_PATH=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DNRF5_SDK_PATH_EXT=${{ github.workspace }}/Nrf52SDK -DGCC_TOOLCHAIN_EXT_PATH=${{ github.workspace }}/toolchain'
+        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DDNRF5_SDK_PATH:PATH=${{ github.workspace }}/Nrf52SDK -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/toolchain'
         buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
