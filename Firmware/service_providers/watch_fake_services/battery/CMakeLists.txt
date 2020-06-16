@@ -3,12 +3,6 @@ add_library(
     sp_battery_service_fake.cpp
 )
 
-target_compile_definitions(
-    battery_fake_service
-    PRIVATE
-    USE_NRFSDK_SIMULATOR
-)
-
 target_include_directories(
     battery_fake_service
     PRIVATE
@@ -20,6 +14,18 @@ target_link_libraries(
     battery_fake_service
     PRIVATE
     services_ih
-    NordicSDK::App::SensorSimulator
     UtilsLibrary
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries(battery_fake_service
+        PRIVATE
+        NordicSDK::App::SensorSimulator
+    )
+
+    target_compile_definitions(
+        battery_fake_service
+        PRIVATE
+        USE_NRFSDK_SIMULATOR
+    )
+endif()
