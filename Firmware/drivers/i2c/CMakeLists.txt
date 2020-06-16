@@ -9,6 +9,12 @@ target_compile_features(
     cxx_std_17
 )
 
+target_compile_definitions(
+    i2c
+    PUBLIC
+    USE_DEVICE_SPECIFIC
+)
+
 target_include_directories(
     i2c
     PUBLIC
@@ -28,4 +34,5 @@ target_link_libraries(
     PRIVATE
     NordicSDK::Common
     UtilsLibrary
+    logger_service
 )
