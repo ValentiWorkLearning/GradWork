@@ -21,14 +21,6 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
-
-target_include_directories(
-    i2c
-    PRIVATE
-    NordicSDK::Common
-    UtilsLibrary
-)
-
 target_link_libraries(
     i2c
     PRIVATE

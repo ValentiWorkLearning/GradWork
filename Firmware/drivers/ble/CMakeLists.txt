@@ -16,9 +16,6 @@ target_compile_features(
 
 target_include_directories(
     ${TARGET_NAME}
-    PRIVATE
-    UtilsLibrary
-    NordicSDK::BleService::CTSCLIENT
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/inc
 )

@@ -23,14 +23,6 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
-
-target_include_directories(
-    ble_factory
-    PRIVATE
-    NordicSDK::Common
-    UtilsLibrary
-)
-
 target_link_libraries(
     ble_factory
     PRIVATE

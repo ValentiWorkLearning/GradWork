@@ -15,12 +15,6 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
-target_include_directories(
-    platform_delay
-    PRIVATE
-    NordicSDK::Common
-)
-
 target_link_libraries(
     platform_delay
     NordicSDK::Common

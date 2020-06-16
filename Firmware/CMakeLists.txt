@@ -1,25 +1,33 @@
 cmake_minimum_required(VERSION 3.8)
 
-set( NRF_TARGET "nrf52" )
-set( NRF52SOFTDEVICE "S112" )
-set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
+set( TARGET_PLATFORM "ARM_CORTEX" CACHE STRING "Target platform for application building")
 
-set(CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake)
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH} )
+    set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
+    set(COMMON_FLAGS 
+        -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums 
+        ${CPU_FLAGS}
+    )
+    set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake )
+endif()
 
 project(nordic-template C CXX ASM)
-
-set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
-set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
-set(COMMON_FLAGS 
-    -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums 
-    ${CPU_FLAGS}
-)
-
 
 set (3RDPARTY_DIR "../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
-add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+
+    set( NRF_TARGET "nrf52" )
+    set( NRF52SOFTDEVICE "S112" )
+    set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
+
+    add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
+
+endif()
+
 add_subdirectory(drivers)
 add_subdirectory(utils)
 add_subdirectory(logger)
@@ -28,7 +36,6 @@ add_subdirectory(service_providers)
 
 set (NORDIC_TARGET theOpenWatch)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
-set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
 target_sources(
     ${NORDIC_TARGET}
@@ -63,14 +70,22 @@ target_link_libraries(
     UtilsLibrary
     i2c
     watchboard
-    NordicSDK::Common
+    $<$<STREQUAL:${TARGET_PLATFORM},"ARM_CORTEX">:NordicSDK::Common>
 )
 
-option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" ON )
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
-nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
+    option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
+    option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" OFF )
 
-if( EXECUTE_MCU_FLASHING )
-    nordicSdk_flashSoftDevice( ${SOFTDEVICE_PATH} ${NRF_TARGET} )
-    nordicSdk_flashFirmware( ${NORDIC_TARGET} )
+    if( CREATE_NORDIC_FIRMWARE )
+        nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
+    endif()
+
+    if( EXECUTE_MCU_FLASHING )
+        nordicSdk_flashSoftDevice( ${SOFTDEVICE_PATH} ${NRF_TARGET} )
+        nordicSdk_flashFirmware( ${NORDIC_TARGET} )
+    endif()
+
 endif()

@@ -15,13 +15,6 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
-target_include_directories(
-    spi
-    PRIVATE
-    NordicSDK::Common
-    UtilsLibrary
-)
-
 target_link_libraries(
     spi
     PRIVATE
