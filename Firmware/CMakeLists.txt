@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 
 set( TARGET_PLATFORM "ARM_CORTEX" CACHE STRING "Target platform for application building")
+message( "Current building platform is ${TARGET_PLATFORM}")
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH} )

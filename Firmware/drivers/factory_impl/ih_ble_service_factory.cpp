@@ -9,7 +9,7 @@
 #include "ble/ble_datetime_service.hpp"
 
 #elif defined (USE_DESKTOP_SIMULATOR)
-#include "drivers/factory_impl/ble_services_stub.hpp"
+#include "ble_services_stub.hpp"
 #endif
 
 namespace Ble::ServiceFactory

@@ -5,12 +5,6 @@ add_library(
     ih_ible_softdevice.cpp
 )
 
-target_compile_definitions(
-    ble_factory
-    PRIVATE
-    USE_BLE_SERVICES
-)
-
 target_compile_features(
     ble_factory
     INTERFACE
@@ -36,5 +30,16 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(ble_factory
         PRIVATE
         NordicSDK::Common
+    )
+    target_compile_definitions(
+        ble_factory
+        PRIVATE
+        USE_BLE_SERVICES
+    )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_compile_definitions(
+        ble_factory
+        PRIVATE
+        USE_DESKTOP_SIMULATOR
     )
 endif()

@@ -2,10 +2,7 @@ set (TARGET_NAME ble_services )
 
 add_library(
     ${TARGET_NAME}
-    ble_battery_service.cpp
-    ble_custom_service.cpp
-    ble_datetime_service.cpp
-    ble_softdevice.cpp
+    ${TARGET_SOURCE}
 )
 
 target_compile_features(
@@ -40,6 +37,15 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         NordicSDK::Ble::ServiceDbDiscovery
         NordicSDK::BleService::BAS
         NordicSDK::BleService::CTSCLIENT
+    )
+
+    target_sources(
+        ${TARGET_NAME}
+        PRIVATE
+        ble_custom_service.cpp
+        ble_softdevice.cpp
+        ble_battery_service.cpp
+        ble_datetime_service.cpp
     )
 endif()
 
