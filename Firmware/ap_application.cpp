@@ -9,8 +9,8 @@
 
 #endif
 
-#include "drivers/board/inc/board/watchboard.hpp" // TODO FIXME
-#include "drivers/i2c/inc/i2c/i2c_test.hpp" // TODO FIX ME
+#include "board/watchboard.hpp"
+#include "i2c/i2c_test.hpp"
 
 #include "graphics/gs_lvgl_service.hpp"
 #include "graphics/ih/gs_imain_window.hpp"
