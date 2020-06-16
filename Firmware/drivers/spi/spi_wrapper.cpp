@@ -10,7 +10,6 @@
 #include <cassert>
 #include <array>
 
-
 namespace Interface::Spi
 {
 
@@ -168,14 +167,16 @@ SpiBus::SpiBus(
     )
     :   m_isTransactionCompleted{ true }
     ,   m_pSpiBackendImpl{
-                _clockPin
-            ,   _misoPin
-            ,   _mosiPin
-            ,   _chipSelectPin
-            ,   _pRegister
-            ,   _driverInstance
-            ,   this
-    }
+            std::make_unique<SpiBackendImpl>(
+                    _clockPin
+                ,   _misoPin
+                ,   _mosiPin
+                ,   _chipSelectPin
+                ,   _pRegister
+                ,   _driverInstance
+                ,   this
+            )
+        }
 {
 }
 

@@ -1,7 +1,6 @@
 #pragma once
 
-#include "utils/FastPimpl.hpp"
-#include "utils/Platform.hpp"
+#include <memory>
 
 namespace Gpio
 {
@@ -32,11 +31,8 @@ public:
 
 private:
 
-    static constexpr inline std::size_t kImplSize = Platform::GpioImplSize;
-    static constexpr inline std::size_t kImplAlignment = Platform::GpioImplAlignment;
-
     class GpioBackendImpl;
-    Utils::FastPimpl<GpioBackendImpl,kImplSize,kImplAlignment> m_pGpioBackendImpl;
+    std::unique_ptr<GpioBackendImpl> m_pGpioBackendImpl;
 };
 
 GpioPin getGpioPin ( std::uint8_t _pinNumber, Direction _pinDirection );

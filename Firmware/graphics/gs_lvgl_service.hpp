@@ -1,8 +1,7 @@
 #pragma once
 
-#include "utils/FastPimpl.hpp"
 #include "utils/MetaUtils.hpp"
-#include "utils/Platform.hpp"
+#include <memory>
 
 namespace Graphics
 {
@@ -42,11 +41,8 @@ private:
 
 private:
 
-    static constexpr inline std::size_t kImplSize = Platform::GraphicsBackendSize;
-    static constexpr inline std::size_t kImplAlignment = Platform::GraphicsBackendAlignment;
-
     class GSLvglServiceImpl;
-    Utils::FastPimpl<GSLvglServiceImpl,Platform::GlLvglServiceImplSize,Platform::GlLvglServiceAlignment> m_pGraphicsServiceImpl;
+    std::unique_ptr<GSLvglServiceImpl> m_pGraphicsServiceImpl;
 
 };
 

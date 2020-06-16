@@ -28,7 +28,7 @@ namespace Graphics
 
 LvglGraphicsService::LvglGraphicsService(
             std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
-        )   :   m_pGraphicsServiceImpl{ std::move( _platformBackend ) }
+        )   :   m_pGraphicsServiceImpl{ std::make_unique<GSLvglServiceImpl>(std::move( _platformBackend ) )}
 {
 }
 
@@ -39,8 +39,12 @@ public:
 
     GSLvglServiceImpl(
         std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
-    )   :   m_pPlatformBackend{ std::move( _platformBackend ) }
-        ,   m_pMainWindowTick{nullptr}
+    )   :   m_glDisplay{ nullptr }
+        ,   m_pMainWindowTick{ nullptr }
+        ,   m_pPageSwitch{ nullptr }
+        ,   m_pthemeChangeSwitch{ nullptr }
+        ,   m_glDisplayDriver{}
+        ,   m_pPlatformBackend{ std::move( _platformBackend ) }
     {
         initLvglLogger();
         initDisplayDriver();

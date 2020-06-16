@@ -4,9 +4,6 @@
 
 #include "utils/SimpleSignal.hpp"
 
-#include "utils/FastPimpl.hpp"
-#include "utils/Platform.hpp"
-
 #include <memory>
 #include <atomic>
 
@@ -89,11 +86,8 @@ private:
         ,   etl::memory_model::MEMORY_MODEL_SMALL
     >;
 
-    static constexpr inline std::size_t kImplSize = Platform::SpiImplSize;
-    static constexpr inline std::size_t kImplAlignment = Platform::SpiImplAlignment;
-
     class SpiBackendImpl;
-    Utils::FastPimpl<SpiBackendImpl,kImplSize,kImplAlignment> m_pSpiBackendImpl;
+    std::unique_ptr<SpiBackendImpl> m_pSpiBackendImpl;
 
     DmaBufferType DmaArray;
     TTransactionStorage m_transactionsQueue;

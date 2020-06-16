@@ -44,8 +44,10 @@ GpioPin::GpioPin(
         ,   Gpio::Direction _gpioDirection
     )
     :   m_pGpioBackendImpl{
+        std::make_unique<GpioBackendImpl>(
                 _pinNumber
             ,   _gpioDirection
+        )
     }
 {
 }
