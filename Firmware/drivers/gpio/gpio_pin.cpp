@@ -1,11 +1,15 @@
 #include "inc/gpio/gpio_pin.hpp"
 
-#include "pca10040.h"
+#if defined (USE_DEVICE_SPECIFIC)
+    #include "pca10040.h"
+#endif
 #include "utils/MetaUtils.hpp"
+#include "logger/logger_service.hpp"
 
 namespace Gpio
 {
 
+#if defined (USE_DEVICE_SPECIFIC)
 class GpioPin::GpioBackendImpl
 {
     public:
@@ -38,6 +42,34 @@ class GpioPin::GpioBackendImpl
     Gpio::Direction m_pinDirection;
     std::uint8_t m_pinNumber;
 };
+
+#else
+    class GpioPin::GpioBackendImpl
+    {
+    public:
+
+        GpioBackendImpl(
+                std::uint8_t _pinNumber
+            ,   Gpio::Direction _direction
+            )
+        {
+            Meta::UnuseVar( _pinNumber );
+            Meta::UnuseVar( _direction );
+        }
+
+    public:
+
+        void set()
+        {
+            
+        }
+
+        void reset()
+        {
+        }
+
+    };
+#endif
 
 GpioPin::GpioPin(
             std::uint8_t _pinNumber

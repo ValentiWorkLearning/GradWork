@@ -1,9 +1,13 @@
 #include "inc/i2c/i2c_test.hpp"
 
+#if defined (USE_DEVICE_SPECIFIC)
 #include "pca10040.h"
+#include "nrf_drv_twi.h"
+
+#endif
+
 #include "utils/MetaUtils.hpp"
 
-#include "nrf_drv_twi.h"
 
 #include "logger/logger_service.hpp"
 

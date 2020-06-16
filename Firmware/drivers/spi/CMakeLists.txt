@@ -3,12 +3,6 @@ add_library(
     spi_wrapper.cpp
 )
 
-target_compile_features(
-    spi
-    INTERFACE
-    cxx_std_17
-)
-
 target_include_directories(
     spi
     PUBLIC

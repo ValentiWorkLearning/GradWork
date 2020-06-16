@@ -1,4 +1,4 @@
-#include "inc/ble/ble_custom_service.hpp"
+#include "inc/ble/nordic_ble/ble_custom_service.hpp"
 
 #include "logger/logger_service.hpp"
 #include "utils/CallbackConnector.hpp"

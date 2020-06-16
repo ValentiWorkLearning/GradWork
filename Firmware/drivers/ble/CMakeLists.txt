@@ -5,18 +5,6 @@ add_library(
     ${TARGET_SOURCE}
 )
 
-target_compile_features(
-    ${TARGET_NAME}
-    INTERFACE
-    cxx_std_17
-)
-
-target_include_directories(
-    ${TARGET_NAME}
-    PUBLIC
-    ${CMAKE_CURRENT_LIST_DIR}/inc
-)
-
 target_link_libraries(
     ${TARGET_NAME}
     PUBLIC
@@ -27,6 +15,15 @@ target_link_libraries(
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+
+    target_include_directories(
+        ${TARGET_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/inc
+        PRIVATE
+        ${CMAKE_CURRENT_LIST_DIR}/inc
+    )
+
     target_link_libraries(
         ${TARGET_NAME}
         PUBLIC
@@ -47,6 +44,18 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         ble_battery_service.cpp
         ble_datetime_service.cpp
     )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_include_directories(
+        ${TARGET_NAME}
+        PUBLIC
+        ${CMAKE_CURRENT_LIST_DIR}/inc/ble
+    )
+    target_sources(
+        ${TARGET_NAME}
+        PRIVATE
+        ble_desktop_softdevice.cpp
+    )
+
 endif()
 
 target_link_options(

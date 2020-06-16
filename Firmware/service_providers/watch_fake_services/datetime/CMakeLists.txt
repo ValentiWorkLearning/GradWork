@@ -29,4 +29,10 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         PRIVATE
         USE_NRFSDK_SIMULATOR
     )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
+    target_compile_definitions(
+        datetime_fake_service
+        PRIVATE
+        USE_DESKTOP_SIMULATOR
+    )
 endif()

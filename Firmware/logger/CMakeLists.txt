@@ -29,4 +29,10 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         PRIVATE
         NordicSDK::Common
     )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_compile_definitions(
+        logger_service
+        PRIVATE
+        LoggerDesktop
+    )
 endif()

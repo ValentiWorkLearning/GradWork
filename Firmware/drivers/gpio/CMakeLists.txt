@@ -3,12 +3,6 @@ add_library(
     gpio_pin.cpp
 )
 
-target_compile_features(
-    gpio
-    INTERFACE
-    cxx_std_17
-)
-
 target_include_directories(
     gpio
     PUBLIC
@@ -19,6 +13,7 @@ target_link_libraries(
     gpio
     PRIVATE
     UtilsLibrary
+    logger_service
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )

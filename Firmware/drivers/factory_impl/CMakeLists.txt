@@ -5,12 +5,6 @@ add_library(
     ih_ible_softdevice.cpp
 )
 
-target_compile_features(
-    ble_factory
-    INTERFACE
-    cxx_std_17
-)
-
 target_include_directories(
     ble_factory
     PUBLIC
@@ -27,9 +21,11 @@ target_link_libraries(
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    target_link_libraries(ble_factory
+    target_link_libraries(
+        ble_factory
         PRIVATE
         NordicSDK::Common
+        ble_services
     )
     target_compile_definitions(
         ble_factory

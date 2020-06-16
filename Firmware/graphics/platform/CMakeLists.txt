@@ -28,5 +28,11 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         NordicSDK::Common
         NordicSDK::App::Timer
     )
+elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_compile_definitions(
+        graphics_backend
+        PRIVATE
+        USE_WINSDL_BACKEND
+    )
 endif()
 

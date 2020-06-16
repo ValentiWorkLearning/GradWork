@@ -1,7 +1,7 @@
-#include "inc/ble/ble_softdevice.hpp"
-#include "inc/ble/ble_stack_constants.hpp"
+#include "inc/ble/nordic_ble/ble_softdevice.hpp"
+#include "inc/ble/nordic_ble/ble_stack_constants.hpp"
 
-#include "inc/ble/ble_custom_service.hpp"
+#include "inc/ble/nordic_ble/ble_custom_service.hpp"
 
 #include "utils/CallbackConnector.hpp"
 #include "logger/logger_service.hpp"

@@ -7,10 +7,6 @@ add_library( ${TARGET_NAME} STATIC )
 add_subdirectory (lvgl_lib)
 add_subdirectory (platform)
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 target_include_directories(
     ${TARGET_NAME}
     PUBLIC

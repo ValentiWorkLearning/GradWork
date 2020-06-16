@@ -26,7 +26,6 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
 
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
-
 endif()
 
 add_subdirectory(drivers)
@@ -75,7 +74,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
     option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
-    option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" ON )
+    option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" OFF )
 
     if( CREATE_NORDIC_FIRMWARE )
         nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )
@@ -86,4 +85,6 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         nordicSdk_flashFirmware( ${NORDIC_TARGET} )
     endif()
 
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )
+    target_compile_options( ${NORDIC_TARGET} PUBLIC /wd4576 /std:c++latest )
 endif()

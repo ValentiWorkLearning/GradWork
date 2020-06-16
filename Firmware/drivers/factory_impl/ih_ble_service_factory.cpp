@@ -4,9 +4,8 @@
 #include "utils/MetaUtils.hpp"
 
 #if defined (USE_BLE_SERVICES)
-
-#include "ble/ble_battery_service.hpp"
-#include "ble/ble_datetime_service.hpp"
+#include "ble/nordic_ble/ble_battery_service.hpp"
+#include "ble/nordic_ble/ble_datetime_service.hpp"
 
 #elif defined (USE_DESKTOP_SIMULATOR)
 #include "ble_services_stub.hpp"

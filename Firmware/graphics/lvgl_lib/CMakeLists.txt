@@ -4,11 +4,15 @@ set (TARGET_NAME lvgl_lib)
 
 add_library( ${TARGET_NAME} STATIC )
 
+if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_compile_options( ${TARGET_NAME} PUBLIC /wd4576 /std:c++latest )
+endif()
 
-set(CMAKE_C_STANDARD 11)
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
+target_compile_features(
+    ${TARGET_NAME}
+    PUBLIC
+    cxx_std_20
+)
 #set_target_properties( ${TARGET_NAME} PROPERTIES LANGUAGE C)
 
 target_include_directories(

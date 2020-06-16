@@ -1,12 +1,13 @@
 #include "inc/board/watchboard.hpp"
 
+#if defined (USE_DEVICE_SPECIFIC)
 #include "pca10040.h"
-#include "logger/logger_service.hpp"
-
 #include "boards.h"
 #include "bsp.h"
 #include "app_timer.h"
+#endif
 
+#include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
 
 namespace WatchBoard
