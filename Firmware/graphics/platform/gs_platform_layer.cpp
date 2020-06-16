@@ -10,7 +10,7 @@ namespace
 
 #include "utils/CallbackConnector.hpp"
 
-#if defined USE_ST7789V_BACKEND
+#if defined USE_HARDWARE_DISPLAY_BACKEND
 
 #include "ih/drivers/ih_display_idisplay.hpp"
 #include "ih/drivers/ih_display_driver_creator.hpp"

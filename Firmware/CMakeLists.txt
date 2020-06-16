@@ -44,13 +44,6 @@ target_sources(
     ap_application.cpp
 )
 
-target_compile_definitions(
-    ${NORDIC_TARGET}
-    PRIVATE
-    USE_BLE_SERVICES
-    USE_DEVICE_SPECIFIC
-)
-
 target_compile_options(
     ${NORDIC_TARGET}
     PRIVATE
@@ -59,6 +52,7 @@ target_compile_options(
 
 target_link_libraries(
     ${NORDIC_TARGET}
+    PRIVATE
     ble_services
     logger_service
     services_ih
@@ -70,14 +64,17 @@ target_link_libraries(
     UtilsLibrary
     i2c
     watchboard
-    $<$<STREQUAL:${TARGET_PLATFORM},"ARM_CORTEX">:NordicSDK::Common>
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries(${NORDIC_TARGET} PRIVATE NordicSDK::Common )
+endif()
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
 
     option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
-    option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" OFF )
+    option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" ON )
 
     if( CREATE_NORDIC_FIRMWARE )
         nordicSdk_createBinAndHexFiles( ${NORDIC_TARGET} )

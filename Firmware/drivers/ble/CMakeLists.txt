@@ -23,18 +23,25 @@ target_include_directories(
 target_link_libraries(
     ${TARGET_NAME}
     PUBLIC
-    NordicSDK::Ble
-    NordicSDK::App::FDS
-    NordicSDK::Bsp::BleButton
-    NordicSDK::Ble::PeerManager
-    NordicSDK::Ble::ServiceDbDiscovery
-    NordicSDK::BleService::BAS
-    NordicSDK::BleService::CTSCLIENT
     UtilsLibrary
     etl
     drivers_ih
     logger_service
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries(
+        ${TARGET_NAME}
+        PUBLIC
+        NordicSDK::Ble
+        NordicSDK::App::FDS
+        NordicSDK::Bsp::BleButton
+        NordicSDK::Ble::PeerManager
+        NordicSDK::Ble::ServiceDbDiscovery
+        NordicSDK::BleService::BAS
+        NordicSDK::BleService::CTSCLIENT
+    )
+endif()
 
 target_link_options(
     ${TARGET_NAME}

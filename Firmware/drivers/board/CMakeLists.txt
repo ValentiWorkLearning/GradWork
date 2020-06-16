@@ -3,11 +3,6 @@ add_library(
     watchboard.cpp
 )
 
-target_compile_definitions(
-    watchboard
-    PUBLIC
-    USE_DEVICE_SPECIFIC
-)
 target_include_directories(
     watchboard
     PUBLIC
@@ -17,10 +12,22 @@ target_include_directories(
 target_link_libraries(
     watchboard
     PRIVATE
-    NordicSDK::Common
-    NordicSDK::Bsp
-    NordicSDK::App::Timer
     UtilsLibrary
     logger_service
     platform_delay
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries(watchboard
+        PRIVATE
+        NordicSDK::Common
+        NordicSDK::Bsp
+        NordicSDK::App::Timer
+    )
+
+    target_compile_definitions(
+        watchboard
+        PRIVATE
+        USE_DEVICE_SPECIFIC
+    )
+endif()

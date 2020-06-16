@@ -15,7 +15,6 @@ target_include_directories(
     ${CMAKE_CURRENT_LIST_DIR}/inc
 )
 
-target_link_libraries(
-    platform_delay
-    NordicSDK::Common
-)
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries( platform_delay PRIVATE NordicSDK::Common )
+endif()

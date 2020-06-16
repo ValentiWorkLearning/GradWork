@@ -26,9 +26,15 @@ target_include_directories(
 target_link_libraries(
     ble_factory
     PRIVATE
-    NordicSDK::Common
     UtilsLibrary
     drivers_ih
     logger_service
     ble_services
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries(ble_factory
+        PRIVATE
+        NordicSDK::Common
+    )
+endif()

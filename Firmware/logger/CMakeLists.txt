@@ -3,12 +3,6 @@ add_library(
     logger_service_impl.cpp
 )
 
-target_compile_definitions(
-    logger_service
-    PRIVATE
-    LoggerSegger
-)
-
 target_include_directories(
     logger_service
     PUBLIC
@@ -21,5 +15,18 @@ target_link_libraries(
     PUBLIC
     UtilsLibrary
     PRIVATE
-    NordicSDK::Common
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+
+    target_compile_definitions(
+        logger_service
+        PRIVATE
+        LoggerSegger
+    )
+
+    target_link_libraries(logger_service
+        PRIVATE
+        NordicSDK::Common
+    )
+endif()

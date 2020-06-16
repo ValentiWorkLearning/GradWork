@@ -3,18 +3,9 @@ add_library(
     gs_platform_layer.cpp
 )
 
-
-target_compile_definitions(
-    graphics_backend
-    PRIVATE
-    USE_ST7789V_BACKEND
-)
-
 target_link_libraries(
     graphics_backend
     PRIVATE
-    NordicSDK::Common
-    NordicSDK::App::Timer
     lvgl_lib
     UtilsLibrary
     logger_service
@@ -22,4 +13,20 @@ target_link_libraries(
     drivers_ih
     etl
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+
+    target_compile_definitions(
+        graphics_backend
+        PRIVATE
+        USE_HARDWARE_DISPLAY_BACKEND
+    )
+
+    target_link_libraries(
+        graphics_backend
+        PRIVATE
+        NordicSDK::Common
+        NordicSDK::App::Timer
+    )
+endif()
 

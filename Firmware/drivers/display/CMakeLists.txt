@@ -4,13 +4,6 @@ add_library(
     display_creator.cpp
 )
 
-target_compile_definitions(
-    watch_display
-    PRIVATE
-    USE_ST7789V_BACKEND
-)
-
-
 target_include_directories(
     watch_display
     PUBLIC
@@ -35,3 +28,17 @@ target_link_libraries(
     gpio
     etl
 )
+
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_compile_definitions(
+        watch_display
+        PRIVATE
+        USE_ST7789V_BACKEND
+    )
+
+    target_link_libraries(watch_display
+        PRIVATE
+        NordicSDK::Common
+    )
+endif()

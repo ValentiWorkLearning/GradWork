@@ -18,6 +18,9 @@ target_include_directories(
 target_link_libraries(
     gpio
     PRIVATE
-    NordicSDK::Common
     UtilsLibrary
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries(gpio PRIVATE NordicSDK::Common )
+endif()

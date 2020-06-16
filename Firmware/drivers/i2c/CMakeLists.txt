@@ -9,12 +9,6 @@ target_compile_features(
     cxx_std_17
 )
 
-target_compile_definitions(
-    i2c
-    PUBLIC
-    USE_DEVICE_SPECIFIC
-)
-
 target_include_directories(
     i2c
     PUBLIC
@@ -24,7 +18,16 @@ target_include_directories(
 target_link_libraries(
     i2c
     PRIVATE
-    NordicSDK::Common
     UtilsLibrary
     logger_service
 )
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries(i2c PRIVATE NordicSDK::Common )
+
+    target_compile_definitions(
+        i2c
+        PRIVATE
+        USE_DEVICE_SPECIFIC
+    )
+endif()

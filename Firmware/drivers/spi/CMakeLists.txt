@@ -18,8 +18,10 @@ target_include_directories(
 target_link_libraries(
     spi
     PRIVATE
-    NordicSDK::Common
     UtilsLibrary
     drivers_ih
     etl
 )
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries( spi PRIVATE NordicSDK::Common )
+endif()

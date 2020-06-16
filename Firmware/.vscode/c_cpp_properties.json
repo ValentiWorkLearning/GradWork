@@ -18,7 +18,7 @@
                 "SOFTDEVICE_PRESENT",
                 "SWI_DISABLE0",
                 "USE_NRFSDK_SIMULATOR",
-                "USE_ST7789V_BACKEND",
+                "USE_HARDWARE_DISPLAY_BACKEND",
                 "USE_BLE_SERVICES",
                 "USE_DEVICE_SPECIFIC",
                 "LoggerSegger"
