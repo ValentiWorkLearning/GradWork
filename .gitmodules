@@ -1,0 +1,6 @@
+[submodule "Firmware/3rdparty/fmt"]
+	path = Firmware/3rdparty/fmt
+	url = https://github.com/fmtlib/fmt.git
+[submodule "Firmware/3rdparty/etl"]
+	path = Firmware/3rdparty/etl
+	url = https://github.com/ETLCPP/etl.git
