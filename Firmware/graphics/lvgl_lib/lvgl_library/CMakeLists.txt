@@ -34,7 +34,6 @@ target_include_directories(
 target_sources(
     ${TARGET_NAME}
     PRIVATE
-    "lvgl/src/lv_core/lv_debug.c"
     "lvgl/src/lv_core/lv_disp.c"
     "lvgl/src/lv_core/lv_group.c"
     "lvgl/src/lv_core/lv_indev.c"
@@ -87,6 +86,7 @@ target_sources(
     "lvgl/src/lv_misc/lv_async.c"
     "lvgl/src/lv_misc/lv_bidi.c"
     "lvgl/src/lv_misc/lv_color.c"
+    "lvgl/src/lv_misc/lv_debug.c"
     "lvgl/src/lv_misc/lv_fs.c"
     "lvgl/src/lv_misc/lv_gc.c"
     "lvgl/src/lv_misc/lv_ll.c"
