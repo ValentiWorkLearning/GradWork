@@ -4,9 +4,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master,dev/setup_ci,dev/develop ]
+    branches: [ master,dev/setup_ci,dev/develop,dev/cmake_refactor ]
   pull_request:
-    branches: [ master,dev/setup_ci,dev/develop ]
+    branches: [ master,dev/setup_ci,dev/develop,dev/cmake_refactor ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -30,9 +30,10 @@ jobs:
       uses: lukka/run-cmake@v2
       with:
         cmakeGenerator: VS16Win64
-        cmakeListsOrSettingsJson: CMakeListsTxtBasic
-        cmakeListsTxtPath: ${{ github.workspace }}/Simulator/CMakeLists.txt
+        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
+        cmakeAppendedArgs: '-DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR"'
         buildWithCMake: true
 
   build-arm:
@@ -73,9 +74,9 @@ jobs:
       with:
         cmakeGenerator: UnixMakefiles
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/Firmware/CMakeLists.txt
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DUSE_ENV_SDK_PATH=OFF -DUSE_ENV_GCC_PATH=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DNRF5_SDK_PATH_EXT=${{ github.workspace }}/Nrf52SDK -DGCC_TOOLCHAIN_EXT_PATH=${{ github.workspace }}/toolchain'
+        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDK -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/toolchain'
         buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
