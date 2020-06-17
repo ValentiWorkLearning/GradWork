@@ -53,7 +53,6 @@ target_compile_options(
 target_link_libraries(
     ${NORDIC_TARGET}
     PRIVATE
-    ble_services
     logger_service
     services_ih
     ble_factory
@@ -67,7 +66,11 @@ target_link_libraries(
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    target_link_libraries(${NORDIC_TARGET} PRIVATE NordicSDK::Common)
+    target_link_libraries(
+        ${NORDIC_TARGET} PRIVATE
+        ble_services
+        NordicSDK::Common
+    )
 
 endif()
 
