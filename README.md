@@ -5,6 +5,8 @@ Development board for smart-handwatch based on NRF52832 E73 module with C++17/CM
 
 * Uses the C++17 features as wide as possible
 * Port of LVGL library for ST7789V display and NRFSDK
+* Simulator for fimware development without target MCU
+* CI for Windows Simulator build and GCC build for target
 ![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.1/photo_2020-04-12_14-58-51.jpg "Revision v1.0")
 
 ![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.1/photo_2020-04-12_14-58-50.jpg "Revision v1.0")
