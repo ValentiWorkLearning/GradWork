@@ -9,7 +9,6 @@ target_link_libraries(
     lvgl_lib
     UtilsLibrary
     logger_service
-    watch_display
     drivers_ih
     etl
 )
@@ -25,14 +24,21 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(
         graphics_backend
         PRIVATE
+        watch_display
         NordicSDK::Common
         NordicSDK::App::Timer
     )
-elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )
     target_compile_definitions(
         graphics_backend
         PRIVATE
         USE_WINSDL_BACKEND
+    )
+    target_link_libraries(
+        graphics_backend
+        PRIVATE
+        lvgl_drivers
+        fmt
     )
 endif()
 

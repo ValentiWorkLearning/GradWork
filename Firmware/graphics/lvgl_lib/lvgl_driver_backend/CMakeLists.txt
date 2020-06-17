@@ -4,7 +4,8 @@ set (TARGET_NAME lvgl_drivers)
 
 add_library( ${TARGET_NAME} STATIC )
 
-
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_C_STANDARD 11)
 
 add_subdirectory(SDL-mirror)
@@ -68,6 +69,16 @@ target_include_directories(
     "SDL-mirror/include"
 )
 
+
+target_compile_definitions(
+    ${TARGET_NAME}
+    PRIVATE
+    SDL_MAIN_HANDLED
+)
+
 target_link_libraries(
+    ${TARGET_NAME}
+    PRIVATE
     SDL2
+    lvgl_lib
 )

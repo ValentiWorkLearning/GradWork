@@ -10,6 +10,12 @@ target_include_directories(
     UtilsLibrary
 )
 
+target_compile_features(
+    logger_service
+    PUBLIC
+    cxx_std_20
+)
+
 target_link_libraries(
     logger_service
     PUBLIC

@@ -55,7 +55,6 @@ target_link_libraries(
     PRIVATE
     lvgl_lib
     etl
-    stdc++
     UtilsLibrary
     logger_service
     graphics_backend

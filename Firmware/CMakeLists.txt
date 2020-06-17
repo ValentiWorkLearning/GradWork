@@ -67,7 +67,8 @@ target_link_libraries(
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    target_link_libraries(${NORDIC_TARGET} PRIVATE NordicSDK::Common )
+    target_link_libraries(${NORDIC_TARGET} PRIVATE NordicSDK::Common)
+
 endif()
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
@@ -84,7 +85,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         nordicSdk_flashSoftDevice( ${SOFTDEVICE_PATH} ${NRF_TARGET} )
         nordicSdk_flashFirmware( ${NORDIC_TARGET} )
     endif()
-
-elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    list(APPEND EXTRA_LIBS vcruntime user32 gdi32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32)
     target_compile_options( ${NORDIC_TARGET} PUBLIC /wd4576 /std:c++latest )
 endif()

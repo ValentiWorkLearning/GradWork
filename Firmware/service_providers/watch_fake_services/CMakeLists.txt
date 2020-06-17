@@ -41,3 +41,4 @@ target_compile_options(
     $<$<CONFIG:Release>:-Os>
     ${COMMON_FLAGS}
 )
+target_compile_features( watch_fake_services PUBLIC cxx_std_20 )
