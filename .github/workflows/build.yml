@@ -33,7 +33,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs: '-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\"'
+        cmakeAppendedArgs: '-DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR"'
         buildWithCMake: true
 
   build-arm:
