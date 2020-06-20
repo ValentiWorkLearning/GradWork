@@ -1,5 +1,5 @@
 #pragma once
-
+#include "gs_events.hpp"
 
 namespace Graphics::Events
 {

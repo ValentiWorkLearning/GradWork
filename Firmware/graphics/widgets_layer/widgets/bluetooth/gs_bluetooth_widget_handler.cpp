@@ -16,12 +16,11 @@ BluetoothWidgetHandler::BluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidg
 }
 
 void
-BluetoothWidgetHandler::handleEvent( const Events::TEvent& _event )
+BluetoothWidgetHandler::handleEventImpl( const Events::TBleClientEvents& _event, const std::any& _eventData )
 {
-    Events::TBleClientEvents bleClientEvent { std::any_cast<Events::TBleClientEvents>( _event.eventType ) };
-    if( bleClientEvent == Events::TBleClientEvents::DeviceConnected )
+    if( _event == Events::TBleClientEvents::DeviceConnected )
         m_pBluetoothWidget->setBluetoothStatus( IBluetoothWidget::BluetoothStatus::Connected );
-    else if( bleClientEvent == Events::TBleClientEvents::DeviceDisconnected )
+    else if( _event == Events::TBleClientEvents::DeviceDisconnected )
         m_pBluetoothWidget->setBluetoothStatus( IBluetoothWidget::BluetoothStatus::Disconnected );
     else{
         assert( false );

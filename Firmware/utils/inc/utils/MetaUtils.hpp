@@ -45,4 +45,31 @@ constexpr void UnuseVar(Unused && _toUnuse)
     static_cast<void>( _toUnuse );
 }
 
+template <typename ... Types>
+struct TypeList;
+
+template<typename H, typename ... T>
+struct TypeList<H,T ...>
+{
+    using Head = H;
+    using Tail = TypeList<T...>;
+};
+
+template<>
+struct TypeList<>
+{
+};
+
+template<typename ToDetect, typename Args >
+struct HasType
+{
+	static int const value = std::is_same_v<ToDetect,typename Args::Head> || HasType<ToDetect, typename Args::Tail >::value;
+};
+
+template<typename ToDetect>
+struct HasType<ToDetect,TypeList<>>
+{
+    static const bool value = false;
+};
+
 };

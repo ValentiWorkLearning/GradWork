@@ -1,10 +1,14 @@
 #pragma once
 
+#include "ih/gs_events.hpp"
 #include "ih/gs_ievent_handler.hpp"
+
+#include "widgets_layer/gs_event_handler_base.hpp"
 
 #include "utils/TimeWrapper.hpp"
 
 #include <memory>
+
 
 namespace Graphics::Views
 {
@@ -12,7 +16,10 @@ namespace Graphics::Views
 class IClockWatchPage;
 
 class ClockPageHandler
-    :   public Graphics::IEventHandler
+    :   public Events::EventHandler<
+                Graphics::IEventHandler
+            ,   Events::TDateTimeEvents
+        >
 {
 
 public:
@@ -21,9 +28,9 @@ public:
 
     ~ClockPageHandler() override = default;
 
-public:
+protected:
 
-    void handleEvent( const Events::TEvent& _event ) override;
+    void handleEventImpl( const Events::TDateTimeEvents& _event, const std::any& _eventData ) override;
 
 private:
 

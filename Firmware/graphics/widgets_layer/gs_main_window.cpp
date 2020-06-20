@@ -70,6 +70,14 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
     if( !m_currentPageName.empty() )
     {
         auto pPagePtr = getPagePointer( m_currentPageName );
+
+        getEventDispatcher().postEvent(
+                {       Graphics::Events::EventGroup::GraphicsEvents
+                    ,   Graphics::Events::TGraphicsEvents::PageHiding
+                    ,   m_currentPageName
+                }
+        );
+
         pPagePtr->hide();
     }
 
@@ -77,6 +85,13 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
 
     auto pPagePtr = getPagePointer( m_currentPageName );
     pPagePtr->show();
+
+    getEventDispatcher().postEvent(
+        {       Graphics::Events::EventGroup::GraphicsEvents
+            ,   Graphics::Events::TGraphicsEvents::PageActivated
+            ,   m_currentPageName
+        }
+    );
 
     onActivePageChanged.emit( m_currentPageName );
 }

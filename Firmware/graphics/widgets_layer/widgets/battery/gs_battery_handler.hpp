@@ -1,6 +1,9 @@
 #pragma once
 
 #include "ih/gs_ievent_handler.hpp"
+
+#include "widgets_layer/gs_event_handler_base.hpp"
+
 #include <memory>
 
 namespace Graphics::Widgets
@@ -9,7 +12,10 @@ namespace Graphics::Widgets
 class IBatteryWidget;
 
 class BatteryWidgetHandler
-    :   public Graphics::IEventHandler
+    :   public Events::EventHandler<
+                Graphics::IEventHandler
+            ,   Events::TBatteryEvents
+        >
 {
 
 public:
@@ -18,9 +24,9 @@ public:
 
     ~BatteryWidgetHandler() override = default;
 
-public:
+protected:
 
-    void handleEvent( const Events::TEvent& _event ) override;
+    void handleEventImpl( const Events::TBatteryEvents& _event, const std::any& _eventData ) override;
 
 private:
 

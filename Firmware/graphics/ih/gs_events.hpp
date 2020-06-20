@@ -14,6 +14,7 @@ enum class EventGroup
     ,   Gesture
     ,   HardwareButtons
     ,   DateTime
+    ,   GraphicsEvents
     ,   EventGroupEnd
 };
 
@@ -64,6 +65,14 @@ enum class TBleClientEvents
     ,   DeviceConnected
     ,   DeviceDisconnected
     ,   BleClientEventsEnd
+};
+
+enum class TGraphicsEvents
+{
+        GraphicsEventsBegin = enumConvert<TBleClientEvents>( TBleClientEvents::BleClientEventsEnd )
+    ,   PageHiding
+    ,   PageActivated
+    ,   GraphicsEventsEnd
 };
 
 }
