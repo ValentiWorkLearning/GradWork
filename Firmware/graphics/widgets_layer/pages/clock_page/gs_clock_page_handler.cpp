@@ -57,16 +57,24 @@ ClockPageHandler::handleEventImpl( const Events::TDateTimeEvents& _event, const 
             )
         );
 
-    bool bApplyNewDate{ shouldApplyNewDate( newDateTime ) || forceUpdateAfterVisibilityChange };
+    if( newDateTime.getWeekDayString() != m_lastReceivedTime.getWeekDayString() )
+        pClockView->setWeekday( m_lastReceivedTime.getWeekDayString() );
+
+    const bool bShouldApplyNewDate{
+            m_lastReceivedTime.getWeekday() != newDateTime.getWeekday()
+        ||  m_lastReceivedTime.getMonth() != newDateTime.getMonth()
+        ||  m_lastReceivedTime.getYear() != newDateTime.getYear()
+    };
+
+    if( bShouldApplyNewDate )
+    {
+        m_fullDateString = ClockPageHandler::formatToFullDate( m_lastReceivedTime );
+        pClockView->setFullDate( m_fullDateString );
+    }
 
     forceUpdateAfterVisibilityChange = false;
-
     m_lastReceivedTime = newDateTime;
 
-    pClockView->setWeekday( m_lastReceivedTime.getWeekDayString() );
-
-    m_fullDateString = ClockPageHandler::formatToFullDate( m_lastReceivedTime );
-    pClockView->setFullDate( m_fullDateString );
 
 }
 

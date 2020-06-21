@@ -8,7 +8,7 @@ elseif( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-set( 3RD_PARTY_DIR ${CMAKE_CURRENT_SOURCE_DIR} )# Libs root path
+set( 3RD_PARTY_DIR CACHE STRING ${CMAKE_CURRENT_SOURCE_DIR} )# Libs root path
 
 add_subdirectory( etl )
 add_subdirectory( fmt )

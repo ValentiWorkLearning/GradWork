@@ -13,3 +13,6 @@
 [submodule "Firmware/graphics/lvgl_lib/lvgl_library/lvgl"]
 	path = Firmware/graphics/lvgl_lib/lvgl_library/lvgl
 	url = https://github.com/lvgl/lvgl.git
+[submodule "Firmware/3rdparty/googletest"]
+	path = Firmware/3rdparty/googletest
+	url = https://github.com/google/googletest.git
