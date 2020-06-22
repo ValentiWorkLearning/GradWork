@@ -42,7 +42,7 @@ private:
 
 private:
 
-    bool forceUpdateAfterVisibilityChange;
+    bool m_forceUpdateAfterVisibilityChange;
     IClockWatchPage* m_pClockWatchView;
 
     TimeWrapper m_lastReceivedTime;

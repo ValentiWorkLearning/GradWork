@@ -11,7 +11,7 @@ namespace Graphics::Views
 {
 
 ClockPageHandler::ClockPageHandler( IClockWatchPage* _clockPageView )
-    :   forceUpdateAfterVisibilityChange{false}
+    :   m_forceUpdateAfterVisibilityChange{true}
     ,   m_pClockWatchView{ _clockPageView }
     ,   m_lastReceivedTime{ std::tm{} }
 {
@@ -32,50 +32,49 @@ ClockPageHandler::handleEventImpl( const Events::TDateTimeEvents& _event, const 
 
     if (!pClockView->isVisible())
     {
-        forceUpdateAfterVisibilityChange = true;
+        m_forceUpdateAfterVisibilityChange = true;
         return;
     }
 
-    if( newDateTime.getSeconds() != m_lastReceivedTime.getSeconds() || forceUpdateAfterVisibilityChange)
+    if( newDateTime.getSeconds() != m_lastReceivedTime.getSeconds() || m_forceUpdateAfterVisibilityChange)
         pClockView->setSeconds(
             formatDoubleDigitsNumber(
                     static_cast<std::uint8_t>( newDateTime.getSeconds().count() )
                 )
         );
 
-    if( newDateTime.getMinutes() != m_lastReceivedTime.getMinutes() || forceUpdateAfterVisibilityChange)
+    if( newDateTime.getMinutes() != m_lastReceivedTime.getMinutes() || m_forceUpdateAfterVisibilityChange)
         pClockView->setMinutes(
             formatDoubleDigitsNumber(
                 static_cast<std::uint8_t>( newDateTime.getMinutes().count() )
             )
         );
 
-    if( newDateTime.getHours() != m_lastReceivedTime.getHours() || forceUpdateAfterVisibilityChange)
+    if( newDateTime.getHours() != m_lastReceivedTime.getHours() || m_forceUpdateAfterVisibilityChange)
         pClockView->setHours(
             formatDoubleDigitsNumber(
                 static_cast<std::uint8_t>( newDateTime.getHours().count() )
             )
         );
 
-    if( newDateTime.getWeekDayString() != m_lastReceivedTime.getWeekDayString() )
-        pClockView->setWeekday( m_lastReceivedTime.getWeekDayString() );
+    if( newDateTime.getWeekDayString() != m_lastReceivedTime.getWeekDayString() || m_forceUpdateAfterVisibilityChange)
+        pClockView->setWeekday( newDateTime.getWeekDayString() );
 
     const bool bShouldApplyNewDate{
             m_lastReceivedTime.getWeekday() != newDateTime.getWeekday()
         ||  m_lastReceivedTime.getMonth() != newDateTime.getMonth()
         ||  m_lastReceivedTime.getYear() != newDateTime.getYear()
+        ||  m_forceUpdateAfterVisibilityChange
     };
 
     if( bShouldApplyNewDate )
     {
-        m_fullDateString = ClockPageHandler::formatToFullDate( m_lastReceivedTime );
+        m_fullDateString = ClockPageHandler::formatToFullDate( newDateTime );
         pClockView->setFullDate( m_fullDateString );
     }
 
-    forceUpdateAfterVisibilityChange = false;
+    m_forceUpdateAfterVisibilityChange = false;
     m_lastReceivedTime = newDateTime;
-
-
 }
 
 bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck)

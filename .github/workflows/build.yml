@@ -34,6 +34,7 @@ jobs:
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
         cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR"'
+        buildDirectory: '${{ runner.workspace }}/build/vsfirmwarebuild'
         buildWithCMake: true
 
   build-arm:
