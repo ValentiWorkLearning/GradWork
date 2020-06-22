@@ -5,6 +5,9 @@ include(GoogleTest)
 
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 
+set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 set (3RDPARTY_DIR "../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR}/googletest "3rdparty/googletest")
 

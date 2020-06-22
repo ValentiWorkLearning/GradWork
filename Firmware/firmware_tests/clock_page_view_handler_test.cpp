@@ -27,10 +27,6 @@ TEST( ClockPageHandlerTest, PageLabelsArentUpdateByHandlerWhenPageHidden )
 	FakeClockPage fakeView;
 	auto pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
 
-	EXPECT_CALL(fakeView, isVisible())
-		.Times( 1 )
-		.WillOnce( Return( false ) );
-
 	EXPECT_CALL( fakeView, setHours( "00" ) )
 		.Times( 0 );
 
