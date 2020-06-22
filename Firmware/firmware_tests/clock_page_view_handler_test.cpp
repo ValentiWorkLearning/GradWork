@@ -6,8 +6,14 @@
 
 TEST( ClockPageHandlerTest, CanSetupMock )
 {
+	using ::testing::Return;
+
 	FakeClockPage fakeView;
 	auto pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
+
+	EXPECT_CALL( fakeView, isVisible() )
+		.Times(1)
+		.WillOnce( Return( false ) );
 
 	EXPECT_CALL(fakeView, setHours("00"))
 		.Times(0);
@@ -26,6 +32,10 @@ TEST( ClockPageHandlerTest, PageLabelsArentUpdateByHandlerWhenPageHidden )
 
 	FakeClockPage fakeView;
 	auto pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
+
+	EXPECT_CALL( fakeView, isVisible() )
+		.Times(1)
+		.WillOnce( Return( false ) );
 
 	EXPECT_CALL( fakeView, setHours( "00" ) )
 		.Times( 0 );
@@ -57,7 +67,7 @@ TEST( ClockPageHandlerTest, AllPageLabelsRefreshedWhenPageVisible )
 		.Times(1);
 	EXPECT_CALL( fakeView, setSeconds( "43" ) )
 		.Times(1);
-	EXPECT_CALL( fakeView, setWeekday( std::string_view( "SUN" ) ) )
+	EXPECT_CALL( fakeView, setWeekday( std::strng_view( "SUN" ) ) )
 		.Times(1);
 	EXPECT_CALL( fakeView, setFullDate( "JAN/9/1971" ) )
 		.Times(1);

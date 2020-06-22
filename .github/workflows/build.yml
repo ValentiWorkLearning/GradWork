@@ -36,7 +36,7 @@ jobs:
         cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR"'
         buildDirectory: '${{ runner.workspace }}/build/vsfirmwarebuild'
         buildWithCMake: true
-    - name : Rut firmware testing
+    - name : Run firmware testing
       run: |
         cd ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
         .\FirmwareTesting.exe
