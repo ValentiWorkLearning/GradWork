@@ -67,7 +67,7 @@ TEST( ClockPageHandlerTest, AllPageLabelsRefreshedWhenPageVisible )
 		.Times(1);
 	EXPECT_CALL( fakeView, setSeconds( "43" ) )
 		.Times(1);
-	EXPECT_CALL( fakeView, setWeekday( std::strng_view( "SUN" ) ) )
+	EXPECT_CALL( fakeView, setWeekday( std::string_view( "SUN" ) ) )
 		.Times(1);
 	EXPECT_CALL( fakeView, setFullDate( "JAN/9/1971" ) )
 		.Times(1);
