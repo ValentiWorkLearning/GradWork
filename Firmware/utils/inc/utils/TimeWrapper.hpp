@@ -109,6 +109,7 @@ inline TimeWrapper::TimeWrapper(std::string_view _yyyyMMDDHHMN, char _sep, char 
     currentTm.tm_hour = hour;
     currentTm.tm_min = min;
     currentTm.tm_sec = sec;
+    mktime( &currentTm );
     m_internalTm = currentTm;
 }
 

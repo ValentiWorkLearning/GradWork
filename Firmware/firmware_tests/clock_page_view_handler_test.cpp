@@ -2,186 +2,247 @@
 #include <gtest/gtest.h>
 
 #include "clock_watch_fake_view.hpp"
+#include "clock_page_handler_fixture.hpp"
+
 #include "widgets_layer/pages/clock_page/gs_clock_page_handler.hpp"
 
-TEST( ClockPageHandlerTest, CanSetupMock )
+// Take into account that for this time period we use SummerTime
+
+TEST_F( ClockPageHandlerTest, ExpectInitalValuesAfterCreation )
 {
+	EXPECT_EQ(fakeView.getHours(), "00");
+	EXPECT_EQ(fakeView.getMinutes(), "00");
+	EXPECT_EQ(fakeView.getSeconds(), ":00");
+	EXPECT_EQ(fakeView.getWeekday(), ".........");
+	EXPECT_EQ(fakeView.getFullDate(), "../../....");
+
+}
+
+TEST_F(ClockPageHandlerTest, ExpectInitialDefeaultDate )
+{
+	setDefaultDate();
+
+	EXPECT_EQ(fakeView.getHours(), "15");
+	EXPECT_EQ(fakeView.getMinutes(), "24");
+	EXPECT_EQ(fakeView.getSeconds(), "43");
+	EXPECT_EQ(fakeView.getWeekday(), "MON");
+	EXPECT_EQ(fakeView.getFullDate(), "JUN/22/2020");
+}
+
+
+TEST_F(ClockPageHandlerTest, ViewStaysUnchangedWhenInviisible)
+{
+	setDefaultDate();
+	
 	using ::testing::Return;
 
-	FakeClockPage fakeView;
-	auto pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
+	EXPECT_CALL(fakeView, isVisible())
+		.Times(1).WillOnce(Return(false));
 
-	EXPECT_CALL( fakeView, isVisible() )
-		.Times(1)
-		.WillOnce( Return( false ) );
-
-	EXPECT_CALL(fakeView, setHours("00"))
-		.Times(0);
+	//Only hours were changed
 	pageWatchHandler->handleEvent(
 			{
 					Graphics::Events::EventGroup::DateTime
 				,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-				,	TimeWrapper("1971/01/9 13:24:43", '/', ':')
+				,	TimeWrapper("2020/06/22 15:24:43", '/', ':')
 			}
-	);
+		);
+	EXPECT_EQ( fakeView.getHours(), "15" );
 }
 
-TEST( ClockPageHandlerTest, PageLabelsArentUpdateByHandlerWhenPageHidden )
+TEST_F(ClockPageHandlerTest, OnlyHoursLabelIsRefreshedWhenNewDateTimeEventOccurs )
 {
+	setupMock();
+	
 	using ::testing::Return;
 
-	FakeClockPage fakeView;
-	auto pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
+	EXPECT_CALL( fakePageMock, isVisible() )
+		.Times(1).WillOnce(Return(true));
 
-	EXPECT_CALL( fakeView, isVisible() )
-		.Times(1)
-		.WillOnce( Return( false ) );
+	EXPECT_CALL( fakePageMock, setHours( "16" ) ).Times( 1 );
 
-	EXPECT_CALL( fakeView, setHours( "00" ) )
-		.Times( 0 );
+	//Only hours were changed
+	pageMockWatchHandler->handleEvent(
+			{
+					Graphics::Events::EventGroup::DateTime
+				,	Graphics::Events::TDateTimeEvents::DateTimeChanged
+				,	TimeWrapper("2020/06/22 15:24:43", '/', ':')
+			}
+		);
+}
 
-	pageWatchHandler->handleEvent(
+TEST_F(ClockPageHandlerTest, FulldateRefreshedWhenWeekdayWasChanged )
+{
+	setupMock();
+
+	using ::testing::Return;
+
+	EXPECT_CALL(fakePageMock, isVisible())
+		.Times(1).WillOnce(Return(true));
+
+	EXPECT_CALL(fakePageMock, setFullDate("JUN/29/2020")).Times(1);
+
+	//Only weekday was changed
+	pageMockWatchHandler->handleEvent(
 		{
 				Graphics::Events::EventGroup::DateTime
 			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper( "1971/01/9 13:24:43", '/', ':' )
+			,	TimeWrapper("2020/06/29 14:24:43", '/', ':')
+		}
+	);
+}
+
+TEST_F(ClockPageHandlerTest, FulldateRefreshedWhenMonthWasChanged )
+{
+	setupMock();
+
+	using ::testing::Return;
+
+	EXPECT_CALL(fakePageMock, isVisible())
+		.Times(1).WillOnce(Return(true));
+
+	EXPECT_CALL(fakePageMock, setFullDate("JUL/13/2020")).Times(1);
+
+	//Only month was changed
+	pageMockWatchHandler->handleEvent(
+		{
+				Graphics::Events::EventGroup::DateTime
+			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
+			,	TimeWrapper("2020/07/13 14:24:43", '/', ':')
+		}
+	);
+}
+
+TEST_F(ClockPageHandlerTest, FulldateRefreshedWhenYearWasChanged )
+{
+	setupMock();
+
+	using ::testing::Return;
+
+	EXPECT_CALL(fakePageMock, isVisible())
+		.Times(1).WillOnce(Return(true));
+
+	EXPECT_CALL(fakePageMock, setFullDate("JUN/14/2021")).Times(1);
+
+	//Only year was changed
+	pageMockWatchHandler->handleEvent(
+		{
+				Graphics::Events::EventGroup::DateTime
+			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
+			,	TimeWrapper("2021/06/14 14:24:43", '/', ':')
 		}
 	);
 }
 
 
-TEST( ClockPageHandlerTest, AllPageLabelsRefreshedWhenPageVisible )
+TEST_F(ClockPageHandlerTest, WeekdayChangeHandledCorrectly )
 {
+	setupMock();
+
 	using ::testing::Return;
 
-	FakeClockPage fakeView;
-	auto pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
+	EXPECT_CALL(fakePageMock, isVisible())
+		.Times(1).WillOnce(Return(true));
 
-	EXPECT_CALL( fakeView, isVisible() )
-		.Times(1)
-		.WillOnce( Return( true ) );
-
-	EXPECT_CALL( fakeView, setHours( "13" ) )
-		.Times(1);
-	EXPECT_CALL( fakeView, setMinutes( "24" ) )
-		.Times(1);
-	EXPECT_CALL( fakeView, setSeconds( "43" ) )
-		.Times(1);
-	EXPECT_CALL( fakeView, setWeekday( std::string_view( "SUN" ) ) )
-		.Times(1);
-	EXPECT_CALL( fakeView, setFullDate( "JAN/9/1971" ) )
+	EXPECT_CALL(fakePageMock, setWeekday(std::string_view("TUE"))).Times(1);
+	EXPECT_CALL(fakePageMock, setFullDate("JUN/23/2020"))
 		.Times(1);
 
-	pageWatchHandler->handleEvent(
+	pageMockWatchHandler->handleEvent(
 		{
 				Graphics::Events::EventGroup::DateTime
 			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper( "1971/01/9 13:24:43", '/', ':' )
+			,	TimeWrapper("2020/06/23 14:24:43", '/', ':')
+		}
+	);
+}
+TEST_F(ClockPageHandlerTest, WeekdayChangeFromSundayToMondayHandledCorrectly )
+{
+	setupMock();
+
+	using ::testing::Return;
+
+	EXPECT_CALL(fakePageMock, isVisible())
+		.Times(2).WillRepeatedly(Return(true));
+
+	EXPECT_CALL(fakePageMock, setWeekday(std::string_view("SUN"))).Times(1);
+	EXPECT_CALL(fakePageMock, setFullDate("JUN/28/2020"))
+		.Times(1);
+
+	pageMockWatchHandler->handleEvent(
+		{
+				Graphics::Events::EventGroup::DateTime
+			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
+			,	TimeWrapper("2020/06/28 14:24:43", '/', ':')
+		}
+	);
+
+	EXPECT_CALL(fakePageMock, setWeekday(std::string_view("MON"))).Times(1);
+	EXPECT_CALL(fakePageMock, setFullDate("JUN/29/2020"))
+		.Times(1);
+
+	pageMockWatchHandler->handleEvent(
+		{
+				Graphics::Events::EventGroup::DateTime
+			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
+			,	TimeWrapper("2020/06/29 14:24:43", '/', ':')
 		}
 	);
 }
 
-
-TEST( ClockPageHandlerTest, OnlyHoursLabelRefreshedWhenHoursChanged)
+TEST_F( ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithoutLeadingZero )
 {
-	using ::testing::Return;
+	setDefaultDate();
 
-	FakeClockPage fakeView;
-	auto pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
+	using ::testing::Return;
 
 	EXPECT_CALL(fakeView, isVisible())
-		.Times(2)
-		.WillRepeatedly(Return(true));
-
-	EXPECT_CALL(fakeView, setHours("13"))
-		.Times(1);
-
-	EXPECT_CALL(fakeView, setFullDate("JAN/9/1971"))
-		.Times(1);
-	pageWatchHandler->handleEvent(
-		{
-				Graphics::Events::EventGroup::DateTime
-			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper( "1971/01/9 13:24:43", '/', ':' )
-		}
-	);
-
-	EXPECT_CALL(fakeView, setHours("14"))
-		.Times(1);
-	EXPECT_CALL(fakeView, setMinutes("14"))
-		.Times(0);
+		.Times(1).WillRepeatedly(Return(true));
 
 	pageWatchHandler->handleEvent(
 		{
 				Graphics::Events::EventGroup::DateTime
 			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper( "1971/01/9 14:24:43", '/', ':' )
+			,	TimeWrapper("2020/06/22 15:24:43", '/', ':')
 		}
 	);
+	EXPECT_EQ(fakeView.getFullDate(), "JUN/22/2020");
 }
 
-TEST(ClockPageHandlerTest, ShouldAddplyNewDateConditios)
+TEST_F( ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithLeadingZero)
 {
-	using ::testing::Return;
-	using ::testing::AllOf;
-	using ::testing::Args;
-	using ::testing::Lt;
+	setDefaultDate();
 
-	FakeClockPage fakeView;
-	auto pageWatchHandler = Graphics::Views::createPageWatchHandler(&fakeView);
+	using ::testing::Return;
 
 	EXPECT_CALL(fakeView, isVisible())
-		.Times(5)
-		.WillRepeatedly(Return(true));
+		.Times(1).WillRepeatedly(Return(true));
 
-	EXPECT_CALL(fakeView, setFullDate("JAN/9/1971"))
-		.Times(1);
-	EXPECT_CALL(fakeView, setFullDate("FEB/10/1971"))
-		.Times(1);
-	EXPECT_CALL(fakeView, setFullDate("FEB/10/1972"))
-		.Times(1);
-
-	//Initial date
 	pageWatchHandler->handleEvent(
 		{
 				Graphics::Events::EventGroup::DateTime
 			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper("1971/01/9 13:24:43", '/', ':')
+			,	TimeWrapper("2020/06/2 15:24:43", '/', ':')
 		}
 	);
+	EXPECT_EQ(fakeView.getFullDate(), "JUN/02/2020");
+}
 
-	//Weekday was changed
-	pageWatchHandler->handleEvent(
-		{
-				Graphics::Events::EventGroup::DateTime
-			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper("1971/01/10 14:24:43", '/', ':')
-		}
-	);
+TEST_F( ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithTrailingZero )
+{
+	setDefaultDate();
 
-	//Month was changed
-	pageWatchHandler->handleEvent(
-		{
-				Graphics::Events::EventGroup::DateTime
-			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper("1971/02/10 14:24:43", '/', ':')
-		}
-	);
+	using ::testing::Return;
 
-	//Year was changed
+	EXPECT_CALL(fakeView, isVisible())
+		.Times(1).WillRepeatedly(Return(true));
+
 	pageWatchHandler->handleEvent(
 		{
 				Graphics::Events::EventGroup::DateTime
 			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper("1972/02/10 14:24:43", '/', ':')
+			,	TimeWrapper("2020/06/20 15:24:43", '/', ':')
 		}
 	);
-	// Just hours were chanaged, nothing to update in date
-	pageWatchHandler->handleEvent(
-		{
-				Graphics::Events::EventGroup::DateTime
-			,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-			,	TimeWrapper("1972/02/10 18:24:43", '/', ':')
-		}
-	);
+	EXPECT_EQ(fakeView.getFullDate(), "JUN/20/2020");
 }

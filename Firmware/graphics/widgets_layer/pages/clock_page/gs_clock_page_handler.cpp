@@ -61,10 +61,7 @@ ClockPageHandler::handleEventImpl( const Events::TDateTimeEvents& _event, const 
         pClockView->setWeekday( newDateTime.getWeekDayString() );
 
     const bool bShouldApplyNewDate{
-            m_lastReceivedTime.getWeekday() != newDateTime.getWeekday()
-        ||  m_lastReceivedTime.getMonth() != newDateTime.getMonth()
-        ||  m_lastReceivedTime.getYear() != newDateTime.getYear()
-        ||  m_forceUpdateAfterVisibilityChange
+            shouldApplyNewDate( newDateTime )
     };
 
     if( bShouldApplyNewDate )
@@ -79,9 +76,10 @@ ClockPageHandler::handleEventImpl( const Events::TDateTimeEvents& _event, const 
 
 bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck)
 {
-    return	_toCheck.getWeekday() != m_lastReceivedTime.getWeekday()
-        || _toCheck.getMonthDay() != m_lastReceivedTime.getMonthDay()
-        ||	_toCheck.getYear() != m_lastReceivedTime.getYear();
+    return	m_lastReceivedTime.getMonthDay() != _toCheck.getMonthDay()
+        || m_lastReceivedTime.getMonth() != _toCheck.getMonth()
+        || m_lastReceivedTime.getYear() != _toCheck.getYear()
+        || m_forceUpdateAfterVisibilityChange;
 }
 
 std::string
@@ -103,7 +101,7 @@ Graphics::Views::ClockPageHandler::formatToFullDate( const TimeWrapper& _toForma
 
     std::string toReturn{ _toFormat.getMonthString() };
     toReturn += '/';
-    toReturn += fastConvert( _toFormat.getMonthDay() );
+    toReturn += formatDoubleDigitsNumber( _toFormat.getMonthDay() );
     toReturn += '/';
     toReturn += fastConvert( _toFormat.getYear() );
 

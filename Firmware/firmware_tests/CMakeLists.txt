@@ -16,7 +16,7 @@ add_executable(
     ${PROJECT_NAME}
     main.cpp
     clock_page_view_handler_test.cpp
-)
+    clock_page_handler_fixture.hpp)
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
