@@ -172,14 +172,10 @@ void St7789V::fillRectangle(
     if( _width >= m_width) _width = m_width - _x;
     if( _height>= m_height) _height = m_height - _y;
 
-    constexpr size_t DmaBufferSize = Interface::Spi::SpiBus::DmaBufferSize;
-
     const size_t BytesSizeX = ( _width - _x + 1 );
     const size_t BytesSizeY = ( _height - _y + 1);
     const size_t BytesSquare = BytesSizeX *  BytesSizeY;
-
-    const size_t FullDmaTransactionsCount =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) )  / DmaBufferSize;
-    const size_t ChunkedTransactionsCount = ( BytesSquare* sizeof ( IDisplayDriver::TColor ) )  % DmaBufferSize;
+    const size_t TransferBufferSize =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) );
 
     setAddrWindow(
             _x
@@ -190,72 +186,88 @@ void St7789V::fillRectangle(
 
     sendCommand( DisplayReg::RAMWR );
 
-    m_completedTransitionsCount = 0;
+    Interface::Spi::TransactionDescriptor blockSetup
+        {
+                [ this ]{ setDcPin();}
+            ,   [ this ]{ onRectArreaFilled.emit(); resetDcPin(); }
+            ,   Interface::Spi::TransactionDescriptor::DataSequence{
+                        reinterpret_cast<const std::uint8_t*>( _colorToFill )
+                    ,   TransferBufferSize
+                }
+        };
 
-    if( FullDmaTransactionsCount > 0 )
-    {
-        Interface::Spi::Transaction fullTransaction{};
-        fullTransaction.beforeTransaction =
-            [ this ]
-            {
-                setDcPin();
-            };
+    m_pBusPtr->addXferTransaction( std::move( blockSetup ) );
 
-        fullTransaction.transactionAction =
-            [this, _colorToFill]
-            {
-                std::uint32_t addrOffset = Interface::Spi::SpiBus::DmaBufferSize
-                            *   getTransitionOffset();
+    // constexpr size_t DmaBufferSize = Interface::Spi::SpiBus::DmaBufferSize;
+    // const size_t FullDmaTransactionsCount =  TransferBufferSize  / DmaBufferSize;
+    // const size_t ChunkedTransactionsCount = TransferBufferSize  % DmaBufferSize;
 
-                m_pBusPtr->sendChunk(
-                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + addrOffset
-                    ,   Interface::Spi::SpiBus::DmaBufferSize
-                );
-            };
+    // m_completedTransitionsCount = 0;
 
-        if( FullDmaTransactionsCount > 1 )
-            fullTransaction.repeatsCount = FullDmaTransactionsCount - 1;
+    // if( FullDmaTransactionsCount > 0 )
+    // {
+    //     Interface::Spi::Transaction fullTransaction{};
+    //     fullTransaction.beforeTransaction =
+    //         [ this ]
+    //         {
+    //             setDcPin();
+    //         };
 
-        if( ChunkedTransactionsCount == 0 )
-            fullTransaction.afterTransaction = 
-                [this]
-                {
-                    onRectArreaFilled.emit();
-                    resetDcPin();
-                };
+    //     fullTransaction.transactionAction =
+    //         [this, _colorToFill]
+    //         {
+    //             std::uint32_t addrOffset = Interface::Spi::SpiBus::DmaBufferSize
+    //                         *   getTransitionOffset();
 
-        m_pBusPtr->addTransaction( std::move( fullTransaction ) );
-    }
+    //             m_pBusPtr->sendChunk(
+    //                     reinterpret_cast<const std::uint8_t*>( _colorToFill ) + addrOffset
+    //                 ,   Interface::Spi::SpiBus::DmaBufferSize
+    //             );
+    //         };
 
-    if( ChunkedTransactionsCount > 0 )
-    {
-        Interface::Spi::Transaction chunkTransmission{};
-        chunkTransmission.beforeTransaction =
-            [ this ]
-            {
-                setDcPin();
-            };
+    //     if( FullDmaTransactionsCount > 1 )
+    //         fullTransaction.repeatsCount = FullDmaTransactionsCount - 1;
 
-        chunkTransmission.transactionAction =
-            [this, _colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
-            {
-                const size_t transmissionOffset = FullDmaTransactionsCount >= 1
-                    ?   DmaBufferSize * getTransitionOffset() : 0;
+    //     if( ChunkedTransactionsCount == 0 )
+    //         fullTransaction.afterTransaction = 
+    //             [this]
+    //             {
+    //                 onRectArreaFilled.emit();
+    //                 resetDcPin();
+    //             };
 
-                m_pBusPtr->sendChunk(
-                        reinterpret_cast<const std::uint8_t*>( _colorToFill ) + transmissionOffset
-                    ,   ChunkedTransactionsCount
-                );
-            };
-            chunkTransmission.afterTransaction = 
-                [this]
-                {
-                    onRectArreaFilled.emit();
-                    resetDcPin();
-                };
+    //     m_pBusPtr->addTransaction( std::move( fullTransaction ) );
+    // }
 
-        m_pBusPtr->addTransaction( std::move( chunkTransmission ) );
-    }
+    // if( ChunkedTransactionsCount > 0 )
+    // {
+    //     Interface::Spi::Transaction chunkTransmission{};
+    //     chunkTransmission.beforeTransaction =
+    //         [ this ]
+    //         {
+    //             setDcPin();
+    //         };
+
+    //     chunkTransmission.transactionAction =
+    //         [this, _colorToFill,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
+    //         {
+    //             const size_t transmissionOffset = FullDmaTransactionsCount >= 1
+    //                 ?   DmaBufferSize * getTransitionOffset() : 0;
+
+    //             m_pBusPtr->sendChunk(
+    //                     reinterpret_cast<const std::uint8_t*>( _colorToFill ) + transmissionOffset
+    //                 ,   ChunkedTransactionsCount
+    //             );
+    //         };
+    //         chunkTransmission.afterTransaction = 
+    //             [this]
+    //             {
+    //                 onRectArreaFilled.emit();
+    //                 resetDcPin();
+    //             };
+
+    //     m_pBusPtr->addTransaction( std::move( chunkTransmission ) );
+    // }
     
     m_pBusPtr->runQueue();
 }

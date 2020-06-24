@@ -44,6 +44,8 @@ public:
 
 public:
 
+    void addXferTransaction( TransactionDescriptor&& _deskcriptor );
+
     void sendData( std::uint8_t _data );
 
     void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize );
@@ -75,8 +77,19 @@ private:
 
     void performTransaction( uint16_t _dataSize );
 
+    void setupBlockTransactionInternal(
+            std::function<void()> beforeTransaction
+        ,   std::function<void()> afterTransaction
+        ,   const TransactionDescriptor::DataSequence& dataSequence
+    );
+
+    std::uint32_t getTransitionOffset();
+
+
 private:
+
     std::atomic<bool> m_isTransactionCompleted;
+    std::uint32_t m_completedTransitionsCount;
 
     static constexpr inline int QueueSize = 32;
 

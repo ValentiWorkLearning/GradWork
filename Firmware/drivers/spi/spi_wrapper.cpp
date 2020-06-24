@@ -166,6 +166,7 @@ SpiBus::SpiBus(
         ,   std::uint8_t _driverInstance
     )
     :   m_isTransactionCompleted{ true }
+    ,   m_completedTransitionsCount{}
     ,   m_pSpiBackendImpl{
             std::make_unique<SpiBackendImpl>(
                     _clockPin
@@ -271,6 +272,120 @@ void SpiBus::receiveChunk( std::uint8_t* _pBuffer, const size_t _bufferSize )
 SpiBus::DmaBufferType& SpiBus::getDmaBuffer()
 {
     return DmaArray;
+}
+
+
+void
+SpiBus::addXferTransaction( TransactionDescriptor&& _deskcriptor )
+{
+    TransactionDescriptor localDescriptor{std::move( _deskcriptor )};
+
+    std::visit(
+            [ this,&localDescriptor ](auto&& _tTransactionData)
+            {
+                using TTransactionData = std::decay_t<decltype( _tTransactionData )>;
+
+                Transaction transactionInternalImpl;
+
+                if constexpr (std::is_same_v<TTransactionData, std::uint8_t>)
+                {
+
+                    transactionInternalImpl.beforeTransaction = localDescriptor.beforeTransaction;
+                    transactionInternalImpl.afterTransaction = localDescriptor.afterTransaction;
+
+                    transactionInternalImpl.transactionAction =
+                        [this,_tTransactionData]
+                        {
+                            m_isTransactionCompleted = false;
+
+                            SpiBus::DmaArray[0] = _tTransactionData;
+
+                            constexpr std::uint8_t transactionSize = 1;
+                            m_pSpiBackendImpl->performTransaction( transactionSize );
+                        };
+
+                    m_transactionsQueue.push( std::move( transactionInternalImpl ) );
+                }
+                else if constexpr (std::is_same_v<TTransactionData, TransactionDescriptor::DataSequence>)
+                {
+                    setupBlockTransactionInternal(
+                            localDescriptor.beforeTransaction
+                        ,   localDescriptor.afterTransaction
+                        ,   _tTransactionData
+                    );
+                }
+            }
+        ,   localDescriptor.transactionData
+    );
+}
+
+void
+SpiBus::setupBlockTransactionInternal(
+        std::function<void()> beforeTransaction
+    ,   std::function<void()> afterTransaction
+    ,   const TransactionDescriptor::DataSequence& dataSequence
+)
+{
+
+    m_completedTransitionsCount = 0;
+
+    const size_t TransferBufferSize = dataSequence.blockSize;
+    const size_t FullDmaTransactionsCount =  TransferBufferSize  / Interface::Spi::SpiBus::DmaBufferSize;
+    const size_t ChunkedTransactionsCount = TransferBufferSize  % Interface::Spi::SpiBus::DmaBufferSize;
+
+    const std::uint8_t* pDataBlock = dataSequence.dataBlock;
+
+    if( FullDmaTransactionsCount > 0 )
+    {
+        Interface::Spi::Transaction fullTransaction{};
+        fullTransaction.beforeTransaction = beforeTransaction;
+        fullTransaction.transactionAction =
+            [this, pDataBlock]
+            {
+                std::uint32_t addrOffset = Interface::Spi::SpiBus::DmaBufferSize
+                            *   getTransitionOffset();
+
+                    this->sendChunk(
+                        pDataBlock + addrOffset
+                    ,   Interface::Spi::SpiBus::DmaBufferSize
+                );
+            };
+
+        if( FullDmaTransactionsCount > 1 )
+            fullTransaction.repeatsCount = FullDmaTransactionsCount - 1;
+
+        if( ChunkedTransactionsCount == 0 )
+            fullTransaction.afterTransaction = afterTransaction;
+
+        this->addTransaction( std::move( fullTransaction ) );
+    }
+
+    if( ChunkedTransactionsCount > 0 )
+    {
+        Interface::Spi::Transaction chunkTransmission{};
+        chunkTransmission.beforeTransaction = beforeTransaction;
+
+        chunkTransmission.transactionAction =
+            [this, pDataBlock,ChunkedTransactionsCount ,FullDmaTransactionsCount ]
+            {
+                const size_t transmissionOffset = FullDmaTransactionsCount >= 1
+                    ?   DmaBufferSize * getTransitionOffset() : 0;
+
+                this->sendChunk(
+                        pDataBlock + transmissionOffset
+                    ,   ChunkedTransactionsCount
+                );
+            };
+            chunkTransmission.afterTransaction = afterTransaction;
+
+        this->addTransaction( std::move( chunkTransmission ) );
+    }
+}
+
+std::uint32_t
+SpiBus::getTransitionOffset()
+{
+    return m_completedTransitionsCount++;
 }
 
 template< typename TSpiInstance >
