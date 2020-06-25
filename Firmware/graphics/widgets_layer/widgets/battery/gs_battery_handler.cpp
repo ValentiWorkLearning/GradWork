@@ -34,7 +34,7 @@ BatteryWidgetHandler::BatteryWidgetHandler( IBatteryWidget* _bateryWidget )
 void
 BatteryWidgetHandler::handleEventImpl( const Events::TBatteryEvents& _event, const std::any& _eventData )
 {
-    if( _event == Events::TBatteryEvents::BatteryLevelChanged )
+    if( _event != Events::TBatteryEvents::BatteryLevelChanged )
         return;
 
     std::uint8_t batteryValue = std::any_cast<std::uint8_t>( _eventData );
