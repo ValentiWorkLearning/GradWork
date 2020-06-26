@@ -1,13 +1,6 @@
 #include "inc/display/display_st7789v.hpp"
 #include "display_st7789v_constants.hpp"
 
-#include "ih/drivers/transaction_item.hpp"
-
-#include "spi/spi_wrapper.hpp"
-#include "delay/delay_provider.hpp"
-
-#include "pca10040.h"
-
 #include <array>
 
 namespace DisplayReg = DisplayDriver::St7789vRegisters;
@@ -20,13 +13,11 @@ St7789V::St7789V(
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     )
-    :   
-        m_completedTransitionsCount{}
-    ,   m_width{ _width }
-    ,   m_height { _height }
-    ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output) }
-    ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
-    ,   m_pBusPtr{ std::move( _busPtr ) }
+    :   BaseSpiDisplay(
+                std::move( _busPtr )
+            ,   _width
+            ,   _height
+        )
 {
     initDisplay();
     initColumnRow( _width, _height );
@@ -37,9 +28,9 @@ St7789V::~St7789V()= default;
 void
 St7789V::initDisplay()
 {
-    m_resetPin.reset();
+    BaseSpiDisplay::resetResetPin();
     Delay::waitFor( 100 );
-    m_resetPin.set();
+    BaseSpiDisplay::setResetPin();
 
     sendCommand(    DisplayReg::SWRESET    );
     Delay::waitFor( 150 );
@@ -53,78 +44,7 @@ St7789V::initDisplay()
     sendCommand(    DisplayReg::DISPON     );
     sendCommand(    DisplayReg::MADCTL     , 0xC0   ); // 0xC0 for inverted orientation
 
-    m_pBusPtr->runQueue();
-}
-
-void St7789V::sendCommand(
-        std::uint8_t _command
-)
-{
-    Interface::Spi::Transaction commandTransaction{};
-
-    commandTransaction.beforeTransaction =
-        [ this ]
-        {
-            resetDcPin();
-        };
-    
-    commandTransaction.transactionAction =
-        [ this, _command ]
-        {
-            m_pBusPtr->sendData( _command );
-        };
-
-    commandTransaction.afterTransaction =
-        [ this ]
-        {
-            setDcPin();
-        };
-    
-    m_pBusPtr->addTransaction( std::move( commandTransaction ) );
-
-}
-
-template< typename ... Args >
-void St7789V::sendCommand(
-        std::uint8_t _command
-    ,   Args... _commandArgs
-    )
-{
-    sendCommand( _command );
-    sendChunk( _commandArgs... );
-}
-
-template< typename ... Args >
-void St7789V::sendChunk(
-        Args... _chunkArgs
-)
-{
-    std::array chunk = { _chunkArgs... };
-
-    Interface::Spi::Transaction chunkTransaction{};
-
-    chunkTransaction.beforeTransaction =
-        [ this ]
-        {
-            setDcPin();
-        };
-    
-    chunkTransaction.transactionAction =
-        [ this, chunkToSend = std::move( chunk ) ]
-        {
-            m_pBusPtr->sendChunk(
-                    reinterpret_cast<const std::uint8_t*>( chunkToSend.data() )
-                ,   chunkToSend.size()
-            );
-        };
-
-    chunkTransaction.afterTransaction =
-        [ this ]
-        {
-            resetDcPin();
-        };
-    
-    m_pBusPtr->addTransaction( std::move( chunkTransaction ) );
+    BaseSpiDisplay::getSpiBus()->runQueue();
 }
 
 void St7789V::initColumnRow(
@@ -168,9 +88,12 @@ void St7789V::fillRectangle(
     ,   IDisplayDriver::TColor* _colorToFill
 )
 {
-    if( (_x >= m_width) || (_y >= m_height )) return;
-    if( _width >= m_width) _width = m_width - _x;
-    if( _height>= m_height) _height = m_height - _y;
+    const std::uint16_t DisplayHeight = BaseSpiDisplay::getHeight();
+    const std::uint16_t DisplayWidth = BaseSpiDisplay::getWidth();
+
+    if( (_x >= DisplayWidth) || (_y >= DisplayHeight )) return;
+    if( _width >= DisplayWidth) _width = DisplayWidth - _x;
+    if( _height>= DisplayHeight) _height = DisplayHeight - _y;
 
     const size_t BytesSizeX = ( _width - _x + 1 );
     const size_t BytesSizeY = ( _height - _y + 1);
@@ -196,13 +119,8 @@ void St7789V::fillRectangle(
                 }
         };
 
-    m_pBusPtr->addXferTransaction( std::move( blockSetup ) );
-    m_pBusPtr->runQueue();
-}
-
-std::uint32_t St7789V::getTransitionOffset()
-{
-    return m_completedTransitionsCount++;
+    BaseSpiDisplay::getSpiBus()->addXferTransaction( std::move( blockSetup ) );
+    BaseSpiDisplay::getSpiBus()->runQueue();
 }
 
 void St7789V::setAddrWindow(
@@ -238,16 +156,6 @@ void St7789V::setAddrWindow(
         ,   static_cast<std::uint8_t>( ya )
     );
     
-}
-
-void St7789V::resetDcPin()
-{
-    m_dcPin.reset();
-}
-    
-void St7789V::setDcPin()
-{
-    m_dcPin.set();
 }
 
 std::unique_ptr<St7789V>
