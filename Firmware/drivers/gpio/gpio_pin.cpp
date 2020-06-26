@@ -61,12 +61,12 @@ class GpioPin::GpioBackendImpl
 
         void set()
         {
-            Logger::Instance.logDebugEndl( "Gpio Set called" );
+            Logger::Instance().logDebugEndl( "Gpio Set called" );
         }
 
         void reset()
         {
-            Logger::Instance.logDebugEndl( "Gpio Reset called" );
+            Logger::Instance().logDebugEndl( "Gpio Reset called" );
         }
 
     };
