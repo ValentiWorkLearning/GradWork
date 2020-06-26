@@ -4,24 +4,22 @@
 
 #include "display_spi_common.hpp"
 
-#include "display_st7789v_constants.hpp"
-
 namespace DisplayDriver
 {
 
-class St7789V
+class GC9A01
         :   public BaseSpiDisplay
 {
 
 public:
 
-    explicit St7789V(
+    explicit GC9A01(
             std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     );
 
-    ~St7789V() override;
+    ~GC9A01() override;
 
     void turnOn() override;
 
@@ -39,26 +37,16 @@ private:
 
     void initDisplay();
 
-    void initColumnRow(
-            std::uint16_t _width
-        ,   std::uint16_t _height
-    );
-
     void setAddrWindow(
             std::uint16_t _x
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     );
-
-private:
-
-    std::uint8_t m_columnStart;
-    std::uint8_t m_rowStart;
 };
 
-std::unique_ptr<St7789V>
-createDisplayDriverSt7789V(
+std::unique_ptr<GC9A01>
+createDisplayDriverGC9A01(
         std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height

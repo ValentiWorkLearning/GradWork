@@ -159,7 +159,7 @@ void St7789V::setAddrWindow(
 }
 
 std::unique_ptr<St7789V>
-createDisplayDriver(
+createDisplayDriverSt7789V(
         std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height

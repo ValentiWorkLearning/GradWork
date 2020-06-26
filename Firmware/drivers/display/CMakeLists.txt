@@ -1,6 +1,7 @@
 add_library(
     watch_display
     display_st7789v.cpp
+    display_gc9a01.cpp
     display_creator.cpp
 )
 
@@ -34,7 +35,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_compile_definitions(
         watch_display
         PRIVATE
-        USE_ST7789V_BACKEND
+        USE_GC9A01_BACKEND
     )
 
     target_link_libraries(watch_display

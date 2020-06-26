@@ -91,7 +91,7 @@ private:
     std::atomic<bool> m_isTransactionCompleted;
     std::uint32_t m_completedTransitionsCount;
 
-    static constexpr inline int QueueSize = 32;
+    static constexpr inline int QueueSize = 60;
 
     using TTransactionStorage = etl::queue<
             Transaction
