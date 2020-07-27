@@ -22,7 +22,7 @@ TEST_F(ClockPageHandlerTest, ExpectInitialDefeaultDate )
 {
 	setDefaultDate();
 
-	EXPECT_EQ(fakeView.getHours(), "15");
+	EXPECT_EQ(fakeView.getHours(), "14");
 	EXPECT_EQ(fakeView.getMinutes(), "24");
 	EXPECT_EQ(fakeView.getSeconds(), "43");
 	EXPECT_EQ(fakeView.getWeekday(), "MON");
@@ -44,10 +44,10 @@ TEST_F(ClockPageHandlerTest, ViewStaysUnchangedWhenInviisible)
 			{
 					Graphics::Events::EventGroup::DateTime
 				,	Graphics::Events::TDateTimeEvents::DateTimeChanged
-				,	TimeWrapper("2020/06/22 15:24:43", '/', ':')
+				,	TimeWrapper("2020/06/22 14:24:43", '/', ':')
 			}
 		);
-	EXPECT_EQ( fakeView.getHours(), "15" );
+	EXPECT_EQ( fakeView.getHours(), "14" );
 }
 
 TEST_F(ClockPageHandlerTest, OnlyHoursLabelIsRefreshedWhenNewDateTimeEventOccurs )
@@ -59,7 +59,7 @@ TEST_F(ClockPageHandlerTest, OnlyHoursLabelIsRefreshedWhenNewDateTimeEventOccurs
 	EXPECT_CALL( fakePageMock, isVisible() )
 		.Times(1).WillOnce(Return(true));
 
-	EXPECT_CALL( fakePageMock, setHours( "16" ) ).Times( 1 );
+	EXPECT_CALL( fakePageMock, setHours( "15" ) ).Times( 1 );
 
 	//Only hours were changed
 	pageMockWatchHandler->handleEvent(

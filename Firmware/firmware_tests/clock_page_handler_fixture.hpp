@@ -15,6 +15,8 @@ protected:
 
 	void SetUp() override
 	{
+		setupTimeZoneEnvironment();
+
 		pageWatchHandler = Graphics::Views::createPageWatchHandler( &fakeView );
 		pageMockWatchHandler = Graphics::Views::createPageWatchHandler( &fakePageMock );
 	}
@@ -43,7 +45,7 @@ protected:
 		EXPECT_CALL(fakePageMock, isVisible())
 			.Times(1).WillOnce(Return(true));
 
-		EXPECT_CALL( fakePageMock, setHours( "15" ) )
+		EXPECT_CALL( fakePageMock, setHours( "14" ) )
 			.Times(1);
 		EXPECT_CALL( fakePageMock, setMinutes( "24" ) )
 			.Times(1);
@@ -69,4 +71,14 @@ protected:
 	FakeClockPage fakeView;
 	std::unique_ptr<Graphics::IEventHandler> pageWatchHandler;
 	std::unique_ptr<Graphics::IEventHandler> pageMockWatchHandler;
+
+private:
+
+	void setupTimeZoneEnvironment()
+	{
+		// https://github.com/ikonopistsev/btdef/blob/4893ca36f5a251147c57ecfa460acfbe717f69c3/util/time_zone.hpp
+		// https://science.ksc.nasa.gov/software/winvn/userguide/3_1_4.htm
+		_putenv_s("TZ", "UTC");
+		_tzset();
+	}
 };
