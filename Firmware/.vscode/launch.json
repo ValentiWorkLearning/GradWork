@@ -27,7 +27,7 @@
                     {
                         "encoding": "utf8",
                         "port": 0,
-                        "label": "SWO"
+                        "label": "SWO",
                         "type": "console"
                     }
                 ]

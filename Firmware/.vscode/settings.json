@@ -102,6 +102,7 @@
         "iomanip": "cpp",
         "memory_resource": "cpp",
         "variant": "cpp",
-        "format": "cpp"
+        "format": "cpp",
+        "unordered_set": "cpp"
     }
 }

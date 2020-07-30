@@ -79,7 +79,7 @@ protected:
     )
     {
         sendCommand( _command );
-        sendChunk( _commandArgs... );
+        sendChunk( static_cast<std::uint8_t>(_commandArgs)... );
     }
 
     template< typename ... Args >
@@ -87,8 +87,7 @@ protected:
             Args... _chunkArgs
     )
     {
-        std::array chunk = { _chunkArgs... };
-
+        std::array chunk = { static_cast<std::uint8_t>(_chunkArgs)... };
         Interface::Spi::Transaction chunkTransaction{};
 
         chunkTransaction.beforeTransaction =
