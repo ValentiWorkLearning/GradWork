@@ -15,6 +15,7 @@ enum class EventGroup
     ,   HardwareButtons
     ,   DateTime
     ,   GraphicsEvents
+    ,   Buttons
     ,   EventGroupEnd
 };
 
@@ -73,6 +74,16 @@ enum class TGraphicsEvents
     ,   PageHiding
     ,   PageActivated
     ,   GraphicsEventsEnd
+};
+
+enum class TButtonsEvents
+{
+        TButtonsEventsBegin = enumConvert<TGraphicsEvents>( TGraphicsEvents::GraphicsEventsEnd )
+    ,   ButtonClicked
+    ,   ButtonReleased
+    ,   ButtonDblClick
+    ,   ButtonLongClick
+    ,   ButtonEventsEnd
 };
 
 }

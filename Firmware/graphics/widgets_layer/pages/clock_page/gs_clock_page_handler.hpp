@@ -49,7 +49,7 @@ private:
     std::string m_fullDateString;
 };
 
-std::unique_ptr<Graphics::IEventHandler>
+Graphics::TEventHandlerPtr
 createPageWatchHandler( IClockWatchPage* _clockPage);
 
 };

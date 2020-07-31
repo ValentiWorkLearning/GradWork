@@ -16,7 +16,10 @@ add_executable(
     ${PROJECT_NAME}
     main.cpp
     clock_page_view_handler_test.cpp
-    clock_page_handler_fixture.hpp)
+    clock_page_handler_fixture.hpp
+    buttons_driver_test.cpp
+    buttons_fixture.hpp
+    buttons_fake_event_handler.hpp)
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
@@ -31,6 +34,7 @@ target_link_libraries(
     gtest_main
     watch_graphics
     lvgl_lib
+    drivers_ih
     UtilsLibrary
 )
 

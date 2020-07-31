@@ -44,6 +44,8 @@ private:
     std::atomic_flag locker = ATOMIC_FLAG_INIT;
 };
 
-std::unique_ptr<EventDispatcher> createEventDispatcher();
+using TEventDispatcherPtr = std::unique_ptr<EventDispatcher>;
+
+TEventDispatcherPtr createEventDispatcher();
 
 }

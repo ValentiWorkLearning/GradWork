@@ -59,7 +59,10 @@ public:
             if constexpr ( Meta::HasType<Events::TGraphicsEvents,EventsToHandle>::value )
                 this->handleEventImpl( std::any_cast<Events::TGraphicsEvents>( genericEvent.eventType ), genericEvent.eventData );
             break;
-
+        case Events::EventGroup::Buttons:
+            if constexpr (Meta::HasType<Events::TButtonsEvents, EventsToHandle>::value)
+                this->handleEventImpl(std::any_cast<Events::TButtonsEvents>(genericEvent.eventType), genericEvent.eventData);
+            break;
         default:
             break;
         }
