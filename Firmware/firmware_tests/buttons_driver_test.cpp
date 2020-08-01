@@ -7,5 +7,12 @@
 
 TEST_F(ButtonsDriverTest, SimpleSingleClick)
 {
-	
+	/*---------------Setup---------------*/
+
+
+
+	ASSERT_EQ( m_pFakeEventHandler->getLastEvent(),Graphics::Events::TButtonsEvents::ButtonReleased );
+
+	/*---------------TestingAction-------*/
+
 }

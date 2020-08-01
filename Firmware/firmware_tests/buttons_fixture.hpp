@@ -40,7 +40,7 @@ protected:
 
 	Buttons::TButtonsDriverPtr m_pButtonsDriver;
 	Graphics::Events::TEventDispatcherPtr m_pEventDispatcher;
-	Graphics::TEventHandlerPtr m_pFakeEventHandler;
+	FakeButton::TFakeButtonsHandlerPtr m_pFakeEventHandler;
 
 private:
 
