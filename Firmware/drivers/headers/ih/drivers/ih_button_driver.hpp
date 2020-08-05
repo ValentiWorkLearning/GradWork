@@ -32,6 +32,12 @@ public:
 
     virtual ~IButtonTimerWrapper() = default;
 
+    virtual void startTimer() = 0;
+
+    virtual void stopTimer() = 0;
+
+    virtual bool isTimerEllapsed()const = 0;
+
 public:
     Simple::Signal<void()> onTimerExpired;
 };

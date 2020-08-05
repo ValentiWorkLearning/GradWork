@@ -14,6 +14,8 @@ class ButtonsDriver
 
 public:
 
+	ButtonsDriver();
+
 	void setTimer(IButtonTimerWrapper* _pTimerWrapper)override;
 
 	void setButtonsBackend(IButtonsBackend* _pTimerWrapper)override;
@@ -37,6 +39,9 @@ private:
 	IButtonTimerWrapper* m_timerImpl;
 	IButtonsBackend* m_buttonBackendImpl;
 	ButtonsCollection m_buttons;
+
+	std::uint8_t m_lastPressedId;
+	std::uint8_t m_pressCount;
 };
 
 TButtonsDriverPtr createButtonsDriver();

@@ -15,11 +15,32 @@ public:
 
 public:
 
+    bool isTimerEllapsed() const
+    {
+        return m_isTimerEllapsed;
+    };
+
+    void startTimer() override
+    {
+        m_isTimerEllapsed = false;
+    }
+
+    void stopTimer() override
+    {
+        m_isTimerEllapsed = true;
+    }
+
+public:
+
     void ellapseTimer()
     {
+        m_isTimerEllapsed = true;
         onTimerExpired.emit();
     }
 
+private:
+
+    bool m_isTimerEllapsed = false;
 };
 
 using TFakeTimerBackendPtr = std::unique_ptr<FakeTimerBackend>;
