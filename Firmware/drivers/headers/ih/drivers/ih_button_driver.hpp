@@ -9,7 +9,7 @@
 namespace Buttons
 {
 
-enum class Event
+enum class ButtonState
 {
         kButtonUp
     ,   kButtonDown
@@ -18,10 +18,11 @@ enum class Event
     ,   kButtonLongPress
 };
 
+
 struct ButtonEvent
 {
     std::uint8_t buttonId;
-    Event buttonEvent;
+    ButtonState buttonEvent;
 };
 
 class IButtonTimerWrapper
@@ -35,8 +36,24 @@ public:
     Simple::Signal<void()> onTimerExpired;
 };
 
-using TTimerWrapperPtr = std::unique_ptr<IButtonTimerWrapper>;
+enum class ButtonBackendEvent
+{
+        Pressed
+    ,   Released
+};
 
+class IButtonsBackend
+{
+
+public:
+
+    virtual ~IButtonsBackend() = default;
+
+public:
+
+public:
+    Simple::Signal<void( std::uint8_t, ButtonBackendEvent)> onButtonEvent;
+};
 
 class IButtonsDriver
 {
@@ -47,12 +64,13 @@ public:
 
 public:
 
-    virtual void setTimer( TTimerWrapperPtr&& _pTimerWrapper ) = 0;
+    virtual void setTimer( IButtonTimerWrapper* _pTimerWrapper ) = 0;
+
+    virtual void setButtonsBackend( IButtonsBackend* _pTimerWrapper ) = 0;
 
 public:
 
     Simple::Signal<void(ButtonEvent)> onButtonEvent;
-
 };
 
 using TButtonsDriverPtr = std::unique_ptr<IButtonsDriver>;

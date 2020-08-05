@@ -32,9 +32,11 @@ target_link_libraries(
     gtest
     gmock
     gtest_main
+
     watch_graphics
     lvgl_lib
     drivers_ih
+    buttons_driver
     UtilsLibrary
 )
 

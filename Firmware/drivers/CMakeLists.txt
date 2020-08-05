@@ -8,6 +8,7 @@ add_subdirectory(i2c)
 add_subdirectory(board)
 add_subdirectory(gpio)
 add_subdirectory(ble)
+add_subdirectory(buttons)
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     add_subdirectory(display)

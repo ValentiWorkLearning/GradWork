@@ -16,12 +16,18 @@ TEST_F(ButtonsDriverTest, SimpleSingleClick)
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
 	};
 
+	/*---------------TestingAction-------*/
+
+	m_pFakeButtonsBackend->fakeButtonPress(0);
+	m_pFakeButtonsBackend->fakeButtonRelease(0);
+	m_pEventDispatcher->processEventQueue();
+
+	/*---------------Assertions---------------*/
+
 	constexpr size_t EventsCount = 3;
 	ASSERT_EQ( m_pFakeEventHandler->getEventsCount(), EventsCount );
 	
 	for (size_t i{}; i< EventsCount; ++i )
 		ASSERT_EQ( m_pFakeEventHandler->getEventAt(i), eventsToCheck[i] );
-
-	/*---------------TestingAction-------*/
 
 }
