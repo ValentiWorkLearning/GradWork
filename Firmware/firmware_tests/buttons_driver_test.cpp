@@ -10,8 +10,17 @@ TEST_F(ButtonsDriverTest, SimpleSingleClick)
 	/*---------------Setup---------------*/
 
 
+	const auto eventsToCheck = std::array{
+			Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+	};
 
-	ASSERT_EQ( m_pFakeEventHandler->getLastEvent(),Graphics::Events::TButtonsEvents::ButtonReleased );
+	constexpr size_t EventsCount = 3;
+	ASSERT_EQ( m_pFakeEventHandler->getEventsCount(), EventsCount );
+	
+	for (size_t i{}; i< EventsCount; ++i )
+		ASSERT_EQ( m_pFakeEventHandler->getEventAt(i), eventsToCheck[i] );
 
 	/*---------------TestingAction-------*/
 

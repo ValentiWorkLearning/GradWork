@@ -80,6 +80,7 @@ enum class TButtonsEvents
 {
         TButtonsEventsBegin = enumConvert<TGraphicsEvents>( TGraphicsEvents::GraphicsEventsEnd )
     ,   ButtonClicked
+    ,   ButtonPressed
     ,   ButtonReleased
     ,   ButtonDblClick
     ,   ButtonLongClick

@@ -20,7 +20,6 @@ public:
 
     explicit FakeButtonEventsHandler()
         :   m_button{}
-        ,   m_lastEvent{ Graphics::Events::TButtonsEvents::TButtonsEventsBegin }
     {
     };
 
@@ -28,9 +27,24 @@ public:
 
 public:
 
+    bool hasEvents()const
+    {
+        return !m_receivedEvents.empty();
+    }
+
+    size_t getEventsCount() const
+    {
+        return m_receivedEvents.size();
+    }
+
+    Graphics::Events::TButtonsEvents getEventAt( size_t _eventIndex )
+    {
+        return m_receivedEvents.at( _eventIndex );
+    }
+
     Graphics::Events::TButtonsEvents getLastEvent() const
     {
-        return m_lastEvent;
+        return m_receivedEvents.back();
     }
 
     std::uint8_t getLastButton() const
@@ -42,13 +56,13 @@ protected:
 
     void handleEventImpl(const Graphics::Events::TButtonsEvents& _event, const std::any& _eventData) override
     {
-        m_lastEvent = _event;
+        m_receivedEvents.push_back( _event );
         m_button = std::any_cast<std::uint8_t>( _eventData );
     }
 
 private:
-
-    Graphics::Events::TButtonsEvents m_lastEvent;
+    using TEventsStorage = std::vector<Graphics::Events::TButtonsEvents>;
+    TEventsStorage m_receivedEvents;
     std::uint8_t m_button;
 };
 
