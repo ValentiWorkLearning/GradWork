@@ -86,7 +86,7 @@ void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBac
 			}
 			else
 			{
-				if ( m_timerImpl->isTimerEllapsed() && _buttonId == m_lastPressedId )
+				if ( m_timerImpl->isTimerEllapsed() && _buttonId == m_lastPressedId && m_pressCount == 1 )
 				{
 					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });
 				}

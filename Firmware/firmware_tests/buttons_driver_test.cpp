@@ -36,6 +36,85 @@ TEST_F(ButtonsDriverTest, SingleClick)
 
 }
 
+TEST_F(ButtonsDriverTest, SingleClickDifferentButtons)
+{
+	/*---------------Setup---------------*/
+
+
+	const auto eventsToCheck = std::array{
+			Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+	};
+
+	/*---------------TestingAction-------*/
+
+	constexpr std::uint8_t TestButtonId = 0;
+	constexpr std::uint8_t TestSecondButtonId = 1;
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestSecondButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestSecondButtonId);
+
+	m_pEventDispatcher->processEventQueue();
+
+	/*---------------Assertions---------------*/
+
+	constexpr size_t EventsCount = eventsToCheck.size();
+	ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+
+	for (size_t i{}; i < EventsCount; ++i)
+		ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+
+	ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
+
+}
+
+TEST_F(ButtonsDriverTest, SingleClickSequenceOfPushRelease)
+{
+	/*---------------Setup---------------*/
+
+
+	const auto eventsToCheck = std::array{
+			Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
+
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+	};
+
+	/*---------------TestingAction-------*/
+
+	constexpr std::uint8_t TestButtonId = 0;
+	constexpr std::uint8_t TestSecondButtonId = 1;
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonPress(TestSecondButtonId);
+
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestSecondButtonId);
+
+	m_pEventDispatcher->processEventQueue();
+
+	/*---------------Assertions---------------*/
+
+	constexpr size_t EventsCount = eventsToCheck.size();
+	ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+
+	for (size_t i{}; i < EventsCount; ++i)
+		ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+
+	ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
+
+}
 TEST_F(ButtonsDriverTest, DoubleClickWithoutTimeout )
 {
 	/*---------------Setup---------------*/
