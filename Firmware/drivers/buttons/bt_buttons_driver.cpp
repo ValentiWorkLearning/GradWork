@@ -42,10 +42,6 @@ void ButtonsDriver::setButtonsBackend(IButtonsBackend* _pTimerWrapper)
 
 void ButtonsDriver::handleTimerExpired()
 {
-	if( m_buttons[m_lastPressedId].state == ButtonState::kButtonDown )
-	{
-		onButtonEvent.emit( { m_lastPressedId, ButtonState::kButtonLongPress } );
-	}
 }
 
 void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBackendEvent _buttonEvent )
@@ -88,8 +84,16 @@ void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBac
 			{
 				onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });
 			}
-			else {
-				onButtonEvent.emit({ _buttonId, ButtonState::kButtonClick });
+			else
+			{
+				if ( m_timerImpl->isTimerEllapsed() && _buttonId == m_lastPressedId )
+				{
+					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });
+				}
+				else
+				{
+					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });
+				}
 			}
 
 		}

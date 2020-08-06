@@ -161,8 +161,8 @@ TEST_F(ButtonsDriverTest, DetectLongClickEllapsedTimer)
 
 	const auto eventsToCheck = std::array{
 			Graphics::Events::TButtonsEvents::ButtonPressed
-		,	Graphics::Events::TButtonsEvents::ButtonLongClick
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonLongClick
 	};
 
 	constexpr std::uint8_t TestButtonId = 0;
