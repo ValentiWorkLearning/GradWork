@@ -42,7 +42,10 @@ void ButtonsDriver::setButtonsBackend(IButtonsBackend* _pTimerWrapper)
 
 void ButtonsDriver::handleTimerExpired()
 {
-
+	if( m_buttons[m_lastPressedId].state == ButtonState::kButtonDown )
+	{
+		onButtonEvent.emit( { m_lastPressedId, ButtonState::kButtonLongPress } );
+	}
 }
 
 void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBackendEvent _buttonEvent )
