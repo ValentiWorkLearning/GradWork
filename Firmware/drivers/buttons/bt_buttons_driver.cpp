@@ -71,8 +71,7 @@ void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBac
 	{
 		if( m_buttons[ _buttonId ].state == ButtonState::kButtonDown )
 		{
-			m_buttons[ _buttonId ].state = ButtonState::kButtonUp;
-
+			m_buttons[_buttonId].state = ButtonState::kButtonUp;
 			onButtonEvent.emit( { _buttonId, ButtonState::kButtonUp } );
 
 			const bool shoulEmitDoubleClickEvent =
@@ -83,19 +82,20 @@ void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBac
 			if ( shoulEmitDoubleClickEvent )
 			{
 				onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });
+				m_pressCount = 0;
 			}
 			else
 			{
 				if ( m_timerImpl->isTimerEllapsed() && _buttonId == m_lastPressedId && m_pressCount == 1 )
 				{
 					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });
+					m_pressCount = 0;
 				}
 				else
 				{
 					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });
 				}
 			}
-
 		}
 
 	}

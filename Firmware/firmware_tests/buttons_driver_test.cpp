@@ -163,6 +163,7 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfTimeoutBetweenClick )
 			Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
@@ -247,6 +248,46 @@ TEST_F(ButtonsDriverTest, DetectLongClickEllapsedTimer)
 	constexpr std::uint8_t TestButtonId = 0;
 
 	/*---------------TestingAction-------*/
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeTimer->ellapseTimer();
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pEventDispatcher->processEventQueue();
+
+	/*---------------Assertions---------------*/
+
+	constexpr size_t EventsCount = eventsToCheck.size();
+	ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+
+	for (size_t i{}; i < EventsCount; ++i)
+		ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+
+	ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+}
+
+TEST_F(ButtonsDriverTest, DetectSequenceOfLongClicks)
+{
+	/*---------------Setup---------------*/
+
+
+	const auto eventsToCheck = std::array{
+			Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonLongClick
+
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonLongClick
+	};
+
+	constexpr std::uint8_t TestButtonId = 0;
+
+	/*---------------TestingAction-------*/
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeTimer->ellapseTimer();
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeTimer->ellapseTimer();
