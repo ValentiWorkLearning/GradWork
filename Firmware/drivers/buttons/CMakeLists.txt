@@ -1,6 +1,7 @@
 add_library(
     buttons_driver
     bt_buttons_driver.cpp
+    bt_buttons_driver_creator.cpp
 )
 
 target_include_directories(
@@ -19,6 +20,11 @@ target_link_libraries(
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_sources(
+        buttons_driver
+        PRIVATE
+        bt_nordic_hardware_backend.cpp
+    )
     target_link_libraries(buttons_driver
         PRIVATE
         NordicSDK::Common

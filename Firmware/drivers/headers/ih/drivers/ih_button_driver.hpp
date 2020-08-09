@@ -42,6 +42,8 @@ public:
     Simple::Signal<void()> onTimerExpired;
 };
 
+using TButtonTimerWrapperPtr = std::unique_ptr<IButtonTimerWrapper>;
+
 enum class ButtonBackendEvent
 {
         Pressed
@@ -60,6 +62,8 @@ public:
 public:
     Simple::Signal<void( std::uint8_t, ButtonBackendEvent)> onButtonEvent;
 };
+
+using TButtonsBackendPtr = std::unique_ptr<IButtonsBackend>;
 
 class IButtonsDriver
 {
@@ -80,7 +84,5 @@ public:
 };
 
 using TButtonsDriverPtr = std::unique_ptr<IButtonsDriver>;
-
-//TButtonsDriverPtr createButtonsDriver();
 
 }

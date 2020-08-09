@@ -16,6 +16,29 @@
 
 #include <optional>
 
+namespace EventConvert
+{
+    Graphics::Events::TButtonsEvents toButtonEvent( Buttons::ButtonState _buttonToConvert )
+    {
+        switch (_buttonToConvert)
+        {
+        case Buttons::ButtonState::kButtonUp:
+            return Graphics::Events::TButtonsEvents::ButtonReleased;
+        case Buttons::ButtonState::kButtonDown:
+            return Graphics::Events::TButtonsEvents::ButtonPressed;
+        case Buttons::ButtonState::kButtonClick:
+            return Graphics::Events::TButtonsEvents::ButtonClicked;
+        case Buttons::ButtonState::kButtonDblClick:
+            return Graphics::Events::TButtonsEvents::ButtonDblClick;
+        case Buttons::ButtonState::kButtonLongPress:
+            return Graphics::Events::TButtonsEvents::ButtonLongClick;
+        default:
+            assert(false);
+            return Graphics::Events::TButtonsEvents::ButtonPressed;
+        }
+    }
+}
+
 Application::Application()
 {
     initBoard();
@@ -23,6 +46,7 @@ Application::Application()
     initServices();
     initGraphicsStack();
     initBleStack();
+    connectBoardSpecificEvents();
 }
 
 Application::~Application() = default;
@@ -30,7 +54,7 @@ Application::~Application() = default;
 void
 Application::initBoard()
 {
-    WatchBoard::initBoard();
+    m_pBoardImpl = WatchBoard::createBoard();
 }
 
 void
@@ -144,6 +168,26 @@ Application::initGraphicsStack()
     );
 }
 
+
+void
+Application::connectBoardSpecificEvents()
+{
+    auto& pMainWindow = m_graphicsService->getMainWindow();
+
+    m_pBoardImpl->getButtonsDriver()->onButtonEvent.connect(
+        [&pMainWindow]( Buttons::ButtonEvent _buttonEvent )
+        {
+            pMainWindow.getEventDispatcher().postEvent(
+                {
+                        Graphics::Events::EventGroup::Buttons
+                    ,   EventConvert::toButtonEvent( _buttonEvent.buttonEvent )
+                    ,   _buttonEvent.buttonId
+                }
+            );
+        }
+    );
+}
+
 void
 Application::runApplicationLoop()
 {
@@ -155,6 +199,6 @@ Application::runApplicationLoop()
     {
         m_graphicsService->executeGlTask();
         Simple::Lib::ExecuteLaterPool::Instance().processQueue();
-        WatchBoard::toggleStatusLed();
+        m_pBoardImpl->toggleStatusLed();
     }
 }

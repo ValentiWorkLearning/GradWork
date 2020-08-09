@@ -12,6 +12,8 @@
 
 #include "ih/drivers/ih_ible_softdevice.hpp"
 
+#include "board/watchboard.hpp"
+
 #include "utils/Noncopyable.hpp"
 
 class Application
@@ -39,6 +41,8 @@ private:
 
     void initGraphicsStack();
 
+    void connectBoardSpecificEvents();
+
 private:
 
     Ble::Stack::TSoftDevicePtr m_bleStackKeeper;
@@ -47,4 +51,5 @@ private:
     std::unique_ptr<ServiceProviders::HeartrateService::IHeartrateService> m_heartrateService;
     std::unique_ptr<ServiceProviders::DateTimeService::IDateTimeService> m_dateTimeService;
     std::unique_ptr<Graphics::LvglGraphicsService> m_graphicsService;
+    WatchBoard::TBoardPtr m_pBoardImpl;
 };
