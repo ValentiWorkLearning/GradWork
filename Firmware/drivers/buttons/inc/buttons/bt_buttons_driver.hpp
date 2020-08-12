@@ -24,12 +24,12 @@ private:
 
 	void handleTimerExpired();
 
-	void handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBackendEvent _buttonEvent );
+	void handleButtonsBackendEvent( ButtonId _buttonId, ButtonBackendEvent _buttonEvent );
 
 private:
 	struct ButtonDescriptor
 	{
-		std::uint8_t id;
+		ButtonId id;
 		ButtonState state;
 	};
 
@@ -40,7 +40,7 @@ private:
 	IButtonsBackend* m_buttonBackendImpl;
 	ButtonsCollection m_buttons;
 
-	std::uint8_t m_lastPressedId;
+	ButtonId m_lastPressedId;
 	std::uint8_t m_pressCount;
 };
 

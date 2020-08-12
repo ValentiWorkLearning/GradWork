@@ -47,7 +47,7 @@ public:
         return m_receivedEvents.back();
     }
 
-    std::uint8_t getLastButton() const
+    Buttons::ButtonId getLastButton() const
     {
         return m_button;
     }
@@ -57,13 +57,13 @@ protected:
     void handleEventImpl(const Graphics::Events::TButtonsEvents& _event, const std::any& _eventData) override
     {
         m_receivedEvents.push_back( _event );
-        m_button = std::any_cast<std::uint8_t>( _eventData );
+        m_button = std::any_cast<Buttons::ButtonId>( _eventData );
     }
 
 private:
     using TEventsStorage = std::vector<Graphics::Events::TButtonsEvents>;
     TEventsStorage m_receivedEvents;
-    std::uint8_t m_button;
+    Buttons::ButtonId m_button;
 };
 
 using TFakeButtonsHandlerPtr = std::unique_ptr<FakeButtonEventsHandler>;

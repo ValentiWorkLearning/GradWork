@@ -45,6 +45,8 @@ public:
 private:
 
     void initNordicButtonsBackend();
+
+    void handleHardwareButtonEvent( std::uint8_t _pinNumber, std::uint8_t _buttonEvent );
 };
 
 

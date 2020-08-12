@@ -60,13 +60,13 @@ public:
 
 public:
 
-    void fakeButtonPress( std::uint8_t _buttonId )
+    void fakeButtonPress( ButtonId _buttonId )
     {
-        onButtonEvent.emit(_buttonId, ButtonBackendEvent::Pressed );
+        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kPressed );
     }
-    void fakeButtonRelease( std::uint8_t _buttonId )
+    void fakeButtonRelease( ButtonId _buttonId )
     {
-        onButtonEvent.emit(_buttonId, ButtonBackendEvent::Released );
+        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kReleased );
     }
 };
 

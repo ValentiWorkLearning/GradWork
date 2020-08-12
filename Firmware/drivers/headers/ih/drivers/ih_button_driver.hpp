@@ -19,9 +19,18 @@ enum class ButtonState
 };
 
 
+enum class ButtonId
+{
+        kLeftButtonTop
+    ,   kLeftButtonMedium
+    ,   kLeftButtonBottom
+    ,   kRightButtonTop
+    ,   kRightButtonBottom
+};
+
 struct ButtonEvent
 {
-    std::uint8_t buttonId;
+    ButtonId buttonId;
     ButtonState buttonEvent;
 };
 
@@ -46,8 +55,8 @@ using TButtonTimerWrapperPtr = std::unique_ptr<IButtonTimerWrapper>;
 
 enum class ButtonBackendEvent
 {
-        Pressed
-    ,   Released
+        kPressed
+    ,   kReleased
 };
 
 class IButtonsBackend
@@ -60,7 +69,7 @@ public:
 public:
 
 public:
-    Simple::Signal<void( std::uint8_t, ButtonBackendEvent)> onButtonEvent;
+    Simple::Signal<void( ButtonId, ButtonBackendEvent)> onButtonEvent;
 };
 
 using TButtonsBackendPtr = std::unique_ptr<IButtonsBackend>;

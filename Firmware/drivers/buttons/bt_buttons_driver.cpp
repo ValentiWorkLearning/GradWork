@@ -33,7 +33,7 @@ void ButtonsDriver::setButtonsBackend(IButtonsBackend* _pTimerWrapper)
 {
 	m_buttonBackendImpl = _pTimerWrapper;
 	m_buttonBackendImpl->onButtonEvent.connect(
-		[this](std::uint8_t _buttonId, ButtonBackendEvent _buttonEvent)
+		[this](ButtonId _buttonId, ButtonBackendEvent _buttonEvent)
 		{
 			handleButtonsBackendEvent(_buttonId, _buttonEvent);
 		}
@@ -44,16 +44,19 @@ void ButtonsDriver::handleTimerExpired()
 {
 }
 
-void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBackendEvent _buttonEvent )
+void ButtonsDriver::handleButtonsBackendEvent( ButtonId _buttonId, ButtonBackendEvent _buttonEvent )
 {
-	if( _buttonEvent == ButtonBackendEvent::Pressed )
+	using TButtonUnderlying = std::underlying_type_t<ButtonId>;
+	auto arrayIndex = static_cast<TButtonUnderlying>( _buttonId );
+
+	if( _buttonEvent == ButtonBackendEvent::kPressed )
 	{
-		if( m_buttons[ _buttonId ].state == ButtonState::kButtonUp )
+		if( m_buttons[ arrayIndex ].state == ButtonState::kButtonUp )
 		{
-			m_buttons[ _buttonId ].state = ButtonState::kButtonDown;
+			m_buttons[ arrayIndex ].state = ButtonState::kButtonDown;
 			onButtonEvent.emit({ _buttonId, ButtonState::kButtonDown });
 
-			if ( m_lastPressedId != _buttonId )
+			if ( m_lastPressedId != _buttonId)
 			{
 				m_lastPressedId = _buttonId;
 				m_pressCount = 1;
@@ -67,11 +70,11 @@ void ButtonsDriver::handleButtonsBackendEvent( std::uint8_t _buttonId, ButtonBac
 
 		}
 	}
-	else if( _buttonEvent == ButtonBackendEvent::Released )
+	else if( _buttonEvent == ButtonBackendEvent::kReleased )
 	{
-		if( m_buttons[ _buttonId ].state == ButtonState::kButtonDown )
+		if( m_buttons[ arrayIndex ].state == ButtonState::kButtonDown )
 		{
-			m_buttons[_buttonId].state = ButtonState::kButtonUp;
+			m_buttons[arrayIndex].state = ButtonState::kButtonUp;
 			onButtonEvent.emit( { _buttonId, ButtonState::kButtonUp } );
 
 			const bool shoulEmitDoubleClickEvent =

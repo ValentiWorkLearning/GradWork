@@ -18,7 +18,7 @@ TEST_F(ButtonsDriverTest, SingleClick)
 
 	/*---------------TestingAction-------*/
 
-	constexpr std::uint8_t TestButtonId = 0;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
@@ -52,8 +52,8 @@ TEST_F(ButtonsDriverTest, SingleClickDifferentButtons)
 
 	/*---------------TestingAction-------*/
 
-	constexpr std::uint8_t TestButtonId = 0;
-	constexpr std::uint8_t TestSecondButtonId = 1;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
+	constexpr Buttons::ButtonId TestSecondButtonId = Buttons::ButtonId::kLeftButtonMedium;
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
@@ -93,8 +93,8 @@ TEST_F(ButtonsDriverTest, SingleClickSequenceOfPushRelease)
 
 	/*---------------TestingAction-------*/
 
-	constexpr std::uint8_t TestButtonId = 0;
-	constexpr std::uint8_t TestSecondButtonId = 1;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
+	constexpr Buttons::ButtonId TestSecondButtonId = Buttons::ButtonId::kLeftButtonMedium;
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonPress(TestSecondButtonId);
@@ -129,7 +129,7 @@ TEST_F(ButtonsDriverTest, DoubleClickWithoutTimeout )
 		,	Graphics::Events::TButtonsEvents::ButtonDblClick
 	};
 
-	constexpr std::uint8_t TestButtonId = 0;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
 
 	/*---------------TestingAction-------*/
 
@@ -169,7 +169,7 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfTimeoutBetweenClick )
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
 	};
 
-	constexpr std::uint8_t TestButtonId = 0;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
 
 	/*---------------TestingAction-------*/
 
@@ -210,16 +210,16 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfInterruptedDoubleClickSequen
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
 	};
 
-	constexpr std::uint8_t TestButtonId = 0;
-	constexpr std::uint8_t SecondTestButtonId = 1;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
+	constexpr Buttons::ButtonId TestSecondButtonId = Buttons::ButtonId::kLeftButtonMedium;
 
 	/*---------------TestingAction-------*/
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 
-	m_pFakeButtonsBackend->fakeButtonPress(SecondTestButtonId);
-	m_pFakeButtonsBackend->fakeButtonRelease(SecondTestButtonId);
+	m_pFakeButtonsBackend->fakeButtonPress(TestSecondButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestSecondButtonId);
 
 	m_pEventDispatcher->processEventQueue();
 
@@ -231,7 +231,7 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfInterruptedDoubleClickSequen
 	for (size_t i{}; i < EventsCount; ++i)
 		ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-	ASSERT_EQ(m_pFakeEventHandler->getLastButton(), SecondTestButtonId);
+	ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
 }
 
 TEST_F(ButtonsDriverTest, DetectLongClickEllapsedTimer)
@@ -245,7 +245,7 @@ TEST_F(ButtonsDriverTest, DetectLongClickEllapsedTimer)
 		,	Graphics::Events::TButtonsEvents::ButtonLongClick
 	};
 
-	constexpr std::uint8_t TestButtonId = 0;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
 
 	/*---------------TestingAction-------*/
 
@@ -281,7 +281,7 @@ TEST_F(ButtonsDriverTest, DetectSequenceOfLongClicks)
 		,	Graphics::Events::TButtonsEvents::ButtonLongClick
 	};
 
-	constexpr std::uint8_t TestButtonId = 0;
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
 
 	/*---------------TestingAction-------*/
 

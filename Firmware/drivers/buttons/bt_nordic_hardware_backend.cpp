@@ -5,6 +5,9 @@
 
 #include "app_timer.h"
 #include "app_error.h"
+#include "app_button.h"
+
+#include "pca10040.h"
 
 namespace
 {
@@ -85,6 +88,65 @@ void
 NordicButtonsBackend::initNordicButtonsBackend()
 {
 
-}
+    ret_code_t errorCode{};
 
+    constexpr std::uint8_t ButtonsCount = BUTTONS_NUMBER;
+    using TButtonsDescriptor = std::array<app_button_cfg_t,ButtonsCount>;
+
+    auto buttonEventCallback = cbc::obtain_connector(
+        [ this ](uint8_t _pinNumber, uint8_t _buttonAction)
+        {
+            handleHardwareButtonEvent( _pinNumber,_buttonAction );
+        }
+    );
+
+    static TButtonsDescriptor BoardButtons = 
+    {
+            app_button_cfg_t{ BUTTON_1, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback }
+        ,   app_button_cfg_t{ BUTTON_2, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback }
+        ,   app_button_cfg_t{ BUTTON_3, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback }
+        ,   app_button_cfg_t{ BUTTON_4, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback }
+    };
+
+    constexpr auto ButtonDetectionDelay = APP_TIMER_TICKS(50);
+    errorCode = app_button_init(
+            BoardButtons.data()
+        ,   BoardButtons.size()
+        ,   ButtonDetectionDelay
+    );
+    APP_ERROR_CHECK( errorCode );
+}
+void
+NordicButtonsBackend::handleHardwareButtonEvent( std::uint8_t _pinNumber, std::uint8_t _buttonEvent )
+{
+    auto toLocalEvent = []( std::uint8_t _buttonEvent )
+    {
+        if( _buttonEvent == APP_BUTTON_PUSH )
+            return ButtonBackendEvent::kPressed;
+        else if( _buttonEvent == APP_BUTTON_PUSH )
+            return ButtonBackendEvent::kReleased;
+        else{
+            assert(false);
+            return ButtonBackendEvent::kPressed;
+        }
+    };
+
+    switch (_pinNumber)
+    {
+    case BUTTON_1:
+        onButtonEvent.emit( Buttons::ButtonId::kLeftButtonTop, toLocalEvent( _buttonEvent ) );
+        break;
+    case BUTTON_2:
+        onButtonEvent.emit( Buttons::ButtonId::kLeftButtonMedium, toLocalEvent( _buttonEvent ));
+        break;
+    case BUTTON_3:
+        onButtonEvent.emit( Buttons::ButtonId::kLeftButtonBottom, toLocalEvent( _buttonEvent ));
+        break;
+    case BUTTON_4:
+        onButtonEvent.emit( Buttons::ButtonId::kRightButtonTop, toLocalEvent( _buttonEvent ));
+        break;
+    default:
+        break;
+    }
+}
 }
