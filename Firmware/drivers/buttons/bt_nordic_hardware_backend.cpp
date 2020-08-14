@@ -63,11 +63,7 @@ void
 NordicTimerBackend::stopTimer()
 {
     ret_code_t errorCode{};
-    errorCode = app_timer_start(
-            m_buttonsDriverTimer
-        ,   APP_TIMER_TICKS( ClicksDetectionPeriodMs )
-        ,   nullptr
-    );
+    errorCode = app_timer_stop( m_buttonsDriverTimer );
     APP_ERROR_CHECK( errorCode );
 
     m_isTimerEllapsed = true;
