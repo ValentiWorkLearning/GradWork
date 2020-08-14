@@ -5,24 +5,6 @@
 
 #include <Windows.h>
 
-namespace {
-    LRESULT CALLBACK LowLevelKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
-    {
-        KBDLLHOOKSTRUCT* pKeyboard = reinterpret_cast<KBDLLHOOKSTRUCT*>( lParam );
-
-        if (wParam == WM_KEYUP) {
-            switch (pKeyboard->vkCode)
-            {
-            case VK_SPACE:
-                
-                break;
-            }
-        }
-        return CallNextHookEx(NULL, nCode, wParam, lParam);;
-    }
-}
-
-
 namespace Buttons
 {
 
@@ -63,7 +45,39 @@ Win32ButtonsBackend::Win32ButtonsBackend()
 void
 Win32ButtonsBackend::initWin32ApiHook()
 {
-    HINSTANCE appInstance = GetModuleHandle(NULL);
-    SetWindowsHookEx(WH_KEYBOARD_LL, LowLevelKeyboardProc, appInstance, 0);
+    HINSTANCE appInstance = GetModuleHandle(nullptr);
+
+    auto hookKeyboardCallback = cbc::obtain_connector(
+        [this](int nCode, WPARAM wParam, LPARAM lParam)->LRESULT
+        {
+            KBDLLHOOKSTRUCT* pKeyboard = reinterpret_cast<KBDLLHOOKSTRUCT*>(lParam);
+
+            if (wParam == WM_KEYUP) {
+                switch (pKeyboard->vkCode)
+                {
+                case VK_LEFT:
+                    onButtonEvent.emit(Buttons::ButtonId::kLeftButtonBottom, ButtonBackendEvent::kReleased);
+                    break;
+                case VK_RIGHT:
+                    onButtonEvent.emit(Buttons::ButtonId::kLeftButtonTop, ButtonBackendEvent::kReleased);
+                    break;
+                }
+            }
+            else if (wParam == WM_KEYDOWN) {
+                switch (pKeyboard->vkCode)
+                {
+                case VK_LEFT:
+                    onButtonEvent.emit(Buttons::ButtonId::kLeftButtonBottom, ButtonBackendEvent::kPressed);
+                    break;
+                case VK_RIGHT:
+                    onButtonEvent.emit(Buttons::ButtonId::kLeftButtonTop, ButtonBackendEvent::kPressed);
+                    break;
+                }
+            }
+            return CallNextHookEx(NULL, nCode, wParam, lParam);
+        }
+   );
+
+    SetWindowsHookEx(WH_KEYBOARD_LL, hookKeyboardCallback, appInstance, 0);
 }
 }
