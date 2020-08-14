@@ -1,4 +1,3 @@
-#include "inc\board\watchboard.hpp"
 #include "inc/board/watchboard.hpp"
 
 #if defined (USE_DEVICE_SPECIFIC)
