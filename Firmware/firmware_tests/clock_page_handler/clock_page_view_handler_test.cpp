@@ -6,8 +6,6 @@
 
 #include "widgets_layer/pages/clock_page/gs_clock_page_handler.hpp"
 
-// Take into account that for this time period we use SummerTime
-
 TEST_F( ClockPageHandlerTest, ExpectInitalValuesAfterCreation )
 {
 	EXPECT_EQ(fakeView.getHours(), "00");
@@ -15,7 +13,6 @@ TEST_F( ClockPageHandlerTest, ExpectInitalValuesAfterCreation )
 	EXPECT_EQ(fakeView.getSeconds(), ":00");
 	EXPECT_EQ(fakeView.getWeekday(), ".........");
 	EXPECT_EQ(fakeView.getFullDate(), "../../....");
-
 }
 
 TEST_F(ClockPageHandlerTest, ExpectInitialDefeaultDate )

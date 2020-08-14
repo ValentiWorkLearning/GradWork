@@ -18,6 +18,7 @@ add_executable(
     main.cpp
     buttons_driver/buttons_driver_test.cpp
     clock_page_handler/clock_page_view_handler_test.cpp
+    main_window/mainwindow_model_test.cpp
 )
 
 mark_as_advanced(
@@ -35,6 +36,7 @@ target_link_libraries(
     watch_graphics
     lvgl_lib
     drivers_ih
+
     buttons_driver
     UtilsLibrary
 )
