@@ -11,17 +11,24 @@ namespace WatchBoard
 {
 
 class Board
+	:	private Utils::noncopyable
 {
 
 public:
 
-	void initBoard();
+	Board();
+
+public:
 
 	void toggleStatusLed();
 
 	Buttons::IButtonsDriver* getButtonsDriver();
 
 	Buttons::IButtonsDriver* getButtonsDriver() const;
+
+private:
+
+	void initBoard();
 
 private:
 

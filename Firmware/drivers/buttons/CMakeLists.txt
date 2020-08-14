@@ -2,7 +2,7 @@ add_library(
     buttons_driver
     bt_buttons_driver.cpp
     bt_buttons_driver_creator.cpp
-)
+    )
 
 target_include_directories(
     buttons_driver
@@ -36,5 +36,11 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         buttons_driver
         PRIVATE
         USE_DEVICE_SPECIFIC
+    )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_sources(
+        buttons_driver
+        PRIVATE
+        bt_win32_hardware_buttons_manual_backend.cpp
     )
 endif()
