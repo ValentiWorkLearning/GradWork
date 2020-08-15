@@ -29,16 +29,12 @@ public:
     lv_style_t getIconsFont(FontSize _fontStyle, Color _fontColor)const override
     {
         lv_style_t stubFont{};
-        lv_style_set_text_font(&stubFont, LV_STATE_DEFAULT, &IconFont16px);
-        lv_style_set_text_color(&stubFont, LV_STATE_DEFAULT, getMainThemeColor(_fontColor));
         return stubFont;
     }
 
     lv_style_t getFontStyle(FontSize _fontStyle, Color _fontColor)const override
     {
         lv_style_t stubFont{};
-        lv_style_set_text_font(&stubFont, LV_STATE_DEFAULT, &IconFont16px);
-        lv_style_set_text_color(&stubFont, LV_STATE_DEFAULT, getMainThemeColor(_fontColor));
         return stubFont;
     }
 

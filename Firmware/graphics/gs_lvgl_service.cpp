@@ -10,15 +10,19 @@
 #include "widgets_layer/gs_main_window.hpp"
 #include "widgets_layer/gs_main_window_view.hpp"
 
+#include "widgets_layer/lvgl_views_creators/gs_widgets_creator.hpp"
+#include "widgets_layer/lvgl_views_creators/gs_pages_creator.hpp"
+
 #include "gs_event_dispatcher.hpp"
 
-#include "utils/CallbackConnector.hpp"
-#include "logger/logger_service.hpp"
 
 #include "platform/gs_platform_layer.hpp"
 
 #include "lvgl.h"
 #include "lv_conf.h"
+
+#include "utils/CallbackConnector.hpp"
+#include "logger/logger_service.hpp"
 
 #include <array>
 #include <memory>
@@ -142,7 +146,14 @@ private:
     void initMainWindow()
     {
         auto pMainWindowView = Graphics::MainWindow::createMainWindowView();
-        m_pMainWindow = Graphics::MainWindow::createMainWindow( std::move( pMainWindowView ) );
+        auto pWidgetsCreator = Graphics::Widgets::createLvglWidgetsCreator();
+        auto pPagesCreator = Graphics::Views::createLvglPagesCreator();
+
+        m_pMainWindow = Graphics::MainWindow::createMainWindow(
+                std::move( pMainWindowView )
+            ,   std::move( pWidgetsCreator )
+            ,   std::move( pPagesCreator )
+        );
         // TODO create the lvlg task for ellaped event processing
 
         auto mainWindowTimer = cbc::obtain_connector(

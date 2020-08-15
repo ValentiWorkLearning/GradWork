@@ -15,6 +15,13 @@ namespace Graphics::Widgets
     class IBatteryWidget;
     class IPagesSwitch;
     class IBluetoothWidget;
+
+    class IWidgetsCreator;
+}
+
+namespace Graphics::Views
+{
+    class IPagesCreator;
 }
 
 namespace Graphics
@@ -31,7 +38,11 @@ class GsMainWindow
 
 public:
 
-    GsMainWindow( std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView );
+    GsMainWindow(
+            std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+        ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
+        ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCreator
+    );
     ~GsMainWindow() override;
 
 public:
@@ -94,9 +105,13 @@ private:
 private:
 
     std::unique_ptr<Graphics::MainWindow::IMainWindowView> m_pMainWindowView;
+
     std::unique_ptr<Graphics::Widgets::IBatteryWidget> m_pBatteryWidget;
     std::unique_ptr<Graphics::Widgets::IPagesSwitch> m_pPagesSwitch;
     std::unique_ptr<Graphics::Widgets::IBluetoothWidget> m_pBluetoothWidget;
+
+    std::unique_ptr<Graphics::Widgets::IWidgetsCreator> m_pWidgetsCreator;
+    std::unique_ptr<Graphics::Views::IPagesCreator> m_pPagesCreator;
 
     std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
     std::unique_ptr<Graphics::IEventHandler> m_pBluetoothWidgetController;
@@ -106,6 +121,8 @@ private:
 
 std::unique_ptr<IGsMainWindowModel> createMainWindow(
         std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+    ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
+    ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCrator
 );
 
 };

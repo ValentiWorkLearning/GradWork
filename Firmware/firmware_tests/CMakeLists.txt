@@ -19,12 +19,20 @@ add_executable(
     buttons_driver/buttons_driver_test.cpp
     clock_page_handler/clock_page_view_handler_test.cpp
     main_window/mainwindow_model_test.cpp
+    stubs/pages_stub_pages_creator.cpp
+    stubs/widgets_stub_pages_creator.cpp
 )
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
     gmock_build_tests gtest_build_samples gtest_build_tests
     gtest_disable_pthreads gtest_force_shared_crt gtest_hide_internal_symbols
+)
+
+target_include_directories(
+    ${PROJECT_NAME}
+    PUBLIC
+    stubs
 )
 
 target_link_libraries(

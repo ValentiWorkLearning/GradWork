@@ -3,26 +3,28 @@
 
 #include "ih/gs_events.hpp"
 #include "ih/gs_ipage_view_object.hpp"
-#include "gs_event_dispatcher.hpp"
-
-#include "gs_theme_controller.hpp"
-
 #include "ih/gs_ievent_handler.hpp"
 
+#include "ih/widgets/gs_ibattery_widget.hpp"
+#include "ih/widgets/gs_ipages_switch.hpp"
+#include "ih/widgets/gs_ibluetooth_widget.hpp"
+
+#include "ih/pages/gs_iclock_page_view.hpp"
+#include "ih/pages/gs_ihealth_page_view.hpp"
+#include "ih/pages/gs_iplayer_page_view.hpp"
+
+#include "ih/creators/gs_ipages_creator.hpp"
+#include "ih/creators/gs_iwidgets_creator.hpp"
+
 #include "widgets/battery/gs_battery_handler.hpp"
-#include "widgets/battery/gs_battery_widget.hpp"
-
-#include "widgets/pages_switch/gs_pages_switch.hpp"
-
 #include "widgets/bluetooth/gs_bluetooth_widget_handler.hpp"
-#include "widgets/bluetooth/gs_bluetooth_widget.hpp"
 
-#include "pages/clock_page/gs_clock_page_view.hpp"
+
 #include "pages/clock_page/gs_clock_page_handler.hpp"
 
-#include "pages/health_page/gs_health_page_view.hpp"
 
-#include "pages/player_page/gs_player_page_view.hpp"
+#include "gs_event_dispatcher.hpp"
+#include "gs_theme_controller.hpp"
 
 #include "utils/MetaUtils.hpp"
 
@@ -33,12 +35,16 @@ namespace Graphics::MainWindow
 {
 
 GsMainWindow::GsMainWindow(
-            std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+                std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+            ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
+            ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCreator
         )
     :
         m_currentPageName{}
     ,   m_pEventsDispatcher{ Events::createEventDispatcher() }
     ,   m_pMainWindowView{ std::move( _pMainWindowView ) }
+    ,   m_pWidgetsCreator{ std::move( _pWidgetsCreator ) }
+    ,   m_pPagesCreator{ std::move( _pPagesCreator ) }
 {
     initWidgets();
     initWatchPage();
@@ -136,9 +142,9 @@ void GsMainWindow::handleEventTimerEllapsed()
 
 void GsMainWindow::initWidgets()
 {
-    m_pBatteryWidget = Widgets::createBatteryWidget( getThemeController() );
-    m_pPagesSwitch = Widgets::createPagesSwitch( getThemeController() );
-    m_pBluetoothWidget = Widgets::createBluetoothWidget( getThemeController() );
+    m_pBatteryWidget = m_pWidgetsCreator->createBatteryWidget( getThemeController() );
+    m_pPagesSwitch = m_pWidgetsCreator->createPagesSwitchWidget( getThemeController() );
+    m_pBluetoothWidget = m_pWidgetsCreator->createBluetoothWidget( getThemeController() );
 
     m_pBluetoothWidgetController = Widgets::createBluetoothWidgetHandler( m_pBluetoothWidget.get() );
     m_pBatteryWidgetController = Widgets::createBatteryWidgetHandler( m_pBatteryWidget.get() );
@@ -168,7 +174,7 @@ void GsMainWindow::initWidgets()
 
 void GsMainWindow::initWatchPage()
 {
-    auto pClockPage = Views::createClockWatchView( getThemeController() );
+    auto pClockPage = m_pPagesCreator->createClockPage( getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget.get() );
     pClockPage->addWidget( m_pPagesSwitch.get() );
     pClockPage->addWidget( m_pBluetoothWidget.get() );
@@ -188,7 +194,7 @@ void GsMainWindow::initWatchPage()
 
 void GsMainWindow::initHealthPage()
 {
-    auto pHealthPage = Views::createHeartrateWatchView( getThemeController() );
+    auto pHealthPage = m_pPagesCreator->createHealthPage( getThemeController() );
 
     pHealthPage->addWidget( m_pBatteryWidget.get() );
     pHealthPage->addWidget( m_pPagesSwitch.get());
@@ -199,7 +205,7 @@ void GsMainWindow::initHealthPage()
 
 void GsMainWindow::initPlayerPage()
 {
-    auto pPlayerPage = Views::createPlayerWatchView( getThemeController() );
+    auto pPlayerPage = m_pPagesCreator->createPlayerPage( getThemeController() );
 
     pPlayerPage->addWidget(m_pBatteryWidget.get());
     pPlayerPage->addWidget(m_pPagesSwitch.get());
@@ -274,9 +280,15 @@ Theme::IThemeController* GsMainWindow::getThemeController()
 
 std::unique_ptr<IGsMainWindowModel> createMainWindow(
         std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
+    ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
+    ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCrator
     )
 {
-    return std::make_unique<GsMainWindow>( std::move( _pMainWindowView ) );
+    return std::make_unique<GsMainWindow>(
+            std::move( _pMainWindowView )
+        ,   std::move( _pWidgetsCreator )
+        ,   std::move( _pPagesCrator )
+   );
 }
 
 }
