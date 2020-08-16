@@ -2,34 +2,9 @@
 
 #include <gmock/gmock.h>
 
+#include"base_mocked_page.hpp"
+
 #include "ih/pages/gs_iclock_page_view.hpp"
-
-#include "ih/gs_iwidget_object.hpp"
-#include "ih/gs_itheme_controller.hpp"
-
-#include <string>
-
-template <typename PageBaseFake >
-class FakeBasePage
-	:	public PageBaseFake
-{
-
-public:
-
-	MOCK_METHOD1(addWidget, void(Graphics::Widgets::IWidgetObject* _pWidget));
-	MOCK_CONST_METHOD0(isVisible, bool());
-
-	void reloadStyle() override {}
-
-	void show() override {}
-	void hide() override {}
-
-public:
-
-	MOCK_CONST_METHOD0(getPageName, std::string_view());
-	MOCK_CONST_METHOD0(getThemeController, const Graphics::Theme::IThemeController* ());
-
-};
 
 class FakeClockPage
 	:	public FakeBasePage<Graphics::Views::IClockWatchPage>
@@ -37,8 +12,9 @@ class FakeClockPage
 
 public:
 
-	FakeClockPage()
-		:	m_hoursValue{ "00" }
+	FakeClockPage( std::string_view _pageName )
+		:	FakeBasePage{ _pageName  }
+		,	m_hoursValue{ "00" }
 		,	m_minutesValue{ "00" }
 		,	m_secondsValue{ ":00" }
 		,	m_weekdayValue{ "........." }
@@ -110,7 +86,7 @@ private:
 
 
 class FakeClockPageMock
-	:	public FakeBasePage<Graphics::Views::IClockWatchPage>
+	:	public FakeBasePageMock<Graphics::Views::IClockWatchPage>
 {
 
 public:

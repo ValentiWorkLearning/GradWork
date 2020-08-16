@@ -25,8 +25,7 @@ protected:
 	{
 		using ::testing::Return;
 
-		EXPECT_CALL(fakeView, isVisible())
-			.Times(1).WillOnce(Return(true));
+		fakeView.show();
 
 		pageWatchHandler->handleEvent(
 			{
@@ -68,7 +67,7 @@ protected:
 protected:
 
 	FakeClockPageMock fakePageMock;
-	FakeClockPage fakeView;
+	FakeClockPage fakeView{ Graphics::Views::IClockWatchPage::ClockPageName };
 	std::unique_ptr<Graphics::IEventHandler> pageWatchHandler;
 	std::unique_ptr<Graphics::IEventHandler> pageMockWatchHandler;
 

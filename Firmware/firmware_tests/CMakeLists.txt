@@ -33,6 +33,7 @@ target_include_directories(
     ${PROJECT_NAME}
     PUBLIC
     stubs
+    stubs/pages
 )
 
 target_link_libraries(

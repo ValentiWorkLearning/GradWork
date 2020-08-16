@@ -33,9 +33,6 @@ TEST_F(ClockPageHandlerTest, ViewStaysUnchangedWhenInviisible)
 	
 	using ::testing::Return;
 
-	EXPECT_CALL(fakeView, isVisible())
-		.Times(1).WillOnce(Return(false));
-
 	//Only hours were changed
 	pageWatchHandler->handleEvent(
 			{
@@ -193,8 +190,7 @@ TEST_F( ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithoutLeading
 
 	using ::testing::Return;
 
-	EXPECT_CALL(fakeView, isVisible())
-		.Times(1).WillRepeatedly(Return(true));
+	fakeView.show();
 
 	pageWatchHandler->handleEvent(
 		{
@@ -212,8 +208,7 @@ TEST_F( ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithLeadingZer
 
 	using ::testing::Return;
 
-	EXPECT_CALL(fakeView, isVisible())
-		.Times(1).WillRepeatedly(Return(true));
+	fakeView.show();
 
 	pageWatchHandler->handleEvent(
 		{
@@ -231,8 +226,7 @@ TEST_F( ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithTrailingZe
 
 	using ::testing::Return;
 
-	EXPECT_CALL(fakeView, isVisible())
-		.Times(1).WillRepeatedly(Return(true));
+	fakeView.show();
 
 	pageWatchHandler->handleEvent(
 		{
