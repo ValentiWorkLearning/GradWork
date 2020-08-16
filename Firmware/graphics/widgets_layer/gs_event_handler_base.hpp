@@ -4,6 +4,8 @@
 #include "ih/gs_events.hpp"
 #include "utils/MetaUtils.hpp"
 
+#include <cassert>
+
 namespace Graphics::Events
 {
 
@@ -64,6 +66,7 @@ public:
                 this->handleEventImpl(std::any_cast<Events::TButtonsEvents>(genericEvent.eventType), genericEvent.eventData);
             break;
         default:
+            assert(false);
             break;
         }
     }

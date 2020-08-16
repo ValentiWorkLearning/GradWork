@@ -113,6 +113,7 @@ private:
     std::unique_ptr<Graphics::Widgets::IWidgetsCreator> m_pWidgetsCreator;
     std::unique_ptr<Graphics::Views::IPagesCreator> m_pPagesCreator;
 
+    std::unique_ptr<Graphics::IEventHandler> m_pMainWindowHandler;
     std::unique_ptr<Graphics::IEventHandler> m_pBatteryWidgetController;
     std::unique_ptr<Graphics::IEventHandler> m_pBluetoothWidgetController;
     std::unique_ptr<Graphics::IEventHandler> m_pClockPageController;

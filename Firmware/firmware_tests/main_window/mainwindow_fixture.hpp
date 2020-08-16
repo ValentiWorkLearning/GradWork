@@ -16,6 +16,8 @@
 #include "widgets_layer/gs_main_window.hpp"
 #include "mainwindow_fakes.hpp"
 
+#include "ih/pages/gs_iclock_page_view.hpp"
+
 #include <memory>
 
 class MainWindowTest
@@ -34,6 +36,10 @@ protected:
 				std::move( pMainWindowView )
 			,	std::move( pStubWidgetsCreator )
 			,	std::move( pStubPagesCreator )
+		);
+
+		m_pMainWindow->setPageActive(
+			Graphics::Views::IClockWatchPage::ClockPageName
 		);
 	}
 

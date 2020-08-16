@@ -177,11 +177,15 @@ Application::connectBoardSpecificEvents()
     m_pBoardImpl->getButtonsDriver()->onButtonEvent.connect(
         [&pMainWindow]( Buttons::ButtonEvent _buttonEvent )
         {
+            Graphics::Events::HardwareButtonId graphicsButton{
+                Graphics::Events::enumConvert<Graphics::Events::HardwareButtonId>(_buttonEvent.buttonId)
+            };
+
             pMainWindow.getEventDispatcher().postEvent(
                 {
                         Graphics::Events::EventGroup::Buttons
                     ,   EventConvert::toButtonEvent( _buttonEvent.buttonEvent )
-                    ,   _buttonEvent.buttonId
+                    ,   graphicsButton
                 }
             );
         }

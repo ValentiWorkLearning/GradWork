@@ -87,4 +87,14 @@ enum class TButtonsEvents
     ,   ButtonEventsEnd
 };
 
+enum class HardwareButtonId
+{
+        kLeftButtonTop
+    ,   kLeftButtonMedium
+    ,   kLeftButtonBottom
+    ,   kRightButtonTop
+    ,   kRightButtonBottom
+};
+
+
 }

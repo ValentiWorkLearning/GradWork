@@ -23,6 +23,8 @@
 #include "pages/clock_page/gs_clock_page_handler.hpp"
 
 
+#include "gs_main_window_event_handler.hpp"
+
 #include "gs_event_dispatcher.hpp"
 #include "gs_theme_controller.hpp"
 
@@ -50,6 +52,9 @@ GsMainWindow::GsMainWindow(
     initWatchPage();
     initHealthPage();
     initPlayerPage();
+
+    m_pMainWindowHandler = createMainWindowEventHandler( this );
+
     initMainWindowSubscriptions();
 }
 
@@ -77,12 +82,13 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
     {
         auto pPagePtr = getPagePointer( m_currentPageName );
 
-        getEventDispatcher().postEvent(
-                {       Graphics::Events::EventGroup::GraphicsEvents
-                    ,   Graphics::Events::TGraphicsEvents::PageHiding
-                    ,   m_currentPageName
-                }
-        );
+        // TODO: Is it really needed?
+        //getEventDispatcher().postEvent(
+        //        {       Graphics::Events::EventGroup::GraphicsEvents
+        //            ,   Graphics::Events::TGraphicsEvents::PageHiding
+        //            ,   m_currentPageName
+        //        }
+        //);
 
         pPagePtr->hide();
     }
@@ -92,12 +98,13 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
     auto pPagePtr = getPagePointer( m_currentPageName );
     pPagePtr->show();
 
-    getEventDispatcher().postEvent(
-        {       Graphics::Events::EventGroup::GraphicsEvents
-            ,   Graphics::Events::TGraphicsEvents::PageActivated
-            ,   m_currentPageName
-        }
-    );
+    // TODO: Is it really needed?
+    //getEventDispatcher().postEvent(
+    //    {       Graphics::Events::EventGroup::GraphicsEvents
+    //        ,   Graphics::Events::TGraphicsEvents::PageActivated
+    //        ,   m_currentPageName
+    //    }
+    //);
 
     onActivePageChanged.emit( m_currentPageName );
 }
@@ -223,6 +230,13 @@ void GsMainWindow::initMainWindowSubscriptions()
             auto& activePage = getActivePage();
             activePage.reloadStyle();
         }
+    );
+    getEventDispatcher().subscribe(
+            Events::EventGroup::Buttons
+        ,   [this](const Events::TEvent& _event)
+            {
+                m_pMainWindowHandler->handleEvent( _event );
+            }
     );
 }
 

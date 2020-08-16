@@ -226,14 +226,14 @@ private:
             }
         );
 
-        m_pPageSwitch.reset(
+        /*m_pPageSwitch.reset(
             lv_task_create(
                     pageToggle
                 ,   4100
                 ,   LV_TASK_PRIO_MID
                 ,   nullptr
             )
-        );
+        );*/
 
         m_pthemeChangeSwitch.reset(
             lv_task_create(
