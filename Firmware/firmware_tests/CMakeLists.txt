@@ -34,6 +34,7 @@ target_include_directories(
     PUBLIC
     stubs
     stubs/pages
+    stubs/widgets
 )
 
 target_link_libraries(
