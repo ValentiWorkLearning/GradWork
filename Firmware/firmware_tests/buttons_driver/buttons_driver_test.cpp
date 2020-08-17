@@ -154,13 +154,17 @@ TEST_F(ButtonsDriverTest, DoubleClickWithoutTimeout )
 }
 
 
-TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfTimeoutBetweenClick )
+TEST_F(ButtonsDriverTest, ThreeSeparateClicksBecauseOfTimeoutBetweenClick )
 {
 	/*---------------Setup---------------*/
 
 
 	const auto eventsToCheck = std::array{
 			Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
 
@@ -177,6 +181,9 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfTimeoutBetweenClick )
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 
 	m_pFakeTimer->ellapseTimer();
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
