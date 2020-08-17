@@ -9,6 +9,8 @@
 
 #include "pca10040.h"
 
+#include "logger/logger_service.hpp"
+
 namespace
 {
     APP_TIMER_DEF( m_buttonsDriverTimer );
@@ -27,6 +29,7 @@ NordicTimerBackend::NordicTimerBackend()
         [ this ]( void * _pContext )
         {
             m_isTimerEllapsed = true;
+            Logger::Instance().logDebugEndl("m_isTimerEllapsed = true;");
         }
     );
 
@@ -37,6 +40,16 @@ NordicTimerBackend::NordicTimerBackend()
     );
     APP_ERROR_CHECK( errorCode );
 }
+
+
+std::uint32_t
+NordicTimerBackend::convertToTimerTicks( std::chrono::seconds _interval )
+{
+    std::chrono::milliseconds msValue = std::chrono::duration_cast<std::chrono::milliseconds>( _interval );
+    std::uint32_t timerTicksValue = APP_TIMER_TICKS( msValue.count() );
+    return timerTicksValue;
+}
+
 
 void
 NordicTimerBackend::startTimer()
@@ -51,7 +64,7 @@ NordicTimerBackend::startTimer()
     ret_code_t errorCode{};
     errorCode = app_timer_start(
             m_buttonsDriverTimer
-        ,   APP_TIMER_TICKS( ClicksDetectionPeriodMs )
+        ,   convertToTimerTicks(m_buttonLongPressDetectionDelay)
         ,   nullptr
     );
     APP_ERROR_CHECK( errorCode );
@@ -111,16 +124,26 @@ NordicButtonsBackend::initNordicButtonsBackend()
         ,   ButtonDetectionDelay
     );
     APP_ERROR_CHECK( errorCode );
+
+    errorCode = app_button_enable();
+    APP_ERROR_CHECK( errorCode );
 }
+
 void
 NordicButtonsBackend::handleHardwareButtonEvent( std::uint8_t _pinNumber, std::uint8_t _buttonEvent )
 {
     auto toLocalEvent = []( std::uint8_t _buttonEvent )
     {
         if( _buttonEvent == APP_BUTTON_PUSH )
+        {
+            Logger::Instance().logDebugEndl("ButtonBackendEvent::kPressed");
             return ButtonBackendEvent::kPressed;
-        else if( _buttonEvent == APP_BUTTON_PUSH )
+        }
+        else if( _buttonEvent == APP_BUTTON_RELEASE )
+        {
+            Logger::Instance().logDebugEndl("ButtonBackendEvent::kReleased");
             return ButtonBackendEvent::kReleased;
+        }
         else{
             assert(false);
             return ButtonBackendEvent::kPressed;
@@ -130,15 +153,19 @@ NordicButtonsBackend::handleHardwareButtonEvent( std::uint8_t _pinNumber, std::u
     switch (_pinNumber)
     {
     case BUTTON_1:
+        Logger::Instance().logDebugEndl("BUTTON_1");
         onButtonEvent.emit( Buttons::ButtonId::kLeftButtonTop, toLocalEvent( _buttonEvent ) );
         break;
     case BUTTON_2:
+        Logger::Instance().logDebugEndl("BUTTON_2");
         onButtonEvent.emit( Buttons::ButtonId::kLeftButtonMedium, toLocalEvent( _buttonEvent ));
         break;
     case BUTTON_3:
+        Logger::Instance().logDebugEndl("BUTTON_3");
         onButtonEvent.emit( Buttons::ButtonId::kLeftButtonBottom, toLocalEvent( _buttonEvent ));
         break;
     case BUTTON_4:
+        Logger::Instance().logDebugEndl("BUTTON_4");
         onButtonEvent.emit( Buttons::ButtonId::kRightButtonTop, toLocalEvent( _buttonEvent ));
         break;
     default:

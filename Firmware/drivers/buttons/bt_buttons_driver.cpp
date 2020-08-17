@@ -1,5 +1,6 @@
 #include "inc/buttons/bt_buttons_driver.hpp"
 
+#include "logger/logger_service.hpp"
 
 namespace Buttons
 {
@@ -85,17 +86,20 @@ void ButtonsDriver::handleButtonsBackendEvent( ButtonId _buttonId, ButtonBackend
 			if ( shoulEmitDoubleClickEvent )
 			{
 				onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });
+				Logger::Instance().logDebugEndl("onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });");
 				m_pressCount = 0;
 			}
 			else
 			{
 				if ( m_timerImpl->isTimerEllapsed() && _buttonId == m_lastPressedId && m_pressCount == 1 )
 				{
+					Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });");
 					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });
 					m_pressCount = 0;
 				}
 				else
 				{
+					Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });");
 					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });
 				}
 			}

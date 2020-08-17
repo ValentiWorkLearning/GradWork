@@ -27,7 +27,10 @@ public:
 
 private:
 
-    static constexpr inline std::uint32_t ClicksDetectionPeriodMs = 100;
+    std::uint32_t convertToTimerTicks( std::chrono::seconds _interval );
+
+private:
+    const std::chrono::seconds m_buttonLongPressDetectionDelay = std::chrono::seconds{3};
 
     std::atomic<bool> m_isTimerEllapsed = false;
 };
