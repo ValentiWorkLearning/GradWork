@@ -43,10 +43,9 @@ NordicTimerBackend::NordicTimerBackend()
 
 
 std::uint32_t
-NordicTimerBackend::convertToTimerTicks( std::chrono::seconds _interval )
+NordicTimerBackend::convertToTimerTicks( std::chrono::milliseconds _interval )
 {
-    std::chrono::milliseconds msValue = std::chrono::duration_cast<std::chrono::milliseconds>( _interval );
-    std::uint32_t timerTicksValue = APP_TIMER_TICKS( msValue.count() );
+    std::uint32_t timerTicksValue = APP_TIMER_TICKS( _interval.count() );
     return timerTicksValue;
 }
 

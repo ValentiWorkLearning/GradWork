@@ -27,10 +27,10 @@ public:
 
 private:
 
-    std::uint32_t convertToTimerTicks( std::chrono::seconds _interval );
+    std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval );
 
 private:
-    const std::chrono::seconds m_buttonLongPressDetectionDelay = std::chrono::seconds{3};
+    const std::chrono::milliseconds m_buttonLongPressDetectionDelay = std::chrono::milliseconds{400};
 
     std::atomic<bool> m_isTimerEllapsed = false;
 };

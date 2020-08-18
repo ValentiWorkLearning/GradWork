@@ -171,6 +171,7 @@ TEST_F(ButtonsDriverTest, ThreeSeparateClicksBecauseOfTimeoutBetweenClick )
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
 	};
 
 	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
@@ -184,6 +185,8 @@ TEST_F(ButtonsDriverTest, ThreeSeparateClicksBecauseOfTimeoutBetweenClick )
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pFakeTimer->ellapseTimer();
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
@@ -298,6 +301,101 @@ TEST_F(ButtonsDriverTest, DetectSequenceOfLongClicks)
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeTimer->ellapseTimer();
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pEventDispatcher->processEventQueue();
+
+	/*---------------Assertions---------------*/
+
+	constexpr size_t EventsCount = eventsToCheck.size();
+	ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+
+	for (size_t i{}; i < EventsCount; ++i)
+		ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+
+	ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+}
+
+
+TEST_F(ButtonsDriverTest, DetectSequenceOfDoubleClicks)
+{
+	/*---------------Setup---------------*/
+
+
+	const auto eventsToCheck = std::array{
+			Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonDblClick
+
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonDblClick
+	};
+
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
+
+	/*---------------TestingAction-------*/
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+	m_pFakeTimer->ellapseTimer();
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+	m_pFakeTimer->ellapseTimer();
+
+	m_pEventDispatcher->processEventQueue();
+
+	/*---------------Assertions---------------*/
+
+	constexpr size_t EventsCount = eventsToCheck.size();
+	ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+
+	for (size_t i{}; i < EventsCount; ++i)
+		ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+
+	ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+}
+
+
+TEST_F(ButtonsDriverTest, DetectButtonClickAfterLongClick)
+{
+	/*---------------Setup---------------*/
+
+
+	const auto eventsToCheck = std::array{
+			Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonLongClick
+
+		,	Graphics::Events::TButtonsEvents::ButtonPressed
+		,	Graphics::Events::TButtonsEvents::ButtonReleased
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
+	};
+
+	constexpr Buttons::ButtonId TestButtonId = Buttons::ButtonId::kLeftButtonTop;
+
+	/*---------------TestingAction-------*/
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
+	m_pFakeTimer->ellapseTimer();
+	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 
 	m_pEventDispatcher->processEventQueue();

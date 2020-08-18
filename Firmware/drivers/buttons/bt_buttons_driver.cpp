@@ -66,7 +66,15 @@ void ButtonsDriver::handleButtonsBackendEvent( ButtonId _buttonId, ButtonBackend
 			}
 			else
 			{
-				m_pressCount = m_pressCount < 2 ? m_pressCount + 1 : 1;
+				if (m_pressCount >= 1)
+				{
+					if (m_timerImpl->isTimerEllapsed())
+						m_timerImpl->startTimer();
+					else
+						++m_pressCount;
+				}
+				else
+					++m_pressCount;
 			}
 
 		}
