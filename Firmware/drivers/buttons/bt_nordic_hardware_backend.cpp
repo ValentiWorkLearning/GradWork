@@ -29,6 +29,7 @@ NordicTimerBackend::NordicTimerBackend()
         [ this ]( void * _pContext )
         {
             m_isTimerEllapsed = true;
+            onTimerExpired.emit();
             Logger::Instance().logDebugEndl("m_isTimerEllapsed = true;");
         }
     );
@@ -39,6 +40,7 @@ NordicTimerBackend::NordicTimerBackend()
         ,   timerExpiredCallback
     );
     APP_ERROR_CHECK( errorCode );
+    m_isTimerEllapsed = true;
 }
 
 
