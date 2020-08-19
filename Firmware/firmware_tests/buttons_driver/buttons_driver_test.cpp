@@ -22,6 +22,8 @@ TEST_F(ButtonsDriverTest, SingleClick)
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+	m_pFakeTimer->ellapseTimer();
+
 	m_pEventDispatcher->processEventQueue();
 
 	/*---------------Assertions---------------*/
@@ -44,9 +46,11 @@ TEST_F(ButtonsDriverTest, SingleClickDifferentButtons)
 	const auto eventsToCheck = std::array{
 			Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
-		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
+
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
 	};
 
@@ -60,6 +64,8 @@ TEST_F(ButtonsDriverTest, SingleClickDifferentButtons)
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestSecondButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestSecondButtonId);
+
+	m_pFakeTimer->ellapseTimer();
 
 	m_pEventDispatcher->processEventQueue();
 
@@ -85,9 +91,9 @@ TEST_F(ButtonsDriverTest, SingleClickSequenceOfPushRelease)
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
-		,	Graphics::Events::TButtonsEvents::ButtonClicked
-
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
+
+		,	Graphics::Events::TButtonsEvents::ButtonClicked
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
 	};
 
@@ -101,6 +107,8 @@ TEST_F(ButtonsDriverTest, SingleClickSequenceOfPushRelease)
 
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestSecondButtonId);
+
+	m_pFakeTimer->ellapseTimer();
 
 	m_pEventDispatcher->processEventQueue();
 
@@ -123,7 +131,7 @@ TEST_F(ButtonsDriverTest, DoubleClickWithoutTimeout )
 	const auto eventsToCheck = std::array{
 			Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
-		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
 		,	Graphics::Events::TButtonsEvents::ButtonDblClick
@@ -138,6 +146,8 @@ TEST_F(ButtonsDriverTest, DoubleClickWithoutTimeout )
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
+	m_pFakeTimer->ellapseTimer();
 
 	m_pEventDispatcher->processEventQueue();
 
@@ -191,6 +201,8 @@ TEST_F(ButtonsDriverTest, ThreeSeparateClicksBecauseOfTimeoutBetweenClick )
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 
+	m_pFakeTimer->ellapseTimer();
+
 	m_pEventDispatcher->processEventQueue();
 
 	/*---------------Assertions---------------*/
@@ -215,6 +227,7 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfInterruptedDoubleClickSequen
 			Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
+
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
 		,	Graphics::Events::TButtonsEvents::ButtonClicked
@@ -228,8 +241,12 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfInterruptedDoubleClickSequen
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
 
+	m_pFakeTimer->ellapseTimer();
+
 	m_pFakeButtonsBackend->fakeButtonPress(TestSecondButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestSecondButtonId);
+
+	m_pFakeTimer->ellapseTimer();
 
 	m_pEventDispatcher->processEventQueue();
 
@@ -325,7 +342,6 @@ TEST_F(ButtonsDriverTest, DetectSequenceOfDoubleClicks)
 	const auto eventsToCheck = std::array{
 			Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
-		,	Graphics::Events::TButtonsEvents::ButtonClicked
 
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
@@ -333,7 +349,6 @@ TEST_F(ButtonsDriverTest, DetectSequenceOfDoubleClicks)
 
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
-		,	Graphics::Events::TButtonsEvents::ButtonClicked
 
 		,	Graphics::Events::TButtonsEvents::ButtonPressed
 		,	Graphics::Events::TButtonsEvents::ButtonReleased
@@ -349,6 +364,7 @@ TEST_F(ButtonsDriverTest, DetectSequenceOfDoubleClicks)
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+
 	m_pFakeTimer->ellapseTimer();
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
@@ -397,6 +413,7 @@ TEST_F(ButtonsDriverTest, DetectButtonClickAfterLongClick)
 
 	m_pFakeButtonsBackend->fakeButtonPress(TestButtonId);
 	m_pFakeButtonsBackend->fakeButtonRelease(TestButtonId);
+	m_pFakeTimer->ellapseTimer();
 
 	m_pEventDispatcher->processEventQueue();
 

@@ -13,10 +13,13 @@ TButtonsDriverPtr createButtonsDriver()
 ButtonsDriver::ButtonsDriver()
 	:	m_timerImpl{nullptr}
 	,	m_buttonBackendImpl{nullptr}
-	,	m_buttons{}
-	,	m_lastPressedId{ std::numeric_limits<std::uint8_t>::max() }
-	,	m_pressCount{ std::numeric_limits<std::uint8_t>::max() }
-
+	,	m_buttons{
+			ButtonDescriptor{ ButtonId::kLeftButtonTop, ButtonState::Undefined, 0, false }
+		,	ButtonDescriptor{ ButtonId::kLeftButtonMedium, ButtonState::Undefined, 0, false }
+		,	ButtonDescriptor{ ButtonId::kLeftButtonBottom, ButtonState::Undefined, 0, false }
+		,	ButtonDescriptor{ ButtonId::kRightButtonTop, ButtonState::Undefined, 0, false }
+		,	ButtonDescriptor{ ButtonId::kRightButtonBottom, ButtonState::Undefined, 0, false }
+	}
 {
 }
 
@@ -43,6 +46,30 @@ void ButtonsDriver::setButtonsBackend(IButtonsBackend* _pTimerWrapper)
 
 void ButtonsDriver::handleTimerExpired()
 {
+	for( auto& buttonDescriptor : m_buttons )
+	{
+		if( buttonDescriptor.state != ButtonState::kButtonDown )
+		{
+			switch (buttonDescriptor.pressCount)
+			{
+			case 1:
+				Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });");
+				onButtonEvent.emit( { buttonDescriptor.id, ButtonState::kButtonClick } );
+			break;
+			case 2:
+				Logger::Instance().logDebugEndl("onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });");
+				onButtonEvent.emit({ buttonDescriptor.id, ButtonState::kButtonDblClick });
+			break;
+
+			default:
+				break;
+			}
+			buttonDescriptor.pressCount = 0;
+		}
+		else {
+			buttonDescriptor.longPressTimeoutExpired = true;
+		}
+	}
 }
 
 void ButtonsDriver::handleButtonsBackendEvent( ButtonId _buttonId, ButtonBackendEvent _buttonEvent )
@@ -52,67 +79,26 @@ void ButtonsDriver::handleButtonsBackendEvent( ButtonId _buttonId, ButtonBackend
 
 	if( _buttonEvent == ButtonBackendEvent::kPressed )
 	{
-		if( m_buttons[ arrayIndex ].state == ButtonState::kButtonUp )
-		{
-			m_buttons[ arrayIndex ].state = ButtonState::kButtonDown;
-			onButtonEvent.emit({ _buttonId, ButtonState::kButtonDown });
+		m_buttons[ arrayIndex ].state = ButtonState::kButtonDown;
+		onButtonEvent.emit({ _buttonId, ButtonState::kButtonDown });
 
-			if ( m_lastPressedId != _buttonId)
-			{
-				m_lastPressedId = _buttonId;
-				m_pressCount = 1;
-				m_timerImpl->stopTimer();
-				m_timerImpl->startTimer();
-			}
-			else
-			{
-				if (m_pressCount >= 1)
-				{
-					if (m_timerImpl->isTimerEllapsed())
-						m_timerImpl->startTimer();
-					else
-						++m_pressCount;
-				}
-				else
-					++m_pressCount;
-			}
+		m_buttons[ arrayIndex ].pressCount = m_buttons[arrayIndex].pressCount + 1;
 
-		}
+		if ( m_timerImpl->isTimerEllapsed() )
+			m_timerImpl->startTimer();
 	}
 	else if( _buttonEvent == ButtonBackendEvent::kReleased )
 	{
-		if( m_buttons[ arrayIndex ].state == ButtonState::kButtonDown )
+		m_buttons[arrayIndex].state = ButtonState::kButtonUp;
+		onButtonEvent.emit( { _buttonId, ButtonState::kButtonUp } );
+
+		if ( m_buttons[arrayIndex].longPressTimeoutExpired )
 		{
-			m_buttons[arrayIndex].state = ButtonState::kButtonUp;
-			onButtonEvent.emit( { _buttonId, ButtonState::kButtonUp } );
-
-			const bool shoulEmitDoubleClickEvent =
-							m_pressCount == 2
-					&&		_buttonId == m_lastPressedId
-					&&		!m_timerImpl->isTimerEllapsed();
-
-			if ( shoulEmitDoubleClickEvent )
-			{
-				onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });
-				Logger::Instance().logDebugEndl("onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });");
-				m_pressCount = 0;
-			}
-			else
-			{
-				if ( m_timerImpl->isTimerEllapsed() && _buttonId == m_lastPressedId && m_pressCount == 1 )
-				{
-					Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });");
-					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });
-					m_pressCount = 0;
-				}
-				else
-				{
-					Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });");
-					onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });
-				}
-			}
+			m_buttons[arrayIndex].pressCount = 0;
+			m_buttons[arrayIndex].longPressTimeoutExpired = false;
+			Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });");
+			onButtonEvent.emit({ m_buttons[arrayIndex].id, ButtonState::kButtonLongPress });
 		}
-
 	}
 
 }

@@ -31,6 +31,8 @@ private:
 	{
 		ButtonId id;
 		ButtonState state;
+		std::uint8_t pressCount;
+		bool longPressTimeoutExpired;
 	};
 
 	static constexpr std::uint8_t ButtonsCount = 5;
@@ -39,9 +41,6 @@ private:
 	IButtonTimerWrapper* m_timerImpl;
 	IButtonsBackend* m_buttonBackendImpl;
 	ButtonsCollection m_buttons;
-
-	ButtonId m_lastPressedId;
-	std::uint8_t m_pressCount;
 };
 
 TButtonsDriverPtr createButtonsDriver();

@@ -17,6 +17,7 @@ enum class ButtonState
     ,   kButtonClick
     ,   kButtonDblClick
     ,   kButtonLongPress
+    ,   Undefined
 };
 
 
