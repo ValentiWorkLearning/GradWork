@@ -9,18 +9,32 @@ namespace Buttons
 {
 
 Win32TimerBackend::Win32TimerBackend()
+    :   m_isTimerEllapsed{true}
 {
 }
 
 void
 Win32TimerBackend::startTimer()
 {
-
     if (!m_isTimerEllapsed)
     {
         stopTimer();
         startTimer();
     }
+
+    auto timerEllapsedCallback = cbc::obtain_connector(
+        [this](HWND, UINT, UINT_PTR, DWORD)->VOID
+        {
+            onTimerExpired.emit();
+        }
+    );
+
+    SetTimer(
+            nullptr
+        ,   TimerId
+        ,   ClicksDetectionPeriodMs
+        ,   timerEllapsedCallback
+    );
 
     m_isTimerEllapsed = false;
 }
@@ -28,6 +42,7 @@ Win32TimerBackend::startTimer()
 void
 Win32TimerBackend::stopTimer()
 {
+    KillTimer( nullptr, TimerId );
     m_isTimerEllapsed = true;
 }
 
