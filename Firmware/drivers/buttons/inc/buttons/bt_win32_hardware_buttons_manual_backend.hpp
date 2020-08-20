@@ -26,7 +26,7 @@ public:
     void stopTimer() override;
 
 private:
-    static constexpr inline std::uint32_t ClicksDetectionPeriodMs = 100;
+    static constexpr inline std::uint32_t ClicksDetectionPeriodMs = 400;
     static constexpr std::uint32_t TimerId = 128;
     std::atomic<bool> m_isTimerEllapsed = false;
 };
