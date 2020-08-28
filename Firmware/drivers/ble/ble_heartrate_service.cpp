@@ -16,6 +16,14 @@ NordicHeartrateService::NordicHeartrateService()
     initService();
 }
 
+NordicHeartrateService::~NordicHeartrateService()= default;
+
+void
+NordicHeartrateService::onHeartrateChanged ( std::uint8_t _newHeartrateLevel )
+{
+    // TODO me
+}
+
 void
 NordicHeartrateService::initService()
 {
@@ -34,8 +42,9 @@ NordicHeartrateService::initService()
 }
 
 void
-NordicHeartrateService::setSensorLocation( SensorLocation _sensorLocation )
+NordicHeartrateService::setSensorLocation( Ble::HeartrateService::SensorLocation _sensorLocation )
 {
     // TODO me?
 }
+
 }

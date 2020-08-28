@@ -12,7 +12,7 @@ class NordicHeartrateService
 public:
 
     NordicHeartrateService();
-    ~NordicHeartrateService()override = default;
+    ~NordicHeartrateService()override;
 
 public:
     void onHeartrateChanged ( std::uint8_t _newHeartrateLevel ) override;
