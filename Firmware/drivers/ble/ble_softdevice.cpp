@@ -1,6 +1,10 @@
 #include "inc/ble/nordic_ble/ble_softdevice.hpp"
 #include "inc/ble/nordic_ble/ble_stack_constants.hpp"
 
+#include "ih/drivers/ih_ble_battery_service.hpp"
+#include "ih/drivers/ih_ble_dts_service.hpp"
+#include "ih/drivers/ih_ble_heartrate_service.hpp"
+
 #include "inc/ble/nordic_ble/ble_custom_service.hpp"
 
 #include "utils/CallbackConnector.hpp"
@@ -650,6 +654,7 @@ void BleStackKeeper::initServices()
     m_customService = std::make_unique<CustomService::CustomService>();
     m_batteryService = m_pServiceCreator->getBatteryService();
     m_dateTimeService = m_pServiceCreator->getDateTimeService( &m_bleGattQueue );
+    m_pHeartrateService = m_pServiceCreator->getHeartrateService();
 }
 
 Ble::BatteryService::IBatteryLevelService&

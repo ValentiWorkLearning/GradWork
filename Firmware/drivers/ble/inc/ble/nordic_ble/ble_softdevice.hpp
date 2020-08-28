@@ -1,8 +1,7 @@
 #pragma once
 
 #include "ih/drivers/ih_ible_softdevice.hpp"
-#include "ih/drivers/ih_ble_battery_service.hpp"
-#include "ih/drivers/ih_ble_dts_service.hpp"
+
 #include "ih/drivers/ih_ble_service_factory.hpp"
 
 #include "utils/SimpleSignal.hpp"
@@ -142,7 +141,7 @@ private:
     std::unique_ptr<Ble::CustomService::CustomService> m_customService;
     Ble::ServiceFactory::IBleServiceFactory::TBatteryServicePtr m_batteryService;
     Ble::ServiceFactory::IBleServiceFactory::TDateTimeServicePtr m_dateTimeService;
-
+    Ble::ServiceFactory::IBleServiceFactory::THeartrateServicePtr m_pHeartrateService;
     using TPeersStorage = std::array<pm_peer_id_t,Ble::Stack::WhiteList::Size>;
 
     /**< List of peers currently in the whitelist. */

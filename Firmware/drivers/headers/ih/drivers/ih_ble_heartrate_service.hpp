@@ -15,7 +15,7 @@ enum class SensorLocation
         Finger
     ,   Chest
     ,   Hand
-}
+};
 
 class IHeartrateService
     :   private Utils::noncopyable

@@ -18,6 +18,11 @@ namespace Ble::DateTimeService
     class IDateTimeService;
 }
 
+namespace Ble::HeartrateService
+{
+    class IHeartrateService;
+}
+
 namespace Ble::ServiceFactory
 {
 
@@ -38,6 +43,9 @@ class IBleServiceFactory
 
     using TDateTimeServicePtr = TServicePtr<Ble::DateTimeService::IDateTimeService>;
     [[nodiscard]] virtual TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) = 0;
+
+    using THeartrateServicePtr = TServicePtr<Ble::HeartrateService::IHeartrateService>;
+    [[nodiscard]] virtual THeartrateServicePtr getHeartrateService() = 0;
 
 };
 

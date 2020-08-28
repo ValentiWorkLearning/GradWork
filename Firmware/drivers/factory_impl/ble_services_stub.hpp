@@ -2,6 +2,7 @@
 
 #include "ih/drivers/ih_ble_battery_service.hpp"
 #include "ih/drivers/ih_ble_dts_service.hpp"
+#include "ih/drivers/ih_ble_heartrate_service.hpp"
 
 namespace Ble::BatteryService
 {
@@ -41,6 +42,29 @@ public:
 public:
 
     virtual ~StubDateTimeService()override = default;
+};
+
+}
+
+
+namespace Ble::HeartrateService
+{
+class StubHeartrateService
+    :   public IHeartrateService
+{
+
+public:
+
+    StubHeartrateService();
+
+public:
+
+    virtual ~StubHeartrateService()override = default;
+
+public:
+    void onHeartrateChanged ( std::uint8_t _newHeartrateLevel ) override;
+
+    void setSensorLocation( SensorLocation _sensorLocation ) override;
 };
 
 }

@@ -36,3 +36,19 @@ StubDateTimeService::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent
 }
 
 }
+
+
+namespace Ble::HeartrateService
+{
+
+void
+StubHeartrateService::onHeartrateChanged( std::uint8_t _heartRate )
+{
+}
+
+void
+StubHeartrateService::setSensorLocation(SensorLocation _location)
+{
+}
+
+}

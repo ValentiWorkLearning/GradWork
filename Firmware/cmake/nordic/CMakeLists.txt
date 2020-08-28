@@ -488,7 +488,7 @@ declareNordicSdkLibrary(
 
 #BAS Service
 declareNordicSdkLibrary(
-    BleService_BAS
+    BleService_BateryService
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas/ble_bas.c"
     NordicSDK::Ble
@@ -496,9 +496,17 @@ declareNordicSdkLibrary(
 
 #CTS_C Service
 declareNordicSdkLibrary(
-    BleService_CTSCLIENT
+    BleService_CurrentTimeClient
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c/ble_cts_c.c"
+    NordicSDK::Ble::ServiceDbDiscovery
+)
+
+#CTS_C Service
+declareNordicSdkLibrary(
+    BleService_HeartrateService
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_hrs"
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_hrs/ble_hrs.c"
     NordicSDK::Ble::ServiceDbDiscovery
 )
 

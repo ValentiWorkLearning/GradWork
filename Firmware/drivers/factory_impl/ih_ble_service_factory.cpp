@@ -6,6 +6,8 @@
 #if defined (USE_BLE_SERVICES)
 #include "ble/nordic_ble/ble_battery_service.hpp"
 #include "ble/nordic_ble/ble_datetime_service.hpp"
+#include "ble/nordic_ble/ble_heartrate_service.hpp"
+
 
 #elif defined (USE_DESKTOP_SIMULATOR)
 #include "ble_services_stub.hpp"
@@ -28,6 +30,7 @@ public:
 
     [[nodiscard]] TBatteryServicePtr getBatteryService() override;
     [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) override;
+    [[nodiscard]] THeartrateServicePtr getHeartrateService() override;
 
 };
 
@@ -43,6 +46,12 @@ NordicServiceFactory::getBatteryService()
     return std::make_unique<Ble::BatteryService::BatteryLevelService>();
 }
 
+[[nodiscard]] IBleServiceFactory::THeartrateServicePtr
+NordicServiceFactory::getHeartrateService()
+{
+    return std::make_unique<Ble::HeartrateService::NordicHeartrateService>();
+}
+
 #elif defined (USE_DESKTOP_SIMULATOR)
 
 class DesktopFakeBleServiceFactory
@@ -56,6 +65,7 @@ public:
 
     [[nodiscard]] TBatteryServicePtr getBatteryService() override;
     [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) override;
+    [[nodiscard]] THeartrateServicePtr getHeartrateService() override;
 };
 
 
@@ -72,6 +82,11 @@ DesktopFakeBleServiceFactory::getBatteryService()
     return std::make_unique<Ble::BatteryService::StubBatteryService>();
 }
 
+[[nodiscard]] IBleServiceFactory::THeartrateServicePtr
+DesktopFakeBleServiceFactory::getHeartrateService()
+{
+    return std::make_unique<Ble::HeartrateService::StubHeartrateService>();
+}
 #endif
 
 
