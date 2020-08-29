@@ -11,6 +11,7 @@
 #include <atomic>
 
 #include <etl/vector.h>
+#include <etl/queue_spsc_atomic.h>
 
 namespace Graphics::Events
 {
@@ -38,10 +39,11 @@ private:
         Events::enumConvert<EventGroup>( EventGroup::EventGroupEnd );
     static constexpr inline int EventPoolSize = 16;
 
-    etl::vector<std::pair<EventGroup,SubscriberStorage>,EventsCount> m_eventsMap;
-    etl::vector<TEvent,EventPoolSize> m_eventsQueue;
+    using TEventsMap = etl::vector<std::pair<EventGroup, SubscriberStorage>, EventsCount>;
+    TEventsMap m_eventsMap;
 
-    std::atomic_flag locker = ATOMIC_FLAG_INIT;
+    using TEventsQueue = etl::queue_spsc_atomic<TEvent, EventPoolSize, etl::memory_model::MEMORY_MODEL_SMALL>;
+    TEventsQueue m_eventsQueue;
 };
 
 using TEventDispatcherPtr = std::unique_ptr<EventDispatcher>;
