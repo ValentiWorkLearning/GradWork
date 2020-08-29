@@ -3,6 +3,8 @@
 #include "ble_hrs.h"
 #include "app_error.h"
 
+#include <cstdint>
+
 namespace
 {
     BLE_HRS_DEF(m_hrs);
@@ -21,7 +23,11 @@ NordicHeartrateService::~NordicHeartrateService()= default;
 void
 NordicHeartrateService::onHeartrateChanged ( std::uint8_t _newHeartrateLevel )
 {
-    // TODO me
+    ret_code_t errorCode = ble_hrs_heart_rate_measurement_send(
+            &m_hrs
+        ,   _newHeartrateLevel
+    );
+    APP_ERROR_CHECK(errorCode);
 }
 
 void
