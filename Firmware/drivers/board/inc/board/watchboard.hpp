@@ -20,7 +20,7 @@ public:
 
 public:
 
-	void toggleStatusLed();
+	void enableLedToggle();
 
 	Buttons::IButtonsDriver* getButtonsDriver();
 
@@ -30,6 +30,12 @@ private:
 
 	void initBoard();
 
+	void initBoardTimer();
+
+	std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval );
+
+private:
+    const std::chrono::milliseconds LedToggleTimeout = std::chrono::milliseconds{300};
 private:
 
 	Buttons::TButtonsDriverPtr m_pButtonsDriver;

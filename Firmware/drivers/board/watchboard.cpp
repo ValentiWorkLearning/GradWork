@@ -6,14 +6,23 @@
 #include "boards.h"
 #include "bsp.h"
 #include "app_timer.h"
+#include "app_error.h"
 
 #endif
+
+#include "utils/CallbackConnector.hpp"
 
 #include "buttons/bt_buttons_driver.hpp"
 #include "buttons/bt_buttons_driver_creator.hpp"
 
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
+
+
+namespace
+{
+    APP_TIMER_DEF( m_ledDriverTimer );
+}
 
 namespace WatchBoard
 {
@@ -41,23 +50,54 @@ Board::initBoard()
     m_pButtonsDriver->setTimer( m_pButtonsTimer.get() );
 }
 
+void
+Board::initBoardTimer()
+{
+    ret_code_t errorCode{};
+
+    auto timerExpiredCallback = cbc::obtain_connector(
+        [ this ]( void * _pContext )
+        {
+            LOG_DEBUG_ENDL("LED TIMER EXPIRED");
+            bsp_board_led_invert(0);
+        }
+    );
+
+    errorCode = app_timer_create(
+            &m_ledDriverTimer
+        ,   APP_TIMER_MODE_REPEATED
+        ,   timerExpiredCallback
+    );
+    APP_ERROR_CHECK( errorCode );
+}
+
 Board::Board()
 {
     initBoard();
+    initBoardTimer();
 }
 
 void
-Board::toggleStatusLed()
+Board::enableLedToggle()
 {
 #if defined (USE_DEVICE_SPECIFIC)
-
-    constexpr std::uint16_t DelayTime = 300;
-
-    bsp_board_led_invert(0);
-    Delay::waitFor( DelayTime );
-
+    ret_code_t errorCode{};
+    errorCode = app_timer_start(
+            m_ledDriverTimer
+        ,   convertToTimerTicks(LedToggleTimeout)
+        ,   nullptr
+    );
+    APP_ERROR_CHECK( errorCode );
 #endif
 }
+
+std::uint32_t
+Board::convertToTimerTicks( std::chrono::milliseconds _interval )
+{
+    std::uint32_t timerTicksValue = APP_TIMER_TICKS( _interval.count() );
+    return timerTicksValue;
+}
+
 
 Buttons::IButtonsDriver*
 Board::getButtonsDriver()
