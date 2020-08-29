@@ -25,7 +25,7 @@ Board::initBoard()
     /* Configure board. */
     bsp_board_init( BSP_INIT_LEDS );
 
-    Logger::Instance().logDebugEndl( "Hello from E73 Mod Board!" );
+    LOG_DEBUG_ENDL( "Hello from E73 Mod Board!" );
 
     ret_code_t errorCode{};
 

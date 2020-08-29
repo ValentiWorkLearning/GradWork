@@ -8,6 +8,15 @@
 #include <charconv>
 #include <atomic>
 
+#define ENABLE_DEBUG_LOGGING
+#ifdef ENABLE_DEBUG_LOGGING
+    #define LOG_DEBUG(ARGS)( Logger::Instance().logDebug( ARGS ) )
+    #define LOG_DEBUG_ENDL( ARGS )( Logger::Instance().logDebugEndl( ARGS ) )
+#else
+    #define LOG_DEBUG(ARGS)
+    #define LOG_DEBUG_ENDL(ARGS)
+#endif
+
 class Logger
 {
 

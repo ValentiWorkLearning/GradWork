@@ -181,7 +181,7 @@ public:
         lv_mem_monitor_t moninor{};
         lv_mem_monitor( &moninor );
 
-        Logger::Instance().logDebugEndl(
+        LOG_DEBUG_ENDL(
                 fmt::format(
                     "Used: {} , {}% fragmentation: {}, biggest free: {}"
                  ,   static_cast<std::uint32_t>( moninor.total_size - moninor.free_size )

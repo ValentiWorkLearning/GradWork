@@ -53,18 +53,18 @@ void ButtonsDriver::handleTimerExpired()
 			switch (buttonDescriptor.pressCount)
 			{
 			case 1:
-				Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });");
+				LOG_DEBUG_ENDL("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });");
 				onButtonEvent.emit( { buttonDescriptor.id, ButtonState::kButtonClick } );
 			break;
 			case 2:
-				Logger::Instance().logDebugEndl("onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });");
+				LOG_DEBUG_ENDL("onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });");
 				onButtonEvent.emit({ buttonDescriptor.id, ButtonState::kButtonDblClick });
 			break;
 
 			default:
 				break;
 			}
-			Logger::Instance().logDebugEndl("EXPIRED HANDLE");
+			LOG_DEBUG_ENDL("EXPIRED HANDLE");
 			buttonDescriptor.pressCount = 0;
 		}
 		else {
@@ -97,7 +97,7 @@ void ButtonsDriver::handleButtonsBackendEvent( ButtonId _buttonId, ButtonBackend
 		{
 			m_buttons[arrayIndex].pressCount = 0;
 			m_buttons[arrayIndex].longPressTimeoutExpired = false;
-			Logger::Instance().logDebugEndl("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });");
+			LOG_DEBUG_ENDL("onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });");
 			onButtonEvent.emit({ m_buttons[arrayIndex].id, ButtonState::kButtonLongPress });
 		}
 	}

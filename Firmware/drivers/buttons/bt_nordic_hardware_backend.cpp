@@ -30,7 +30,7 @@ NordicTimerBackend::NordicTimerBackend()
         {
             m_isTimerEllapsed = true;
             onTimerExpired.emit();
-            Logger::Instance().logDebugEndl("m_isTimerEllapsed = true;");
+            LOG_DEBUG_ENDL("m_isTimerEllapsed = true;");
         }
     );
 
@@ -137,12 +137,12 @@ NordicButtonsBackend::handleHardwareButtonEvent( std::uint8_t _pinNumber, std::u
     {
         if( _buttonEvent == APP_BUTTON_PUSH )
         {
-            Logger::Instance().logDebugEndl("ButtonBackendEvent::kPressed");
+            LOG_DEBUG_ENDL("ButtonBackendEvent::kPressed");
             return ButtonBackendEvent::kPressed;
         }
         else if( _buttonEvent == APP_BUTTON_RELEASE )
         {
-            Logger::Instance().logDebugEndl("ButtonBackendEvent::kReleased");
+            LOG_DEBUG_ENDL("ButtonBackendEvent::kReleased");
             return ButtonBackendEvent::kReleased;
         }
         else{
@@ -154,19 +154,19 @@ NordicButtonsBackend::handleHardwareButtonEvent( std::uint8_t _pinNumber, std::u
     switch (_pinNumber)
     {
     case BUTTON_1:
-        Logger::Instance().logDebugEndl("BUTTON_1");
+        LOG_DEBUG_ENDL("BUTTON_1");
         onButtonEvent.emit( Buttons::ButtonId::kLeftButtonTop, toLocalEvent( _buttonEvent ) );
         break;
     case BUTTON_2:
-        Logger::Instance().logDebugEndl("BUTTON_2");
+        LOG_DEBUG_ENDL("BUTTON_2");
         onButtonEvent.emit( Buttons::ButtonId::kLeftButtonMedium, toLocalEvent( _buttonEvent ));
         break;
     case BUTTON_3:
-        Logger::Instance().logDebugEndl("BUTTON_3");
+        LOG_DEBUG_ENDL("BUTTON_3");
         onButtonEvent.emit( Buttons::ButtonId::kLeftButtonBottom, toLocalEvent( _buttonEvent ));
         break;
     case BUTTON_4:
-        Logger::Instance().logDebugEndl("BUTTON_4");
+        LOG_DEBUG_ENDL("BUTTON_4");
         onButtonEvent.emit( Buttons::ButtonId::kRightButtonTop, toLocalEvent( _buttonEvent ));
         break;
     default:

@@ -8,14 +8,14 @@ namespace Ble::BatteryService
 
 StubBatteryService::StubBatteryService()
 {
-    Logger::Instance().logDebugEndl( "Initialized DesktopStubBatteryService" );
+    LOG_DEBUG_ENDL( "Initialized DesktopStubBatteryService" );
 }
 
 void
 StubBatteryService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )
 {
-    Logger::Instance().logDebug("New battery level is:" );
-    Logger::Instance().logDebugEndl( _newBatteryLevel );
+    LOG_DEBUG("New battery level is:" );
+    LOG_DEBUG_ENDL( _newBatteryLevel );
 }
 
 }
@@ -25,7 +25,7 @@ namespace Ble::DateTimeService
 
 StubDateTimeService::StubDateTimeService()
 {
-    Logger::Instance().logDebugEndl( "Initialized StubDateTimeService" );
+    LOG_DEBUG_ENDL( "Initialized StubDateTimeService" );
 }
 
 

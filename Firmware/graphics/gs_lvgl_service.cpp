@@ -84,27 +84,27 @@ private:
                 switch( level )
                 {
                     case LV_LOG_LEVEL_ERROR:
-                        Logger::Instance().logDebug( "[ERROR]:" );
+                        LOG_DEBUG( "[ERROR]:" );
                     break;
                     case LV_LOG_LEVEL_WARN:
-                        Logger::Instance().logDebug( "[WARNING]:" );
+                        LOG_DEBUG( "[WARNING]:" );
                     break;
                     case LV_LOG_LEVEL_INFO:
-                        Logger::Instance().logDebug( "[INFO]:" );
+                        LOG_DEBUG( "[INFO]:" );
                     break;
                     case LV_LOG_LEVEL_TRACE:
-                        Logger::Instance().logDebug( "[TRACE]:" );
+                        LOG_DEBUG( "[TRACE]:" );
                     break;
 
                     default:
-                        Logger::Instance().logDebug( "[LVGL_LOG]:" );
+                        LOG_DEBUG( "[LVGL_LOG]:" );
                 }
-                Logger::Instance().logDebug( "File:"  );
-                Logger::Instance().logDebug( file );
-                Logger::Instance().logDebug( ":" );
-                Logger::Instance().logDebug(":functon");
-                Logger::Instance().logDebug(functionName);
-                Logger::Instance().logDebugEndl( dsc );
+                LOG_DEBUG( "File:"  );
+                LOG_DEBUG( file );
+                LOG_DEBUG( ":" );
+                LOG_DEBUG(":functon");
+                LOG_DEBUG(functionName);
+                LOG_DEBUG_ENDL( dsc );
             }
         );
 
@@ -128,10 +128,10 @@ private:
         // auto monitorCallback = cbc::obtain_connector(
         //     []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
         //     {
-        //         Logger::Instance().logDebug("Refresh time:");
-        //         Logger::Instance().logDebugEndl( time );
-        //         Logger::Instance().logDebug("Refreshed pixels:");
-        //         Logger::Instance().logDebugEndl( px );
+        //         LOG_DEBUG("Refresh time:");
+        //         LOG_DEBUG_ENDL( time );
+        //         LOG_DEBUG("Refreshed pixels:");
+        //         LOG_DEBUG_ENDL( px );
         //     }
         // );
 
