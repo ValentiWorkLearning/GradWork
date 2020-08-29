@@ -8,6 +8,11 @@
 #include "app_timer.h"
 #include "app_error.h"
 
+namespace
+{
+    APP_TIMER_DEF( m_ledDriverTimer );
+}
+
 #endif
 
 #include "utils/CallbackConnector.hpp"
@@ -18,11 +23,6 @@
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
 
-
-namespace
-{
-    APP_TIMER_DEF( m_ledDriverTimer );
-}
 
 namespace WatchBoard
 {
@@ -53,6 +53,7 @@ Board::initBoard()
 void
 Board::initBoardTimer()
 {
+#if defined (USE_DEVICE_SPECIFIC)
     ret_code_t errorCode{};
 
     auto timerExpiredCallback = cbc::obtain_connector(
@@ -69,6 +70,7 @@ Board::initBoardTimer()
         ,   timerExpiredCallback
     );
     APP_ERROR_CHECK( errorCode );
+#endif
 }
 
 Board::Board()
@@ -94,8 +96,11 @@ Board::enableLedToggle()
 std::uint32_t
 Board::convertToTimerTicks( std::chrono::milliseconds _interval )
 {
+#if defined (USE_DEVICE_SPECIFIC)
     std::uint32_t timerTicksValue = APP_TIMER_TICKS( _interval.count() );
     return timerTicksValue;
+#endif
+    return 0;
 }
 
 
