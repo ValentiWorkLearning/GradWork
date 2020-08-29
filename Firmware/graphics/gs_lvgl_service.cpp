@@ -31,8 +31,7 @@ namespace Graphics
 {
 
 LvglGraphicsService::LvglGraphicsService(
-            std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
-        )   :   m_pGraphicsServiceImpl{ std::make_unique<GSLvglServiceImpl>(std::move( _platformBackend ) )}
+        )   :   m_pGraphicsServiceImpl{ std::make_unique<GSLvglServiceImpl>() }
 {
 }
 
@@ -42,13 +41,12 @@ class LvglGraphicsService::GSLvglServiceImpl
 public:
 
     GSLvglServiceImpl(
-        std::unique_ptr<Graphics::PlatformBackend>&& _platformBackend
     )   :   m_glDisplay{ nullptr }
         ,   m_pMainWindowTick{ nullptr }
         ,   m_pPageSwitch{ nullptr }
         ,   m_pthemeChangeSwitch{ nullptr }
         ,   m_glDisplayDriver{}
-        ,   m_pPlatformBackend{ std::move( _platformBackend ) }
+        ,   m_pPlatformBackend{}
     {
         initLvglLogger();
         initDisplayDriver();
@@ -59,7 +57,7 @@ public:
 
     void executeGlTask()
     {
-        m_pPlatformBackend->executeTask();
+        m_pPlatformBackend.executeLvTaskHandler();
     }
 
 public:
@@ -136,11 +134,11 @@ private:
         // );
 
         //m_glDisplayDriver.monitor_cb = monitorCallback;
-        m_pPlatformBackend->platformDependentInit( &m_glDisplayDriver );
+        m_pPlatformBackend.platformDependentInit( &m_glDisplayDriver );
 
         m_glDisplay.reset( lv_disp_drv_register( &m_glDisplayDriver ) );
 
-        m_pPlatformBackend->initPlatformGfxTimer();
+        m_pPlatformBackend.initPlatformGfxTimer();
     }
 
     void initMainWindow()
@@ -263,7 +261,7 @@ private:
 
     lv_disp_drv_t m_glDisplayDriver;
 
-    std::unique_ptr<Graphics::PlatformBackend> m_pPlatformBackend;
+    Graphics::PlatformBackend m_pPlatformBackend;
     std::unique_ptr<Graphics::MainWindow::IGsMainWindowModel> m_pMainWindow;
 };
 
@@ -295,9 +293,7 @@ LvglGraphicsService::getMainWindow() const
 std::unique_ptr<LvglGraphicsService>
 createGraphicsService()
 {
-    return std::make_unique<LvglGraphicsService>(
-        Graphics::createPlatformBackend()
-    );
+    return std::make_unique<LvglGraphicsService>();
 }
 
 };

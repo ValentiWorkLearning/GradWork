@@ -2,10 +2,17 @@
 
 #include <memory>
 
-#include "utils/FastPimpl.hpp"
-#include "utils/Platform.hpp"
-
 #include "lvgl.h"
+
+#ifdef USE_WINSDL_BACKEND
+#include <thread>
+#include <chrono>
+#endif // USE_WINSDL_BACKEND
+
+
+namespace DisplayDriver {
+    class IDisplayDriver;
+}
 
 namespace Graphics
 {
@@ -15,25 +22,32 @@ class PlatformBackend
 
 public:
 
-    explicit PlatformBackend();
+    PlatformBackend();
 
     void platformDependentInit( lv_disp_drv_t* _displayDriver );
 
-    void executeTask();
-
     void initPlatformGfxTimer();
 
-    ~PlatformBackend();
+    void executeLvTaskHandler();
 
 private:
 
-    static constexpr inline std::size_t kImplSize = Platform::GraphicsBackendSize;
-    static constexpr inline std::size_t kImplAlignment = Platform::GraphicsBackendAlignment;
+    static constexpr std::uint32_t LvglNotificationTime = 15;
 
-    class PlatformBackendImpl;
-    Utils::FastPimpl<PlatformBackendImpl,kImplSize,kImplAlignment> m_pBackendImpl;
+private:
+
+    void indevPlatformInit();
+
+    void memoryMonitor(lv_task_t* _param);
+
+private:
+
+#if defined USE_HARDWARE_DISPLAY_BACKEND
+    std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
+#elif defined USE_WINSDL_BACKEND
+    std::thread m_tickThread;
+#endif
+
 };
 
-std::unique_ptr<PlatformBackend> createPlatformBackend();
-
-};
+} // namespace Graphics
