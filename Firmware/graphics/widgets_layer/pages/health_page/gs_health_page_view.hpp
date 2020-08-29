@@ -75,7 +75,7 @@ private:
     static constexpr std::uint8_t LineWidth = 3;
     static constexpr std::uint8_t LineRounded = 2;
 
-    static constexpr std::array<lv_point_t, PointsCount> CardioIconPoints =
+    static inline std::array<lv_point_t, PointsCount> CardioIconPoints =
         {
                 lv_point_t{ 7, 20 }
             ,   lv_point_t{ 15, 20 }
