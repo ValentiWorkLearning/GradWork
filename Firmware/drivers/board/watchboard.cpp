@@ -90,6 +90,14 @@ Board::initBoardSpiFlash()
                 LOG_DEBUG_ENDL( deviceId );
             }
         );
+
+        m_pFlashDriver->onRequestJedecIdCompleted.connect(
+            [this]( std::uint32_t _jedecId )
+            {
+                LOG_DEBUG("Jedec Id is:");
+                LOG_DEBUG_ENDL( _jedecId );
+            }
+        );
     }
 #endif
 }

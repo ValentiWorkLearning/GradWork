@@ -32,6 +32,8 @@ namespace WindbondCommandSet
 
     constexpr std::uint8_t DeviceIdFromPowedDownRelease = 0xab;
     constexpr std::uint8_t ReadManufactureId = 0x90;
+
+    constexpr std::uint8_t JedecIdLength = 3;
     constexpr std::uint8_t ReadJedecId = 0x9F;
 
     constexpr std::uint8_t UniqueIdLength = 8; // 64 bits

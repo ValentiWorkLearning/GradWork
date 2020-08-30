@@ -73,6 +73,29 @@ WinbondFlash::requestDeviceId()
 }
 
 void
+WinbondFlash::requestJEDEDCId()
+{
+    Interface::Spi::Transaction requestIdCommandTransaction = writeTransaction(
+            WindbondCommandSet::ReadJedecId
+    );
+    m_pBusPtr->addTransaction( std::move( requestIdCommandTransaction ) );
+
+    Interface::Spi::Transaction receiveDataTranscation =
+        readTransaction( WindbondCommandSet::JedecIdLength );
+    receiveDataTranscation.afterTransaction =
+            [this]
+            {
+                std::uint32_t JedecDeviceId{};
+                const auto dmaReceiveBuffer = m_pBusPtr->getDmaBufferReceive();
+                for( std::size_t i{}; i<WindbondCommandSet::JedecIdLength; ++i )
+                {
+                    JedecDeviceId |= ( dmaReceiveBuffer[i] << ( 16 - i * 8 ) );
+                }
+                onRequestJedecIdCompleted.emit(JedecDeviceId);
+            };
+}
+
+void
 WinbondFlash::requestEnterSleepMode()
 {
 

@@ -28,18 +28,22 @@ public:
 
     virtual void requestDeviceId() = 0;
 
+    virtual void requestJEDEDCId() = 0;
+
     virtual void requestEnterSleepMode() = 0;
 
     virtual void requestRestoreFromSleepMode() = 0;
 
     static constexpr inline std::uint8_t DeviceIdLength = 8;
     using TDeviceIdType = std::array<std::uint8_t,DeviceIdLength>;
+
     virtual const TDeviceIdType& getDeviceUniqueId() = 0;
 
 public:
 
     Simple::Signal<void()> onBlockWriteCompleted;
     Simple::Signal<void()> onRequestDeviceIdCompleted;
+    Simple::Signal<void(std::uint32_t)> onRequestJedecIdCompleted;
 
 };
 

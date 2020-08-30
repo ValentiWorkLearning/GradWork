@@ -43,6 +43,8 @@ public:
 
     void requestDeviceId() override;
 
+    void requestJEDEDCId() override;
+
     void requestEnterSleepMode() override;
 
     void requestRestoreFromSleepMode() override;
