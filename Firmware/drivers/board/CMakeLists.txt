@@ -17,7 +17,6 @@ target_link_libraries(
     platform_delay
     drivers_ih
     buttons_driver
-    windbond_spi_flash_driver
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
@@ -26,6 +25,8 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         NordicSDK::Common
         NordicSDK::Bsp
         NordicSDK::App::Timer
+
+        windbond_spi_flash_driver
     )
 
     target_compile_definitions(

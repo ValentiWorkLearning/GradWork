@@ -50,6 +50,8 @@ Board::initBoard()
 
     m_pButtonsDriver->setButtonsBackend( m_pButtonsBackend.get() );
     m_pButtonsDriver->setTimer( m_pButtonsTimer.get() );
+
+    initBoardSpiFlash();
 }
 
 void
