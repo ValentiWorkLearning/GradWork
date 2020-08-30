@@ -13,14 +13,14 @@ namespace
     APP_TIMER_DEF( m_ledDriverTimer );
 }
 
+#include "windbondflash/winbond_driver_creator.hpp"
+
 #endif
 
 #include "utils/CallbackConnector.hpp"
 
 #include "buttons/bt_buttons_driver.hpp"
 #include "buttons/bt_buttons_driver_creator.hpp"
-
-#include "windbondflash/winbond_driver_creator.hpp"
 
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
