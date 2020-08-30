@@ -67,19 +67,12 @@ class SpiBus::SpiBackendImpl
         spiConfig.mode           = NRF_SPIM_MODE_0;
         spiConfig.bit_order      = NRF_SPIM_BIT_ORDER_MSB_FIRST;
 
-        auto eventHandler = cbc::obtain_connector(
-            [ this ]( nrfx_spim_evt_t const* _pEvent, void* _pContext )
-            {
-                spimEventHandler( _pEvent,_pContext );
-            }
-        );
-
         APP_ERROR_CHECK(
             nrfx_spim_init(
                     &m_spiHandle
                 ,   &spiConfig
-                ,   eventHandler
-                ,   nullptr
+                ,   spimEventHandler
+                ,   this
             )
         );
     }
@@ -90,7 +83,7 @@ class SpiBus::SpiBackendImpl
     {
         nrfx_spim_xfer_desc_t xferDesc =
             NRFX_SPIM_XFER_TX(
-                m_pSpiBus->getDmaBuffer().data()
+                m_pSpiBus->getDmaBufferTransmit().data()
             ,   _dataSize
         );
 
@@ -120,13 +113,20 @@ class SpiBus::SpiBackendImpl
     }
 
 
-    void receiveChunk( std::uint8_t* _pBuffer, const size_t _bufferSize )
+    void xferChunk(
+                const std::uint8_t* _pTransmitBuffer
+            ,   const size_t _transmitBufferSize
+            ,   std::uint8_t* _pReceiveBuffer
+            ,   const size_t _receiveBufferSize
+        )
     {
 
         nrfx_spim_xfer_desc_t xferDesc =
-            NRFX_SPIM_XFER_RX(
-                    _pBuffer
-                ,   _bufferSize
+            NRFX_SPIM_XFER_TRX(
+                    _pTransmitBuffer
+                ,   _transmitBufferSize
+                ,   _pReceiveBuffer
+                ,   _receiveBufferSize
             );
 
         nrfx_err_t transmissionError = nrfx_spim_xfer(
@@ -137,9 +137,32 @@ class SpiBus::SpiBackendImpl
 
         APP_ERROR_CHECK( transmissionError );
     }
+
+    void receiveAsync(
+                const size_t _bytesCount
+            ,   std::uint8_t* _pReceiveBuffer
+            ,   const size_t _receiveBufferSize
+        )
+    {
+        assert( _bytesCount <= _receiveBufferSize );
+
+        nrfx_spim_xfer_desc_t receiveAsyncDesc =
+            NRFX_SPIM_XFER_RX(
+                    _pReceiveBuffer
+                ,   _bytesCount
+            );
+
+        nrfx_err_t transmissionError = nrfx_spim_xfer(
+                &m_spiHandle
+            ,   &receiveAsyncDesc
+            ,   0
+        );
+
+        APP_ERROR_CHECK( transmissionError );
+    }
     private:
 
-    void spimEventHandler(
+    static void spimEventHandler(
             nrfx_spim_evt_t const* _pEvent
         ,   void* _pContext
     )
@@ -147,12 +170,12 @@ class SpiBus::SpiBackendImpl
         Meta::UnuseVar( _pContext );
         if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
         {
-            m_pSpiBus->handleEvent( SpiBus::TCompletedEvent::TransactionCompleted );
+            auto pThis = reinterpret_cast<SpiBus::SpiBackendImpl*>( _pContext );
+            pThis->m_pSpiBus->handleEvent( SpiBus::TCompletedEvent::TransactionCompleted );
         }
     }
 
-    private:
-
+    public:
     nrfx_spim_t m_spiHandle;
     SpiBus* m_pSpiBus;
 };
@@ -213,7 +236,7 @@ SpiBus::handleEvent( TCompletedEvent _eventToHandle )
 
 std::uint16_t SpiBus::getDmaBufferSize()
 {
-    return SpiBus::DmaArray.size();
+    return SpiBus::DmaArrayTransmit.size();
 }
 
 void SpiBus::addTransaction( Transaction&& _item )
@@ -246,7 +269,7 @@ void SpiBus::sendData( std::uint8_t _data )
 
     while( m_isTransactionCompleted )
     {        
-        SpiBus::DmaArray[0] = _data;
+        SpiBus::DmaArrayTransmit[0] = _data;
         performTransaction( transactionSize );
     }
 }
@@ -263,17 +286,43 @@ void SpiBus::sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )
     m_pSpiBackendImpl->sendChunk( _pBuffer,_bufferSize );
 }
 
-void SpiBus::receiveChunk( std::uint8_t* _pBuffer, const size_t _bufferSize )
+void SpiBus::xferChunk(
+        const std::uint8_t* _pTransmitBuffer
+    ,   const size_t _transmitBufferSize
+)
 {
     m_isTransactionCompleted = false;
-    m_pSpiBackendImpl->receiveChunk( _pBuffer, _bufferSize );
+    m_pSpiBackendImpl->xferChunk(
+            _pTransmitBuffer
+        ,   _transmitBufferSize
+        ,   DmaArrayReceive.data()
+        ,   DmaArrayReceive.size()
+    );
 }
 
-SpiBus::DmaBufferType& SpiBus::getDmaBuffer()
+void
+SpiBus::receiveAsync( const size_t _bytesCount )
 {
-    return DmaArray;
+    m_isTransactionCompleted = false;
+
+    m_pSpiBackendImpl->receiveAsync(
+            _bytesCount
+        ,   DmaArrayReceive.data()
+        ,   DmaArrayReceive.size()
+    );
 }
 
+SpiBus::DmaBufferType&
+SpiBus::getDmaBufferTransmit()
+{
+    return DmaArrayTransmit;
+}
+
+SpiBus::DmaBufferType&
+SpiBus::getDmaBufferReceive()
+{
+    return DmaArrayReceive;
+}
 
 void
 SpiBus::addXferTransaction( TransactionDescriptor&& _deskcriptor )
@@ -298,7 +347,7 @@ SpiBus::addXferTransaction( TransactionDescriptor&& _deskcriptor )
                         {
                             m_isTransactionCompleted = false;
 
-                            SpiBus::DmaArray[0] = _tTransactionData;
+                            SpiBus::DmaArrayTransmit[0] = _tTransactionData;
 
                             constexpr std::uint8_t transactionSize = 1;
                             m_pSpiBackendImpl->performTransaction( transactionSize );

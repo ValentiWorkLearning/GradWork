@@ -4,6 +4,7 @@
 #include "utils/Platform.hpp"
 
 #include "ih/drivers/ih_button_driver.hpp"
+#include "ih/drivers/ih_iexternal_flash.hpp"
 
 #include <memory>
 
@@ -32,6 +33,8 @@ private:
 
 	void initBoardTimer();
 
+	void initBoardSpiFlash();
+
 	std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval );
 
 private:
@@ -41,6 +44,7 @@ private:
 	Buttons::TButtonsDriverPtr m_pButtonsDriver;
 	Buttons::TButtonTimerWrapperPtr m_pButtonsTimer;
 	Buttons::TButtonsBackendPtr m_pButtonsBackend;
+	ExternalFlash::TFlashDevicePtr m_pFlashDriver;
 };
 
 using TBoardPtr = std::unique_ptr<Board>;

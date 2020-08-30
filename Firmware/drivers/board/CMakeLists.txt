@@ -17,6 +17,7 @@ target_link_libraries(
     platform_delay
     drivers_ih
     buttons_driver
+    windbond_spi_flash_driver
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )

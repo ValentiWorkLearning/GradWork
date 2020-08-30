@@ -1,23 +1,23 @@
-#include "winbond_flash.hpp"
+#include "inc/windbondflash/winbond_flash.hpp"
+#include "inc/windbondflash/winbond_commandset.hpp"
 
-#include "spi/transaction_item.hpp"
+#include "ih/drivers/transaction_item.hpp"
 
 #include "nrf_delay.h"
 #include "pca10040.h"
 
 #include <array>
 
-
 namespace ExternalFlash
 {
 
 
 WinbondFlash::WinbondFlash(
-        Interface::Spi::SpiBus* _busPtr
+        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     )
-    :   m_pBusPtr{ _busPtr }
-    {    
-    }
+    :   m_pBusPtr{ std::move( _busPtr ) }
+{
+}
 
 
 
@@ -33,12 +33,43 @@ WinbondFlash::requestWriteBlock(
 void
 WinbondFlash::requestChipErase()
 {
-
+    Interface::Spi::Transaction chipEraseTransaction = writeTransaction(
+            WindbondCommandSet::ChipErase
+    );
+    m_pBusPtr->addTransaction( std::move( chipEraseTransaction ) );
+    m_pBusPtr->runQueue();
 }
 
 void
 WinbondFlash::requestDeviceId()
 {
+    Interface::Spi::Transaction requestIdCommandTransaction = writeTransaction(
+            WindbondCommandSet::ReadUniqueId
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+    );
+    m_pBusPtr->addTransaction( std::move( requestIdCommandTransaction ) );
+
+
+    Interface::Spi::Transaction receiveDataTranscation =
+        readTransaction( WindbondCommandSet::UniqueIdLength );
+
+    receiveDataTranscation.afterTransaction =
+            [this]
+            {
+                const auto& dmaReceiveBuffer = m_pBusPtr->getDmaBufferReceive();
+
+                for( std::size_t i{}; i< WindbondCommandSet::UniqueIdLength; ++i )
+                {
+                    m_spiFlashId[i] = dmaReceiveBuffer[i];
+                }
+                onRequestDeviceIdCompleted.emit();
+            };
+
+    m_pBusPtr->addTransaction( std::move( receiveDataTranscation ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -53,15 +84,10 @@ WinbondFlash::requestRestoreFromSleepMode()
 
 };
 
-
-std::unique_ptr<WinbondFlash>
-createFlashDriver(
-        Interface::Spi::SpiBus* _busPtr
-)
+IFlashStorageDriver::TDeviceIdType&
+WinbondFlash::getDeviceUniqueId()
 {
-    return std::make_unique<WinbondFlash>(
-        _busPtr
-    );
+    return m_spiFlashId;
 }
 
 }

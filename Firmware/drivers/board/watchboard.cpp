@@ -20,6 +20,8 @@ namespace
 #include "buttons/bt_buttons_driver.hpp"
 #include "buttons/bt_buttons_driver_creator.hpp"
 
+#include "windbondflash/winbond_driver_creator.hpp"
+
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
 
@@ -70,6 +72,25 @@ Board::initBoardTimer()
         ,   timerExpiredCallback
     );
     APP_ERROR_CHECK( errorCode );
+#endif
+}
+
+void
+Board::initBoardSpiFlash()
+{
+#if defined (USE_DEVICE_SPECIFIC)
+
+    m_pFlashDriver = ExternalFlash::createExternalFlashDriver();
+    if( m_pFlashDriver )
+    {
+        m_pFlashDriver->onRequestDeviceIdCompleted.connect(
+            [this]
+            {
+                auto deviceId = m_pFlashDriver->getDeviceUniqueId();
+                LOG_DEBUG_ENDL( deviceId );
+            }
+        );
+    }
 #endif
 }
 

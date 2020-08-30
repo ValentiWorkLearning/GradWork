@@ -1,8 +1,10 @@
 #pragma once
 
-#include "SimpleSignal.hpp"
+#include "utils/SimpleSignal.hpp"
 
 #include <cstdint>
+#include <memory>
+#include <array>
 
 namespace ExternalFlash
 {
@@ -30,11 +32,17 @@ public:
 
     virtual void requestRestoreFromSleepMode() = 0;
 
+    static constexpr inline std::uint8_t DeviceIdLength = 8;
+    using TDeviceIdType = std::array<std::uint8_t,DeviceIdLength>;
+    virtual const TDeviceIdType& getDeviceUniqueId() = 0;
+
 public:
 
     Simple::Signal<void()> onBlockWriteCompleted;
-    Simple::Signal<void(std::uint16_t)> onDeviceIdRequestCompleted;
+    Simple::Signal<void()> onRequestDeviceIdCompleted;
 
 };
 
-} // namespace DisplayDriver
+using TFlashDevicePtr = std::unique_ptr<IFlashStorageDriver>;
+
+} // namespace ExternalFlash

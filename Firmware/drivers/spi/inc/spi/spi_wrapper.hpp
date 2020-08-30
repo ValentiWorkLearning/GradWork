@@ -50,9 +50,15 @@ public:
 
     void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize );
 
-    void receiveChunk( std::uint8_t* _pBuffer, const size_t _bufferSize );
+    void xferChunk(
+            const std::uint8_t* _pTransmitBuffer
+        ,   const size_t _transmitBufferSize
+    );
 
-    DmaBufferType& getDmaBuffer();
+    void receiveAsync( const size_t bytesCount );
+
+    DmaBufferType& getDmaBufferTransmit();
+    DmaBufferType& getDmaBufferReceive();
 
     Simple::Signal<void()> onTransactionCompleted;
 
@@ -85,7 +91,6 @@ private:
 
     std::uint32_t getTransitionOffset();
 
-
 private:
 
     std::atomic<bool> m_isTransactionCompleted;
@@ -102,7 +107,8 @@ private:
     class SpiBackendImpl;
     std::unique_ptr<SpiBackendImpl> m_pSpiBackendImpl;
 
-    DmaBufferType DmaArray;
+    DmaBufferType DmaArrayTransmit;
+    DmaBufferType DmaArrayReceive;
     TTransactionStorage m_transactionsQueue;
 };
 

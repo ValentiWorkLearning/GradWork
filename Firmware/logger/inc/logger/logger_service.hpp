@@ -92,6 +92,23 @@ public:
         }
     }
 
+    template< typename TArrayType, size_t ArraySize>
+    void logDebug( const std::array<TArrayType,ArraySize>& _arrayToLog )
+    {
+        for( auto arrayItem: _arrayToLog )
+        {
+            logDebug('[');
+            logDebug(arrayItem);
+            logDebug(']');
+        }
+    }
+
+    template< typename TArrayType, size_t ArraySize>
+    void logDebugEndl( const std::array<TArrayType,ArraySize>& _arrayToLog )
+    {
+        logDebug(_arrayToLog);
+        logDebug('\n');
+    }
 private:
 
     Logger();
