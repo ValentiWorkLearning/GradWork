@@ -28,6 +28,16 @@ WinbondFlash::requestWriteBlock(
     ,   const std::uint32_t _blockSize
 )
 {
+    onBlockWriteRequestCompleted.emit();
+}
+
+void
+WinbondFlash::requestReadBlock(
+        const std::uint32_t _address
+    ,   const std::uint32_t _blockSize
+)
+{
+    onBlockReadRequestCompleted.emit();
 }
 
 void
@@ -43,20 +53,20 @@ WinbondFlash::requestChipErase()
 void
 WinbondFlash::requestDeviceId()
 {
-    Interface::Spi::Transaction requestIdCommandTransaction = writeTransaction(
+    Interface::Spi::Transaction requestId = writeTransaction(
             WindbondCommandSet::ReadUniqueId
         ,   WindbondCommandSet::DummyByte
         ,   WindbondCommandSet::DummyByte
         ,   WindbondCommandSet::DummyByte
         ,   WindbondCommandSet::DummyByte
     );
-    m_pBusPtr->addTransaction( std::move( requestIdCommandTransaction ) );
+    m_pBusPtr->addTransaction( std::move( requestId ) );
 
 
-    Interface::Spi::Transaction receiveDataTranscation =
+    Interface::Spi::Transaction receiveData =
         readTransaction( WindbondCommandSet::UniqueIdLength );
 
-    receiveDataTranscation.afterTransaction =
+    receiveData.afterTransaction =
             [this]
             {
                 const auto& dmaReceiveBuffer = m_pBusPtr->getDmaBufferReceive();
@@ -68,7 +78,7 @@ WinbondFlash::requestDeviceId()
                 onRequestDeviceIdCompleted.emit();
             };
 
-    m_pBusPtr->addTransaction( std::move( receiveDataTranscation ) );
+    m_pBusPtr->addTransaction( std::move( receiveData ) );
     m_pBusPtr->runQueue();
 }
 
@@ -80,9 +90,9 @@ WinbondFlash::requestJEDEDCId()
     );
     m_pBusPtr->addTransaction( std::move( requestIdCommandTransaction ) );
 
-    Interface::Spi::Transaction receiveDataTranscation =
+    Interface::Spi::Transaction receiveData =
         readTransaction( WindbondCommandSet::JedecIdLength );
-    receiveDataTranscation.afterTransaction =
+    receiveData.afterTransaction =
             [this]
             {
                 std::uint32_t JedecDeviceId{};
@@ -93,18 +103,29 @@ WinbondFlash::requestJEDEDCId()
                 }
                 onRequestJedecIdCompleted.emit(JedecDeviceId);
             };
+    m_pBusPtr->addTransaction( std::move( receiveData ) );
+    m_pBusPtr->runQueue();
 }
 
 void
 WinbondFlash::requestEnterSleepMode()
 {
-
+    Interface::Spi::Transaction requestPowerdown = writeTransaction(
+            WindbondCommandSet::PowerDownMode
+    );
+    m_pBusPtr->addTransaction( std::move( requestPowerdown ) );
+    m_pBusPtr->runQueue();
 }
 
 void
 WinbondFlash::requestRestoreFromSleepMode()
 {
-
+    Interface::Spi::Transaction requestRestoreFromSleep
+            = writeTransaction(
+                WindbondCommandSet::ResumePowerDownMode
+            );
+    m_pBusPtr->addTransaction( std::move( requestRestoreFromSleep ) );
+    m_pBusPtr->runQueue();
 };
 
 IFlashStorageDriver::TDeviceIdType&

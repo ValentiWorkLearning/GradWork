@@ -24,6 +24,11 @@ public:
         ,   const std::uint32_t _blockSize
     ) = 0;
 
+    virtual void requestReadBlock(
+            const std::uint32_t _address
+        ,   const std::uint32_t _blockSize
+    ) = 0;
+
     virtual void requestChipErase() = 0;
 
     virtual void requestDeviceId() = 0;
@@ -41,7 +46,8 @@ public:
 
 public:
 
-    Simple::Signal<void()> onBlockWriteCompleted;
+    Simple::Signal<void()> onBlockWriteRequestCompleted;
+    Simple::Signal<void()> onBlockReadRequestCompleted;
     Simple::Signal<void()> onRequestDeviceIdCompleted;
     Simple::Signal<void(std::uint32_t)> onRequestJedecIdCompleted;
 

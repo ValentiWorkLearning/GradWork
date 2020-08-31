@@ -39,6 +39,11 @@ public:
         ,   const std::uint32_t _blockSize
     )override;
 
+    void requestReadBlock(
+            const std::uint32_t _address
+        ,   const std::uint32_t _blockSize
+    ) override;
+
     void requestChipErase() override;
 
     void requestDeviceId() override;
