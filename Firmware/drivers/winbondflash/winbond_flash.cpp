@@ -28,7 +28,31 @@ WinbondFlash::requestWriteBlock(
     ,   const std::uint32_t _blockSize
 )
 {
-    onBlockWriteRequestCompleted.emit();
+    Interface::Spi::Transaction requestWriteEnable = writeTransaction(
+        WindbondCommandSet::WriteEnable
+    );
+    m_pBusPtr->addTransaction( std::move( requestWriteEnable ) );
+
+    Interface::Spi::Transaction requestWriteAddress = writeTransaction(
+            WindbondCommandSet::PageProgram
+        ,   ( _address >> 16 )
+        ,   ( _address >> 8 )
+        ,   ( _address >> 0 )
+    );
+    m_pBusPtr->addTransaction( std::move( requestWriteAddress ) );
+
+
+    Interface::Spi::TransactionDescriptor blockSetup{
+            nullptr
+        ,   [this]{ onBlockWriteRequestCompleted.emit(); }
+        ,   Interface::Spi::TransactionDescriptor::DataSequence{
+                reinterpret_cast<const std::uint8_t*>( _blockData )
+                ,   _blockSize
+            }
+        };
+
+    m_pBusPtr->addXferTransaction( std::move( blockSetup ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -37,7 +61,53 @@ WinbondFlash::requestReadBlock(
     ,   const std::uint32_t _blockSize
 )
 {
-    onBlockReadRequestCompleted.emit();
+    Interface::Spi::Transaction requestRead = writeTransaction(
+            WindbondCommandSet::ReadData
+        ,   ( _address >> 16 )
+        ,   ( _address >> 8 )
+        ,   ( _address >> 0 )
+    );
+    m_pBusPtr->addTransaction( std::move( requestRead ) );
+
+    Interface::Spi::Transaction receiveData =
+        readTransaction( _blockSize );
+
+    receiveData.afterTransaction =
+            [this]
+            {
+                onBlockReadRequestCompleted.emit();
+            };
+
+    m_pBusPtr->addTransaction( std::move( receiveData ) );
+    m_pBusPtr->runQueue();
+}
+
+void
+WinbondFlash::requestFastReadBlock(
+        const std::uint32_t _address
+    ,   const std::uint32_t _blockSize
+)
+{
+    Interface::Spi::Transaction requestRead = writeTransaction(
+            WindbondCommandSet::ReadData
+        ,   ( _address >> 16 )
+        ,   ( _address >> 8 )
+        ,   ( _address >> 0 )
+        ,   0xFF
+    );
+    m_pBusPtr->addTransaction( std::move( requestRead ) );
+
+    Interface::Spi::Transaction receiveData =
+        readTransaction( _blockSize );
+
+    receiveData.afterTransaction =
+            [this]
+            {
+                onBlockReadRequestCompleted.emit();
+            };
+
+    m_pBusPtr->addTransaction( std::move( receiveData ) );
+    m_pBusPtr->runQueue();
 }
 
 void

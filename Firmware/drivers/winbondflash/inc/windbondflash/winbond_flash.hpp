@@ -44,6 +44,11 @@ public:
         ,   const std::uint32_t _blockSize
     ) override;
 
+    void requestFastReadBlock(
+            const std::uint32_t _address
+        ,   const std::uint32_t _blockSize
+    ) override;
+
     void requestChipErase() override;
 
     void requestDeviceId() override;

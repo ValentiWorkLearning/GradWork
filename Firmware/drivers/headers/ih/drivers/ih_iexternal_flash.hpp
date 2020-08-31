@@ -29,6 +29,11 @@ public:
         ,   const std::uint32_t _blockSize
     ) = 0;
 
+    virtual void requestFastReadBlock(
+            const std::uint32_t _address
+        ,   const std::uint32_t _blockSize
+    ) = 0;
+
     virtual void requestChipErase() = 0;
 
     virtual void requestDeviceId() = 0;
