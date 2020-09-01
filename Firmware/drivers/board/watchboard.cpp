@@ -100,6 +100,9 @@ Board::initBoardSpiFlash()
                 LOG_DEBUG_ENDL( _jedecId );
             }
         );
+
+        m_pFlashDriver->requestDeviceId();
+        m_pFlashDriver->requestJEDEDCId();
     }
 #endif
 }
