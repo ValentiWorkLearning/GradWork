@@ -129,14 +129,16 @@ WinbondFlash::requestDeviceId()
         ,   WindbondCommandSet::DummyByte
         ,   WindbondCommandSet::DummyByte
         ,   WindbondCommandSet::DummyByte
+
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
     );
-    m_pBusPtr->addTransaction( std::move( requestId ) );
 
-
-    Interface::Spi::Transaction receiveData =
-        readTransaction( WindbondCommandSet::UniqueIdLength );
-
-    receiveData.afterTransaction =
+    requestId.afterTransaction =
             [this]
             {
                 const auto& dmaReceiveBuffer = m_pBusPtr->getDmaBufferReceive();
@@ -147,8 +149,8 @@ WinbondFlash::requestDeviceId()
                 }
                 onRequestDeviceIdCompleted.emit();
             };
-
-    m_pBusPtr->addTransaction( std::move( receiveData ) );
+            
+    m_pBusPtr->addTransaction( std::move( requestId ) );
     m_pBusPtr->runQueue();
 }
 
@@ -157,12 +159,11 @@ WinbondFlash::requestJEDEDCId()
 {
     Interface::Spi::Transaction requestIdCommandTransaction = writeTransaction(
             WindbondCommandSet::ReadJedecId
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
+        ,   WindbondCommandSet::DummyByte
     );
-    m_pBusPtr->addTransaction( std::move( requestIdCommandTransaction ) );
-
-    Interface::Spi::Transaction receiveData =
-        readTransaction( WindbondCommandSet::JedecIdLength );
-    receiveData.afterTransaction =
+    requestIdCommandTransaction.afterTransaction =
             [this]
             {
                 std::uint32_t JedecDeviceId{};
@@ -173,7 +174,7 @@ WinbondFlash::requestJEDEDCId()
                 }
                 onRequestJedecIdCompleted.emit(JedecDeviceId);
             };
-    m_pBusPtr->addTransaction( std::move( receiveData ) );
+    m_pBusPtr->addTransaction( std::move( requestIdCommandTransaction ) );
     m_pBusPtr->runQueue();
 }
 

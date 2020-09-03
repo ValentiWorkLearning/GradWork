@@ -144,7 +144,7 @@ class SpiBus::SpiBackendImpl
             ,   const size_t _receiveBufferSize
         )
     {
-        assert( _bytesCount <= _receiveBufferSize );
+        //assert( _bytesCount <= _receiveBufferSize );
 
         nrfx_spim_xfer_desc_t receiveAsyncDesc =
             NRFX_SPIM_XFER_RX(
