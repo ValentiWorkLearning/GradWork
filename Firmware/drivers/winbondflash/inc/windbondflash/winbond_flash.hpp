@@ -36,17 +36,17 @@ public:
     void requestWriteBlock(
             const std::uint32_t _address
         ,   const std::uint8_t* _blockData
-        ,   const std::uint32_t _blockSize
+        ,   const std::uint8_t _blockSize
     )override;
 
     void requestReadBlock(
             const std::uint32_t _address
-        ,   const std::uint32_t _blockSize
+        ,   const std::uint8_t _blockSize
     ) override;
 
     void requestFastReadBlock(
             const std::uint32_t _address
-        ,   const std::uint32_t _blockSize
+        ,   const std::uint8_t _blockSize
     ) override;
 
     void requestChipErase() override;

@@ -25,7 +25,7 @@ void
 WinbondFlash::requestWriteBlock(
         const std::uint32_t _address
     ,   const std::uint8_t* _blockData
-    ,   const std::uint32_t _blockSize
+    ,   const std::uint8_t _blockSize
 )
 {
     Interface::Spi::Transaction requestWriteEnable = writeTransaction(
@@ -33,20 +33,23 @@ WinbondFlash::requestWriteBlock(
     );
     m_pBusPtr->addTransaction( std::move( requestWriteEnable ) );
 
-    Interface::Spi::Transaction requestWriteAddress = writeTransaction(
-            WindbondCommandSet::PageProgram
-        ,   ( _address >> 16 )
-        ,   ( _address >> 8 )
-        ,   ( _address >> 0 )
-    );
-    m_pBusPtr->addTransaction( std::move( requestWriteAddress ) );
+    auto& spiTrasnsmitBuffer = m_pBusPtr->getDmaBufferTransmit();
+    spiTrasnsmitBuffer[0] = WindbondCommandSet::PageProgram;
+    spiTrasnsmitBuffer[1] = ( _address >> 16 );
+    spiTrasnsmitBuffer[2] = ( _address >> 8 );
+    spiTrasnsmitBuffer[3] = ( _address >> 0 );
 
+    memcpy(
+            reinterpret_cast<void*>( spiTrasnsmitBuffer.data() + 3 )
+        ,   _blockData
+        ,   _blockSize
+    );
 
     Interface::Spi::TransactionDescriptor blockSetup{
             nullptr
         ,   [this]{ onBlockWriteRequestCompleted.emit(); }
         ,   Interface::Spi::TransactionDescriptor::DataSequence{
-                reinterpret_cast<const std::uint8_t*>( _blockData )
+                reinterpret_cast<const std::uint8_t*>( &m_pBusPtr->getDmaBufferTransmit() )
                 ,   _blockSize
             }
         };
@@ -58,7 +61,7 @@ WinbondFlash::requestWriteBlock(
 void
 WinbondFlash::requestReadBlock(
         const std::uint32_t _address
-    ,   const std::uint32_t _blockSize
+    ,   const std::uint8_t _blockSize
 )
 {
     Interface::Spi::Transaction requestRead = writeTransaction(
@@ -85,7 +88,7 @@ WinbondFlash::requestReadBlock(
 void
 WinbondFlash::requestFastReadBlock(
         const std::uint32_t _address
-    ,   const std::uint32_t _blockSize
+    ,   const std::uint8_t _blockSize
 )
 {
     Interface::Spi::Transaction requestRead = writeTransaction(

@@ -21,17 +21,17 @@ public:
     virtual void requestWriteBlock(
             const std::uint32_t _address
         ,   const std::uint8_t* _blockData
-        ,   const std::uint32_t _blockSize
+        ,   const std::uint8_t _blockSize
     ) = 0;
 
     virtual void requestReadBlock(
             const std::uint32_t _address
-        ,   const std::uint32_t _blockSize
+        ,   const std::uint8_t _blockSize
     ) = 0;
 
     virtual void requestFastReadBlock(
             const std::uint32_t _address
-        ,   const std::uint32_t _blockSize
+        ,   const std::uint8_t _blockSize
     ) = 0;
 
     virtual void requestChipErase() = 0;
