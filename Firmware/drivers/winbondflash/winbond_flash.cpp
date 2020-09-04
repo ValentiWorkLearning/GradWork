@@ -44,7 +44,7 @@ WinbondFlash::requestWriteBlock(
                 spiTrasnsmitBuffer[3] = ( _address >> 0 );
 
                 memcpy(
-                        reinterpret_cast<void*>( spiTrasnsmitBuffer.data() + 3 )
+                        reinterpret_cast<void*>( spiTrasnsmitBuffer.data() + 4 )
                     ,   _blockData
                     ,   _blockSize
                 );
