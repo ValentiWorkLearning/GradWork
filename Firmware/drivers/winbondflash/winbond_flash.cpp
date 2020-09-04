@@ -33,20 +33,22 @@ WinbondFlash::requestWriteBlock(
     );
     m_pBusPtr->addTransaction( std::move( requestWriteEnable ) );
 
-    auto& spiTrasnsmitBuffer = m_pBusPtr->getDmaBufferTransmit();
-    spiTrasnsmitBuffer[0] = WindbondCommandSet::PageProgram;
-    spiTrasnsmitBuffer[1] = ( _address >> 16 );
-    spiTrasnsmitBuffer[2] = ( _address >> 8 );
-    spiTrasnsmitBuffer[3] = ( _address >> 0 );
-
-    memcpy(
-            reinterpret_cast<void*>( spiTrasnsmitBuffer.data() + 3 )
-        ,   _blockData
-        ,   _blockSize
-    );
 
     Interface::Spi::TransactionDescriptor blockSetup{
-            nullptr
+            [this,_address,_blockData,_blockSize]
+            {
+                auto& spiTrasnsmitBuffer = m_pBusPtr->getDmaBufferTransmit();
+                spiTrasnsmitBuffer[0] = WindbondCommandSet::PageProgram;
+                spiTrasnsmitBuffer[1] = ( _address >> 16 );
+                spiTrasnsmitBuffer[2] = ( _address >> 8 );
+                spiTrasnsmitBuffer[3] = ( _address >> 0 );
+
+                memcpy(
+                        reinterpret_cast<void*>( spiTrasnsmitBuffer.data() + 3 )
+                    ,   _blockData
+                    ,   _blockSize
+                );
+            }
         ,   [this]{ onBlockWriteRequestCompleted.emit(); }
         ,   Interface::Spi::TransactionDescriptor::DataSequence{
                 reinterpret_cast<const std::uint8_t*>( &m_pBusPtr->getDmaBufferTransmit() )
