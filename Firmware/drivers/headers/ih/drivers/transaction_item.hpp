@@ -2,6 +2,7 @@
 
 #include <functional>
 #include <variant>
+#include <cstdint>
 
 namespace Interface::Spi
 {
