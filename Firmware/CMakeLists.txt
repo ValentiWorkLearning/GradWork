@@ -44,12 +44,6 @@ target_sources(
     ap_application.cpp
 )
 
-target_compile_options(
-    ${NORDIC_TARGET}
-    PRIVATE
-    -O0
-)
-
 target_link_libraries(
     ${NORDIC_TARGET}
     PRIVATE
@@ -72,6 +66,12 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         NordicSDK::Common
     )
 
+    target_compile_options(
+        ${NORDIC_TARGET}
+        PRIVATE
+        -O0
+        -fcoroutines
+    )
 endif()
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )

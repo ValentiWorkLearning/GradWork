@@ -26,4 +26,5 @@ target_link_libraries(
     UtilsLibrary
     INTERFACE
     etl
+    logger_service
 )
