@@ -13,7 +13,27 @@
 #define GENERATOR_H
 
 // infiniteDataStream.cpp
+#if defined WIN32
+#include <experimental/coroutine>
+
+template<typename TPromise>
+using coroutine_handle = std::experimental::coroutine_handle<TPromise>;
+
+using suspend_always = std::experimental::suspend_always;
+
+using suspend_never = std::experimental::suspend_never;
+
+#else
+
 #include <coroutine>
+template<typename TPromise>
+using coroutine_handle = std::coroutine_handle<TPromise>;
+
+using suspend_always = std::suspend_always;
+
+using suspend_never = std::suspend_never;
+
+#endif
 #include <memory>
 
 namespace coro_exp {
@@ -22,7 +42,7 @@ namespace coro_exp {
   class generator {
   public:
     struct promise_type;
-    using handle_type = std::coroutine_handle<promise_type>;
+    using handle_type = coroutine_handle<promise_type>;
   private:
     handle_type coro;
   public:
@@ -45,7 +65,7 @@ namespace coro_exp {
 
     bool next() {
       coro.resume();
-      return not coro.done();
+      return ! coro.done();
     }
 
     T getValue() {
@@ -65,11 +85,11 @@ namespace coro_exp {
       promise_type &operator=(promise_type&&) = delete;
 
       auto initial_suspend() {
-        return std::suspend_always{};
+        return suspend_always{};
       }
 
       auto final_suspend() {
-        return std::suspend_always{};
+        return suspend_always{};
       }
 
       auto get_return_object() {
@@ -77,12 +97,12 @@ namespace coro_exp {
       }
 
       auto return_void() {
-        return std::suspend_never{};
+        return suspend_never{};
       }
 
       auto yield_value(T some_value) {
         current_value = some_value;
-        return std::suspend_always{};
+        return suspend_always{};
       }
 
       void unhandled_exception() {
@@ -124,6 +144,14 @@ void testMe(){
     LOG_DEBUG( "Example program using C++20 coroutine to implement a Fibonacci Sequence generator" );
     auto iter = fibonacci(demo_ceiling);
     auto value = iter.getValue();
+    LOG_DEBUG(static_cast<int>(value));
+
+    iter.next();
+    value = iter.getValue();
+    LOG_DEBUG(static_cast<int>(value));
+
+    iter.next();
+    value = iter.getValue();
     LOG_DEBUG(static_cast<int>(value));
 
     iter.next();
