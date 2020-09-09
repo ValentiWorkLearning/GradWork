@@ -58,7 +58,7 @@ jobs:
     - name: Get the latest arm-none-eabi-gcc
       uses: fiam/arm-none-eabi-gcc@v1
       with:
-        release: '9-2019-q4'
+        release: '10-2020-q2'
         directory: ${{ github.workspace }}/toolchain
 
     - name: Get NRF52 16.0 SDK
