@@ -24,7 +24,6 @@ public:
     void syncronizeWithBleDts() override;
 
 private:
-
     class DatetimeSimulatorImpl;
     std::unique_ptr<DatetimeSimulatorImpl> m_pDatetimeSimImpl;
 };

@@ -111,6 +111,84 @@ private:
 #include <atomic>
 #include <mutex>
 #include <condition_variable>
+#include <windows.h>
+#include <winnt.h>
+#include <experimental/coroutine>
+
+
+using namespace std::literals;
+
+// https://luncliff.github.io/posts/Exploring-MSVC-Coroutine.html
+// operator overload.
+// co_await can't use primitive type parameter.
+auto operator co_await(std::chrono::system_clock::duration _duration)
+{
+    // Awaitable must implements 3 function.
+//  - bool await_ready();
+//  - auto await_suspend();
+//  - T    await_resume();
+
+    class Awaiter
+    {
+
+    public:
+
+        static void CALLBACK TimerCallback(PTP_CALLBACK_INSTANCE, void* _context, PTP_TIMER)
+        {
+            std::experimental::coroutine_handle<>::from_address(_context).resume();
+        }
+
+        explicit Awaiter(std::chrono::system_clock::duration _duration)
+            :   m_duration{ _duration }
+            ,   m_pTimer{ }
+        {
+        }
+
+        bool await_ready() const
+        {
+            return m_duration.count() <= 0;
+        }
+
+        bool await_suspend( std::experimental::coroutine_handle<> _resumeCallback )
+        {
+            std::int64_t relativeCount = -m_duration.count();
+            m_pTimer.reset(
+                CreateThreadpoolTimer(TimerCallback, _resumeCallback.address(), nullptr)
+            );
+            SetThreadpoolTimer(
+                    m_pTimer.get()
+                ,   reinterpret_cast<PFILETIME>(&relativeCount)
+                ,   0
+                ,   0
+            );
+
+            return m_pTimer != nullptr;
+        }
+
+        void await_resume()
+        {
+        }
+
+        private:
+            Meta::PointerWrapper<TP_TIMER, CloseThreadpoolTimer> m_pTimer;
+            std::chrono::system_clock::duration m_duration;
+    };
+
+    return Awaiter{ _duration };
+}
+
+template<typename ... Args>
+struct std::experimental::coroutine_traits<void, Args ...>
+{
+    struct promise_type
+    {
+        void get_return_object() {}
+        std::experimental::suspend_never initial_suspend() { return {}; }
+        std::experimental::suspend_never final_suspend()noexcept { return {}; }
+        void return_void() {}
+        void unhandled_exception() { std::terminate(); }
+    };
+};
 
 namespace ServiceProviders::DateTimeService
 {
@@ -120,6 +198,7 @@ class DateTimeServiceFake::DatetimeSimulatorImpl
 
 public:
 
+public:
     explicit DatetimeSimulatorImpl(
             const IDateTimeService* _pAppService
     )
@@ -130,17 +209,12 @@ public:
         initSimulator();
     }
 
-    ~DatetimeSimulatorImpl()
-    {
-        if( m_simulatorThread.joinable() )
-            m_simulatorThread.join();
-    }
+    ~DatetimeSimulatorImpl() = default;
 
 public:
 
     void launchService()
     {
-        m_timeGenerator.notify_one();
     }
 
     void calibrateSource()
@@ -156,44 +230,26 @@ private:
     void initSimulator()
     {
         m_isStopped.store( false );
-        m_simulatorThread = std::thread(
-            [this]
-            {
-                using namespace std::chrono_literals;
-
-                std::unique_lock locker( m_simulationStartMarker );
-                m_timeGenerator.wait( locker );
-
-                while( !m_isStopped.load() )
-                {
-                    std::this_thread::sleep_for( 1s );
-                    TimeWrapper tempWrapper = m_timeWrapper.load( std::memory_order_acquire );
-                    tempWrapper.addSecond();
-                    m_timeWrapper.store( tempWrapper, std::memory_order_release );
-                    m_pDateTimeService->onDateTimeChanged.emit( tempWrapper );
-                }
-            }
-       );
+        while(!m_isStopped)
+        {
+            co_await 1s;
+            TimeWrapper tempWrapper = m_timeWrapper.load(std::memory_order_acquire);
+            tempWrapper.addSecond();
+            m_timeWrapper.store(tempWrapper, std::memory_order_release);
+            m_pDateTimeService->onDateTimeChanged.emit(tempWrapper);
+        }
     }
 
 private:
 
     std::atomic<TimeWrapper> m_timeWrapper;
-
-    std::thread m_simulatorThread;
-
-    std::mutex m_simulationStartMarker;
-
     std::atomic_bool m_isStopped;
-
-    std::condition_variable m_timeGenerator;
-
     const IDateTimeService* m_pDateTimeService;
 };
+
 }
 
 #endif
-
 
 namespace ServiceProviders::DateTimeService
 {
