@@ -37,7 +37,7 @@ namespace SpiInstance
         static constexpr uint8_t DriverInstance = NRFX_SPIM2_INST_IDX;
     };
 
-    constexpr SpiDecriptor fillSpiDescriptor(TSpiDescriptor _descriptor)
+    SpiDecriptor fillSpiDescriptor(TSpiDescriptor _descriptor)
     {
         SpiDecriptor toReturn{};
         if( _descriptor == TSpiDescriptor::M1 )
@@ -220,6 +220,16 @@ SpiBus::SpiBus( const SpiInstance::SpiDecriptor& _spiDescriptor )
         }
 {
 }
+
+SpiBus::SpiBus(SpiBus&& _other)
+    :   m_isTransactionCompleted{ _other.m_isTransactionCompleted.load() }
+    ,   m_completedTransitionsCount{_other.m_completedTransitionsCount}
+    ,   m_pSpiBackendImpl {std::move(_other.m_pSpiBackendImpl)}
+    ,   DmaArrayTransmit{ std::move(_other.DmaArrayTransmit)}
+    ,   DmaArrayReceive{std::move(_other.DmaArrayReceive)}
+    ,   m_transactionsQueue{std::move( _other.m_transactionsQueue)}
+{
+};
 
 SpiBus::~SpiBus() = default;
 
