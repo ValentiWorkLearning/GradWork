@@ -10,13 +10,21 @@ std::unique_ptr<DisplayDriver::IDisplayDriver> createDisplayDriver()
 {
 #if defined USE_ST7789V_BACKEND
     return DisplayDriver::createDisplayDriverSt7789V(
-                Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M2>()
+                Interface::Spi::SpiBus(
+                    Interface::Spi::SpiInstance::fillSpiDescriptor(
+                        Interface::Spi::SpiInstance::TSpiDescriptor::M2
+                    )
+                )
             ,   DisplayDriver::St7789v::Disp240_320::Width
             ,   DisplayDriver::St7789v::Disp240_320::Height
         );
 #elif defined USE_GC9A01_BACKEND
     return DisplayDriver::createDisplayDriverGC9A01(
-                Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M2>()
+                Interface::Spi::SpiBus(
+                    Interface::Spi::SpiInstance::fillSpiDescriptor(
+                        Interface::Spi::SpiInstance::TSpiDescriptor::M2
+                    )
+                )
             ,   DisplayDriver::St7789v::Disp240_320::Width
             ,   DisplayDriver::St7789v::Disp240_320::Height
         );

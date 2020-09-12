@@ -18,7 +18,7 @@ namespace DisplayDriver
 {
 
 GC9A01::GC9A01(
-            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
+            Interface::Spi::SpiBus&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     )
@@ -207,13 +207,13 @@ void GC9A01::setAddrWindow(
 
 std::unique_ptr<GC9A01>
 createDisplayDriverGC9A01(
-        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
+        Interface::Spi::SpiBus&& _bus
     ,   std::uint16_t _width
     ,   std::uint16_t _height
 )
 {
     return std::make_unique<GC9A01>(
-            std::move( _busPtr )
+            std::move( _bus )
         ,   _width
         ,   _height
     );

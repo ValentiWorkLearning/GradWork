@@ -9,7 +9,7 @@ namespace DisplayDriver
 {
 
 St7789V::St7789V(
-            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
+            Interface::Spi::SpiBus&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     )
@@ -160,13 +160,13 @@ void St7789V::setAddrWindow(
 
 std::unique_ptr<St7789V>
 createDisplayDriverSt7789V(
-        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
+        Interface::Spi::SpiBus&& _bus
     ,   std::uint16_t _width
     ,   std::uint16_t _height
 )
 {
     return std::make_unique<St7789V>(
-            std::move( _busPtr )
+            std::move( _bus )
         ,   _width
         ,   _height
     );
