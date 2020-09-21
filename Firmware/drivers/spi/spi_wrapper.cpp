@@ -79,7 +79,7 @@ class SpiBus::SpiBackendImpl
 
     public:
 
-    void performTransaction( uint16_t _dataSize )
+    void performTransaction( uint16_t _dataSize ) noexcept
     {
         nrfx_spim_xfer_desc_t xferDesc =
             NRFX_SPIM_XFER_TX(
@@ -95,7 +95,7 @@ class SpiBus::SpiBackendImpl
         APP_ERROR_CHECK( transmissionError );
     }
 
-    void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )
+    void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )noexcept
     {
         nrfx_spim_xfer_desc_t xferDesc =
             NRFX_SPIM_XFER_TX(
@@ -118,7 +118,7 @@ class SpiBus::SpiBackendImpl
             ,   const size_t _transmitBufferSize
             ,   std::uint8_t* _pReceiveBuffer
             ,   const size_t _receiveBufferSize
-        )
+        )noexcept
     {
 
         nrfx_spim_xfer_desc_t xferDesc =
@@ -142,7 +142,7 @@ class SpiBus::SpiBackendImpl
                 const size_t _bytesCount
             ,   std::uint8_t* _pReceiveBuffer
             ,   const size_t _receiveBufferSize
-        )
+        )noexcept
     {
         //assert( _bytesCount <= _receiveBufferSize );
 
@@ -165,7 +165,7 @@ class SpiBus::SpiBackendImpl
     static void spimEventHandler(
             nrfx_spim_evt_t const* _pEvent
         ,   void* _pContext
-    )
+    )noexcept
     {
         Meta::UnuseVar( _pContext );
         if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
@@ -207,7 +207,7 @@ SpiBus::SpiBus(
 SpiBus::~SpiBus() = default;
 
 void
-SpiBus::handleEvent( TCompletedEvent _eventToHandle )
+SpiBus::handleEvent( TCompletedEvent _eventToHandle )noexcept
 {
     if( _eventToHandle == TCompletedEvent::TransactionCompleted )
     {
@@ -234,17 +234,17 @@ SpiBus::handleEvent( TCompletedEvent _eventToHandle )
     }
 }
 
-std::uint16_t SpiBus::getDmaBufferSize()
+std::uint16_t SpiBus::getDmaBufferSize()noexcept
 {
     return SpiBus::DmaArrayTransmit.size();
 }
 
-void SpiBus::addTransaction( Transaction&& _item )
+void SpiBus::addTransaction( Transaction&& _item )noexcept
 {
     m_transactionsQueue.push( std::move( _item ) );
 }
 
-void SpiBus::runQueue()
+void SpiBus::runQueue()noexcept
 {
     assert(m_isTransactionCompleted);
     if( !m_transactionsQueue.empty() && m_isTransactionCompleted )
@@ -258,12 +258,12 @@ void SpiBus::runQueue()
     }
 }
 
-size_t SpiBus::getQueueSize()const
+size_t SpiBus::getQueueSize()const noexcept
 {
     return m_transactionsQueue.size();
 }
 
-void SpiBus::sendData( std::uint8_t _data )
+void SpiBus::sendData( std::uint8_t _data ) noexcept
 {
     constexpr std::uint8_t transactionSize = 1;
 
@@ -274,13 +274,13 @@ void SpiBus::sendData( std::uint8_t _data )
     }
 }
 
-void SpiBus::performTransaction( uint16_t _dataSize )
+void SpiBus::performTransaction( uint16_t _dataSize ) noexcept
 {
     m_isTransactionCompleted = false;
     m_pSpiBackendImpl->performTransaction( _dataSize );
 }
 
-void SpiBus::sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )
+void SpiBus::sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize ) noexcept
 {
     m_isTransactionCompleted = false;
     m_pSpiBackendImpl->sendChunk( _pBuffer,_bufferSize );
@@ -289,7 +289,7 @@ void SpiBus::sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )
 void SpiBus::xferChunk(
         const std::uint8_t* _pTransmitBuffer
     ,   const size_t _transmitBufferSize
-)
+) noexcept
 {
     m_isTransactionCompleted = false;
     m_pSpiBackendImpl->xferChunk(
@@ -301,7 +301,7 @@ void SpiBus::xferChunk(
 }
 
 void
-SpiBus::receiveAsync( const size_t _bytesCount )
+SpiBus::receiveAsync( const size_t _bytesCount ) noexcept
 {
     m_isTransactionCompleted = false;
 
@@ -313,19 +313,19 @@ SpiBus::receiveAsync( const size_t _bytesCount )
 }
 
 SpiBus::DmaBufferType&
-SpiBus::getDmaBufferTransmit()
+SpiBus::getDmaBufferTransmit() noexcept
 {
     return DmaArrayTransmit;
 }
 
 SpiBus::DmaBufferType&
-SpiBus::getDmaBufferReceive()
+SpiBus::getDmaBufferReceive() noexcept
 {
     return DmaArrayReceive;
 }
 
 void
-SpiBus::addXferTransaction( TransactionDescriptor&& _deskcriptor )
+SpiBus::addXferTransaction( TransactionDescriptor&& _deskcriptor ) noexcept
 {
     TransactionDescriptor localDescriptor{std::move( _deskcriptor )};
 
@@ -373,7 +373,7 @@ SpiBus::setupBlockTransactionInternal(
         std::function<void()> beforeTransaction
     ,   std::function<void()> afterTransaction
     ,   const TransactionDescriptor::DataSequence& dataSequence
-)
+) noexcept
 {
 
     m_completedTransitionsCount = 0;
@@ -432,7 +432,7 @@ SpiBus::setupBlockTransactionInternal(
 }
 
 std::uint32_t
-SpiBus::getTransitionOffset()
+SpiBus::getTransitionOffset() noexcept
 {
     return m_completedTransitionsCount++;
 }

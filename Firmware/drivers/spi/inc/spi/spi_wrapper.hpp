@@ -40,35 +40,35 @@ public:
     static constexpr std::uint16_t DmaBufferSize = 255;
     using DmaBufferType = etl::vector<std::uint8_t,DmaBufferSize>;
 
-    std::uint16_t getDmaBufferSize();
+    std::uint16_t getDmaBufferSize() noexcept;
 
 public:
 
-    void addXferTransaction( TransactionDescriptor&& _deskcriptor );
+    void addXferTransaction( TransactionDescriptor&& _deskcriptor ) noexcept;
 
-    void sendData( std::uint8_t _data );
+    void sendData( std::uint8_t _data )noexcept;
 
-    void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize );
+    void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )noexcept;
 
     void xferChunk(
             const std::uint8_t* _pTransmitBuffer
         ,   const size_t _transmitBufferSize
-    );
+    )noexcept;
 
-    void receiveAsync( const size_t bytesCount );
+    void receiveAsync( const size_t bytesCount )noexcept;
 
-    DmaBufferType& getDmaBufferTransmit();
-    DmaBufferType& getDmaBufferReceive();
+    DmaBufferType& getDmaBufferTransmit()noexcept;
+    DmaBufferType& getDmaBufferReceive()noexcept;
 
     Simple::Signal<void()> onTransactionCompleted;
 
 public:
 
-    void addTransaction( Transaction&& _item );
+    void addTransaction( Transaction&& _item )noexcept;
 
-    void runQueue();
+    void runQueue()noexcept;
 
-    size_t getQueueSize() const;
+    size_t getQueueSize() const noexcept;
 
     enum class TCompletedEvent
     {
@@ -77,19 +77,19 @@ public:
         ,   Unknown
     };
 
-    void handleEvent( TCompletedEvent _eventToHandle );
+    void handleEvent( TCompletedEvent _eventToHandle )noexcept;
 
 private:
 
-    void performTransaction( uint16_t _dataSize );
+    void performTransaction( uint16_t _dataSize )noexcept;
 
     void setupBlockTransactionInternal(
             std::function<void()> beforeTransaction
         ,   std::function<void()> afterTransaction
         ,   const TransactionDescriptor::DataSequence& dataSequence
-    );
+    )noexcept;
 
-    std::uint32_t getTransitionOffset();
+    std::uint32_t getTransitionOffset()noexcept;
 
 private:
 
