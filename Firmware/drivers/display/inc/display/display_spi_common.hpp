@@ -29,7 +29,7 @@ class BaseSpiDisplay
 
 public:
     BaseSpiDisplay(
-            Interface::Spi::SpiBus&& _busPtr
+            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     )   :   m_width{ _width }
@@ -38,6 +38,7 @@ public:
         ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
         ,   m_pBusPtr{ std::move( _busPtr ) }
     {
+
     }
 
     ~BaseSpiDisplay()override = default;
@@ -59,7 +60,7 @@ protected:
         commandTransaction.transactionAction =
             [ this, _command ]
             {
-                m_pBusPtr.sendData( _command );
+                m_pBusPtr->sendData( _command );
             };
 
         commandTransaction.afterTransaction =
@@ -68,7 +69,7 @@ protected:
                 setDcPin();
             };
 
-        m_pBusPtr.addTransaction( std::move( commandTransaction ) );
+        m_pBusPtr->addTransaction( std::move( commandTransaction ) );
     }
 
     template< typename ... Args >
@@ -98,7 +99,7 @@ protected:
         chunkTransaction.transactionAction =
             [ this, chunkToSend = std::move( chunk ) ]
             {
-                m_pBusPtr.sendChunk(
+                m_pBusPtr->sendChunk(
                         reinterpret_cast<const std::uint8_t*>( chunkToSend.data() )
                     ,   chunkToSend.size()
                 );
@@ -110,7 +111,7 @@ protected:
                 resetDcPin();
             };
 
-        m_pBusPtr.addTransaction( std::move( chunkTransaction ) );
+        m_pBusPtr->addTransaction( std::move( chunkTransaction ) );
     }
 
 protected:
@@ -149,7 +150,7 @@ protected:
 
     Interface::Spi::SpiBus* getSpiBus()
     {
-        return &m_pBusPtr;
+        return m_pBusPtr.get();
     }
 
 private:
@@ -159,7 +160,7 @@ private:
 
     Gpio::GpioPin m_dcPin;
     Gpio::GpioPin m_resetPin;
-    Interface::Spi::SpiBus m_pBusPtr;
+    std::unique_ptr<Interface::Spi::SpiBus> m_pBusPtr;
 
 };
 

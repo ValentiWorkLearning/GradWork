@@ -14,7 +14,7 @@ class GC9A01
 public:
 
     explicit GC9A01(
-            Interface::Spi::SpiBus&& _busPtr
+            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     );
@@ -47,7 +47,7 @@ private:
 
 std::unique_ptr<GC9A01>
 createDisplayDriverGC9A01(
-        Interface::Spi::SpiBus&& _busPtr
+        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height
 );

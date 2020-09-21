@@ -15,11 +15,7 @@ createExternalFlashDriver()
 {
 #if defined (USE_DEVICE_SPECIFIC)
     return std::make_unique<WinbondFlash>(
-        Interface::Spi::SpiBus(
-            Interface::Spi::SpiInstance::fillSpiDescriptor(
-                Interface::Spi::SpiInstance::TSpiDescriptor::M1
-            )
-        )
+        Interface::Spi::createSpiBus<Interface::Spi::SpiInstance::M1>()
     );
 #else
     return nullptr;

@@ -36,30 +36,6 @@ namespace SpiInstance
         static constexpr std::uint32_t Register = NRF_SPIM2_BASE;
         static constexpr uint8_t DriverInstance = NRFX_SPIM2_INST_IDX;
     };
-
-    constexpr SpiDecriptor fillSpiDescriptor(TSpiDescriptor _descriptor)
-    {
-        SpiDecriptor toReturn{};
-        if( _descriptor == TSpiDescriptor::M1 )
-        {
-            toReturn.ClockPin = M1::ClockPin;
-            toReturn.MisoPin = M1::MisoPin;
-            toReturn.MosiPin = M1::MosiPin;
-            toReturn.SlaveSelectPin = M1::SlaveSelectPin;
-            toReturn.Register = M1::Register;
-            toReturn.DriverInstance = M1::DriverInstance;
-        }
-        else if(_descriptor == TSpiDescriptor::M2)
-        {
-            toReturn.ClockPin = M2::ClockPin;
-            toReturn.MisoPin = M2::MisoPin;
-            toReturn.MosiPin = M2::MosiPin;
-            toReturn.SlaveSelectPin = M2::SlaveSelectPin;
-            toReturn.Register = M2::Register;
-            toReturn.DriverInstance = M2::DriverInstance;
-        }
-        return toReturn;
-    }
 };
 
 class SpiBus::SpiBackendImpl
@@ -204,17 +180,24 @@ class SpiBus::SpiBackendImpl
     SpiBus* m_pSpiBus;
 };
 
-SpiBus::SpiBus( const SpiInstance::SpiDecriptor& _spiDescriptor )
+SpiBus::SpiBus(
+            std::uint8_t _clockPin
+        ,   std::uint8_t _misoPin
+        ,   std::uint8_t _mosiPin
+        ,   std::uint8_t _chipSelectPin
+        ,   std::uint32_t _pRegister
+        ,   std::uint8_t _driverInstance
+    )
     :   m_isTransactionCompleted{ true }
     ,   m_completedTransitionsCount{}
     ,   m_pSpiBackendImpl{
             std::make_unique<SpiBackendImpl>(
-                    _spiDescriptor.ClockPin
-                ,   _spiDescriptor.MisoPin
-                ,   _spiDescriptor.MosiPin
-                ,   _spiDescriptor.SlaveSelectPin
-                ,   _spiDescriptor.Register
-                ,   _spiDescriptor.DriverInstance
+                    _clockPin
+                ,   _misoPin
+                ,   _mosiPin
+                ,   _chipSelectPin
+                ,   _pRegister
+                ,   _driverInstance
                 ,   this
             )
         }
@@ -453,5 +436,21 @@ SpiBus::getTransitionOffset()
 {
     return m_completedTransitionsCount++;
 }
+
+template< typename TSpiInstance >
+std::unique_ptr<SpiBus> createSpiBus()
+{
+    return std::make_unique<SpiBus>(
+            TSpiInstance::ClockPin
+        ,   TSpiInstance::MisoPin
+        ,   TSpiInstance::MosiPin
+        ,   TSpiInstance::SlaveSelectPin
+        ,   TSpiInstance::Register
+        ,   TSpiInstance::DriverInstance
+    );
+}
+
+template class std::unique_ptr<SpiBus> createSpiBus<SpiInstance::M1>();
+template class std::unique_ptr<SpiBus> createSpiBus<SpiInstance::M2>();
 
 };

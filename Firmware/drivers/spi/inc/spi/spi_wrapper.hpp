@@ -15,23 +15,8 @@ namespace Interface::Spi
 
 namespace SpiInstance
 {
-    struct SpiDecriptor
-    {
-        std::uint8_t ClockPin;
-        std::uint8_t MisoPin;
-        std::uint8_t MosiPin;
-        std::uint8_t SlaveSelectPin;
-
-        std::uint32_t Register;
-        uint8_t DriverInstance;
-    };
-
-    enum class TSpiDescriptor
-    {
-            M1
-        ,   M2
-    };
-    constexpr SpiDecriptor fillSpiDescriptor(TSpiDescriptor _descriptor);
+    struct M1;
+    struct M2;
 };
 
 class SpiBus
@@ -39,7 +24,14 @@ class SpiBus
 
 public:
 
-    explicit SpiBus(const SpiInstance::SpiDecriptor& _spiDescriptor);
+    explicit SpiBus(
+            std::uint8_t _clockPin
+        ,   std::uint8_t _misoPin
+        ,   std::uint8_t _mosiPin
+        ,   std::uint8_t _chipSelectPin
+        ,   std::uint32_t _pRegister
+        ,   std::uint8_t _driverInstance
+    );
 
     ~SpiBus();
 
@@ -119,5 +111,8 @@ private:
     DmaBufferType DmaArrayReceive;
     TTransactionStorage m_transactionsQueue;
 };
+
+template< typename TSpiInstance >
+std::unique_ptr<SpiBus> createSpiBus();
 
 } // namespace Interface

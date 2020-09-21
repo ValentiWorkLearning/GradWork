@@ -13,7 +13,7 @@ namespace ExternalFlash
 
 
 WinbondFlash::WinbondFlash(
-        Interface::Spi::SpiBus&& _busPtr
+        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     )
     :   m_pBusPtr{ std::move( _busPtr ) }
 {
@@ -31,13 +31,13 @@ WinbondFlash::requestWriteBlock(
     Interface::Spi::Transaction requestWriteEnable = writeTransaction(
         WindbondCommandSet::WriteEnable
     );
-    m_pBusPtr.addTransaction( std::move( requestWriteEnable ) );
+    m_pBusPtr->addTransaction( std::move( requestWriteEnable ) );
 
 
     Interface::Spi::TransactionDescriptor blockSetup{
             [this,_address,_blockData,_blockSize]
             {
-                auto& spiTrasnsmitBuffer = m_pBusPtr.getDmaBufferTransmit();
+                auto& spiTrasnsmitBuffer = m_pBusPtr->getDmaBufferTransmit();
                 spiTrasnsmitBuffer[0] = WindbondCommandSet::PageProgram;
                 spiTrasnsmitBuffer[1] = ( _address >> 16 );
                 spiTrasnsmitBuffer[2] = ( _address >> 8 );
@@ -51,13 +51,13 @@ WinbondFlash::requestWriteBlock(
             }
         ,   [this]{ onBlockWriteRequestCompleted.emit(); }
         ,   Interface::Spi::TransactionDescriptor::DataSequence{
-                reinterpret_cast<const std::uint8_t*>( &m_pBusPtr.getDmaBufferTransmit() )
+                reinterpret_cast<const std::uint8_t*>( &m_pBusPtr->getDmaBufferTransmit() )
                 ,   _blockSize
             }
         };
 
-    m_pBusPtr.addXferTransaction( std::move( blockSetup ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addXferTransaction( std::move( blockSetup ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -72,7 +72,7 @@ WinbondFlash::requestReadBlock(
         ,   ( _address >> 8 )
         ,   ( _address >> 0 )
     );
-    m_pBusPtr.addTransaction( std::move( requestRead ) );
+    m_pBusPtr->addTransaction( std::move( requestRead ) );
 
     Interface::Spi::Transaction receiveData =
         readTransaction( _blockSize );
@@ -83,8 +83,8 @@ WinbondFlash::requestReadBlock(
                 onBlockReadRequestCompleted.emit();
             };
 
-    m_pBusPtr.addTransaction( std::move( receiveData ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addTransaction( std::move( receiveData ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -100,7 +100,7 @@ WinbondFlash::requestFastReadBlock(
         ,   ( _address >> 0 )
         ,   0xFF
     );
-    m_pBusPtr.addTransaction( std::move( requestRead ) );
+    m_pBusPtr->addTransaction( std::move( requestRead ) );
 
     Interface::Spi::Transaction receiveData =
         readTransaction( _blockSize );
@@ -111,8 +111,8 @@ WinbondFlash::requestFastReadBlock(
                 onBlockReadRequestCompleted.emit();
             };
 
-    m_pBusPtr.addTransaction( std::move( receiveData ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addTransaction( std::move( receiveData ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -121,8 +121,8 @@ WinbondFlash::requestChipErase()
     Interface::Spi::Transaction chipEraseTransaction = writeTransaction(
             WindbondCommandSet::ChipErase
     );
-    m_pBusPtr.addTransaction( std::move( chipEraseTransaction ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addTransaction( std::move( chipEraseTransaction ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -146,7 +146,7 @@ WinbondFlash::requestDeviceId()
     requestId.afterTransaction =
             [this]
             {
-                const auto& dmaReceiveBuffer = m_pBusPtr.getDmaBufferReceive();
+                const auto& dmaReceiveBuffer = m_pBusPtr->getDmaBufferReceive();
 
                 for( std::size_t i{}; i< WindbondCommandSet::UniqueIdLength; ++i )
                 {
@@ -155,8 +155,8 @@ WinbondFlash::requestDeviceId()
                 onRequestDeviceIdCompleted.emit();
             };
             
-    m_pBusPtr.addTransaction( std::move( requestId ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addTransaction( std::move( requestId ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -172,15 +172,15 @@ WinbondFlash::requestJEDEDCId()
             [this]
             {
                 std::uint32_t JedecDeviceId{};
-                const auto dmaReceiveBuffer = m_pBusPtr.getDmaBufferReceive();
+                const auto dmaReceiveBuffer = m_pBusPtr->getDmaBufferReceive();
                 for( std::size_t i{}; i<WindbondCommandSet::JedecIdLength; ++i )
                 {
                     JedecDeviceId |= ( dmaReceiveBuffer[i] << ( 16 - i * 8 ) );
                 }
                 onRequestJedecIdCompleted.emit(JedecDeviceId);
             };
-    m_pBusPtr.addTransaction( std::move( requestIdCommandTransaction ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addTransaction( std::move( requestIdCommandTransaction ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -189,8 +189,8 @@ WinbondFlash::requestEnterSleepMode()
     Interface::Spi::Transaction requestPowerdown = writeTransaction(
             WindbondCommandSet::PowerDownMode
     );
-    m_pBusPtr.addTransaction( std::move( requestPowerdown ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addTransaction( std::move( requestPowerdown ) );
+    m_pBusPtr->runQueue();
 }
 
 void
@@ -200,8 +200,8 @@ WinbondFlash::requestRestoreFromSleepMode()
             = writeTransaction(
                 WindbondCommandSet::ResumePowerDownMode
             );
-    m_pBusPtr.addTransaction( std::move( requestRestoreFromSleep ) );
-    m_pBusPtr.runQueue();
+    m_pBusPtr->addTransaction( std::move( requestRestoreFromSleep ) );
+    m_pBusPtr->runQueue();
 };
 
 IFlashStorageDriver::TDeviceIdType&

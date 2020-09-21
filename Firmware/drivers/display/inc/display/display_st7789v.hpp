@@ -16,7 +16,7 @@ class St7789V
 public:
 
     explicit St7789V(
-            Interface::Spi::SpiBus&& _busPtr
+            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     );
@@ -59,7 +59,7 @@ private:
 
 std::unique_ptr<St7789V>
 createDisplayDriverSt7789V(
-        Interface::Spi::SpiBus&& _busPtr
+        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height
 );

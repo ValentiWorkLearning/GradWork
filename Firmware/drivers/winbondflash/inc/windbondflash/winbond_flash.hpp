@@ -26,7 +26,7 @@ class WinbondFlash
 public:
 
     explicit WinbondFlash(
-        Interface::Spi::SpiBus&& _busPtr
+        std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     );
 
     ~WinbondFlash()override = default;
@@ -75,7 +75,7 @@ private:
         chunkTransaction.transactionAction =
             [ this, chunkToSend = std::move( chunk ) ]
             {
-                m_pBusPtr.xferChunk(
+                m_pBusPtr->xferChunk(
                         reinterpret_cast<const std::uint8_t*>( chunkToSend.data() )
                     ,   chunkToSend.size()
                 );
@@ -90,13 +90,13 @@ private:
         receiveTransaction.transactionAction =
             [this,_bytesCount]
             {
-                m_pBusPtr.receiveAsync( _bytesCount );
+                m_pBusPtr->receiveAsync( _bytesCount );
             };
 
         return receiveTransaction;
     }
 private:
-    Interface::Spi::SpiBus m_pBusPtr;
+    std::unique_ptr<Interface::Spi::SpiBus> m_pBusPtr;
 
     std::array<std::uint8_t,WindbondCommandSet::UniqueIdLength> m_spiFlashId;
 
