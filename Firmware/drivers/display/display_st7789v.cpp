@@ -23,10 +23,10 @@ St7789V::St7789V(
     initColumnRow( _width, _height );
 }
 
-St7789V::~St7789V()= default;
+St7789V::~St7789V()noexcept= default;
 
 void
-St7789V::initDisplay()
+St7789V::initDisplay()noexcept
 {
     BaseSpiDisplay::resetResetPin();
     Delay::waitFor( 100 );
@@ -50,7 +50,7 @@ St7789V::initDisplay()
 void St7789V::initColumnRow(
         std::uint16_t _width
     ,   std::uint16_t _height
-)
+)noexcept
 {
     if(
             _width == DisplayDriver::St7789v::Disp208_240::Width
@@ -70,12 +70,12 @@ void St7789V::initColumnRow(
     }
 }
 
-void St7789V::turnOn()
+void St7789V::turnOn()noexcept
 {
     sendCommand( DisplayReg::DISPON );
 }
 
-void St7789V::turnOff()
+void St7789V::turnOff()noexcept
 {
     sendCommand( DisplayReg::DISPOFF );
 }
@@ -86,7 +86,7 @@ void St7789V::fillRectangle(
     ,   std::uint16_t _width
     ,   std::uint16_t _height
     ,   IDisplayDriver::TColor* _colorToFill
-)
+)noexcept
 {
     const std::uint16_t DisplayHeight = BaseSpiDisplay::getHeight();
     const std::uint16_t DisplayWidth = BaseSpiDisplay::getWidth();
@@ -128,7 +128,7 @@ void St7789V::setAddrWindow(
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-)
+)noexcept
 {
     // TODO be careful here;
     std::uint16_t width = _width - _x;
@@ -163,7 +163,7 @@ createDisplayDriverSt7789V(
         std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height
-)
+)noexcept
 {
     return std::make_unique<St7789V>(
             std::move( _busPtr )

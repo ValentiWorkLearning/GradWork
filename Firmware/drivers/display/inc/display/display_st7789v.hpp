@@ -21,11 +21,11 @@ public:
         ,   std::uint16_t _height
     );
 
-    ~St7789V() override;
+    ~St7789V()noexcept override;
 
-    void turnOn() override;
+    void turnOn()noexcept override;
 
-    void turnOff() override;
+    void turnOff()noexcept override;
 
     void fillRectangle(
             std::uint16_t _x
@@ -33,23 +33,23 @@ public:
         ,   std::uint16_t _width
         ,   std::uint16_t _height
         ,   IDisplayDriver::TColor* _color
-    ) override;
+    )noexcept override;
 
 private:
 
-    void initDisplay();
+    void initDisplay()noexcept;
 
     void initColumnRow(
             std::uint16_t _width
         ,   std::uint16_t _height
-    );
+    )noexcept;
 
     void setAddrWindow(
             std::uint16_t _x
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-    );
+    )noexcept;
 
 private:
 
@@ -62,7 +62,7 @@ createDisplayDriverSt7789V(
         std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height
-);
+)noexcept;
 
 }; // namespace DisplayDriver
 

@@ -31,10 +31,10 @@ GC9A01::GC9A01(
     initDisplay();
 }
 
-GC9A01::~GC9A01()= default;
+GC9A01::~GC9A01()noexcept= default;
 
 void
-GC9A01::initDisplay()
+GC9A01::initDisplay()noexcept
 {
     BaseSpiDisplay::resetResetPin();
     Delay::waitFor( 100 );
@@ -120,11 +120,11 @@ GC9A01::initDisplay()
     BaseSpiDisplay::getSpiBus()->runQueue();
 }
 
-void GC9A01::turnOn()
+void GC9A01::turnOn()noexcept
 {
 }
 
-void GC9A01::turnOff()
+void GC9A01::turnOff()noexcept
 {
 }
 
@@ -134,7 +134,7 @@ void GC9A01::fillRectangle(
     ,   std::uint16_t _width
     ,   std::uint16_t _height
     ,   IDisplayDriver::TColor* _colorToFill
-)
+)noexcept
 {
     const std::uint16_t DisplayHeight = BaseSpiDisplay::getHeight();
     const std::uint16_t DisplayWidth = BaseSpiDisplay::getWidth();
@@ -176,7 +176,7 @@ void GC9A01::setAddrWindow(
         ,   std::uint16_t _y
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-)
+)noexcept
 {
     // TODO be careful here;
     std::uint16_t width = _width - _x;
@@ -210,7 +210,7 @@ createDisplayDriverGC9A01(
         std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     ,   std::uint16_t _width
     ,   std::uint16_t _height
-)
+)noexcept
 {
     return std::make_unique<GC9A01>(
             std::move( _busPtr )

@@ -41,13 +41,13 @@ public:
 
     }
 
-    ~BaseSpiDisplay()override = default;
+    ~BaseSpiDisplay()noexcept override = default;
 
 protected:
 
     void sendCommand(
             std::uint8_t _command
-    )
+    )noexcept
     {
         Interface::Spi::Transaction commandTransaction{};
 
@@ -76,7 +76,7 @@ protected:
     void sendCommand(
             std::uint8_t _command
         ,   Args... _commandArgs
-    )
+    )noexcept
     {
         sendCommand( _command );
         sendChunk( static_cast<std::uint8_t>(_commandArgs)... );
@@ -85,7 +85,7 @@ protected:
     template< typename ... Args >
     void sendChunk(
             Args... _chunkArgs
-    )
+    )noexcept
     {
         std::array chunk = { static_cast<std::uint8_t>(_chunkArgs)... };
         Interface::Spi::Transaction chunkTransaction{};
@@ -116,17 +116,17 @@ protected:
 
 protected:
 
-    void resetDcPin()
+    void resetDcPin()noexcept
     {
         m_dcPin.reset();
     }
 
-    void setDcPin()
+    void setDcPin()noexcept
     {
         m_dcPin.set();
     }
 
-    void resetResetPin()
+    void resetResetPin()noexcept
     {
         m_resetPin.reset();
     }
@@ -138,17 +138,17 @@ protected:
 
 protected:
 
-    std::uint16_t getWidth() const
+    std::uint16_t getWidth() const noexcept
     {
         return m_width;
     }
 
-    std::uint16_t getHeight() const
+    std::uint16_t getHeight() const noexcept
     {
         return m_height;
     }
 
-    Interface::Spi::SpiBus* getSpiBus()
+    Interface::Spi::SpiBus* getSpiBus() noexcept
     {
         return m_pBusPtr.get();
     }

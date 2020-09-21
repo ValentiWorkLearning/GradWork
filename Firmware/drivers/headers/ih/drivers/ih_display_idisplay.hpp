@@ -12,7 +12,7 @@ public:
 
     using TColor = std::uint16_t;
 
-    virtual ~IDisplayDriver() = default;
+    virtual ~IDisplayDriver()noexcept = default;
 
     virtual void fillRectangle(
             std::uint16_t _x
@@ -20,11 +20,11 @@ public:
         ,   std::uint16_t _width
         ,   std::uint16_t _height
         ,   TColor* _colorToFill
-    ) = 0;
+    )noexcept = 0;
 
-    virtual void turnOn() = 0;
+    virtual void turnOn()noexcept = 0;
 
-    virtual void turnOff() = 0;
+    virtual void turnOff()noexcept = 0;
 
 public:
     Simple::Signal<void()> onRectArreaFilled;
