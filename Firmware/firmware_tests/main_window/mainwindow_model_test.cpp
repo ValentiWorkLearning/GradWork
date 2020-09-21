@@ -65,7 +65,7 @@ TEST_F(MainWindowTest, HandleNavigateNextFromLastPage_ButtonClickEvent)
 
     ASSERT_EQ(
             m_pMainWindow->getActivePage().getPageName()
-        ,   Graphics::Views::IPlayerWatchPage::PlayerPageName
+        ,   Graphics::Views::IClockWatchPage::ClockPageName
     );
 }
 
@@ -83,6 +83,6 @@ TEST_F(MainWindowTest, HandleNavigateToPreviousPageFromInitialState_ButtonClickE
 
     ASSERT_EQ(
             m_pMainWindow->getActivePage().getPageName()
-        ,   Graphics::Views::IClockWatchPage::ClockPageName
+        ,   Graphics::Views::IPlayerWatchPage::PlayerPageName
     );
 }

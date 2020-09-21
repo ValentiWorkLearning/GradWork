@@ -38,9 +38,8 @@ MainWindowHandler::navigateToNextPage()
 	auto activePageName = activePage.getPageName();
 
 	if (activePageName == Graphics::Views::IPlayerWatchPage::PlayerPageName)
-		return;
-
-	if( activePageName == Graphics::Views::IClockWatchPage::ClockPageName )
+		m_pMainWindowModel->setPageActive(Graphics::Views::IClockWatchPage::ClockPageName);
+	else if( activePageName == Graphics::Views::IClockWatchPage::ClockPageName )
 		m_pMainWindowModel->setPageActive( Graphics::Views::IHealthWatchPage::HealthPageName );
 	else if( activePageName == Graphics::Views::IHealthWatchPage::HealthPageName )
 		m_pMainWindowModel->setPageActive( Graphics::Views::IPlayerWatchPage::PlayerPageName );
@@ -54,9 +53,8 @@ MainWindowHandler::navigateToPreviousPage()
 	auto activePageName = activePage.getPageName();
 
 	if ( activePageName == Graphics::Views::IClockWatchPage::ClockPageName )
-		return;
-
-	if ( activePageName == Graphics::Views::IPlayerWatchPage::PlayerPageName )
+		m_pMainWindowModel->setPageActive(Graphics::Views::IPlayerWatchPage::PlayerPageName);
+	else if( activePageName == Graphics::Views::IPlayerWatchPage::PlayerPageName )
 		m_pMainWindowModel->setPageActive( Graphics::Views::IHealthWatchPage::HealthPageName );
 	else if (activePageName == Graphics::Views::IHealthWatchPage::HealthPageName)
 		m_pMainWindowModel->setPageActive( Graphics::Views::IClockWatchPage::ClockPageName );
