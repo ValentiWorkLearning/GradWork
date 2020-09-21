@@ -13,6 +13,7 @@
         "serverpath": "JLinkGDBServerCL.exe", 
         "servertype": "jlink",
         "device": "NRF52",
+        "armToolchainPath": "C://gcc_arm_none_eabi_10_1_q2//bin",
         "interface": "swd",
         "serialNumber": "", //if you have more than one J-Link probe add the serial number here 
         "runToMain": true,

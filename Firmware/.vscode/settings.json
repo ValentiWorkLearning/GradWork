@@ -5,7 +5,7 @@
     ],
     "cmake.parallelJobs": 4,
     "cmake.environment": {
-        "NRF5_SDK_PATH": "C://Nordic"
+        "NRF5_SDK_PATH": "C://Nordic_dev"
     },
     "files.associations": {
         "nrf51822_peripherals.h": "c",
