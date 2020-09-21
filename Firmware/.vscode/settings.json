@@ -103,11 +103,6 @@
         "memory_resource": "cpp",
         "variant": "cpp",
         "format": "cpp",
-        "unordered_set": "cpp",
-        "bit": "cpp",
-        "compare": "cpp",
-        "coroutine": "cpp",
-        "ranges": "cpp",
-        "stop_token": "cpp"
+        "unordered_set": "cpp"
     }
 }

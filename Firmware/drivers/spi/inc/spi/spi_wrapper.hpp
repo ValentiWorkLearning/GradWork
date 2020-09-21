@@ -31,7 +31,7 @@ namespace SpiInstance
             M1
         ,   M2
     };
-    SpiDecriptor fillSpiDescriptor(TSpiDescriptor _descriptor);
+    constexpr SpiDecriptor fillSpiDescriptor(TSpiDescriptor _descriptor);
 };
 
 class SpiBus
@@ -40,9 +40,6 @@ class SpiBus
 public:
 
     explicit SpiBus(const SpiInstance::SpiDecriptor& _spiDescriptor);
-
-    SpiBus (SpiBus&& _other);
-    SpiBus& operator= (SpiBus&& x) = default;
 
     ~SpiBus();
 

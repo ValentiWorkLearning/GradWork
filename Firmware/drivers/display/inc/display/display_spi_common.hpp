@@ -36,7 +36,7 @@ public:
         ,   m_height { _height }
         ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output) }
         ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
-        ,   m_pBusPtr{  std::move(_busPtr) }
+        ,   m_pBusPtr{ std::move( _busPtr ) }
     {
     }
 
