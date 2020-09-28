@@ -19,6 +19,18 @@ target_link_libraries(
     buttons_driver
 )
 
+target_compile_features(
+    watchboard
+    PRIVATE
+    cxx_std_20
+)
+
+target_compile_options(
+    watchboard
+    PRIVATE
+    -fcoroutines
+)
+
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(watchboard
         PRIVATE

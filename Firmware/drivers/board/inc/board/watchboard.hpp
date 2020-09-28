@@ -21,7 +21,7 @@ public:
 
 public:
 
-	void enableLedToggle();
+	void ledToggle();
 
 	Buttons::IButtonsDriver* getButtonsDriver();
 

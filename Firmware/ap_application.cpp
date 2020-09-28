@@ -199,10 +199,10 @@ Application::runApplicationLoop()
 
     m_batteryLevelService->startBatteryMeasure();
     m_dateTimeService->launchService();
-    m_pBoardImpl->enableLedToggle();
 
     while (true)
     {
+        m_pBoardImpl->ledToggle();
         m_graphicsService->executeGlTask();
         Simple::Lib::ExecuteLaterPool::Instance().processQueue();
     }

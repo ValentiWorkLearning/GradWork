@@ -25,6 +25,80 @@ namespace
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
 
+#include <coroutine>
+
+namespace
+{
+    static void TimerExpiredCallback( void* _pExpiredContext )
+    {
+        std::coroutine_handle<>::from_address(_pExpiredContext).resume();
+    }
+}
+
+template<typename  ... Args>
+struct std::coroutine_traits<void, Args...>
+{
+    struct promise_type
+    {
+        void get_return_object(){}
+
+        constexpr auto initial_suspend(){ return std::suspend_never{}; }
+
+        constexpr auto final_suspend() noexcept {  return std::suspend_never{}; }
+
+        void return_void(){}
+
+        void unhandled_exception()
+        {
+            APP_ERROR_CHECK(NRF_ERROR_BUSY);
+        }
+    };
+};
+
+auto operator co_await( std::chrono::milliseconds _duration)
+{
+
+    class Awaitable
+    {
+
+        public:
+
+        explicit Awaitable(std::chrono::milliseconds _duration)
+            :   m_duration{_duration}
+        {
+        }
+
+        bool await_ready()const
+        {
+            return false;
+        }
+
+        void await_suspend(std::coroutine_handle<> _coroLedHandle)
+        {
+            ret_code_t errorCode{};
+            errorCode = app_timer_start(
+                    m_ledDriverTimer
+                ,   APP_TIMER_TICKS( m_duration.count() )
+                ,   nullptr
+            );
+            LOG_DEBUG("LED timer start code is:");
+            LOG_DEBUG_ENDL(errorCode);
+
+            APP_ERROR_CHECK( errorCode );
+        }
+
+        void await_resume()
+        {
+            app_timer_stop(m_ledDriverTimer);
+        }
+
+        private:
+
+        std::chrono::milliseconds m_duration;
+
+    };
+    return Awaitable{_duration};
+}
 
 namespace WatchBoard
 {
@@ -57,24 +131,15 @@ Board::initBoard()
 void
 Board::initBoardTimer()
 {
-#if defined (USE_DEVICE_SPECIFIC)
     ret_code_t errorCode{};
-
-    auto timerExpiredCallback = cbc::obtain_connector(
-        [ this ]( void * _pContext )
-        {
-            LOG_DEBUG_ENDL("LED TIMER EXPIRED");
-            bsp_board_led_invert(0);
-        }
-    );
-
     errorCode = app_timer_create(
             &m_ledDriverTimer
-        ,   APP_TIMER_MODE_REPEATED
-        ,   timerExpiredCallback
+        ,   APP_TIMER_MODE_SINGLE_SHOT
+        ,   TimerExpiredCallback
     );
-    APP_ERROR_CHECK( errorCode );
-#endif
+    APP_ERROR_CHECK(errorCode);
+    LOG_DEBUG("LED timer create code is:");
+    LOG_DEBUG_ENDL(errorCode);
 }
 
 void
@@ -114,16 +179,14 @@ Board::Board()
 }
 
 void
-Board::enableLedToggle()
+Board::ledToggle()
 {
 #if defined (USE_DEVICE_SPECIFIC)
-    ret_code_t errorCode{};
-    errorCode = app_timer_start(
-            m_ledDriverTimer
-        ,   convertToTimerTicks(LedToggleTimeout)
-        ,   nullptr
-    );
-    APP_ERROR_CHECK( errorCode );
+    using namespace std::chrono_literals;
+    //co_await 300ms;
+
+    LOG_DEBUG_ENDL("LED TIMER EXPIRED");
+    //bsp_board_led_invert(0);
 #endif
 }
 
