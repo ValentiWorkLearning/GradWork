@@ -79,11 +79,8 @@ auto operator co_await( std::chrono::milliseconds _duration)
             errorCode = app_timer_start(
                     m_ledDriverTimer
                 ,   APP_TIMER_TICKS( m_duration.count() )
-                ,   nullptr
+                ,   _coroLedHandle.address()
             );
-            LOG_DEBUG("LED timer start code is:");
-            LOG_DEBUG_ENDL(errorCode);
-
             APP_ERROR_CHECK( errorCode );
         }
 
