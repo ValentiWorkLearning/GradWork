@@ -55,13 +55,7 @@ nrfx_err_t nrfx_spim_init(nrfx_spim_t  const * const p_instance,
 
 ```cpp
 APP_ERROR_CHECK(
-            nrfx_spim_init(
-                    &m_spiHandle
-                ,   &spiConfig
-                ,   spimEventHandler
-                ,   this
-            )
-        );
+    nrfx_spim_init(&m_spiHandle, &spiConfig, spimEventHandler, this));
 ```
 
 Аргументами которой являются:
@@ -85,28 +79,21 @@ APP_ERROR_CHECK(
 Callback реализован как:
 
 ```cpp
- static void spimEventHandler(
-            nrfx_spim_evt_t const* _pEvent
-        ,   void* _pContext
-    )noexcept
-    {
-        Meta::UnuseVar( _pContext );
-        if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
-        {
-            auto pThis = reinterpret_cast<SpiBus::SpiBackendImpl*>( _pContext );
-            pThis->m_pSpiBus->handleEvent( SpiBus::TCompletedEvent::TransactionCompleted );
-        }
-    }
+static void spimEventHandler(nrfx_spim_evt_t const* _pEvent,
+                             void* _pContext) noexcept {
+  Meta::UnuseVar(_pContext);
+  if (_pEvent->type == NRFX_SPIM_EVENT_DONE) {
+    auto pThis = reinterpret_cast<SpiBus::SpiBackendImpl*>(_pContext);
+    pThis->m_pSpiBus->handleEvent(
+        SpiBus::TCompletedEvent::TransactionCompleted);
+  }
+}
 ```
 
 Передача данных по SPI формируется созданием дескриптора транзакции + инициации передачи данных:
 
 ```cpp
-nrfx_spim_xfer_desc_t xferDesc =
-    NRFX_SPIM_XFER_TX(
-            _pBuffer
-        ,   _bufferSize
-    );
+nrfx_spim_xfer_desc_t xferDesc = NRFX_SPIM_XFER_TX(_pBuffer, _bufferSize);
 nrfx_err_t transmissionError = nrfx_spim_xfer
         &m_spiHandle
     ,   &xferDesc
@@ -117,7 +104,9 @@ nrfx_err_t transmissionError = nrfx_spim_xfer
 В общем случае,  можно объединить вызов в :
 
 ```cpp
-void sendDataChunk(std::uint8_t* _pData, std::uint16_t _dataSize, void* _pUserContext);
+void sendDataChunk(std::uint8_t* _pData,
+                   std::uint16_t _dataSize,
+                   void* _pUserContext);
 ```
 
 При необходимости передачи данных блоком, например-  передачи блока команд инициализации на дисплей в неблокирующем режиме - в традиционном варианте необходимо сформировать очередь на отправку, из которой по прерыванию(событию?) доставать новый блок данных и формировать пакет на отправку.
@@ -125,9 +114,9 @@ void sendDataChunk(std::uint8_t* _pData, std::uint16_t _dataSize, void* _pUserCo
 В коде выглядит примерно как:
 
 ```cpp
-    sendCommand(    DisplayReg::SLPOUT     );
-    sendCommand(    DisplayReg::COLMOD     , 0x55   );
-    sendCommand(    DisplayReg::MADCTL     , 0x08   );
+sendCommand(DisplayReg::SLPOUT);
+sendCommand(DisplayReg::COLMOD, 0x55);
+sendCommand(DisplayReg::MADCTL, 0x08);
 ```
 
 Реализацию sendCommand можно посмотреть [тут](https://github.com/ValentiWorkLearning/GradWork/blob/9262f65599d58640db2a972ff668a8b065b6441c/Firmware/drivers/display/inc/display/display_spi_common.hpp#L76)
@@ -143,23 +132,17 @@ void sendDataChunk(std::uint8_t* _pData, std::uint16_t _dataSize, void* _pUserCo
   
 
 ```cpp
-void spiBackendImplTransmit(
-        std::uint8_t* _pBuffer
-    ,   std::uint16_t _bufferSize
-    ,   void* _pUserData
-)
-{
-    std::thread dmaThread = std::thread(
-        [_pUserData]
-        {
-            using namespace std::chrono_literals;
-            std::this_thread::sleep_for(500ms);
+void spiBackendImplTransmit(std::uint8_t* _pBuffer,
+                            std::uint16_t _bufferSize,
+                            void* _pUserData) {
+  std::thread dmaThread = std::thread([_pUserData] {
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(500ms);
 
-            std::cout << "TRANSMIT SOME DATA" << std::endl;
-            stdcoro::coroutine_handle<>::from_address(_pUserData).resume();
-        }
-    );
-    dmaThread.detach();
+    std::cout << "TRANSMIT SOME DATA" << std::endl;
+    stdcoro::coroutine_handle<>::from_address(_pUserData).resume();
+  });
+  dmaThread.detach();
 }
 ```
 
@@ -168,35 +151,23 @@ void spiBackendImplTransmit(
 Пользовательский метод передачи данных реализуем следующим образом
 
 ```cpp
-auto spiTrasnmitCommandBufferAsync(
-        std::uint8_t* _pBuffer
-    ,   std::uint16_t _bufferSize
-)
-{
-    std::cout << "Toggle GPIO ON" << std::endl;
-    struct Awaiter
-    {
-        std::uint8_t* pBuffer;
-        std::uint16_t bufferSize;
+auto spiTrasnmitCommandBufferAsync(std::uint8_t* _pBuffer,
+                                   std::uint16_t _bufferSize) {
+  std::cout << "Toggle GPIO ON" << std::endl;
+  struct Awaiter {
+    std::uint8_t* pBuffer;
+    std::uint16_t bufferSize;
 
-        bool await_ready() const noexcept
-        {
-            return false;
-        }
-        void await_resume() const noexcept
-        {
-            std::cout << "Toggle GPIO OFF" << std::endl;
-        }
-        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
-        {
-            spiBackendImplTransmit( pBuffer,bufferSize, thisCoroutine.address() );
-        }
-    };
+    bool await_ready() const noexcept { return false; }
+    void await_resume() const noexcept {
+      std::cout << "Toggle GPIO OFF" << std::endl;
+    }
+    void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const {
+      spiBackendImplTransmit(pBuffer, bufferSize, thisCoroutine.address());
+    }
+  };
 
-    return Awaiter{
-            .pBuffer = _pBuffer
-        ,   .bufferSize = _bufferSize
-    };
+  return Awaiter{.pBuffer = _pBuffer, .bufferSize = _bufferSize};
 }
 ```
 
@@ -209,20 +180,16 @@ auto spiTrasnmitCommandBufferAsync(
 И получим следующую реализацию функции инициализации дисплея:
 
 ```cpp
-auto commandBufferFirst = std::array{ 0x00u, 0x01u, 0x02u, 0x03u };
-auto commandBufferSecond = std::array{ 0x04u, 0x05u, 0x06u, 0x07u,0x08u };
+auto commandBufferFirst = std::array{0x00u, 0x01u, 0x02u, 0x03u};
+auto commandBufferSecond = std::array{0x04u, 0x05u, 0x06u, 0x07u, 0x08u};
 
-void initDisplay()
-{
-
-    co_await spiTrasnmitCommandBufferAsync(
-            reinterpret_cast<std::uint8_t*>( commandBufferFirst.data() )
-        ,   commandBufferFirst.size()
-    );
-    co_await spiTrasnmitCommandBufferAsync(
-            reinterpret_cast<std::uint8_t*>( commandBufferSecond.data() )
-        ,   commandBufferSecond.size()
-    );
+void initDisplay() {
+  co_await spiTrasnmitCommandBufferAsync(
+      reinterpret_cast<std::uint8_t*>(commandBufferFirst.data()),
+      commandBufferFirst.size());
+  co_await spiTrasnmitCommandBufferAsync(
+      reinterpret_cast<std::uint8_t*>(commandBufferSecond.data()),
+      commandBufferSecond.size());
 }
 ```
 
@@ -236,17 +203,14 @@ void initDisplay()
 
 ```cpp
 
-void
-Board::ledToggle()
-{
-    using namespace std::chrono_literals;
-    while(true)
-    {
-        co_await 300ms;
+void Board::ledToggle() {
+  using namespace std::chrono_literals;
+  while (true) {
+    co_await 300ms;
 
-        LOG_DEBUG_ENDL("LED TIMER EXPIRED");
-        bsp_board_led_invert(0);
-    }
+    LOG_DEBUG_ENDL("LED TIMER EXPIRED");
+    bsp_board_led_invert(0);
+  }
 }
 
 ```
@@ -256,63 +220,45 @@ Board::ledToggle()
 Немного освежив в памяти API FreeRTOS - вспоминается следующий фрагмент кода:
 
 ```cpp
-xTaskCreate(ledBlinkTask,"ledBlinkTask",128,NULL,2,NULL);
-void ledBlinkTask(void *pvParameters)  
-{
-	while(true)
-    {
-        vTaskDelay( 300 / portTICK_PERIOD_MS );
-        bsp_board_led_invert(0);
-	}
+xTaskCreate(ledBlinkTask, "ledBlinkTask", 128, NULL, 2, NULL);
+
+void ledBlinkTask(void* pvParameters) {
+  while (true) {
+    vTaskDelay(300 / portTICK_PERIOD_MS);
+    bsp_board_led_invert(0);
+  }
 }
 ```
 
 Реализация `co_await 300ms` схожа с вышеупомянутой статьей с [Exploring MSVC Coroutine](https://luncliff.github.io/posts/Exploring-MSVC-Coroutine.html), а именно следующая:
 
 ```cpp
-auto operator co_await( std::chrono::milliseconds _duration)
-{
+auto operator co_await(std::chrono::milliseconds _duration) {
+  class Awaitable {
+   public:
+    explicit Awaitable(std::chrono::milliseconds _duration)
+        : m_duration{_duration} {}
 
-    class Awaitable
-    {
+    bool await_ready() const { return false; }
 
-        public:
+    void await_suspend(std::coroutine_handle<> _coroLedHandle) {
+      ret_code_t errorCode{};
+      errorCode =
+          app_timer_start(m_ledDriverTimer, APP_TIMER_TICKS(m_duration.count()),
+                          _coroLedHandle.address());
+      APP_ERROR_CHECK(errorCode);
+    }
 
-        explicit Awaitable(std::chrono::milliseconds _duration)
-            :   m_duration{_duration}
-        {
-        }
+    void await_resume() { app_timer_stop(m_ledDriverTimer); }
 
-        bool await_ready()const
-        {
-            return false;
-        }
-
-        void await_suspend(std::coroutine_handle<> _coroLedHandle)
-        {
-            ret_code_t errorCode{};
-            errorCode = app_timer_start(
-                    m_ledDriverTimer
-                ,   APP_TIMER_TICKS( m_duration.count() )
-                ,   _coroLedHandle.address()
-            );
-            APP_ERROR_CHECK( errorCode );
-        }
-
-        void await_resume()
-        {
-            app_timer_stop(m_ledDriverTimer);
-        }
-
-        private:
-
-        std::chrono::milliseconds m_duration;
-
-    };
-    return Awaitable{_duration};
+   private:
+    std::chrono::milliseconds m_duration;
+  };
+  return Awaitable{_duration};
 }
 ```
 
 Где на `await_suspend` сопрограммы делается запуск таймера на заданный период( `300ms`),  в обработчике таймера вызывается `coroutine_handle.resume()` , после которого таймер останавливается в `void await_resume()`. 
 
 Полная реализация доступна [Ссылка на репозиторий,watchboard.cpp](https://github.com/ValentiWorkLearning/GradWork/blob/dev/develop/Firmware/drivers/board/watchboard.cpp)
+
