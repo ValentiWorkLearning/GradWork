@@ -258,7 +258,7 @@ auto operator co_await(std::chrono::milliseconds _duration) {
 }
 ```
 
-Где на `await_suspend` сопрограммы делается запуск таймера на заданный период( `300ms`),  в обработчике таймера вызывается `coroutine_handle.resume()` , после которого таймер останавливается в `void await_resume()`. 
+Где на `await_suspend` сопрограммы делается запуск таймера на заданный период(`300ms`),  в обработчике таймера вызывается `coroutine_handle.resume()` , после которого таймер останавливается в `void await_resume()`. 
 
 Полная реализация доступна [Ссылка на репозиторий,watchboard.cpp](https://github.com/ValentiWorkLearning/GradWork/blob/dev/develop/Firmware/drivers/board/watchboard.cpp)
 
