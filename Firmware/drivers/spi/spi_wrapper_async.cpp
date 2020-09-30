@@ -1,5 +1,13 @@
 #include "inc/spi/spi_wrapper_async.hpp"
 
+#include "utils/MetaUtils.hpp"
+
+#include "pca10040.h"
+
+#include "nrfx_spim.h"
+
+#include <coroutine>
+
 namespace Interface::Spi
 {
 
@@ -101,14 +109,14 @@ private:
         if( _pEvent->type == NRFX_SPIM_EVENT_DONE )
         {
             auto pThis = reinterpret_cast<SpiBusAsync::SpiAsyncBackendImpl*>( _pContext );
-            pThis->m_pSpiBus->trasnmitCompleted();
+            pThis->m_pSpiBus->transmitCompleted();
         }
     }
 
 public:
     nrfx_spim_t m_spiHandle;
     SpiBusAsync* m_pSpiBus;
-}
+};
 
 
 
@@ -120,7 +128,7 @@ SpiBusAsync::SpiBusAsync(
         ,   std::uint32_t _pRegister
         ,   std::uint8_t _driverInstance
     )
-    ,   m_pSpiBackendImpl{
+    :   m_pSpiBackendImpl{
             std::make_unique<SpiAsyncBackendImpl>(
                     _clockPin
                 ,   _misoPin
@@ -143,17 +151,24 @@ SpiBusAsync::transmitBuffer(
     ,   void* _pUserData
 )
 {
-    m_completedTransitionsCount = 0;
+    m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
 
     const size_t TransferBufferSize = _pBufferSize;
 
-    m_fullDmaTransactionsCount =
+    m_transmitContext.pDataToTransmit = _pBuffer;
+
+    m_transmitContext.fullDmaTransactionsCount =
         TransferBufferSize / Interface::Spi::SpiBusAsync::DmaBufferSize;
-    m_chunkedTransactionsCount =
+    m_transmitContext.chunkedTransactionsCount =
         TransferBufferSize % Interface::Spi::SpiBusAsync::DmaBufferSize;
 
-    if(m_fullDmaTransactionsCount > 0)
+    m_transmitContext.completedTransactionsCount = 0;
+    m_transmitContext.computeChunkOffsetWithDma =
+        m_transmitContext.fullDmaTransactionsCount >= 1;
+
+    if(m_transmitContext.fullDmaTransactionsCount > 0)
     {
+        --m_transmitContext.fullDmaTransactionsCount;
         m_pSpiBackendImpl->sendChunk(
                 _pBuffer
             ,   Interface::Spi::SpiBusAsync::DmaBufferSize
@@ -170,13 +185,38 @@ SpiBusAsync::transmitBuffer(
 void
 SpiBusAsync::transmitCompleted()
 {
-    
+    const bool isAllDmaTransactionsProceeded =
+        m_transmitContext.fullDmaTransactionsCount != 0;
+
+    if( !isAllDmaTransactionsProceeded )
+    {
+        --m_transmitContext.fullDmaTransactionsCount;
+
+        m_pSpiBackendImpl->sendChunk(
+                m_transmitContext.pDataToTransmit + getTransitionOffset()
+            ,   Interface::Spi::SpiBusAsync::DmaBufferSize
+        );
+    }
+    else if(m_transmitContext.chunkedTransactionsCount != 0)
+    {
+        const size_t transmissionOffset = m_transmitContext.computeChunkOffsetWithDma
+            ?       Interface::Spi::SpiBusAsync::DmaBufferSize
+                *   getTransitionOffset() : 0;
+
+        m_pSpiBackendImpl->sendChunk(
+                m_transmitContext.pDataToTransmit + transmissionOffset
+            ,   m_transmitContext.chunkedTransactionsCount
+        );
+    }
+    else{
+        m_coroHandle.resume();
+    }
 }
 
 std::uint32_t
 SpiBusAsync::getTransitionOffset() noexcept
 {
-    return m_completedTransitionsCount++;
+    return m_transmitContext.completedTransactionsCount++;
 }
 
 template< typename TSpiInstance >

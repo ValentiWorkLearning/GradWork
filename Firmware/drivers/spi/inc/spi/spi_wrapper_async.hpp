@@ -1,10 +1,11 @@
 #pragma once
 
+#include <etl/vector.h>
+
 #include <memory>
 #include <atomic>
 #include <coroutine>
 
-#include <etl/vector.h>
 
 namespace Interface::Spi
 {
@@ -56,10 +57,18 @@ private:
     class SpiAsyncBackendImpl;
     std::unique_ptr<SpiAsyncBackendImpl> m_pSpiBackendImpl;
 
-    size_t m_fullDmaTransactionsCount = 0;
-    size_t m_chunkedTransactionsCount = 0;
-    size_t m_completedTransactionsCount = 0;
+    std::coroutine_handle<> m_coroHandle;
 
+    struct TransactionContext
+    {
+        std::uint8_t* pDataToTransmit = nullptr;
+        size_t fullDmaTransactionsCount = 0;
+        size_t chunkedTransactionsCount = 0;
+        size_t completedTransactionsCount = 0;
+        bool computeChunkOffsetWithDma = false;
+    };
+
+    TransactionContext m_transmitContext;
     DmaBufferType DmaArrayTransmit;
     DmaBufferType DmaArrayReceive;
 };

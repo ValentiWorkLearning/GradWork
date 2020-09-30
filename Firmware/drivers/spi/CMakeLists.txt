@@ -1,6 +1,7 @@
 add_library(
     spi
     spi_wrapper.cpp
+    spi_wrapper_async.cpp
 )
 
 target_include_directories(
