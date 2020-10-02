@@ -12,6 +12,7 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 enable_testing()
 set (3RDPARTY_DIR "../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR}/googletest "3rdparty/googletest")
+add_subdirectory(coroutine)
 
 add_executable(
     ${PROJECT_NAME}
@@ -55,6 +56,12 @@ target_compile_features(
     ${PROJECT_NAME}
     PUBLIC
     cxx_std_20
+)
+
+target_compile_options(
+    ${PROJECT_NAME}
+    PRIVATE
+    /await
 )
 
 gtest_discover_tests(${PROJECT_NAME} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

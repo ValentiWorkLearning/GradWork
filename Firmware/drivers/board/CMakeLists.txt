@@ -25,12 +25,6 @@ target_compile_features(
     cxx_std_20
 )
 
-target_compile_options(
-    watchboard
-    PRIVATE
-    -fcoroutines
-)
-
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(watchboard
         PRIVATE
@@ -45,5 +39,16 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         watchboard
         PRIVATE
         USE_DEVICE_SPECIFIC
+    )
+    target_compile_options(
+        watchboard
+        PRIVATE
+        -fcoroutines
+    )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
+    target_compile_options(
+        watchboard
+        PRIVATE
+        /await
     )
 endif()

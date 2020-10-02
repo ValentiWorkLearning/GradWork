@@ -25,18 +25,25 @@ namespace
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
 
+
+#ifdef WIN32
+#include <experimental/coroutine>
+namespace stdcoro = std::experimental;
+#else
 #include <coroutine>
+namespace stdcoro = std;
+#endif // WIN32
 
 namespace
 {
     static void TimerExpiredCallback( void* _pExpiredContext )
     {
-        std::coroutine_handle<>::from_address(_pExpiredContext).resume();
+        stdcoro::coroutine_handle<>::from_address(_pExpiredContext).resume();
     }
 }
 
 template<typename  ... Args>
-struct std::coroutine_traits<void, Args...>
+struct stdcoro::coroutine_traits<void, Args...>
 {
     struct promise_type
     {
@@ -72,8 +79,8 @@ auto operator co_await( std::chrono::milliseconds _duration)
         {
             return false;
         }
-
-        void await_suspend(std::coroutine_handle<> _coroLedHandle)
+#if defined (USE_DEVICE_SPECIFIC)
+        void await_suspend(stdcoro::coroutine_handle<> _coroLedHandle)
         {
             ret_code_t errorCode{};
             errorCode = app_timer_start(
@@ -88,7 +95,16 @@ auto operator co_await( std::chrono::milliseconds _duration)
         {
             app_timer_stop(m_ledDriverTimer);
         }
+#else
+        bool await_suspend(stdcoro::coroutine_handle<> _coroLedHandle)
+        {
+            return false;
+        }
 
+        void await_resume()
+        {
+        }
+#endif
         private:
 
         std::chrono::milliseconds m_duration;
@@ -128,6 +144,7 @@ Board::initBoard()
 void
 Board::initBoardTimer()
 {
+#if defined (USE_DEVICE_SPECIFIC)
     ret_code_t errorCode{};
     errorCode = app_timer_create(
             &m_ledDriverTimer
@@ -137,6 +154,7 @@ Board::initBoardTimer()
     APP_ERROR_CHECK(errorCode);
     LOG_DEBUG("LED timer create code is:");
     LOG_DEBUG_ENDL(errorCode);
+#endif
 }
 
 void
