@@ -199,11 +199,97 @@ struct Display
 
     DisplayInitializedEvent m_initializedEvent;
 };
+
+
+
+
+class ST7789Coroutine
+    : public DisplayDriver::BaseSpiDisplayCoroutine
+{
+    using BaseDisplay_t = DisplayDriver::BaseSpiDisplayCoroutine;
+public:
+
+    explicit ST7789Coroutine(
+        std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
+        , std::uint16_t _width
+        , std::uint16_t _height
+    ) : DisplayDriver::BaseSpiDisplayCoroutine(
+        std::move(_busPtr)
+        , _width
+        , _height
+    )
+    {
+        initDisplay();
+        initColumnRow(_width, _height);
+    }
+
+    ~ST7789Coroutine()noexcept override
+    {
+    }
+
+    void turnOn()noexcept override
+    {
+    }
+
+    void turnOff()noexcept override
+    {
+    }
+
+    void fillRectangle(
+        std::uint16_t _x
+        , std::uint16_t _y
+        , std::uint16_t _width
+        , std::uint16_t _height
+        , IDisplayDriver::TColor* _color
+    )noexcept override
+    {
+    }
+
+private:
+
+    void initDisplay()noexcept
+    {
+        BaseDisplay_t::resetResetPin();
+        Delay::waitFor(100);
+        BaseDisplay_t::setResetPin();
+
+        co_await sendCommand(0x01);
+        Delay::waitFor(150);
+        co_await sendCommand(0x02);
+        co_await sendCommand(0x03, 0x31);
+        co_await sendCommand(0x04, 0x41);
+        co_await sendCommand(0x05, 0x51, 0x52, 0x53, 0x54);
+        co_await sendCommand(0x06, 0x61, 0x62, 0x63, 0x64);
+        co_await sendCommand(0x07, 0x71);
+        co_await sendCommand(0x08);
+        co_await sendCommand(0x09);
+        co_await sendCommand(0x10, 0x11);
+
+    }
+
+    void initColumnRow(
+        std::uint16_t _width
+        , std::uint16_t _height
+    )noexcept
+    {
+    }
+
+    void setAddrWindow(
+        std::uint16_t _x
+        , std::uint16_t _y
+        , std::uint16_t _width
+        , std::uint16_t _height
+    )noexcept
+    {
+    }
+};
+
+
  // TODO what is the compiler-generated code?
  int main()
  {
-     Display display{};
-     display.fillRectangle(0, 0, 220, 220, nullptr);
+     /*Display display{};
+     display.fillRectangle(0, 0, 220, 220, nullptr);*/
 
      using namespace std::chrono_literals;
      std::this_thread::sleep_for(5000ms);

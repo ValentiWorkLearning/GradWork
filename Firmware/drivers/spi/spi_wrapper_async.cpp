@@ -219,6 +219,13 @@ SpiBusAsync::getTransitionOffset() noexcept
     return m_transmitContext.completedTransactionsCount++;
 }
 
+stdcoro::coroutine_handle<>
+SpiBusAsync::getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey)
+{
+    Meta::UnuseVar(_coroHandleKey);
+    return m_coroHandle;
+}
+
 template< typename TSpiInstance >
 std::unique_ptr<SpiBusAsync> createSpiBusAsync()
 {

@@ -2,8 +2,15 @@
 
 #include <memory>
 
+namespace Gpio::Pins
+{
+    extern const std::uint8_t Display_DataCommand;
+    extern const std::uint8_t Display_Reset;
+}//namespace Gpio::Pins
+
 namespace Gpio
 {
+
 
 enum class Direction
 {

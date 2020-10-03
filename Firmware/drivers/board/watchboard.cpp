@@ -18,21 +18,13 @@ namespace
 #endif
 
 #include "utils/CallbackConnector.hpp"
+#include "utils/CoroUtils.hpp"
 
 #include "buttons/bt_buttons_driver.hpp"
 #include "buttons/bt_buttons_driver_creator.hpp"
 
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
-
-
-#ifdef WIN32
-#include <experimental/coroutine>
-namespace stdcoro = std::experimental;
-#else
-#include <coroutine>
-namespace stdcoro = std;
-#endif // WIN32
 
 namespace
 {

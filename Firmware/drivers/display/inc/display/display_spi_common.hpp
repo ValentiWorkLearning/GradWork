@@ -13,8 +13,6 @@
 #include "spi/spi_wrapper.hpp"
 #include "delay/delay_provider.hpp"
 
-#include "pca10040.h"
-
 namespace Interface::Spi
 {
     class SpiBus;
@@ -34,8 +32,8 @@ public:
         ,   std::uint16_t _height
     )   :   m_width{ _width }
         ,   m_height { _height }
-        ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output) }
-        ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
+        ,   m_dcPin { Gpio::getGpioPin( Gpio::Pins::Display_DataCommand, Gpio::Direction::Output) }
+        ,   m_resetPin { Gpio::getGpioPin( Gpio::Pins::Display_Reset, Gpio::Direction::Output) }
         ,   m_pBusPtr{ std::move( _busPtr ) }
     {
 

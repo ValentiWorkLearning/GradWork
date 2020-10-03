@@ -3,16 +3,16 @@
 #include "ih/drivers/ih_display_idisplay.hpp"
 
 #include "gpio/gpio_pin.hpp"
+
+#include "spi/spi_wrapper_async.hpp"
+#include "delay/delay_provider.hpp"
+
 #include "utils/SimpleSignal.hpp"
+#include "utils/CoroUtils.hpp"
 
 #include <memory>
 #include <cstdint>
-
-#include "spi/spi_wrapper.hpp"
-#include "delay/delay_provider.hpp"
-
-#include "pca10040.h"
-#include <coroutine>
+#include <array>
 
 namespace Interface::Spi
 {
@@ -28,13 +28,13 @@ class BaseSpiDisplayCoroutine
 
 public:
     BaseSpiDisplayCoroutine(
-            std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
+            std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
     )   :   m_width{ _width }
         ,   m_height { _height }
-        ,   m_dcPin { Gpio::getGpioPin( DISP_DC_PIN, Gpio::Direction::Output) }
-        ,   m_resetPin { Gpio::getGpioPin( DISP_RST, Gpio::Direction::Output) }
+        ,   m_dcPin { Gpio::getGpioPin( Gpio::Pins::Display_DataCommand, Gpio::Direction::Output) }
+        ,   m_resetPin { Gpio::getGpioPin( Gpio::Pins::Display_Reset, Gpio::Direction::Output) }
         ,   m_pBusPtr{ std::move( _busPtr ) }
     {
 
@@ -46,7 +46,7 @@ protected:
 
     struct Awaiter
     {
-        std::uint8_t* pBuffer;
+        std::uint8_t* pTransmitBuffer;
         std::uint16_t bufferSize;
         BaseSpiDisplayCoroutine* pBaseDisplay;
 
@@ -60,8 +60,8 @@ protected:
         }
         void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
-            m_pBusPtr->transmitBuffer(
-                    pBuffer
+            pBaseDisplay->getSpiBus()->transmitBuffer(
+                    pTransmitBuffer
                 ,   bufferSize
                 ,   thisCoroutine.address()
             );
@@ -73,13 +73,15 @@ protected:
     )noexcept
     {
         resetDcPin();
+        auto pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
+        pTransmitBuffer[0] = _command;
 
         return Awaiter
         {
-                .pBuffer = _command
+                .pTransmitBuffer = pTransmitBuffer.data()
             ,   .bufferSize = 1
             ,   .pBaseDisplay = this
-        }
+        };
     }
 
     template< typename ... Args >
@@ -99,12 +101,21 @@ protected:
             Args... _chunkArgs
     )noexcept
     {
+        std::array chunkArray = std::array{ static_cast<std::uint8_t>(_chunkArgs)... };
+        auto pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
+
+        constexpr size_t TransmitBufferSize = sizeof...(Args);
+        for (size_t i{}; i< TransmitBufferSize; ++i)
+        {
+            pTransmitBuffer[i] = chunkArray[i];
+        }
+
         return Awaiter
         {
-                .pBuffer = _command
-            ,   .bufferSize = 1
+                .pTransmitBuffer = pTransmitBuffer.data()
+            ,   .bufferSize = TransmitBufferSize
             ,   .pBaseDisplay = this
-        }
+        };
     }
 
 protected:
@@ -141,7 +152,7 @@ protected:
         return m_height;
     }
 
-    Interface::Spi::SpiBus* getSpiBus() noexcept
+    Interface::Spi::SpiBusAsync* getSpiBus() noexcept
     {
         return m_pBusPtr.get();
     }
@@ -153,7 +164,7 @@ private:
 
     Gpio::GpioPin m_dcPin;
     Gpio::GpioPin m_resetPin;
-    std::unique_ptr<Interface::Spi::SpiBus> m_pBusPtr;
+    std::unique_ptr<Interface::Spi::SpiBusAsync> m_pBusPtr;
 
 };
 

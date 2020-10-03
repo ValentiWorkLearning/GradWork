@@ -2,6 +2,11 @@
 
 #if defined (USE_DEVICE_SPECIFIC)
     #include "pca10040.h"
+
+// https://cookierobotics.com/032/ useful for such constans declaration
+
+const std::uint8_t Gpio::Pins::Display_DataCommand = DISP_DC_PIN;
+const std::uint8_t Gpio::Pins::Display_Reset = DISP_RST;
 #endif
 #include "utils/MetaUtils.hpp"
 #include "logger/logger_service.hpp"

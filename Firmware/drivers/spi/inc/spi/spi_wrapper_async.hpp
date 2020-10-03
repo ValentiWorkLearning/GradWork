@@ -5,14 +5,7 @@
 #include <memory>
 #include <atomic>
 
-#ifdef WIN32
-#include <experimental/coroutine>
-namespace stdcoro = std::experimental;
-#else
-#include <coroutine>
-namespace stdcoro = std;
-#endif // WIN32
-
+#include "utils/CoroUtils.hpp"
 
 namespace Interface::Spi
 {
@@ -21,6 +14,16 @@ namespace SpiInstance
 {
     struct M1;
     struct M2;
+};
+
+class GetCoroHandleKey
+{
+    friend class SpiBusAsync;
+    friend class SpiAsyncBackendImpl;
+private:
+    GetCoroHandleKey() {}
+    GetCoroHandleKey(const GetCoroHandleKey&) = default;
+    GetCoroHandleKey& operator=(const GetCoroHandleKey&) = delete;
 };
 
 class SpiBusAsync
@@ -49,6 +52,11 @@ public:
         return DmaBufferSize;
     }
 
+    constexpr DmaBufferType& getDmaBufferTransmit() noexcept
+    {
+        return DmaArrayTransmit;
+    }
+
     void transmitBuffer(
             std::uint8_t* _pBuffer
         ,   std::uint16_t _pBufferSize
@@ -56,6 +64,9 @@ public:
     );
 
     void transmitCompleted();
+
+    stdcoro::coroutine_handle<>
+    getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey);
 
 private:
     std::uint32_t getTransitionOffset() noexcept;

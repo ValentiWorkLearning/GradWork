@@ -1,8 +1,30 @@
-add_library(
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    
+    add_library(
+        spi
+        spi_wrapper.cpp
+        spi_wrapper_async.cpp
+    )
+
+    target_link_libraries( spi PRIVATE NordicSDK::Common )
+    target_compile_options(
     spi
-    spi_wrapper.cpp
-    spi_wrapper_async.cpp
+    PRIVATE
+    -fcoroutines
 )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+
+    add_library(
+        spi
+        spi_wrapper_stub.cpp
+    )
+    target_compile_options(
+        spi
+        PRIVATE
+        /await
+    )
+endif()
+
 
 target_include_directories(
     spi
@@ -22,19 +44,3 @@ target_compile_features(
     PRIVATE
     cxx_std_20
 )
-
-
-if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    target_link_libraries( spi PRIVATE NordicSDK::Common )
-    target_compile_options(
-    spi
-    PRIVATE
-    -fcoroutines
-)
-elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
-    target_compile_options(
-        spi
-        PRIVATE
-        /await
-    )
-endif()
