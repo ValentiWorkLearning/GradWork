@@ -23,12 +23,18 @@ target_compile_features(
     cxx_std_20
 )
 
-target_compile_options(
+
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_link_libraries( spi PRIVATE NordicSDK::Common )
+    target_compile_options(
     spi
     PRIVATE
     -fcoroutines
 )
-
-if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    target_link_libraries( spi PRIVATE NordicSDK::Common )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_compile_options(
+        spi
+        PRIVATE
+        /await
+    )
 endif()

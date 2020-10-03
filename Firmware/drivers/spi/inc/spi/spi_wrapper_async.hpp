@@ -4,7 +4,14 @@
 
 #include <memory>
 #include <atomic>
+
+#ifdef WIN32
+#include <experimental/coroutine>
+namespace stdcoro = std::experimental;
+#else
 #include <coroutine>
+namespace stdcoro = std;
+#endif // WIN32
 
 
 namespace Interface::Spi
@@ -57,7 +64,7 @@ private:
     class SpiAsyncBackendImpl;
     std::unique_ptr<SpiAsyncBackendImpl> m_pSpiBackendImpl;
 
-    std::coroutine_handle<> m_coroHandle;
+    stdcoro::coroutine_handle<> m_coroHandle;
 
     struct TransactionContext
     {

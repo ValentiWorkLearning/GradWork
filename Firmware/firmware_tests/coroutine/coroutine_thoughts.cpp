@@ -16,6 +16,9 @@ namespace stdcoro = std::experimental;
 namespace stdcoro = std;
 #endif // WIN32
 
+#include "ih/drivers/ih_display_idisplay.hpp"
+
+#include "display/display_spi_common_coro.hpp"
 
 // https://blog.panicsoftware.com/your-first-coroutine/
 // https://manybutfinite.com/post/anatomy-of-a-program-in-memory/

@@ -19,3 +19,10 @@ target_compile_options(
     PRIVATE
     /await
 )
+target_link_libraries(
+    coroutine_experiments_app
+    PRIVATE
+    drivers_ih
+    watch_display
+    UtilsLibrary
+)

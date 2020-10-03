@@ -10,8 +10,9 @@ add_subdirectory(gpio)
 add_subdirectory(ble)
 add_subdirectory(buttons)
 
+add_subdirectory(display)
+add_subdirectory(spi)
+
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    add_subdirectory(display)
-    add_subdirectory(spi)
     add_subdirectory(winbondflash)
 endif()
