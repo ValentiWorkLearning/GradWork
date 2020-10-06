@@ -1,5 +1,5 @@
 if( NOT ARM_NONE_EABI_TOOLCHAIN_PATH )
-    set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_arm_none_eabi_10_1_preview")
+    set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_none_eabi")
     message(STATUS "No ARM_NONE_EABI_TOOLCHAIN_PATH specified, using default: " ${ARM_NONE_EABI_TOOLCHAIN_PATH})
 else()
     file(TO_CMAKE_PATH "${ARM_NONE_EABI_TOOLCHAIN_PATH}" ARM_NONE_EABI_TOOLCHAIN_PATH)

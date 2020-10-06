@@ -28,7 +28,7 @@ constexpr auto when_all(Awaitables&&... _awaitablesList)
         void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
             Meta::tupleApply(
-                [thisCoroutine](auto&& _awaitable)->decltype(_awa)
+                [thisCoroutine](auto&& _awaitable)
                 {
                     co_await _awaitable;
                 }
