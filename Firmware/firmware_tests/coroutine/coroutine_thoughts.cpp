@@ -210,13 +210,13 @@ class ST7789Coroutine
 public:
 
     explicit ST7789Coroutine(
-        std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
-        , std::uint16_t _width
-        , std::uint16_t _height
-    ) : DisplayDriver::BaseSpiDisplayCoroutine(
-        std::move(_busPtr)
-        , _width
-        , _height
+            std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
+        ,   std::uint16_t _width
+        ,   std::uint16_t _height
+    )   :     DisplayDriver::BaseSpiDisplayCoroutine(
+            std::move(_busPtr)
+        ,   _width
+        ,   _height
     )
     {
         initDisplay();
