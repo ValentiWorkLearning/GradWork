@@ -34,26 +34,6 @@ namespace
     }
 }
 
-template<typename  ... Args>
-struct stdcoro::coroutine_traits<void, Args...>
-{
-    struct promise_type
-    {
-        void get_return_object(){}
-
-        constexpr auto initial_suspend(){ return std::suspend_never{}; }
-
-        constexpr auto final_suspend() noexcept {  return std::suspend_never{}; }
-
-        void return_void(){}
-
-        void unhandled_exception()
-        {
-            APP_ERROR_CHECK(NRF_ERROR_BUSY);
-        }
-    };
-};
-
 auto operator co_await( std::chrono::milliseconds _duration)
 {
 

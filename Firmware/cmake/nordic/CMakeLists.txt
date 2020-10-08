@@ -2,7 +2,7 @@
 message("<FindNordicSDK.cmake>")
 
 if( NOT NRF5_SDK_PATH)
-    set( NRF5_SDK_PATH "C:/NRFSDK" )
+    set( NRF5_SDK_PATH "C:/Nordic_dev" )
     message(WARNING " NRF5_SDK_PATH isn't defined, use default: ${NRF5_SDK_PATH}")
 else()
     file(TO_CMAKE_PATH "${NRF5_SDK_PATH}" NRF5_SDK_PATH)
@@ -244,7 +244,7 @@ target_link_options(
     PUBLIC
     ${CPU_FLAGS}
     -L${NRF5_SDK_PATH}/modules/nrfx/mdk
-    -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm
+    -Wl,--print-memory-usage,--gc-sections --specs=nano.specs -lc -lnosys -lm
     -Wl,-Map=${NORDIC_TARGET}.map
     -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
 )

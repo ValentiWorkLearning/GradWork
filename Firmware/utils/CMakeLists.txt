@@ -20,6 +20,12 @@ if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )
         USE_DESKTOP_SIMULATOR
         _CRT_SECURE_NO_WARNINGS
     )
+elseif( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_compile_options(
+        UtilsLibrary
+        INTERFACE
+        -fcoroutines
+    )
 endif()
 
 target_link_libraries(

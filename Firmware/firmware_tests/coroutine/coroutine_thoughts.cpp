@@ -32,17 +32,6 @@ namespace stdcoro = std;
 // https://m.habr.com/ru/post/519464/ // C++20 coroutines
 // https://mariusbancila.ro/blog/2020/06/22/a-cpp20-coroutine-example/
 
-template <typename... Args>
-struct stdcoro::coroutine_traits<void, Args...> {
-    struct promise_type {
-        void get_return_object() {}
-        stdcoro::suspend_never initial_suspend() { return {}; }
-        stdcoro::suspend_never final_suspend()noexcept { return {}; }
-        void return_void() {}
-        void unhandled_exception() { std::terminate(); }
-    };
-};
-
 void spiBackendImplTransmit(
         std::uint8_t* _pBuffer
     ,   std::uint16_t _bufferSize
