@@ -69,22 +69,15 @@ auto when_all(Awaitables&&... _awaitablesList)
         }
         void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) noexcept
         {
-            try_await(thisCoroutine);
-        }
-
-        bool try_await(stdcoro::coroutine_handle<> awaitingCoroutine) noexcept
-        {
-            auto& coroTask = std::get<0>(m_taskList);
-            //co_await coroTask;
-           /* Meta::tupleApply(
-                [this](auto&& task)
+            m_whenAllCounter.setCoroutineForWaiting(thisCoroutine);
+            Meta::tupleApply(
+                [this](auto&& task)->void
                 {
                     co_await task;
                     m_whenAllCounter.notifyAwaitingCompleted();
                 }
-                ,   m_taskList
-            );*/
-            return m_whenAllCounter.setCoroutineForWaiting(awaitingCoroutine);
+                , m_taskList
+            );
         }
 	};
 

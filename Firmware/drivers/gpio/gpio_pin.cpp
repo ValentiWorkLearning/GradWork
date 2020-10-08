@@ -7,6 +7,10 @@
 
 const std::uint8_t Gpio::Pins::Display_DataCommand = DISP_DC_PIN;
 const std::uint8_t Gpio::Pins::Display_Reset = DISP_RST;
+
+#else
+const std::uint8_t Gpio::Pins::Display_DataCommand = 0;
+const std::uint8_t Gpio::Pins::Display_Reset = 0;
 #endif
 #include "utils/MetaUtils.hpp"
 #include "logger/logger_service.hpp"

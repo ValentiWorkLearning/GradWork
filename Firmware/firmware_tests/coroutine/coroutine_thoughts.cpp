@@ -19,6 +19,7 @@ namespace stdcoro = std;
 #include "ih/drivers/ih_display_idisplay.hpp"
 
 #include "display/display_spi_common_coro.hpp"
+#include "spi/spi_wrapper_async.hpp"
 
 // https://blog.panicsoftware.com/your-first-coroutine/
 // https://manybutfinite.com/post/anatomy-of-a-program-in-memory/
@@ -279,6 +280,12 @@ private:
  {
      /*Display display{};
      display.fillRectangle(0, 0, 220, 220, nullptr);*/
+
+     ST7789Coroutine  displayCoro{
+            Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M1>()
+         ,  240
+         ,  240
+     };
 
      using namespace std::chrono_literals;
      std::this_thread::sleep_for(5000ms);
