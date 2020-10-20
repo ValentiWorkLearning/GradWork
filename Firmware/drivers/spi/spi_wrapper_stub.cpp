@@ -66,25 +66,22 @@ public:
             {
                 while (m_processSpiTransactions)
                 {
-                    std::unique_lock<std::mutex> guard(m_mutexLock);
-                    m_dataArrivedEvent.wait(guard, [this] {return m_newDataArrived.load(); });
-
-                    using namespace std::chrono_literals;
-                    std::this_thread::sleep_for(500ms);
-
-                    std::cout << "TRANSMIT SOME DATA:" << ' ';
-
-                    for (size_t i{}; i < m_bufferTransmitSize; ++i)
+                    if(m_newDataArrived)
                     {
-                        std::cout << std::hex << m_pDataBuffer[i] << ' ';
+                        using namespace std::chrono_literals;
+                        std::this_thread::sleep_for(500ms);
+
+                        std::cout << "TRANSMIT SOME DATA:" << ' ';
+
+                        for (size_t i{}; i < m_bufferTransmitSize; ++i)
+                        {
+                            std::cout << std::hex << m_pDataBuffer[i] << ' ';
+                        }
+                        std::cout << std::endl;
+
+                        m_newDataArrived.store(false);
+                        m_pSpiBus->transmitCompleted();
                     }
-                    std::cout << std::endl;
-
-                    m_newDataArrived.store(false, std::memory_order_release);
-                    guard.unlock();
-
-                    auto suspendedCoroutineHandle = m_pSpiBus->getCoroutineHandle(GetCoroHandleKey{});
-                    suspendedCoroutineHandle.resume();
                 }
             }
        );
@@ -106,8 +103,7 @@ public:
     {
         m_bufferTransmitSize.store( _bufferSize );
         m_pDataBuffer.store( _pBuffer );
-        m_newDataArrived = true;
-        m_dataArrivedEvent.notify_one();
+        m_newDataArrived.store(true);
     }
 
 private:
@@ -118,9 +114,7 @@ private:
     std::atomic<const std::uint8_t*> m_pDataBuffer;
     std::atomic<size_t> m_bufferTransmitSize;
 
-    std::mutex m_mutexLock;
     std::unique_ptr<std::thread> m_dmaThread;
-    std::condition_variable m_dataArrivedEvent;
 };
 
 
