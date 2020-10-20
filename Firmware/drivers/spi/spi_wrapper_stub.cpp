@@ -9,6 +9,8 @@
 #include <queue>
 #include <atomic>
 #include <functional>
+#include <mutex>
+#include <condition_variable>
 
 #include "utils/MetaUtils.hpp"
 
@@ -54,7 +56,45 @@ public:
         ,   SpiBusAsync* _pSpiBusHal
     )
         :   m_pSpiBus{ _pSpiBusHal }
+        ,   m_newDataArrived{ false }
+        ,   m_pDataBuffer{ nullptr }
+        ,   m_bufferTransmitSize{}
+        ,   m_processSpiTransactions{true}
     {
+        m_dmaThread = std::make_unique<std::thread>(
+            [this]
+            {
+                while (m_processSpiTransactions)
+                {
+                    std::unique_lock<std::mutex> guard(m_mutexLock);
+                    m_dataArrivedEvent.wait(guard, [this] {return m_newDataArrived.load(); });
+
+                    using namespace std::chrono_literals;
+                    std::this_thread::sleep_for(500ms);
+
+                    std::cout << "TRANSMIT SOME DATA:" << ' ';
+
+                    for (size_t i{}; i < m_bufferTransmitSize; ++i)
+                    {
+                        std::cout << std::hex << m_pDataBuffer[i] << ' ';
+                    }
+                    std::cout << std::endl;
+
+                    m_newDataArrived.store(false, std::memory_order_release);
+                    guard.unlock();
+
+                    auto suspendedCoroutineHandle = m_pSpiBus->getCoroutineHandle(GetCoroHandleKey{});
+                    suspendedCoroutineHandle.resume();
+                }
+            }
+       );
+    }
+
+    ~SpiAsyncBackendImpl()
+    {
+        m_processSpiTransactions.store(false);
+        m_dmaThread->detach();
+        m_dmaThread.reset();
     }
 
 public:
@@ -64,30 +104,23 @@ public:
         , const size_t _bufferSize
     )noexcept
     {
-        std::thread dmaThread = std::thread(
-            [this, _pBuffer,_bufferSize]
-            {
-                using namespace std::chrono_literals;
-                std::this_thread::sleep_for(500ms);
-
-                std::cout << "TRANSMIT SOME DATA:" << ' ';
-
-                for (size_t i{}; i<_bufferSize; ++i)
-                {
-                    std::cout << std::hex << _pBuffer[i] << ' ';
-                }
-                std::cout << std::endl;
-                //std::cout << "TRANSMIT SOME DATA" << "THREAD:" << std::this_thread::get_id() << std::endl;
-                
-                auto suspendedCoroutineHandle = m_pSpiBus->getCoroutineHandle(GetCoroHandleKey{});
-                suspendedCoroutineHandle.resume();
-            }
-            );
-        dmaThread.detach();
+        m_bufferTransmitSize.store( _bufferSize );
+        m_pDataBuffer.store( _pBuffer );
+        m_newDataArrived = true;
+        m_dataArrivedEvent.notify_one();
     }
 
 private:
     SpiBusAsync* m_pSpiBus;
+
+    std::atomic_bool m_newDataArrived;
+    std::atomic_bool m_processSpiTransactions;
+    std::atomic<const std::uint8_t*> m_pDataBuffer;
+    std::atomic<size_t> m_bufferTransmitSize;
+
+    std::mutex m_mutexLock;
+    std::unique_ptr<std::thread> m_dmaThread;
+    std::condition_variable m_dataArrivedEvent;
 };
 
 
@@ -185,7 +218,7 @@ SpiBusAsync::transmitCompleted()
     }
 }
 
-std::uint32_t
+std::size_t
 SpiBusAsync::getTransitionOffset() noexcept
 {
     return m_transmitContext.completedTransactionsCount++;

@@ -69,7 +69,7 @@ public:
     getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey);
 
 private:
-    std::uint32_t getTransitionOffset() noexcept;
+    std::size_t getTransitionOffset() noexcept;
 
 private:
     class SpiAsyncBackendImpl;

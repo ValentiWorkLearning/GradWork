@@ -190,7 +190,96 @@ struct Display
     DisplayInitializedEvent m_initializedEvent;
 };
 
+constexpr std::uint8_t TFT_WIDTH_128 = 128;  // for 1.44 and mini
+constexpr std::uint8_t TFT_WIDTH_80 = 80;   // for mini
+constexpr std::uint8_t TFT_HEIGHT_128 = 128;  // for 1.44" display
+constexpr std::uint8_t TFT_HEIGHT_160 = 160;  // for 1.8" and mini display
 
+constexpr std::uint8_t DELAY = 0x80;   // special signifier for command lists
+
+constexpr std::uint8_t NOP = 0x00;
+constexpr std::uint8_t SWRESET = 0x01;
+constexpr std::uint8_t RDDID = 0x04;
+constexpr std::uint8_t RDDST = 0x09;
+
+constexpr std::uint8_t SLPIN = 0x10;
+constexpr std::uint8_t SLPOUT = 0x11;
+constexpr std::uint8_t PTLON = 0x12;
+constexpr std::uint8_t NORON = 0x13;
+
+constexpr std::uint8_t INVOFF = 0x20;
+constexpr std::uint8_t INVON = 0x21;
+constexpr std::uint8_t DISPOFF = 0x28;
+constexpr std::uint8_t DISPON = 0x29;
+constexpr std::uint8_t CASET = 0x2A;
+constexpr std::uint8_t RASET = 0x2B;
+constexpr std::uint8_t RAMWR = 0x2C;
+constexpr std::uint8_t RAMRD = 0x2E;
+
+constexpr std::uint8_t PTLAR = 0x30;
+constexpr std::uint8_t TEOFF = 0x34;
+constexpr std::uint8_t TEON = 0x35;
+constexpr std::uint8_t MADCTL = 0x36;
+constexpr std::uint8_t COLMOD = 0x3A;
+constexpr std::uint8_t MADCTL_MY = 0x80;
+constexpr std::uint8_t MADCTL_MX = 0x40;
+constexpr std::uint8_t MADCTL_MV = 0x20;
+constexpr std::uint8_t MADCTL_ML = 0x10;
+constexpr std::uint8_t MADCTL_RGB = 0x00;
+
+constexpr std::uint8_t RDID1 = 0xDA;
+constexpr std::uint8_t RDID2 = 0xDB;
+constexpr std::uint8_t RDID3 = 0xDC;
+constexpr std::uint8_t RDID4 = 0xDD;
+
+template< std::uint8_t ... CommandArgs>
+struct CommandDescriptor {};
+
+template<std::uint8_t Command, std::uint8_t CommandDelay,std::uint8_t ... CommandArgs>
+struct CommandDescriptor< Command, CommandDelay, CommandArgs...>
+{
+    std::uint8_t command = Command;
+    std::uint8_t argsCount = sizeof...(CommandArgs);
+    std::uint8_t commandDelay = CommandDelay;
+
+    std::tuple<decltype(CommandArgs)...> commandArgs{ CommandArgs... };
+};
+
+template<std::uint8_t Command, std::uint8_t CommandDelay>
+struct CommandDescriptor<Command, CommandDelay>
+{
+    std::uint8_t command = Command;
+    std::uint8_t argsCount = 0;
+    std::uint8_t commandDelay = CommandDelay;
+    std::tuple<std::uint8_t> commandArgs{};
+};
+
+template<std::uint8_t Command>
+struct CommandDescriptor<Command>
+{
+    std::uint8_t command = Command;
+    std::uint8_t argsCount = 0;
+    std::uint8_t commandDelay = 0;
+    std::tuple<std::uint8_t> commandArgs{};
+};
+
+constexpr std::uint8_t bitwiseResolutionConstant()
+{
+    return  320 >> 8;
+}
+
+static constexpr std::tuple CommandsArray = {
+        CommandDescriptor<SWRESET,150>{}
+    ,   CommandDescriptor<SLPOUT>{}
+    ,   CommandDescriptor<COLMOD, 0x55>{}
+    ,   CommandDescriptor<MADCTL, 0x08>{}
+    ,   CommandDescriptor<CASET, 0x00,0,0,240>{}
+    ,   CommandDescriptor<RASET, 0x00, 0, bitwiseResolutionConstant(), 320 & 0xFF> {}
+    ,   CommandDescriptor<INVON>{}
+    ,   CommandDescriptor<NORON>{}
+    ,   CommandDescriptor<DISPON>{}
+    ,   CommandDescriptor<MADCTL, 0xC0>{}
+};
 
 
 class ST7789Coroutine
@@ -243,18 +332,16 @@ private:
         Delay::waitFor(100);
         BaseDisplay_t::setResetPin();
 
-        co_await sendCommand(0x01);
-        Delay::waitFor(150);
-        co_await sendCommand(0x02);
-        co_await sendCommand(0x03, 0x31);
-        co_await sendCommand(0x04, 0x41);
-        co_await sendCommand(0x05, 0x51, 0x52, 0x53, 0x54);
-        co_await sendCommand(0x06, 0x61, 0x62, 0x63, 0x64);
-        co_await sendCommand(0x07, 0x71);
-        co_await sendCommand(0x08);
-        co_await sendCommand(0x09);
-        co_await sendCommand(0x10, 0x11);
+        Meta::tupleApply(
+            [this](const auto& _commandDescriptor) -> void
+            {
+                co_await sendCommand(_commandDescriptor.command);
 
+                if( _commandDescriptor.commandDelay != 0 )
+                    Delay::waitFor(150);
+            }
+            ,   CommandsArray
+        );
     }
 
     void initColumnRow(
@@ -287,8 +374,11 @@ private:
          ,  240
      };
 
-     using namespace std::chrono_literals;
-     std::this_thread::sleep_for(5000ms);
+     while(true)
+     {
+         using namespace std::chrono_literals;
+         std::this_thread::sleep_for(100ms);
+     }
      return 0;
  }
 

@@ -73,7 +73,7 @@ protected:
     )noexcept
     {
         resetDcPin();
-        auto pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
+        auto& pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
         pTransmitBuffer[0] = _command;
 
         return Awaiter
@@ -102,7 +102,7 @@ protected:
     )noexcept
     {
         std::array chunkArray = std::array{ static_cast<std::uint8_t>(_chunkArgs)... };
-        auto pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
+        auto& pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
 
         constexpr size_t TransmitBufferSize = sizeof...(Args);
         for (size_t i{}; i< TransmitBufferSize; ++i)
