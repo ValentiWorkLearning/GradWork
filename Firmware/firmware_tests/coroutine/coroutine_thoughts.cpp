@@ -326,13 +326,20 @@ public:
 
 private:
 
+
     void initDisplay()noexcept
     {
         BaseDisplay_t::resetResetPin();
         Delay::waitFor(100);
         BaseDisplay_t::setResetPin();
-
-        Meta::tupleApply(
+        std::apply(
+                [this](const auto&... _commandDescriptor)
+                {
+                    return CoroUtils::makeTaskSequence(sendCommand(_commandDescriptor.command)...);
+                }
+            ,   CommandsArray
+        );
+        /*Meta::tupleApply(
             [this](const auto& _commandDescriptor) -> void
             {
                 co_await sendCommand(_commandDescriptor.command);
@@ -341,7 +348,7 @@ private:
                     Delay::waitFor(150);
             }
             ,   CommandsArray
-        );
+        );*/
     }
 
     void initColumnRow(

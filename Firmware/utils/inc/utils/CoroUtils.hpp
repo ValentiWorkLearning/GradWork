@@ -87,4 +87,10 @@ auto when_all(Awaitables&&... _awaitablesList)
 	};
 }
 
+template<typename... Tasks>
+void makeTaskSequence(Tasks&&... tasks)
+{
+    (co_await std::forward<Tasks>(tasks), ...);
+}
+
 }
