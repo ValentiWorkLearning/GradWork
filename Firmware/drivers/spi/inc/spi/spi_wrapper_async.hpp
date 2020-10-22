@@ -4,6 +4,7 @@
 
 #include <memory>
 #include <atomic>
+#include <optional>
 
 #include "utils/CoroUtils.hpp"
 
@@ -58,7 +59,7 @@ public:
     }
 
     void transmitBuffer(
-            std::uint8_t* _pBuffer
+            const std::uint8_t* _pBuffer
         ,   std::uint16_t _pBufferSize
         ,   void* _pUserData
     );
@@ -79,14 +80,14 @@ private:
 
     struct TransactionContext
     {
-        std::uint8_t* pDataToTransmit = nullptr;
+        bool computeChunkOffsetWithDma = false;
+        const std::uint8_t* pDataToTransmit = nullptr;
         size_t fullDmaTransactionsCount = 0;
         size_t chunkedTransactionsCount = 0;
         size_t completedTransactionsCount = 0;
-        bool computeChunkOffsetWithDma = false;
     };
 
-    TransactionContext m_transmitContext;
+    std::optional<TransactionContext> m_transmitContext;
     DmaBufferType DmaArrayTransmit;
     DmaBufferType DmaArrayReceive;
 };

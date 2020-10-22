@@ -145,29 +145,34 @@ SpiBusAsync::~SpiBusAsync() = default;
 
 void
 SpiBusAsync::transmitBuffer(
-    std::uint8_t * _pBuffer
-    , std::uint16_t _pBufferSize
-    , void* _pUserData
+        const std::uint8_t * _pBuffer
+    ,   std::uint16_t _pBufferSize
+    ,   void* _pUserData
 )
 {
     m_coroHandle = stdcoro::coroutine_handle<>::from_address(_pUserData);
 
     const size_t TransferBufferSize = _pBufferSize;
-
-    m_transmitContext.pDataToTransmit = _pBuffer;
-
-    m_transmitContext.fullDmaTransactionsCount =
+    const size_t FullDmaTransactionsCount =
         TransferBufferSize / Interface::Spi::SpiBusAsync::DmaBufferSize;
-    m_transmitContext.chunkedTransactionsCount =
+    const size_t ChunkedTransactionsCount =
         TransferBufferSize % Interface::Spi::SpiBusAsync::DmaBufferSize;
+    const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
 
-    m_transmitContext.completedTransactionsCount = 0;
-    m_transmitContext.computeChunkOffsetWithDma =
-        m_transmitContext.fullDmaTransactionsCount >= 1;
-
-    if (m_transmitContext.fullDmaTransactionsCount > 0)
+    TransactionContext newContext
     {
-        --m_transmitContext.fullDmaTransactionsCount;
+            .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma
+        ,   .pDataToTransmit = _pBuffer
+        ,   .fullDmaTransactionsCount = FullDmaTransactionsCount
+        ,   .chunkedTransactionsCount = ChunkedTransactionsCount
+        ,   .completedTransactionsCount = 0
+    };
+
+    m_transmitContext = newContext;
+
+    if (FullDmaTransactionsCount)
+    {
+        --m_transmitContext->fullDmaTransactionsCount;
         m_pSpiBackendImpl->sendChunk(
             _pBuffer
             , Interface::Spi::SpiBusAsync::DmaBufferSize
@@ -185,26 +190,26 @@ void
 SpiBusAsync::transmitCompleted()
 {
     const bool isAllDmaTransactionsProceeded =
-        m_transmitContext.fullDmaTransactionsCount != 0;
+        m_transmitContext->fullDmaTransactionsCount != 0;
 
     if (!isAllDmaTransactionsProceeded)
     {
-        --m_transmitContext.fullDmaTransactionsCount;
+        --m_transmitContext->fullDmaTransactionsCount;
 
         m_pSpiBackendImpl->sendChunk(
-            m_transmitContext.pDataToTransmit + getTransitionOffset()
+            m_transmitContext->pDataToTransmit + getTransitionOffset()
             , Interface::Spi::SpiBusAsync::DmaBufferSize
         );
     }
-    else if (m_transmitContext.chunkedTransactionsCount != 0)
+    else if (m_transmitContext->chunkedTransactionsCount != 0)
     {
-        const size_t transmissionOffset = m_transmitContext.computeChunkOffsetWithDma
+        const size_t transmissionOffset = m_transmitContext->computeChunkOffsetWithDma
             ? Interface::Spi::SpiBusAsync::DmaBufferSize
             * getTransitionOffset() : 0;
 
         m_pSpiBackendImpl->sendChunk(
-            m_transmitContext.pDataToTransmit + transmissionOffset
-            , m_transmitContext.chunkedTransactionsCount
+            m_transmitContext->pDataToTransmit + transmissionOffset
+            , m_transmitContext->chunkedTransactionsCount
         );
     }
     else {
@@ -215,7 +220,7 @@ SpiBusAsync::transmitCompleted()
 std::size_t
 SpiBusAsync::getTransitionOffset() noexcept
 {
-    return m_transmitContext.completedTransactionsCount++;
+    return m_transmitContext->completedTransactionsCount++;
 }
 
 stdcoro::coroutine_handle<>

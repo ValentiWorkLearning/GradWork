@@ -239,28 +239,25 @@ template<std::uint8_t Command, std::uint8_t CommandDelay,std::uint8_t ... Comman
 struct CommandDescriptor< Command, CommandDelay, CommandArgs...>
 {
     std::uint8_t command = Command;
-    std::uint8_t argsCount = sizeof...(CommandArgs);
     std::uint8_t commandDelay = CommandDelay;
 
-    std::tuple<decltype(CommandArgs)...> commandArgs{ CommandArgs... };
+    std::array<std::uint8_t,sizeof...(CommandArgs)> commandArgs{ CommandArgs... };
 };
 
 template<std::uint8_t Command, std::uint8_t CommandDelay>
 struct CommandDescriptor<Command, CommandDelay>
 {
     std::uint8_t command = Command;
-    std::uint8_t argsCount = 0;
     std::uint8_t commandDelay = CommandDelay;
-    std::tuple<std::uint8_t> commandArgs{};
+    std::array<std::uint8_t,0> commandArgs{};
 };
 
 template<std::uint8_t Command>
 struct CommandDescriptor<Command>
 {
     std::uint8_t command = Command;
-    std::uint8_t argsCount = 0;
     std::uint8_t commandDelay = 0;
-    std::tuple<std::uint8_t> commandArgs{};
+    std::array<std::uint8_t,0> commandArgs{};
 };
 
 constexpr std::uint8_t bitwiseResolutionConstant()
@@ -326,7 +323,6 @@ public:
 
 private:
 
-
     void initDisplay()noexcept
     {
         BaseDisplay_t::resetResetPin();
@@ -335,20 +331,16 @@ private:
         std::apply(
                 [this](const auto&... _commandDescriptor)
                 {
-                    return CoroUtils::makeTaskSequence(sendCommand(_commandDescriptor.command)...);
+                    return CoroUtils::makeTaskSequence(
+                        sendCommand(
+                                _commandDescriptor.command
+                            ,   _commandDescriptor.commandArgs.data()
+                            ,   _commandDescriptor.commandArgs.size()
+                        )...
+                    );
                 }
             ,   CommandsArray
         );
-        /*Meta::tupleApply(
-            [this](const auto& _commandDescriptor) -> void
-            {
-                co_await sendCommand(_commandDescriptor.command);
-
-                if( _commandDescriptor.commandDelay != 0 )
-                    Delay::waitFor(150);
-            }
-            ,   CommandsArray
-        );*/
     }
 
     void initColumnRow(

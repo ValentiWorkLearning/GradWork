@@ -46,9 +46,10 @@ protected:
 
     struct Awaiter
     {
-        std::uint8_t* pTransmitBuffer;
-        std::uint16_t bufferSize;
+        bool resetDcPin = false;
+        const std::uint8_t* pTransmitBuffer;
         BaseSpiDisplayCoroutine* pBaseDisplay;
+        std::uint16_t bufferSize;
 
         bool await_ready() const noexcept
         {
@@ -56,10 +57,14 @@ protected:
         }
         void await_resume() const noexcept
         {
-            pBaseDisplay->setDcPin();
+            if( resetDcPin )
+                pBaseDisplay->setDcPin();
         }
         void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
+            if (resetDcPin)
+                pBaseDisplay->resetDcPin();
+
             pBaseDisplay->getSpiBus()->transmitBuffer(
                     pTransmitBuffer
                 ,   bufferSize
@@ -72,51 +77,44 @@ protected:
             std::uint8_t _command
     )noexcept
     {
-        resetDcPin();
         auto& pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
         pTransmitBuffer[0] = _command;
 
         return Awaiter
         {
-                .pTransmitBuffer = pTransmitBuffer.data()
-            ,   .bufferSize = 1
+                .resetDcPin = true
+            ,   .pTransmitBuffer = pTransmitBuffer.data()
             ,   .pBaseDisplay = this
+            ,   .bufferSize = 1
         };
     }
 
-    template< typename ... Args >
+    auto sendChunk(
+            const std::uint8_t* _pBuffer
+        ,   std::uint16_t _bufferSize
+    )noexcept
+    {
+        return Awaiter
+        {
+                .pTransmitBuffer = _pBuffer
+            ,   .pBaseDisplay = this
+            ,   .bufferSize = _bufferSize
+        };
+    }
+
     auto sendCommand(
             std::uint8_t _command
-        ,   Args... _commandArgs
+        ,   const std::uint8_t* _pBuffer
+        ,   std::uint16_t _bufferSize
     )noexcept
     {
         return CoroUtils::when_all (
                 sendCommand( _command )
-            ,   sendChunk( static_cast<std::uint8_t>(_commandArgs)... )
+            ,   sendChunk( _pBuffer,_bufferSize )
         );
     }
 
-    template< typename ... Args >
-    auto sendChunk(
-            Args... _chunkArgs
-    )noexcept
-    {
-        std::array chunkArray = std::array{ static_cast<std::uint8_t>(_chunkArgs)... };
-        auto& pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
 
-        constexpr size_t TransmitBufferSize = sizeof...(Args);
-        for (size_t i{}; i< TransmitBufferSize; ++i)
-        {
-            pTransmitBuffer[i] = chunkArray[i];
-        }
-
-        return Awaiter
-        {
-                .pTransmitBuffer = pTransmitBuffer.data()
-            ,   .bufferSize = TransmitBufferSize
-            ,   .pBaseDisplay = this
-        };
-    }
 
 protected:
 
