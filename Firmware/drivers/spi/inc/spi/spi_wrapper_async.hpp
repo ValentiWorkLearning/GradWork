@@ -83,7 +83,7 @@ private:
         bool computeChunkOffsetWithDma = false;
         const std::uint8_t* pDataToTransmit = nullptr;
         size_t fullDmaTransactionsCount = 0;
-        size_t chunkedTransactionsCount = 0;
+        size_t chunkedTransactionBufSize = 0;
         size_t completedTransactionsCount = 0;
     };
 

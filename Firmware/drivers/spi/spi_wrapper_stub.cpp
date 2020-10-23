@@ -69,13 +69,13 @@ public:
                     if(m_newDataArrived)
                     {
                         using namespace std::chrono_literals;
-                        std::this_thread::sleep_for(500ms);
+                        std::this_thread::sleep_for(1500ms);
 
                         std::cout << "TRANSMIT SOME DATA:" << ' ';
 
                         for (size_t i{}; i < m_bufferTransmitSize; ++i)
                         {
-                            std::cout << std::hex << m_pDataBuffer[i] << ' ';
+                            std::cout << std::hex << static_cast<std::int16_t>(m_pDataBuffer[i]) << ' ';
                         }
                         std::cout << std::endl;
 
@@ -155,7 +155,7 @@ SpiBusAsync::transmitBuffer(
     const size_t TransferBufferSize = _pBufferSize;
     const size_t FullDmaTransactionsCount =
         TransferBufferSize / Interface::Spi::SpiBusAsync::DmaBufferSize;
-    const size_t ChunkedTransactionsCount =
+    const size_t ChunkedTransactionsBufSize =
         TransferBufferSize % Interface::Spi::SpiBusAsync::DmaBufferSize;
     const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
 
@@ -164,7 +164,7 @@ SpiBusAsync::transmitBuffer(
             .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma
         ,   .pDataToTransmit = _pBuffer
         ,   .fullDmaTransactionsCount = FullDmaTransactionsCount
-        ,   .chunkedTransactionsCount = ChunkedTransactionsCount
+        ,   .chunkedTransactionBufSize = ChunkedTransactionsBufSize
         ,   .completedTransactionsCount = 0
     };
 
@@ -179,6 +179,7 @@ SpiBusAsync::transmitBuffer(
         );
     }
     else {
+        m_transmitContext->chunkedTransactionBufSize = 0;
         m_pSpiBackendImpl->sendChunk(
             _pBuffer
             , _pBufferSize
@@ -190,7 +191,9 @@ void
 SpiBusAsync::transmitCompleted()
 {
     const bool isAllDmaTransactionsProceeded =
-        m_transmitContext->fullDmaTransactionsCount != 0;
+        m_transmitContext->fullDmaTransactionsCount == 0;
+    const bool isAllChunckedTransactionsCompleted =
+        m_transmitContext->chunkedTransactionBufSize == 0;
 
     if (!isAllDmaTransactionsProceeded)
     {
@@ -201,15 +204,19 @@ SpiBusAsync::transmitCompleted()
             , Interface::Spi::SpiBusAsync::DmaBufferSize
         );
     }
-    else if (m_transmitContext->chunkedTransactionsCount != 0)
+    else if (!isAllChunckedTransactionsCompleted)
     {
         const size_t transmissionOffset = m_transmitContext->computeChunkOffsetWithDma
             ? Interface::Spi::SpiBusAsync::DmaBufferSize
             * getTransitionOffset() : 0;
 
+        const size_t TransmitBufferSize =
+            m_transmitContext->chunkedTransactionBufSize;
+        m_transmitContext->chunkedTransactionBufSize = 0;
+
         m_pSpiBackendImpl->sendChunk(
-            m_transmitContext->pDataToTransmit + transmissionOffset
-            , m_transmitContext->chunkedTransactionsCount
+                m_transmitContext->pDataToTransmit + transmissionOffset
+            ,   TransmitBufferSize
         );
     }
     else {

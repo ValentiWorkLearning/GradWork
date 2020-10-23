@@ -232,32 +232,28 @@ constexpr std::uint8_t RDID2 = 0xDB;
 constexpr std::uint8_t RDID3 = 0xDC;
 constexpr std::uint8_t RDID4 = 0xDD;
 
-template< std::uint8_t ... CommandArgs>
+template< std::uint8_t ... Command>
 struct CommandDescriptor {};
 
-template<std::uint8_t Command, std::uint8_t CommandDelay,std::uint8_t ... CommandArgs>
+template<std::uint8_t Command, std::uint8_t CommandDelay ,std::uint8_t ... CommandArgs>
 struct CommandDescriptor< Command, CommandDelay, CommandArgs...>
 {
-    std::uint8_t command = Command;
     std::uint8_t commandDelay = CommandDelay;
-
-    std::array<std::uint8_t,sizeof...(CommandArgs)> commandArgs{ CommandArgs... };
+    std::array<std::uint8_t,sizeof...(CommandArgs)+1> command{ Command,CommandArgs... };
 };
 
 template<std::uint8_t Command, std::uint8_t CommandDelay>
 struct CommandDescriptor<Command, CommandDelay>
 {
-    std::uint8_t command = Command;
     std::uint8_t commandDelay = CommandDelay;
-    std::array<std::uint8_t,0> commandArgs{};
+    std::array<std::uint8_t,1> command{ Command };
 };
 
 template<std::uint8_t Command>
 struct CommandDescriptor<Command>
 {
-    std::uint8_t command = Command;
     std::uint8_t commandDelay = 0;
-    std::array<std::uint8_t,0> commandArgs{};
+    std::array<std::uint8_t, 1> command{ Command };
 };
 
 constexpr std::uint8_t bitwiseResolutionConstant()
@@ -333,9 +329,8 @@ private:
                 {
                     return CoroUtils::makeTaskSequence(
                         sendCommand(
-                                _commandDescriptor.command
-                            ,   _commandDescriptor.commandArgs.data()
-                            ,   _commandDescriptor.commandArgs.size()
+                                _commandDescriptor.command.data()
+                            ,   _commandDescriptor.command.size()
                         )...
                     );
                 }
