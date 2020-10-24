@@ -53,7 +53,7 @@ protected:
 
         bool await_ready() const noexcept
         {
-            return false;
+            return pTransmitBuffer == nullptr;
         }
         void await_resume() const noexcept
         {
@@ -73,17 +73,14 @@ protected:
         }
     };
 
-    auto sendCommand(
-            std::uint8_t _command
+    auto sendCommandImpl(
+            const std::uint8_t* _command
     )noexcept
     {
-        auto& pTransmitBuffer = m_pBusPtr->getDmaBufferTransmit();
-        pTransmitBuffer[0] = _command;
-
         return Awaiter
         {
                 .resetDcPin = true
-            ,   .pTransmitBuffer = pTransmitBuffer.data()
+            ,   .pTransmitBuffer = _command
             ,   .pBaseDisplay = this
             ,   .bufferSize = 1
         };
@@ -103,14 +100,17 @@ protected:
     }
 
     auto sendCommand(
-            std::uint8_t _command
-        ,   const std::uint8_t* _pBuffer
+            const std::uint8_t* _pBuffer
         ,   std::uint16_t _bufferSize
     )noexcept
     {
+        const std::uint8_t* commandBuf = _pBuffer;
+        const std::uint8_t* ArgBuf = _pBuffer + 1;
+        const std::uint16_t ArgsBufferSize = _bufferSize - 1;
+
         return CoroUtils::when_all (
-                sendCommand( _command )
-            ,   sendChunk( _pBuffer,_bufferSize )
+                sendCommandImpl( commandBuf )
+            ,   ArgsBufferSize > 0 ? sendChunk( ArgBuf, ArgsBufferSize): sendChunk(nullptr,0)
         );
     }
 
