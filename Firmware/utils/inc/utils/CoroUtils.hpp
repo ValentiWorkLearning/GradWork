@@ -25,6 +25,26 @@ struct stdcoro::coroutine_traits<void, Args...> {
 namespace CoroUtils
 {
 
+
+template<typename... Tasks>
+void makeTaskSequence(Tasks&&... tasks)
+{
+    (co_await std::forward<Tasks>(tasks), ...);
+}
+
+//
+//template<typename... Tasks>
+//void makeCountedSequence(WhenAllReadyCounter& _counter, Tasks&&... tasks)
+//{
+//    auto helper = [](auto&& _task, WhenAllReadyCounter* _counter)
+//    {
+//        return WhenAllTask{ _counter };
+//    };
+//    
+//    //( co_await helper(tasks,std::addressof(_counter)) , ...);
+//    (co_await WhenAllTask{ _counter }, ...);
+//}
+
 struct WhenAllReadyCounter
 {
     WhenAllReadyCounter(size_t _countTo)
@@ -50,19 +70,54 @@ struct WhenAllReadyCounter
     std::atomic<size_t> m_whenAllCounter;
 };
 
+template<typename Task>
+struct WhenAllTask
+{
+
+    template<typename Task>
+    WhenAllTask(Task _task)
+        :   m_taskItem{ _task }
+    {
+    }
+    bool await_ready() const noexcept
+    {
+        return false;
+    }
+
+    void await_resume() const noexcept
+    {
+        m_whenAllCounter->notifyAwaitingCompleted();
+    }
+
+    void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) noexcept
+    {
+        co_await m_taskItem;
+    }
+
+    void setTimer(WhenAllReadyCounter* _pCounter)
+    {
+       m_whenAllCounter = _pCounter;
+    }
+
+    Task m_taskItem;
+    WhenAllReadyCounter* m_whenAllCounter;
+};
+
 template<typename ...Awaitables>
 auto when_all(Awaitables&&... _awaitablesList)
 {
 	struct WhenAllAwaitable
 	{
-        std::tuple<Awaitables...> m_taskList;
+
+        using TTaskTuple = std::tuple<WhenAllTask<Awaitables>...>;
+        TTaskTuple m_taskList;
         WhenAllReadyCounter m_whenAllCounter;
 
         bool await_ready() const noexcept
         {
             return false;
         }
-        std::tuple<Awaitables...>& await_resume()noexcept
+        TTaskTuple& await_resume()noexcept
         {
             return m_taskList;
         }
@@ -70,14 +125,21 @@ auto when_all(Awaitables&&... _awaitablesList)
         void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) noexcept
         {
             m_whenAllCounter.setCoroutineForWaiting(thisCoroutine);
-
             std::apply(
-                    [this](const auto&... _taskList)
-                    {
-                        return makeCountedSequence(m_whenAllCounter, _taskList...);
-                    }
+                [this](auto& taskNode)
+                {
+                    taskNode.setTimer(m_whenAllCounter);
+                }
                 ,   m_taskList
             );
+            //std::apply(
+            //        [this](const auto&... _taskList)
+            //        {
+            //            //return makeCountedSequence(m_whenAllCounter, _taskList...);
+            //            return makeTaskSequence(_taskList...);
+            //        }
+            //    ,   m_taskList
+            //);
         }
 	};
 
@@ -85,25 +147,6 @@ auto when_all(Awaitables&&... _awaitablesList)
 		    std::forward_as_tuple(_awaitablesList...)
         ,   sizeof...(_awaitablesList)
 	};
-}
-
-template<typename... Tasks>
-void makeTaskSequence(Tasks&&... tasks)
-{
-    (co_await std::forward<Tasks>(tasks), ...);
-}
-
-template<typename... Tasks>
-void makeCountedSequence(WhenAllReadyCounter& _counter, Tasks&&... tasks)
-{
-    auto helper = [&_counter](auto&& _task)
-        ->  void
-    {
-        co_await _task;
-        _counter.notifyAwaitingCompleted();
-    };
-
-    (helper(tasks), ...);
 }
 
 }
