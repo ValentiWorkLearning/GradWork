@@ -126,20 +126,20 @@ auto when_all(Awaitables&&... _awaitablesList)
         {
             m_whenAllCounter.setCoroutineForWaiting(thisCoroutine);
             std::apply(
-                [this](auto& taskNode)
-                {
-                    taskNode.setTimer(m_whenAllCounter);
-                }
+                    [this](auto& ... task)
+                    {
+                        (task.setTimer(&m_whenAllCounter), ...);
+                    }
                 ,   m_taskList
             );
-            //std::apply(
-            //        [this](const auto&... _taskList)
-            //        {
-            //            //return makeCountedSequence(m_whenAllCounter, _taskList...);
-            //            return makeTaskSequence(_taskList...);
-            //        }
-            //    ,   m_taskList
-            //);
+            std::apply(
+                    [](auto&... _task)
+                    {
+                        //return makeCountedSequence(m_whenAllCounter, _taskList...);
+                        return makeTaskSequence(_task...);
+                    }
+                ,   m_taskList
+            );
         }
 	};
 
