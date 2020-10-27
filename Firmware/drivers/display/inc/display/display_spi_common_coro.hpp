@@ -88,25 +88,25 @@ protected:
 
     auto sendChunk(
             const std::uint8_t* _pBuffer
-        ,   std::uint16_t _bufferSize
+        ,   std::size_t _bufferSize
     )noexcept
     {
         return Awaiter
         {
                 .pTransmitBuffer = _pBuffer
             ,   .pBaseDisplay = this
-            ,   .bufferSize = _bufferSize
+            ,   .bufferSize = static_cast<std::uint16_t>( _bufferSize ) 
         };
     }
 
     auto sendCommand(
             const std::uint8_t* _pBuffer
-        ,   std::uint16_t _bufferSize
+        ,   std::size_t _bufferSize
     )noexcept
     {
         const std::uint8_t* commandBuf = _pBuffer;
         const std::uint8_t* ArgBuf = _pBuffer + 1;
-        const std::uint16_t ArgsBufferSize = _bufferSize - 1;
+        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
 
         return CoroUtils::when_all (
                 sendCommandImpl( commandBuf )

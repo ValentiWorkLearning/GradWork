@@ -20,6 +20,7 @@ namespace stdcoro = std;
 
 #include "display/display_spi_common_coro.hpp"
 #include "spi/spi_wrapper_async.hpp"
+#include "logger/logger_service.hpp"
 
 // https://blog.panicsoftware.com/your-first-coroutine/
 // https://manybutfinite.com/post/anatomy-of-a-program-in-memory/
@@ -152,7 +153,7 @@ struct Display
 {
     Display()
     {
-        initDisplay();
+        //initDisplay();
     }
 
     void fillRectangle(
@@ -167,13 +168,13 @@ struct Display
         co_await m_initializedEvent;
         std::cout << "void fillRectangle(); RESUMED"<< "THREAD:" << std::this_thread::get_id() << std::endl;
         
-        co_await spiTrasnmitCommandBufferAsync(
+        /*co_await spiTrasnmitCommandBufferAsync(
             reinterpret_cast<std::uint8_t*>(commandBufferFirst.data())
             , commandBufferFirst.size()
-        );
+        );*/
     }
 
-    void initDisplay()
+   /* void initDisplay()
     {
 
         co_await spiTrasnmitCommandBufferAsync(
@@ -185,7 +186,7 @@ struct Display
             , commandBufferSecond.size()
         );
         m_initializedEvent.notify();
-    }
+    }*/
 
     DisplayInitializedEvent m_initializedEvent;
 };

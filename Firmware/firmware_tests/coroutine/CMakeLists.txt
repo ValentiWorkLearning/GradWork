@@ -25,4 +25,5 @@ target_link_libraries(
     drivers_ih
     watch_display
     UtilsLibrary
+    logger_service
 )
