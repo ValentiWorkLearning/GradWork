@@ -29,8 +29,17 @@ namespace CoroUtils
 template<typename... Tasks>
 void makeTaskSequence(Tasks&&... tasks)
 {
-    (co_await std::forward<Tasks>(tasks), ...);
+    //Eventually, this should be compiled by GCC version >= 10.2 because of internal compiler error in GCC
+#ifdef WIN32
+    (co_await tasks, ...);
+
+#else
+    //Let's make some C++11
+
+#endif
+
 }
+
 
 //
 //template<typename... Tasks>
@@ -48,8 +57,8 @@ void makeTaskSequence(Tasks&&... tasks)
 struct WhenAllReadyCounter
 {
     WhenAllReadyCounter(size_t _countTo)
-        :   m_whenAllCounter{ _countTo +1}
-        ,   m_suspendedCoroutine{nullptr}
+        :   m_suspendedCoroutine{nullptr}
+        ,   m_whenAllCounter{ _countTo +1}
     {
     }
 
@@ -74,7 +83,6 @@ template<typename Task>
 struct WhenAllTask
 {
 
-    template<typename Task>
     WhenAllTask(Task _task)
         :   m_taskItem{ _task }
     {
@@ -106,8 +114,8 @@ struct WhenAllTask
 template<typename ...Awaitables>
 auto when_all(Awaitables&&... _awaitablesList)
 {
-	struct WhenAllAwaitable
-	{
+    struct WhenAllAwaitable
+    {
 
         using TTaskTuple = std::tuple<WhenAllTask<Awaitables>...>;
         TTaskTuple m_taskList;
@@ -141,12 +149,12 @@ auto when_all(Awaitables&&... _awaitablesList)
                 ,   m_taskList
             );
         }
-	};
+    };
 
-	return WhenAllAwaitable{
-		    std::forward_as_tuple(_awaitablesList...)
+    return WhenAllAwaitable{
+            std::forward_as_tuple(_awaitablesList...)
         ,   sizeof...(_awaitablesList)
-	};
+    };
 }
 
 }

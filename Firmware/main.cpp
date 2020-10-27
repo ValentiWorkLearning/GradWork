@@ -4,7 +4,7 @@
 
 int main(void)
 {
-    testMe();
+    //testMe();
 
     Application mainApp;
 

@@ -146,38 +146,44 @@ SpiBusAsync::~SpiBusAsync() = default;
 
 void
 SpiBusAsync::transmitBuffer(
-        std::uint8_t* _pBuffer
+        const std::uint8_t * _pBuffer
     ,   std::uint16_t _pBufferSize
     ,   void* _pUserData
 )
 {
-    m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+    m_coroHandle = stdcoro::coroutine_handle<>::from_address(_pUserData);
 
     const size_t TransferBufferSize = _pBufferSize;
-
-    m_transmitContext.pDataToTransmit = _pBuffer;
-
-    m_transmitContext.fullDmaTransactionsCount =
+    const size_t FullDmaTransactionsCount =
         TransferBufferSize / Interface::Spi::SpiBusAsync::DmaBufferSize;
-    m_transmitContext.chunkedTransactionsCount =
+    const size_t ChunkedTransactionsBufSize =
         TransferBufferSize % Interface::Spi::SpiBusAsync::DmaBufferSize;
+    const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
 
-    m_transmitContext.completedTransactionsCount = 0;
-    m_transmitContext.computeChunkOffsetWithDma =
-        m_transmitContext.fullDmaTransactionsCount >= 1;
-
-    if(m_transmitContext.fullDmaTransactionsCount > 0)
+    TransactionContext newContext
     {
-        --m_transmitContext.fullDmaTransactionsCount;
+            .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma
+        ,   .pDataToTransmit = _pBuffer
+        ,   .fullDmaTransactionsCount = FullDmaTransactionsCount
+        ,   .chunkedTransactionBufSize = ChunkedTransactionsBufSize
+        ,   .completedTransactionsCount = 0
+    };
+
+    m_transmitContext = newContext;
+
+    if (FullDmaTransactionsCount)
+    {
+        --m_transmitContext->fullDmaTransactionsCount;
         m_pSpiBackendImpl->sendChunk(
-                _pBuffer
-            ,   Interface::Spi::SpiBusAsync::DmaBufferSize
+            _pBuffer
+            , Interface::Spi::SpiBusAsync::DmaBufferSize
         );
     }
-    else{
+    else {
+        m_transmitContext->chunkedTransactionBufSize = 0;
         m_pSpiBackendImpl->sendChunk(
-                _pBuffer
-            ,   _pBufferSize
+            _pBuffer
+            , _pBufferSize
         );
     }
 }
@@ -186,37 +192,43 @@ void
 SpiBusAsync::transmitCompleted()
 {
     const bool isAllDmaTransactionsProceeded =
-        m_transmitContext.fullDmaTransactionsCount != 0;
+        m_transmitContext->fullDmaTransactionsCount == 0;
+    const bool isAllChunckedTransactionsCompleted =
+        m_transmitContext->chunkedTransactionBufSize == 0;
 
-    if( !isAllDmaTransactionsProceeded )
+    if (!isAllDmaTransactionsProceeded)
     {
-        --m_transmitContext.fullDmaTransactionsCount;
+        --m_transmitContext->fullDmaTransactionsCount;
 
         m_pSpiBackendImpl->sendChunk(
-                m_transmitContext.pDataToTransmit + getTransitionOffset()
-            ,   Interface::Spi::SpiBusAsync::DmaBufferSize
+            m_transmitContext->pDataToTransmit + getTransitionOffset()
+            , Interface::Spi::SpiBusAsync::DmaBufferSize
         );
     }
-    else if(m_transmitContext.chunkedTransactionsCount != 0)
+    else if (!isAllChunckedTransactionsCompleted)
     {
-        const size_t transmissionOffset = m_transmitContext.computeChunkOffsetWithDma
-            ?       Interface::Spi::SpiBusAsync::DmaBufferSize
-                *   getTransitionOffset() : 0;
+        const size_t transmissionOffset = m_transmitContext->computeChunkOffsetWithDma
+            ? Interface::Spi::SpiBusAsync::DmaBufferSize
+            * getTransitionOffset() : 0;
+
+        const size_t TransmitBufferSize =
+            m_transmitContext->chunkedTransactionBufSize;
+        m_transmitContext->chunkedTransactionBufSize = 0;
 
         m_pSpiBackendImpl->sendChunk(
-                m_transmitContext.pDataToTransmit + transmissionOffset
-            ,   m_transmitContext.chunkedTransactionsCount
+                m_transmitContext->pDataToTransmit + transmissionOffset
+            ,   TransmitBufferSize
         );
     }
-    else{
+    else {
         m_coroHandle.resume();
     }
 }
 
-std::uint32_t
+std::size_t
 SpiBusAsync::getTransitionOffset() noexcept
 {
-    return m_transmitContext.completedTransactionsCount++;
+    return m_transmitContext->completedTransactionsCount++;
 }
 
 stdcoro::coroutine_handle<>

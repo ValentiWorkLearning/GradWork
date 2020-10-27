@@ -9,7 +9,7 @@
 
 namespace Ble::BatteryService
 {
-    static constexpr std::uint8_t InitialBatteryLevel = 100;
+    inline constexpr std::uint8_t InitialBatteryLevel = 100;
 
 class BatteryLevelService
     :   public IBatteryLevelService
