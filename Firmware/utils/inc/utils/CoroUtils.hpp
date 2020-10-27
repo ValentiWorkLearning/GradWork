@@ -87,6 +87,7 @@ struct WhenAllTask
 
     WhenAllTask(Task _task)
         :   m_taskItem{ _task }
+        ,   m_whenAllCounter{nullptr}
     {
     }
     bool await_ready() const noexcept
