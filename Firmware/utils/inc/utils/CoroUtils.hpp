@@ -65,11 +65,13 @@ struct WhenAllReadyCounter
     void setCoroutineForWaiting( stdcoro::coroutine_handle<> _awaitingCoroutine )noexcept
     {
         m_suspendedCoroutine = _awaitingCoroutine;
+        m_whenAllCounter.fetch_sub(1, std::memory_order_acq_rel);
     }
 
     void notifyAwaitingCompleted()noexcept
     {
-        if( m_whenAllCounter.fetch_sub(1,std::memory_order_acq_rel) == 1)
+        const size_t countValue{ m_whenAllCounter.fetch_sub(1,std::memory_order_acq_rel) };
+        if(countValue == 1)
         {
             m_suspendedCoroutine.resume();
         }
@@ -100,6 +102,7 @@ struct WhenAllTask
     void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) noexcept
     {
         co_await m_taskItem;
+        thisCoroutine.resume();
     }
 
     void setTimer(WhenAllReadyCounter* _pCounter)

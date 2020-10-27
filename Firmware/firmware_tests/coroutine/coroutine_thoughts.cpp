@@ -261,17 +261,19 @@ constexpr std::uint8_t bitwiseResolutionConstant()
     return  320 >> 8;
 }
 
+inline constexpr std::uint8_t DefaultDelay = 0;
+
 static constexpr std::tuple CommandsArray = {
         CommandDescriptor<SWRESET,150>{}
     ,   CommandDescriptor<SLPOUT>{}
-    ,   CommandDescriptor<COLMOD, 0x55>{}
-    ,   CommandDescriptor<MADCTL, 0x08>{}
-    ,   CommandDescriptor<CASET, 0x00,0,0,240>{}
-    ,   CommandDescriptor<RASET, 0x00, 0, bitwiseResolutionConstant(), 320 & 0xFF> {}
+    ,   CommandDescriptor<COLMOD,DefaultDelay, 0x55>{}
+    ,   CommandDescriptor<MADCTL,DefaultDelay, 0x08>{}
+    ,   CommandDescriptor<CASET, DefaultDelay,0x00,0,0,240>{}
+    ,   CommandDescriptor<RASET, DefaultDelay,0x00, 0, bitwiseResolutionConstant(), 320 & 0xFF> {}
     ,   CommandDescriptor<INVON>{}
     ,   CommandDescriptor<NORON>{}
     ,   CommandDescriptor<DISPON>{}
-    ,   CommandDescriptor<MADCTL, 0xC0>{}
+    ,   CommandDescriptor<MADCTL,DefaultDelay, 0xC0>{}
 };
 
 
