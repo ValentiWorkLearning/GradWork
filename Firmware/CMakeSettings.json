@@ -21,6 +21,18 @@
             "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\"",
             "buildCommandArgs": "",
             "ctestCommandArgs": "",
+            "inheritEnvironments": [ "msvc_x86" ],
+            "variables": []
+        },
+        {
+            "name": "x86-Release",
+            "generator": "Ninja",
+            "configurationType": "RelWithDebInfo",
+            "buildRoot": "${projectDir}\\out\\buildx86_release\\${name}",
+            "installRoot": "${projectDir}\\out\\install\\${name}",
+            "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\"",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": "",
             "addressSanitizerEnabled": true,
             "inheritEnvironments": [ "msvc_x86" ],
             "variables": []
