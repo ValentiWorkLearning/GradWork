@@ -33,7 +33,7 @@ Win32TimerBackend::startTimer()
             nullptr
         ,   TimerId
         ,   ClicksDetectionPeriodMs
-        ,   timerEllapsedCallback
+        ,   reinterpret_cast<TIMERPROC>(timerEllapsedCallback)
     );
 
     m_isTimerEllapsed = false;
@@ -93,6 +93,6 @@ Win32ButtonsBackend::initWin32ApiHook()
         }
    );
 
-    SetWindowsHookEx(WH_KEYBOARD_LL, hookKeyboardCallback, appInstance, 0);
+    SetWindowsHookEx(WH_KEYBOARD_LL, reinterpret_cast<HOOKPROC>(hookKeyboardCallback), appInstance, 0);
 }
 }

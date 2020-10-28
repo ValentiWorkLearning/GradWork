@@ -11,6 +11,19 @@
             "buildCommandArgs": "",
             "ctestCommandArgs": "",
             "variables": []
+        },
+        {
+            "name": "x86-Debug",
+            "generator": "Ninja",
+            "configurationType": "Debug",
+            "buildRoot": "${projectDir}\\out\\buildx86\\${name}",
+            "installRoot": "${projectDir}\\out\\install\\${name}",
+            "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\"",
+            "buildCommandArgs": "",
+            "ctestCommandArgs": "",
+            "addressSanitizerEnabled": true,
+            "inheritEnvironments": [ "msvc_x86" ],
+            "variables": []
         }
     ]
 }

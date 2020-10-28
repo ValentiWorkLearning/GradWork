@@ -24,8 +24,8 @@ class GpioPin
 public:
 
     GpioPin(
-            std::uint8_t _pinNumber
-        ,   Gpio::Direction _gpioDirection
+            Gpio::Direction _gpioDirection
+        ,   std::uint8_t _pinNumber
     );
 
     ~GpioPin();
@@ -37,9 +37,8 @@ public:
     void reset();
 
 private:
-
-    class GpioBackendImpl;
-    std::unique_ptr<GpioBackendImpl> m_pGpioBackendImpl;
+    Direction m_pinDirection;
+    std::uint8_t m_pinNumber;
 };
 
 GpioPin getGpioPin ( std::uint8_t _pinNumber, Direction _pinDirection );

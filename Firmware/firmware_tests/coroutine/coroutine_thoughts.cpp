@@ -296,6 +296,7 @@ public:
     {
         initDisplay();
         initColumnRow(_width, _height);
+        LOG_DEBUG_ENDL("Display initialized");
     }
 
     ~ST7789Coroutine()noexcept override
@@ -346,6 +347,7 @@ private:
         , std::uint16_t _height
     )noexcept
     {
+        LOG_DEBUG_ENDL("void initColumnRow");
     }
 
     void setAddrWindow(

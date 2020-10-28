@@ -12,6 +12,7 @@
 cmake-build-debug
 build-Firmware-ARM_Toolchain-Debug
 test/build
+out
 
 #CMake gitignore
 CMakeLists.txt.user

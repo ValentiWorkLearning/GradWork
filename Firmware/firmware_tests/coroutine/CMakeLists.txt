@@ -18,7 +18,9 @@ target_compile_options(
     coroutine_experiments_app
     PRIVATE
     /await
+    /fsanitize=address
 )
+
 target_link_libraries(
     coroutine_experiments_app
     PRIVATE

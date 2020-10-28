@@ -156,7 +156,7 @@ class Logger::LoggerImpl
 public:
     void logString(std::string_view _toLog) const
     {
-        std::cout << _toLog;
+        printf(_toLog.data());
     }
 };
 #endif
