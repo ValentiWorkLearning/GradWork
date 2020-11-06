@@ -28,4 +28,5 @@ target_link_libraries(
     watch_display
     UtilsLibrary
     logger_service
+    cppcoro
 )

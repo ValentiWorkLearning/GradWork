@@ -16,3 +16,6 @@
 [submodule "Firmware/3rdparty/googletest"]
 	path = Firmware/3rdparty/googletest
 	url = https://github.com/google/googletest.git
+[submodule "Firmware/3rdparty/cppcoro_lib/cppcoro"]
+	path = Firmware/3rdparty/cppcoro_lib/cppcoro
+	url = https://github.com/lewissbaker/cppcoro.git
