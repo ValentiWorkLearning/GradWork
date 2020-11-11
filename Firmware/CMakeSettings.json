@@ -20,7 +20,8 @@
             "installRoot": "${projectDir}\\out\\install\\${name}",
             "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\"",
             "buildCommandArgs": "",
-            "ctestCommandArgs": "",
+          "ctestCommandArgs": "",
+          "addressSanitizerEnabled": false,
             "inheritEnvironments": [ "msvc_x86" ],
             "variables": []
         },
@@ -33,7 +34,7 @@
             "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\"",
             "buildCommandArgs": "",
             "ctestCommandArgs": "",
-            "addressSanitizerEnabled": true,
+            "addressSanitizerEnabled": false,
             "inheritEnvironments": [ "msvc_x86" ],
             "variables": []
         }

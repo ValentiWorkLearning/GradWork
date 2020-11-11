@@ -18,8 +18,11 @@ target_compile_options(
     coroutine_experiments_app
     PRIVATE
     /await
-    /fsanitize=address
 )
+
+if( ${ENABLE_SANITIZE_BUILD} )
+        target_compile_options( coroutine_experiments_app PRIVATE /fsanitize=address )
+    endif()
 
 target_link_libraries(
     coroutine_experiments_app
