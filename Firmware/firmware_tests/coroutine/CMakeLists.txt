@@ -8,7 +8,7 @@ target_sources(
     coroutine_experiments_app
     PRIVATE
     coroutine_thoughts.cpp
-)
+ "thoughts.hpp")
 target_compile_features(
     coroutine_experiments_app
     PRIVATE
