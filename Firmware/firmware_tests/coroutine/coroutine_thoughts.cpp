@@ -24,6 +24,7 @@ namespace stdcoro = std;
 
 
 #include <cppcoro/when_all.hpp>
+#include <cppcoro/task.hpp>
 
 constexpr std::uint8_t NOP = 0x00;
 constexpr std::uint8_t SWRESET = 0x01;
@@ -169,7 +170,6 @@ private:
     {
     }
 };
-
 
  // TODO what is the compiler-generated code?
  int main()

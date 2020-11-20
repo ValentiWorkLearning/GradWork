@@ -14,6 +14,9 @@
 
 #include "utils/MetaUtils.hpp"
 
+//#define USE_THREADING_ASYNC_BACKEND
+
+
 namespace Interface::Spi
 {
 
@@ -61,6 +64,8 @@ public:
         ,   m_bufferTransmitSize{}
         ,   m_processSpiTransactions{true}
     {
+#ifdef  USE_THREADING_ASYNC_BACKEND
+
         m_dmaThread = std::make_unique<std::thread>(
             [this]
             {
@@ -69,7 +74,7 @@ public:
                     if(m_newDataArrived)
                     {
                         using namespace std::chrono_literals;
-                        std::this_thread::sleep_for(1500ms);
+                        //std::this_thread::sleep_for(1500ms);
 
                         std::cout << "TRANSMIT SOME DATA:" << ' ';
 
@@ -85,6 +90,7 @@ public:
                 }
             }
        );
+#endif  //  USE_THREADING_ASYNC_BACKEND
     }
 
     ~SpiAsyncBackendImpl()
@@ -103,7 +109,21 @@ public:
     {
         m_bufferTransmitSize.store( _bufferSize );
         m_pDataBuffer.store( _pBuffer );
-        m_newDataArrived.store(true);
+        m_newDataArrived.store( true, std::memory_order_release );
+
+#ifndef USE_THREADING_ASYNC_BACKEND
+        std::cout << "TRANSMIT SOME DATA:" << ' ';
+
+        for ( size_t i{}; i < m_bufferTransmitSize; ++i )
+        {
+            std::cout << std::hex
+                      << static_cast<std::int16_t>( m_pDataBuffer[i] ) << ' ';
+        }
+        std::cout << std::endl;
+
+        m_newDataArrived.store( false );
+        m_pSpiBus->transmitCompleted();
+#endif
     }
 
 private:

@@ -249,3 +249,86 @@ resumable foo()
 //
 //    return 0;
 //}
+
+
+
+
+class ST7789CppCoro : public DisplayDriver::BaseSpiDisplayCoroutine
+{
+    using BaseDisplay_t = DisplayDriver::BaseSpiDisplayCoroutine;
+public:
+
+    explicit ST7789CppCoro(
+            std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
+        ,   std::uint16_t _width
+        ,   std::uint16_t _height
+    )   :     DisplayDriver::BaseSpiDisplayCoroutine(
+            std::move(_busPtr)
+        ,   _width
+        ,   _height
+    )
+    {
+        initDisplay();
+        LOG_DEBUG_ENDL("Display initialized");
+    }
+
+    ~ST7789CppCoro() noexcept override
+    {
+    }
+
+    void turnOn()noexcept override
+    {
+    }
+
+    void turnOff()noexcept override
+    {
+    }
+
+    void fillRectangle(
+        std::uint16_t _x
+        , std::uint16_t _y
+        , std::uint16_t _width
+        , std::uint16_t _height
+        , IDisplayDriver::TColor* _color
+    )noexcept override
+    {
+    }
+
+private:
+
+    cppcoro::task<> sendInitialCommand( const std::uint8_t* _pBuffer, const std::uint16_t _bufferSize )
+    {
+        const std::uint8_t* commandBuf = _pBuffer;
+        const std::uint8_t* ArgBuf = _pBuffer + 1;
+        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
+
+        co_await sendCommandImpl( _pBuffer);
+        co_await sendChunk( ArgBuf, ArgsBufferSize );
+    }
+
+    void initDisplay()noexcept
+    {
+        BaseDisplay_t::resetResetPin();
+        Delay::waitFor(100);
+        BaseDisplay_t::setResetPin();
+
+
+        co_await std::apply(
+                [this](const auto&... _commandDescriptor)
+                {
+                    return cppcoro::when_all( sendInitialCommand(
+                                _commandDescriptor.command.data()
+                            ,   _commandDescriptor.command.size()
+                        )...
+                    ); 
+                }
+            ,   CommandsArray
+        );
+    }
+};
+
+
+     /*ST7789CppCoro displayCoro{
+         Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M2>(),
+             240, 240
+     };*/

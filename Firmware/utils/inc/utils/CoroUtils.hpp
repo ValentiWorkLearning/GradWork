@@ -39,21 +39,6 @@ void makeTaskSequence(Tasks&&... tasks)
 #endif
 
 }
-
-
-//
-//template<typename... Tasks>
-//void makeCountedSequence(WhenAllReadyCounter& _counter, Tasks&&... tasks)
-//{
-//    auto helper = [](auto&& _task, WhenAllReadyCounter* _counter)
-//    {
-//        return WhenAllTask{ _counter };
-//    };
-//    
-//    //( co_await helper(tasks,std::addressof(_counter)) , ...);
-//    (co_await WhenAllTask{ _counter }, ...);
-//}
-
 struct WhenAllReadyCounter
 {
     WhenAllReadyCounter(size_t _countTo)
@@ -84,7 +69,6 @@ struct WhenAllReadyCounter
 template<typename Task>
 struct WhenAllTask
 {
-
     WhenAllTask(Task _task)
         :   m_taskItem{ _task }
         ,   m_whenAllCounter{nullptr}

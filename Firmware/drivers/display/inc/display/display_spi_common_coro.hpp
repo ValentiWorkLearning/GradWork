@@ -53,7 +53,8 @@ protected:
 
         bool await_ready() const noexcept
         {
-            return pTransmitBuffer == nullptr;
+            const bool isAwaitReady = pTransmitBuffer == nullptr || bufferSize == 0;
+            return isAwaitReady;
         }
         void await_resume() const noexcept
         {
