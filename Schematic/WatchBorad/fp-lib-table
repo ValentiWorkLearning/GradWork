@@ -6,4 +6,5 @@
   (lib (name BU6655NUX-TR)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/BU6655NUX-TR/BU6655NUX-TR.mod)(options "")(descr ""))
   (lib (name testpoints)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/testpoints/testpoints.pretty)(options "")(descr ""))
   (lib (name LocalFootprints)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/Footprints)(options "")(descr ""))
+  (lib (name USB)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/USB_connectors)(options "")(descr ""))
 )

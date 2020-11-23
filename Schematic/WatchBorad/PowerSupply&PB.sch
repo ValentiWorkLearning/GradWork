@@ -3,7 +3,7 @@ EELAYER 30 0
 EELAYER END
 $Descr A4 11693 8268
 encoding utf-8
-Sheet 5 6
+Sheet 5 5
 Title ""
 Date ""
 Rev ""
@@ -532,6 +532,8 @@ $Comp
 L Switch:SW_Push SW?
 U 1 1 5FDD967A
 P 8650 2425
+AR Path="/5ED3F98E/5FDD967A" Ref="SW?"  Part="1" 
+AR Path="/5E9C1C3A/5FDD967A" Ref="SW?"  Part="1" 
 F 0 "SW?" H 8650 2710 50  0000 C CNN
 F 1 "SW_Push" H 8650 2619 50  0000 C CNN
 F 2 "" H 8650 2625 50  0001 C CNN
@@ -544,6 +546,8 @@ $Comp
 L Switch:SW_Push SW?
 U 1 1 5FDD9681
 P 9350 2425
+AR Path="/5ED3F98E/5FDD9681" Ref="SW?"  Part="1" 
+AR Path="/5E9C1C3A/5FDD9681" Ref="SW?"  Part="1" 
 F 0 "SW?" H 9350 2710 50  0000 C CNN
 F 1 "SW_Push" H 9350 2619 50  0000 C CNN
 F 2 "" H 9350 2625 50  0001 C CNN
@@ -556,6 +560,8 @@ $Comp
 L Switch:SW_Push SW?
 U 1 1 5FDD9688
 P 10075 2425
+AR Path="/5ED3F98E/5FDD9688" Ref="SW?"  Part="1" 
+AR Path="/5E9C1C3A/5FDD9688" Ref="SW?"  Part="1" 
 F 0 "SW?" H 10075 2710 50  0000 C CNN
 F 1 "SW_Push" H 10075 2619 50  0000 C CNN
 F 2 "" H 10075 2625 50  0001 C CNN
