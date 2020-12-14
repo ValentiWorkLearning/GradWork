@@ -79,97 +79,152 @@ static constexpr std::tuple CommandsArray = {
         CommandDescriptor<SWRESET,150>{}
     ,   CommandDescriptor<SLPOUT>{}
     ,   CommandDescriptor<COLMOD,DefaultDelay, 0x55>{}
-    ,   CommandDescriptor<MADCTL,DefaultDelay, 0x08>{}
-    ,   CommandDescriptor<CASET, DefaultDelay,0x00,0,0,240>{}
-    ,   CommandDescriptor<RASET, DefaultDelay,0x00, 0, bitwiseResolutionConstant(), 320 & 0xFF> {}
-    ,   CommandDescriptor<INVON>{}
-    ,   CommandDescriptor<NORON>{}
-    ,   CommandDescriptor<DISPON>{}
-    ,   CommandDescriptor<MADCTL,DefaultDelay, 0xC0>{}
+    //,   CommandDescriptor<MADCTL,DefaultDelay, 0x08>{}
+    //,   CommandDescriptor<CASET, DefaultDelay,0x00,0,0,240>{}
+    //,   CommandDescriptor<RASET, DefaultDelay,0x00, 0, bitwiseResolutionConstant(), 320 & 0xFF> {}
+    //,   CommandDescriptor<INVON>{}
+    //,   CommandDescriptor<NORON>{}
+    //,   CommandDescriptor<DISPON>{}
+    //,   CommandDescriptor<MADCTL,DefaultDelay, 0xC0>{}
 };
 
+//
+//class ST7789Coroutine
+//    : public DisplayDriver::BaseSpiDisplayCoroutine
+//{
+//    using BaseDisplay_t = DisplayDriver::BaseSpiDisplayCoroutine;
+//public:
+//
+//    explicit ST7789Coroutine(
+//            std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
+//        ,   std::uint16_t _width
+//        ,   std::uint16_t _height
+//    )   :     DisplayDriver::BaseSpiDisplayCoroutine(
+//            std::move(_busPtr)
+//        ,   _width
+//        ,   _height
+//    )
+//    {
+//        BaseDisplay_t::resetResetPin();
+//        Delay::waitFor(100);
+//        BaseDisplay_t::setResetPin();
+//        std::apply(
+//                [this](const auto&... _commandDescriptor)
+//                {
+//                    return CoroUtils::makeTaskSequence(
+//                        sendCommand(
+//                                _commandDescriptor.command.data()
+//                            ,   _commandDescriptor.command.size()
+//                        )...
+//                    );
+//                }
+//            ,   CommandsArray
+//        );
+//
+//        initColumnRow(_width, _height);
+//        LOG_DEBUG_ENDL("Display initialized");
+//    }
+//
+//    ~ST7789Coroutine()noexcept override
+//    {
+//    }
+//
+//    void turnOn()noexcept override
+//    {
+//    }
+//
+//    void turnOff()noexcept override
+//    {
+//    }
+//
+//    void fillRectangle(
+//        std::uint16_t _x
+//        , std::uint16_t _y
+//        , std::uint16_t _width
+//        , std::uint16_t _height
+//        , IDisplayDriver::TColor* _color
+//    )noexcept override
+//    {
+//    }
+//
+//private:
+//
+//    void initColumnRow(
+//        std::uint16_t _width
+//        , std::uint16_t _height
+//    )noexcept
+//    {
+//        LOG_DEBUG_ENDL("void initColumnRow");
+//    }
+//
+//    void setAddrWindow(
+//        std::uint16_t _x
+//        , std::uint16_t _y
+//        , std::uint16_t _width
+//        , std::uint16_t _height
+//    )noexcept
+//    {
+//    }
+//};
 
-class ST7789Coroutine
-    : public DisplayDriver::BaseSpiDisplayCoroutine
+template <typename... Args>
+struct stdcoro::coroutine_traits<void, Args...> {
+    struct promise_type {
+        void get_return_object() {}
+        stdcoro::suspend_never initial_suspend() { return {}; }
+        stdcoro::suspend_never final_suspend()noexcept { return {}; }
+        void return_void() {}
+        void unhandled_exception()
+        {
+            while (1)
+            {
+
+            }
+        }
+    };
+};
+
+struct SendTaskPromise
 {
-    using BaseDisplay_t = DisplayDriver::BaseSpiDisplayCoroutine;
-public:
 
-    explicit ST7789Coroutine(
-            std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
-        ,   std::uint16_t _width
-        ,   std::uint16_t _height
-    )   :     DisplayDriver::BaseSpiDisplayCoroutine(
-            std::move(_busPtr)
-        ,   _width
-        ,   _height
-    )
+};
+
+struct Awaiter
+{
+    using promise_type = SendTaskPromise;
+
+    bool await_ready() const noexcept
     {
-        initDisplay();
-        initColumnRow(_width, _height);
-        LOG_DEBUG_ENDL("Display initialized");
+        std::cout << "Await ready \n";
+        return false;
     }
-
-    ~ST7789Coroutine()noexcept override
+    void await_resume() const noexcept
     {
+        std::cout << "Await resume \n";
     }
-
-    void turnOn()noexcept override
+    void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
     {
-    }
-
-    void turnOff()noexcept override
-    {
-    }
-
-    void fillRectangle(
-        std::uint16_t _x
-        , std::uint16_t _y
-        , std::uint16_t _width
-        , std::uint16_t _height
-        , IDisplayDriver::TColor* _color
-    )noexcept override
-    {
-    }
-
-private:
-
-    void initDisplay()noexcept
-    {
-        BaseDisplay_t::resetResetPin();
-        Delay::waitFor(100);
-        BaseDisplay_t::setResetPin();
-        std::apply(
-                [this](const auto&... _commandDescriptor)
-                {
-                    return CoroUtils::makeTaskSequence(
-                        sendCommand(
-                                _commandDescriptor.command.data()
-                            ,   _commandDescriptor.command.size()
-                        )...
-                    );
-                }
-            ,   CommandsArray
-        );
-    }
-
-    void initColumnRow(
-        std::uint16_t _width
-        , std::uint16_t _height
-    )noexcept
-    {
-        LOG_DEBUG_ENDL("void initColumnRow");
-    }
-
-    void setAddrWindow(
-        std::uint16_t _x
-        , std::uint16_t _y
-        , std::uint16_t _width
-        , std::uint16_t _height
-    )noexcept
-    {
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(100ms);
     }
 };
+
+auto suspendableFunction()
+{
+    return Awaiter{};
+}
+
+void doSomeSync()
+{
+    auto task = 
+        CoroUtils::when_all(
+            suspendableFunction(),
+            suspendableFunction(),
+            suspendableFunction()
+        );
+
+    co_await  task;
+}
 
  // TODO what is the compiler-generated code?
  int main()
@@ -177,12 +232,13 @@ private:
      /*Display display{};
      display.fillRectangle(0, 0, 220, 220, nullptr);*/
 
-     ST7789Coroutine  displayCoro{
+   /*  ST7789Coroutine  displayCoro{
             Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M1>()
          ,  240
          ,  240
-     };
+     };*/
 
+     doSomeSync();
      while(true)
      {
          using namespace std::chrono_literals;
