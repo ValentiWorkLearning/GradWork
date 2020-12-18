@@ -9,17 +9,17 @@ namespace stdcoro = std;
 
 #include "MetaUtils.hpp"
 #include <atomic>
-//
-//template <typename... Args>
-//struct stdcoro::coroutine_traits<void, Args...> {
-//    struct promise_type {
-//        void get_return_object() {}
-//        stdcoro::suspend_never initial_suspend() { return {}; }
-//        stdcoro::suspend_never final_suspend()noexcept { return {}; }
-//        void return_void() {}
-//        void unhandled_exception() { std::terminate(); }
-//    };
-//};
+
+template <typename... Args>
+struct stdcoro::coroutine_traits<void, Args...> {
+   struct promise_type {
+       void get_return_object() {}
+       stdcoro::suspend_never initial_suspend() { return {}; }
+       stdcoro::suspend_never final_suspend()noexcept { return {}; }
+       void return_void() {}
+       void unhandled_exception() { std::terminate(); }
+   };
+};
 
 
 namespace CoroUtils
@@ -29,15 +29,7 @@ namespace CoroUtils
 template<typename... Tasks>
 void makeTaskSequence(Tasks&&... tasks)
 {
-    //Eventually, this should be compiled by GCC version >= 10.2 because of internal compiler error in GCC
-#ifdef WIN32
     (co_await tasks, ...);
-
-#else
-    //Let's make some C++11
-
-#endif
-
 }
 struct WhenAllReadyCounter
 {
