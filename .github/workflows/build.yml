@@ -4,9 +4,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master,dev/setup_ci,dev/develop,dev/cmake_refactor ]
+    branches: [ master,dev/develop,dev/coroutine ]
   pull_request:
-    branches: [ master,dev/setup_ci,dev/develop,dev/cmake_refactor ]
+    branches: [ master,dev/develop,dev/coroutine]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
