@@ -70,8 +70,6 @@ jobs:
       run: |
         mkdir toolchain
         tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/toolchain
-        cd ${{ github.workspace }}/toolchain
-        ls -l
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
@@ -92,7 +90,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDK -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/toolchain'
+        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDK -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/toolchain/gcc-arm-none-eabi-10-2020-q4-major'
         buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
