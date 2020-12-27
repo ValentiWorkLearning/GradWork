@@ -61,8 +61,13 @@ jobs:
     #     release: '10-2020-q2'
     #     directory: ${{ github.workspace }}/toolchain
     - name: Get the latest arm-gcc-none-eabi-gcc
+      uses: wei/wget@v1
+      id: download-arm-gcc
+        with:
+          args: https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2
+    - name: Unpack arm-gcc-compiler
       run: |
-        wget https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 -P ${{ github.workspace }}/toolachin
+        mkdir toolchain
         tar -xjf ${{ github.workspace }}/toolachin/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/toolchain
 
     - name: Get NRF52 16.0 SDK
