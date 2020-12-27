@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.14)
 project(cppcoro LANGUAGES CXX)
 
 set(CMAKE_CXX_EXTENSIONS OFF)
