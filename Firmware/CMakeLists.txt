@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.14)
 
 set( TARGET_PLATFORM "ARM_CORTEX" CACHE STRING "Target platform for application building")
 message( "Current building platform is ${TARGET_PLATFORM}")
@@ -25,6 +25,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set( NRF52SOFTDEVICE "S112" )
     set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
 
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
 endif()
 
@@ -76,7 +77,6 @@ endif()
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
-
     option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
     option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" ON )
 
