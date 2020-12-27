@@ -70,6 +70,8 @@ jobs:
       run: |
         mkdir toolchain
         tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/toolchain
+        cd ${{ github.workspace }}/toolchain
+        ls -l
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
