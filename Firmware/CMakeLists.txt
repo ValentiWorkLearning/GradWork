@@ -25,6 +25,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set( NRF52SOFTDEVICE "S112" )
     set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
 
+    #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
 endif()
