@@ -18,11 +18,6 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
         spi
         spi_wrapper_stub.cpp
     )
-    target_compile_options(
-        spi
-        PRIVATE
-        /await
-    )
 endif()
 
 

@@ -58,10 +58,4 @@ target_compile_features(
     cxx_std_20
 )
 
-target_compile_options(
-    ${PROJECT_NAME}
-    PRIVATE
-    /await
-)
-
 gtest_discover_tests(${PROJECT_NAME} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR})

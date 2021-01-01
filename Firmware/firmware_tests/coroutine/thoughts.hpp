@@ -24,7 +24,7 @@ void spiBackendImplTransmit(
             std::this_thread::sleep_for(500ms);
 
             std::cout << "TRANSMIT SOME DATA" << "THREAD:" << std::this_thread::get_id() << std::endl;
-            stdcoro::coroutine_handle<>::from_address(_pUserData).resume();
+            std::coroutine_handle<>::from_address(_pUserData).resume();
         }
         );
     dmaThread.detach();
@@ -49,7 +49,7 @@ auto spiTrasnmitCommandBufferAsync(
         {
             std::cout << "Toggle GPIO OFF" << std::endl;
         }
-        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
+        void await_suspend(std::coroutine_handle<> thisCoroutine) const
         {
             spiBackendImplTransmit(pBuffer, bufferSize, thisCoroutine.address());
         }
@@ -85,7 +85,7 @@ struct DisplayInitializedEvent
             return m_event.m_isNotified;
         }
 
-        bool await_suspend(stdcoro::coroutine_handle<> _coroHandle)noexcept
+        bool await_suspend(std::coroutine_handle<> _coroHandle)noexcept
         {
             m_coroHandle = _coroHandle;
             if (m_event.m_isNotified)
@@ -101,7 +101,7 @@ struct DisplayInitializedEvent
         friend DisplayInitializedEvent;
     private:
         const DisplayInitializedEvent& m_event;
-        stdcoro::coroutine_handle<> m_coroHandle;
+        std::coroutine_handle<> m_coroHandle;
     };
 
     auto operator co_await() const noexcept
@@ -181,7 +181,7 @@ public:
     struct promise_type
     {
         // //declaration of the coroutine handle alias- basic type for operating with coroutine;
-        using coro_handle = stdcoro::coroutine_handle<promise_type>;
+        using coro_handle = std::coroutine_handle<promise_type>;
 
         resumable get_return_object()
         {
@@ -189,11 +189,11 @@ public:
         }
         auto initial_suspend()
         {
-            return stdcoro::suspend_always();
+            return std::suspend_always();
         }
         auto final_suspend()noexcept
         {
-            return stdcoro::suspend_always();
+            return std::suspend_always();
         }
 
         void unhandled_exception()
@@ -205,7 +205,7 @@ public:
     };
 
     //declaration of the coroutine handle alias- basic type for operating with coroutine;
-    using coro_handle = stdcoro::coroutine_handle<promise_type>;
+    using coro_handle = std::coroutine_handle<promise_type>;
 
 public:
 
@@ -234,7 +234,7 @@ resumable foo()
     // Without resumable return type we cant't use our coroutine
     // or without overriding the co_await operator also
 
-    co_await stdcoro::suspend_always();
+    co_await std::suspend_always();
     std::cout << "from coroutine" << std::endl;
 }
 

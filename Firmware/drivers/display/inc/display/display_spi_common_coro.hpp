@@ -61,7 +61,7 @@ protected:
             if( resetDcPin )
                 pBaseDisplay->setDcPin();
         }
-        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
+        void await_suspend(std::coroutine_handle<> thisCoroutine) const
         {
             if (resetDcPin)
                 pBaseDisplay->resetDcPin();
@@ -109,7 +109,7 @@ protected:
         const std::uint8_t* ArgBuf = _pBuffer + 1;
         const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
 
-        return CoroUtils::when_all (
+        return CoroUtils::when_all_sequence<Awaiter> (
                 sendCommandImpl( commandBuf )
             ,   ArgsBufferSize > 0 ? sendChunk( ArgBuf, ArgsBufferSize): sendChunk(nullptr,0)
         );

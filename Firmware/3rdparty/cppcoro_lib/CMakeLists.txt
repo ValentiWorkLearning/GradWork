@@ -52,4 +52,3 @@ target_include_directories(cppcoro PUBLIC
 )
 target_compile_definitions(cppcoro PRIVATE _SILENCE_EXPERIMENTAL_FILESYSTEM_DEPRECATION_WARNING )
 target_compile_features(cppcoro PUBLIC cxx_std_20)
-target_compile_options( cppcoro PUBLIC /await )

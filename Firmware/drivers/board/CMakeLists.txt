@@ -46,9 +46,4 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         -fcoroutines
     )
 elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
-    target_compile_options(
-        watchboard
-        PRIVATE
-        /await
-    )
 endif()

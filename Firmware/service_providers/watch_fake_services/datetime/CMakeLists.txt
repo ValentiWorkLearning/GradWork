@@ -35,9 +35,10 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
         PRIVATE
         USE_DESKTOP_SIMULATOR
     )
-    target_compile_options(
-        datetime_fake_service
+    target_compile_features(
+        coroutine_experiments_app
         PRIVATE
-        /await
-    )
+        cxx_std_20
+    )   
+
 endif()

@@ -30,7 +30,7 @@ namespace
 {
     static void TimerExpiredCallback( void* _pExpiredContext )
     {
-        stdcoro::coroutine_handle<>::from_address(_pExpiredContext).resume();
+        std::coroutine_handle<>::from_address(_pExpiredContext).resume();
     }
 }
 
@@ -52,7 +52,7 @@ auto operator co_await( std::chrono::milliseconds _duration)
             return false;
         }
 #if defined (USE_DEVICE_SPECIFIC)
-        void await_suspend(stdcoro::coroutine_handle<> _coroLedHandle)
+        void await_suspend(std::coroutine_handle<> _coroLedHandle)
         {
             ret_code_t errorCode{};
             errorCode = app_timer_start(
@@ -68,7 +68,7 @@ auto operator co_await( std::chrono::milliseconds _duration)
             app_timer_stop(m_ledDriverTimer);
         }
 #else
-        bool await_suspend(stdcoro::coroutine_handle<> _coroLedHandle)
+        bool await_suspend(std::coroutine_handle<> _coroLedHandle)
         {
             return false;
         }

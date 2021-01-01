@@ -4,7 +4,9 @@
 
 #include <memory>
 #include <atomic>
+#include <coroutine>
 #include <optional>
+#include <cstdint>
 
 #include "utils/CoroUtils.hpp"
 
@@ -66,7 +68,7 @@ public:
 
     void transmitCompleted();
 
-    stdcoro::coroutine_handle<>
+    std::coroutine_handle<>
     getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey);
 
 private:
@@ -76,7 +78,7 @@ private:
     class SpiAsyncBackendImpl;
     std::unique_ptr<SpiAsyncBackendImpl> m_pSpiBackendImpl;
 
-    stdcoro::coroutine_handle<> m_coroHandle;
+    std::coroutine_handle<> m_coroHandle;
 
     struct TransactionContext
     {

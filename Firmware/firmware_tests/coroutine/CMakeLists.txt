@@ -17,9 +17,8 @@ target_compile_features(
 target_compile_options(
     coroutine_experiments_app
     PRIVATE
-    /await
+    /std:c++latest
 )
-
 if( ${ENABLE_SANITIZE_BUILD} )
         target_compile_options( coroutine_experiments_app PRIVATE /fsanitize=address )
     endif()

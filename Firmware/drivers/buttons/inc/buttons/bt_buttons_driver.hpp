@@ -5,6 +5,8 @@
 #include "utils/FastPimpl.hpp"
 #include "utils/Platform.hpp"
 
+#include <cstdint>
+
 namespace Buttons
 {
 

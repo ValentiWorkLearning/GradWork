@@ -3,7 +3,7 @@
 set(CMAKE_C_STANDARD 11)
 if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
 	set(CMAKE_CXX_STANDARD 20)
-	add_subdirectory( cppcoro_lib )
+	#add_subdirectory( cppcoro_lib )
 elseif( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 	set(CMAKE_CXX_STANDARD 17)
 endif()
