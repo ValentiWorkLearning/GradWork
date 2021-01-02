@@ -151,7 +151,7 @@ SpiBusAsync::transmitBuffer(
     ,   void* _pUserData
 )
 {
-    m_coroHandle = stdcoro::coroutine_handle<>::from_address(_pUserData);
+    m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
 
     const size_t TransferBufferSize = _pBufferSize;
     const size_t FullDmaTransactionsCount =
@@ -231,7 +231,7 @@ SpiBusAsync::getTransitionOffset() noexcept
     return m_transmitContext->completedTransactionsCount++;
 }
 
-stdcoro::coroutine_handle<>
+std::coroutine_handle<>
 SpiBusAsync::getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey)
 {
     Meta::UnuseVar(_coroHandleKey);
