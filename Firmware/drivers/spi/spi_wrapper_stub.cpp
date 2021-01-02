@@ -14,7 +14,7 @@
 
 #include "utils/MetaUtils.hpp"
 
-//#define USE_THREADING_ASYNC_BACKEND
+#define USE_THREADING_ASYNC_BACKEND
 
 
 namespace Interface::Spi

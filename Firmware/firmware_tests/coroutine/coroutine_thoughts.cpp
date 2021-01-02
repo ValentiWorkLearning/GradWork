@@ -111,10 +111,11 @@ public:
         BaseDisplay_t::resetResetPin();
         Delay::waitFor(100);
         BaseDisplay_t::setResetPin();
-        std::apply(
-            [this](const auto&... _commandDescriptor)
+
+        co_await std::apply(
+            [this](const auto&... _commandDescriptor)->CoroUtils::VoidTask
             {
-                return CoroUtils::when_all_sequence<>(
+                co_await CoroUtils::when_all_sequence(
                     sendCommand(
                         _commandDescriptor.command.data()
                         , _commandDescriptor.command.size()
@@ -122,9 +123,8 @@ public:
                 );
             }
             , CommandsArray
-                );
+        );
 
-        /*initColumnRow(_width, _height);*/
         LOG_DEBUG_ENDL("Display initialized");
     }
 
@@ -166,16 +166,22 @@ private:
     }
 };
 
+void initializePeripheral(ST7789Coroutine& display)
+{
+    display.initDisplay();
+}
+
  int main()
  {
      /*Display display{};
      display.fillRectangle(0, 0, 220, 220, nullptr);*/
 
-     ST7789Coroutine  displayCoro{
+     ST7789Coroutine displayCoro{
             Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M1>()
          ,  240
          ,  240
      };
+     initializePeripheral(displayCoro);
 
      while(true)
      {

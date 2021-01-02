@@ -113,7 +113,7 @@ private:
 #include <condition_variable>
 #include <windows.h>
 #include <winnt.h>
-#include <experimental/coroutine>
+#include <coroutine>
 
 
 using namespace std::literals;
@@ -135,7 +135,7 @@ auto operator co_await(std::chrono::system_clock::duration _duration)
 
         static void CALLBACK TimerCallback(PTP_CALLBACK_INSTANCE, void* _context, PTP_TIMER)
         {
-            std::experimental::coroutine_handle<>::from_address(_context).resume();
+            std::coroutine_handle<>::from_address(_context).resume();
         }
 
         explicit Awaiter(std::chrono::system_clock::duration _duration)
@@ -149,7 +149,7 @@ auto operator co_await(std::chrono::system_clock::duration _duration)
             return m_duration.count() <= 0;
         }
 
-        bool await_suspend( std::experimental::coroutine_handle<> _resumeCallback )
+        bool await_suspend( std::coroutine_handle<> _resumeCallback )
         {
             std::int64_t relativeCount = -m_duration.count();
             m_pTimer.reset(
@@ -178,13 +178,13 @@ auto operator co_await(std::chrono::system_clock::duration _duration)
 }
 
 template<typename ... Args>
-struct std::experimental::coroutine_traits<void, Args ...>
+struct std::coroutine_traits<void, Args ...>
 {
     struct promise_type
     {
         void get_return_object() {}
-        std::experimental::suspend_never initial_suspend() { return {}; }
-        std::experimental::suspend_never final_suspend()noexcept { return {}; }
+        std::suspend_never initial_suspend() { return {}; }
+        std::suspend_never final_suspend()noexcept { return {}; }
         void return_void() {}
         void unhandled_exception() { std::terminate(); }
     };

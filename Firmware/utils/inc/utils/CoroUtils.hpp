@@ -5,34 +5,30 @@
 #include <coroutine>
 #include <atomic>
 #include <array>
+#include <logger/logger_service.hpp>
 
 struct Promise
 {
 	auto initial_suspend()noexcept
 	{
-		printf("Initial suspend \n");
 		return std::suspend_never{};
 	}
 	auto final_suspend()noexcept
 	{
-		printf("Final suspend \n");
 		return std::suspend_never{};
 	}
 
 	void get_return_object()
 	{
-		printf("void get_return_object() \n");
 	}
 	void return_void()
 	{
-		printf("void return_void() \n");
 	}
 
 	void unhandled_exception()
 	{
 		while (1)
 		{
-
 		}
 	}
 
@@ -45,23 +41,145 @@ struct std::coroutine_traits<void, Args ...>
 };
 
 
-
 namespace CoroUtils
 {
-	template<typename Task>
+
+	struct VoidTask
+	{
+		struct task_promise;
+		using promise_type = task_promise;
+
+		struct task_promise
+		{
+			task_promise()noexcept = default;
+			void return_void()noexcept {}
+			void unhandled_exception() noexcept
+			{
+				while (true)
+				{
+
+				}
+			}
+			VoidTask get_return_object()noexcept
+			{
+				return VoidTask{ std::coroutine_handle<task_promise>::from_promise(*this) };
+			}
+
+			auto initial_suspend()noexcept { return std::suspend_always{}; }
+
+			struct final_awaitable
+			{
+				bool await_ready()
+				{
+					return false;
+				}
+				template<typename TPromise>
+				void await_suspend(std::coroutine_handle<TPromise> coroutine)
+				{
+					task_promise& promise = coroutine.promise();
+					if (promise.m_continuation)
+					{
+						promise.m_continuation.resume();
+					}
+				}
+
+				void await_resume() {}
+			};
+
+			void set_continuation(std::coroutine_handle<> continuation)
+			{
+				m_continuation = continuation;
+			}
+
+			auto final_suspend()
+			{
+				return final_awaitable{};
+			}
+
+			std::coroutine_handle<> m_continuation;
+		};
+
+		struct task_awaitable
+		{
+			task_awaitable(std::coroutine_handle<promise_type> coroutine)
+				: m_coroutine{ coroutine }
+			{
+			}
+			bool await_ready()const noexcept
+			{
+				return !m_coroutine || m_coroutine.done();
+			}
+			void await_suspend(std::coroutine_handle<> awaitingRoutine)
+			{
+				m_coroutine.resume();
+				m_coroutine.promise().set_continuation(awaitingRoutine);
+			}
+
+			void await_resume()
+			{
+			}
+
+			std::coroutine_handle<promise_type> m_coroutine;
+		};
+
+		VoidTask(std::coroutine_handle<task_promise> suspendedCoroutine)
+			: m_coroutine{ suspendedCoroutine }
+		{
+		}
+
+		~VoidTask()
+		{
+			if (m_coroutine)
+				m_coroutine.destroy();
+		}
+
+		bool await_ready() const noexcept
+		{
+			return !m_coroutine || m_coroutine.done();
+		}
+
+		auto operator co_await() noexcept
+		{
+			return task_awaitable{ m_coroutine };
+		}
+
+		void await_resume()
+		{
+		}
+
+		std::coroutine_handle<promise_type> m_coroutine;
+	};
+
+	template<typename ... Tasks>
 	struct WhenAllSequence
 	{
-		std::vector<Task> m_taskList;
+		std::tuple<Tasks...> m_taskList;
+
+		explicit WhenAllSequence(Tasks&& ... tasks) noexcept
+			: m_taskList(std::move(tasks)...)
+		{
+		}
+
+		explicit WhenAllSequence(std::tuple<Tasks...>&& tasks)noexcept
+			: m_taskList(std::move(tasks))
+		{
+		}
 
 		bool await_ready() const noexcept { return false; }
 
 		void await_suspend(std::coroutine_handle<> handle)
 		{
-			for (auto& task : m_taskList)
-			{
-				co_await task;
-			}
+			co_await std::apply(
+				[](auto ... task)->VoidTask
+				{
+					(co_await task, ...);
+
+					LOG_DEBUG("std::apply! completed\n");
+				}
+				, m_taskList
+			);
 			handle.resume();
+			LOG_DEBUG("Requested coroutine resume\n");
 		}
 
 		void await_resume()
@@ -70,13 +188,10 @@ namespace CoroUtils
 	};
 
 
-	template<typename Task, typename ... Args>
+	template<typename ... Args>
 	auto when_all_sequence(Args&& ... args)
 	{
-		std::vector<Task> m_taskList;
-		(m_taskList.push_back(std::forward<Args&&>(args)), ...);
-
-		return WhenAllSequence{ std::move(m_taskList) };
+		return WhenAllSequence{ std::make_tuple(std::move(args)...) };
 	}
 
 //

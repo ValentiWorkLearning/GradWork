@@ -61,6 +61,12 @@ target_link_libraries(
     watchboard
 )
 
+target_compile_features(
+    ${NORDIC_TARGET}
+    PRIVATE
+    cxx_std_20
+)
+
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(
         ${NORDIC_TARGET} PRIVATE
@@ -93,7 +99,6 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
 
     option( ENABLE_SANITIZE_BUILD "Build simultator with ASAN support" OFF)
     list(APPEND EXTRA_LIBS vcruntime user32 gdi32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32)
-    target_compile_options( ${NORDIC_TARGET} PUBLIC /wd4576 /std:c++latest /await)
 
     if( ${ENABLE_SANITIZE_BUILD} )
         target_compile_options( ${NORDIC_TARGET} PUBLIC  /fsanitize=address )

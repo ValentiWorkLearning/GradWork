@@ -109,7 +109,7 @@ protected:
         const std::uint8_t* ArgBuf = _pBuffer + 1;
         const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
 
-        return CoroUtils::when_all_sequence<Awaiter> (
+        return CoroUtils::when_all_sequence(
                 sendCommandImpl( commandBuf )
             ,   ArgsBufferSize > 0 ? sendChunk( ArgBuf, ArgsBufferSize): sendChunk(nullptr,0)
         );

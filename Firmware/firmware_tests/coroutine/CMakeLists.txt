@@ -8,17 +8,15 @@ target_sources(
     coroutine_experiments_app
     PRIVATE
     coroutine_thoughts.cpp
- "thoughts.hpp")
+    thoughts.hpp
+)
+
 target_compile_features(
     coroutine_experiments_app
     PRIVATE
     cxx_std_20
 )
-target_compile_options(
-    coroutine_experiments_app
-    PRIVATE
-    /std:c++latest
-)
+
 if( ${ENABLE_SANITIZE_BUILD} )
         target_compile_options( coroutine_experiments_app PRIVATE /fsanitize=address )
     endif()
@@ -30,5 +28,4 @@ target_link_libraries(
     watch_display
     UtilsLibrary
     logger_service
-    cppcoro
 )
