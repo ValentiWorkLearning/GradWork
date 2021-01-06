@@ -1,4 +1,3 @@
-#pragma once
 #include "inc/delay/delay_provider.hpp"
 
 #if defined (USE_DEVICE_SPECIFIC)
