@@ -24,13 +24,13 @@ jobs:
 
     - name: Setup python
       uses: actions/setup-python@v2
-        with:
-          python-version: '3.8'
+      with:
+        python-version: '3.8'
 
     - name: Install conan
       uses:  BSFishy/pip-action@v1
-        with:
-          packages: |
+      with:
+        packages: |
           conan
 
     - name: Setup conan dependencies
