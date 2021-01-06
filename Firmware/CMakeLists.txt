@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
+project(nordic-template C CXX ASM)
+
 set( TARGET_PLATFORM "ARM_CORTEX" CACHE STRING "Target platform for application building")
 message( "Current building platform is ${TARGET_PLATFORM}")
 
@@ -11,13 +13,13 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         ${CPU_FLAGS}
     )
     set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake )
+elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+conan_basic_setup(TARGETS)
 endif()
-
-project(nordic-template C CXX ASM)
 
 set (3RDPARTY_DIR "3rdparty")
 add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
-
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
@@ -103,7 +105,6 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
     if( ${ENABLE_SANITIZE_BUILD} )
         target_compile_options( ${NORDIC_TARGET} PUBLIC  /fsanitize=address )
     endif()
-
 endif()
 
 

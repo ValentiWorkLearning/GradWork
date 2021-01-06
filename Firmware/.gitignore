@@ -29,6 +29,8 @@ _deps
 
 #Ignore build directory
 build/
+out/
+build_simulator/
 
 #ignore vs temp folders
 .vs/

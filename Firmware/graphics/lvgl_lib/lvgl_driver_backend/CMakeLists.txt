@@ -8,8 +8,6 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_C_STANDARD 11)
 
-add_subdirectory(SDL-mirror)
-
 target_include_directories(
     ${TARGET_NAME}
     PUBLIC
@@ -63,22 +61,9 @@ set_source_files_properties(
     PROPERTIES LANGUAGE C
 )
 
-target_include_directories(
-    ${TARGET_NAME}
-    PUBLIC
-    "SDL-mirror/include"
-)
-
-
-target_compile_definitions(
-    ${TARGET_NAME}
-    PRIVATE
-    SDL_MAIN_HANDLED
-)
-
 target_link_libraries(
     ${TARGET_NAME}
     PRIVATE
-    SDL2
     lvgl_lib
 )
+target_link_libraries(${TARGET_NAME} PUBLIC CONAN_PKG::sdl2)
