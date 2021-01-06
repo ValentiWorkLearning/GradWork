@@ -15,9 +15,6 @@ endif()
 
 project(nordic-template C CXX ASM)
 
-set (3RDPARTY_DIR "3rdparty")
-add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
-
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
@@ -28,7 +25,15 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
+
+elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup(TARGETS)
 endif()
+
+
+set (3RDPARTY_DIR "3rdparty")
+add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
 add_subdirectory(drivers)
 add_subdirectory(utils)
@@ -103,7 +108,6 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
     if( ${ENABLE_SANITIZE_BUILD} )
         target_compile_options( ${NORDIC_TARGET} PUBLIC  /fsanitize=address )
     endif()
-
 endif()
 
 

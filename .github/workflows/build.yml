@@ -4,7 +4,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master,dev/develop,dev/coroutine ]
+    branches: [ master,dev/develop,dev/coroutine,dev/sdl_migrate]
   pull_request:
     branches: [ master,dev/develop,dev/coroutine]
 
@@ -22,6 +22,26 @@ jobs:
       with:
         submodules: 'true'
 
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install conan
+      uses:  BSFishy/pip-action@v1
+      with:
+        packages: |
+          conan
+
+    - name: Setup conan dependencies
+      run: |
+        conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
+    - name: Download libraries from Conan
+      run: |
+        mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
+        conan install ${{ github.workspace }}/Firmware/conanfile.txt --install-folder ${{ runner.workspace }}/build/vsfirmwarebuild/
+
     #Install the latest cmake
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
@@ -38,7 +58,7 @@ jobs:
         buildWithCMake: true
     - name : Run firmware testing
       run: |
-        cd ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
+        cd ${{ runner.workspace }}/build/vsfirmwarebuild/bin
         .\FirmwareTesting.exe
   build-arm:
 
@@ -68,8 +88,8 @@ jobs:
 
     - name: Unpack arm-gcc-compiler
       run: |
-        mkdir toolchain
-        tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/toolchain
+        mkdir gcc_toolchain
+        tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/gcc_toolchain
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
@@ -86,11 +106,11 @@ jobs:
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
       with:
-        cmakeGenerator: UnixMakefiles
+        cmakeGenerator: Ninja
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDK -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/toolchain/gcc-arm-none-eabi-10-2020-q4-major'
+        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDK -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain/gcc-arm-none-eabi-10-2020-q4-major'
         buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
