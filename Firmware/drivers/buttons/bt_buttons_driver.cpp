@@ -64,7 +64,6 @@ void ButtonsDriver::handleTimerExpired()
 			default:
 				break;
 			}
-			LOG_DEBUG_ENDL("EXPIRED HANDLE");
 			buttonDescriptor.pressCount = 0;
 		}
 		else {
