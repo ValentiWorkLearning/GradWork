@@ -106,7 +106,7 @@ jobs:
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
       with:
-        cmakeGenerator: UnixMakefiles
+        cmakeGenerator: Ninja
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
