@@ -1,7 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
 
-project(nordic-template C CXX ASM)
-
 set( TARGET_PLATFORM "ARM_CORTEX" CACHE STRING "Target platform for application building")
 message( "Current building platform is ${TARGET_PLATFORM}")
 
@@ -13,13 +11,10 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         ${CPU_FLAGS}
     )
     set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake )
-elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-conan_basic_setup(TARGETS)
 endif()
 
-set (3RDPARTY_DIR "3rdparty")
-add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
+project(nordic-template C CXX ASM)
+
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
@@ -30,7 +25,15 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
+
+elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
+    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+    conan_basic_setup(TARGETS)
 endif()
+
+
+set (3RDPARTY_DIR "3rdparty")
+add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 
 add_subdirectory(drivers)
 add_subdirectory(utils)
