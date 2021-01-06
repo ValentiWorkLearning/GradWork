@@ -36,7 +36,6 @@ jobs:
     - name: Setup conan dependencies
       run: |
         conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-        conan remote add conan-center https://conan.bintray.com
 
     - name: Download libraries from Conan
       run: |
