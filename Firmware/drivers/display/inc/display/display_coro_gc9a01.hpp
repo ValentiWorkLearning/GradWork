@@ -17,7 +17,7 @@ public:
             std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-    );
+    )noexcept;
 
     ~GC9A01Coro()noexcept override;
 
@@ -34,6 +34,18 @@ public:
     ) noexcept override;
 
 private:
+
+    template<typename Tuple, std::size_t... Indexes>
+    CoroUtils::VoidTask launchInit(Tuple&& commandSequence,std::integer_sequence<std::size_t,Indexes...> ) noexcept
+    {
+        (co_await CoroUtils::when_all_sequence(
+                    sendCommand(
+                            std::get<Indexes>(commandSequence).command.data()
+                        ,   std::get<Indexes>(commandSequence).command.size()
+                    )
+                  ), ...
+       );
+    }
 
     void initDisplay() noexcept;
 

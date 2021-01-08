@@ -167,7 +167,7 @@ public:
         ,   _height
     )
     {
-        
+        initDisplay();
     }
 
     ~ST7789Coroutine()noexcept override
@@ -180,17 +180,8 @@ public:
         Delay::waitFor(100);
         BaseDisplay_t::setResetPin();
 
-        co_await std::apply(
-            [this](const auto&... _commandDescriptor)->CoroUtils::VoidTask
-            {
-                co_await CoroUtils::when_all_sequence(
-                    sendCommand(
-                        _commandDescriptor.command.data()
-                        , _commandDescriptor.command.size()
-                    )...
-                );
-            }
-            , CommandsArray
+        co_await launchInit(
+            std::make_integer_sequence<std::size_t, std::tuple_size<decltype(CommandsArray)>::value> {}
         );
 
         LOG_DEBUG_ENDL("Display initialized");
@@ -213,7 +204,19 @@ public:
     )noexcept override
     {
     }
+private:
 
+    template<std::size_t... Indexes>
+    CoroUtils::VoidTask launchInit( std::integer_sequence<std::size_t,Indexes...> )
+    {
+        (co_await CoroUtils::when_all_sequence(
+                    sendCommand(
+                            std::get<Indexes>(CommandsArray).command.data()
+                        ,   std::get<Indexes>(CommandsArray).command.size()
+                    )
+                  ), ...
+       );
+    }
 private:
 
     void initColumnRow(
@@ -234,11 +237,6 @@ private:
     }
 };
 
-void initializePeripheral(ST7789Coroutine& display)
-{
-    display.initDisplay();
-}
-
  int main()
  {
      /*Display display{};
@@ -249,7 +247,6 @@ void initializePeripheral(ST7789Coroutine& display)
          ,  240
          ,  240
      };
-     initializePeripheral(displayCoro);
 
      while(true)
      {

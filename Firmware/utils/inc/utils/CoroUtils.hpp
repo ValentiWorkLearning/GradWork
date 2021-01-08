@@ -190,9 +190,7 @@ struct WhenAllSequence
 	template<std::size_t... Indexes>
 	VoidTask launchAll(std::integer_sequence<std::size_t, Indexes...>)
 	{
-		(void)std::initializer_list<int>{
-			(co_await std::get<Indexes>(m_taskList), 0)...
-		};
+		(co_await std::get<Indexes>(m_taskList),...);
 	}
 
 	void await_resume() noexcept

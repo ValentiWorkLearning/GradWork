@@ -115,6 +115,7 @@ static constexpr std::tuple CommandsArray = {
     ,   CommandDescriptor<0x29>{}
 };
 
+
 }
 namespace HorizontalOrientation
 {
@@ -135,7 +136,7 @@ GC9A01Coro::GC9A01Coro(
             std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
         ,   std::uint16_t _width
         ,   std::uint16_t _height
-    )
+    ) noexcept
     :   BaseSpiDisplayCoroutine(
                 std::move( _busPtr )
             ,   _width
@@ -154,18 +155,10 @@ GC9A01Coro::initDisplay()noexcept
     Delay::waitFor( 100 );
     BaseSpiDisplayCoroutine::setResetPin();
 
-    co_await std::apply(
-        [this](const auto&... _commandDescriptor)->CoroUtils::VoidTask
-        {
-            co_await CoroUtils::when_all_sequence(
-                    sendCommand(
-                    _commandDescriptor.command.data()
-                    , _commandDescriptor.command.size()
-                )...
-            );
-        }
-        , CommandsArray
-    );
+    co_await launchInit(
+            CommandsArray,
+            std::make_integer_sequence<std::size_t, std::tuple_size<decltype(CommandsArray)>::value> {}
+        );
 }
 
 void GC9A01Coro::turnOn()noexcept
