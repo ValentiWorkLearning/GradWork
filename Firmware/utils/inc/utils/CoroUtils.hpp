@@ -205,6 +205,38 @@ auto when_all_sequence(Args&& ... args) noexcept
 	return WhenAllSequence{ std::make_tuple(std::move(args)...) };
 }
 
+struct Event
+{
+	Event(bool isSet = false)
+		: m_isSet{ isSet }
+	{
+	}
+
+	bool await_ready()noexcept
+	{
+		return m_isSet;
+	}
+
+	void await_suspend(stdcoro::coroutine_handle<> handle)
+	{
+		m_continuation = handle;
+	}
+
+	void await_resume()
+	{
+	}
+
+	void set()
+	{
+		m_isSet.store(true);
+		if (m_continuation && !m_continuation.done())
+			m_continuation.resume();
+	}
+
+	std::atomic_bool m_isSet;
+	stdcoro::coroutine_handle<> m_continuation;
+};
+
 //
 //template<typename... Tasks>
 //void makeTaskSequence(Tasks&&... tasks)

@@ -49,7 +49,7 @@ private:
 
     void initDisplay() noexcept;
 
-    void setAddrWindow(
+    CoroUtils::VoidTask setAddrWindow(
             std::uint16_t _x
         ,   std::uint16_t _y
         ,   std::uint16_t _width

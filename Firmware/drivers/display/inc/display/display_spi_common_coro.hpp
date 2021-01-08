@@ -156,6 +156,8 @@ protected:
         return m_pBusPtr.get();
     }
 
+    CoroUtils::Event m_displayInitialized;
+
 private:
 
     const std::uint16_t m_width;
@@ -164,7 +166,6 @@ private:
     Gpio::GpioPin m_dcPin;
     Gpio::GpioPin m_resetPin;
     std::unique_ptr<Interface::Spi::SpiBusAsync> m_pBusPtr;
-
 };
 
 }

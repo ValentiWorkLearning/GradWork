@@ -185,6 +185,7 @@ public:
         );
 
         LOG_DEBUG_ENDL("Display initialized");
+        m_displayInitialized.set();
     }
 
     void turnOn()noexcept override
@@ -203,6 +204,7 @@ public:
         , IDisplayDriver::TColor* _color
     )noexcept override
     {
+        co_await fillRectImpl();
     }
 private:
 
@@ -216,6 +218,12 @@ private:
                     )
                   ), ...
        );
+    }
+
+    CoroUtils::VoidTask fillRectImpl()
+    {
+        co_await m_displayInitialized;
+        printf("CoroUtils::VoidTask fillRectImpl()\n!");
     }
 private:
 
@@ -247,7 +255,7 @@ private:
          ,  240
          ,  240
      };
-
+     displayCoro.fillRectangle(0, 0, 0, 0, nullptr);
      while(true)
      {
          using namespace std::chrono_literals;

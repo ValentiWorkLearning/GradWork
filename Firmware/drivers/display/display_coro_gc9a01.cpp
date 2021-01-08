@@ -1,6 +1,8 @@
 #include "inc/display/display_coro_gc9a01.hpp"
 
+#include "logger/logger_service.hpp"
 #include <array>
+
 namespace
 {
 template< std::uint8_t ... Command>
@@ -115,7 +117,6 @@ static constexpr std::tuple CommandsArray = {
     ,   CommandDescriptor<0x29>{}
 };
 
-
 }
 namespace HorizontalOrientation
 {
@@ -156,9 +157,10 @@ GC9A01Coro::initDisplay()noexcept
     BaseSpiDisplayCoroutine::setResetPin();
 
     co_await launchInit(
-            CommandsArray,
-            std::make_integer_sequence<std::size_t, std::tuple_size<decltype(CommandsArray)>::value> {}
-        );
+        CommandsArray,
+        std::make_integer_sequence<std::size_t, std::tuple_size<decltype(CommandsArray)>::value> {}
+    );
+    m_displayInitialized.set();
 }
 
 void GC9A01Coro::turnOn()noexcept
@@ -180,9 +182,9 @@ void GC9A01Coro::fillRectangle(
     const std::uint16_t DisplayHeight = BaseSpiDisplayCoroutine::getHeight();
     const std::uint16_t DisplayWidth = BaseSpiDisplayCoroutine::getWidth();
 
-    const bool isCoordsInvalid{ (_x >= DisplayWidth) || (_y >= DisplayHeight ) };
+    const bool isCoordsValid{ !( (_x >= DisplayWidth) || (_y >= DisplayHeight )) };
 
-    if( !isCoordsInvalid)
+    if( isCoordsValid)
     {
         if( _width >= DisplayWidth) _width = DisplayWidth - _x;
         if( _height>= DisplayHeight) _height = DisplayHeight - _y;
@@ -192,12 +194,8 @@ void GC9A01Coro::fillRectangle(
         const size_t BytesSquare = BytesSizeX *  BytesSizeY;
         const size_t TransferBufferSize =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) );
 
-        setAddrWindow(
-                _x
-            ,   _y
-            ,   _width
-            ,   _height
-        );
+        co_await m_displayInitialized;
+        co_await setAddrWindow(_x,_y,_width,_height);
 
         static constexpr CommandDescriptor<0x29> RamWrite{};
 
@@ -210,7 +208,7 @@ void GC9A01Coro::fillRectangle(
     }
 }
 
-void GC9A01Coro::setAddrWindow(
+CoroUtils::VoidTask GC9A01Coro::setAddrWindow(
             std::uint16_t _x
         ,   std::uint16_t _y
         ,   std::uint16_t _width
@@ -227,21 +225,27 @@ void GC9A01Coro::setAddrWindow(
     uint32_t xa = ((uint32_t)correctedX << 16) | ( correctedX + width);// (_x+_width-1);
     int32_t ya = ((uint32_t)correctedY << 16) | ( correctedY +  height); //(_y+_height-1); 
 
-//    co_await sendCommand(
-//             0x2a
-//         ,   static_cast<std::uint8_t>( xa >> 24 )
-//         ,   static_cast<std::uint8_t>( xa >> 16 )
-//         ,   static_cast<std::uint8_t>( xa >> 8 )
-//         ,   static_cast<std::uint8_t>( xa )
-//     );
+    static std::array xAxisCommand =
+        std::array{
+                static_cast<std::uint8_t>( 0x2a )
+            ,   static_cast<std::uint8_t>( xa >> 24 )
+            ,   static_cast<std::uint8_t>( xa >> 16 )
+            ,   static_cast<std::uint8_t>( xa >> 8 )
+            ,   static_cast<std::uint8_t>( xa )
+        };
+    static std::array yAxisCommand =
+        std::array{
+                static_cast<std::uint8_t>( 0x2b )
+            ,   static_cast<std::uint8_t>( ya >> 24 )
+            ,   static_cast<std::uint8_t>( ya >> 16 )
+            ,   static_cast<std::uint8_t>( ya >> 8 )
+            ,   static_cast<std::uint8_t>( ya )
+        };
 
-//     co_await sendCommand(
-//             0x2b
-//         ,   static_cast<std::uint8_t>( ya >> 24 )
-//         ,   static_cast<std::uint8_t>( ya >> 16 )
-//         ,   static_cast<std::uint8_t>( ya >> 8 )
-//         ,   static_cast<std::uint8_t>( ya )
-//     );
+    co_await CoroUtils::when_all_sequence(
+            sendCommand(xAxisCommand.data(), xAxisCommand.size())
+        ,   sendCommand(yAxisCommand.data(), yAxisCommand.size())
+    );
 }
 
 std::unique_ptr<GC9A01Coro>

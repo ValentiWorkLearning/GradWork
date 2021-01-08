@@ -29,6 +29,7 @@ target_link_libraries(
     platform_delay
     gpio
     etl
+    logger_service
 )
 
 
