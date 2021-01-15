@@ -6,14 +6,17 @@
 #include "ih/gs_events.hpp"
 #include "ih/gs_ievent_handler.hpp"
 
-#include "buttons/bt_buttons_driver.hpp"
-
 #include "gs_event_dispatcher.hpp"
 
 #include "buttons_fake_event_handler.hpp"
 #include "buttons_fake_backends.hpp"
 
 #include <memory>
+
+using TFakeTimerBackend = Buttons::FakeTimerBackend;
+using TFakeButtonsBackend = Buttons::FakeButtonsBackend;
+using TButtonDriver = Buttons::ButtonsDriverTemplate<TFakeTimerBackend, TFakeButtonsBackend>;
+
 
 class ButtonsDriverTest
 	: public ::testing::Test
@@ -23,15 +26,12 @@ protected:
 
 	void SetUp() override
 	{
-		m_pButtonsDriver = Buttons::createButtonsDriver();
-		m_pFakeTimer = Buttons::createFakeTimerBackend();
-		m_pFakeButtonsBackend = Buttons::createFakeButtonsBackend();
-
-		m_pButtonsDriver->setButtonsBackend( m_pFakeButtonsBackend.get() );
-		m_pButtonsDriver->setTimer( m_pFakeTimer.get() );
 
 		m_pEventDispatcher = Graphics::Events::createEventDispatcher();
 		m_pFakeEventHandler = FakeButton::createFakeButtonsHandler();
+
+		m_pFakeTimer = m_pButtonsDriver.getTimeWrapper();
+		m_pFakeButtonsBackend = m_pButtonsDriver.getButtonsBackend();
 
 		m_pEventDispatcher->subscribe(
 				Graphics::Events::EventGroup::Buttons
@@ -41,7 +41,7 @@ protected:
 			}
 		);
 
-		m_pButtonsDriver->onButtonEvent.connect(
+		m_pButtonsDriver.onButtonEvent.connect(
 			[this]( const Buttons::ButtonEvent& _buttonEvent )
 			{
 				m_pEventDispatcher->postEvent(
@@ -57,9 +57,9 @@ protected:
 
 protected:
 
-	Buttons::TButtonsDriverPtr m_pButtonsDriver;
-	Buttons::TFakeTimerBackendPtr m_pFakeTimer;
-	Buttons::TFakeButtonsBackendPtr m_pFakeButtonsBackend;
+	TButtonDriver m_pButtonsDriver;
+	TFakeTimerBackend* m_pFakeTimer{ nullptr };
+	TFakeButtonsBackend* m_pFakeButtonsBackend{nullptr};
 
 	Graphics::Events::TEventDispatcherPtr m_pEventDispatcher;
 

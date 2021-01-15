@@ -3,8 +3,8 @@
 #include "utils/FastPimpl.hpp"
 #include "utils/Platform.hpp"
 
-#include "ih/drivers/ih_button_driver.hpp"
 #include "ih/drivers/ih_iexternal_flash.hpp"
+#include "hardware_usings.hpp"
 
 #include <memory>
 
@@ -23,9 +23,7 @@ public:
 
 	void ledToggle();
 
-	Buttons::IButtonsDriver* getButtonsDriver();
-
-	Buttons::IButtonsDriver* getButtonsDriver() const;
+	Hal::ButtonsDriver* getButtonsDriver();
 
 private:
 
@@ -41,9 +39,7 @@ private:
     const std::chrono::milliseconds LedToggleTimeout = std::chrono::milliseconds{300};
 private:
 
-	Buttons::TButtonsDriverPtr m_pButtonsDriver;
-	Buttons::TButtonTimerWrapperPtr m_pButtonsTimer;
-	Buttons::TButtonsBackendPtr m_pButtonsBackend;
+	Hal::ButtonsDriver m_buttonsDriver;
 	ExternalFlash::TFlashDevicePtr m_pFlashDriver;
 };
 

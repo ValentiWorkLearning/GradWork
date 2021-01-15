@@ -8,42 +8,43 @@ namespace Buttons
 {
 
 class NordicTimerBackend
-    :   public IButtonTimerWrapper
 {
 
 public:
 
-    NordicTimerBackend();
-
-    virtual ~NordicTimerBackend() = default;
+    Simple::Signal<void()> onTimerExpired;
 
 public:
 
-    bool isTimerEllapsed() const override;
+    bool isTimerEllapsed() const;
 
-    void startTimer() override;
+    void startTimer();
 
-    void stopTimer() override;
+    void stopTimer();
+
+    void initialize();
 
 private:
 
-    std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval );
+    static std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval );
 
 private:
     const std::chrono::milliseconds m_buttonLongPressDetectionDelay = std::chrono::milliseconds{400};
 
     std::atomic<bool> m_isTimerEllapsed = false;
+    std::atomic<bool> m_isInitialized = false;
 };
 
 class NordicButtonsBackend
-    :   public IButtonsBackend
 {
 
 public:
 
-    NordicButtonsBackend();
+    void initialize();
 
-    virtual ~NordicButtonsBackend() = default;
+public:
+
+    Simple::Signal<void(ButtonId, ButtonBackendEvent)> onButtonEvent;
 
 private:
 

@@ -20,9 +20,6 @@ namespace
 #include "utils/CallbackConnector.hpp"
 #include "utils/CoroUtils.hpp"
 
-#include "buttons/bt_buttons_driver.hpp"
-#include "buttons/bt_buttons_driver_creator.hpp"
-
 #include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
 
@@ -102,14 +99,7 @@ Board::initBoard()
     errorCode = app_timer_init();
     APP_ERROR_CHECK( errorCode );
 #endif
-
-    m_pButtonsDriver = Buttons::createButtonsDriver();
-    m_pButtonsTimer = Buttons::createTimerBackend();
-    m_pButtonsBackend = Buttons::createButtonsBackend();
-
-    m_pButtonsDriver->setButtonsBackend( m_pButtonsBackend.get() );
-    m_pButtonsDriver->setTimer( m_pButtonsTimer.get() );
-
+    m_buttonsDriver.initializeHalDependent();
     initBoardSpiFlash();
 }
 
@@ -191,16 +181,10 @@ Board::convertToTimerTicks( std::chrono::milliseconds _interval )
 }
 
 
-Buttons::IButtonsDriver*
+Hal::ButtonsDriver*
 Board::getButtonsDriver()
 {
-    return m_pButtonsDriver.get();
-}
-
-Buttons::IButtonsDriver*
-Board::getButtonsDriver() const
-{
-    return m_pButtonsDriver.get();
+    return &m_buttonsDriver;
 }
 
 TBoardPtr createBoard()

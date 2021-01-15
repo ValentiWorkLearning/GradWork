@@ -1,6 +1,7 @@
 add_library(
     watchboard
     watchboard.cpp
+    inc/board/hardware_usings.hpp
 )
 
 target_include_directories(
@@ -11,12 +12,13 @@ target_include_directories(
 
 target_link_libraries(
     watchboard
+    PUBLIC
+    buttons_driver
     PRIVATE
     UtilsLibrary
     logger_service
     platform_delay
     drivers_ih
-    buttons_driver
 )
 
 target_compile_features(

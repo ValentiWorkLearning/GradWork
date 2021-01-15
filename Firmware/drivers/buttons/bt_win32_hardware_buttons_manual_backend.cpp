@@ -46,6 +46,11 @@ Win32TimerBackend::stopTimer()
     m_isTimerEllapsed = true;
 }
 
+void
+Win32TimerBackend::initialize()
+{
+}
+
 bool
 Win32TimerBackend::isTimerEllapsed() const
 {
@@ -95,4 +100,10 @@ Win32ButtonsBackend::initWin32ApiHook()
 
     SetWindowsHookEx(WH_KEYBOARD_LL, reinterpret_cast<HOOKPROC>(hookKeyboardCallback), appInstance, 0);
 }
+
+void
+Win32ButtonsBackend::initialize()
+{
+}
+
 }

@@ -8,22 +8,24 @@ namespace Buttons
 {
 
 class Win32TimerBackend
-    :   public IButtonTimerWrapper
 {
 
 public:
 
     Win32TimerBackend();
 
-    virtual ~Win32TimerBackend() = default;
+public:
+    Simple::Signal<void()> onTimerExpired;
 
 public:
 
-    bool isTimerEllapsed() const override;
+    bool isTimerEllapsed() const;
 
-    void startTimer() override;
+    void startTimer();
 
-    void stopTimer() override;
+    void stopTimer();
+
+    void initialize();
 
 private:
     static constexpr inline std::uint32_t ClicksDetectionPeriodMs = 400;
@@ -32,20 +34,23 @@ private:
 };
 
 class Win32ButtonsBackend
-    :   public IButtonsBackend
 {
 
 public:
 
     Win32ButtonsBackend();
 
-    virtual ~Win32ButtonsBackend() = default;
+public:
+
+    Simple::Signal<void(ButtonId, ButtonBackendEvent)> onButtonEvent;
+
+public:
+
+    void initialize();
 
 private:
 
     void initWin32ApiHook();
 };
-
-
 
 }

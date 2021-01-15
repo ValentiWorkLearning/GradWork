@@ -21,12 +21,20 @@ namespace
 namespace Buttons
 {
 
-NordicTimerBackend::NordicTimerBackend()
+std::uint32_t
+NordicTimerBackend::convertToTimerTicks( std::chrono::milliseconds _interval )
+{
+    std::uint32_t timerTicksValue = APP_TIMER_TICKS( _interval.count() );
+    return timerTicksValue;
+}
+
+void
+NordicTimerBackend::initialize()
 {
     ret_code_t errorCode{};
 
     auto timerExpiredCallback = cbc::obtain_connector(
-        [ this ]( void * _pContext )
+        [this](void* _pContext)
         {
             m_isTimerEllapsed = true;
             onTimerExpired.emit();
@@ -35,26 +43,19 @@ NordicTimerBackend::NordicTimerBackend()
     );
 
     errorCode = app_timer_create(
-            &m_buttonsDriverTimer
-        ,   APP_TIMER_MODE_SINGLE_SHOT
-        ,   timerExpiredCallback
+        &m_buttonsDriverTimer
+        , APP_TIMER_MODE_SINGLE_SHOT
+        , timerExpiredCallback
     );
-    APP_ERROR_CHECK( errorCode );
+    APP_ERROR_CHECK(errorCode);
     m_isTimerEllapsed = true;
 }
-
-
-std::uint32_t
-NordicTimerBackend::convertToTimerTicks( std::chrono::milliseconds _interval )
-{
-    std::uint32_t timerTicksValue = APP_TIMER_TICKS( _interval.count() );
-    return timerTicksValue;
-}
-
 
 void
 NordicTimerBackend::startTimer()
 {
+    if (!m_isInitialized)
+        initialize();
 
     if( !m_isTimerEllapsed )
     {
@@ -89,7 +90,8 @@ NordicTimerBackend::isTimerEllapsed() const
     return m_isTimerEllapsed;
 }
 
-NordicButtonsBackend::NordicButtonsBackend()
+void
+NordicButtonsBackend::initialize()
 {
     initNordicButtonsBackend();
 }

@@ -6,12 +6,10 @@ namespace Buttons
 {
 
 class FakeTimerBackend
-    :   public IButtonTimerWrapper
 {
 
 public:
-
-    virtual ~FakeTimerBackend() = default;
+    Simple::Signal<void()> onTimerExpired;
 
 public:
 
@@ -20,12 +18,12 @@ public:
         return m_isTimerEllapsed;
     };
 
-    void startTimer() override
+    void startTimer()
     {
         m_isTimerEllapsed = false;
     }
 
-    void stopTimer() override
+    void stopTimer()
     {
         m_isTimerEllapsed = true;
     }
@@ -43,20 +41,11 @@ private:
     bool m_isTimerEllapsed = false;
 };
 
-using TFakeTimerBackendPtr = std::unique_ptr<FakeTimerBackend>;
-
-TFakeTimerBackendPtr createFakeTimerBackend()
-{
-    return std::make_unique<FakeTimerBackend>();
-}
-
 class FakeButtonsBackend
-    :   public IButtonsBackend
 {
 
 public:
-
-    virtual ~FakeButtonsBackend() = default;
+    Simple::Signal<void(ButtonId, ButtonBackendEvent)> onButtonEvent;
 
 public:
 
@@ -69,12 +58,5 @@ public:
         onButtonEvent.emit(_buttonId, ButtonBackendEvent::kReleased );
     }
 };
-
-using TFakeButtonsBackendPtr = std::unique_ptr<FakeButtonsBackend>;
-
-TFakeButtonsBackendPtr createFakeButtonsBackend()
-{
-    return std::make_unique<FakeButtonsBackend>();
-}
 
 }
