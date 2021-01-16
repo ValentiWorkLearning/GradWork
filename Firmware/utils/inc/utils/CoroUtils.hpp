@@ -18,6 +18,8 @@ namespace stdcoro = std;
 namespace stdcoro = std::experimental
 #endif
 
+#include <etl/vector.h>
+#include <etl/queue_spsc_atomic.h>
 
 struct Promise
 {
@@ -205,6 +207,36 @@ auto when_all_sequence(Args&& ... args) noexcept
 	return WhenAllSequence{ std::make_tuple(std::move(args)...) };
 }
 
+
+struct CoroQueueMainLoop
+{
+	static CoroQueueMainLoop& GetInstance()
+	{
+		static CoroQueueMainLoop instance{};
+		return instance;
+	}
+
+	void pushToLater(std::coroutine_handle<> coroHandle)
+	{
+		executionQueue.push(coroHandle);
+	}
+
+	void processQueue()
+	{
+		std::coroutine_handle<> handle;
+		while( executionQueue.pop(handle))
+		{
+			if(!handle.done())
+				handle.resume();
+		}
+	}
+
+	template<typename Type, const size_t StorageSize = 3>
+	using TQueueStorageType = etl::queue_spsc_atomic<Type, StorageSize,etl::memory_model::MEMORY_MODEL_SMALL>;
+	
+	TQueueStorageType<std::coroutine_handle<>> executionQueue;
+};
+
 struct Event
 {
 	Event(bool isSet = false)
@@ -226,16 +258,25 @@ struct Event
 	{
 	}
 
-	void set()
+	void set(bool toMainThread = false)
 	{
 		m_isSet.store(true);
 		if (m_continuation && !m_continuation.done())
-			m_continuation.resume();
+		{
+			if (toMainThread){
+				CoroQueueMainLoop::GetInstance().pushToLater(m_continuation);
+			}
+			else{
+				m_continuation.resume();
+			}
+		}
+			
 	}
 
 	std::atomic_bool m_isSet;
 	stdcoro::coroutine_handle<> m_continuation;
 };
+
 
 //
 //template<typename... Tasks>

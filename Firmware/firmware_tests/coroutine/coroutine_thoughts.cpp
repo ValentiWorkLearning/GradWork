@@ -185,7 +185,8 @@ public:
         );
 
         LOG_DEBUG_ENDL("Display initialized");
-        m_displayInitialized.set();
+        constexpr bool pushToMainQueue = true;
+        m_displayInitialized.set(pushToMainQueue);
     }
 
     void turnOn()noexcept override
@@ -260,6 +261,7 @@ private:
      {
          using namespace std::chrono_literals;
          std::this_thread::sleep_for(100ms);
+         CoroUtils::CoroQueueMainLoop::GetInstance().processQueue();
      }
      return 0;
  }

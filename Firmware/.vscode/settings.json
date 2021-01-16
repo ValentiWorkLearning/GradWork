@@ -108,6 +108,8 @@
         "compare": "cpp",
         "coroutine": "cpp",
         "ranges": "cpp",
-        "stop_token": "cpp"
+        "stop_token": "cpp",
+        "complex": "cpp",
+        "csignal": "cpp"
     }
 }
