@@ -174,20 +174,11 @@ Logger& Logger::Instance()
 
 void Logger::logDebugEndl( std::string_view _toLog )
 {
-    while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
-    {
         m_pLoggerImpl->logString( _toLog );
         m_pLoggerImpl->logString( CaretReset );
-
-        m_loggerReady.clear( std::memory_order_release );
-    }
 }
 
 void Logger::logDebug( std::string_view _toLog )
 {
-    while ( m_loggerReady.test_and_set( std::memory_order_acquire ) )
-    {
         m_pLoggerImpl->logString( _toLog );
-        m_loggerReady.clear( std::memory_order_release );
-    }
 }
