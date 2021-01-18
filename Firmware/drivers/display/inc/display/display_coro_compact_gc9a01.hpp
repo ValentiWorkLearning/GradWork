@@ -41,7 +41,7 @@ namespace DisplayDriver
             , std::uint16_t _y
             , std::uint16_t _width
             , std::uint16_t _height
-        ) noexcept{}
+        ) noexcept;
     };
 
     std::unique_ptr<GC9A01Compact>

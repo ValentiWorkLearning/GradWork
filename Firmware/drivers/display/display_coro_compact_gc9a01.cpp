@@ -1,8 +1,10 @@
 #include "inc\display\display_coro_compact_gc9a01.hpp"
 
 namespace {
-    
-static constexpr auto Commands = std::array<std::uint8_t,324>
+   
+constexpr std::size_t CommandsSize = 328;
+constexpr std::size_t CommandsTransactionsCount = 59;
+static constexpr auto Commands = std::array<std::uint8_t, CommandsSize>
 {
     /***Cmd****Argc****delay****argv*****************************/
         0xFE,   0,      0
@@ -12,8 +14,8 @@ static constexpr auto Commands = std::array<std::uint8_t,324>
     ,   0xFE,   0,      0
     ,   0xEF,   0,      0
     ,   0xEB,   1,      0,      0x14
-    ,   0xFE
-    ,   0xEF
+    ,   0xFE,   0,      0
+    ,   0xEF,   0,      0
     ,   0xEB,   1,      0,      0x14
 
     ,   0xFE,   0,      0
@@ -99,14 +101,48 @@ GC9A01Compact::GC9A01Compact(std::unique_ptr<Interface::Spi::SpiBusAsync>&& _bus
 {
     initDisplay();
 }
-void GC9A01Compact::fillRectangle(std::uint16_t _x, std::uint16_t _y, std::uint16_t _width, std::uint16_t _height, IDisplayDriver::TColor* _color) noexcept
+void GC9A01Compact::fillRectangle(
+    std::uint16_t _x,
+    std::uint16_t _y,
+    std::uint16_t _width,
+    std::uint16_t _height,
+    IDisplayDriver::TColor* _colorToFill
+) noexcept
 {
+    const std::uint16_t DisplayHeight = BaseSpiDisplayCoroutine::getHeight();
+    const std::uint16_t DisplayWidth = BaseSpiDisplayCoroutine::getWidth();
 
+    const bool isCoordsValid{ !((_x >= DisplayWidth) || (_y >= DisplayHeight)) };
+
+    if (isCoordsValid)
+    {
+        if (_width >= DisplayWidth) _width = DisplayWidth - _x;
+        if (_height >= DisplayHeight) _height = DisplayHeight - _y;
+
+        const size_t BytesSizeX = (_width - _x + 1);
+        const size_t BytesSizeY = (_height - _y + 1);
+        const size_t BytesSquare = BytesSizeX * BytesSizeY;
+        const size_t TransferBufferSize = (BytesSquare * sizeof(IDisplayDriver::TColor));
+
+        co_await m_displayInitialized;
+        co_await setAddrWindow(_x, _y, _width, _height);
+
+        static constexpr std::uint8_t RamWriteCmd{0x29};
+
+        co_await sendCommandImpl(&RamWriteCmd);  //LCD_WriteCMD(GRAMWR);
+
+        setDcPin();
+        co_await sendChunk(reinterpret_cast<const std::uint8_t*>(_colorToFill), TransferBufferSize);
+        resetDcPin();
+
+        LOG_DEBUG_ENDL("Draw something");
+        onRectArreaFilled.emit();
+    }
 }
 
 void GC9A01Compact::initDisplay() noexcept
 {
-    size_t CommandCount = Commands.size();
+    size_t CommandCount = CommandsTransactionsCount;
     const std::uint8_t* pBuffer = Commands.data();
     while(CommandCount--)
     {
@@ -117,11 +153,54 @@ void GC9A01Compact::initDisplay() noexcept
         co_await BaseSpiDisplayCoroutine::sendCommandImpl(Command);
         if (NumArgs) {
             co_await BaseSpiDisplayCoroutine::sendChunk(pBuffer++, NumArgs);
+            pBuffer+=(NumArgs - 1);
         }
 
         if(Delay)
             Delay::waitFor(Delay);
     }
+    m_displayInitialized.set();
+}
+
+CoroUtils::VoidTask
+GC9A01Compact::setAddrWindow(
+    std::uint16_t _x,
+    std::uint16_t _y,
+    std::uint16_t _width,
+    std::uint16_t _height
+) noexcept
+{
+        // TODO be careful here;
+    std::uint16_t width = _width - _x;
+    std::uint16_t height = _height - _y;
+
+    std::uint16_t correctedX = _x;
+    std::uint16_t correctedY = _y;
+
+    uint32_t xa = ((uint32_t)correctedX << 16) | ( correctedX + width);// (_x+_width-1);
+    int32_t ya = ((uint32_t)correctedY << 16) | ( correctedY +  height); //(_y+_height-1); 
+
+    static std::array xAxisCommand =
+        std::array{
+                static_cast<std::uint8_t>( 0x2a )
+            ,   static_cast<std::uint8_t>( xa >> 24 )
+            ,   static_cast<std::uint8_t>( xa >> 16 )
+            ,   static_cast<std::uint8_t>( xa >> 8 )
+            ,   static_cast<std::uint8_t>( xa )
+        };
+    static std::array yAxisCommand =
+        std::array{
+                static_cast<std::uint8_t>( 0x2b )
+            ,   static_cast<std::uint8_t>( ya >> 24 )
+            ,   static_cast<std::uint8_t>( ya >> 16 )
+            ,   static_cast<std::uint8_t>( ya >> 8 )
+            ,   static_cast<std::uint8_t>( ya )
+        };
+
+    co_await CoroUtils::when_all_sequence(
+            sendCommand(xAxisCommand.data(), xAxisCommand.size())
+        ,   sendCommand(yAxisCommand.data(), yAxisCommand.size())
+    );
 }
 
 }
