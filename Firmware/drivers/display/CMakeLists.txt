@@ -4,6 +4,7 @@ add_library(
     display_gc9a01.cpp
     display_coro_gc9a01.cpp
     display_creator.cpp
+    display_coro_compact_gc9a01.cpp
 )
 
 target_include_directories(

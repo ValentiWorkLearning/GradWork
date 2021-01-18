@@ -9,6 +9,7 @@ target_sources(
     PRIVATE
     coroutine_thoughts.cpp
     thoughts.hpp
+    st7789_draft.hpp
 )
 
 target_compile_features(
