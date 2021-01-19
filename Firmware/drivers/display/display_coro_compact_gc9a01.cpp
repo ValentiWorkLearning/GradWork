@@ -1,4 +1,4 @@
-#include "inc\display\display_coro_compact_gc9a01.hpp"
+#include "inc/display/display_coro_compact_gc9a01.hpp"
 
 namespace {
    
