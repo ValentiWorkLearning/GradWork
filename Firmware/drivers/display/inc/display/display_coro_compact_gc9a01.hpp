@@ -45,7 +45,7 @@ namespace DisplayDriver
     };
 
     std::unique_ptr<GC9A01Compact>
-        createDisplayDriverCoroBasedGC9A01(
+        createDisplayDriverCompactCoroBasedGC9A01(
             std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
             , std::uint16_t _width
             , std::uint16_t _height

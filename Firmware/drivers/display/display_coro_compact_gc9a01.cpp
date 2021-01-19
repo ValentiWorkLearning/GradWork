@@ -203,4 +203,17 @@ GC9A01Compact::setAddrWindow(
     );
 }
 
+std::unique_ptr<GC9A01Compact> createDisplayDriverCompactCoroBasedGC9A01(
+    std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr,
+    std::uint16_t _width,
+    std::uint16_t _height
+) noexcept
+{
+    return std::make_unique<GC9A01Compact>(
+        std::move(_busPtr),
+        _width,
+        _height
+    );
+}
+
 }

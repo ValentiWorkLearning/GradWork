@@ -38,7 +38,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_compile_definitions(
         watch_display
         PRIVATE
-        USE_GC9A01_BACKEND_COROUTINE
+        USE_GC9A01_COMPACT_CORO_BACKEND
     )
 
     target_link_libraries(watch_display
