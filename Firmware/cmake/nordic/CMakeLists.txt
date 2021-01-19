@@ -266,6 +266,8 @@ target_compile_options(
 list(APPEND NRFSDK_INCLUDES ${NordicCommonInc} )
 list(APPEND NRFSDK_SOURCES ${NordicCommonSrc} )
 
+set_source_files_properties(${NRFSDK_SOURCES} PROPERTIES LANGUAGE C)
+
 include (CMakePrintHelpers)
 
 function(declareNordicSdkLibrary LIBRARY_NAME INCLUDES_LIST SOURCES_LIST DEPENDS_ON)
