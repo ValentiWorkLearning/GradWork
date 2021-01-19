@@ -125,6 +125,7 @@ void GC9A01Compact::fillRectangle(
         const size_t TransferBufferSize = (BytesSquare * sizeof(IDisplayDriver::TColor));
 
         co_await m_displayInitialized;
+        LOG_DEBUG_ENDL("Received initialize event");
         co_await setAddrWindow(_x, _y, _width, _height);
 
         static constexpr std::uint8_t RamWriteCmd{0x29};

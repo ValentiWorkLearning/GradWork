@@ -4,7 +4,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master,dev/develop,dev/coroutine,dev/sdl_migrate]
+    branches: [ master,dev/develop,dev/coroutine,dev/build_ci_speedup]
   pull_request:
     branches: [ master,dev/develop,dev/coroutine]
 
@@ -80,28 +80,46 @@ jobs:
     #   with:
     #     release: '10-2020-q2'
     #     directory: ${{ github.workspace }}/toolchain
+    - name: Cache GCC toolchain
+      id: cache-gcc-toolchain
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/gcc_toolchain_10_2_q4
+        key: ${{runner.os}}-toolchain-v10_2_q4
+
     - name: Get the latest arm-gcc-none-eabi-gcc
       uses: wei/wget@v1
+      if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
       id: download-arm-gcc
       with:
         args: 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2'
 
     - name: Unpack arm-gcc-compiler
+      if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
       run: |
-        mkdir gcc_toolchain
-        tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/gcc_toolchain
+        mkdir gcc_toolchain_10_2_q4
+        tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/gcc_toolchain_10_2_q4
+
+    - name: Cache NordicSDK
+      id: cache-nordic-sdk
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/Nrf52SDKv16_0
+        key: ${{runner.os}}-nordic-sdk-v16-0
 
     - name: Get NRF52 16.0 SDK
       uses: wei/wget@v1
       id: download-nrf52sdk
+      if: steps.cache-nordic-sdk.outputs.cache-hit != 'true'
       with:
         args: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip'
     
     - name: Unpack NordicSDK
+      if: steps.cache-nordic-sdk.outputs.cache-hit != 'true'
       run: |
-        mkdir Nrf52SDK
-        unzip nRF5SDK160098a08e2.zip -d Nrf52SDK
-        mv Nrf52SDK/components/boards/pca10040.h Nrf52SDK/components/boards/pca10040_1.h
+        mkdir Nrf52SDKv16_0
+        unzip nRF5SDK160098a08e2.zip -d Nrf52SDKv16_0
+        mv Nrf52SDKv16_0/components/boards/pca10040.h Nrf52SDKv16_0/components/boards/pca10040_1.h
 
     - name: Run CMakeLists generation for GCC compiler
       uses: lukka/run-cmake@v2
@@ -110,7 +128,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDK -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain/gcc-arm-none-eabi-10-2020-q4-major'
+        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_10_2_q4/gcc-arm-none-eabi-10-2020-q4-major'
         buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
