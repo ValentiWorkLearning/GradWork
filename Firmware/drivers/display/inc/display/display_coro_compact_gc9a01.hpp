@@ -32,6 +32,7 @@ namespace DisplayDriver
             , IDisplayDriver::TColor* _color
         ) noexcept override;
 
+        void initialize()noexcept override;
     public:
 
         void initDisplay() noexcept;

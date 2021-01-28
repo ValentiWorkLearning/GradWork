@@ -99,9 +99,17 @@ GC9A01Compact::GC9A01Compact(std::unique_ptr<Interface::Spi::SpiBusAsync>&& _bus
         , _height
     )
 {
+//   initDisplay();
+}
+
+void
+GC9A01Compact::initialize() noexcept
+{
     initDisplay();
 }
-void GC9A01Compact::fillRectangle(
+
+void
+GC9A01Compact::fillRectangle(
     std::uint16_t _x,
     std::uint16_t _y,
     std::uint16_t _width,
@@ -141,7 +149,8 @@ void GC9A01Compact::fillRectangle(
     }
 }
 
-void GC9A01Compact::initDisplay() noexcept
+void
+GC9A01Compact::initDisplay() noexcept
 {
     size_t CommandCount = CommandsTransactionsCount;
     const std::uint8_t* pBuffer = Commands.data();

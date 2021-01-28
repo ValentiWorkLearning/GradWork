@@ -31,6 +31,8 @@ PlatformBackend::PlatformBackend()
 void
 PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )
 {
+    m_hardwareDisplayDriver->initialize();
+
     auto hardwareDriverCallback = cbc::obtain_connector(
         [ this ]( lv_disp_drv_t* _displayDriver, const lv_area_t* _fillArea, lv_color_t* _colorFill )
         {
