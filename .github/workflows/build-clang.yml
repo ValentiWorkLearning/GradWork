@@ -32,7 +32,15 @@ jobs:
       run: |
         sudo apt update
         sudo apt -y update
-        sudo apt-get -y cmake
+        wget https://github.com/Kitware/CMake/releases/download/v3.19.4/cmake-3.19.4.tar.gz
+        tar -zxvf cmake-3.19.4.tar.gz
+        cd cmake-3.19.4
+        ./bootstrap
+        make
+        sudo make install
+    - name: Check cmake version
+      run: |
+        cmake --version
 
     - name: Setup Python
       run: |
