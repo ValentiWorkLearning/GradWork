@@ -1,0 +1,54 @@
+name: Clang-Build
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master,dev/develop,dev/coroutine,dev/clang_build]
+  pull_request:
+    branches: [ master,dev/develop,dev/coroutine]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build-ubuntu-clang-simulator:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Setup CLang compiler
+      run: |
+        sudo apt update
+        sudo apt -y update
+        sudo apt-get -y clang
+
+    - name: Setup CMake
+      run: |
+        sudo apt update
+        sudo apt -y update
+        sudo apt-get -y cmake
+
+    - name: Setup Python
+        sudo apt update
+        sudo apt -y update
+        sudo apt install -y python3-pip
+
+    - name: Setup Pip dependencies
+      run: |
+        pip3 install conan
+        pip3 install mako
+
+    - name: Setup conan dependencies
+      run: |
+        conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
+    - name: Download libraries from Conan
+      run: |
+        mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
+        conan install ${{ github.workspace }}/Firmware/conanfile.txt --install-folder ${{ runner.workspace }}/build/vsfirmwarebuild/ -s compiler=clang  -scompiler.version=10 --build=missing
