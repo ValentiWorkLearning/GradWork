@@ -53,5 +53,5 @@ jobs:
       run: |
         export CC=/usr/bin/clang
         export CXX=/usr/bin/clang++
-        mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
-        conan install ${{ github.workspace }}/Firmware/conanfile.txt --install-folder ${{ runner.workspace }}/build/vsfirmwarebuild/ -s compiler=clang  -scompiler.version=10 --build=missing
+        mkdir ${{ runner.workspace }}/build && cd ${{ runner.workspace }}/build
+        conan install .. -s compiler=clang -s compiler.version=10 --build=missing
