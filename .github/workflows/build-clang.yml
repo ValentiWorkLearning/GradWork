@@ -24,9 +24,9 @@ jobs:
 
     - name: Setup CLang compiler
       run: |
-        sudo apt update
-        sudo apt -y update
-        sudo apt-get -y clang
+        sudo apt-get update
+        sudo apt-get -y update
+        sudo bash -c "$(wget -O - https://apt.llvm.org/llvm.sh)"
 
     - name: Setup CMake
       run: |
@@ -51,5 +51,7 @@ jobs:
 
     - name: Download libraries from Conan
       run: |
+        export CC=/usr/bin/clang
+        export CXX=/usr/bin/clang++
         mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
         conan install ${{ github.workspace }}/Firmware/conanfile.txt --install-folder ${{ runner.workspace }}/build/vsfirmwarebuild/ -s compiler=clang  -scompiler.version=10 --build=missing
