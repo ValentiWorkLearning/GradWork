@@ -33,17 +33,17 @@ jobs:
         sudo apt-get -y install cmake
         cmake --version
 
-    - name: Setup Python
-      run: |
-        sudo apt update
-        sudo apt -y update
-        sudo apt install -y python3-pip
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
 
-    - name: Setup Pip dependencies
-      run: |
-        pip3 install --upgrade setuptools
-        pip3 install conan
-        pip3 install mako
+    - name: Install pip dependencies
+      uses:  BSFishy/pip-action@v1
+      with:
+        packages: |
+          conan
+          mako
 
     - name: Setup conan dependencies
       run: |
