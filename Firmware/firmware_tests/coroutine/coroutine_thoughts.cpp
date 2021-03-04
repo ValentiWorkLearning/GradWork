@@ -31,6 +31,7 @@
          ,  240
      };
      compactGc9A01.fillRectangle(0, 0, 0, 0, nullptr);
+     compactGc9A01.initialize();
      //ST7789Coroutine displayCoro{
      //       Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M1>()
      //    ,  240

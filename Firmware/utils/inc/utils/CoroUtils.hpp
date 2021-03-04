@@ -85,12 +85,12 @@ struct VoidTask
 
 		struct final_awaitable
 		{
-			bool await_ready()
+			bool await_ready() noexcept
 			{
 				return false;
 			}
 			template<typename TPromise>
-			void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine)
+			void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
 			{
 				task_promise& promise = coroutine.promise();
 				if (promise.m_continuation)
