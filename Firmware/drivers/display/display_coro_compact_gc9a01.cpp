@@ -4,7 +4,7 @@ namespace {
    
 constexpr std::size_t CommandsSize = 328;
 constexpr std::size_t CommandsTransactionsCount = 59;
-static constexpr auto Commands = std::array<std::uint8_t, CommandsSize>
+static auto Commands = std::array<std::uint8_t, CommandsSize>
 {
     /***Cmd****Argc****delay****argv*****************************/
         0xFE,   0,      0

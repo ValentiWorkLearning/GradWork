@@ -36,7 +36,7 @@ constexpr std::uint8_t bitwiseResolutionConstant()
 
 inline constexpr std::uint8_t DefaultDelay = 0;
 
-static constexpr std::tuple CommandsArray = {
+static std::tuple CommandsArray = {
         CommandDescriptor<0xFE>{}
     ,   CommandDescriptor<0xEF>{}
     ,   CommandDescriptor<0xEB,DefaultDelay, 0x14>{}
@@ -144,10 +144,16 @@ GC9A01Coro::GC9A01Coro(
             ,   _height
         )
 {
-    initDisplay();
+    //initDisplay();
 }
 
 GC9A01Coro::~GC9A01Coro()noexcept= default;
+
+void
+GC9A01Coro::initialize() noexcept
+{
+    initDisplay();
+}
 
 void
 GC9A01Coro::initDisplay()noexcept
