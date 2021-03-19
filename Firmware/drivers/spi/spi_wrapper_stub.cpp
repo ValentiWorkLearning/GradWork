@@ -240,7 +240,7 @@ SpiBusAsync::transmitCompleted()
         );
     }
     else {
-        m_coroHandle.resume();
+        CoroUtils::CoroQueueMainLoop::GetInstance().pushToLater(m_coroHandle);
     }
 }
 
