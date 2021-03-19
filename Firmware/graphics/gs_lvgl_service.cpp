@@ -113,7 +113,7 @@ private:
     {
         lv_init();
 
-        lv_disp_buf_init(
+        lv_disp_draw_buf_init(
                         &displayBuffer
                     ,   &dispFrameBufFirst
                     ,   nullptr
@@ -121,7 +121,7 @@ private:
                 );
 
         lv_disp_drv_init( &m_glDisplayDriver );
-        m_glDisplayDriver.buffer = &displayBuffer;
+        m_glDisplayDriver.draw_buf = &displayBuffer;
 
         // auto monitorCallback = cbc::obtain_connector(
         //     []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
@@ -155,16 +155,15 @@ private:
         // TODO create the lvlg task for ellaped event processing
 
         auto mainWindowTimer = cbc::obtain_connector(
-            [this](lv_task_t* _pTask)
+            [this](lv_timer_t* _pTask)
             {
                 m_pMainWindow->handleEventTimerEllapsed();
             }
         );
 
-        m_pMainWindowTick.reset( lv_task_create(
+        m_pMainWindowTick.reset( lv_timer_create(
                     mainWindowTimer
                 ,   50
-                ,   LV_TASK_PRIO_MID
                 ,   nullptr
             )
         );
@@ -174,7 +173,7 @@ private:
         );
 
         auto pageToggle = cbc::obtain_connector(
-            [this](lv_task_t* _pTask)
+            [this](lv_timer_t* _pTask)
             {
                 static std::uint8_t toggle{ 0 };
                 std::string_view pageToSet{};
@@ -209,7 +208,7 @@ private:
         );
 
         auto themeChange = cbc::obtain_connector(
-            [this](lv_task_t* _pTask)
+            [this](lv_timer_t* _pTask)
             {
                 auto themeController = getMainWindow().getThemeController();
                 auto activeTheme = themeController->getActiveTheme();
@@ -234,10 +233,9 @@ private:
         // );
 
         m_pthemeChangeSwitch.reset(
-            lv_task_create(
+            lv_timer_create(
                     themeChange
                 ,   2000
-                ,   LV_TASK_PRIO_MID
                 ,   nullptr
             )
         );
@@ -249,15 +247,15 @@ private:
 
     using TColorBuf = std::array<lv_color_t,DispHorRes>;
 
-    static lv_disp_buf_t displayBuffer;
+    static lv_disp_draw_buf_t displayBuffer;
     static TColorBuf dispFrameBufFirst;
 
 private:
 
     Meta::PointerWrapper<lv_disp_t,lv_disp_remove> m_glDisplay;
-    Meta::PointerWrapper<lv_task_t,lv_task_del> m_pMainWindowTick;
-    Meta::PointerWrapper<lv_task_t, lv_task_del> m_pPageSwitch;
-    Meta::PointerWrapper<lv_task_t, lv_task_del> m_pthemeChangeSwitch;
+    Meta::PointerWrapper<lv_timer_t, lv_timer_del> m_pMainWindowTick;
+    Meta::PointerWrapper<lv_timer_t, lv_timer_del> m_pPageSwitch;
+    Meta::PointerWrapper<lv_timer_t, lv_timer_del> m_pthemeChangeSwitch;
 
     lv_disp_drv_t m_glDisplayDriver;
 
@@ -265,7 +263,7 @@ private:
     std::unique_ptr<Graphics::MainWindow::IGsMainWindowModel> m_pMainWindow;
 };
 
-lv_disp_buf_t LvglGraphicsService::GSLvglServiceImpl::displayBuffer{};
+lv_disp_draw_buf_t LvglGraphicsService::GSLvglServiceImpl::displayBuffer{};
 
 LvglGraphicsService::GSLvglServiceImpl::TColorBuf
 LvglGraphicsService::GSLvglServiceImpl::dispFrameBufFirst{};

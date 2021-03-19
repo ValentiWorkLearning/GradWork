@@ -38,7 +38,7 @@ private:
 
     void indevPlatformInit();
 
-    void memoryMonitor(lv_task_t* _param);
+    void memoryMonitor(lv_timer_t* _param);
 
 private:
 
