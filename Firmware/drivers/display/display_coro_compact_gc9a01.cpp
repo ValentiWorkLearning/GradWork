@@ -218,6 +218,12 @@ GC9A01Compact::setAddrWindow(
     );
 }
 
+bool
+GC9A01Compact::isInitialized() const noexcept
+{
+    return m_displayInitialized.isSet();
+}
+
 std::unique_ptr<GC9A01Compact> createDisplayDriverCompactCoroBasedGC9A01(
     std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr,
     std::uint16_t _width,

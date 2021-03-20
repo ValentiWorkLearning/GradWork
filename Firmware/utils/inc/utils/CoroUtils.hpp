@@ -273,6 +273,11 @@ struct Event
 			
 	}
 
+	bool isSet() const noexcept
+	{
+		return m_isSet;
+	}
+
 	std::atomic_bool m_isSet;
 	stdcoro::coroutine_handle<> m_continuation;
 };

@@ -85,6 +85,9 @@ PlatformBackend::initPlatformGfxTimer()
 void
 PlatformBackend::executeLvTaskHandler()
 {
+    if(!m_hardwareDisplayDriver->isInitialized())
+        return;
+
     lv_task_handler();
 }
 }

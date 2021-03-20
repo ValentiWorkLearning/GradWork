@@ -10,9 +10,11 @@
 #include "graphics/ih/gs_imain_window.hpp"
 #include "graphics/gs_event_dispatcher.hpp"
 
-#include "utils/SimpleSignal.hpp"
+#include <utils/SimpleSignal.hpp>
+#include <utils/CoroUtils.hpp>
 
-#include "logger/logger_service.hpp"
+#include <logger/logger_service.hpp>
+
 
 #include <optional>
 
@@ -203,7 +205,8 @@ Application::runApplicationLoop()
 
     while (true)
     {
-        m_graphicsService->executeGlTask();
+        CoroUtils::CoroQueueMainLoop::GetInstance().processQueue();
         Simple::Lib::ExecuteLaterPool::Instance().processQueue();
+        m_graphicsService->executeGlTask();
     }
 }

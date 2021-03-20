@@ -35,6 +35,8 @@ public:
 
     void initialize()noexcept override;
 
+    bool isInitialized() const noexcept override;
+
 private:
 
     template<typename Tuple, std::size_t... Indexes>

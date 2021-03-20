@@ -27,6 +27,9 @@ public:
     virtual void turnOff()noexcept = 0;
 
     virtual void initialize() noexcept {};
+
+    virtual bool isInitialized() const noexcept{ return false;};
+    
 public:
     Simple::Signal<void()> onRectArreaFilled;
 
