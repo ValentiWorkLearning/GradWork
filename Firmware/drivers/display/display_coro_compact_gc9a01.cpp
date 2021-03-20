@@ -99,13 +99,13 @@ GC9A01Compact::GC9A01Compact(std::unique_ptr<Interface::Spi::SpiBusAsync>&& _bus
         , _height
     )
 {
-//   initDisplay();
+   initDisplay();
 }
 
 void
 GC9A01Compact::initialize() noexcept
 {
-    initDisplay();
+    //initDisplay();
 }
 
 void
@@ -136,7 +136,7 @@ GC9A01Compact::fillRectangle(
         LOG_DEBUG_ENDL("Received initialize event");
         co_await setAddrWindow(_x, _y, _width, _height);
 
-        static constexpr std::uint8_t RamWriteCmd{0x29};
+        static std::uint8_t RamWriteCmd{0x2C};
 
         co_await sendCommandImpl(&RamWriteCmd);  //LCD_WriteCMD(GRAMWR);
 

@@ -144,7 +144,7 @@ GC9A01Coro::GC9A01Coro(
             ,   _height
         )
 {
-    //initDisplay();
+    initDisplay();
 }
 
 GC9A01Coro::~GC9A01Coro()noexcept= default;
@@ -152,7 +152,7 @@ GC9A01Coro::~GC9A01Coro()noexcept= default;
 void
 GC9A01Coro::initialize() noexcept
 {
-    initDisplay();
+    //initDisplay();
 }
 
 void
@@ -196,10 +196,10 @@ void GC9A01Coro::fillRectangle(
     const size_t BytesSquare = BytesSizeX *  BytesSizeY;
     const size_t TransferBufferSize =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) );
 
-        //co_await m_displayInitialized;
+    co_await m_displayInitialized;
     co_await setAddrWindow(_x,_y,_width,_height);
 
-    static CommandDescriptor<0x29> RamWrite{};
+    static CommandDescriptor<0x2c> RamWrite{};
 
     co_await sendCommand(RamWrite.command.data(), RamWrite.command.size() );  //LCD_WriteCMD(GRAMWR);
 
