@@ -21,8 +21,8 @@ int main(void)
 
     while(true)
     {
-        bsp_board_led_invert(0);
-        nrf_delay_ms(500);
+        //bsp_board_led_invert(0);
+        //nrf_delay_ms(20);
         //pBoard->ledToggle();
         CoroUtils::CoroQueueMainLoop::GetInstance().processQueue();
     }

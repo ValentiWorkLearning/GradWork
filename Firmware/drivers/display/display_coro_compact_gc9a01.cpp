@@ -152,6 +152,11 @@ GC9A01Compact::fillRectangle(
 void
 GC9A01Compact::initDisplay() noexcept
 {
+    BaseSpiDisplayCoroutine::resetResetPin();
+    Delay::waitFor( 100 );
+    BaseSpiDisplayCoroutine::setResetPin();
+    //static std::array Test = std::array<std::uint8_t, CommandsSize>{0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A};
+    //co_await BaseSpiDisplayCoroutine::sendChunk(Test.data(), Test.size());
     size_t CommandCount = CommandsTransactionsCount;
     const std::uint8_t* pBuffer = Commands.data();
     while(CommandCount--)
