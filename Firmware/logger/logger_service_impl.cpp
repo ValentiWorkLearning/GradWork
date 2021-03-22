@@ -20,7 +20,11 @@
 #elif defined(LoggerSegger)
 #include "SEGGER_RTT.h"
 #elif defined(LoggerDesktop)
-#include <iostream>
+#include <cstdio>
+    #if defined USE_MSVC_DEBUG_OUT
+        #include <Windows.h>
+    #endif
+
 #endif
 
 namespace
@@ -157,6 +161,9 @@ public:
     void logString(std::string_view _toLog) const
     {
         printf(_toLog.data());
+#if defined USE_MSVC_DEBUG_OUT
+        OutputDebugString(_toLog.data());
+#endif
     }
 };
 #endif
