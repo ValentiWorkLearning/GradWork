@@ -49,6 +49,8 @@ private:
     lv_style_t m_iniCircleStyle;
     lv_style_t m_yanCircleStyle;
     lv_area_t maskArea;
+    std::uint16_t m_maskId;
+
     lv_draw_mask_radius_param_t radiusParam;
 
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pIny;

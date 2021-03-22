@@ -3,9 +3,9 @@
  *
  */
 
-/*
- * COPY THIS FILE AS lv_drv_conf.h
- */
+ /*
+  * COPY THIS FILE AS lv_drv_conf.h
+  */
 
 #if 1 /*Set it to "1" to enable the content*/
 
@@ -14,60 +14,60 @@
 
 #include "lv_conf.h"
 
-/*********************
- * DELAY INTERFACE
- *********************/
+  /*********************
+   * DELAY INTERFACE
+   *********************/
 #define LV_DRV_DELAY_INCLUDE  <stdint.h>            /*Dummy include by default*/
 #define LV_DRV_DELAY_US(us)  /*delay_us(us)*/       /*Delay the given number of microseconds*/
 #define LV_DRV_DELAY_MS(ms)  /*delay_ms(ms)*/       /*Delay the given number of milliseconds*/
 
-/*********************
- * DISPLAY INTERFACE
- *********************/
+   /*********************
+	* DISPLAY INTERFACE
+	*********************/
 
-/*------------
- *  Common
- *------------*/
+	/*------------
+	 *  Common
+	 *------------*/
 #define LV_DRV_DISP_INCLUDE         <stdint.h>           /*Dummy include by default*/
 #define LV_DRV_DISP_CMD_DATA(val)  /*pin_x_set(val)*/    /*Set the command/data pin to 'val'*/
 #define LV_DRV_DISP_RST(val)       /*pin_x_set(val)*/    /*Set the reset pin to 'val'*/
 
-/*---------
- *  SPI
- *---------*/
+	 /*---------
+	  *  SPI
+	  *---------*/
 #define LV_DRV_DISP_SPI_CS(val)          /*spi_cs_set(val)*/     /*Set the SPI's Chip select to 'val'*/
 #define LV_DRV_DISP_SPI_WR_BYTE(data)    /*spi_wr(data)*/        /*Write a byte the SPI bus*/
 #define LV_DRV_DISP_SPI_WR_ARRAY(adr, n) /*spi_wr_mem(adr, n)*/  /*Write 'n' bytes to SPI bus from 'adr'*/
 
-/*------------------
- *  Parallel port
- *-----------------*/
+	  /*------------------
+	   *  Parallel port
+	   *-----------------*/
 #define LV_DRV_DISP_PAR_CS(val)          /*par_cs_set(val)*/   /*Set the Parallel port's Chip select to 'val'*/
 #define LV_DRV_DISP_PAR_SLOW             /*par_slow()*/        /*Set low speed on the parallel port*/
 #define LV_DRV_DISP_PAR_FAST             /*par_fast()*/        /*Set high speed on the parallel port*/
 #define LV_DRV_DISP_PAR_WR_WORD(data)    /*par_wr(data)*/      /*Write a word to the parallel port*/
 #define LV_DRV_DISP_PAR_WR_ARRAY(adr, n) /*par_wr_mem(adr,n)*/ /*Write 'n' bytes to Parallel ports from 'adr'*/
 
-/***************************
- * INPUT DEVICE INTERFACE
- ***************************/
+	   /***************************
+		* INPUT DEVICE INTERFACE
+		***************************/
 
-/*----------
- *  Common
- *----------*/
+		/*----------
+		 *  Common
+		 *----------*/
 #define LV_DRV_INDEV_INCLUDE     <stdint.h>             /*Dummy include by default*/
 #define LV_DRV_INDEV_RST(val)    /*pin_x_set(val)*/     /*Set the reset pin to 'val'*/
 #define LV_DRV_INDEV_IRQ_READ    0 /*pn_x_read()*/      /*Read the IRQ pin*/
 
-/*---------
- *  SPI
- *---------*/
+		 /*---------
+		  *  SPI
+		  *---------*/
 #define LV_DRV_INDEV_SPI_CS(val)            /*spi_cs_set(val)*/     /*Set the SPI's Chip select to 'val'*/
 #define LV_DRV_INDEV_SPI_XCHG_BYTE(data)    0 /*spi_xchg(val)*/     /*Write 'val' to SPI and give the read value*/
 
-/*---------
- *  I2C
- *---------*/
+		  /*---------
+		   *  I2C
+		   *---------*/
 #define LV_DRV_INDEV_I2C_START              /*i2c_start()*/       /*Make an I2C start*/
 #define LV_DRV_INDEV_I2C_STOP               /*i2c_stop()*/        /*Make an I2C stop*/
 #define LV_DRV_INDEV_I2C_RESTART            /*i2c_restart()*/     /*Make an I2C restart*/
@@ -75,32 +75,30 @@
 #define LV_DRV_INDEV_I2C_READ(last_read)    0 /*i2c_rd()*/        /*Read a byte from the I2C bud*/
 
 
-/*********************
- *  DISPLAY DRIVERS
- *********************/
+		   /*********************
+			*  DISPLAY DRIVERS
+			*********************/
 
-/*-------------------
- *  Monitor of PC
- *-------------------*/
-#define USE_MONITOR         1
-
+			/*-------------------
+			 *  Monitor of PC
+			 *-------------------*/
 #ifndef USE_MONITOR
-#  define USE_MONITOR         0
+#  define USE_MONITOR         1
 #endif
 
 #if USE_MONITOR
-#  define MONITOR_HOR_RES     LV_HOR_RES
-#  define MONITOR_VER_RES     LV_VER_RES
+#  define MONITOR_HOR_RES     320
+#  define MONITOR_VER_RES     240
 
-/* Scale window by this factor (useful when simulating small screens) */
+			 /* Scale window by this factor (useful when simulating small screens) */
 #  define MONITOR_ZOOM        2
 
 /* Used to test true double buffering with only address changing.
- * Set LV_VDB_SIZE = (LV_HOR_RES * LV_VER_RES) and  LV_VDB_DOUBLE = 1 and LV_COLOR_DEPTH = 32" */
+ * Set LV_draw_buf_SIZE = (LV_HOR_RES * LV_VER_RES) and  LV_draw_buf_DOUBLE = 1 and LV_COLOR_DEPTH = 32" */
 #  define MONITOR_DOUBLE_BUFFERED 0
 
-/*Eclipse: <SDL2/SDL.h>    Visual Studio: <SDL.h>*/
-#  define MONITOR_SDL_INCLUDE_PATH    <SDL.h>
+ /*Eclipse: <SDL2/SDL.h>    Visual Studio: <SDL.h>*/
+#  define MONITOR_SDL_INCLUDE_PATH    <SDL2/SDL.h>
 
 /*Different rendering might be used if running in a Virtual machine*/
 #  define MONITOR_VIRTUAL_MACHINE 0
@@ -122,9 +120,9 @@
 #  define WINDOW_VER_RES      320
 #endif
 
-/*----------------
- *    SSD1963
- *--------------*/
+ /*----------------
+  *    SSD1963
+  *--------------*/
 #ifndef USE_SSD1963
 #  define USE_SSD1963         0
 #endif
@@ -146,9 +144,9 @@
 #  define SSD1963_COLOR_DEPTH 16
 #endif
 
-/*----------------
- *    R61581
- *--------------*/
+  /*----------------
+   *    R61581
+   *--------------*/
 #ifndef USE_R61581
 #  define USE_R61581          0
 #endif
@@ -170,20 +168,56 @@
 #  define R61581_LV_COLOR_DEPTH 16    /*Fix 16 bit*/
 #endif
 
-/*------------------------------
- *  ST7565 (Monochrome, low res.)
- *-----------------------------*/
+   /*------------------------------
+	*  ST7565 (Monochrome, low res.)
+	*-----------------------------*/
 #ifndef USE_ST7565
 #  define USE_ST7565          0
 #endif
 
 #if USE_ST7565
-/*No settings*/
+	/*No settings*/
 #endif  /*USE_ST7565*/
 
-/*-----------------------------------------
- *  Linux frame buffer device (/dev/fbx)
+/*------------------------------------------
+ *  UC1610 (4 gray 160*[104|128])
+ *  (EA DOGXL160 160x104 tested)
  *-----------------------------------------*/
+#ifndef USE_UC1610
+#  define USE_UC1610          0
+#endif
+
+#if USE_UC1610
+#  define UC1610_HOR_RES         LV_HOR_RES
+#  define UC1610_VER_RES         LV_VER_RES
+#  define UC1610_INIT_CONTRAST   33   /* init contrast, values in [%] */
+#  define UC1610_INIT_HARD_RST   0    /* 1 : hardware reset at init, 0 : software reset */
+#  define UC1610_TOP_VIEW        0    /* 0 : Bottom View, 1 : Top View */
+#endif  /*USE_UC1610*/
+
+ /*-------------------------------------------------
+  *  SHARP memory in pixel monochrome display series
+  *      LS012B7DD01 (184x38  pixels.)
+  *      LS013B7DH03 (128x128 pixels.)
+  *      LS013B7DH05 (144x168 pixels.)
+  *      LS027B7DH01 (400x240 pixels.) (tested)
+  *      LS032B7DD02 (336x536 pixels.)
+  *      LS044Q7DH01 (320x240 pixels.)
+  *------------------------------------------------*/
+#ifndef USE_SHARP_MIP
+#  define USE_SHARP_MIP       0
+#endif
+
+#if USE_SHARP_MIP
+#  define SHARP_MIP_HOR_RES             LV_HOR_RES
+#  define SHARP_MIP_VER_RES             LV_VER_RES
+#  define SHARP_MIP_SOFT_COM_INVERSION  0
+#  define SHARP_MIP_REV_BYTE(b)         /*((uint8_t) __REV(__RBIT(b)))*/  /*Architecture / compiler dependent byte bits order reverse*/
+#endif  /*USE_SHARP_MIP*/
+
+  /*-----------------------------------------
+   *  Linux frame buffer device (/dev/fbx)
+   *-----------------------------------------*/
 #ifndef USE_FBDEV
 #  define USE_FBDEV           0
 #endif
@@ -192,13 +226,24 @@
 #  define FBDEV_PATH          "/dev/fb0"
 #endif
 
-/*********************
- *  INPUT DEVICES
- *********************/
+   /*-----------------------------------------
+	*  FreeBSD frame buffer device (/dev/fbx)
+	*.........................................*/
+#ifndef USE_BSD_FBDEV
+#  define USE_BSD_FBDEV     0
+#endif
 
-/*--------------
- *    XPT2046
- *--------------*/
+#if USE_BSD_FBDEV
+# define FBDEV_PATH     "/dev/fb0"
+#endif
+
+	/*********************
+	 *  INPUT DEVICES
+	 *********************/
+
+	 /*--------------
+	  *    XPT2046
+	  *--------------*/
 #ifndef USE_XPT2046
 #  define USE_XPT2046         0
 #endif
@@ -214,9 +259,9 @@
 #  define XPT2046_INV         0
 #endif
 
-/*-----------------
- *    FT5406EE8
- *-----------------*/
+	  /*-----------------
+	   *    FT5406EE8
+	   *-----------------*/
 #ifndef USE_FT5406EE8
 #  define USE_FT5406EE8       0
 #endif
@@ -225,40 +270,38 @@
 # define FT5406EE8_I2C_ADR   0x38                  /*7 bit address*/
 #endif
 
-/*---------------
- *  AD TOUCH
- *--------------*/
+	   /*---------------
+		*  AD TOUCH
+		*--------------*/
 #ifndef USE_AD_TOUCH
 #  define USE_AD_TOUCH        0
 #endif
 
 #if USE_AD_TOUCH
-/*No settings*/
+		/*No settings*/
 #endif
 
 
 /*---------------------------------------
  * Mouse or touchpad on PC (using SDL)
  *-------------------------------------*/
-#define USE_MOUSE       1
 #ifndef USE_MOUSE
-#  define USE_MOUSE           0
+#  define USE_MOUSE           1
 #endif
 
 #if USE_MOUSE
-/*No settings*/
+ /*No settings*/
 #endif
 
 /*-------------------------------------------
  * Mousewheel as encoder on PC (using SDL)
  *------------------------------------------*/
-#define USE_MOUSEWHEEL      1
 #ifndef USE_MOUSEWHEEL
-#  define USE_MOUSEWHEEL      0
+#  define USE_MOUSEWHEEL      1
 #endif
 
 #if USE_MOUSEWHEEL
-/*No settings*/
+ /*No settings*/
 #endif
 
 /*-------------------------------------------------
@@ -272,11 +315,15 @@
 #  define LIBINPUT_NAME   "/dev/input/event0"        /*You can use the "evtest" Linux tool to get the list of devices and test them*/
 #endif  /*USE_LIBINPUT*/
 
-/*-------------------------------------------------
- * Mouse or touchpad as evdev interface (for Linux based systems)
- *------------------------------------------------*/
+ /*-------------------------------------------------
+  * Mouse or touchpad as evdev interface (for Linux based systems)
+  *------------------------------------------------*/
 #ifndef USE_EVDEV
 #  define USE_EVDEV           0
+#endif
+
+#ifndef USE_BSD_EVDEV
+#  define USE_BSD_EVDEV       0
 #endif
 
 #if USE_EVDEV
@@ -298,16 +345,22 @@
 #  endif  /*EVDEV_SCALE*/
 #endif  /*USE_EVDEV*/
 
-/*-------------------------------
- *   Keyboard of a PC (using SDL)
- *------------------------------*/
-#define USE_KEYBOARD    1
+  /*-------------------------------
+   *   Keyboard of a PC (using SDL)
+   *------------------------------*/
 #ifndef USE_KEYBOARD
-#  define USE_KEYBOARD        0
+#  define USE_KEYBOARD        1
 #endif
 
 #if USE_KEYBOARD
-/*No settings*/
+   /*No settings*/
+#endif
+
+/*----------------------------------------
+ *  GTK drivers (monitor, mouse, keyboard
+ *---------------------------------------*/
+#ifndef USE_GTK
+#  define USE_GTK       0
 #endif
 
 #endif  /*LV_DRV_CONF_H*/
