@@ -46,6 +46,7 @@ private:
     std::unique_ptr<DisplayDriver::IDisplayDriver> m_hardwareDisplayDriver;
 #elif defined USE_WINSDL_BACKEND
     std::thread m_tickThread;
+    lv_indev_drv_t m_indevDriver;
 #endif
 
 };

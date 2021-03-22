@@ -85,7 +85,10 @@ void ClockWatch::initStyles()
 		,	Theme::Color::MainThemeLight
 	);
 
-	m_fullDateStyle = m_secondsLabelStyle;
+	m_fullDateStyle = pThemeProvider->getFontStyle(
+		Theme::FontSize::small
+		, Theme::Color::MainThemeLight
+	);;
 
 	m_weekDayStyle = pThemeProvider->getFontStyle(
 			Theme::FontSize::large

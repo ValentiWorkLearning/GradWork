@@ -106,7 +106,7 @@ private:
             }
         );
 
-        //lv_log_register_print_cb( lvglLoggerCallback );
+        lv_log_register_print_cb( lvglLoggerCallback );
     }
 
     void initDisplayDriver()

@@ -87,6 +87,7 @@ lv_style_t
 ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
 {
     lv_style_t iconsFont{};
+    lv_style_init(&iconsFont);
     //lv_style_copy( &iconsFont,&lv_style_plain);
 
     switch (_fontStyle)
@@ -115,6 +116,7 @@ lv_style_t
 ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const
 {
     lv_style_t fontStyle{};
+    lv_style_init(&fontStyle);
     //lv_style_copy( &fontStyle, &lv_style_plain_color );
 
     switch (_fontStyle)

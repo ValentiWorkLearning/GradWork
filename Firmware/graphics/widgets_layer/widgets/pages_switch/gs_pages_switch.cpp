@@ -12,6 +12,7 @@ namespace Graphics::Widgets
 PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
 	:	WidgetBaseObj<IPagesSwitch>{ _themeController }
     ,	m_pointStyle{}
+	, m_pointStyleChecked{}
 	,	m_activePageName{}
 {
 	initStyles();
@@ -83,7 +84,11 @@ void PagesSwitch::initStyles()
 	const auto ThemeLight = pThemeProvider->getMainThemeColor(
 			Theme::Color::MainThemeLight
 		);
-	( &m_pointStyleChecked, ThemeDark );
+
+	lv_style_init(&m_pointStyle);
+	lv_style_init(&m_pointStyleChecked);
+
+	lv_style_set_bg_color( &m_pointStyleChecked, ThemeDark );
 	lv_style_set_bg_color( &m_pointStyle, ThemeLight );
 
 	lv_style_set_bg_grad_color(&m_pointStyle, ThemeLight);
@@ -111,6 +116,7 @@ void PagesSwitch::resetStyle()
 		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
 		,   std::forward_as_tuple(
 				m_pointStyle
+			, m_pointStyleChecked
 		)
 	);
 }

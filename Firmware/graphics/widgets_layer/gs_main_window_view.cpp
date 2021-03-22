@@ -30,7 +30,7 @@ MainWindowView::initBackground()
     auto createAlignedRect = [this]( auto _aligmentType, lv_style_t* _style )
     {
         lv_obj_t* pObject{ nullptr };
-        auto parent = m_pObjMask.get();
+        auto parent = lv_scr_act();//m_pObjMask.get();
 
         pObject = lv_obj_create( parent, nullptr );
         lv_obj_set_size(
@@ -53,10 +53,12 @@ MainWindowView::initBackground()
             Graphics::Theme::Color::MainThemeLight
         );
 
+    lv_style_init( &m_iniStyle );
     lv_style_set_bg_opa( &m_iniStyle, LV_OPA_COVER );
     lv_style_set_bg_color( &m_iniStyle, MainThemeDark );
     lv_style_set_bg_grad_color( &m_iniStyle,MainThemeDark );
 
+    lv_style_init(&m_yanStyle);
     lv_style_set_bg_color( &m_yanStyle, MainThemeLight );
     lv_style_set_bg_grad_color( &m_yanStyle, MainThemeLight );
     lv_style_set_bg_opa( &m_yanStyle, LV_OPA_COVER );
@@ -66,7 +68,7 @@ MainWindowView::initBackground()
 
     auto createAlignedCircle = [this](auto _aligmentType, lv_style_t* _style)
     {
-        auto parent = m_pObjMask.get();
+        auto parent = lv_scr_act();//m_pObjMask.get();
         lv_obj_t* pCircle = lv_obj_create( parent, nullptr );
 
         lv_obj_set_size(
@@ -81,12 +83,14 @@ MainWindowView::initBackground()
         return pCircle;
     };
 
+    lv_style_init(&m_iniCircleStyle);
     lv_style_set_bg_opa( &m_iniCircleStyle, LV_OPA_COVER );
     lv_style_set_bg_color( &m_iniCircleStyle,MainThemeDark );
     lv_style_set_border_color( &m_iniCircleStyle, MainThemeDark );
     lv_style_set_bg_grad_color( &m_iniCircleStyle, MainThemeDark );
     lv_style_set_radius( &m_iniCircleStyle, LV_RADIUS_CIRCLE );
 
+    lv_style_init(&m_yanCircleStyle);
     lv_style_set_bg_opa( &m_yanCircleStyle, LV_OPA_COVER );
     lv_style_set_bg_color( &m_yanCircleStyle,MainThemeLight );
     lv_style_set_border_color( &m_yanCircleStyle, MainThemeLight );
