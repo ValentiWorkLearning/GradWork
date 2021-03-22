@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.14)
 
+set( CONAN_DISABLE_CHECK_COMPILER TRUE )
 set( TARGET_PLATFORM "ARM_CORTEX" CACHE STRING "Target platform for application building")
 message( "Current building platform is ${TARGET_PLATFORM}")
 
