@@ -45,7 +45,7 @@ Application::Application()
     initPeripheral();
     initServices();
     initGraphicsStack();
-    initBleStack();
+    //initBleStack();
     connectBoardSpecificEvents();
 }
 

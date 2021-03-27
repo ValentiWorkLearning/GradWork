@@ -123,17 +123,17 @@ private:
         lv_disp_drv_init( &m_glDisplayDriver );
         m_glDisplayDriver.buffer = &displayBuffer;
 
-        // auto monitorCallback = cbc::obtain_connector(
-        //     []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
-        //     {
-        //         LOG_DEBUG("Refresh time:");
-        //         LOG_DEBUG_ENDL( time );
-        //         LOG_DEBUG("Refreshed pixels:");
-        //         LOG_DEBUG_ENDL( px );
-        //     }
-        // );
+        auto monitorCallback = cbc::obtain_connector(
+            []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
+            {
+                LOG_DEBUG("Refresh time:");
+                LOG_DEBUG_ENDL( time );
+                LOG_DEBUG("Refreshed pixels:");
+                LOG_DEBUG_ENDL( px );
+            }
+        );
 
-        //m_glDisplayDriver.monitor_cb = monitorCallback;
+        m_glDisplayDriver.monitor_cb = monitorCallback;
         m_pPlatformBackend.platformDependentInit( &m_glDisplayDriver );
 
         m_glDisplay.reset( lv_disp_drv_register( &m_glDisplayDriver ) );
