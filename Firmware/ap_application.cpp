@@ -41,7 +41,7 @@ namespace EventConvert
     }
 }
 
-Application::Application()
+Application::Application()noexcept
 {
     initBoard();
     initPeripheral();
@@ -51,16 +51,16 @@ Application::Application()
     connectBoardSpecificEvents();
 }
 
-Application::~Application() = default;
+Application::~Application()noexcept = default;
 
 void
-Application::initBoard()
+Application::initBoard() noexcept
 {
     m_pBoardImpl = WatchBoard::createBoard();
 }
 
 void
-Application::initServices()
+Application::initServices() noexcept
 {
     m_fakeServiceProvider = ServiceProviders::getFakeServiceCreator();
     m_batteryLevelService = m_fakeServiceProvider->getBatteryService();
@@ -69,13 +69,13 @@ Application::initServices()
 }
 
 void
-Application::initPeripheral()
+Application::initPeripheral() noexcept
 {
 
 }
 
 void
-Application::initBleStack()
+Application::initBleStack() noexcept
 {
 
     m_bleStackKeeper = std::move(
@@ -139,7 +139,7 @@ Application::initBleStack()
 }
 
 void
-Application::initGraphicsStack()
+Application::initGraphicsStack() noexcept
 {
     m_graphicsService = Graphics::createGraphicsService();
 
@@ -172,7 +172,7 @@ Application::initGraphicsStack()
 
 
 void
-Application::connectBoardSpecificEvents()
+Application::connectBoardSpecificEvents() noexcept
 {
     auto& pMainWindow = m_graphicsService->getMainWindow();
 
@@ -195,7 +195,7 @@ Application::connectBoardSpecificEvents()
 }
 
 void
-Application::runApplicationLoop()
+Application::runApplicationLoop() noexcept
 {
     I2C::scanI2CSensors();
 

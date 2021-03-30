@@ -27,11 +27,11 @@ public:
     static constexpr inline int MaxSubscriberLimit = 3;
     using SubscriberStorage = etl::vector<TEventHandler,MaxSubscriberLimit>;
 
-    void subscribe( EventGroup _eventGroup, const TEventHandler& _handler );
+    void subscribe( EventGroup _eventGroup, const TEventHandler& _handler )noexcept;
  
-    void postEvent( TEvent&& _eventToProcess );
+    void postEvent( TEvent&& _eventToProcess )noexcept;
 
-    void processEventQueue();
+    void processEventQueue()noexcept;
 
 private:
 

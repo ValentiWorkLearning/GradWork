@@ -5,7 +5,7 @@
 namespace Graphics::Events
 {
 
-void EventDispatcher::subscribe( EventGroup _eventGroup, const TEventHandler& _handler )
+void EventDispatcher::subscribe( EventGroup _eventGroup, const TEventHandler& _handler )noexcept
 {
     auto it = std::find_if(
             m_eventsMap.begin()
@@ -27,12 +27,12 @@ void EventDispatcher::subscribe( EventGroup _eventGroup, const TEventHandler& _h
 
 }
 
-void EventDispatcher::postEvent(TEvent &&_eventToProcess)
+void EventDispatcher::postEvent(TEvent &&_eventToProcess)noexcept
 {
     m_eventsQueue.push( std::move( _eventToProcess ) );
 }
 
-void EventDispatcher::processEventQueue()
+void EventDispatcher::processEventQueue()noexcept
 {
     TEvent tempEvent{};
     while( m_eventsQueue.pop(tempEvent) )
