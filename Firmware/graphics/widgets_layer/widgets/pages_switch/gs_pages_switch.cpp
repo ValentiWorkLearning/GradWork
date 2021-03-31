@@ -135,8 +135,7 @@ void PagesSwitch::initCheckedPages(
 
 	lv_obj_align(
 			m_pFirstPage.get()
-		,	nullptr
-		,	LV_ALIGN_IN_BOTTOM_MID
+		,	LV_ALIGN_BOTTOM_MID
 		,	-static_cast<int>( _displayWidth / 12 )
 		,	-static_cast<int>( _displayHeight / 10 )
 	);
@@ -156,8 +155,7 @@ void PagesSwitch::initUncheckedPages(
 
 	lv_obj_align(
 			m_pSecondPage.get()
-		,	nullptr
-		,	LV_ALIGN_IN_BOTTOM_MID
+		,	LV_ALIGN_BOTTOM_MID
 		,	0
 		,	-static_cast<int>(_displayHeight / 10)
 	);
@@ -171,8 +169,7 @@ void PagesSwitch::initUncheckedPages(
 
 	lv_obj_align(
 			m_pThirdPage.get()
-		,	nullptr
-		,	LV_ALIGN_IN_BOTTOM_MID
+		,	LV_ALIGN_BOTTOM_MID
 		,	static_cast<int>( _displayWidth / 12)
 		,	-static_cast<int>( _displayHeight / 10)
 	);

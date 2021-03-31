@@ -146,8 +146,7 @@ void HealthPage::initPageTitle(
 	lv_label_set_text( m_pHealthPageLabel.get(), "HEALTH" );
 	lv_obj_align(
 			m_pHealthPageLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_TOP_MID
+		,	LV_ALIGN_TOP_MID
 		,	0
 		,	_displayHeight / 15
 	);
@@ -156,7 +155,7 @@ void HealthPage::initPageTitle(
 
 	lv_obj_add_style( m_pHealthPageIcon.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_healthPageIconStyle );
 	lv_label_set_text( m_pHealthPageIcon.get(), IconFontSymbols::Health::HeartIcon.data() );
-	lv_obj_align(
+	lv_obj_align_to(
 			m_pHealthPageIcon.get()
 		,	m_pHealthPageLabel.get()
 		,	LV_ALIGN_OUT_BOTTOM_MID
@@ -179,8 +178,7 @@ void HealthPage::initHeartrateWidgets(
 
 	lv_obj_align(
 			m_pHeartBeatsLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_LEFT_MID
+		,	LV_ALIGN_LEFT_MID
 		,	_displayWidth / 4  - _displayWidth / 60
 		,	-static_cast<int>( _displayHeight / 24 )
 	);
@@ -190,7 +188,7 @@ void HealthPage::initHeartrateWidgets(
 	lv_obj_add_style( m_pHeartBeatsTooltip.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_tooltipsStyleDark);
 	lv_label_set_text( m_pHeartBeatsTooltip.get(), "HEARTBEATS");
 
-	lv_obj_align(
+	lv_obj_align_to(
 			m_pHeartBeatsTooltip.get()
 		,	m_pHeartBeatsLabel.get()
 		,	LV_ALIGN_OUT_BOTTOM_LEFT
@@ -210,8 +208,7 @@ void HealthPage::initHeartrateWidgets(
 
 	lv_obj_align(
 			m_pPulseIcon.get()
-		,	nullptr
-		,	LV_ALIGN_IN_LEFT_MID
+		,	LV_ALIGN_LEFT_MID
 		,	0
 		,	-static_cast<int>( _displayHeight / 25 )
 	);
@@ -230,7 +227,6 @@ void HealthPage::initCalloriesCounter(
 
 	lv_obj_align(
 			m_pKcalLabel.get()
-		,	nullptr
 		,	LV_ALIGN_CENTER
 		,	_displayWidth / 6
 		,	static_cast<int>( _displayHeight / 6 )
@@ -241,7 +237,7 @@ void HealthPage::initCalloriesCounter(
 	lv_obj_add_style( m_pKcalTooltip.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_tooltipsStyleLight );
 	lv_label_set_text( m_pKcalTooltip.get(), "KCAL");
 
-	lv_obj_align(
+	lv_obj_align_to(
 			m_pKcalTooltip.get()
 		,	m_pKcalLabel.get()
 		,	LV_ALIGN_OUT_BOTTOM_RIGHT
@@ -263,8 +259,7 @@ void HealthPage::initStepsCounter(
 
 	lv_obj_align(
 			m_pStepsLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_RIGHT_MID
+		,	LV_ALIGN_RIGHT_MID
 		,	-static_cast<int>( _displayWidth / 12 )
 		,	-static_cast<int>( _displayHeight / 20 )
 	);
@@ -274,7 +269,7 @@ void HealthPage::initStepsCounter(
 	lv_obj_add_style( m_pStepsTooltip.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_tooltipsStyleLight );
 	lv_label_set_text( m_pStepsTooltip.get(), "STEPS");
 
-	lv_obj_align(
+	lv_obj_align_to(
 			m_pStepsTooltip.get()
 		,	m_pStepsLabel.get()
 		,	LV_ALIGN_OUT_BOTTOM_RIGHT
@@ -288,7 +283,6 @@ void HealthPage::initStepsCounter(
 
     lv_obj_align(
 			m_pStepsIcon.get()
-        ,   nullptr
         ,   LV_ALIGN_CENTER
         ,   static_cast<int>( _displayWidth / 10 )
         ,	-static_cast<int>(_displayHeight / 48 )

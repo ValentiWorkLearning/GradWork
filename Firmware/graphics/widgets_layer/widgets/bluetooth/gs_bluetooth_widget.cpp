@@ -76,8 +76,7 @@ void BluetoothWidget::initBluetoothIcon(
 
     lv_obj_align(
             m_pBluetoothIcon.get()
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_LEFT
+        ,   LV_ALIGN_TOP_LEFT
         ,   static_cast<int>( DisplayWidth / 6)
         ,   static_cast<int>( DisplayHeight / 3.5f)
     );

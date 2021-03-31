@@ -148,6 +148,7 @@ set (LVGL_SOURCES
     "lvgl/src/extra/widgets/tabview/lv_tabview.c"
     "lvgl/src/extra/widgets/tileview/lv_tileview.c"
     "lvgl/src/extra/widgets/win/lv_win.c"
+    "lvgl/src/extra/lv_extra.c"
     "lvgl/src/font/lv_font.c"
     "lvgl/src/font/lv_font_dejavu_16_persian_hebrew.c"
     "lvgl/src/font/lv_font_fmt_txt.c"

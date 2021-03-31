@@ -138,8 +138,7 @@ void ClockWatch::initClockLabels(
 
 	lv_obj_align(
 			m_pHoursLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_LEFT_MID
+		,	LV_ALIGN_LEFT_MID
 		,	DisplayWidth / 7
 		,	DisplayHeight / 30
 	);
@@ -150,7 +149,6 @@ void ClockWatch::initClockLabels(
 
 	lv_obj_align(
 			m_pMinutesLabel.get()
-		,	nullptr
 		,	LV_ALIGN_CENTER
 		,	DisplayWidth / 20
 		,	DisplayHeight / 30
@@ -166,8 +164,7 @@ void ClockWatch::initClockLabels(
 
 	lv_obj_align(
 			m_pSecondsLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_TOP_RIGHT
+		,	LV_ALIGN_TOP_RIGHT
 		,	0
 		,	DisplayHeight / 3 + DisplayHeight / 20
 	);
@@ -190,8 +187,7 @@ void ClockWatch::initFullDateLabel(
 
 	lv_obj_align(
 			m_pFullDateLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_RIGHT_MID
+		,	LV_ALIGN_RIGHT_MID
 		,	- static_cast<int>( _displayWidth / 3 )
 		,	static_cast<int>( _displayHeight / 4.5f )
 	);
@@ -213,8 +209,7 @@ void ClockWatch::initWeekDayLabel(
 
 	lv_obj_align(
 			m_pWeekDayLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_TOP_MID
+		,	LV_ALIGN_TOP_MID
 		,	static_cast<int>( _displayWidth / 24 )
 		,	_displayHeight / 15
 	);

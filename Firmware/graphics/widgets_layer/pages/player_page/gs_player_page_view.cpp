@@ -103,26 +103,24 @@ void PlayerPage::initPageTitle(
 	,	const std::uint32_t _displayHeight
 	)
 {
-	m_pageTitle.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pageTitle.reset( lv_label_create( _parentObject) );
 
 	lv_obj_add_style( m_pageTitle.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_mainLabelStyleDark );
 	lv_label_set_text( m_pageTitle.get(), "MUSIC" );
 	lv_obj_align(
 			m_pageTitle.get()
-		,	nullptr
-		,	LV_ALIGN_IN_TOP_MID
+		,	LV_ALIGN_TOP_MID
 		,	0
 		,	_displayHeight / 6
 	);
 
-	m_melodyIcon.reset( lv_label_create( _parentObject, nullptr ) );
+	m_melodyIcon.reset( lv_label_create( _parentObject) );
 
 	lv_obj_add_style( m_melodyIcon.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_melodyIconStyle );
 	lv_label_set_text( m_melodyIcon.get(), IconFontSymbols::Music::Melody.data() );
 	lv_obj_align(
 			m_melodyIcon.get()
-		,	nullptr
-		,	LV_ALIGN_IN_TOP_MID
+		,	LV_ALIGN_TOP_MID
 		,	0
 		,	_displayHeight / 30
 	);
@@ -135,26 +133,24 @@ void PlayerPage::initPlayIcon(
 	)
 {
 
-	m_pPlayIconSecond.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pPlayIconSecond.reset( lv_label_create( _parentObject ) );
 
 	lv_obj_add_style( m_pPlayIconSecond.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleLight );
 	lv_label_set_text( m_pPlayIconSecond.get(), IconFontSymbols::Player::SecondPart.data() );
 	lv_obj_align(
 		m_pPlayIconSecond.get()
-		,	nullptr
 		,	LV_ALIGN_CENTER
 		,	6
 		,	0
 	);
 
-	m_pPlayIconFirst.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pPlayIconFirst.reset( lv_label_create( _parentObject ) );
 
 	lv_obj_add_style( m_pPlayIconFirst.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleDark );
 	lv_label_set_text( m_pPlayIconFirst.get(), IconFontSymbols::Player::FirstPart.data() );
 	lv_obj_align(
 			m_pPlayIconFirst.get()
-		,	nullptr
-		,	LV_ALIGN_IN_LEFT_MID
+		,	LV_ALIGN_LEFT_MID
 		,	_displayWidth / 3 +  _displayWidth / 25
 		,	0
 	);
@@ -166,25 +162,23 @@ void PlayerPage::initNextSongIcon(
 	,	const std::uint32_t _displayHeight
 	)
 {
-	m_pSwitchNextSongArrow.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pSwitchNextSongArrow.reset( lv_label_create( _parentObject ) );
 
 	lv_obj_add_style(m_pSwitchNextSongArrow.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleLight );
 	lv_label_set_text(m_pSwitchNextSongArrow.get(), IconFontSymbols::Player::ArrowRight.data() );
 	lv_obj_align(
 			m_pSwitchNextSongArrow.get()
-		,	nullptr
 		,	LV_ALIGN_CENTER
 		,	_displayWidth / 3
 		,	0
 	);
 
-	m_pSwitchNextSongLine.reset(lv_label_create(_parentObject, nullptr ) );
+	m_pSwitchNextSongLine.reset(lv_label_create(_parentObject ) );
 
 	lv_obj_add_style(m_pSwitchNextSongLine.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleLight );
 	lv_label_set_text(m_pSwitchNextSongLine.get(), IconFontSymbols::Player::Line.data() );
 	lv_obj_align(
 			m_pSwitchNextSongLine.get()
-		,	nullptr
 		,	LV_ALIGN_CENTER
 		,	_displayWidth / 5
 		,	0
@@ -197,26 +191,24 @@ void PlayerPage::initPrevSongIcon(
 	,	const std::uint32_t _displayHeight
 	)
 {
-	m_pSwitchPreviousSongArrow.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pSwitchPreviousSongArrow.reset( lv_label_create( _parentObject ) );
 
 	lv_obj_add_style( m_pSwitchPreviousSongArrow.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleDark );
 	lv_label_set_text(m_pSwitchPreviousSongArrow.get(), IconFontSymbols::Player::ArrowLeft.data() );
 	lv_obj_align(
 			m_pSwitchPreviousSongArrow.get()
-		,	nullptr
-		,	LV_ALIGN_IN_LEFT_MID
+		,	LV_ALIGN_LEFT_MID
 		,	_displayWidth / 20
 		,	0
 	);
 
-	m_pSwitchPreviousSongLine.reset(lv_label_create(_parentObject, nullptr ) );
+	m_pSwitchPreviousSongLine.reset(lv_label_create(_parentObject ) );
 
 	lv_obj_add_style(m_pSwitchPreviousSongLine.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleDark );
 	lv_label_set_text(m_pSwitchPreviousSongLine.get(), IconFontSymbols::Player::Line.data() );
 	lv_obj_align(
 			m_pSwitchPreviousSongLine.get()
-		,	nullptr
-		,	LV_ALIGN_IN_LEFT_MID
+		,	LV_ALIGN_LEFT_MID
 		,	_displayWidth / 10
 		,	0
 	);

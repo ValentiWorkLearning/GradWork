@@ -32,7 +32,7 @@ MainWindowView::initBackground()
         lv_obj_t* pObject{ nullptr };
         auto parent = lv_scr_act();//m_pObjMask.get();
 
-        pObject = lv_obj_create( parent, nullptr );
+        pObject = lv_obj_create( parent );
         lv_obj_set_size(
                 pObject
             ,   MainWindowView::Width
@@ -40,7 +40,7 @@ MainWindowView::initBackground()
         );
 
         lv_obj_add_style( pObject,LV_PART_MAIN, LV_STATE_DEFAULT, _style );
-        lv_obj_align( pObject, nullptr, _aligmentType, 0, 0 );
+        lv_obj_align( pObject, _aligmentType, 0, 0 );
 
         return pObject;
     };
@@ -63,13 +63,13 @@ MainWindowView::initBackground()
     lv_style_set_bg_grad_color( &m_yanStyle, MainThemeLight );
     lv_style_set_bg_opa( &m_yanStyle, LV_OPA_COVER );
 
-    m_pIny.reset( createAlignedRect(LV_ALIGN_IN_BOTTOM_MID, &m_iniStyle) );
-    m_pYan.reset( createAlignedRect( LV_ALIGN_IN_TOP_MID, &m_yanStyle ) );
+    m_pIny.reset( createAlignedRect(LV_ALIGN_BOTTOM_MID, &m_iniStyle) );
+    m_pYan.reset( createAlignedRect( LV_ALIGN_TOP_MID, &m_yanStyle ) );
 
     auto createAlignedCircle = [this](auto _aligmentType, lv_style_t* _style)
     {
         auto parent = lv_scr_act();//m_pObjMask.get();
-        lv_obj_t* pCircle = lv_obj_create( parent, nullptr );
+        lv_obj_t* pCircle = lv_obj_create( parent );
 
         lv_obj_set_size(
                 pCircle
@@ -78,7 +78,7 @@ MainWindowView::initBackground()
         );
 
         lv_obj_add_style( pCircle, LV_PART_MAIN, LV_STATE_DEFAULT,_style );
-        lv_obj_align( pCircle, nullptr, _aligmentType, 0, 0);
+        lv_obj_align( pCircle, _aligmentType, 0, 0);
 
         return pCircle;
     };
@@ -97,8 +97,8 @@ MainWindowView::initBackground()
     lv_style_set_bg_grad_color( &m_yanCircleStyle, MainThemeLight );
     lv_style_set_radius(&m_yanCircleStyle, LV_RADIUS_CIRCLE);
 
-    m_pInyCircle.reset( createAlignedCircle( LV_ALIGN_IN_RIGHT_MID, &m_iniCircleStyle ) );
-    m_pYanCircle.reset( createAlignedCircle( LV_ALIGN_IN_LEFT_MID, &m_yanCircleStyle ) );
+    m_pInyCircle.reset( createAlignedCircle( LV_ALIGN_RIGHT_MID, &m_iniCircleStyle ) );
+    m_pYanCircle.reset( createAlignedCircle( LV_ALIGN_LEFT_MID, &m_yanCircleStyle ) );
 }
 
 void

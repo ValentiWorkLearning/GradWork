@@ -126,8 +126,7 @@ void BatteryWidget::initBatteryPercentageLabel(
 
     lv_obj_align(
             m_pBatteryLabel.get()
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_RIGHT
+        ,   LV_ALIGN_TOP_RIGHT
         ,   -static_cast<int>( DisplayWidth / 4)
         ,   static_cast<int>( DisplayHeight / 4) + static_cast<int>( DisplayHeight / 20)
     );
@@ -150,8 +149,7 @@ void BatteryWidget::initBatteryIcon(
 
     lv_obj_align(
             m_pBatteryIcon.get()
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_RIGHT
+        ,   LV_ALIGN_TOP_RIGHT
         ,   -static_cast<int>( DisplayWidth / 7 )
         ,   static_cast<int>( DisplayHeight / 4 ) + static_cast<int>( DisplayHeight / 22)
     );
