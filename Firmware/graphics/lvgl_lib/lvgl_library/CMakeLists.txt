@@ -2,38 +2,7 @@ cmake_minimum_required(VERSION 3.14)
 
 set (TARGET_NAME lvgl_lib)
 
-add_library( ${TARGET_NAME} STATIC )
-
-if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
-    target_compile_options( ${TARGET_NAME} PUBLIC /wd4576 /std:c++latest )
-endif()
-
-target_compile_features(
-    ${TARGET_NAME}
-    PUBLIC
-    cxx_std_20
-)
-#set_target_properties( ${TARGET_NAME} PROPERTIES LANGUAGE C)
-
-target_include_directories(
-    ${TARGET_NAME}
-    PUBLIC
-    "lvgl/"
-    "lvgl/src/"
-    "lvgl/src/core/"
-    "lvgl/src/draw/"
-    "lvgl/src/font/"
-    "lvgl/src/gpu/"
-    "lvgl/src/hal/"
-    "lvgl/src/misc/"
-    "lvgl/src/widgets/"
-    "lvgl/src/extra/"
-    ${CMAKE_CURRENT_LIST_DIR}
-)
-
-target_sources(
-    ${TARGET_NAME}
-    PRIVATE
+set (LVGL_SOURCES
     "lvgl/examples/assets/imgbtn_left.c"
     "lvgl/examples/assets/imgbtn_mid.c"
     "lvgl/examples/assets/imgbtn_right.c"
@@ -73,7 +42,6 @@ target_sources(
     "lvgl/examples/styles/lv_example_style_2.c"
     "lvgl/examples/styles/lv_example_style_3.c"
     "lvgl/examples/styles/lv_example_style_4.c"
-    "lvgl/examples/styles/lv_example_style_5.c"
     "lvgl/examples/styles/lv_example_style_6.c"
     "lvgl/examples/styles/lv_example_style_7.c"
     "lvgl/examples/styles/lv_example_style_8.c"
@@ -264,6 +232,39 @@ target_sources(
     "lvgl/tests/lv_test_fonts/font_3.c"
     "lvgl/tests/lv_test_main.c"
     "lvgl/tests/lv_test_widgets/lv_test_label.c"
+)
+
+set (LVGL_HEADERS
+    "lvgl/"
+    "lvgl/src/"
+    "lvgl/src/core/"
+    "lvgl/src/draw/"
+    "lvgl/src/font/"
+    "lvgl/src/gpu/"
+    "lvgl/src/hal/"
+    "lvgl/src/misc/"
+    "lvgl/src/widgets/"
+    "lvgl/src/extra/"
+    ${CMAKE_CURRENT_LIST_DIR}
+)
+
+add_library( ${TARGET_NAME} STATIC ${LVGL_SOURCES} )
+
+if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
+    target_compile_options( ${TARGET_NAME} PUBLIC /wd4576 /std:c++latest )
+endif()
+
+target_compile_features(
+    ${TARGET_NAME}
+    PUBLIC
+    cxx_std_20
+)
+#set_target_properties( ${TARGET_NAME} PROPERTIES LANGUAGE C)
+
+target_include_directories(
+    ${TARGET_NAME}
+    PUBLIC
+    ${LVGL_HEADERS}
 )
 
 target_link_options(
