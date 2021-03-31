@@ -127,7 +127,7 @@ void PagesSwitch::initCheckedPages(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pFirstPage.reset( lv_obj_create(_parentObject, nullptr ) );
+	m_pFirstPage.reset( lv_obj_create(_parentObject ) );
 	lv_obj_set_size( m_pFirstPage.get(), ArcSize, ArcSize );
 	lv_obj_add_style(m_pFirstPage.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_pointStyle);
 	lv_obj_add_style(m_pFirstPage.get(), LV_PART_MAIN,LV_STATE_CHECKED, &m_pointStyleChecked);
@@ -148,7 +148,7 @@ void PagesSwitch::initUncheckedPages(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pSecondPage.reset( lv_obj_create(_parentObject, nullptr ) );
+	m_pSecondPage.reset( lv_obj_create(_parentObject) );
 	lv_obj_set_size( m_pSecondPage.get(), ArcSize, ArcSize );
 	lv_obj_add_style( m_pSecondPage.get(), LV_PART_MAIN, LV_STATE_DEFAULT,&m_pointStyle );
 	lv_obj_add_style( m_pSecondPage.get(), LV_PART_MAIN, LV_STATE_CHECKED, &m_pointStyleChecked );
@@ -162,7 +162,7 @@ void PagesSwitch::initUncheckedPages(
 		,	-static_cast<int>(_displayHeight / 10)
 	);
 
-	m_pThirdPage.reset( lv_obj_create( _parentObject, nullptr) );
+	m_pThirdPage.reset( lv_obj_create( _parentObject) );
 
 	lv_obj_set_size( m_pThirdPage.get(), ArcSize, ArcSize );
 	lv_obj_add_style( m_pThirdPage.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_pointStyle);

@@ -133,7 +133,7 @@ void ClockWatch::initClockLabels(
 	const std::uint32_t DisplayWidth { _displayWidth };
 	const std::uint32_t DisplayHeight { _displayHeight };
 
-	m_pHoursLabel.reset( lv_label_create( parent, nullptr ) );
+	m_pHoursLabel.reset( lv_label_create( parent ) );
 	lv_obj_add_style( m_pHoursLabel.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_hoursLabelStyle );
 
 	lv_obj_align(
@@ -144,7 +144,7 @@ void ClockWatch::initClockLabels(
 		,	DisplayHeight / 30
 	);
 
-	m_pMinutesLabel.reset( lv_label_create( parent, nullptr ) );
+	m_pMinutesLabel.reset( lv_label_create( parent ) );
 	lv_obj_add_style( m_pMinutesLabel.get(), LV_PART_MAIN, LV_STATE_DEFAULT		,	&m_minutesLabelStyle
 	);
 
@@ -156,7 +156,7 @@ void ClockWatch::initClockLabels(
 		,	DisplayHeight / 30
 	);
 
-	m_pSecondsLabel.reset( lv_label_create( parent, nullptr ) );
+	m_pSecondsLabel.reset( lv_label_create( parent ) );
 	lv_obj_add_style(
 			m_pSecondsLabel.get()
 		,	LV_PART_MAIN
@@ -180,7 +180,7 @@ void ClockWatch::initFullDateLabel(
 )
 {
 
-	m_pFullDateLabel.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pFullDateLabel.reset( lv_label_create( _parentObject ) );
 	lv_obj_add_style(
 			m_pFullDateLabel.get()
 		, 	LV_PART_MAIN
@@ -203,7 +203,7 @@ void ClockWatch::initWeekDayLabel(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pWeekDayLabel.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pWeekDayLabel.reset( lv_label_create( _parentObject ) );
 	lv_obj_add_style(
 			m_pWeekDayLabel.get()
 		, 	LV_PART_MAIN

@@ -140,7 +140,7 @@ void HealthPage::initPageTitle(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pHealthPageLabel.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pHealthPageLabel.reset( lv_label_create( _parentObject ) );
 
 	lv_obj_add_style( m_pHealthPageLabel.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_mainLabelStyleDark );
 	lv_label_set_text( m_pHealthPageLabel.get(), "HEALTH" );
@@ -152,7 +152,7 @@ void HealthPage::initPageTitle(
 		,	_displayHeight / 15
 	);
 
-	m_pHealthPageIcon.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pHealthPageIcon.reset( lv_label_create( _parentObject ) );
 
 	lv_obj_add_style( m_pHealthPageIcon.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_healthPageIconStyle );
 	lv_label_set_text( m_pHealthPageIcon.get(), IconFontSymbols::Health::HeartIcon.data() );
@@ -172,7 +172,7 @@ void HealthPage::initHeartrateWidgets(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pHeartBeatsLabel.reset( lv_label_create(_parentObject, nullptr) );
+	m_pHeartBeatsLabel.reset( lv_label_create(_parentObject) );
 
 	lv_obj_add_style( m_pHeartBeatsLabel.get(), LV_PART_MAIN,LV_STATE_DEFAULT, &m_mainFontDark );
 	lv_label_set_text( m_pHeartBeatsLabel.get(), "80");
@@ -185,7 +185,7 @@ void HealthPage::initHeartrateWidgets(
 		,	-static_cast<int>( _displayHeight / 24 )
 	);
 
-	m_pHeartBeatsTooltip.reset( lv_label_create(_parentObject, nullptr) );
+	m_pHeartBeatsTooltip.reset( lv_label_create(_parentObject) );
 
 	lv_obj_add_style( m_pHeartBeatsTooltip.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_tooltipsStyleDark);
 	lv_label_set_text( m_pHeartBeatsTooltip.get(), "HEARTBEATS");
@@ -198,7 +198,7 @@ void HealthPage::initHeartrateWidgets(
 		,	0
 	);
 
-	m_pPulseIcon.reset( lv_line_create(_parentObject, nullptr ) );
+	m_pPulseIcon.reset( lv_line_create(_parentObject ) );
 
 	lv_line_set_points(
 			m_pPulseIcon.get()
@@ -223,7 +223,7 @@ void HealthPage::initCalloriesCounter(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pKcalLabel.reset( lv_label_create(_parentObject, nullptr) );
+	m_pKcalLabel.reset( lv_label_create(_parentObject) );
 
 	lv_obj_add_style( m_pKcalLabel.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_mainFontLight );
 	lv_label_set_text( m_pKcalLabel.get(), "160");
@@ -236,7 +236,7 @@ void HealthPage::initCalloriesCounter(
 		,	static_cast<int>( _displayHeight / 6 )
 	);
 
-	m_pKcalTooltip.reset( lv_label_create(_parentObject, nullptr) );
+	m_pKcalTooltip.reset( lv_label_create(_parentObject) );
 
 	lv_obj_add_style( m_pKcalTooltip.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_tooltipsStyleLight );
 	lv_label_set_text( m_pKcalTooltip.get(), "KCAL");
@@ -256,7 +256,7 @@ void HealthPage::initStepsCounter(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pStepsLabel.reset( lv_label_create(_parentObject, nullptr) );
+	m_pStepsLabel.reset( lv_label_create(_parentObject) );
 
 	lv_obj_add_style( m_pStepsLabel.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_mainFontLight );
 	lv_label_set_text( m_pStepsLabel.get(), "3600");
@@ -269,7 +269,7 @@ void HealthPage::initStepsCounter(
 		,	-static_cast<int>( _displayHeight / 20 )
 	);
 
-	m_pStepsTooltip.reset( lv_label_create(_parentObject, nullptr) );
+	m_pStepsTooltip.reset( lv_label_create(_parentObject) );
 
 	lv_obj_add_style( m_pStepsTooltip.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_tooltipsStyleLight );
 	lv_label_set_text( m_pStepsTooltip.get(), "STEPS");
@@ -282,7 +282,7 @@ void HealthPage::initStepsCounter(
 		,	0
 	);
 
-	m_pStepsIcon.reset( lv_label_create(_parentObject, nullptr ) );
+	m_pStepsIcon.reset( lv_label_create(_parentObject ) );
 	lv_obj_add_style( m_pStepsIcon.get(), LV_PART_MAIN, LV_STATE_DEFAULT ,&m_stepsIconStyle );
     lv_label_set_text( m_pStepsIcon.get(), IconFontSymbols::Steps::StepsIcon.data() );
 

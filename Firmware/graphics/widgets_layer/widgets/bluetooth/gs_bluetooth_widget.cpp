@@ -66,7 +66,7 @@ void BluetoothWidget::initBluetoothIcon(
 )
 {
 
-    m_pBluetoothIcon.reset( lv_label_create( _parentObject, nullptr) );
+    m_pBluetoothIcon.reset( lv_label_create( _parentObject ) );
 
     const std::uint32_t DisplayWidth{ _displayWidth };
     const std::uint32_t DisplayHeight{ _displayHeight };
