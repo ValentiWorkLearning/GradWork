@@ -121,7 +121,8 @@ private:
                 );
 
         lv_disp_drv_init( &m_glDisplayDriver );
-
+        m_glDisplayDriver.hor_res = LV_HOR_RES_MAX;
+        m_glDisplayDriver.ver_res = LV_VER_RES_MAX;
         m_glDisplayDriver.draw_buf = &displayBuffer;
 
         // auto monitorCallback = cbc::obtain_connector(
