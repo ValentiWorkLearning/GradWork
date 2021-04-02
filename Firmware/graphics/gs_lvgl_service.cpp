@@ -121,6 +121,7 @@ private:
                 );
 
         lv_disp_drv_init( &m_glDisplayDriver );
+
         m_glDisplayDriver.draw_buf = &displayBuffer;
 
         // auto monitorCallback = cbc::obtain_connector(
@@ -243,7 +244,7 @@ private:
 
 private:
 
-    static constexpr size_t DispHorRes = LV_HOR_RES_MAX*10;
+    static constexpr inline size_t DispHorRes = LV_HOR_RES_MAX*10;
 
     using TColorBuf = std::array<lv_color_t,DispHorRes>;
 

@@ -105,7 +105,7 @@ void PlayerPage::initPageTitle(
 {
 	m_pageTitle.reset( lv_label_create( _parentObject) );
 
-	lv_obj_add_style( m_pageTitle.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_mainLabelStyleDark );
+	lv_obj_add_style( m_pageTitle.get(), &m_mainLabelStyleDark, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text( m_pageTitle.get(), "MUSIC" );
 	lv_obj_align(
 			m_pageTitle.get()
@@ -116,7 +116,7 @@ void PlayerPage::initPageTitle(
 
 	m_melodyIcon.reset( lv_label_create( _parentObject) );
 
-	lv_obj_add_style( m_melodyIcon.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_melodyIconStyle );
+	lv_obj_add_style( m_melodyIcon.get(), &m_melodyIconStyle, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text( m_melodyIcon.get(), IconFontSymbols::Music::Melody.data() );
 	lv_obj_align(
 			m_melodyIcon.get()
@@ -135,7 +135,7 @@ void PlayerPage::initPlayIcon(
 
 	m_pPlayIconSecond.reset( lv_label_create( _parentObject ) );
 
-	lv_obj_add_style( m_pPlayIconSecond.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleLight );
+	lv_obj_add_style( m_pPlayIconSecond.get(), &m_playIconStyleLight, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text( m_pPlayIconSecond.get(), IconFontSymbols::Player::SecondPart.data() );
 	lv_obj_align(
 		m_pPlayIconSecond.get()
@@ -146,7 +146,7 @@ void PlayerPage::initPlayIcon(
 
 	m_pPlayIconFirst.reset( lv_label_create( _parentObject ) );
 
-	lv_obj_add_style( m_pPlayIconFirst.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleDark );
+	lv_obj_add_style( m_pPlayIconFirst.get(), &m_playIconStyleDark, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text( m_pPlayIconFirst.get(), IconFontSymbols::Player::FirstPart.data() );
 	lv_obj_align(
 			m_pPlayIconFirst.get()
@@ -164,7 +164,7 @@ void PlayerPage::initNextSongIcon(
 {
 	m_pSwitchNextSongArrow.reset( lv_label_create( _parentObject ) );
 
-	lv_obj_add_style(m_pSwitchNextSongArrow.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleLight );
+	lv_obj_add_style(m_pSwitchNextSongArrow.get(), &m_playIconStyleLight, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text(m_pSwitchNextSongArrow.get(), IconFontSymbols::Player::ArrowRight.data() );
 	lv_obj_align(
 			m_pSwitchNextSongArrow.get()
@@ -175,7 +175,7 @@ void PlayerPage::initNextSongIcon(
 
 	m_pSwitchNextSongLine.reset(lv_label_create(_parentObject ) );
 
-	lv_obj_add_style(m_pSwitchNextSongLine.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleLight );
+	lv_obj_add_style(m_pSwitchNextSongLine.get(), &m_playIconStyleLight, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text(m_pSwitchNextSongLine.get(), IconFontSymbols::Player::Line.data() );
 	lv_obj_align(
 			m_pSwitchNextSongLine.get()
@@ -193,7 +193,7 @@ void PlayerPage::initPrevSongIcon(
 {
 	m_pSwitchPreviousSongArrow.reset( lv_label_create( _parentObject ) );
 
-	lv_obj_add_style( m_pSwitchPreviousSongArrow.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleDark );
+	lv_obj_add_style( m_pSwitchPreviousSongArrow.get(), &m_playIconStyleDark, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text(m_pSwitchPreviousSongArrow.get(), IconFontSymbols::Player::ArrowLeft.data() );
 	lv_obj_align(
 			m_pSwitchPreviousSongArrow.get()
@@ -204,7 +204,7 @@ void PlayerPage::initPrevSongIcon(
 
 	m_pSwitchPreviousSongLine.reset(lv_label_create(_parentObject ) );
 
-	lv_obj_add_style(m_pSwitchPreviousSongLine.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_playIconStyleDark );
+	lv_obj_add_style(m_pSwitchPreviousSongLine.get(), &m_playIconStyleDark, LV_PART_MAIN | LV_STATE_DEFAULT);
 	lv_label_set_text(m_pSwitchPreviousSongLine.get(), IconFontSymbols::Player::Line.data() );
 	lv_obj_align(
 			m_pSwitchPreviousSongLine.get()

@@ -39,7 +39,7 @@ MainWindowView::initBackground()
             ,   MainWindowView::Height / 2
         );
 
-        lv_obj_add_style( pObject,LV_PART_MAIN, LV_STATE_DEFAULT, _style );
+        lv_obj_add_style( pObject, _style, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_align( pObject, _aligmentType, 0, 0 );
 
         return pObject;
@@ -77,7 +77,7 @@ MainWindowView::initBackground()
             ,   MainWindowView::Height / 2
         );
 
-        lv_obj_add_style( pCircle, LV_PART_MAIN, LV_STATE_DEFAULT,_style );
+        lv_obj_add_style( pCircle, _style, LV_PART_MAIN | LV_STATE_DEFAULT);
         lv_obj_align( pCircle, _aligmentType, 0, 0);
 
         return pCircle;

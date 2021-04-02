@@ -117,7 +117,7 @@ void BatteryWidget::initBatteryPercentageLabel(
 
     m_pBatteryLabel.reset( lv_label_create( _parentObject ) );
 
-    lv_obj_add_style( m_pBatteryLabel.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_batteryLabelStyle );
+    lv_obj_add_style( m_pBatteryLabel.get(), &m_batteryLabelStyle, LV_PART_MAIN | LV_STATE_DEFAULT);
 
     const std::uint32_t DisplayWidth { _displayWidth };
     const std::uint32_t DisplayHeight { _displayHeight };
@@ -144,7 +144,7 @@ void BatteryWidget::initBatteryIcon(
     const std::uint32_t DisplayWidth{ _displayWidth };
     const std::uint32_t DisplayHeight{ _displayHeight };
 
-    lv_obj_add_style( m_pBatteryIcon.get(), LV_PART_MAIN, LV_STATE_DEFAULT,&m_bateryIconStyle );
+    lv_obj_add_style( m_pBatteryIcon.get(), &m_bateryIconStyle, LV_PART_MAIN | LV_STATE_DEFAULT);
     setBatteryStatus( m_currentStatus );
 
     lv_obj_align(

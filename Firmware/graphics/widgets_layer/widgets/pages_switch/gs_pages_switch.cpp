@@ -129,8 +129,8 @@ void PagesSwitch::initCheckedPages(
 {
 	m_pFirstPage.reset( lv_obj_create(_parentObject ) );
 	lv_obj_set_size( m_pFirstPage.get(), ArcSize, ArcSize );
-	lv_obj_add_style(m_pFirstPage.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_pointStyle);
-	lv_obj_add_style(m_pFirstPage.get(), LV_PART_MAIN,LV_STATE_CHECKED, &m_pointStyleChecked);
+	lv_obj_add_style(m_pFirstPage.get(), &m_pointStyle,LV_PART_MAIN|LV_STATE_DEFAULT );
+	lv_obj_add_style(m_pFirstPage.get(), &m_pointStyleChecked,LV_PART_MAIN|LV_STATE_CHECKED );
 
 
 	lv_obj_align(
@@ -149,8 +149,8 @@ void PagesSwitch::initUncheckedPages(
 {
 	m_pSecondPage.reset( lv_obj_create(_parentObject) );
 	lv_obj_set_size( m_pSecondPage.get(), ArcSize, ArcSize );
-	lv_obj_add_style( m_pSecondPage.get(), LV_PART_MAIN, LV_STATE_DEFAULT,&m_pointStyle );
-	lv_obj_add_style( m_pSecondPage.get(), LV_PART_MAIN, LV_STATE_CHECKED, &m_pointStyleChecked );
+	lv_obj_add_style( m_pSecondPage.get(), &m_pointStyle ,LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_add_style( m_pSecondPage.get(), &m_pointStyleChecked, LV_PART_MAIN|LV_STATE_CHECKED);
 
 
 	lv_obj_align(
@@ -163,8 +163,8 @@ void PagesSwitch::initUncheckedPages(
 	m_pThirdPage.reset( lv_obj_create( _parentObject) );
 
 	lv_obj_set_size( m_pThirdPage.get(), ArcSize, ArcSize );
-	lv_obj_add_style( m_pThirdPage.get(), LV_PART_MAIN, LV_STATE_DEFAULT, &m_pointStyle);
-	lv_obj_add_style( m_pThirdPage.get(), LV_PART_MAIN, LV_STATE_CHECKED, &m_pointStyleChecked);
+	lv_obj_add_style( m_pThirdPage.get(), &m_pointStyle,LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_add_style( m_pThirdPage.get(), &m_pointStyleChecked,LV_PART_MAIN|LV_STATE_CHECKED);
 
 
 	lv_obj_align(
