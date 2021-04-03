@@ -4,8 +4,31 @@
 
 #include <string>
 #include <coroutine>
+#include <utils/MetaUtils.hpp>
+
+#include <FreeRTOS.h>
+#include <task.h>
+#include <timers.h>
 
 #include "SEGGER_RTT.h"
+
+constexpr inline auto FirstMessage = "Before suspending";
+constexpr inline auto SecondMessage = "After restoring from suspended state";
+
+inline constexpr std::uint32_t TaskDelay = 200;
+TaskHandle_t seggerLoggerTaskHandle;
+
+
+static void loggerTaskFunction (void * pvParameter)
+{
+    UNUSED_PARAMETER(pvParameter);
+    while (true)
+    {
+        SEGGER_RTT_WriteString(0, FirstMessage);
+        vTaskDelay(TaskDelay);
+        SEGGER_RTT_WriteString(0, SecondMessage);
+    }
+}
 
 class Resumable
 {
@@ -34,24 +57,34 @@ private:
     coro_handle m_handle;
 };
 
-constexpr inline auto FirstMessage = "Before suspending";
-constexpr inline auto SecondMessage = "After restoring from suspended state";
-
 Resumable suspendableFunction() noexcept
 {
-    SEGGER_RTT_WriteString(0, FirstMessage);
-    co_await std::suspend_always{};
-    SEGGER_RTT_WriteString(0, SecondMessage);
+    while(true){
+        SEGGER_RTT_WriteString(0, FirstMessage);
+        co_await std::suspend_always{};
+        SEGGER_RTT_WriteString(0, SecondMessage);
+    }
 }
 
 int main(void)
 {
-    auto resumable = suspendableFunction();
-    resumable.resume();
-    resumable.resume();
+
+    // auto resumable = suspendableFunction();
+    // resumable.resume();
+    // resumable.resume();
+
+    constexpr std::uint8_t Priority = 2;
+    Meta::UnuseVar(
+        xTaskCreate(
+            loggerTaskFunction,
+            "LogggerTask",
+            configMINIMAL_STACK_SIZE + 200,nullptr, Priority, &seggerLoggerTaskHandle)
+    );
+    vTaskStartScheduler();
 
     while (true)
     {
     }
+
     return 0;
 }

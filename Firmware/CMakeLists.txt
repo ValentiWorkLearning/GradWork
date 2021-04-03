@@ -22,11 +22,12 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set( NRF_TARGET "nrf52" )
     set( NRF52SOFTDEVICE "S112" )
     set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
+    set( FREE_RTOS_CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/freertos_config")
 
     #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
-
+    add_subdirectory(cmake/freertos ${CMAKE_BINARY_DIR}/freertos )
 elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
     include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
     conan_basic_setup(TARGETS)
@@ -62,7 +63,7 @@ target_link_libraries(
     # watch_graphics
     # graphics_backend
     # watch_fake_services
-    # UtilsLibrary
+    UtilsLibrary
     # i2c
     # watchboard
 )
@@ -78,6 +79,8 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         ${NORDIC_TARGET} PRIVATE
         ble_services
         NordicSDK::Common
+        FreeRTOS::FreeRTOS
+        NordicSDK::External::FreeRtosPortable
     )
 
     target_compile_options(
