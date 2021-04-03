@@ -25,7 +25,7 @@ static void loggerTaskFunction (void * pvParameter)
     while (true)
     {
         SEGGER_RTT_WriteString(0, FirstMessage);
-        vTaskDelay(TaskDelay);
+        taskYIELD();
         SEGGER_RTT_WriteString(0, SecondMessage);
     }
 }
