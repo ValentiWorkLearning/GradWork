@@ -16,3 +16,6 @@
 [submodule "Firmware/3rdparty/cppcoro_lib/cppcoro"]
 	path = Firmware/3rdparty/cppcoro_lib/cppcoro
 	url = https://github.com/lewissbaker/cppcoro.git
+[submodule "Firmware/amazon-freertos"]
+	path = Firmware/amazon-freertos
+	url = https://github.com/aws/amazon-freertos.git
