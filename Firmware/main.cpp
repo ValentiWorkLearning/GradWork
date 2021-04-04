@@ -1,6 +1,6 @@
 //#include "ap_application.hpp"
-//#include <etl/memory.h>
-//#include "utils/CoroutineExample.hpp"
+#include <etl/memory.h>
+#include "utils/CoroutineExample.hpp"
 
 #include <string>
 #include <coroutine>
@@ -74,7 +74,7 @@ int main(void)
     // resumable.resume();
 
     constexpr std::uint8_t Priority = 2;
-    Meta::UnuseVar(
+    UNUSED_PARAMETER(
         xTaskCreate(
             loggerTaskFunction,
             "LogggerTask",

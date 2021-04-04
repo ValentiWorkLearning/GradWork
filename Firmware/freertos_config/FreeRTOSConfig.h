@@ -55,7 +55,7 @@
 
 #define configTICK_SOURCE FREERTOS_USE_RTC
 
-#define configUSE_PREEMPTION 1
+#define configUSE_PREEMPTION 0
 #define configUSE_PORT_OPTIMISED_TASK_SELECTION 1
 #define configUSE_TICKLESS_IDLE 1
 #define configUSE_TICKLESS_IDLE_SIMPLE_DEBUG                                      1 /* See into vPortSuppressTicksAndSleep source code for explanation */
