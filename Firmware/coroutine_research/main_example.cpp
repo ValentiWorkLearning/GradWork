@@ -1,6 +1,4 @@
-//#include "ap_application.hpp"
 #include <etl/memory.h>
-#include "utils/CoroutineExample.hpp"
 
 #include <string>
 #include <coroutine>
@@ -70,18 +68,18 @@ Resumable loggerFunction() noexcept
 int main(void)
 {
 
-    // auto resumable = suspendableFunction();
-    // resumable.resume();
-    // resumable.resume();
+    auto resumable = loggerFunction();
+    resumable.resume();
+    resumable.resume();
 
-    constexpr std::uint8_t Priority = 2;
-    UNUSED_PARAMETER(
-        xTaskCreate(
-            loggerTaskFunction,
-            "LogggerTask",
-            configMINIMAL_STACK_SIZE + 200,nullptr, Priority, &seggerLoggerTaskHandle)
-    );
-    vTaskStartScheduler();
+    // constexpr std::uint8_t Priority = 2;
+    // UNUSED_PARAMETER(
+    //     xTaskCreate(
+    //         loggerTaskFunction,
+    //         "LogggerTask",
+    //         configMINIMAL_STACK_SIZE + 200,nullptr, Priority, &seggerLoggerTaskHandle)
+    // );
+    // vTaskStartScheduler();
 
     while (true)
     {
