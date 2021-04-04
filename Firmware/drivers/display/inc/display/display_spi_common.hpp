@@ -71,45 +71,27 @@ protected:
     }
 
     template< typename ... Args >
-    void sendCommand(
-            std::uint8_t _command
-        ,   Args... _commandArgs
-    )noexcept
+    void sendCommand(std::uint8_t _command,Args... _commandArgs)noexcept
     {
         sendCommand( _command );
         sendChunk( static_cast<std::uint8_t>(_commandArgs)... );
     }
 
     template< typename ... Args >
-    void sendChunk(
-            Args... _chunkArgs
-    )noexcept
+    void sendChunk( Args... _chunkArgs )noexcept
     {
         std::array chunk = { static_cast<std::uint8_t>(_chunkArgs)... };
         Interface::Spi::Transaction chunkTransaction{};
 
-        chunkTransaction.beforeTransaction =
-            [ this ]
-            {
-                setDcPin();
-            };
-
-        chunkTransaction.transactionAction =
-            [ this, chunkToSend = std::move( chunk ) ]
-            {
+        chunkTransaction.beforeTransaction =[this] {setDcPin();};
+        chunkTransaction.transactionAction = [this, chunkToSend = std::move(chunk)]{
                 m_pBusPtr->sendChunk(
-                        reinterpret_cast<const std::uint8_t*>( chunkToSend.data() )
-                    ,   chunkToSend.size()
+                        reinterpret_cast<const std::uint8_t*>( chunkToSend.data() ),
+                        chunkToSend.size()
                 );
             };
-
-        chunkTransaction.afterTransaction =
-            [ this ]
-            {
-                resetDcPin();
-            };
-
-        m_pBusPtr->addTransaction( std::move( chunkTransaction ) );
+        chunkTransaction.afterTransaction = [this]{resetDcPin();};
+        m_pBusPtr->addTransaction(std::move(chunkTransaction));
     }
 
 protected:

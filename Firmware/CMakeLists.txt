@@ -40,8 +40,8 @@ add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 add_subdirectory(drivers)
 add_subdirectory(utils)
 add_subdirectory(logger)
-# add_subdirectory(graphics)
-# add_subdirectory(service_providers)
+add_subdirectory(graphics)
+add_subdirectory(service_providers)
 
 set (NORDIC_TARGET theOpenWatch)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
@@ -49,7 +49,8 @@ add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
 target_sources(
     ${NORDIC_TARGET}
     PRIVATE
-    main.cpp
+    coroutine_research/simple_scheduler.cpp
+    #main.cpp
     # ap_application.cpp
 )
 
@@ -88,6 +89,11 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         PRIVATE
         -O0
         -fcoroutines
+    )
+    target_compile_definitions(
+        ${NORDIC_TARGET}
+        PRIVATE
+        USE_DEVICE_SPECIFIC_OPTIONS
     )
 endif()
 
