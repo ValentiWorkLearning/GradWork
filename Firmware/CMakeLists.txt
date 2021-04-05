@@ -25,7 +25,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set( FREE_RTOS_CONFIG_DIR "${CMAKE_CURRENT_SOURCE_DIR}/freertos_config")
 
     #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
     add_subdirectory(cmake/freertos ${CMAKE_BINARY_DIR}/freertos )
 elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
@@ -40,8 +40,8 @@ add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
 add_subdirectory(drivers)
 add_subdirectory(utils)
 add_subdirectory(logger)
-# add_subdirectory(graphics)
-# add_subdirectory(service_providers)
+add_subdirectory(graphics)
+add_subdirectory(service_providers)
 
 set (NORDIC_TARGET theOpenWatch)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
@@ -49,7 +49,7 @@ add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
 target_sources(
     ${NORDIC_TARGET}
     PRIVATE
-    coroutine_research/simple_scheduler.cpp
+    coroutine_research/display_transaction.cpp
     #main.cpp
     # ap_application.cpp
 )
@@ -58,15 +58,15 @@ target_link_libraries(
     ${NORDIC_TARGET}
     PRIVATE
     logger_service
-    # services_ih
-    # ble_factory
-    # drivers_ih
-    # watch_graphics
-    # graphics_backend
-    # watch_fake_services
+    services_ih
+    ble_factory
+    drivers_ih
+    watch_graphics
+    graphics_backend
+    watch_fake_services
     UtilsLibrary
-    # i2c
-    # watchboard
+    i2c
+    watchboard
 )
 
 target_compile_features(
@@ -87,7 +87,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_compile_options(
         ${NORDIC_TARGET}
         PRIVATE
-        -O0
+        -Os
         -fcoroutines
     )
     target_compile_definitions(
