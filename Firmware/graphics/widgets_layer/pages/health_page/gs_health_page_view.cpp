@@ -109,6 +109,7 @@ void HealthPage::initStyles()
 		Theme::Color::MainThemeDark
 	);
 	
+	lv_style_init(&m_pulseLineStyle);
 	lv_style_set_line_color(&m_pulseLineStyle, MainThemeDark);
 
 	constexpr int LineWidth = 3;

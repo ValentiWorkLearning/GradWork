@@ -105,8 +105,9 @@ private:
                 LOG_DEBUG_ENDL( dsc );
             }
         );
-
+#if LV_USE_LOG == 1
         lv_log_register_print_cb( lvglLoggerCallback );
+#endif
     }
 
     void initDisplayDriver()
