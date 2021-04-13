@@ -462,7 +462,7 @@ typedef void* lv_font_user_data_t;
 
  /* No theme, you can apply your styles as you need
   * No flags. Set LV_THEME_DEFAULT_FLAG 0 */
-#define LV_USE_THEME_EMPTY       1
+#define LV_USE_THEME_EMPTY       0
 
   /*Simple to the create your theme based on it
    * No flags. Set LV_THEME_DEFAULT_FLAG 0 */

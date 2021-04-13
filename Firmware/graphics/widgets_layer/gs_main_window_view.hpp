@@ -31,8 +31,8 @@ public:
 
 private:
 
-    static const inline std::uint32_t Width = LV_HOR_RES;
-    static const inline std::uint32_t Height = LV_VER_RES;
+    static constexpr inline std::uint32_t Width = LV_HOR_RES_MAX;
+    static constexpr inline std::uint32_t Height = LV_VER_RES_MAX;
 
 private:
 

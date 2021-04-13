@@ -30,7 +30,7 @@ MainWindowView::initBackground()
     auto createAlignedRect = [this]( auto _aligmentType, lv_style_t* _style )
     {
         lv_obj_t* pObject{ nullptr };
-        auto parent = lv_scr_act();//m_pObjMask.get();
+        auto parent = lv_scr_act();
 
         pObject = lv_obj_create( parent );
         lv_obj_set_size(
@@ -57,18 +57,20 @@ MainWindowView::initBackground()
     lv_style_set_bg_opa( &m_iniStyle, LV_OPA_COVER );
     lv_style_set_bg_color( &m_iniStyle, MainThemeDark );
     lv_style_set_bg_grad_color( &m_iniStyle,MainThemeDark );
+    lv_style_set_border_width(&m_iniStyle, 0);
 
     lv_style_init(&m_yanStyle);
     lv_style_set_bg_color( &m_yanStyle, MainThemeLight );
     lv_style_set_bg_grad_color( &m_yanStyle, MainThemeLight );
     lv_style_set_bg_opa( &m_yanStyle, LV_OPA_COVER );
+    lv_style_set_border_width(&m_yanStyle, 0);
 
     m_pIny.reset( createAlignedRect(LV_ALIGN_BOTTOM_MID, &m_iniStyle) );
     m_pYan.reset( createAlignedRect( LV_ALIGN_TOP_MID, &m_yanStyle ) );
 
     auto createAlignedCircle = [this](auto _aligmentType, lv_style_t* _style)
     {
-        auto parent = lv_scr_act();//m_pObjMask.get();
+        auto parent = lv_scr_act();
         lv_obj_t* pCircle = lv_obj_create( parent );
 
         lv_obj_set_size(
@@ -89,6 +91,7 @@ MainWindowView::initBackground()
     lv_style_set_border_color( &m_iniCircleStyle, MainThemeDark );
     lv_style_set_bg_grad_color( &m_iniCircleStyle, MainThemeDark );
     lv_style_set_radius( &m_iniCircleStyle, LV_RADIUS_CIRCLE );
+    lv_style_set_border_width(&m_iniCircleStyle, 0);
 
     lv_style_init(&m_yanCircleStyle);
     lv_style_set_bg_opa( &m_yanCircleStyle, LV_OPA_COVER );
@@ -96,6 +99,7 @@ MainWindowView::initBackground()
     lv_style_set_border_color( &m_yanCircleStyle, MainThemeLight );
     lv_style_set_bg_grad_color( &m_yanCircleStyle, MainThemeLight );
     lv_style_set_radius(&m_yanCircleStyle, LV_RADIUS_CIRCLE);
+    lv_style_set_border_width(&m_yanCircleStyle, 0);
 
     m_pInyCircle.reset( createAlignedCircle( LV_ALIGN_RIGHT_MID, &m_iniCircleStyle ) );
     m_pYanCircle.reset( createAlignedCircle( LV_ALIGN_LEFT_MID, &m_yanCircleStyle ) );
@@ -118,9 +122,9 @@ MainWindowView::resetBackgroundStyle()
 void
 MainWindowView::initMask()
 {
-    
-    lv_draw_mask_radius_init(&radiusParam, &maskArea, LV_RADIUS_CIRCLE, false);
-    m_maskId = lv_draw_mask_add(&radiusParam, 0);
+    constexpr std::uint8_t RoundedArea = 240;
+    lv_draw_mask_radius_init(&radiusParam, &maskArea, RoundedArea, false);
+    m_maskId = lv_draw_mask_add(&radiusParam, nullptr);
 
     //m_pObjMask.reset( lv_objmask_create( lv_disp_get_scr_act( nullptr ), nullptr ) );
 
