@@ -66,6 +66,7 @@ private:
 private:
 
     lv_style_t m_pointStyle;
+    lv_style_t m_pointStyleChecked;
 
     std::string_view m_activePageName;
 

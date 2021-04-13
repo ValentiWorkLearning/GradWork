@@ -12,6 +12,7 @@ namespace Graphics::Widgets
 PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
 	:	WidgetBaseObj<IPagesSwitch>{ _themeController }
     ,	m_pointStyle{}
+	, m_pointStyleChecked{}
 	,	m_activePageName{}
 {
 	initStyles();
@@ -52,21 +53,21 @@ void PagesSwitch::setActivePage( std::string_view _pageName )
 {
 	if( _pageName == Views::IClockWatchPage::ClockPageName )
 	{
-		lv_obj_set_state( m_pFirstPage.get(), LV_STATE_CHECKED );
-		lv_obj_set_state( m_pSecondPage.get(), LV_STATE_DEFAULT );
-		lv_obj_set_state( m_pThirdPage.get(), LV_STATE_DEFAULT );
+		lv_obj_add_state( m_pFirstPage.get(), LV_STATE_CHECKED );
+		lv_obj_clear_state( m_pSecondPage.get(), LV_STATE_CHECKED);
+		lv_obj_clear_state( m_pThirdPage.get(), LV_STATE_CHECKED);
 	}
 	else if( _pageName == Views::IHealthWatchPage::HealthPageName ) // TODO migrate to labels/ objects
 	{
-		lv_obj_set_state( m_pFirstPage.get(), LV_STATE_DEFAULT );
-		lv_obj_set_state( m_pSecondPage.get(), LV_STATE_CHECKED );
-		lv_obj_set_state( m_pThirdPage.get(), LV_STATE_DEFAULT );
+		lv_obj_clear_state( m_pFirstPage.get(), LV_STATE_CHECKED);
+		lv_obj_add_state( m_pSecondPage.get(), LV_STATE_CHECKED );
+		lv_obj_clear_state( m_pThirdPage.get(), LV_STATE_CHECKED);
 	}
 	else if ( _pageName == Views::IPlayerWatchPage::PlayerPageName )
 	{
-		lv_obj_set_state( m_pFirstPage.get(), LV_STATE_DEFAULT );
-		lv_obj_set_state( m_pSecondPage.get(), LV_STATE_DEFAULT );
-		lv_obj_set_state( m_pThirdPage.get(), LV_STATE_CHECKED );
+		lv_obj_clear_state( m_pFirstPage.get(), LV_STATE_CHECKED);
+		lv_obj_clear_state( m_pSecondPage.get(), LV_STATE_CHECKED);
+		lv_obj_add_state( m_pThirdPage.get(), LV_STATE_CHECKED );
 	}
 	m_activePageName = _pageName;
 }
@@ -84,25 +85,29 @@ void PagesSwitch::initStyles()
 			Theme::Color::MainThemeLight
 		);
 
+	lv_style_init(&m_pointStyle);
+	lv_style_init(&m_pointStyleChecked);
+
+	lv_style_set_bg_color( &m_pointStyleChecked, ThemeDark );
+	lv_style_set_bg_color( &m_pointStyle, ThemeLight );
+
+	lv_style_set_bg_grad_color(&m_pointStyle, ThemeLight);
+	lv_style_set_bg_grad_color(&m_pointStyleChecked,ThemeDark);
+
+	lv_style_set_bg_opa(&m_pointStyle, LV_OPA_COVER);
+	lv_style_set_bg_opa(&m_pointStyleChecked, LV_OPA_COVER);
+
+	lv_style_set_radius( &m_pointStyle, LV_RADIUS_CIRCLE );
+	lv_style_set_radius( &m_pointStyleChecked, LV_RADIUS_CIRCLE );
+
+	lv_style_set_border_color(&m_pointStyle, ThemeLight);
+	lv_style_set_border_color(&m_pointStyleChecked, ThemeLight);
 	
-	lv_style_set_bg_color( &m_pointStyle, LV_STATE_CHECKED, ThemeDark );
-	lv_style_set_bg_color( &m_pointStyle, LV_STATE_DEFAULT, ThemeLight );
+	lv_style_set_bg_opa( &m_pointStyleChecked, LV_OPA_COVER );
+	lv_style_set_border_opa( &m_pointStyle, LV_OPA_COVER );
 
-	lv_style_set_bg_grad_color(&m_pointStyle, LV_STATE_DEFAULT, ThemeLight);
-	lv_style_set_bg_grad_color(&m_pointStyle, LV_STATE_CHECKED, ThemeDark);
-
-	lv_style_set_bg_opa(&m_pointStyle, LV_STATE_DEFAULT, LV_OPA_COVER);
-
-	lv_style_set_radius( &m_pointStyle, LV_STATE_DEFAULT, LV_RADIUS_CIRCLE );
-	lv_style_set_radius( &m_pointStyle, LV_STATE_CHECKED, LV_RADIUS_CIRCLE );
-
-	lv_style_set_border_color(&m_pointStyle, LV_STATE_DEFAULT, ThemeLight);
-	lv_style_set_border_color(&m_pointStyle, LV_STATE_CHECKED, ThemeLight);
-	
-	lv_style_set_bg_opa( &m_pointStyle, LV_STATE_CHECKED, LV_OPA_COVER );
-	lv_style_set_border_opa( &m_pointStyle, LV_STATE_DEFAULT, LV_OPA_COVER );
-
-	lv_style_set_border_width( &m_pointStyle, LV_STATE_CHECKED, 2 );
+	lv_style_set_border_width( &m_pointStyleChecked, 2 );
+	lv_style_set_border_width( &m_pointStyle, 2 );
 }
 
 void PagesSwitch::resetStyle()
@@ -111,6 +116,7 @@ void PagesSwitch::resetStyle()
 		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
 		,   std::forward_as_tuple(
 				m_pointStyle
+			, m_pointStyleChecked
 		)
 	);
 }
@@ -121,15 +127,15 @@ void PagesSwitch::initCheckedPages(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pFirstPage.reset( lv_obj_create(_parentObject, nullptr ) );
+	m_pFirstPage.reset( lv_obj_create(_parentObject ) );
 	lv_obj_set_size( m_pFirstPage.get(), ArcSize, ArcSize );
-	lv_obj_add_style(m_pFirstPage.get(), LV_OBJ_PART_MAIN, &m_pointStyle);
+	lv_obj_add_style(m_pFirstPage.get(), &m_pointStyle,LV_PART_MAIN|LV_STATE_DEFAULT );
+	lv_obj_add_style(m_pFirstPage.get(), &m_pointStyleChecked,LV_PART_MAIN|LV_STATE_CHECKED );
 
 
 	lv_obj_align(
 			m_pFirstPage.get()
-		,	nullptr
-		,	LV_ALIGN_IN_BOTTOM_MID
+		,	LV_ALIGN_BOTTOM_MID
 		,	-static_cast<int>( _displayWidth / 12 )
 		,	-static_cast<int>( _displayHeight / 10 )
 	);
@@ -141,29 +147,29 @@ void PagesSwitch::initUncheckedPages(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pSecondPage.reset( lv_obj_create(_parentObject, nullptr ) );
+	m_pSecondPage.reset( lv_obj_create(_parentObject) );
 	lv_obj_set_size( m_pSecondPage.get(), ArcSize, ArcSize );
-	lv_obj_add_style( m_pSecondPage.get(), LV_OBJ_PART_MAIN, &m_pointStyle);
+	lv_obj_add_style( m_pSecondPage.get(), &m_pointStyle ,LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_add_style( m_pSecondPage.get(), &m_pointStyleChecked, LV_PART_MAIN|LV_STATE_CHECKED);
 
 
 	lv_obj_align(
 			m_pSecondPage.get()
-		,	nullptr
-		,	LV_ALIGN_IN_BOTTOM_MID
+		,	LV_ALIGN_BOTTOM_MID
 		,	0
 		,	-static_cast<int>(_displayHeight / 10)
 	);
 
-	m_pThirdPage.reset( lv_obj_create( _parentObject, nullptr) );
+	m_pThirdPage.reset( lv_obj_create( _parentObject) );
 
 	lv_obj_set_size( m_pThirdPage.get(), ArcSize, ArcSize );
-	lv_obj_add_style( m_pThirdPage.get(), LV_OBJ_PART_MAIN, &m_pointStyle);
+	lv_obj_add_style( m_pThirdPage.get(), &m_pointStyle,LV_PART_MAIN|LV_STATE_DEFAULT);
+	lv_obj_add_style( m_pThirdPage.get(), &m_pointStyleChecked,LV_PART_MAIN|LV_STATE_CHECKED);
 
 
 	lv_obj_align(
 			m_pThirdPage.get()
-		,	nullptr
-		,	LV_ALIGN_IN_BOTTOM_MID
+		,	LV_ALIGN_BOTTOM_MID
 		,	static_cast<int>( _displayWidth / 12)
 		,	-static_cast<int>( _displayHeight / 10)
 	);

@@ -147,35 +147,33 @@ PlatformBackend::initPlatformGfxTimer()
     );
     m_tickThread.detach();
     indevPlatformInit();
+    lv_indev_drv_init(&m_indevDriver);
 }
 
 void
 PlatformBackend::indevPlatformInit()
 {
-    lv_indev_drv_t indevDrv{};
-
-    lv_indev_drv_init( &indevDrv );
-    indevDrv.type = LV_INDEV_TYPE_POINTER;
-    indevDrv.read_cb = mouse_read;
-    lv_indev_drv_register( &indevDrv );
+    
+    m_indevDriver.type = LV_INDEV_TYPE_POINTER;
+    m_indevDriver.read_cb = mouse_read;
+    lv_indev_drv_register( &m_indevDriver );
 
     auto memoryMonitorTask = cbc::obtain_connector(
-        [this]( lv_task_t* _param )
+        [this]( lv_timer_t* _param )
         {
             memoryMonitor( _param );
         }
     );
 
-    lv_task_create(
+    lv_timer_create(
             memoryMonitorTask
         ,   10
-        ,   LV_TASK_PRIO_MID
         ,   nullptr
     );
 }
 
 void
-PlatformBackend::memoryMonitor(lv_task_t* _param)
+PlatformBackend::memoryMonitor(lv_timer_t* _param)
 {
     static_cast<void>( _param );
 

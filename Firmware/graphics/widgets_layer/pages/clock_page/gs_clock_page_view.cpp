@@ -85,7 +85,10 @@ void ClockWatch::initStyles()
 		,	Theme::Color::MainThemeLight
 	);
 
-	m_fullDateStyle = m_secondsLabelStyle;
+	m_fullDateStyle = pThemeProvider->getFontStyle(
+		Theme::FontSize::small
+		, Theme::Color::MainThemeLight
+	);;
 
 	m_weekDayStyle = pThemeProvider->getFontStyle(
 			Theme::FontSize::large
@@ -130,48 +133,37 @@ void ClockWatch::initClockLabels(
 	const std::uint32_t DisplayWidth { _displayWidth };
 	const std::uint32_t DisplayHeight { _displayHeight };
 
-	m_pHoursLabel.reset( lv_label_create( parent, nullptr ) );
-	lv_obj_add_style(
-			m_pHoursLabel.get()
-		, 	LV_LABEL_PART_MAIN
-		, 	&m_hoursLabelStyle
-	);
+	m_pHoursLabel.reset( lv_label_create( parent ) );
+	lv_obj_add_style( m_pHoursLabel.get(), &m_hoursLabelStyle, LV_PART_MAIN | LV_STATE_DEFAULT);
 
 	lv_obj_align(
 			m_pHoursLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_LEFT_MID
+		,	LV_ALIGN_LEFT_MID
 		,	DisplayWidth / 7
 		,	DisplayHeight / 30
 	);
 
-	m_pMinutesLabel.reset( lv_label_create( parent, nullptr ) );
-	lv_obj_add_style(
-			m_pMinutesLabel.get()
-		,	LV_LABEL_PART_MAIN
-		,	&m_minutesLabelStyle
-	);
+	m_pMinutesLabel.reset( lv_label_create( parent ) );
+	lv_obj_add_style( m_pMinutesLabel.get(), &m_minutesLabelStyle, LV_PART_MAIN|LV_STATE_DEFAULT);
 
 	lv_obj_align(
 			m_pMinutesLabel.get()
-		,	nullptr
 		,	LV_ALIGN_CENTER
-		,	DisplayWidth / 20
+		,	DisplayWidth / 5
 		,	DisplayHeight / 30
 	);
 
-	m_pSecondsLabel.reset( lv_label_create( parent, nullptr ) );
+	m_pSecondsLabel.reset( lv_label_create( parent ) );
 	lv_obj_add_style(
 			m_pSecondsLabel.get()
-		,	LV_LABEL_PART_MAIN
 		,	&m_secondsLabelStyle
+		, LV_PART_MAIN | LV_STATE_DEFAULT
 	);
 
 	lv_obj_align(
 			m_pSecondsLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_TOP_RIGHT
-		,	0
+		,	LV_ALIGN_TOP_RIGHT
+		, -(DisplayWidth/12)
 		,	DisplayHeight / 3 + DisplayHeight / 20
 	);
 }
@@ -183,18 +175,17 @@ void ClockWatch::initFullDateLabel(
 )
 {
 
-	m_pFullDateLabel.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pFullDateLabel.reset( lv_label_create( _parentObject ) );
 	lv_obj_add_style(
 			m_pFullDateLabel.get()
-		, 	LV_LABEL_PART_MAIN
 		, 	&m_fullDateStyle
+		, LV_PART_MAIN | LV_STATE_DEFAULT
 	);
 
 	lv_obj_align(
 			m_pFullDateLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_RIGHT_MID
-		,	- static_cast<int>( _displayWidth / 3 )
+		,	LV_ALIGN_RIGHT_MID
+		,	- static_cast<int>( _displayWidth / 15 )
 		,	static_cast<int>( _displayHeight / 4.5f )
 	);
 }
@@ -205,18 +196,17 @@ void ClockWatch::initWeekDayLabel(
 	,	const std::uint32_t _displayHeight
 )
 {
-	m_pWeekDayLabel.reset( lv_label_create( _parentObject, nullptr ) );
+	m_pWeekDayLabel.reset( lv_label_create( _parentObject ) );
 	lv_obj_add_style(
 			m_pWeekDayLabel.get()
-		, 	LV_LABEL_PART_MAIN
 		, 	&m_weekDayStyle
+		, LV_PART_MAIN | LV_STATE_DEFAULT
 	);
 
 	lv_obj_align(
 			m_pWeekDayLabel.get()
-		,	nullptr
-		,	LV_ALIGN_IN_TOP_MID
-		,	static_cast<int>( _displayWidth / 24 )
+		,	LV_ALIGN_TOP_MID
+		,	0
 		,	_displayHeight / 15
 	);
 }

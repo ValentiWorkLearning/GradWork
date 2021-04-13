@@ -76,7 +76,7 @@ auto drawInyan( lv_obj_t* _parent )
     pYanStyle.body.main_color = UiTheme::MainLightColor;
     pYanStyle.body.grad_color = pYanStyle.body.main_color;
 
-    lv_obj_t* pIny = createAlignedRect(LV_ALIGN_IN_BOTTOM_MID, &pInyStyle);
+    lv_obj_t* pIny = createAlignedRect(LV_ALIGN_BOTTOM_MID, &pInyStyle);
     lv_obj_t* pYan = createAlignedRect( LV_ALIGN_IN_TOP_MID, &pYanStyle );
 
     auto createAlignedCircle = [ _parent ](auto _aligmentType, const lv_style_t* _style)
@@ -221,8 +221,7 @@ auto drawClocks( lv_obj_t* _parent )
     lv_obj_set_size( pCurrentArc, ArcSize, ArcSize );
     lv_obj_align(
             pCurrentArc
-        ,   nullptr
-        ,   LV_ALIGN_IN_BOTTOM_MID
+        ,   LV_ALIGN_BOTTOM_MID
         ,   -static_cast<int>( UiConstants::Display::Width / 12 )
         ,   -static_cast<int>( UiConstants::Display::Height / 10 )
     );
@@ -240,8 +239,7 @@ auto drawClocks( lv_obj_t* _parent )
     lv_obj_set_style( pSecondArc, &pUncheckedBoxItem );
     lv_obj_align(
             pSecondArc
-        ,   nullptr
-        ,   LV_ALIGN_IN_BOTTOM_MID
+        ,   LV_ALIGN_BOTTOM_MID
         ,   0
         ,   -static_cast<int>( UiConstants::Display::Height / 10 )
     );
@@ -251,8 +249,7 @@ auto drawClocks( lv_obj_t* _parent )
     lv_obj_set_style( pThirdArc, &pUncheckedBoxItem );
     lv_obj_align(
             pThirdArc
-        ,   nullptr
-        ,   LV_ALIGN_IN_BOTTOM_MID
+        ,   LV_ALIGN_BOTTOM_MID
         ,   static_cast<int>( UiConstants::Display::Width / 12 )
         ,   -static_cast<int>( UiConstants::Display::Height / 10 )
     );

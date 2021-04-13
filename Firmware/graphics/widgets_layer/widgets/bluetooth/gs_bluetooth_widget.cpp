@@ -66,18 +66,17 @@ void BluetoothWidget::initBluetoothIcon(
 )
 {
 
-    m_pBluetoothIcon.reset( lv_label_create( _parentObject, nullptr) );
+    m_pBluetoothIcon.reset( lv_label_create( _parentObject ) );
 
     const std::uint32_t DisplayWidth{ _displayWidth };
     const std::uint32_t DisplayHeight{ _displayHeight };
 
-    lv_obj_add_style( m_pBluetoothIcon.get(), LV_OBJ_PART_MAIN,&m_bluetoothIconStyle );
+    lv_obj_add_style( m_pBluetoothIcon.get(), &m_bluetoothIconStyle ,LV_PART_MAIN|LV_STATE_DEFAULT);
     lv_label_set_text( m_pBluetoothIcon.get(), IconFontSymbols::Bluetooth::BluetoothEnabled.data() );
 
     lv_obj_align(
             m_pBluetoothIcon.get()
-        ,   nullptr
-        ,   LV_ALIGN_IN_TOP_LEFT
+        ,   LV_ALIGN_TOP_LEFT
         ,   static_cast<int>( DisplayWidth / 6)
         ,   static_cast<int>( DisplayHeight / 3.5f)
     );
