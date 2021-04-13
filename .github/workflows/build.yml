@@ -49,7 +49,7 @@ jobs:
     - name: Run CMakeLists build for MSVC compiler
       uses: lukka/run-cmake@v2
       with:
-        cmakeGenerator: VS16Win64
+        cmakeGenerator: Ninja
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug

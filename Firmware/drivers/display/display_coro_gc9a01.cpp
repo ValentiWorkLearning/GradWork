@@ -36,7 +36,7 @@ constexpr std::uint8_t bitwiseResolutionConstant()
 
 inline constexpr std::uint8_t DefaultDelay = 0;
 
-static constexpr std::tuple CommandsArray = {
+static std::tuple CommandsArray = {
         CommandDescriptor<0xFE>{}
     ,   CommandDescriptor<0xEF>{}
     ,   CommandDescriptor<0xEB,DefaultDelay, 0x14>{}
@@ -150,6 +150,12 @@ GC9A01Coro::GC9A01Coro(
 GC9A01Coro::~GC9A01Coro()noexcept= default;
 
 void
+GC9A01Coro::initialize() noexcept
+{
+    //initDisplay();
+}
+
+void
 GC9A01Coro::initDisplay()noexcept
 {
     BaseSpiDisplayCoroutine::resetResetPin();
@@ -182,30 +188,31 @@ void GC9A01Coro::fillRectangle(
     const std::uint16_t DisplayHeight = BaseSpiDisplayCoroutine::getHeight();
     const std::uint16_t DisplayWidth = BaseSpiDisplayCoroutine::getWidth();
 
-    const bool isCoordsValid{ !( (_x >= DisplayWidth) || (_y >= DisplayHeight )) };
+    if( _width >= DisplayWidth) _width = DisplayWidth - _x;
+    if( _height>= DisplayHeight) _height = DisplayHeight - _y;
 
-    if( isCoordsValid)
-    {
-        if( _width >= DisplayWidth) _width = DisplayWidth - _x;
-        if( _height>= DisplayHeight) _height = DisplayHeight - _y;
+    const size_t BytesSizeX = ( _width - _x + 1 );
+    const size_t BytesSizeY = ( _height - _y + 1);
+    const size_t BytesSquare = BytesSizeX *  BytesSizeY;
+    const size_t TransferBufferSize =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) );
 
-        const size_t BytesSizeX = ( _width - _x + 1 );
-        const size_t BytesSizeY = ( _height - _y + 1);
-        const size_t BytesSquare = BytesSizeX *  BytesSizeY;
-        const size_t TransferBufferSize =  ( BytesSquare* sizeof ( IDisplayDriver::TColor ) );
+    co_await m_displayInitialized;
+    co_await setAddrWindow(_x,_y,_width,_height);
 
-        co_await m_displayInitialized;
-        co_await setAddrWindow(_x,_y,_width,_height);
+    static CommandDescriptor<0x2c> RamWrite{};
 
-        static constexpr CommandDescriptor<0x29> RamWrite{};
+    co_await sendCommand(RamWrite.command.data(), RamWrite.command.size() );  //LCD_WriteCMD(GRAMWR);
 
-        co_await sendCommand(RamWrite.command.data(), RamWrite.command.size() );  //LCD_WriteCMD(GRAMWR);
+    setDcPin();
+    co_await sendChunk(reinterpret_cast<const std::uint8_t*>( _colorToFill ),TransferBufferSize);
+    resetDcPin();
+    onRectArreaFilled.emit();
+}
 
-        setDcPin();
-        co_await sendChunk(reinterpret_cast<const std::uint8_t*>( _colorToFill ),TransferBufferSize);
-        resetDcPin();
-        onRectArreaFilled.emit();
-    }
+bool
+GC9A01Coro::isInitialized() const noexcept
+{
+    return m_displayInitialized.isSet();
 }
 
 CoroUtils::VoidTask GC9A01Coro::setAddrWindow(

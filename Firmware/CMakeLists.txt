@@ -24,7 +24,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
 
     #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
-    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION TRUE)
+    set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
 
 elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
@@ -90,7 +90,7 @@ endif()
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
-    option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
+    option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" ON )
     option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" ON )
 
     if( CREATE_NORDIC_FIRMWARE )

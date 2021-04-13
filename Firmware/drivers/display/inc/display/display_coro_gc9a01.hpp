@@ -33,6 +33,10 @@ public:
         ,   IDisplayDriver::TColor* _color
     ) noexcept override;
 
+    void initialize()noexcept override;
+
+    bool isInitialized() const noexcept override;
+
 private:
 
     template<typename Tuple, std::size_t... Indexes>

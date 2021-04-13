@@ -33,6 +33,9 @@ namespace DisplayDriver
         ) noexcept override;
 
         void initialize()noexcept override;
+
+        bool isInitialized() const noexcept override;
+
     public:
 
         void initDisplay() noexcept;

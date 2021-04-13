@@ -1,17 +1,18 @@
 #include "gs_platform_layer.hpp"
-#include "logger/logger_service.hpp"
+#include <logger/logger_service.hpp>
 
-#include "lvgl.h"
+#include <lvgl.h>
 
-#include "utils/CallbackConnector.hpp"
+#include <utils/CallbackConnector.hpp>
+#include <utils/CoroUtils.hpp>
 
 #if defined USE_HARDWARE_DISPLAY_BACKEND
 
-#include "ih/drivers/ih_display_idisplay.hpp"
-#include "ih/drivers/ih_display_driver_creator.hpp"
+#include <ih/drivers/ih_display_idisplay.hpp>
+#include <ih/drivers/ih_display_driver_creator.hpp>
 
-#include "app_timer.h"
-#include "nrf_drv_clock.h"
+#include <app_timer.h>
+#include <nrf_drv_clock.h>
 
 namespace
 {
@@ -45,11 +46,21 @@ PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )
             );
         }
     );
+
+    auto waitCallback = cbc::obtain_connector(
+        [](lv_disp_drv_t * disp_drv)
+        {
+            CoroUtils::CoroQueueMainLoop::GetInstance().processQueue();
+        }
+    );
+
     _displayDriver->flush_cb = hardwareDriverCallback;
+    _displayDriver->wait_cb = waitCallback;
 
     m_hardwareDisplayDriver->onRectArreaFilled.connect(
         [this,_displayDriver]
         {
+            LOG_DEBUG_ENDL("lv_disp_flush_ready CALLED");
             lv_disp_flush_ready( _displayDriver );
         }
     );
@@ -85,6 +96,9 @@ PlatformBackend::initPlatformGfxTimer()
 void
 PlatformBackend::executeLvTaskHandler()
 {
+    if(!m_hardwareDisplayDriver->isInitialized())
+        return;
+
     lv_task_handler();
 }
 }

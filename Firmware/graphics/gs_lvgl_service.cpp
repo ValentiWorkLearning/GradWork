@@ -1,28 +1,28 @@
 #include "gs_lvgl_service.hpp"
 
-#include "ih/gs_events.hpp"
-#include "ih/gs_itheme_controller.hpp"
+#include <ih/gs_events.hpp>
+#include <ih/gs_itheme_controller.hpp>
 
-#include "ih/pages/gs_iclock_page_view.hpp"
-#include "ih/pages/gs_ihealth_page_view.hpp"
-#include "ih/pages/gs_iplayer_page_view.hpp"
+#include <ih/pages/gs_iclock_page_view.hpp>
+#include <ih/pages/gs_ihealth_page_view.hpp>
+#include <ih/pages/gs_iplayer_page_view.hpp>
 
-#include "widgets_layer/gs_main_window.hpp"
-#include "widgets_layer/gs_main_window_view.hpp"
+#include <widgets_layer/gs_main_window.hpp>
+#include <widgets_layer/gs_main_window_view.hpp>
 
-#include "widgets_layer/lvgl_views_creators/gs_widgets_creator.hpp"
-#include "widgets_layer/lvgl_views_creators/gs_pages_creator.hpp"
+#include <widgets_layer/lvgl_views_creators/gs_widgets_creator.hpp>
+#include <widgets_layer/lvgl_views_creators/gs_pages_creator.hpp>
 
-#include "gs_event_dispatcher.hpp"
+#include <gs_event_dispatcher.hpp>
 
 
-#include "platform/gs_platform_layer.hpp"
+#include <platform/gs_platform_layer.hpp>
 
-#include "lvgl.h"
-#include "lv_conf.h"
+#include <lvgl.h>
+#include <lv_conf.h>
 
-#include "utils/CallbackConnector.hpp"
-#include "logger/logger_service.hpp"
+#include <utils/CallbackConnector.hpp>
+#include <logger/logger_service.hpp>
 
 #include <array>
 #include <memory>
@@ -30,8 +30,8 @@
 namespace Graphics
 {
 
-LvglGraphicsService::LvglGraphicsService(
-        )   :   m_pGraphicsServiceImpl{ std::make_unique<GSLvglServiceImpl>() }
+LvglGraphicsService::LvglGraphicsService (
+        )noexcept   :   m_pGraphicsServiceImpl{ std::make_unique<GSLvglServiceImpl>() }
 {
 }
 
@@ -55,26 +55,26 @@ public:
 
 public:
 
-    void executeGlTask()
+    void executeGlTask() noexcept
     {
         m_pPlatformBackend.executeLvTaskHandler();
     }
 
 public:
 
-    Graphics::MainWindow::IGsMainWindowModel& getMainWindow()
+    Graphics::MainWindow::IGsMainWindowModel& getMainWindow() noexcept
     {
         return *m_pMainWindow;
     }
 
-    Graphics::MainWindow::IGsMainWindowModel& getMainWindow() const
+    Graphics::MainWindow::IGsMainWindowModel& getMainWindow() const noexcept
     {
         return *m_pMainWindow;
     }
 
 private:
 
-    void initLvglLogger()
+    void initLvglLogger() noexcept
     {
         auto lvglLoggerCallback = cbc::obtain_connector(
             []( lv_log_level_t level, const char * file, std::uint32_t line, const char * functionName, const char* dsc)
@@ -110,7 +110,7 @@ private:
 #endif
     }
 
-    void initDisplayDriver()
+    void initDisplayDriver() noexcept
     {
         lv_init();
 
@@ -126,17 +126,17 @@ private:
         m_glDisplayDriver.ver_res = LV_VER_RES_MAX;
         m_glDisplayDriver.draw_buf = &displayBuffer;
 
-        // auto monitorCallback = cbc::obtain_connector(
-        //     []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
-        //     {
-        //         LOG_DEBUG("Refresh time:");
-        //         LOG_DEBUG_ENDL( time );
-        //         LOG_DEBUG("Refreshed pixels:");
-        //         LOG_DEBUG_ENDL( px );
-        //     }
-        // );
+        auto monitorCallback = cbc::obtain_connector(
+            []( lv_disp_drv_t * disp_drv, uint32_t time, uint32_t px )
+            {
+                LOG_DEBUG("Refresh time:");
+                LOG_DEBUG_ENDL( time );
+                LOG_DEBUG("Refreshed pixels:");
+                LOG_DEBUG_ENDL( px );
+            }
+        );
 
-        //m_glDisplayDriver.monitor_cb = monitorCallback;
+        m_glDisplayDriver.monitor_cb = monitorCallback;
         m_pPlatformBackend.platformDependentInit( &m_glDisplayDriver );
 
         m_glDisplay.reset( lv_disp_drv_register( &m_glDisplayDriver ) );
@@ -144,7 +144,7 @@ private:
         m_pPlatformBackend.initPlatformGfxTimer();
     }
 
-    void initMainWindow()
+    void initMainWindow() noexcept
     {
         auto pMainWindowView = Graphics::MainWindow::createMainWindowView();
         auto pWidgetsCreator = Graphics::Widgets::createLvglWidgetsCreator();
@@ -271,22 +271,22 @@ lv_disp_draw_buf_t LvglGraphicsService::GSLvglServiceImpl::displayBuffer{};
 LvglGraphicsService::GSLvglServiceImpl::TColorBuf
 LvglGraphicsService::GSLvglServiceImpl::dispFrameBufFirst{};
 
-LvglGraphicsService::~LvglGraphicsService() = default;
+LvglGraphicsService::~LvglGraphicsService()noexcept = default;
 
 
-void LvglGraphicsService::executeGlTask()
+void LvglGraphicsService::executeGlTask() noexcept
 {
     m_pGraphicsServiceImpl->executeGlTask();
 }
 
 Graphics::MainWindow::IGsMainWindowModel&
-LvglGraphicsService::getMainWindow()
+LvglGraphicsService::getMainWindow() noexcept
 {
     return m_pGraphicsServiceImpl->getMainWindow();
 }
 
 Graphics::MainWindow::IGsMainWindowModel&
-LvglGraphicsService::getMainWindow() const
+LvglGraphicsService::getMainWindow() const noexcept
 {
     return m_pGraphicsServiceImpl->getMainWindow();
 }

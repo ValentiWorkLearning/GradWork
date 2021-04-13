@@ -1,47 +1,48 @@
 #pragma once
 
-#include "logger/logger_service.hpp"
+#include <logger/logger_service.hpp>
 
 #include "graphics/gs_lvgl_service.hpp"
 
-#include "sp_fake_services_creator.hpp"
+#include <sp_fake_services_creator.hpp>
 
-#include "ih/sp_ibattery_service.hpp"
-#include "ih/sp_iheartrate_service.hpp"
-#include "ih/sp_idatetime_service.hpp"
+#include <ih/sp_ibattery_service.hpp>
+#include <ih/sp_iheartrate_service.hpp>
+#include <ih/sp_idatetime_service.hpp>
 
-#include "ih/drivers/ih_ible_softdevice.hpp"
+#include <ih/drivers/ih_ible_softdevice.hpp>
 
-#include "board/watchboard.hpp"
+#include <board/watchboard.hpp>
 
-#include "utils/Noncopyable.hpp"
+#include <utils/Noncopyable.hpp>
 
 class Application
+    :   public Utils::noncopyable
 {
 
 public:
 
-    Application();
+    Application()noexcept;
 
-    ~Application();
+    ~Application()noexcept;
 
 public:
 
-    void runApplicationLoop();
+    void runApplicationLoop()noexcept;
 
 private:
 
-    void initBoard();
+    void initBoard()noexcept;
 
-    void initServices();
+    void initServices()noexcept;
 
-    void initPeripheral();
+    void initPeripheral()noexcept;
 
-    void initBleStack();
+    void initBleStack()noexcept;
 
-    void initGraphicsStack();
+    void initGraphicsStack()noexcept;
 
-    void connectBoardSpecificEvents();
+    void connectBoardSpecificEvents()noexcept;
 
 private:
 

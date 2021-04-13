@@ -21,21 +21,21 @@ class LvglGraphicsService
 
 public:
 
-    explicit LvglGraphicsService();
+    explicit LvglGraphicsService()noexcept;
 
-    ~LvglGraphicsService();
+    ~LvglGraphicsService()noexcept;
 
-    void executeGlTask();
+    void executeGlTask()noexcept;
 
 public:
 
-    Graphics::MainWindow::IGsMainWindowModel& getMainWindow();
+    Graphics::MainWindow::IGsMainWindowModel& getMainWindow()noexcept;
 
-    Graphics::MainWindow::IGsMainWindowModel& getMainWindow() const;
+    Graphics::MainWindow::IGsMainWindowModel& getMainWindow() const noexcept;
 
 private:
 
-    void initMainWindow();
+    void initMainWindow() noexcept;
 
 private:
 

@@ -4,7 +4,7 @@ namespace {
    
 constexpr std::size_t CommandsSize = 328;
 constexpr std::size_t CommandsTransactionsCount = 59;
-static constexpr auto Commands = std::array<std::uint8_t, CommandsSize>
+static auto Commands = std::array<std::uint8_t, CommandsSize>
 {
     /***Cmd****Argc****delay****argv*****************************/
         0xFE,   0,      0
@@ -99,13 +99,13 @@ GC9A01Compact::GC9A01Compact(std::unique_ptr<Interface::Spi::SpiBusAsync>&& _bus
         , _height
     )
 {
-//   initDisplay();
+   initDisplay();
 }
 
 void
 GC9A01Compact::initialize() noexcept
 {
-    initDisplay();
+    //initDisplay();
 }
 
 void
@@ -136,7 +136,7 @@ GC9A01Compact::fillRectangle(
         LOG_DEBUG_ENDL("Received initialize event");
         co_await setAddrWindow(_x, _y, _width, _height);
 
-        static constexpr std::uint8_t RamWriteCmd{0x29};
+        static std::uint8_t RamWriteCmd{0x2C};
 
         co_await sendCommandImpl(&RamWriteCmd);  //LCD_WriteCMD(GRAMWR);
 
@@ -152,6 +152,11 @@ GC9A01Compact::fillRectangle(
 void
 GC9A01Compact::initDisplay() noexcept
 {
+    BaseSpiDisplayCoroutine::resetResetPin();
+    Delay::waitFor( 100 );
+    BaseSpiDisplayCoroutine::setResetPin();
+    //static std::array Test = std::array<std::uint8_t, CommandsSize>{0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A};
+    //co_await BaseSpiDisplayCoroutine::sendChunk(Test.data(), Test.size());
     size_t CommandCount = CommandsTransactionsCount;
     const std::uint8_t* pBuffer = Commands.data();
     while(CommandCount--)
@@ -211,6 +216,12 @@ GC9A01Compact::setAddrWindow(
             sendCommand(xAxisCommand.data(), xAxisCommand.size())
         ,   sendCommand(yAxisCommand.data(), yAxisCommand.size())
     );
+}
+
+bool
+GC9A01Compact::isInitialized() const noexcept
+{
+    return m_displayInitialized.isSet();
 }
 
 std::unique_ptr<GC9A01Compact> createDisplayDriverCompactCoroBasedGC9A01(

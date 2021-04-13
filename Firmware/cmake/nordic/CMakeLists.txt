@@ -252,8 +252,8 @@ target_link_options(
 target_compile_options(
     Common PUBLIC
     --sysroot="${TOOLCHAIN_SYSROOT}"
-    $<$<CONFIG:Debug>:-Os>
-    $<$<CONFIG:Release>:-Os>
+    $<$<CONFIG:Debug>:-O0>
+    $<$<CONFIG:Release>:-O0>
     ${COMMON_FLAGS}
 )
 
