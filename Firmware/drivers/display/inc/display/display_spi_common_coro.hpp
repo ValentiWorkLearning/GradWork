@@ -47,6 +47,7 @@ protected:
     struct Awaiter
     {
         bool resetDcPin = false;
+        bool restoreInSpiCtx = false;
         const std::uint8_t* pTransmitBuffer;
         BaseSpiDisplayCoroutine* pBaseDisplay;
         std::uint16_t bufferSize;
@@ -70,6 +71,7 @@ protected:
                     pTransmitBuffer
                 ,   bufferSize
                 ,   thisCoroutine.address()
+                ,   restoreInSpiCtx
             );
         }
     };
@@ -81,6 +83,21 @@ protected:
         return Awaiter
         {
                 .resetDcPin = true
+            ,   .restoreInSpiCtx = false
+            ,   .pTransmitBuffer = _command
+            ,   .pBaseDisplay = this
+            ,   .bufferSize = 1
+        };
+    }
+
+    auto sendCommandImplFast(
+            const std::uint8_t* _command
+    )noexcept
+    {
+        return Awaiter
+        {
+                .resetDcPin = true
+            ,   .restoreInSpiCtx = true
             ,   .pTransmitBuffer = _command
             ,   .pBaseDisplay = this
             ,   .bufferSize = 1
@@ -95,6 +112,20 @@ protected:
         return Awaiter
         {
                 .pTransmitBuffer = _pBuffer
+            ,   .pBaseDisplay = this
+            ,   .bufferSize = static_cast<std::uint16_t>( _bufferSize ) 
+        };
+    }
+
+    auto sendChunkFast(
+            const std::uint8_t* _pBuffer
+        ,   std::size_t _bufferSize
+    )noexcept
+    {
+        return Awaiter
+        {
+                .restoreInSpiCtx = true
+            ,   .pTransmitBuffer = _pBuffer
             ,   .pBaseDisplay = this
             ,   .bufferSize = static_cast<std::uint16_t>( _bufferSize ) 
         };
@@ -115,6 +146,20 @@ protected:
         );
     }
 
+    auto sendCommandFast(
+            const std::uint8_t* _pBuffer
+        ,   std::size_t _bufferSize
+    )noexcept
+    {
+        const std::uint8_t* commandBuf = _pBuffer;
+        const std::uint8_t* ArgBuf = _pBuffer + 1;
+        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
+
+        return CoroUtils::when_all_sequence(
+                sendCommandImplFast( commandBuf )
+            ,   ArgsBufferSize > 0 ? sendChunk( ArgBuf, ArgsBufferSize): sendChunk(nullptr,0)
+        );
+    }
 
 
 protected:

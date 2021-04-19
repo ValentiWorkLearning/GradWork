@@ -99,13 +99,12 @@ GC9A01Compact::GC9A01Compact(std::unique_ptr<Interface::Spi::SpiBusAsync>&& _bus
         , _height
     )
 {
-   initDisplay();
 }
 
 void
 GC9A01Compact::initialize() noexcept
 {
-    //initDisplay();
+    initDisplay();
 }
 
 void
@@ -133,18 +132,54 @@ GC9A01Compact::fillRectangle(
         const size_t TransferBufferSize = (BytesSquare * sizeof(IDisplayDriver::TColor));
 
         co_await m_displayInitialized;
-        LOG_DEBUG_ENDL("Received initialize event");
-        co_await setAddrWindow(_x, _y, _width, _height);
+        //LOG_DEBUG_ENDL("Received initialize event");
+
+        //co_await setAddrWindow(_x, _y, _width, _height);
+
+        std::uint16_t width = _width - _x;
+        std::uint16_t height = _height - _y;
+    
+        std::uint16_t correctedX = _x;
+        std::uint16_t correctedY = _y;
+    
+        uint32_t xa = ((uint32_t)correctedX << 16) | ( correctedX + width);// (_x+_width-1);
+        int32_t ya = ((uint32_t)correctedY << 16) | ( correctedY +  height); //(_y+_height-1); 
+    
+        static std::array xAxisCommand =
+            std::array{
+                    static_cast<std::uint8_t>( 0x2a )
+                ,   static_cast<std::uint8_t>( xa >> 24 )
+                ,   static_cast<std::uint8_t>( xa >> 16 )
+                ,   static_cast<std::uint8_t>( xa >> 8 )
+                ,   static_cast<std::uint8_t>( xa )
+            };
+        static std::array yAxisCommand =
+            std::array{
+                    static_cast<std::uint8_t>( 0x2b )
+                ,   static_cast<std::uint8_t>( ya >> 24 )
+                ,   static_cast<std::uint8_t>( ya >> 16 )
+                ,   static_cast<std::uint8_t>( ya >> 8 )
+                ,   static_cast<std::uint8_t>( ya )
+            };
+
+        constexpr std::uint8_t CmdSize = 1;
+        constexpr std::uint8_t ArgSize = 3;
+
+        co_await sendCommandImplFast(xAxisCommand.data());
+        co_await sendChunkFast(xAxisCommand.data()+CmdSize, ArgSize);
+
+        co_await sendCommandImplFast(yAxisCommand.data());
+        co_await sendChunkFast(yAxisCommand.data()+CmdSize, ArgSize);
 
         static std::uint8_t RamWriteCmd{0x2C};
 
-        co_await sendCommandImpl(&RamWriteCmd);  //LCD_WriteCMD(GRAMWR);
+        co_await sendCommandImplFast(&RamWriteCmd);  //LCD_WriteCMD(GRAMWR);
 
         setDcPin();
-        co_await sendChunk(reinterpret_cast<const std::uint8_t*>(_colorToFill), TransferBufferSize);
+        co_await sendChunkFast(reinterpret_cast<const std::uint8_t*>(_colorToFill), TransferBufferSize);
         resetDcPin();
 
-        LOG_DEBUG_ENDL("Draw something");
+        //LOG_DEBUG_ENDL("Draw something");
         onRectArreaFilled.emit();
     }
 }
@@ -213,8 +248,8 @@ GC9A01Compact::setAddrWindow(
         };
 
     co_await CoroUtils::when_all_sequence(
-            sendCommand(xAxisCommand.data(), xAxisCommand.size())
-        ,   sendCommand(yAxisCommand.data(), yAxisCommand.size())
+            sendCommandFast(xAxisCommand.data(), xAxisCommand.size())
+        ,   sendCommandFast(yAxisCommand.data(), yAxisCommand.size())
     );
 }
 

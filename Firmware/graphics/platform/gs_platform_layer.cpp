@@ -55,12 +55,12 @@ PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )
     );
 
     _displayDriver->flush_cb = hardwareDriverCallback;
-    _displayDriver->wait_cb = waitCallback;
+    //_displayDriver->wait_cb = waitCallback;
 
     m_hardwareDisplayDriver->onRectArreaFilled.connect(
         [this,_displayDriver]
         {
-            LOG_DEBUG_ENDL("lv_disp_flush_ready CALLED");
+            //LOG_DEBUG_ENDL("lv_disp_flush_ready CALLED");
             lv_disp_flush_ready( _displayDriver );
         }
     );

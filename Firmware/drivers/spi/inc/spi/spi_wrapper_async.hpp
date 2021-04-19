@@ -60,16 +60,19 @@ public:
         return DmaArrayTransmit;
     }
 
+    void shouldRestoreInSpiCtx(bool _shouldRestore)noexcept;
+
     void transmitBuffer(
             const std::uint8_t* _pBuffer
         ,   std::uint16_t _pBufferSize
         ,   void* _pUserData
-    );
+        ,   bool restoreInSpiCtx
+    )noexcept;
 
-    void transmitCompleted();
+    void transmitCompleted()noexcept;
 
     std::coroutine_handle<>
-    getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey);
+    getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey)noexcept;
 
 private:
     std::size_t getTransitionOffset() noexcept;
@@ -82,6 +85,7 @@ private:
 
     struct TransactionContext
     {
+        bool restoreInSpiCtx = false;
         bool computeChunkOffsetWithDma = false;
         const std::uint8_t* pDataToTransmit = nullptr;
         size_t fullDmaTransactionsCount = 0;

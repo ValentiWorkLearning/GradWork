@@ -110,6 +110,7 @@
         "ranges": "cpp",
         "stop_token": "cpp",
         "complex": "cpp",
-        "csignal": "cpp"
+        "csignal": "cpp",
+        "typeindex": "cpp"
     }
 }

@@ -149,7 +149,8 @@ SpiBusAsync::transmitBuffer(
         const std::uint8_t * _pBuffer
     ,   std::uint16_t _pBufferSize
     ,   void* _pUserData
-)
+    ,   bool restoreInSpiCtx
+)noexcept
 {
     m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
 
@@ -162,7 +163,8 @@ SpiBusAsync::transmitBuffer(
 
     TransactionContext newContext
     {
-            .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma
+            .restoreInSpiCtx = restoreInSpiCtx
+        ,   .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma
         ,   .pDataToTransmit = _pBuffer
         ,   .fullDmaTransactionsCount = FullDmaTransactionsCount
         ,   .chunkedTransactionBufSize = ChunkedTransactionsBufSize
@@ -189,7 +191,7 @@ SpiBusAsync::transmitBuffer(
 }
 
 void
-SpiBusAsync::transmitCompleted()
+SpiBusAsync::transmitCompleted()noexcept
 {
     const bool isAllDmaTransactionsProceeded =
         m_transmitContext->fullDmaTransactionsCount == 0;
@@ -221,7 +223,12 @@ SpiBusAsync::transmitCompleted()
         );
     }
     else {
-        CoroUtils::CoroQueueMainLoop::GetInstance().pushToLater(m_coroHandle);
+        if(m_transmitContext->restoreInSpiCtx){
+            m_coroHandle.resume();
+        }
+        else{
+            CoroUtils::CoroQueueMainLoop::GetInstance().pushToLater(m_coroHandle);
+        }
     }
 }
 
@@ -232,7 +239,7 @@ SpiBusAsync::getTransitionOffset() noexcept
 }
 
 std::coroutine_handle<>
-SpiBusAsync::getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey)
+SpiBusAsync::getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey)noexcept
 {
     Meta::UnuseVar(_coroHandleKey);
     return m_coroHandle;
