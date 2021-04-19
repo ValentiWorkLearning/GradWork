@@ -85,7 +85,7 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
     ,   0x21,   0,      0
 
     ,   0x11,   0,      120
-    ,   0x29,   0,      0
+    ,   0x29,   0,      120
 };
 }
 
@@ -163,7 +163,7 @@ GC9A01Compact::fillRectangle(
             };
 
         constexpr std::uint8_t CmdSize = 1;
-        constexpr std::uint8_t ArgSize = 3;
+        constexpr std::uint8_t ArgSize = 4;
 
         co_await sendCommandImplFast(xAxisCommand.data());
         co_await sendChunkFast(xAxisCommand.data()+CmdSize, ArgSize);
