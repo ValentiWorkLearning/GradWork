@@ -1,7 +1,10 @@
 #include "inc/display/display_coro_gc9a01.hpp"
 
-#include "logger/logger_service.hpp"
 #include <array>
+
+#define FMT_HEADER_ONLY
+#include <fmt/core.h>
+#include <logger/logger_service.hpp>
 
 namespace
 {
@@ -185,6 +188,13 @@ void GC9A01Coro::fillRectangle(
     ,   IDisplayDriver::TColor* _colorToFill
 )noexcept
 {
+
+    for( size_t i{}; i< 2400; ++i ){
+        _colorToFill[i] = 0xF800;
+    }
+
+    LOG_DEBUG(fmt::format("X {0},y{1}, width{2}, height{3}\n",_x,_y,_width,_height));
+
     const std::uint16_t DisplayHeight = BaseSpiDisplayCoroutine::getHeight();
     const std::uint16_t DisplayWidth = BaseSpiDisplayCoroutine::getWidth();
 
