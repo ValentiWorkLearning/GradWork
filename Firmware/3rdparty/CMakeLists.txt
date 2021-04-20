@@ -10,6 +10,14 @@ endif()
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set( 3RD_PARTY_DIR CACHE STRING ${CMAKE_CURRENT_SOURCE_DIR} )# Libs root path
-
 add_subdirectory( etl )
 add_subdirectory( fmt )
+
+target_compile_definitions(fmt
+	PUBLIC
+	FMT_STATIC_THOUSANDS_SEPARATOR=1
+	FMT_USE_FLOAT=0
+	FMT_USE_DOUBLE=0
+	FMT_USE_LONG_DOUBLE=0
+	FMT_REDUCE_INT_INSTANTIATIONS=0
+)

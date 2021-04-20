@@ -1,5 +1,9 @@
 #include "inc/display/display_coro_compact_gc9a01.hpp"
 
+#define FMT_HEADER_ONLY 
+#include <fmt/core.h>
+#include <logger/logger_service.hpp>
+
 namespace {
    
 constexpr std::size_t CommandsSize = 328;
@@ -116,11 +120,16 @@ GC9A01Compact::fillRectangle(
     IDisplayDriver::TColor* _colorToFill
 ) noexcept
 {
+    for( size_t i{}; i< 2400; ++i ){
+        _colorToFill[i] = 0xF800;
+    }
+    LOG_DEBUG(fmt::format("X {0},y{1}, width{2}, height{3}\n",_x,_y,_width,_height));
+
     const std::uint16_t DisplayHeight = BaseSpiDisplayCoroutine::getHeight();
     const std::uint16_t DisplayWidth = BaseSpiDisplayCoroutine::getWidth();
 
     const bool isCoordsValid{ !((_x >= DisplayWidth) || (_y >= DisplayHeight)) };
-
+    LOG_DEBUG(fmt::format("Is coords valid: {0}\n", isCoordsValid));
     if (isCoordsValid)
     {
         if (_width >= DisplayWidth) _width = DisplayWidth - _x;
@@ -180,7 +189,7 @@ GC9A01Compact::fillRectangle(
         resetDcPin();
 
         //LOG_DEBUG_ENDL("Draw something");
-        onRectArreaFilled.emit();
+        onRectArreaFilled.emitLater();
     }
 }
 
