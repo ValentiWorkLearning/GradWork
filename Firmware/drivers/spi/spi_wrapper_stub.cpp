@@ -168,8 +168,11 @@ SpiBusAsync::transmitBuffer(
         const std::uint8_t * _pBuffer
     ,   std::uint16_t _pBufferSize
     ,   void* _pUserData
-)
+    , bool restoreInSpiCtx
+) noexcept
 {
+    Meta::UnuseVar(restoreInSpiCtx);
+
     m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
 
     const size_t TransferBufferSize = _pBufferSize;
@@ -208,7 +211,7 @@ SpiBusAsync::transmitBuffer(
 }
 
 void
-SpiBusAsync::transmitCompleted()
+SpiBusAsync::transmitCompleted()noexcept
 {
     const bool isAllDmaTransactionsProceeded =
         m_transmitContext->fullDmaTransactionsCount == 0;
@@ -251,7 +254,7 @@ SpiBusAsync::getTransitionOffset() noexcept
 }
 
 std::coroutine_handle<>
-SpiBusAsync::getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey)
+SpiBusAsync::getCoroutineHandle(const GetCoroHandleKey& _coroHandleKey)noexcept
 {
     Meta::UnuseVar(_coroHandleKey);
     return m_coroHandle;
