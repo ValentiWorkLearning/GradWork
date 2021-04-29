@@ -1,4 +1,4 @@
-#include "inc/display/display_coro_compact_gc9a01.hpp"
+#include <display/display_coro_compact_gc9a01.hpp>
 
 #define FMT_HEADER_ONLY 
 #include <fmt/core.h>
@@ -123,13 +123,12 @@ GC9A01Compact::fillRectangle(
     for( size_t i{}; i< 2400; ++i ){
         _colorToFill[i] = 0xF800;
     }
-    LOG_DEBUG(fmt::format("X {0},y{1}, width{2}, height{3}\n",_x,_y,_width,_height));
+
 
     const std::uint16_t DisplayHeight = BaseSpiDisplayCoroutine::getHeight();
     const std::uint16_t DisplayWidth = BaseSpiDisplayCoroutine::getWidth();
 
     const bool isCoordsValid{ !((_x >= DisplayWidth) || (_y >= DisplayHeight)) };
-    LOG_DEBUG(fmt::format("Is coords valid: {0}\n", isCoordsValid));
     if (isCoordsValid)
     {
         if (_width >= DisplayWidth) _width = DisplayWidth - _x;
@@ -141,35 +140,32 @@ GC9A01Compact::fillRectangle(
         const size_t TransferBufferSize = (BytesSquare * sizeof(IDisplayDriver::TColor));
 
         co_await m_displayInitialized;
-        //LOG_DEBUG_ENDL("Received initialize event");
 
         //co_await setAddrWindow(_x, _y, _width, _height);
 
         std::uint16_t width = _width - _x;
         std::uint16_t height = _height - _y;
-    
+
         std::uint16_t correctedX = _x;
         std::uint16_t correctedY = _y;
-    
-        uint32_t xa = ((uint32_t)correctedX << 16) | ( correctedX + width);// (_x+_width-1);
-        int32_t ya = ((uint32_t)correctedY << 16) | ( correctedY +  height); //(_y+_height-1); 
-    
-        static std::array xAxisCommand =
-            std::array{
-                    static_cast<std::uint8_t>( 0x2a )
-                ,   static_cast<std::uint8_t>( xa >> 24 )
-                ,   static_cast<std::uint8_t>( xa >> 16 )
-                ,   static_cast<std::uint8_t>( xa >> 8 )
-                ,   static_cast<std::uint8_t>( xa )
-            };
-        static std::array yAxisCommand =
-            std::array{
-                    static_cast<std::uint8_t>( 0x2b )
-                ,   static_cast<std::uint8_t>( ya >> 24 )
-                ,   static_cast<std::uint8_t>( ya >> 16 )
-                ,   static_cast<std::uint8_t>( ya >> 8 )
-                ,   static_cast<std::uint8_t>( ya )
-            };
+
+        uint32_t xa = ((uint32_t)correctedX << 16) | (correctedX + width); // (_x+_width-1);
+        int32_t ya = ((uint32_t)correctedY << 16) | (correctedY + height); //(_y+_height-1);
+
+        using TCommandsArray = std::array<std::uint8_t,5>;
+        static TCommandsArray xAxisCommand{};
+        xAxisCommand[0] = static_cast<std::uint8_t>( 0x2a );
+        xAxisCommand[1] = static_cast<std::uint8_t>( xa >> 24 );
+        xAxisCommand[2] = static_cast<std::uint8_t>( xa >> 16 );
+        xAxisCommand[3] = static_cast<std::uint8_t>( xa >> 8 );
+        xAxisCommand[4] = static_cast<std::uint8_t>( xa );
+
+        static TCommandsArray yAxisCommand{};
+        yAxisCommand[0] = static_cast<std::uint8_t>( 0x2b );
+        yAxisCommand[1] = static_cast<std::uint8_t>( ya >> 24 );
+        yAxisCommand[2] = static_cast<std::uint8_t>( ya >> 16 );
+        yAxisCommand[3] = static_cast<std::uint8_t>( ya >> 8 );
+        yAxisCommand[4] = static_cast<std::uint8_t>( ya );
 
         constexpr std::uint8_t CmdSize = 1;
         constexpr std::uint8_t ArgSize = 4;
@@ -188,7 +184,6 @@ GC9A01Compact::fillRectangle(
         co_await sendChunkFast(reinterpret_cast<const std::uint8_t*>(_colorToFill), TransferBufferSize);
         resetDcPin();
 
-        //LOG_DEBUG_ENDL("Draw something");
         onRectArreaFilled.emitLater();
     }
 }
@@ -214,7 +209,6 @@ GC9A01Compact::initDisplay() noexcept
             co_await BaseSpiDisplayCoroutine::sendChunk(pBuffer++, NumArgs);
             pBuffer+=(NumArgs - 1);
         }
-
         if(Delay)
             Delay::waitFor(Delay);
     }

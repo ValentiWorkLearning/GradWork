@@ -33,6 +33,8 @@ target_link_libraries(
     UtilsLibrary
     drivers_ih
     etl
+    fmt
+    logger_service
 )
 target_compile_features(
     spi
