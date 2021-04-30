@@ -8,7 +8,7 @@
 #include <optional>
 #include <cstdint>
 
-#include "utils/CoroUtils.hpp"
+#include <utils/CoroUtils.hpp>
 
 namespace Interface::Spi
 {

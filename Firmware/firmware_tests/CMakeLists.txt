@@ -18,12 +18,20 @@ add_executable(
     ${PROJECT_NAME}
     main.cpp
     buttons_driver/buttons_driver_test.cpp
+
     clock_page_handler/clock_page_view_handler_test.cpp
+
     main_window/mainwindow_model_test.cpp
+
     coroutine/display_peripheral_test.cpp
+
     stubs/pages_stub_pages_creator.cpp
     stubs/widgets_stub_pages_creator.cpp
-)
+
+    drivers/spi/spi_driver_fixture.hpp
+    drivers/spi/spi_fake_backend.hpp
+    drivers/spi/spi_driver_test_suite.cpp
+ )
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS

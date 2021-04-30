@@ -56,9 +56,9 @@ public:
 
         const size_t TransferBufferSize = _pBufferSize;
         const size_t FullDmaTransactionsCount =
-            TransferBufferSize / Interface::Spi::SpiBusAsync::DmaBufferSize;
+            TransferBufferSize / DmaBufferSize;
         const size_t ChunkedTransactionsBufSize =
-            TransferBufferSize % Interface::Spi::SpiBusAsync::DmaBufferSize;
+            TransferBufferSize % DmaBufferSize;
         const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
 
         TransactionContext newContext
@@ -78,7 +78,7 @@ public:
             --m_transmitContext->fullDmaTransactionsCount;
             m_backendImpl.sendChunk(
                 _pBuffer
-                , Interface::Spi::SpiBusAsync::DmaBufferSize
+                , DmaBufferSize
             );
         }
         else {
@@ -105,13 +105,13 @@ private:
 
             m_backendImpl.sendChunk(
                 m_transmitContext->pDataToTransmit + getTransitionOffset()
-                , Interface::Spi::SpiBusAsync::DmaBufferSize
+                , DmaBufferSize
             );
         }
         else if (!isAllChunckedTransactionsCompleted)
         {
             const size_t transmissionOffset = m_transmitContext->computeChunkOffsetWithDma
-                ? Interface::Spi::SpiBusAsync::DmaBufferSize
+                ? DmaBufferSize
                 * getTransitionOffset() : 0;
 
             const size_t TransmitBufferSize =
