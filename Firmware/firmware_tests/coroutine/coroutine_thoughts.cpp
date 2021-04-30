@@ -17,11 +17,18 @@
 #include "logger/logger_service.hpp"
 #include "display/display_coro_compact_gc9a01.hpp"
 
+
+#include <spi/spi_wrappper_async_templated.hpp>
+#include <backends/spi_backend_desktop.hpp>
+
 #include "st7789_draft.hpp"
 
 
  int main()
  {
+     using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
+
+
      /*Display display{};
      display.fillRectangle(0, 0, 220, 220, nullptr);*/
 

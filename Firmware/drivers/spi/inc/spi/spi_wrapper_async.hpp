@@ -60,8 +60,6 @@ public:
         return DmaArrayTransmit;
     }
 
-    void shouldRestoreInSpiCtx(bool _shouldRestore)noexcept;
-
     void transmitBuffer(
             const std::uint8_t* _pBuffer
         ,   std::uint16_t _pBufferSize
