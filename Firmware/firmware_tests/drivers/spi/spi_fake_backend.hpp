@@ -18,6 +18,7 @@ public:
     )noexcept
     {
         BusTransactions.emplace(_pBuffer, _bufferSize);
+        m_completedTransaction();
     }
 
 public:
@@ -28,6 +29,10 @@ public:
         m_completedTransaction = std::move(_handler);
     }
 
+    size_t getTransactionsSize()const
+    {
+        return BusTransactions.size();
+    }
 
 protected:
     using TTransacation = std::pair<const std::uint8_t*, size_t>;

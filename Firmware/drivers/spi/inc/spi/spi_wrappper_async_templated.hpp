@@ -89,6 +89,17 @@ public:
             );
         }
     }
+public:
+
+    SpiBackendImpl& getBackendImpl()
+    {
+        return m_backendImpl;
+    }
+
+    const SpiBackendImpl& getBackendImpl()const
+    {
+        return m_backendImpl;
+    }
 
 private:
 
