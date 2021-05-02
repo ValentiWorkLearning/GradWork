@@ -6,8 +6,13 @@
 
 #include "spi_fake_backend.hpp"
 
+#include <vector>
+
+using TTestParameter = std::vector<std::byte>;
+
 class SpiDriverTest
 	: public ::testing::Test
+    , public ::testing::WithParamInterface<TTestParameter>
 {
 
 protected:
@@ -58,6 +63,11 @@ protected:
             ,   .pThis = this
             ,   .bufferSize = static_cast<std::uint16_t>(_bufferSize)
         };
+    }
+
+    std::vector<std::byte> TransactionsToDataStream()
+    {
+        return testSpiDriver.getBackendImpl().getTransmittedData();
     }
 
 protected:
