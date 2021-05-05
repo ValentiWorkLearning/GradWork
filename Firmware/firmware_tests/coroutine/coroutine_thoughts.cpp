@@ -18,7 +18,7 @@
 #include "display/display_coro_compact_gc9a01.hpp"
 
 
-#include <spi/spi_wrappper_async_templated.hpp>
+#include <spi/spi_wrapper_async_templated.hpp>
 #include <backends/spi_backend_desktop.hpp>
 
 #include "st7789_draft.hpp"
@@ -28,15 +28,12 @@
  {
      using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
 
-
+     using TDisplayDriver =
+         DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
      /*Display display{};
      display.fillRectangle(0, 0, 220, 220, nullptr);*/
 
-     auto compactGc9A01 = DisplayDriver::GC9A01Compact{
-           Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M1>()
-         ,  240
-         ,  240
-     };
+     TDisplayDriver compactGc9A01;
      compactGc9A01.fillRectangle(0, 0, 0, 0, nullptr);
      compactGc9A01.initialize();
      //ST7789Coroutine displayCoro{

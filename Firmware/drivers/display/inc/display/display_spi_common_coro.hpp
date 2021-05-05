@@ -1,44 +1,67 @@
 #pragma once
 
-#include "ih/drivers/ih_display_idisplay.hpp"
+#include <gpio/gpio_pin.hpp>
 
-#include "gpio/gpio_pin.hpp"
+#include <spi/spi_wrapper_async_templated.hpp>
+#include <delay/delay_provider.hpp>
 
-#include "spi/spi_wrapper_async.hpp"
-#include "delay/delay_provider.hpp"
-
-#include "utils/SimpleSignal.hpp"
-#include "utils/CoroUtils.hpp"
+#include <utils/SimpleSignal.hpp>
+#include <utils/CoroUtils.hpp>
 
 #include <memory>
 #include <cstdint>
 #include <array>
 
-namespace Interface::Spi
-{
-    class SpiBus;
-}
 
 namespace DisplayDriver
 {
-
+template <typename TConcreteDisplay,typename TSpiBusInstance,std::uint16_t Width, std::uint16_t Height>
 class BaseSpiDisplayCoroutine
-    :   public IDisplayDriver
 {
-
+    using This_t = BaseSpiDisplayCoroutine<TConcreteDisplay, TSpiBusInstance,Width, Height>;
 public:
-    BaseSpiDisplayCoroutine(
-            std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
-        ,   std::uint16_t _width
-        ,   std::uint16_t _height
-    )   :   m_width{ _width }
-        ,   m_height { _height }
-        ,   m_pBusPtr{ std::move( _busPtr ) }
-    {
 
+    void turnOn()noexcept
+    {
+        pOffspring()->turnOn();
     }
 
-    ~BaseSpiDisplayCoroutine()noexcept override = default;
+    void turnOff()noexcept
+    {
+        pOffspring()->turnOff();
+    }
+
+    using TColor = std::uint16_t;
+
+
+    void fillRectangle(
+        std::uint16_t _x
+        , std::uint16_t _y
+        , std::uint16_t _width
+        , std::uint16_t _height
+        , TColor* _color
+    ) noexcept
+    {
+        pOffspring()->fillRectangle(
+            _x,
+            _y,
+            _width,
+            _height,
+            _color
+        );
+    }
+
+    void initialize()noexcept
+    {
+        pOffspring()->initialize();
+    };
+
+    bool isInitialized() const noexcept
+    {
+        return m_displayInitialized.isSet();
+    }
+
+    Simple::Signal<void()> onRectArreaFilled;
 
 protected:
 
@@ -47,7 +70,7 @@ protected:
         bool resetDcPin = false;
         bool restoreInSpiCtx = false;
         const std::uint8_t* pTransmitBuffer;
-        BaseSpiDisplayCoroutine* pBaseDisplay;
+        This_t* pBaseDisplay;
         std::uint16_t bufferSize;
 
         bool await_ready() const noexcept
@@ -177,38 +200,43 @@ protected:
         m_resetPin.reset();
     }
 
-    void setResetPin()
+    void setResetPin()noexcept
     {
         m_resetPin.set();
     }
 
 protected:
 
-    std::uint16_t getWidth() const noexcept
+    constexpr std::uint16_t getWidth() const noexcept
     {
         return m_width;
     }
 
-    std::uint16_t getHeight() const noexcept
+    constexpr std::uint16_t getHeight() const noexcept
     {
         return m_height;
     }
 
-    Interface::Spi::SpiBusAsync* getSpiBus() noexcept
+    auto getSpiBus() noexcept
     {
-        return m_pBusPtr.get();
+        return &m_spiBus;
     }
 
     CoroUtils::Event m_displayInitialized;
 
+    auto pOffspring()
+    {
+        return static_cast<TConcreteDisplay*>(this);
+    }
+
 private:
 
-    const std::uint16_t m_width;
-    const std::uint16_t m_height;
+    const std::uint16_t m_width = Width;
+    const std::uint16_t m_height = Height;
 
     Gpio::DisplayDataCommandPin m_dcPin;
     Gpio::DisplayResetPin m_resetPin;
-    std::unique_ptr<Interface::Spi::SpiBusAsync> m_pBusPtr;
+    TSpiBusInstance m_spiBus;
 };
 
 }

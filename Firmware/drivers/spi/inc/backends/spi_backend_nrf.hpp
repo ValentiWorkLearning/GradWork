@@ -42,7 +42,7 @@ class NordicSpi
 {
 
 public:
-
+    using This_t = NordicSpi<PeripheralInstance>;
     NordicSpi()
         : m_spiHandle{
         reinterpret_cast<NRF_SPIM_Type*>(PeripheralInstance::Register),
@@ -107,7 +107,7 @@ private:
     {
         if (_pEvent->type == NRFX_SPIM_EVENT_DONE)
         {
-            auto pThis = reinterpret_cast<SpiBusAsync::SpiAsyncBackendImpl*>(_pContext);
+            auto pThis = reinterpret_cast<This_t*>(_pContext);
             pThis->m_transactionCompleted();
         }
     }

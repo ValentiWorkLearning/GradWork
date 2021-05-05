@@ -18,7 +18,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_compile_definitions(
         graphics_backend
         PRIVATE
-        USE_HARDWARE_DISPLAY_BACKEND
+        USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
     )
 
     target_link_libraries(

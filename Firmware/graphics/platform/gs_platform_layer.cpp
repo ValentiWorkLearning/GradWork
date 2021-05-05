@@ -6,11 +6,7 @@
 #include <utils/CallbackConnector.hpp>
 #include <utils/CoroUtils.hpp>
 
-#if defined USE_HARDWARE_DISPLAY_BACKEND
-
-#include <ih/drivers/ih_display_idisplay.hpp>
-#include <ih/drivers/ih_display_driver_creator.hpp>
-
+#if defined USE_HARDWARE_DISPLAY_BACKEND || defined USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
 #include <app_timer.h>
 #include <nrf_drv_clock.h>
 
@@ -21,6 +17,12 @@ namespace
 
 namespace Graphics
 {
+#endif
+
+
+#if defined (USE_HARDWARE_DISPLAY_BACKEND)
+#include <ih/drivers/ih_display_idisplay.hpp>
+#include <ih/drivers/ih_display_driver_creator.hpp>
 
 PlatformBackend::PlatformBackend()
     :   m_hardwareDisplayDriver{
@@ -28,16 +30,22 @@ PlatformBackend::PlatformBackend()
         }
 {
 }
+#endif
 
+#if defined (USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND)
+PlatformBackend::PlatformBackend() = default;
+#endif
+
+#if defined USE_HARDWARE_DISPLAY_BACKEND || defined USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
 void
 PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )
 {
-    m_hardwareDisplayDriver->initialize();
+    getHardwareDisplayDriver()->initialize();
 
     auto hardwareDriverCallback = cbc::obtain_connector(
         [ this ]( lv_disp_drv_t* _displayDriver, const lv_area_t* _fillArea, lv_color_t* _colorFill )
         {
-            m_hardwareDisplayDriver->fillRectangle(
+            getHardwareDisplayDriver()->fillRectangle(
                     _fillArea->x1
                 ,   _fillArea->y1
                 ,   _fillArea->x2
@@ -58,7 +66,7 @@ PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )
     _displayDriver->flush_cb = hardwareDriverCallback;
     _displayDriver->wait_cb = waitCallback;
 
-    m_hardwareDisplayDriver->onRectArreaFilled.connect(
+    getHardwareDisplayDriver()->onRectArreaFilled.connect(
         [this,_displayDriver]
         {
             LOG_DEBUG_ENDL("lv_disp_flush_ready CALLED");
@@ -97,12 +105,12 @@ PlatformBackend::initPlatformGfxTimer()
 void
 PlatformBackend::executeLvTaskHandler()
 {
-    if(!m_hardwareDisplayDriver->isInitialized())
+    if(!getHardwareDisplayDriver()->isInitialized())
         return;
 
     lv_task_handler();
 }
-}
+} // namespace Graphics
 #endif
 
 
