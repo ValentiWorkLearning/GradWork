@@ -2,16 +2,16 @@
 
 #include "ih/drivers/ih_display_idisplay.hpp"
 
-#include "gpio/gpio_pin.hpp"
-#include "utils/SimpleSignal.hpp"
+#include <gpio/gpio_pin.hpp>
+#include <utils/SimpleSignal.hpp>
 
 #include <memory>
 #include <cstdint>
 
-#include "ih/drivers/transaction_item.hpp"
+#include <ih/drivers/transaction_item.hpp>
 
-#include "spi/spi_wrapper.hpp"
-#include "delay/delay_provider.hpp"
+#include <spi/spi_wrapper.hpp>
+#include <delay/delay_provider.hpp>
 
 namespace Interface::Spi
 {
@@ -32,8 +32,6 @@ public:
         ,   std::uint16_t _height
     )   :   m_width{ _width }
         ,   m_height { _height }
-        ,   m_dcPin { Gpio::getGpioPin( Gpio::Pins::Display_DataCommand, Gpio::Direction::Output) }
-        ,   m_resetPin { Gpio::getGpioPin( Gpio::Pins::Display_Reset, Gpio::Direction::Output) }
         ,   m_pBusPtr{ std::move( _busPtr ) }
     {
 
@@ -156,8 +154,8 @@ private:
     const std::uint16_t m_width;
     const std::uint16_t m_height;
 
-    Gpio::GpioPin m_dcPin;
-    Gpio::GpioPin m_resetPin;
+    Gpio::DisplayDataCommandPin m_dcPin;
+    Gpio::DisplayResetPin m_resetPin;
     std::unique_ptr<Interface::Spi::SpiBus> m_pBusPtr;
 
 };

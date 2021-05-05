@@ -1,78 +1,62 @@
 #include "inc/gpio/gpio_pin.hpp"
 
+#include <utils/MetaUtils.hpp>
+#include <logger/logger_service.hpp>
+
 #if defined (USE_DEVICE_SPECIFIC)
-    #include "pca10040.h"
-
-// https://cookierobotics.com/032/ useful for such constans declaration
-
-const std::uint8_t Gpio::Pins::Display_DataCommand = DISP_DC_PIN;
-const std::uint8_t Gpio::Pins::Display_Reset = DISP_RST;
-
-#else
-const std::uint8_t Gpio::Pins::Display_DataCommand = 0;
-const std::uint8_t Gpio::Pins::Display_Reset = 0;
+    #include "boards.h"
 #endif
-#include "utils/MetaUtils.hpp"
-#include "logger/logger_service.hpp"
 
 namespace Gpio
 {
 
 #if defined (USE_DEVICE_SPECIFIC)
-GpioPin::GpioPin(
-            Gpio::Direction _direction
-        ,   std::uint8_t _pinNumber
-    )
-    :   m_pinDirection{ _direction }
-    ,   m_pinNumber{ _pinNumber }
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
+GpioPin<GpioPinNumber,pinDirection>::GpioPin()noexcept
 {
-     if( _direction ==  Direction::Output )
-        nrf_gpio_cfg_output( m_pinNumber );
+     if( m_pinDirection ==  Direction::Output )
+        Gpio::Pins::nrf_gpio_cfg_output( m_pinNumber );
 }
 
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
 void
-GpioPin::set()
+GpioPin<GpioPinNumber,pinDirection>::set()noexcept
 {
-    nrf_gpio_pin_set( m_pinNumber );
+    Gpio::Pins::nrf_gpio_pin_set( m_pinNumber );
 }
 
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
 void
-GpioPin::reset()
+GpioPin<GpioPinNumber,pinDirection>::reset()noexcept
 {
-    nrf_gpio_pin_clear( m_pinNumber );
+    Gpio::Pins::nrf_gpio_pin_clear( m_pinNumber );
 }
 
 #else
-GpioPin::GpioPin(
-       Gpio::Direction _direction
-     ,  std::uint8_t _pinNumber
-    )
-    :   m_pinDirection{ _direction }
-    ,   m_pinNumber{ _pinNumber }
-{
-    Meta::UnuseVar( _pinNumber );
-    Meta::UnuseVar( _direction );
-}
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
+GpioPin<GpioPinNumber,pinDirection>::GpioPin()noexcept = default;
 
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
 void
-GpioPin::set()
+GpioPin<GpioPinNumber,pinDirection>::set()noexcept
 {
     LOG_DEBUG_ENDL( "Gpio Set called" );
 }
 
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
 void
-GpioPin::reset()
+GpioPin<GpioPinNumber, pinDirection>::reset()noexcept
 {
     LOG_DEBUG_ENDL( "Gpio Reset called" );
 }
 
 #endif
 
-GpioPin::~GpioPin() = default;
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
+GpioPin<GpioPinNumber, pinDirection>::~GpioPin() = default;
 
-GpioPin getGpioPin ( std::uint8_t _pinNumber, Direction _pinDirection )
-{
-    return GpioPin( _pinDirection, _pinNumber );
-}
 
+template class GpioPin<Gpio::Pins::Display_DataCommand, Direction::Output>;
+template class GpioPin<Gpio::Pins::Display_Reset, Direction::Output>;
+template class GpioPin<Gpio::Pins::LedPin, Direction::Output>;
 };

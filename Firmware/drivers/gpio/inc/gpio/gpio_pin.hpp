@@ -4,8 +4,19 @@
 
 namespace Gpio::Pins
 {
-    extern const std::uint8_t Display_DataCommand;
-    extern const std::uint8_t Display_Reset;
+#if defined (USE_DEVICE_SPECIFIC)
+#include "pca10040.h"
+
+    inline constexpr std::uint8_t Display_DataCommand = DISP_DC_PIN;
+    inline constexpr std::uint8_t Display_Reset = DISP_RST;
+    inline constexpr std::uint8_t LedPin = 13;
+
+#else
+    inline constexpr std::uint8_t Display_DataCommand = 0;
+    inline constexpr std::uint8_t Display_Reset = 0;
+    inline constexpr std::uint8_t LedPin = 0;
+#endif
+
 }//namespace Gpio::Pins
 
 namespace Gpio
@@ -18,29 +29,29 @@ enum class Direction
     ,   Output
 };
 
+template<std::uint8_t GpioPinNumber, Direction pinDirection>
 class GpioPin
 {
 
 public:
 
-    GpioPin(
-            Gpio::Direction _gpioDirection
-        ,   std::uint8_t _pinNumber
-    );
+    GpioPin()noexcept;
 
     ~GpioPin();
 
 public:
 
-    void set();
+    void set()noexcept;
 
-    void reset();
+    void reset()noexcept;
 
 private:
-    Direction m_pinDirection;
-    std::uint8_t m_pinNumber;
+    Direction m_pinDirection = pinDirection;
+    std::uint8_t m_pinNumber = GpioPinNumber;
 };
 
-GpioPin getGpioPin ( std::uint8_t _pinNumber, Direction _pinDirection );
+using DisplayDataCommandPin = GpioPin<Gpio::Pins::Display_DataCommand, Direction::Output>;
+using DisplayResetPin = GpioPin<Gpio::Pins::Display_Reset, Direction::Output>;
+using OnboardLedPin = GpioPin<Gpio::Pins::LedPin, Direction::Output>;
 
 } // namespace Gpio

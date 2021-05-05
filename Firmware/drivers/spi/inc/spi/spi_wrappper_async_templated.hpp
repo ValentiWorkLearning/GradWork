@@ -91,12 +91,12 @@ public:
     }
 public:
 
-    SpiBackendImpl& getBackendImpl()
+    SpiBackendImpl& getBackendImpl()noexcept
     {
         return m_backendImpl;
     }
 
-    const SpiBackendImpl& getBackendImpl()const
+    const SpiBackendImpl& getBackendImpl()const noexcept
     {
         return m_backendImpl;
     }
