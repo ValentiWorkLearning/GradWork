@@ -26,13 +26,13 @@ public:
 
 public:
 
-    virtual Ble::BatteryService::IBatteryLevelService& getBatteryService() = 0;
+    virtual Ble::BatteryService::IBatteryLevelService& getBatteryService()noexcept = 0;
 
-    virtual const Ble::BatteryService::IBatteryLevelService& getBatteryService() const = 0;
+    virtual const Ble::BatteryService::IBatteryLevelService& getBatteryService() const noexcept = 0;
 
-    virtual Ble::DateTimeService::IDateTimeService& getDateTimeService() = 0;
+    virtual Ble::DateTimeService::IDateTimeService& getDateTimeService()noexcept = 0;
 
-    virtual const Ble::DateTimeService::IDateTimeService& getDateTimeService() const = 0;
+    virtual const Ble::DateTimeService::IDateTimeService& getDateTimeService() const noexcept = 0;
 
 public:
 
@@ -43,7 +43,7 @@ public:
 
 using TSoftDevicePtr = std::unique_ptr<IBleSoftDevice>;
 [[nodiscard]]
-TSoftDevicePtr createSoftDevice( Ble::ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
+TSoftDevicePtr createSoftDevice( Ble::ServiceFactory::TBleFactoryPtr&& _pServiceCreator )noexcept;
 
 
 }

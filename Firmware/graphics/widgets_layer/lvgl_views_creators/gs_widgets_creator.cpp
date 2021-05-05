@@ -11,24 +11,24 @@ namespace Graphics::Widgets
 LvglWidgetsCreator::~LvglWidgetsCreator() = default;
  
 std::unique_ptr<Graphics::Widgets::IBluetoothWidget>
-LvglWidgetsCreator::createBluetoothWidget(Theme::IThemeController* _pThemeController)
+LvglWidgetsCreator::createBluetoothWidget(Theme::IThemeController* _pThemeController)noexcept
 {
 	return Widgets::createBluetoothWidget(_pThemeController);
 }
 
 std::unique_ptr<Graphics::Widgets::IPagesSwitch>
-LvglWidgetsCreator::createPagesSwitchWidget(Theme::IThemeController* _pThemeController)
+LvglWidgetsCreator::createPagesSwitchWidget(Theme::IThemeController* _pThemeController)noexcept
 {
 	return Widgets::createPagesSwitch(_pThemeController);
 }
 
 std::unique_ptr<Graphics::Widgets::IBatteryWidget>
-LvglWidgetsCreator::createBatteryWidget(Theme::IThemeController* _pThemeController)
+LvglWidgetsCreator::createBatteryWidget(Theme::IThemeController* _pThemeController)noexcept
 {
 	return Widgets::createBatteryWidget(_pThemeController);
 }
 
-IWidgetsCreator::Ptr createLvglWidgetsCreator()
+IWidgetsCreator::Ptr createLvglWidgetsCreator()noexcept
 {
 	return std::make_unique<LvglWidgetsCreator>();
 }

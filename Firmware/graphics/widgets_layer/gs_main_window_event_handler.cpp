@@ -11,13 +11,13 @@
 namespace Graphics::MainWindow
 {
 
-MainWindowHandler::MainWindowHandler(IGsMainWindowModel* _pMainWindowModel)
+MainWindowHandler::MainWindowHandler(IGsMainWindowModel* _pMainWindowModel)noexcept
 	:	m_pMainWindowModel{ _pMainWindowModel }
 {
 }
 
 void
-MainWindowHandler::handleEventImpl(const Events::TButtonsEvents& _event, const std::any& _eventData)
+MainWindowHandler::handleEventImpl(const Events::TButtonsEvents& _event, const std::any& _eventData)noexcept
 {
 	if( _event != Events::TButtonsEvents::ButtonClicked )
 		return;
@@ -32,7 +32,7 @@ MainWindowHandler::handleEventImpl(const Events::TButtonsEvents& _event, const s
 }
 
 void
-MainWindowHandler::navigateToNextPage()
+MainWindowHandler::navigateToNextPage()noexcept
 {
 	const auto& activePage = m_pMainWindowModel->getActivePage();
 	auto activePageName = activePage.getPageName();
@@ -47,7 +47,7 @@ MainWindowHandler::navigateToNextPage()
 }
 
 void
-MainWindowHandler::navigateToPreviousPage()
+MainWindowHandler::navigateToPreviousPage()noexcept
 {
 	const auto& activePage = m_pMainWindowModel->getActivePage();
 	auto activePageName = activePage.getPageName();
@@ -62,7 +62,7 @@ MainWindowHandler::navigateToPreviousPage()
 
 
 std::unique_ptr<Graphics::IEventHandler>
-createMainWindowEventHandler(IGsMainWindowModel* _pMainWindowModel)
+createMainWindowEventHandler(IGsMainWindowModel* _pMainWindowModel)noexcept
 {
 	return std::make_unique<MainWindowHandler>( _pMainWindowModel );
 }

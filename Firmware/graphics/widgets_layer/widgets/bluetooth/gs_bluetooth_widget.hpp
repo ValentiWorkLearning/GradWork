@@ -26,35 +26,35 @@ class BluetoothWidget
 
 public:
 
-    explicit BluetoothWidget( const Theme::IThemeController* _themeController );
+    explicit BluetoothWidget( const Theme::IThemeController* _themeController )noexcept;
 
     ~BluetoothWidget() override = default;
 
 public:
 
-    void show() override;
+    void show()noexcept override;
 
-    void hide() override;
+    void hide()noexcept override;
 
-    void reloadStyle() override;
+    void reloadStyle()noexcept override;
 
 public:
 
-    void setBluetoothStatus( BluetoothStatus _iconToSet ) override;
+    void setBluetoothStatus( BluetoothStatus _iconToSet )noexcept override;
 
 private:
 
-    void initStyles();
+    void initStyles()noexcept;
 
-    void resetStyle();
+    void resetStyle()noexcept;
 
     void initBluetoothIcon(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
-    BluetoothStatus getCurrentStatus() const;
+    BluetoothStatus getCurrentStatus() const noexcept;
 
 private:
 
@@ -66,6 +66,6 @@ private:
 
 std::unique_ptr<IBluetoothWidget> createBluetoothWidget(
     const Theme::IThemeController* _themeController
-);
+)noexcept;
 
 };

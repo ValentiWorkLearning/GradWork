@@ -17,16 +17,16 @@ class BatteryLevelService
 
 public:
 
-    BatteryLevelService();
+    BatteryLevelService()noexcept;
     ~BatteryLevelService()override = default;
 
 public:
 
-    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel ) override;
+    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )noexcept override;
 
 private:
 
-    void initService();
+    void initService()noexcept;
 };
 
 

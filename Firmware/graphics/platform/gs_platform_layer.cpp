@@ -24,7 +24,7 @@ namespace Graphics
 #include <ih/drivers/ih_display_idisplay.hpp>
 #include <ih/drivers/ih_display_driver_creator.hpp>
 
-PlatformBackend::PlatformBackend()
+PlatformBackend::PlatformBackend()noexcept
     :   m_hardwareDisplayDriver{
             DisplayCreator::createDisplayDriver()
         }
@@ -33,12 +33,12 @@ PlatformBackend::PlatformBackend()
 #endif
 
 #if defined (USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND)
-PlatformBackend::PlatformBackend() = default;
+PlatformBackend::PlatformBackend()noexcept = default;
 #endif
 
 #if defined USE_HARDWARE_DISPLAY_BACKEND || defined USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
 void
-PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )
+PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )noexcept
 {
     getHardwareDisplayDriver()->initialize();
 
@@ -76,7 +76,7 @@ PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )
 }
 
 void
-PlatformBackend::initPlatformGfxTimer()
+PlatformBackend::initPlatformGfxTimer()noexcept
 {
     ret_code_t errorCode{};
 
@@ -103,7 +103,7 @@ PlatformBackend::initPlatformGfxTimer()
 }
 
 void
-PlatformBackend::executeLvTaskHandler()
+PlatformBackend::executeLvTaskHandler()noexcept
 {
     if(!getHardwareDisplayDriver()->isInitialized())
         return;
@@ -129,17 +129,17 @@ PlatformBackend::executeLvTaskHandler()
 namespace Graphics
 {
 
-PlatformBackend::PlatformBackend() = default;
+PlatformBackend::PlatformBackend()noexcept = default;
 
 void
-PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver)
+PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver)noexcept
 {
     monitor_init();
     _displayDriver->flush_cb = monitor_flush;
 }
 
 void
-PlatformBackend::initPlatformGfxTimer()
+PlatformBackend::initPlatformGfxTimer()noexcept
 {
     m_tickThread = std::thread(
         []
@@ -160,7 +160,7 @@ PlatformBackend::initPlatformGfxTimer()
 }
 
 void
-PlatformBackend::indevPlatformInit()
+PlatformBackend::indevPlatformInit()noexcept
 {
     
     m_indevDriver.type = LV_INDEV_TYPE_POINTER;
@@ -182,7 +182,7 @@ PlatformBackend::indevPlatformInit()
 }
 
 void
-PlatformBackend::memoryMonitor(lv_timer_t* _param)
+PlatformBackend::memoryMonitor(lv_timer_t* _param)noexcept
 {
     static_cast<void>( _param );
 
@@ -201,7 +201,7 @@ PlatformBackend::memoryMonitor(lv_timer_t* _param)
 }
 
 void
-PlatformBackend::executeLvTaskHandler()
+PlatformBackend::executeLvTaskHandler()noexcept
 {
     lv_task_handler();
     std::this_thread::sleep_for(

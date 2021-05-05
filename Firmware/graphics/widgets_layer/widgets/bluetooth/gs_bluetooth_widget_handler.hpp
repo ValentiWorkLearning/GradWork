@@ -20,13 +20,13 @@ class BluetoothWidgetHandler
 
 public:
 
-    explicit BluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidget );
+    explicit BluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidget )noexcept;
 
     ~BluetoothWidgetHandler() override = default;
 
 protected:
 
-    void handleEventImpl( const Events::TBleClientEvents& _event, const std::any& _eventData ) override;
+    void handleEventImpl( const Events::TBleClientEvents& _event, const std::any& _eventData )noexcept override;
 
 private:
 
@@ -34,6 +34,6 @@ private:
 };
 
 std::unique_ptr<Graphics::IEventHandler>
-createBluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidget );
+createBluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidget )noexcept;
 
 }

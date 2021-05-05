@@ -48,6 +48,6 @@ private:
 
 using TEventDispatcherPtr = std::unique_ptr<EventDispatcher>;
 
-TEventDispatcherPtr createEventDispatcher();
+TEventDispatcherPtr createEventDispatcher()noexcept;
 
 }

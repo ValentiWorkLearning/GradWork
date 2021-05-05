@@ -28,13 +28,13 @@ class PlatformBackend
 
 public:
 
-    PlatformBackend();
+    PlatformBackend()noexcept;
 
-    void platformDependentInit( lv_disp_drv_t* _displayDriver );
+    void platformDependentInit( lv_disp_drv_t* _displayDriver )noexcept;
 
-    void initPlatformGfxTimer();
+    void initPlatformGfxTimer()noexcept;
 
-    void executeLvTaskHandler();
+    void executeLvTaskHandler()noexcept;
 
 private:
 
@@ -64,9 +64,9 @@ private:
     }
 private:
 
-    void indevPlatformInit();
+    void indevPlatformInit()noexcept;
 
-    void memoryMonitor(lv_timer_t* _param);
+    void memoryMonitor(lv_timer_t* _param)noexcept;
 
 private:
 

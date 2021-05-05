@@ -20,19 +20,19 @@ class WidgetBaseObj
 
 public:
 
-    explicit WidgetBaseObj( const Theme::IThemeController* _themeController );
+    explicit WidgetBaseObj( const Theme::IThemeController* _themeController )noexcept;
 
 public:
 
-    void show() override;
+    void show()noexcept override;
 
-    void hide() override;
+    void hide()noexcept override;
 
-    bool isVisible()const override;
+    bool isVisible()const noexcept override;
 
 public:
 
-    const Theme::IThemeController* getThemeController() const override;
+    const Theme::IThemeController* getThemeController() const noexcept override;
 
 protected:
 
@@ -43,7 +43,7 @@ protected:
         const std::uint32_t DisplayHeight;
     };
 
-    ShowParams getShowParams();
+    ShowParams getShowParams() noexcept;
 
 private:
 

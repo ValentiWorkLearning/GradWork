@@ -15,15 +15,15 @@ public:
 public:
 
     std::unique_ptr<Graphics::Widgets::IBluetoothWidget>
-        createBluetoothWidget(Theme::IThemeController* _pThemeController) override;
+        createBluetoothWidget(Theme::IThemeController* _pThemeController)noexcept override;
 
     std::unique_ptr<Graphics::Widgets::IPagesSwitch>
-        createPagesSwitchWidget(Theme::IThemeController* _pThemeController) override;
+        createPagesSwitchWidget(Theme::IThemeController* _pThemeController)noexcept override;
 
     std::unique_ptr<Graphics::Widgets::IBatteryWidget>
-        createBatteryWidget(Theme::IThemeController* _pThemeController) override;
+        createBatteryWidget(Theme::IThemeController* _pThemeController)noexcept override;
 };
 
-IWidgetsCreator::Ptr createLvglWidgetsCreator();
+IWidgetsCreator::Ptr createLvglWidgetsCreator()noexcept;
 
 }

@@ -14,9 +14,9 @@ class IPlayerWatchPage
 
 public:
 
-    virtual void setPause() = 0;
+    virtual void setPause()noexcept = 0;
 
-    virtual void setPlaying() = 0;
+    virtual void setPlaying()noexcept = 0;
 
 public:
 

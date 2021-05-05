@@ -14,12 +14,12 @@ inline constexpr std::uint8_t ServiceType = BLE_UUID_TYPE_BLE;
 
 BLE_BAS_DEF(m_bas);
 
-BatteryLevelService::BatteryLevelService()
+BatteryLevelService::BatteryLevelService()noexcept
 {
     initService();
 }
 
-void BatteryLevelService::initService()
+void BatteryLevelService::initService()noexcept
 {
     ret_code_t errorCode{};
     ble_bas_init_t batteryServiceInit{};
@@ -37,7 +37,7 @@ void BatteryLevelService::initService()
     APP_ERROR_CHECK( errorCode );
 }
 
-void BatteryLevelService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )
+void BatteryLevelService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )noexcept
 {
     ret_code_t errorCode{};
     std::uint8_t levelToSet{ _newBatteryLevel };

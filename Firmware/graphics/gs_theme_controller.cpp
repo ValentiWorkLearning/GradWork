@@ -27,7 +27,7 @@ namespace Graphics::Theme
 {
 
 lv_color_t
-ThemeController::getMainThemeColor( Color _fromColor ) const
+ThemeController::getMainThemeColor( Color _fromColor ) const noexcept
 {
     switch (_fromColor)
     {
@@ -43,12 +43,12 @@ ThemeController::getMainThemeColor( Color _fromColor ) const
     return m_mainThemeDarkColor;
 }
 
-std::uint32_t ThemeController::getDisplayWidth() const
+std::uint32_t ThemeController::getDisplayWidth() const noexcept
 {
     return m_displayWidth;
 }
 
-std::uint32_t ThemeController::getDisplayHeight() const
+std::uint32_t ThemeController::getDisplayHeight() const noexcept
 {
     return m_displayHeight;
 }
@@ -57,7 +57,7 @@ ThemeController::ThemeController(
             const ColorTheme _initialColorTheme
         ,   std::uint32_t _displayWidth
         ,   std::uint32_t _displayHeight
-    )
+    )noexcept
     :   m_activeTheme{ _initialColorTheme }
     ,   m_displayWidth{ _displayWidth }
     ,   m_displayHeight{ _displayHeight }
@@ -66,7 +66,7 @@ ThemeController::ThemeController(
 }
 
 void
-ThemeController::setActiveTheme( ColorTheme _themeToSet )
+ThemeController::setActiveTheme( ColorTheme _themeToSet )noexcept
 {
     if( m_activeTheme != _themeToSet )
     {
@@ -77,14 +77,14 @@ ThemeController::setActiveTheme( ColorTheme _themeToSet )
         onThemeChanged.emit();
     }
 }
-ColorTheme ThemeController::getActiveTheme() const
+ColorTheme ThemeController::getActiveTheme() const noexcept
 {
     return m_activeTheme;
 }
 ;
 
 lv_style_t
-ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
+ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const noexcept
 {
     lv_style_t iconsFont{};
     lv_style_init(&iconsFont);
@@ -113,7 +113,7 @@ ThemeController::getIconsFont(FontSize _fontStyle, Color _fontColor ) const
 };
 
 lv_style_t
-ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const
+ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const noexcept
 {
     lv_style_t fontStyle{};
     lv_style_init(&fontStyle);
@@ -150,7 +150,7 @@ ThemeController::getFontStyle( FontSize _fontStyle, Color _fontColor ) const
 }
 
 
-void ThemeController::initColorsAccrodingToTheme(ColorTheme _theme)
+void ThemeController::initColorsAccrodingToTheme(ColorTheme _theme) noexcept
 {
     switch (_theme)
     {
@@ -177,7 +177,7 @@ createThemeController(
         const ColorTheme _initialColorTheme
     ,   std::uint32_t _displayWidth
     ,   std::uint32_t _displayHeight
-)
+) noexcept
 {
     return std::make_unique<ThemeController>(
             _initialColorTheme

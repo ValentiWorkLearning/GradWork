@@ -50,7 +50,7 @@ class SpiBus::SpiBackendImpl
         ,   std::uint32_t _pRegister
         ,   std::uint8_t _driverInstance
         ,   SpiBus* _pSpiBus
-    )
+    )noexcept
         :   m_spiHandle{  reinterpret_cast<NRF_SPIM_Type*>(_pRegister), _driverInstance }
         ,   m_pSpiBus{ _pSpiBus }
     {
@@ -187,7 +187,7 @@ SpiBus::SpiBus(
         ,   std::uint8_t _chipSelectPin
         ,   std::uint32_t _pRegister
         ,   std::uint8_t _driverInstance
-    )
+    )noexcept
     :   m_isTransactionCompleted{ true }
     ,   m_completedTransitionsCount{}
     ,   m_pSpiBackendImpl{
@@ -438,7 +438,7 @@ SpiBus::getTransitionOffset() noexcept
 }
 
 template< typename TSpiInstance >
-std::unique_ptr<SpiBus> createSpiBus()
+std::unique_ptr<SpiBus> createSpiBus()noexcept
 {
     return std::make_unique<SpiBus>(
             TSpiInstance::ClockPin
@@ -450,7 +450,7 @@ std::unique_ptr<SpiBus> createSpiBus()
     );
 }
 
-template class std::unique_ptr<SpiBus> createSpiBus<SpiInstance::M1>();
-template class std::unique_ptr<SpiBus> createSpiBus<SpiInstance::M2>();
+template class std::unique_ptr<SpiBus> createSpiBus<SpiInstance::M1>()noexcept;
+template class std::unique_ptr<SpiBus> createSpiBus<SpiInstance::M2>()noexcept;
 
 };

@@ -22,32 +22,32 @@ public:
             const std::uint32_t _address
         ,   const std::uint8_t* _blockData
         ,   const std::uint8_t _blockSize
-    ) = 0;
+    )noexcept = 0;
 
     virtual void requestReadBlock(
             const std::uint32_t _address
         ,   const std::uint8_t _blockSize
-    ) = 0;
+    )noexcept = 0;
 
     virtual void requestFastReadBlock(
             const std::uint32_t _address
         ,   const std::uint8_t _blockSize
-    ) = 0;
+    )noexcept = 0;
 
-    virtual void requestChipErase() = 0;
+    virtual void requestChipErase()noexcept = 0;
 
-    virtual void requestDeviceId() = 0;
+    virtual void requestDeviceId()noexcept = 0;
 
-    virtual void requestJEDEDCId() = 0;
+    virtual void requestJEDEDCId()noexcept = 0;
 
-    virtual void requestEnterSleepMode() = 0;
+    virtual void requestEnterSleepMode()noexcept = 0;
 
-    virtual void requestRestoreFromSleepMode() = 0;
+    virtual void requestRestoreFromSleepMode()noexcept = 0;
 
     static constexpr inline std::uint8_t DeviceIdLength = 8;
     using TDeviceIdType = std::array<std::uint8_t,DeviceIdLength>;
 
-    virtual const TDeviceIdType& getDeviceUniqueId() = 0;
+    virtual const TDeviceIdType& getDeviceUniqueId()noexcept = 0;
 
 public:
 

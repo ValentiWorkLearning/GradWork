@@ -11,7 +11,7 @@ namespace ServiceProviders
 {
 
 std::unique_ptr<BatteryService::IBatteryLevelAppService>
-FakeServiceCreator::getBatteryService()
+FakeServiceCreator::getBatteryService()noexcept
 {
     return std::make_unique<BatteryService::BatteryServiceFake>(
         BatteryService::Settings::MeasurmentPeriod
@@ -19,18 +19,18 @@ FakeServiceCreator::getBatteryService()
 }
 
 std::unique_ptr<HeartrateService::IHeartrateService>
-FakeServiceCreator::getHeartrateService()
+FakeServiceCreator::getHeartrateService()noexcept
 {
     return std::make_unique<HeartrateService::HeartrateServiceFake>();
 }
 
 std::unique_ptr<DateTimeService::IDateTimeService>
-FakeServiceCreator::getDateTimeService()
+FakeServiceCreator::getDateTimeService()noexcept
 {
     return std::make_unique<DateTimeService::DateTimeServiceFake>();
 }
 
-std::unique_ptr<IServiceCreator> getFakeServiceCreator()
+std::unique_ptr<IServiceCreator> getFakeServiceCreator()noexcept
 {
     return std::make_unique<FakeServiceCreator>();
 }

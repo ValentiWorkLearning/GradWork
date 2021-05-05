@@ -13,13 +13,13 @@ class HeartrateServiceFake :
 
 public:
 
-    explicit HeartrateServiceFake();
+    explicit HeartrateServiceFake()noexcept;
 
     ~HeartrateServiceFake();
 
 public:
 
-    void startMeasure() override;
+    void startMeasure()noexcept override;
 
 private:
 

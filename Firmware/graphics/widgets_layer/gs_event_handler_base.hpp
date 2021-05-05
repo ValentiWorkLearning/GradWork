@@ -22,7 +22,7 @@ class Helper< HeadEvent>
 
 protected:
 
-    virtual void handleEventImpl( const HeadEvent& _eventToHandle, const std::any& _eventData) = 0;
+    virtual void handleEventImpl( const HeadEvent& _eventToHandle, const std::any& _eventData)noexcept = 0;
 };
 
 
@@ -33,7 +33,7 @@ class EventHandler
 {
 public:
 
-    void handleEvent(const Events::TEvent& genericEvent)
+    void handleEvent(const Events::TEvent& genericEvent)noexcept
     {
         switch (genericEvent.eventGroup)
         {

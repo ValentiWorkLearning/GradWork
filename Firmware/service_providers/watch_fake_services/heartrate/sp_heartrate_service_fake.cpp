@@ -9,13 +9,13 @@ class HeartrateServiceFake::HeartrateSimulatorImpl
 
 public:
 
-    void startMeasure(){}; //Just for test
+    void startMeasure()noexcept {}; //Just for test
 
 };
 
 
 
-HeartrateServiceFake::HeartrateServiceFake()
+HeartrateServiceFake::HeartrateServiceFake()noexcept
     :   m_pHeartrateSimImpl{ std::make_unique<HeartrateSimulatorImpl>() }
 {
 }
@@ -23,7 +23,7 @@ HeartrateServiceFake::HeartrateServiceFake()
 HeartrateServiceFake::~HeartrateServiceFake() = default;
 
 void
-HeartrateServiceFake::startMeasure()
+HeartrateServiceFake::startMeasure()noexcept
 {
     m_pHeartrateSimImpl->startMeasure();
 }

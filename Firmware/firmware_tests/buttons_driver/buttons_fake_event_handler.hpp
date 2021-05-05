@@ -54,7 +54,7 @@ public:
 
 protected:
 
-    void handleEventImpl(const Graphics::Events::TButtonsEvents& _event, const std::any& _eventData) override
+    void handleEventImpl(const Graphics::Events::TButtonsEvents& _event, const std::any& _eventData)noexcept override
     {
         m_receivedEvents.push_back( _event );
         m_button = std::any_cast<Buttons::ButtonId>( _eventData );
@@ -68,7 +68,7 @@ private:
 
 using TFakeButtonsHandlerPtr = std::unique_ptr<FakeButtonEventsHandler>;
 
-TFakeButtonsHandlerPtr createFakeButtonsHandler()
+TFakeButtonsHandlerPtr createFakeButtonsHandler()noexcept
 {
     return std::make_unique<FakeButtonEventsHandler>();
 }

@@ -10,7 +10,7 @@
 namespace Graphics::Views
 {
 
-PlayerPage::PlayerPage( const Theme::IThemeController* _themeController )
+PlayerPage::PlayerPage( const Theme::IThemeController* _themeController )noexcept
 	:	PageViewObject<IPlayerWatchPage>{ _themeController, IPlayerWatchPage::PlayerPageName }
 	,	m_mainLabelStyleDark{}
 	,	m_melodyIconStyle{}
@@ -20,15 +20,15 @@ PlayerPage::PlayerPage( const Theme::IThemeController* _themeController )
 	initStyles();
 }
 
-void PlayerPage::setPause()
+void PlayerPage::setPause()noexcept
 {
 }
 
-void PlayerPage::setPlaying()
+void PlayerPage::setPlaying()noexcept
 {
 }
 
-void PlayerPage::resetStyle()
+void PlayerPage::resetStyle()noexcept
 {
 	Meta::tupleApply(
 		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
@@ -41,7 +41,7 @@ void PlayerPage::resetStyle()
 	);
 }
 
-void PlayerPage::initStyles()
+void PlayerPage::initStyles()noexcept
 {
 	auto pThemeProvider = PageViewObject::getThemeController();
 	if (!pThemeProvider )
@@ -72,7 +72,7 @@ void PlayerPage::initPageWidgets(
 		lv_obj_t* _parent
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-	)
+	)noexcept
 {
 	initPageTitle( _parent, _displayWidth, _displayHeight );
 	initPlayIcon( _parent, _displayWidth, _displayHeight );
@@ -80,7 +80,7 @@ void PlayerPage::initPageWidgets(
 	initNextSongIcon( _parent, _displayWidth, _displayHeight );
 }
 
-void PlayerPage::unloadWidgets()
+void PlayerPage::unloadWidgets()noexcept
 {
 	Meta::tupleApply(
 			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
@@ -101,7 +101,7 @@ void PlayerPage::initPageTitle(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-	)
+	)noexcept
 {
 	m_pageTitle.reset( lv_label_create( _parentObject) );
 
@@ -130,7 +130,7 @@ void PlayerPage::initPlayIcon(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-	)
+	)noexcept
 {
 
 	m_pPlayIconSecond.reset( lv_label_create( _parentObject ) );
@@ -160,7 +160,7 @@ void PlayerPage::initNextSongIcon(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-	)
+	)noexcept
 {
 	m_pSwitchNextSongArrow.reset( lv_label_create( _parentObject ) );
 
@@ -189,7 +189,7 @@ void PlayerPage::initPrevSongIcon(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-	)
+	)noexcept
 {
 	m_pSwitchPreviousSongArrow.reset( lv_label_create( _parentObject ) );
 
@@ -215,7 +215,7 @@ void PlayerPage::initPrevSongIcon(
 }
 
 std::unique_ptr<IPlayerWatchPage>
-createPlayerWatchView( const Theme::IThemeController* _themeController )
+createPlayerWatchView( const Theme::IThemeController* _themeController )noexcept
 {
 	return std::make_unique<PlayerPage>( _themeController );
 }

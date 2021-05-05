@@ -11,15 +11,15 @@ class BatteryServiceFake
 
 public:
 
-    explicit BatteryServiceFake( std::chrono::seconds _measurementPeriod );
+    explicit BatteryServiceFake( std::chrono::seconds _measurementPeriod )noexcept;
 
     ~BatteryServiceFake()override;
 
 public:
 
-    std::chrono::seconds getMeasurmentPeriod() const override;
+    std::chrono::seconds getMeasurmentPeriod() const noexcept override;
 
-    void startBatteryMeasure() override;
+    void startBatteryMeasure()noexcept override;
 
 private:
 

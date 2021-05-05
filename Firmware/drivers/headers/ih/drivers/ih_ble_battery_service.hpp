@@ -16,7 +16,7 @@ public:
 
 public:
 
-    virtual void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel ) = 0;
+    virtual void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )noexcept = 0;
 
 };
 

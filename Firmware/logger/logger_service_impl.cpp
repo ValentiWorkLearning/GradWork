@@ -39,12 +39,12 @@ class Logger::LoggerImpl
 
 public:
 
-    LoggerImpl()
+    LoggerImpl() noexcept
     {
         initLogInterface();
     }
 
-    void logString( std::string_view _toLog ) const
+    void logString( std::string_view _toLog ) const noexcept
     {
         for( const auto ch : _toLog )
            app_uart_put( static_cast<std::uint8_t>( ch ) );
@@ -53,7 +53,7 @@ public:
 
 private:
 
-    void initLogInterface()
+    void initLogInterface() noexcept
     {
         std::uint32_t errorCode{};
 
@@ -93,7 +93,7 @@ private:
     static constexpr std::uint16_t RxSize = TxSize;     /**< UART RX buffer size. */
     static constexpr std::uint8_t TestDataBytes = 15;   /**< max number of test bytes to be used for tx and rx. */
 
-    void uartEventHandler(app_uart_evt_t * _pEvent)
+    void uartEventHandler(app_uart_evt_t * _pEvent)noexcept
     {
         if (_pEvent->evt_type == APP_UART_COMMUNICATION_ERROR)
         {
@@ -113,21 +113,21 @@ class Logger::LoggerImpl
 
 public:
 
-    LoggerImpl()
+    LoggerImpl()noexcept
     {
         initLogInterface();
     }
 
 public:
 
-    void logString( std::string_view _toLog ) const
+    void logString( std::string_view _toLog ) const noexcept
     {
         for( const auto ch : _toLog )
             ITM_SendChar( ch );
     }
 
 private:
-    void initLogInterface()
+    void initLogInterface()noexcept
     {
         NRF_CLOCK->TRACECONFIG =
             ( NRF_CLOCK->TRACECONFIG & ~CLOCK_TRACECONFIG_TRACEPORTSPEED_Msk )
@@ -146,7 +146,7 @@ class Logger::LoggerImpl
 
 public:
 
-    void logString( std::string_view _toLog ) const
+    void logString( std::string_view _toLog ) const noexcept
     {
         SEGGER_RTT_WriteString( 0, _toLog.data() );
     }
@@ -158,7 +158,7 @@ class Logger::LoggerImpl
 {
 
 public:
-    void logString(std::string_view _toLog) const
+    void logString(std::string_view _toLog) const noexcept
     {
         printf(_toLog.data());
 #if defined USE_MSVC_DEBUG_OUT
@@ -169,23 +169,23 @@ public:
 #endif
 
 
-Logger::Logger() = default;
+Logger::Logger()noexcept = default;
 
 Logger::~Logger() = default;
 
-Logger& Logger::Instance()
+Logger& Logger::Instance()noexcept
 {
     static Logger intance;
     return intance;
 }
 
-void Logger::logDebugEndl( std::string_view _toLog )
+void Logger::logDebugEndl( std::string_view _toLog )noexcept
 {
         m_pLoggerImpl->logString( _toLog );
         m_pLoggerImpl->logString( CaretReset );
 }
 
-void Logger::logDebug( std::string_view _toLog )
+void Logger::logDebug( std::string_view _toLog )noexcept
 {
         m_pLoggerImpl->logString( _toLog );
 }

@@ -10,7 +10,7 @@
 namespace Graphics::Views
 {
 
-ClockPageHandler::ClockPageHandler( IClockWatchPage* _clockPageView )
+ClockPageHandler::ClockPageHandler( IClockWatchPage* _clockPageView )noexcept
     :   m_forceUpdateAfterVisibilityChange{true}
     ,   m_pClockWatchView{ _clockPageView }
     ,   m_lastReceivedTime{ std::tm{} }
@@ -18,7 +18,7 @@ ClockPageHandler::ClockPageHandler( IClockWatchPage* _clockPageView )
 }
 
 void
-ClockPageHandler::handleEventImpl( const Events::TDateTimeEvents& _event, const std::any& _eventData )
+ClockPageHandler::handleEventImpl( const Events::TDateTimeEvents& _event, const std::any& _eventData )noexcept
 {
 
     if( _event != Events::TDateTimeEvents::DateTimeChanged )
@@ -74,7 +74,7 @@ ClockPageHandler::handleEventImpl( const Events::TDateTimeEvents& _event, const 
     m_lastReceivedTime = newDateTime;
 }
 
-bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck)
+bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck)noexcept
 {
     return	m_lastReceivedTime.getMonthDay() != _toCheck.getMonthDay()
         || m_lastReceivedTime.getMonth() != _toCheck.getMonth()
@@ -83,7 +83,7 @@ bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck)
 }
 
 std::string
-Graphics::Views::ClockPageHandler::formatToFullDate( const TimeWrapper& _toFormat )
+Graphics::Views::ClockPageHandler::formatToFullDate( const TimeWrapper& _toFormat )noexcept
 {
     constexpr std::uint8_t arraySize = 5;
     std::array<char, arraySize> tempStr{};
@@ -108,7 +108,7 @@ Graphics::Views::ClockPageHandler::formatToFullDate( const TimeWrapper& _toForma
     return toReturn;
 }
 
-std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat)
+std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat)noexcept
 {
     constexpr std::uint8_t arraySize = 4;
     std::array<char, arraySize> tempStr{};
@@ -127,7 +127,7 @@ std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat)
 }
 
 std::unique_ptr<Graphics::IEventHandler>
-createPageWatchHandler( IClockWatchPage* _clockPage )
+createPageWatchHandler( IClockWatchPage* _clockPage )noexcept
 {
     return std::make_unique<ClockPageHandler>( _clockPage );
 }

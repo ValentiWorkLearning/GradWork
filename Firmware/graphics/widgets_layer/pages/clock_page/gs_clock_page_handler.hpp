@@ -24,21 +24,21 @@ class ClockPageHandler
 
 public:
 
-    explicit ClockPageHandler( IClockWatchPage* _clockPageView );
+    explicit ClockPageHandler( IClockWatchPage* _clockPageView )noexcept;
 
     ~ClockPageHandler() override = default;
 
 protected:
 
-    void handleEventImpl( const Events::TDateTimeEvents& _event, const std::any& _eventData ) override;
+    void handleEventImpl( const Events::TDateTimeEvents& _event, const std::any& _eventData )noexcept override;
 
 private:
 
-    bool shouldApplyNewDate( const TimeWrapper& _toCheck );
+    bool shouldApplyNewDate( const TimeWrapper& _toCheck )noexcept;
 
-    static std::string formatToFullDate( const TimeWrapper& _toFormat );
+    static std::string formatToFullDate( const TimeWrapper& _toFormat )noexcept;
 
-    static std::string formatDoubleDigitsNumber( std::uint8_t _toFormat );
+    static std::string formatDoubleDigitsNumber( std::uint8_t _toFormat )noexcept;
 
 private:
 
@@ -50,6 +50,6 @@ private:
 };
 
 Graphics::TEventHandlerPtr
-createPageWatchHandler( IClockWatchPage* _clockPage);
+createPageWatchHandler( IClockWatchPage* _clockPage)noexcept;
 
 };

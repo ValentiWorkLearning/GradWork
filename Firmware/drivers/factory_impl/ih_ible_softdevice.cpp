@@ -13,7 +13,7 @@ namespace Ble::Stack
 
 TSoftDevicePtr createSoftDevice(
     Ble::ServiceFactory::TBleFactoryPtr&& _pServiceCreator
-)
+)noexcept
 {
     return Ble::Stack::createBleStackKeeper(
         std::move( _pServiceCreator )

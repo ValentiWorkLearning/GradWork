@@ -9,14 +9,14 @@
 namespace Graphics::Widgets
 {
 
-BluetoothWidgetHandler::BluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidget )
+BluetoothWidgetHandler::BluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidget )noexcept
     :   m_pBluetoothWidget{ _bluetoothWidget }
 {
 
 }
 
 void
-BluetoothWidgetHandler::handleEventImpl( const Events::TBleClientEvents& _event, const std::any& _eventData )
+BluetoothWidgetHandler::handleEventImpl( const Events::TBleClientEvents& _event, const std::any& _eventData )noexcept
 {
     if( _event == Events::TBleClientEvents::DeviceConnected )
         m_pBluetoothWidget->setBluetoothStatus( IBluetoothWidget::BluetoothStatus::Connected );
@@ -28,7 +28,7 @@ BluetoothWidgetHandler::handleEventImpl( const Events::TBleClientEvents& _event,
 }
 
 std::unique_ptr<Graphics::IEventHandler>
-createBluetoothWidgetHandler(IBluetoothWidget* _bluetoothWidget)
+createBluetoothWidgetHandler(IBluetoothWidget* _bluetoothWidget)noexcept
 {
     return std::make_unique<BluetoothWidgetHandler>( _bluetoothWidget );
 }

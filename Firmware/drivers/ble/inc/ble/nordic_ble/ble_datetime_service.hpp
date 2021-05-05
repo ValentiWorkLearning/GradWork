@@ -22,13 +22,13 @@ public:
 
 public:
 
-    void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )override;
+    void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )noexcept override;
 
 private:
 
-    void initService( const std::any& _pGattQueue );
+    void initService( const std::any& _pGattQueue )noexcept;
 
-    void serviceEventHandler( ble_cts_c_t* _pCurrentTimeService, ble_cts_c_evt_t* _pEvent );
+    void serviceEventHandler( ble_cts_c_t* _pCurrentTimeService, ble_cts_c_evt_t* _pEvent )noexcept;
 };
 
 }

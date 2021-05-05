@@ -22,14 +22,14 @@ class Logger
 
 public:
 
-    static Logger& Instance();
+    static Logger& Instance()noexcept;
 
-    void logDebugEndl( std::string_view _toLog );
+    void logDebugEndl( std::string_view _toLog )noexcept;
 
-    void logDebug( std::string_view _toLog );
+    void logDebug( std::string_view _toLog )noexcept;
 
     template< typename TToLog >
-    static constexpr bool IsStringType()
+    static constexpr bool IsStringType()noexcept
     {
         using TClearType = typename std::decay<TToLog>::type;
         constexpr bool isStringType = std::is_same_v<TClearType,std::string >
@@ -41,7 +41,7 @@ public:
     }
 
     template< typename TToLog >
-    static constexpr bool IsCharType()
+    static constexpr bool IsCharType()noexcept
     {
         using TClearType = typename std::decay<TToLog>::type;
         constexpr bool isCharType = std::is_same_v<TClearType, std::uint8_t>
@@ -51,7 +51,7 @@ public:
     }
 
     template< typename TToLog >
-    void logDebugEndl( const TToLog& _toLog )
+    void logDebugEndl( const TToLog& _toLog )noexcept
     {
 
         constexpr bool isString = IsStringType<TToLog>();
@@ -73,7 +73,7 @@ public:
     }
 
     template< typename TToLog>
-    void logDebug( const TToLog& _toLog )
+    void logDebug( const TToLog& _toLog )noexcept
     {
         constexpr bool isString = IsStringType<TToLog>();
         if constexpr (!isString)
@@ -93,7 +93,7 @@ public:
     }
 
     template< typename TArrayType, size_t ArraySize>
-    void logDebug( const std::array<TArrayType,ArraySize>& _arrayToLog )
+    void logDebug( const std::array<TArrayType,ArraySize>& _arrayToLog )noexcept
     {
         for( auto arrayItem: _arrayToLog )
         {
@@ -104,14 +104,14 @@ public:
     }
 
     template< typename TArrayType, size_t ArraySize>
-    void logDebugEndl( const std::array<TArrayType,ArraySize>& _arrayToLog )
+    void logDebugEndl( const std::array<TArrayType,ArraySize>& _arrayToLog )noexcept
     {
         logDebug(_arrayToLog);
         logDebug('\n');
     }
 private:
 
-    Logger();
+    Logger()noexcept;
     ~Logger();
 
 private:

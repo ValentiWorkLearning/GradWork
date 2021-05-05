@@ -16,35 +16,35 @@ class ClockWatch
 
 public:
 
-    explicit ClockWatch( const Theme::IThemeController* _themeController );
+    explicit ClockWatch( const Theme::IThemeController* _themeController )noexcept;
 
     ~ClockWatch() override = default;
 
 public:
 
-    void setHours( const std::string& _newHoursValue ) override;
+    void setHours( const std::string& _newHoursValue )noexcept override;
 
-    void setMinutes( const std::string& _newMinutesValue ) override;
+    void setMinutes( const std::string& _newMinutesValue )noexcept override;
 
-    void setSeconds( const std::string& _newSecondsValue ) override;
+    void setSeconds( const std::string& _newSecondsValue )noexcept override;
 
-    void setWeekday( std::string_view _newWeekDay ) override;
+    void setWeekday( std::string_view _newWeekDay )noexcept override;
 
-    void setFullDate( const std::string& _fullDate ) override;
+    void setFullDate( const std::string& _fullDate )noexcept override;
 
 protected:
 
-    void resetStyle() override;
+    void resetStyle()noexcept override;
 
-    void initStyles() override;
+    void initStyles()noexcept override;
 
     void initPageWidgets(
             lv_obj_t* _parent
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    ) override;
+    )noexcept override;
 
-    void unloadWidgets() override;
+    void unloadWidgets()noexcept override;
 
 private:
 
@@ -52,21 +52,21 @@ private:
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initFullDateLabel(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initWeekDayLabel(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
-    void restoreLabelsText();
+    void restoreLabelsText()noexcept;
 
 private:
 
@@ -93,6 +93,6 @@ private:
 
 std::unique_ptr<IClockWatchPage> createClockWatchView(
     const Theme::IThemeController* _themeController
-);
+)noexcept;
 
 }

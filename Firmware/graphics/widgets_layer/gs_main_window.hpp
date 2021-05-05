@@ -42,53 +42,53 @@ public:
             std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
         ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
         ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCreator
-    );
+    )noexcept;
     ~GsMainWindow() override;
 
 public:
 
-    void handleEvent( const Events::TEvent& _tEvent ) override;
+    void handleEvent( const Events::TEvent& _tEvent )noexcept override;
 
     void addPage(
         std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd
-    ) override;
+    )noexcept override;
 
-    void setPageActive( std::string_view _pageName ) override;
+    void setPageActive( std::string_view _pageName )noexcept override;
 
-    Graphics::Views::IPageViewObject& getActivePage() override;
+    Graphics::Views::IPageViewObject& getActivePage()noexcept override;
 
-    const Graphics::Views::IPageViewObject& getActivePage()const override;
+    const Graphics::Views::IPageViewObject& getActivePage()const noexcept override;
 
     const Graphics::Views::IPageViewObject&
-    getPage( std::string_view _pageName )const override;
+    getPage( std::string_view _pageName )const noexcept override;
 
-    void forEachPage(TPageWalker _pageWalker) override;
+    void forEachPage(TPageWalker _pageWalker)noexcept override;
 
 public:
 
-    void handleEventTimerEllapsed() override;
+    void handleEventTimerEllapsed()noexcept override;
 
-    Events::EventDispatcher& getEventDispatcher() override;
+    Events::EventDispatcher& getEventDispatcher()noexcept override;
 
-    const Theme::IThemeController* getThemeController() const override;
+    const Theme::IThemeController* getThemeController() const noexcept override;
 
-    Theme::IThemeController* getThemeController() override;
+    Theme::IThemeController* getThemeController()noexcept override;
 
 private:
 
-    void initWidgets();
+    void initWidgets()noexcept;
 
-    void initWatchPage();
+    void initWatchPage()noexcept;
 
-    void initHealthPage();
+    void initHealthPage()noexcept;
 
-    void initPlayerPage();
+    void initPlayerPage()noexcept;
 
-    void initMainWindowSubscriptions();
+    void initMainWindowSubscriptions()noexcept;
 
-    Graphics::Views::IPageViewObject* getPagePointer( std::string_view _pageName);
+    Graphics::Views::IPageViewObject* getPagePointer( std::string_view _pageName)noexcept;
 
-    const Graphics::Views::IPageViewObject* getPagePointer( std::string_view _pageName) const;
+    const Graphics::Views::IPageViewObject* getPagePointer( std::string_view _pageName) const noexcept;
 
 private:
 
@@ -124,6 +124,6 @@ std::unique_ptr<IGsMainWindowModel> createMainWindow(
         std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
     ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
     ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCrator
-);
+)noexcept;
 
 };

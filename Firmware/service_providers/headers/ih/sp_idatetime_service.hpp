@@ -17,11 +17,11 @@ public:
 
     virtual ~IDateTimeService() = default;
 
-    virtual void launchService() = 0;
+    virtual void launchService()noexcept = 0;
 
-    virtual void calibrateSource() = 0;
+    virtual void calibrateSource()noexcept = 0;
 
-    virtual void syncronizeWithBleDts() = 0;
+    virtual void syncronizeWithBleDts()noexcept = 0;
 
 public:
 

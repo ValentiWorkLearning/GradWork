@@ -18,31 +18,31 @@ class HealthPage
 
 public:
 
-    explicit HealthPage( const Theme::IThemeController* _themeController );
+    explicit HealthPage( const Theme::IThemeController* _themeController )noexcept;
 
     ~HealthPage() override = default;
 
 public:
 
-    void setStepsCount(std::uint8_t _newStepsValue) override;
+    void setStepsCount(std::uint8_t _newStepsValue)noexcept override;
 
-    void setHeartrate(std::uint8_t _newHeartrateValue) override;
+    void setHeartrate(std::uint8_t _newHeartrateValue)noexcept override;
 
-    void setCalloriesCount(std::uint8_t _newCalloriesCount) override;
+    void setCalloriesCount(std::uint8_t _newCalloriesCount)noexcept override;
 
 protected:
 
-    void resetStyle() override;
+    void resetStyle()noexcept override;
 
-    void initStyles() override;
+    void initStyles()noexcept override;
 
     void initPageWidgets(
             lv_obj_t* _parent
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    ) override;
+    )noexcept override;
 
-    void unloadWidgets() override;
+    void unloadWidgets()noexcept override;
 
 private:
 
@@ -50,25 +50,25 @@ private:
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initHeartrateWidgets(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initCalloriesCounter(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initStepsCounter(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
 private:
     static constexpr std::size_t PointsCount = 6;
@@ -118,6 +118,6 @@ private:
 
 std::unique_ptr<IHealthWatchPage> createHeartrateWatchView(
     const Theme::IThemeController* _themeController
-);
+)noexcept;
 
 }

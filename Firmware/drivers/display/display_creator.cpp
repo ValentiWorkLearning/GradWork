@@ -9,7 +9,7 @@
 
 namespace DisplayCreator
 {
-std::unique_ptr<DisplayDriver::IDisplayDriver> createDisplayDriver()
+std::unique_ptr<DisplayDriver::IDisplayDriver> createDisplayDriver()noexcept
 {
 #if defined USE_ST7789V_BACKEND
     return DisplayDriver::createDisplayDriverSt7789V(

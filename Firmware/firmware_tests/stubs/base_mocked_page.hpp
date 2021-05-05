@@ -23,34 +23,34 @@ public:
 
 	}
 
-	void addWidget( Graphics::Widgets::IWidgetObject* _pWidget ) override
+	void addWidget( Graphics::Widgets::IWidgetObject* _pWidget )noexcept override
 	{
 	}
 
-	bool isVisible() const override
+	bool isVisible() const noexcept override
 	{
 		return m_isVisible;
 	}
 
-	void reloadStyle() override {}
+	void reloadStyle()noexcept override {}
 
-	void show() override
+	void show()noexcept override
 	{
 		m_isVisible = true;
 	}
-	void hide() override
+	void hide()noexcept override
 	{
 		m_isVisible = false;
 	}
 
-	std::string_view getPageName() const override
+	std::string_view getPageName() const noexcept override
 	{
 		return m_pageName;
 	}
 
 public:
 
-	const Graphics::Theme::IThemeController* getThemeController() const override
+	const Graphics::Theme::IThemeController* getThemeController() const noexcept override
 	{
 		return nullptr;
 	}
@@ -67,13 +67,13 @@ class FakeBasePageMock
 
 public:
 
-	MOCK_METHOD1(addWidget, void(Graphics::Widgets::IWidgetObject* _pWidget));
-	MOCK_CONST_METHOD0(isVisible, bool());
+	MOCK_METHOD(void,addWidget, (Graphics::Widgets::IWidgetObject*),(noexcept));
+	MOCK_METHOD(bool,isVisible, (), (const,noexcept));
 
-	void reloadStyle() override {}
+	void reloadStyle()noexcept override {}
 
-	void show() override {}
-	void hide() override {}
+	void show()noexcept override {}
+	void hide()noexcept override {}
 
 public:
 

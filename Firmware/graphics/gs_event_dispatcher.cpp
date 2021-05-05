@@ -60,7 +60,7 @@ void EventDispatcher::processEventQueue()noexcept
     }
 }
 
-std::unique_ptr<EventDispatcher> createEventDispatcher()
+std::unique_ptr<EventDispatcher> createEventDispatcher()noexcept
 {
     return std::make_unique<EventDispatcher>();
 }

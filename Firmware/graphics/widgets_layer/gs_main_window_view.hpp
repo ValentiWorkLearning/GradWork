@@ -13,21 +13,21 @@ class MainWindowView
 
 public:
 
-    MainWindowView();
+    MainWindowView()noexcept;
 
     virtual ~MainWindowView() = default;
 
 public:
 
-    void initBackground()override;
+    void initBackground()noexcept override;
 
-    void resetBackgroundStyle()override;
+    void resetBackgroundStyle() noexcept override;
 
 public:
 
-    const Theme::IThemeController* getThemeController() const override;
+    const Theme::IThemeController* getThemeController() const noexcept override;
 
-    Theme::IThemeController* getThemeController() override;
+    Theme::IThemeController* getThemeController()noexcept override;
 
 private:
 
@@ -36,7 +36,7 @@ private:
 
 private:
 
-    void initMask();
+    void initMask()noexcept;
 
 private:
 
@@ -61,6 +61,6 @@ private:
 
 };
 
-std::unique_ptr<IMainWindowView> createMainWindowView();
+std::unique_ptr<IMainWindowView> createMainWindowView()noexcept;
 
 }

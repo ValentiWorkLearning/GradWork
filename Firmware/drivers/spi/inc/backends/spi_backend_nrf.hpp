@@ -43,7 +43,7 @@ class NordicSpi
 
 public:
     using This_t = NordicSpi<PeripheralInstance>;
-    NordicSpi()
+    NordicSpi()noexcept
         : m_spiHandle{
         reinterpret_cast<NRF_SPIM_Type*>(PeripheralInstance::Register),
         PeripheralInstance::DriverInstance
@@ -93,7 +93,7 @@ public:
     }
 
     using TTransactionCompletedHandler = std::function<void()>;
-    void setTransactionCompletedHandler(TTransactionCompletedHandler&& _handler)
+    void setTransactionCompletedHandler(TTransactionCompletedHandler&& _handler)noexcept
     {
         m_transactionCompleted = std::move(_handler);
     }

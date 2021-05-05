@@ -15,15 +15,15 @@ public:
 public:
 
     std::unique_ptr<Graphics::Views::IClockWatchPage>
-        createClockPage(Graphics::Theme::IThemeController* _pThemeController) override;
+        createClockPage(Graphics::Theme::IThemeController* _pThemeController)noexcept override;
 
     std::unique_ptr<Graphics::Views::IHealthWatchPage>
-        createHealthPage(Graphics::Theme::IThemeController* _pThemeController) override;
+        createHealthPage(Graphics::Theme::IThemeController* _pThemeController)noexcept override;
 
     std::unique_ptr<Graphics::Views::IPlayerWatchPage>
-        createPlayerPage(Graphics::Theme::IThemeController* _pThemeController) override;
+        createPlayerPage(Graphics::Theme::IThemeController* _pThemeController)noexcept override;
 };
 
-Graphics::Views::IPagesCreator::Ptr createStubPagesCreator();
+Graphics::Views::IPagesCreator::Ptr createStubPagesCreator()noexcept;
 
 }

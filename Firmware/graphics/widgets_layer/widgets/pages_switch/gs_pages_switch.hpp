@@ -25,39 +25,39 @@ class PagesSwitch
 
 public:
 
-    explicit PagesSwitch( const Theme::IThemeController* _themeController );
+    explicit PagesSwitch( const Theme::IThemeController* _themeController )noexcept;
 
     ~PagesSwitch() override = default;
 
 public:
 
-    void show() override;
+    void show()noexcept override;
 
-    void hide() override;
+    void hide()noexcept override;
 
-    void reloadStyle()override;
+    void reloadStyle()noexcept override;
 
 public:
 
-    void setActivePage( std::string_view _pageName ) override;
+    void setActivePage( std::string_view _pageName )noexcept override;
 
 private:
 
-    void initStyles();
+    void initStyles()noexcept;
 
-    void resetStyle();
+    void resetStyle()noexcept;
 
     void initCheckedPages(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initUncheckedPages(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
 private:
 
@@ -78,6 +78,6 @@ private:
 
 std::unique_ptr<IPagesSwitch> createPagesSwitch(
     const Theme::IThemeController* _themeController
-);
+)noexcept;
 
 };

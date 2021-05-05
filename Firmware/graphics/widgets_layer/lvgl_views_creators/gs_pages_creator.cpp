@@ -9,21 +9,21 @@ namespace Graphics::Views
 LvglPagesCreator::~LvglPagesCreator() = default;
 
 std::unique_ptr<Graphics::Views::IClockWatchPage>
-LvglPagesCreator::createClockPage(Theme::IThemeController* _pThemeController)
+LvglPagesCreator::createClockPage(Theme::IThemeController* _pThemeController)noexcept
 {
 	return Views::createClockWatchView( _pThemeController );
 }
 std::unique_ptr<Graphics::Views::IHealthWatchPage>
-LvglPagesCreator::createHealthPage(Theme::IThemeController* _pThemeController)
+LvglPagesCreator::createHealthPage(Theme::IThemeController* _pThemeController)noexcept
 {
 	return  Views::createHeartrateWatchView( _pThemeController );
 }
 std::unique_ptr<Graphics::Views::IPlayerWatchPage>
-LvglPagesCreator::createPlayerPage(Theme::IThemeController* _pThemeController)
+LvglPagesCreator::createPlayerPage(Theme::IThemeController* _pThemeController)noexcept
 {
 	return Views::createPlayerWatchView( _pThemeController );
 }
-IPagesCreator::Ptr createLvglPagesCreator()
+IPagesCreator::Ptr createLvglPagesCreator()noexcept
 {
 	return std::make_unique<LvglPagesCreator>();
 }

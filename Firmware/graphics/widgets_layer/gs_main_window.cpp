@@ -40,7 +40,7 @@ GsMainWindow::GsMainWindow(
                 std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
             ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
             ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCreator
-        )
+        )noexcept
     :
         m_currentPageName{}
     ,   m_pEventsDispatcher{ Events::createEventDispatcher() }
@@ -62,7 +62,7 @@ GsMainWindow::~GsMainWindow() = default;
 
 void GsMainWindow::addPage(
         std::unique_ptr<Graphics::Views::IPageViewObject>&& _toAdd
-    )
+    )noexcept
 {
     auto localShared { std::move( _toAdd ) };
     auto pageName{ localShared->getPageName() };
@@ -73,7 +73,7 @@ void GsMainWindow::addPage(
 
 }
 
-void GsMainWindow::setPageActive( std::string_view _pageName )
+void GsMainWindow::setPageActive( std::string_view _pageName )noexcept
 {
     if ( getPage( _pageName ).isVisible() )
         return;
@@ -110,44 +110,44 @@ void GsMainWindow::setPageActive( std::string_view _pageName )
 }
 
 Graphics::Views::IPageViewObject&
-GsMainWindow::getActivePage()
+GsMainWindow::getActivePage()noexcept
 {
     auto pPagePtr = getPagePointer( m_currentPageName );
     return *pPagePtr;
 }
 
 const Graphics::Views::IPageViewObject&
-GsMainWindow::getActivePage() const
+GsMainWindow::getActivePage() const noexcept
 {
     auto pPagePtr = getPagePointer( m_currentPageName );
     return *pPagePtr;
 }
 
 const Graphics::Views::IPageViewObject&
-GsMainWindow::getPage( std::string_view _pageName )const
+GsMainWindow::getPage( std::string_view _pageName )const noexcept
 {
     auto pPagePtr = getPagePointer( _pageName );
     return *pPagePtr;
 }
 
-void GsMainWindow::forEachPage(TPageWalker _pageWalker)
+void GsMainWindow::forEachPage(TPageWalker _pageWalker)noexcept
 {
     for (auto& [pageName, page] : m_pagesStorage) {
         _pageWalker( *page );
     }
 }
 
-void GsMainWindow::handleEvent( const Events::TEvent& _tEvent )
+void GsMainWindow::handleEvent( const Events::TEvent& _tEvent )noexcept
 {
 
 }
 
-void GsMainWindow::handleEventTimerEllapsed()
+void GsMainWindow::handleEventTimerEllapsed()noexcept
 {
     m_pEventsDispatcher->processEventQueue();
 }
 
-void GsMainWindow::initWidgets()
+void GsMainWindow::initWidgets()noexcept
 {
     m_pBatteryWidget = m_pWidgetsCreator->createBatteryWidget( getThemeController() );
     m_pPagesSwitch = m_pWidgetsCreator->createPagesSwitchWidget( getThemeController() );
@@ -179,7 +179,7 @@ void GsMainWindow::initWidgets()
     );
 }
 
-void GsMainWindow::initWatchPage()
+void GsMainWindow::initWatchPage()noexcept
 {
     auto pClockPage = m_pPagesCreator->createClockPage( getThemeController() );
     pClockPage->addWidget( m_pBatteryWidget.get() );
@@ -199,7 +199,7 @@ void GsMainWindow::initWatchPage()
     addPage( std::move( pClockPage ) );
 }
 
-void GsMainWindow::initHealthPage()
+void GsMainWindow::initHealthPage()noexcept
 {
     auto pHealthPage = m_pPagesCreator->createHealthPage( getThemeController() );
 
@@ -210,7 +210,7 @@ void GsMainWindow::initHealthPage()
     addPage( std::move( pHealthPage ) );
 }
 
-void GsMainWindow::initPlayerPage()
+void GsMainWindow::initPlayerPage()noexcept
 {
     auto pPlayerPage = m_pPagesCreator->createPlayerPage( getThemeController() );
 
@@ -221,7 +221,7 @@ void GsMainWindow::initPlayerPage()
     addPage(std::move( pPlayerPage ));
 }
 
-void GsMainWindow::initMainWindowSubscriptions()
+void GsMainWindow::initMainWindowSubscriptions()noexcept
 {
     m_pMainWindowView->getThemeController()->onThemeChanged.connect(
         [this] {
@@ -241,7 +241,7 @@ void GsMainWindow::initMainWindowSubscriptions()
 }
 
 Views::IPageViewObject*
-GsMainWindow::getPagePointer(std::string_view _pageName)
+GsMainWindow::getPagePointer(std::string_view _pageName)noexcept
 {
     auto it = std::find_if(
         m_pagesStorage.begin()
@@ -259,7 +259,7 @@ GsMainWindow::getPagePointer(std::string_view _pageName)
 }
 
 const Graphics::Views::IPageViewObject*
-GsMainWindow::getPagePointer( std::string_view _pageName) const
+GsMainWindow::getPagePointer( std::string_view _pageName) const noexcept
 {
     auto it = std::find_if(
         m_pagesStorage.begin()
@@ -276,18 +276,18 @@ GsMainWindow::getPagePointer( std::string_view _pageName) const
     return nullptr;
 }
 
-Events::EventDispatcher& GsMainWindow::getEventDispatcher()
+Events::EventDispatcher& GsMainWindow::getEventDispatcher()noexcept
 {
     return *m_pEventsDispatcher;
 }
 
 const Theme::IThemeController*
-GsMainWindow::getThemeController() const
+GsMainWindow::getThemeController() const noexcept
 {
     return m_pMainWindowView->getThemeController();
 }
 
-Theme::IThemeController* GsMainWindow::getThemeController()
+Theme::IThemeController* GsMainWindow::getThemeController()noexcept
 {
     return m_pMainWindowView->getThemeController();
 }
@@ -296,7 +296,7 @@ std::unique_ptr<IGsMainWindowModel> createMainWindow(
         std::unique_ptr<Graphics::MainWindow::IMainWindowView>&& _pMainWindowView
     ,   std::unique_ptr<Graphics::Widgets::IWidgetsCreator>&& _pWidgetsCreator
     ,   std::unique_ptr<Graphics::Views::IPagesCreator>&& _pPagesCrator
-    )
+    )noexcept
 {
     return std::make_unique<GsMainWindow>(
             std::move( _pMainWindowView )

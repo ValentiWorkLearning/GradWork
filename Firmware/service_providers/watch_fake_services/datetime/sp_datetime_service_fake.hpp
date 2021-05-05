@@ -11,17 +11,17 @@ class DateTimeServiceFake
 
 public:
 
-    explicit DateTimeServiceFake();
+    explicit DateTimeServiceFake()noexcept;
 
     ~DateTimeServiceFake()override;
 
 public:
 
-    void launchService() override;
+    void launchService()noexcept override;
 
-    void calibrateSource() override;
+    void calibrateSource()noexcept override;
 
-    void syncronizeWithBleDts() override;
+    void syncronizeWithBleDts()noexcept override;
 
 private:
     class DatetimeSimulatorImpl;

@@ -40,16 +40,16 @@ namespace Ble::CustomService
 
         private:
 
-        void initCustomService();
+        void initCustomService()noexcept;
 
         private:
         using TThis = CustomService;
 
-        static void serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext );
+        static void serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext )noexcept;
 
-        void bleEventHandler( ble_evt_t const * _pEvent );
+        void bleEventHandler( ble_evt_t const * _pEvent )noexcept;
 
-        void initEventHandler();
+        void initEventHandler()noexcept;
 
         private:
 

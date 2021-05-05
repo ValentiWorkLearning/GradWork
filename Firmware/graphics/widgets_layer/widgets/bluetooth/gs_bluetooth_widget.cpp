@@ -8,7 +8,7 @@
 namespace Graphics::Widgets
 {
 
-BluetoothWidget::BluetoothWidget( const Theme::IThemeController* _themeController )
+BluetoothWidget::BluetoothWidget( const Theme::IThemeController* _themeController )noexcept
     :   WidgetBaseObj<IBluetoothWidget>{ _themeController }
     ,   m_currentStatus{ BluetoothStatus::Disconnected }
     ,   m_bluetoothIconStyle{}
@@ -16,7 +16,7 @@ BluetoothWidget::BluetoothWidget( const Theme::IThemeController* _themeControlle
     initStyles();
 }
 
-void BluetoothWidget::show()
+void BluetoothWidget::show()noexcept
 {
     auto CurrentStatus = getCurrentStatus();
 
@@ -30,13 +30,13 @@ void BluetoothWidget::show()
     }
 }
 
-void BluetoothWidget::reloadStyle()
+void BluetoothWidget::reloadStyle()noexcept
 {
     resetStyle();
     initStyles();
 }
 
-void BluetoothWidget::initStyles()
+void BluetoothWidget::initStyles()noexcept
 {
     auto pThemeProvider = WidgetBaseObj::getThemeController();
     if (!pThemeProvider )
@@ -49,7 +49,7 @@ void BluetoothWidget::initStyles()
 
 }
 
-void BluetoothWidget::resetStyle()
+void BluetoothWidget::resetStyle()noexcept
 {
 	Meta::tupleApply(
 		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
@@ -63,7 +63,7 @@ void BluetoothWidget::initBluetoothIcon(
         lv_obj_t* _parentObject
     ,   const std::uint32_t _displayWidth
     ,   const std::uint32_t _displayHeight
-)
+)noexcept
 {
 
     m_pBluetoothIcon.reset( lv_label_create( _parentObject ) );
@@ -83,7 +83,7 @@ void BluetoothWidget::initBluetoothIcon(
 }
 
 
-void BluetoothWidget::hide()
+void BluetoothWidget::hide()noexcept
 {
 
     WidgetBaseObj::hide();
@@ -96,7 +96,7 @@ void BluetoothWidget::hide()
     );
 }
 
-void BluetoothWidget::setBluetoothStatus(BluetoothStatus _iconToSet)
+void BluetoothWidget::setBluetoothStatus(BluetoothStatus _iconToSet)noexcept
 {
     m_currentStatus = _iconToSet;
 
@@ -107,14 +107,14 @@ void BluetoothWidget::setBluetoothStatus(BluetoothStatus _iconToSet)
 }
 
 IBluetoothWidget::BluetoothStatus
-BluetoothWidget::getCurrentStatus() const
+BluetoothWidget::getCurrentStatus() const noexcept
 {
     return m_currentStatus;
 }
 
 std::unique_ptr<IBluetoothWidget> createBluetoothWidget(
     const Theme::IThemeController* _themeController
-)
+)noexcept
 {
     return std::make_unique<BluetoothWidget>( _themeController );
 }

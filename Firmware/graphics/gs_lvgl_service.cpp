@@ -41,7 +41,7 @@ class LvglGraphicsService::GSLvglServiceImpl
 public:
 
     GSLvglServiceImpl(
-    )   :   m_glDisplay{ nullptr }
+    )noexcept :   m_glDisplay{ nullptr }
         ,   m_pMainWindowTick{ nullptr }
         ,   m_pPageSwitch{ nullptr }
         ,   m_pthemeChangeSwitch{ nullptr }
@@ -292,7 +292,7 @@ LvglGraphicsService::getMainWindow() const noexcept
 }
 
 std::unique_ptr<LvglGraphicsService>
-createGraphicsService()
+createGraphicsService()noexcept
 {
     return std::make_unique<LvglGraphicsService>();
 }

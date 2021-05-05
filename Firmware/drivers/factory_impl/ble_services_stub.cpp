@@ -6,13 +6,13 @@
 namespace Ble::BatteryService
 {
 
-StubBatteryService::StubBatteryService()
+StubBatteryService::StubBatteryService()noexcept
 {
     LOG_DEBUG_ENDL( "Initialized DesktopStubBatteryService" );
 }
 
 void
-StubBatteryService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )
+StubBatteryService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )noexcept
 {
     LOG_DEBUG("New battery level is:" );
     LOG_DEBUG_ENDL( _newBatteryLevel );
@@ -23,14 +23,14 @@ StubBatteryService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )
 namespace Ble::DateTimeService
 {
 
-StubDateTimeService::StubDateTimeService()
+StubDateTimeService::StubDateTimeService()noexcept
 {
     LOG_DEBUG_ENDL( "Initialized StubDateTimeService" );
 }
 
 
 void
-StubDateTimeService::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )
+StubDateTimeService::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )noexcept
 {
     Meta::UnuseVar( _pBleDbDiscoveryEvent );
 }
@@ -41,17 +41,17 @@ StubDateTimeService::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent
 namespace Ble::HeartrateService
 {
 
-StubHeartrateService::StubHeartrateService()
+StubHeartrateService::StubHeartrateService()noexcept
 {
 }
 
 void
-StubHeartrateService::onHeartrateChanged( std::uint8_t _heartRate )
+StubHeartrateService::onHeartrateChanged( std::uint8_t _heartRate )noexcept
 {
 }
 
 void
-StubHeartrateService::setSensorLocation(SensorLocation _location)
+StubHeartrateService::setSensorLocation(SensorLocation _location)noexcept
 {
 }
 

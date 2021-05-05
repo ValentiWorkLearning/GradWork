@@ -26,13 +26,13 @@ class IServiceCreator
 public:
 
     [[nodiscard]] virtual std::unique_ptr<BatteryService::IBatteryLevelAppService>
-    getBatteryService() = 0;
+    getBatteryService()noexcept = 0;
 
     [[nodiscard]] virtual std::unique_ptr<HeartrateService::IHeartrateService>
-    getHeartrateService() = 0;
+    getHeartrateService()noexcept = 0;
 
     [[nodiscard]] virtual std::unique_ptr<DateTimeService::IDateTimeService>
-    getDateTimeService() = 0;
+    getDateTimeService()noexcept = 0;
 
     virtual ~IServiceCreator() = default;
 };

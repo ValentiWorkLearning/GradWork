@@ -15,23 +15,23 @@ public:
             const ColorTheme _initialColorTheme
         ,   std::uint32_t _displayWidth
         ,   std::uint32_t _displayHeight
-    );
+    )noexcept;
 
-    void setActiveTheme( ColorTheme _themeToSet ) override;
+    void setActiveTheme( ColorTheme _themeToSet )noexcept override;
 
-    ColorTheme getActiveTheme()const override;
+    ColorTheme getActiveTheme()const noexcept override;
 
 public:
 
-    lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor )const override;
+    lv_style_t getIconsFont( FontSize _fontStyle, Color _fontColor )const noexcept override;
 
-    lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor )const override;
+    lv_style_t getFontStyle( FontSize _fontStyle, Color _fontColor )const noexcept override;
 
-    lv_color_t getMainThemeColor( Color _fontColor )const override;
+    lv_color_t getMainThemeColor( Color _fontColor )const noexcept override;
 
-    std::uint32_t getDisplayWidth() const override;
+    std::uint32_t getDisplayWidth() const noexcept override;
 
-    std::uint32_t getDisplayHeight() const override;
+    std::uint32_t getDisplayHeight() const noexcept override;
 
 public:
 
@@ -39,7 +39,7 @@ public:
 
 private:
 
-    void initColorsAccrodingToTheme( ColorTheme _theme );
+    void initColorsAccrodingToTheme( ColorTheme _theme )noexcept;
 
 private:
 
@@ -57,6 +57,6 @@ std::unique_ptr<IThemeController> createThemeController(
         const ColorTheme _initialColorTheme
     ,   std::uint32_t _displayWidth
     ,   std::uint32_t _displayHeight
-);
+)noexcept;
 
 }

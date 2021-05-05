@@ -52,62 +52,62 @@ class BleStackKeeper
 
 public:
 
-    BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
+    BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )noexcept;
     ~BleStackKeeper()override = default;
 
 public:
 
-    Ble::BatteryService::IBatteryLevelService& getBatteryService() override;
+    Ble::BatteryService::IBatteryLevelService& getBatteryService()noexcept override;
 
-    const Ble::BatteryService::IBatteryLevelService& getBatteryService() const override;
+    const Ble::BatteryService::IBatteryLevelService& getBatteryService() const noexcept override;
 
-    Ble::DateTimeService::IDateTimeService& getDateTimeService() override;
+    Ble::DateTimeService::IDateTimeService& getDateTimeService()noexcept override;
 
-    const Ble::DateTimeService::IDateTimeService& getDateTimeService() const override;
-
-private:
-
-    void bleStackInit();
-
-    void bleEventHandler( ble_evt_t const* _pBleEvent );
-
-    static void bleEventHandlerLink( ble_evt_t const * _pBleEvent, void * _pContext );
+    const Ble::DateTimeService::IDateTimeService& getDateTimeService() const noexcept override;
 
 private:
 
-    void initGapModule();
+    void bleStackInit()noexcept;
 
-    void initGatt();
+    void bleEventHandler( ble_evt_t const* _pBleEvent )noexcept;
 
-    void initDbDiscovery();
-
-    void gattEventHandler( nrf_ble_gatt_t* p_gatt, nrf_ble_gatt_evt_t const* p_evt );
+    static void bleEventHandlerLink( ble_evt_t const * _pBleEvent, void * _pContext )noexcept;
 
 private:
 
-    void initPeerManager();
+    void initGapModule()noexcept;
 
-    void peerManagerEventHandler( pm_evt_t const* _pPeerEvent );
+    void initGatt()noexcept;
 
-    void peerListGet(pm_peer_id_t* _pPeers, uint32_t* pPeersSize);
+    void initDbDiscovery()noexcept;
 
-private:
-
-    void initAdvertising();
-
-    void advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent );
+    void gattEventHandler( nrf_ble_gatt_t* p_gatt, nrf_ble_gatt_evt_t const* p_evt )noexcept;
 
 private:
 
-    void initConnectionParams();
+    void initPeerManager()noexcept;
 
-    void connectionParamsEventHandler( ble_conn_params_evt_t* _pEvent );
+    void peerManagerEventHandler( pm_evt_t const* _pPeerEvent )noexcept;
 
-    void connectionParamsErrorHandler( std::uint32_t _nrfError );
+    void peerListGet(pm_peer_id_t* _pPeers, uint32_t* pPeersSize)noexcept;
 
 private:
 
-    void initServices();
+    void initAdvertising()noexcept;
+
+    void advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )noexcept;
+
+private:
+
+    void initConnectionParams()noexcept;
+
+    void connectionParamsEventHandler( ble_conn_params_evt_t* _pEvent )noexcept;
+
+    void connectionParamsErrorHandler( std::uint32_t _nrfError )noexcept;
+
+private:
+
+    void initServices()noexcept;
     
 private:
 
@@ -119,9 +119,9 @@ private:
         ,   DontEraseBounds
     };
 
-    void startAdvertising( EraseBondsConfig _eraseBonds );
+    void startAdvertising( EraseBondsConfig _eraseBonds )noexcept;
 
-    void deleteBonds();
+    void deleteBonds()noexcept;
 
 private:
 
@@ -149,6 +149,6 @@ private:
 };
 
 std::unique_ptr<IBleSoftDevice>
-createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
+createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )noexcept;
 
 };

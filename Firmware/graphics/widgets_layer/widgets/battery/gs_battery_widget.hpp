@@ -26,41 +26,41 @@ class BatteryWidget
 
 public:
 
-    explicit BatteryWidget( const Theme::IThemeController* _themeController );
+    explicit BatteryWidget( const Theme::IThemeController* _themeController )noexcept;
 
     ~BatteryWidget() override = default;
 
 public:
 
-    void show() override;
+    void show()noexcept override;
 
-    void hide() override;
+    void hide()noexcept override;
 
-    void reloadStyle() override;
+    void reloadStyle()noexcept override;
 
 public:
 
-    void setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel ) override;
+    void setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel )noexcept override;
 
-    void setBatteryStatus( BatteryStatus _iconToSet ) override;
+    void setBatteryStatus( BatteryStatus _iconToSet )noexcept override;
 
 private:
 
-    void initStyles();
+    void initStyles()noexcept;
 
-    void resetStyle();
+    void resetStyle()noexcept;
 
     void initBatteryPercentageLabel(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initBatteryIcon(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
 private:
 
@@ -78,6 +78,6 @@ private:
 
 std::unique_ptr<IBatteryWidget> createBatteryWidget(
    const Theme::IThemeController* _themeController
-);
+)noexcept;
 
 };

@@ -7,7 +7,7 @@
 
 namespace
 {
-    Graphics::Widgets::IBatteryWidget::BatteryStatus toBatteryStatus( std::uint8_t _batteryValue )
+    Graphics::Widgets::IBatteryWidget::BatteryStatus toBatteryStatus( std::uint8_t _batteryValue )noexcept
     {
         if( _batteryValue <= 25 )
             return Graphics::Widgets::IBatteryWidget::BatteryStatus::QuaterCharge;
@@ -25,14 +25,14 @@ namespace
 namespace Graphics::Widgets
 {
 
-BatteryWidgetHandler::BatteryWidgetHandler( IBatteryWidget* _bateryWidget )
+BatteryWidgetHandler::BatteryWidgetHandler( IBatteryWidget* _bateryWidget )noexcept
     :   m_pBatteryWidget{ _bateryWidget }
 {
 
 }
 
 void
-BatteryWidgetHandler::handleEventImpl( const Events::TBatteryEvents& _event, const std::any& _eventData )
+BatteryWidgetHandler::handleEventImpl( const Events::TBatteryEvents& _event, const std::any& _eventData )noexcept
 {
     if( _event != Events::TBatteryEvents::BatteryLevelChanged )
         return;
@@ -47,7 +47,7 @@ BatteryWidgetHandler::handleEventImpl( const Events::TBatteryEvents& _event, con
 }
 
 std::unique_ptr<Graphics::IEventHandler>
-createBatteryWidgetHandler( IBatteryWidget* _batteryWidget)
+createBatteryWidgetHandler( IBatteryWidget* _batteryWidget)noexcept
 {
     return std::make_unique<BatteryWidgetHandler>( _batteryWidget );
 }

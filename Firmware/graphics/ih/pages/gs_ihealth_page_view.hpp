@@ -14,11 +14,11 @@ class IHealthWatchPage
 
 public:
 
-    virtual void setStepsCount( std::uint8_t _newStepsValue ) = 0;
+    virtual void setStepsCount( std::uint8_t _newStepsValue )noexcept = 0;
 
-    virtual void setHeartrate( std::uint8_t _newHeartrateValue ) = 0;
+    virtual void setHeartrate( std::uint8_t _newHeartrateValue )noexcept = 0;
 
-    virtual void setCalloriesCount( std::uint8_t _newCalloriesCount ) = 0;
+    virtual void setCalloriesCount( std::uint8_t _newCalloriesCount )noexcept = 0;
 
 public:
 

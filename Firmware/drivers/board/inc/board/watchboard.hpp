@@ -17,23 +17,23 @@ class Board
 
 public:
 
-	Board();
+	Board()noexcept;
 
 public:
 
-	void ledToggle();
+	void ledToggle()noexcept;
 
-	Hal::ButtonsDriver* getButtonsDriver();
+	Hal::ButtonsDriver* getButtonsDriver()noexcept;
 
 private:
 
-	void initBoard();
+	void initBoard()noexcept;
 
-	void initBoardTimer();
+	void initBoardTimer()noexcept;
 
-	void initBoardSpiFlash();
+	void initBoardSpiFlash()noexcept;
 
-	std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval );
+	std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval )noexcept;
 
 private:
     const std::chrono::milliseconds LedToggleTimeout = std::chrono::milliseconds{300};
@@ -44,6 +44,6 @@ private:
 };
 
 using TBoardPtr = std::unique_ptr<Board>;
-TBoardPtr createBoard();
+TBoardPtr createBoard()noexcept;
 
 } // namespace WatchBoard

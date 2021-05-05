@@ -75,7 +75,7 @@ public:
 
 public:
 
-    void initializeHalDependent()
+    void initializeHalDependent()noexcept
     {
         m_timerImpl.initialize();
         m_buttonBackendImpl.initialize();
@@ -87,18 +87,18 @@ public:
 
 public:
 
-    TTimerWrapper* getTimeWrapper()
+    TTimerWrapper* getTimeWrapper()noexcept
     {
         return &m_timerImpl;
     }
 
-    TBackend* getButtonsBackend()
+    TBackend* getButtonsBackend()noexcept
     {
         return &m_buttonBackendImpl;
     }
 private:
 
-    void handleTimerExpired()
+    void handleTimerExpired()noexcept
     {
         for (auto& buttonDescriptor : m_buttons)
         {
@@ -127,7 +127,7 @@ private:
     }
 
 
-    void handleButtonsBackendEvent(ButtonId _buttonId, ButtonBackendEvent _buttonEvent)
+    void handleButtonsBackendEvent(ButtonId _buttonId, ButtonBackendEvent _buttonEvent)noexcept
     {
         using TButtonUnderlying = std::underlying_type_t<ButtonId>;
         auto arrayIndex = static_cast<TButtonUnderlying>(_buttonId);

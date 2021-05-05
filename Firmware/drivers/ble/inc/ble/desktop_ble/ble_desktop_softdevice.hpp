@@ -20,13 +20,13 @@ public:
 
 public:
 
-    Ble::BatteryService::IBatteryLevelService& getBatteryService() override;
+    Ble::BatteryService::IBatteryLevelService& getBatteryService()noexcept override;
 
-    const Ble::BatteryService::IBatteryLevelService& getBatteryService() const override;
+    const Ble::BatteryService::IBatteryLevelService& getBatteryService() const noexcept override;
 
-    Ble::DateTimeService::IDateTimeService& getDateTimeService() override;
+    Ble::DateTimeService::IDateTimeService& getDateTimeService()noexcept override;
 
-    const Ble::DateTimeService::IDateTimeService& getDateTimeService() const override;
+    const Ble::DateTimeService::IDateTimeService& getDateTimeService() const noexcept override;
 
 private:
 
@@ -38,6 +38,6 @@ private:
 };
 
 std::unique_ptr<IBleSoftDevice>
-createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
+createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )noexcept;
 
 }

@@ -17,7 +17,7 @@ namespace Graphics
         virtual ~IEventHandler() = default;
 
     public:
-         virtual void handleEvent( const Events::TEvent& _event ) = 0;
+         virtual void handleEvent( const Events::TEvent& _event )noexcept = 0;
     };
 
     using TEventHandlerPtr = std::unique_ptr<Graphics::IEventHandler>;

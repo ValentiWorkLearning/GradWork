@@ -9,7 +9,7 @@
 namespace Graphics::Widgets
 {
 
-PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
+PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )noexcept
 	:	WidgetBaseObj<IPagesSwitch>{ _themeController }
     ,	m_pointStyle{}
 	, m_pointStyleChecked{}
@@ -18,7 +18,7 @@ PagesSwitch::PagesSwitch( const Theme::IThemeController* _themeController )
 	initStyles();
 }
 
-void PagesSwitch::show()
+void PagesSwitch::show()noexcept
 {
 	WidgetBaseObj::show();
 
@@ -29,7 +29,7 @@ void PagesSwitch::show()
 	setActivePage( m_activePageName );
 }
 
-void PagesSwitch::hide()
+void PagesSwitch::hide()noexcept
 {
 	WidgetBaseObj::hide();
 
@@ -43,13 +43,13 @@ void PagesSwitch::hide()
 	);
 }
 
-void PagesSwitch::reloadStyle()
+void PagesSwitch::reloadStyle()noexcept
 {
 	resetStyle();
 	initStyles();
 }
 
-void PagesSwitch::setActivePage( std::string_view _pageName )
+void PagesSwitch::setActivePage( std::string_view _pageName )noexcept
 {
 	if( _pageName == Views::IClockWatchPage::ClockPageName )
 	{
@@ -72,7 +72,7 @@ void PagesSwitch::setActivePage( std::string_view _pageName )
 	m_activePageName = _pageName;
 }
 
-void PagesSwitch::initStyles()
+void PagesSwitch::initStyles()noexcept
 {
 	auto pThemeProvider = WidgetBaseObj::getThemeController();
 	if (!pThemeProvider)
@@ -110,7 +110,7 @@ void PagesSwitch::initStyles()
 	lv_style_set_border_width( &m_pointStyle, 2 );
 }
 
-void PagesSwitch::resetStyle()
+void PagesSwitch::resetStyle()noexcept
 {
 	Meta::tupleApply(
 		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
@@ -125,7 +125,7 @@ void PagesSwitch::initCheckedPages(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	m_pFirstPage.reset( lv_obj_create(_parentObject ) );
 	lv_obj_set_size( m_pFirstPage.get(), ArcSize, ArcSize );
@@ -145,7 +145,7 @@ void PagesSwitch::initUncheckedPages(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	m_pSecondPage.reset( lv_obj_create(_parentObject) );
 	lv_obj_set_size( m_pSecondPage.get(), ArcSize, ArcSize );
@@ -178,7 +178,7 @@ void PagesSwitch::initUncheckedPages(
 
 
 std::unique_ptr<IPagesSwitch>
-createPagesSwitch(const Theme::IThemeController* _themeController)
+createPagesSwitch(const Theme::IThemeController* _themeController)noexcept
 {
 	return std::make_unique<PagesSwitch>( _themeController );
 }

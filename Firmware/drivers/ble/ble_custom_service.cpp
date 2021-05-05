@@ -25,7 +25,7 @@ CustomService::CustomService()
     initCustomService();
 }
 
-void CustomService::initEventHandler()
+void CustomService::initEventHandler()noexcept
 {
         NRF_SDH_BLE_OBSERVER(
             m_serviceEvent
@@ -36,7 +36,7 @@ void CustomService::initEventHandler()
     
  }
 
-void CustomService::bleEventHandler( ble_evt_t const * _pEvent )
+void CustomService::bleEventHandler( ble_evt_t const * _pEvent )noexcept
 {
     if( _pEvent == nullptr )
         return;
@@ -66,14 +66,14 @@ void CustomService::bleEventHandler( ble_evt_t const * _pEvent )
 
 }
 
-void CustomService::serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext )
+void CustomService::serviceBleEventHandler( ble_evt_t const * _pEvent, void * _pContext )noexcept
 {
     TThis* pThis = reinterpret_cast<TThis*>( _pContext );
     pThis->bleEventHandler( _pEvent );
 
 }
 
-void CustomService::initCustomService()
+void CustomService::initCustomService()noexcept
 {
     struct CustomServiceInit
     {

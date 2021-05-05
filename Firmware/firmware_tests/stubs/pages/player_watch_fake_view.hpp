@@ -12,18 +12,18 @@ class FakePlayerPage
 
 public:
 
-	FakePlayerPage(std::string_view _pageName)
+	FakePlayerPage(std::string_view _pageName)noexcept
 		: FakeBasePage{ _pageName }
 	{
 	}
 
 public:
 
-	void setPause()override
+	void setPause()noexcept override
 	{
 	}
 
-	void setPlaying()override
+	void setPlaying()noexcept override
 	{
 	}
 };

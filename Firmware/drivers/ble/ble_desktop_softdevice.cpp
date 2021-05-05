@@ -14,32 +14,32 @@ DesktopBleStackKeeper::DesktopBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _
 }
 
 Ble::BatteryService::IBatteryLevelService&
-DesktopBleStackKeeper::getBatteryService()
+DesktopBleStackKeeper::getBatteryService()noexcept
 {
     return *m_batteryService.get();
 }
 
 const Ble::BatteryService::IBatteryLevelService&
-DesktopBleStackKeeper::getBatteryService() const
+DesktopBleStackKeeper::getBatteryService() const noexcept
 {
     return *m_batteryService.get();
 }
 
 
 Ble::DateTimeService::IDateTimeService&
-DesktopBleStackKeeper::getDateTimeService()
+DesktopBleStackKeeper::getDateTimeService() noexcept
 {
     return *m_dateTimeService.get();
 }
 
 const Ble::DateTimeService::IDateTimeService&
-DesktopBleStackKeeper::getDateTimeService() const
+DesktopBleStackKeeper::getDateTimeService() const noexcept
 {
     return *m_dateTimeService.get();
 }
 
 std::unique_ptr<IBleSoftDevice>
-createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )
+createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )noexcept
 {
     return std::make_unique<DesktopBleStackKeeper>( std::move( _pServiceCreator ) );
 }

@@ -44,6 +44,6 @@ private:
 
 };
 
-std::unique_ptr<LvglGraphicsService> createGraphicsService();
+std::unique_ptr<LvglGraphicsService> createGraphicsService()noexcept;
 
 };

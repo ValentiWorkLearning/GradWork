@@ -39,17 +39,17 @@ class IBleServiceFactory
     using TServicePtr = std::unique_ptr<TService>;
 
     using TBatteryServicePtr = TServicePtr<Ble::BatteryService::IBatteryLevelService>;
-    [[nodiscard]] virtual TBatteryServicePtr getBatteryService() = 0;
+    [[nodiscard]] virtual TBatteryServicePtr getBatteryService()noexcept = 0;
 
     using TDateTimeServicePtr = TServicePtr<Ble::DateTimeService::IDateTimeService>;
-    [[nodiscard]] virtual TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) = 0;
+    [[nodiscard]] virtual TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue )noexcept = 0;
 
     using THeartrateServicePtr = TServicePtr<Ble::HeartrateService::IHeartrateService>;
-    [[nodiscard]] virtual THeartrateServicePtr getHeartrateService() = 0;
+    [[nodiscard]] virtual THeartrateServicePtr getHeartrateService()noexcept = 0;
 
 };
 
 using TBleFactoryPtr = std::unique_ptr<IBleServiceFactory>;
-TBleFactoryPtr getBleServiceFactory();
+TBleFactoryPtr getBleServiceFactory()noexcept;
 
 }

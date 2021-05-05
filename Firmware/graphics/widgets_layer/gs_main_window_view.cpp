@@ -5,7 +5,7 @@
 namespace Graphics::MainWindow
 {
 
-MainWindowView::MainWindowView()
+MainWindowView::MainWindowView()noexcept
     :   m_pThemeController{ Theme::createThemeController(
                 Theme::ColorTheme::Night
             ,   Width
@@ -24,7 +24,7 @@ MainWindowView::MainWindowView()
 }
 
 void
-MainWindowView::initBackground()
+MainWindowView::initBackground()noexcept
 {
 
     auto createAlignedRect = [this]( auto _aligmentType, lv_style_t* _style )
@@ -106,7 +106,7 @@ MainWindowView::initBackground()
 }
 
 void
-MainWindowView::resetBackgroundStyle()
+MainWindowView::resetBackgroundStyle()noexcept
 {
     Meta::tupleApply(
         [](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
@@ -120,7 +120,7 @@ MainWindowView::resetBackgroundStyle()
 }
 
 void
-MainWindowView::initMask()
+MainWindowView::initMask()noexcept
 {
     constexpr std::uint8_t RoundedArea = 240;
     lv_draw_mask_radius_init(&radiusParam, &maskArea, RoundedArea, false);
@@ -136,18 +136,18 @@ MainWindowView::initMask()
 }
 
 const Theme::IThemeController*
-MainWindowView::getThemeController() const
+MainWindowView::getThemeController() const noexcept
 {
     return m_pThemeController.get();
 }
 
 Theme::IThemeController*
-MainWindowView::getThemeController()
+MainWindowView::getThemeController()noexcept
 {
     return m_pThemeController.get();
 }
 
-std::unique_ptr<IMainWindowView> createMainWindowView()
+std::unique_ptr<IMainWindowView> createMainWindowView()noexcept
 {
     return std::make_unique<MainWindowView>();
 }

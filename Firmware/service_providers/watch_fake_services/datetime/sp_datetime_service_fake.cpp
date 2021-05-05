@@ -213,21 +213,21 @@ public:
 
 public:
 
-    void launchService()
+    void launchService()noexcept
     {
     }
 
-    void calibrateSource()
+    void calibrateSource()noexcept
     {
     }
 
-    void syncronizeWithBleDts()
+    void syncronizeWithBleDts()noexcept
     {
     }
 
 private:
 
-    void initSimulator()
+    void initSimulator()noexcept
     {
         m_isStopped.store( false );
         while(!m_isStopped)
@@ -254,7 +254,7 @@ private:
 namespace ServiceProviders::DateTimeService
 {
 
-DateTimeServiceFake::DateTimeServiceFake( )
+DateTimeServiceFake::DateTimeServiceFake( )noexcept
     :   m_pDatetimeSimImpl{
             std::make_unique<DatetimeSimulatorImpl>( this )
         }
@@ -264,19 +264,19 @@ DateTimeServiceFake::DateTimeServiceFake( )
 DateTimeServiceFake::~DateTimeServiceFake() = default;
 
 void
-DateTimeServiceFake::launchService()
+DateTimeServiceFake::launchService()noexcept
 {
     return m_pDatetimeSimImpl->launchService();
 };
 
 void
-DateTimeServiceFake::calibrateSource()
+DateTimeServiceFake::calibrateSource()noexcept
 {
     m_pDatetimeSimImpl->calibrateSource();
 }
 
 void
-DateTimeServiceFake::syncronizeWithBleDts()
+DateTimeServiceFake::syncronizeWithBleDts()noexcept
 {
     m_pDatetimeSimImpl->syncronizeWithBleDts();
 }

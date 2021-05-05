@@ -29,7 +29,7 @@ public:
         std::unique_ptr<Interface::Spi::SpiBus>&& _busPtr
     );
 
-    ~WinbondFlash()override = default;
+    ~WinbondFlash()noexcept override = default;
 
 public:
 
@@ -37,37 +37,37 @@ public:
             const std::uint32_t _address
         ,   const std::uint8_t* _blockData
         ,   const std::uint8_t _blockSize
-    )override;
+    )noexcept override;
 
     void requestReadBlock(
             const std::uint32_t _address
         ,   const std::uint8_t _blockSize
-    ) override;
+    )noexcept override;
 
     void requestFastReadBlock(
             const std::uint32_t _address
         ,   const std::uint8_t _blockSize
-    ) override;
+    )noexcept override;
 
-    void requestChipErase() override;
+    void requestChipErase()noexcept override;
 
-    void requestDeviceId() override;
+    void requestDeviceId()noexcept override;
 
-    void requestJEDEDCId() override;
+    void requestJEDEDCId()noexcept override;
 
-    void requestEnterSleepMode() override;
+    void requestEnterSleepMode()noexcept override;
 
-    void requestRestoreFromSleepMode() override;
+    void requestRestoreFromSleepMode()noexcept override;
 
     IFlashStorageDriver::TDeviceIdType&
-    getDeviceUniqueId() override;
+    getDeviceUniqueId()noexcept override;
 
 private:
 
     template< typename ... Args >
     auto writeTransaction(
             Args... _chunkArgs
-    )
+    )noexcept
     {
         std::array chunk = { static_cast<std::uint8_t>(_chunkArgs)... };
         Interface::Spi::Transaction chunkTransaction{};
@@ -84,7 +84,7 @@ private:
         return chunkTransaction;
     }
 
-    auto readTransaction( const size_t _bytesCount )
+    auto readTransaction( const size_t _bytesCount )noexcept
     {
         Interface::Spi::Transaction receiveTransaction{};
         receiveTransaction.transactionAction =

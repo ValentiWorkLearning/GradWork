@@ -19,7 +19,7 @@ public:
 
 public:
 
-    virtual void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent ) = 0;
+    virtual void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )noexcept = 0;
 public:
 
     Simple::Signal<void(TimeWrapper)> onDateTimeDiscovered;

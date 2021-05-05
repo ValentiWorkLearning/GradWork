@@ -9,7 +9,7 @@
 namespace Graphics::Widgets
 {
 
-BatteryWidget::BatteryWidget( const Theme::IThemeController* _themeController )
+BatteryWidget::BatteryWidget( const Theme::IThemeController* _themeController )noexcept
     :   WidgetBaseObj<IBatteryWidget>{ _themeController }
     ,   m_labelText{ "90%" }
     ,   m_currentStatus{ Graphics::Widgets::IBatteryWidget::BatteryStatus::Charged90Percents }
@@ -17,7 +17,7 @@ BatteryWidget::BatteryWidget( const Theme::IThemeController* _themeController )
     initStyles();
 }
 
-void BatteryWidget::show()
+void BatteryWidget::show()noexcept
 {
     WidgetBaseObj::show();
 
@@ -28,13 +28,13 @@ void BatteryWidget::show()
 
 }
 
-void BatteryWidget::reloadStyle()
+void BatteryWidget::reloadStyle()noexcept
 {
     resetStyle();
     initStyles();
 }
 
-void BatteryWidget::initStyles()
+void BatteryWidget::initStyles()noexcept
 {
     auto pThemeProvider = WidgetBaseObj::getThemeController();
     if (!pThemeProvider )
@@ -52,7 +52,7 @@ void BatteryWidget::initStyles()
 
 }
 
-void BatteryWidget::resetStyle()
+void BatteryWidget::resetStyle()noexcept
 {
     Meta::tupleApply(
 		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
@@ -63,7 +63,7 @@ void BatteryWidget::resetStyle()
 	);
 }
 
-void BatteryWidget::setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel )
+void BatteryWidget::setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel )noexcept
 {
     if( _newBatteryLevel == 100 )
         m_labelText = "  ";
@@ -82,7 +82,7 @@ void BatteryWidget::setBatteryLevelPercentage( const std::uint8_t _newBatteryLev
     lv_label_set_text( m_pBatteryLabel.get(), m_labelText.c_str() );
 }
 
-void BatteryWidget::setBatteryStatus( BatteryStatus _iconToSet )
+void BatteryWidget::setBatteryStatus( BatteryStatus _iconToSet )noexcept
 {
     switch (_iconToSet)
     {
@@ -112,7 +112,7 @@ void BatteryWidget::initBatteryPercentageLabel(
         lv_obj_t* _parentObject
     ,   const std::uint32_t _displayWidth
     ,   const std::uint32_t _displayHeight
-)
+)noexcept
 {
 
     m_pBatteryLabel.reset( lv_label_create( _parentObject ) );
@@ -136,7 +136,7 @@ void BatteryWidget::initBatteryIcon(
         lv_obj_t* _parentObject
     ,   const std::uint32_t _displayWidth
     ,   const std::uint32_t _displayHeight
-)
+)noexcept
 {
 
     m_pBatteryIcon.reset( lv_label_create( _parentObject ) );
@@ -156,7 +156,7 @@ void BatteryWidget::initBatteryIcon(
 }
 
 
-void BatteryWidget::hide()
+void BatteryWidget::hide()noexcept
 {
     WidgetBaseObj::hide();
 
@@ -171,7 +171,7 @@ void BatteryWidget::hide()
 
 std::unique_ptr<IBatteryWidget> createBatteryWidget(
     const Theme::IThemeController* _themeController
-)
+)noexcept
 {
     return std::make_unique<BatteryWidget>( _themeController );
 }

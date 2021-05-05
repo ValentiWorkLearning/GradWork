@@ -4,7 +4,7 @@
 namespace Graphics::Views
 {
 
-ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )
+ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )noexcept
 	:	PageViewObject<IClockWatchPage>{ _themeController, IClockWatchPage::ClockPageName }
 	,	m_hoursLabelStyle{}
 	,	m_minutesLabelStyle{}
@@ -20,37 +20,37 @@ ClockWatch::ClockWatch( const Theme::IThemeController* _themeController )
 	initStyles();
 }
 
-void ClockWatch::setHours( const std::string& _newHoursValue )
+void ClockWatch::setHours( const std::string& _newHoursValue )noexcept
 {
 	m_hoursValue = _newHoursValue;
 	lv_label_set_text( m_pHoursLabel.get(), m_hoursValue.c_str() );
 }
 
-void ClockWatch::setMinutes( const std::string& _newMinutesValue )
+void ClockWatch::setMinutes( const std::string& _newMinutesValue )noexcept
 {
 	m_minutesValue = _newMinutesValue;
 	lv_label_set_text( m_pMinutesLabel.get(), m_minutesValue.c_str() );
 }
 
-void ClockWatch::setSeconds( const std::string& _newSecondsValue )
+void ClockWatch::setSeconds( const std::string& _newSecondsValue )noexcept
 {
 	m_secondsValue = _newSecondsValue;
 	lv_label_set_text( m_pSecondsLabel.get(), m_secondsValue.c_str() );
 }
 
-void ClockWatch::setWeekday( std::string_view _newWeekDay )
+void ClockWatch::setWeekday( std::string_view _newWeekDay )noexcept
 {
 	m_weekdayValue = _newWeekDay;
 	lv_label_set_text( m_pWeekDayLabel.get(), m_weekdayValue.c_str() );
 }
 
-void ClockWatch::setFullDate( const std::string& _fullDate )
+void ClockWatch::setFullDate( const std::string& _fullDate )noexcept
 {
 	m_fulldateValue = _fullDate;
 	lv_label_set_text( m_pFullDateLabel.get(), m_fulldateValue.c_str() );
 }
 
-void ClockWatch::resetStyle()
+void ClockWatch::resetStyle()noexcept
 {
 	Meta::tupleApply(
 		[](auto&& _nodeToReset) { lv_style_reset( &_nodeToReset ); }
@@ -64,7 +64,7 @@ void ClockWatch::resetStyle()
 	);
 }
 
-void ClockWatch::initStyles()
+void ClockWatch::initStyles()noexcept
 {
 	auto pThemeProvider = PageViewObject::getThemeController();
 	if (!pThemeProvider )
@@ -100,7 +100,7 @@ void ClockWatch::initPageWidgets(
 		lv_obj_t* _parent
 	,	 const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-	)
+	)noexcept
 {
 	initClockLabels( _parent, _displayWidth, _displayHeight );
 	initFullDateLabel( _parent, _displayWidth, _displayHeight );
@@ -109,7 +109,7 @@ void ClockWatch::initPageWidgets(
 	restoreLabelsText();
 }
 
-void ClockWatch::unloadWidgets()
+void ClockWatch::unloadWidgets()noexcept
 {
 	Meta::tupleApply(
 			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
@@ -127,7 +127,7 @@ void ClockWatch::initClockLabels(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	auto parent = _parentObject;
 	const std::uint32_t DisplayWidth { _displayWidth };
@@ -172,7 +172,7 @@ void ClockWatch::initFullDateLabel(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 
 	m_pFullDateLabel.reset( lv_label_create( _parentObject ) );
@@ -194,7 +194,7 @@ void ClockWatch::initWeekDayLabel(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	m_pWeekDayLabel.reset( lv_label_create( _parentObject ) );
 	lv_obj_add_style(
@@ -211,7 +211,7 @@ void ClockWatch::initWeekDayLabel(
 	);
 }
 
-void ClockWatch::restoreLabelsText()
+void ClockWatch::restoreLabelsText()noexcept
 {
 	lv_label_set_text( m_pHoursLabel.get(), m_hoursValue.c_str() );
 	lv_label_set_text( m_pMinutesLabel.get(), m_minutesValue.c_str() );
@@ -223,7 +223,7 @@ void ClockWatch::restoreLabelsText()
 
 std::unique_ptr<IClockWatchPage> createClockWatchView(
 	const Theme::IThemeController* _themeController
-)
+)noexcept
 {
 	return std::make_unique<ClockWatch>( _themeController );
 }

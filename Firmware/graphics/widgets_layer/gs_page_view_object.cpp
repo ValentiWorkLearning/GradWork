@@ -20,7 +20,7 @@ template< typename ConcretePageView >
 PageViewObject<ConcretePageView>::PageViewObject(
         const Theme::IThemeController* _themeController
     ,   std::string_view _pageName
-    )
+    )noexcept
     :   m_isPageVisible{ false }
     ,   m_pageName{ _pageName }
     ,   m_pThemeController{ _themeController }
@@ -30,13 +30,13 @@ PageViewObject<ConcretePageView>::PageViewObject(
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::addWidget(
     Graphics::Widgets::IWidgetObject* _pWidget
-)
+)noexcept
 {
     m_pWidgetsStorage.push_back( _pWidget );
 }
 
 template< typename ConcretePageView >
-void PageViewObject<ConcretePageView >::show()
+void PageViewObject<ConcretePageView >::show()noexcept
 {
     if( m_isPageVisible )
         return;
@@ -64,7 +64,7 @@ void PageViewObject<ConcretePageView >::show()
 }
 
 template< typename ConcretePageView >
-void PageViewObject<ConcretePageView>::hide()
+void PageViewObject<ConcretePageView>::hide()noexcept
 {
     if( !m_isPageVisible )
         return;
@@ -81,7 +81,7 @@ void PageViewObject<ConcretePageView>::hide()
 }
 
 template< typename ConcretePageView >
-void PageViewObject<ConcretePageView>::reloadStyle()
+void PageViewObject<ConcretePageView>::reloadStyle()noexcept
 {
     hide();
     executeForEachWidget(
@@ -94,20 +94,20 @@ void PageViewObject<ConcretePageView>::reloadStyle()
 }
 
 template<typename ConcretePageView>
-std::string_view PageViewObject<ConcretePageView>::getPageName() const
+std::string_view PageViewObject<ConcretePageView>::getPageName() const noexcept
 {
     return m_pageName;
 }
 
 template< typename ConcretePageView >
-bool PageViewObject<ConcretePageView>::isVisible() const
+bool PageViewObject<ConcretePageView>::isVisible() const noexcept
 {
     return m_isPageVisible;
 }
 
 template< typename ConcretePageView >
 const Theme::IThemeController*
-PageViewObject<ConcretePageView>::getThemeController() const
+PageViewObject<ConcretePageView>::getThemeController() const noexcept
 {
     return m_pThemeController;
 }
@@ -115,7 +115,7 @@ PageViewObject<ConcretePageView>::getThemeController() const
 template< typename ConcretePageView >
 void PageViewObject<ConcretePageView>::executeForEachWidget(
     std::function<void(Graphics::Widgets::IWidgetObject*)> _toCall
-)
+)noexcept
 {
     std::for_each(
             m_pWidgetsStorage.begin()

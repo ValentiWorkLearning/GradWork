@@ -20,13 +20,13 @@ class BatteryWidgetHandler
 
 public:
 
-    explicit BatteryWidgetHandler( IBatteryWidget* _bateryWidget );
+    explicit BatteryWidgetHandler( IBatteryWidget* _bateryWidget )noexcept;
 
     ~BatteryWidgetHandler() override = default;
 
 protected:
 
-    void handleEventImpl( const Events::TBatteryEvents& _event, const std::any& _eventData ) override;
+    void handleEventImpl( const Events::TBatteryEvents& _event, const std::any& _eventData )noexcept override;
 
 private:
 
@@ -34,6 +34,6 @@ private:
 };
 
 std::unique_ptr<Graphics::IEventHandler>
-createBatteryWidgetHandler( IBatteryWidget* );
+createBatteryWidgetHandler( IBatteryWidget* )noexcept;
 
 };

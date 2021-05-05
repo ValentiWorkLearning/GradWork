@@ -12,7 +12,7 @@ class FakeClockPage
 
 public:
 
-	FakeClockPage( std::string_view _pageName )
+	FakeClockPage( std::string_view _pageName )noexcept
 		:	FakeBasePage{ _pageName  }
 		,	m_hoursValue{ "00" }
 		,	m_minutesValue{ "00" }
@@ -24,54 +24,54 @@ public:
 
 public:
 
-	void setHours(const std::string& _newHoursValue) override
+	void setHours(const std::string& _newHoursValue)noexcept override
 	{
 		m_hoursValue = _newHoursValue;
 	};
 
-	void setMinutes(const std::string& _newMinutesValue) override
+	void setMinutes(const std::string& _newMinutesValue)noexcept override
 	{
 		m_minutesValue = _newMinutesValue;
 	};
 
-	void setSeconds(const std::string& _newSecondsValue) override
+	void setSeconds(const std::string& _newSecondsValue)noexcept override
 	{
 		m_secondsValue = _newSecondsValue;
 	};
 
-	void setWeekday(std::string_view _newWeekDay) override
+	void setWeekday(std::string_view _newWeekDay)noexcept override
 	{
 		m_weekdayValue = _newWeekDay;
 	};
 
-	void setFullDate(const std::string& _fullDate) override
+	void setFullDate(const std::string& _fullDate)noexcept override
 	{
 		m_fulldateValue = _fullDate;
 	};
 
 public:
 
-	std::string_view getHours()const
+	std::string_view getHours()const noexcept
 	{
 		return m_hoursValue;
 	}
 
-	std::string_view getMinutes()const
+	std::string_view getMinutes()const noexcept
 	{
 		return m_minutesValue;
 	}
 
-	std::string_view getSeconds()const
+	std::string_view getSeconds()const noexcept
 	{
 		return m_secondsValue;
 	}
 
-	std::string_view getWeekday()const
+	std::string_view getWeekday()const noexcept
 	{
 		return m_weekdayValue;
 	}
 
-	std::string_view getFullDate()const
+	std::string_view getFullDate()const noexcept
 	{
 		return m_fulldateValue;
 	}
@@ -90,9 +90,9 @@ class FakeClockPageMock
 {
 
 public:
-	MOCK_METHOD(void, setHours, (const std::string&), (override));
-	MOCK_METHOD(void, setMinutes, (const std::string&), (override));
-	MOCK_METHOD(void, setSeconds, (const std::string&), (override));
-	MOCK_METHOD(void, setWeekday, (std::string_view), (override));
-	MOCK_METHOD(void, setFullDate, (const std::string&), (override));
+	MOCK_METHOD(void, setHours, (const std::string&), (noexcept,override));
+	MOCK_METHOD(void, setMinutes, (const std::string&), (noexcept,override));
+	MOCK_METHOD(void, setSeconds, (const std::string&), (noexcept,override));
+	MOCK_METHOD(void, setWeekday, (std::string_view), (noexcept,override));
+	MOCK_METHOD(void, setFullDate, (const std::string&), (noexcept,override));
 };

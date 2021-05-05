@@ -35,7 +35,7 @@ public:
     BatterySimulatorImpl(
                 const std::chrono::seconds _measurePeriod
             ,   const IBatteryLevelAppService* _pBatService
-        )
+        )noexcept
         :   m_batteryLevel{ FakeSettings::FakeMinBatteryLevel }
         ,   m_measuringPeriod{ _measurePeriod }
         ,   m_pBatService{ _pBatService }
@@ -46,12 +46,12 @@ public:
 
 public:
 
-    std::chrono::seconds getMeasurmentPeriod() const
+    std::chrono::seconds getMeasurmentPeriod() const noexcept
     {
         return m_measuringPeriod;
     }
 
-    void startSimulation()
+    void startSimulation()noexcept
     {
         ret_code_t errorCode{};
         errorCode = app_timer_start(
@@ -64,7 +64,7 @@ public:
 
 private:
 
-    void measureBatteryLevel()
+    void measureBatteryLevel()noexcept
     {
         std::uint8_t measuredBatteryLevel =
             static_cast<std::uint8_t>( sensorsim_measure(
@@ -81,13 +81,13 @@ private:
         }
     }
 
-    void timerExpiredHandler( void * _pContext )
+    void timerExpiredHandler( void * _pContext )noexcept
     {
        Meta::UnuseVar( _pContext );
        measureBatteryLevel();
     }
 
-    void initSimulator()
+    void initSimulator()noexcept
     {
         m_simulatorConfig.min          = FakeSettings::FakeMinBatteryLevel;
         m_simulatorConfig.max          = FakeSettings::FakeMaxBatteryLevel;
@@ -97,7 +97,7 @@ private:
         sensorsim_init( &m_simulatorState, &m_simulatorConfig );
     }
 
-    void initTimer()
+    void initTimer()noexcept
     {
         ret_code_t errorCode{};
 
@@ -116,7 +116,7 @@ private:
         APP_ERROR_CHECK( errorCode );
     }
 
-    std::uint32_t convertToTimerTicks( std::chrono::seconds _interval )
+    std::uint32_t convertToTimerTicks( std::chrono::seconds _interval )noexcept
     {
         std::chrono::milliseconds msValue = std::chrono::duration_cast<std::chrono::milliseconds>( _interval );
         std::uint32_t timerTicksValue = APP_TIMER_TICKS( msValue.count() );
@@ -162,7 +162,7 @@ public:
     BatterySimulatorImpl(
             const std::chrono::seconds _measurePeriod
         ,   const IBatteryLevelAppService* _pBatService
-    )
+    )noexcept
         :
             m_batteryLevel{ FakeSettings::FakeMinBatteryLevel }
         ,   m_measuringPeriod{ _measurePeriod }
@@ -180,19 +180,19 @@ public:
 
 public:
 
-    std::chrono::seconds getMeasurmentPeriod() const
+    std::chrono::seconds getMeasurmentPeriod() const noexcept
     {
         return m_measuringPeriod;
     }
 
-    void startSimulation()
+    void startSimulation()noexcept
     {
         m_startMeasureNotifier.notify_one();
     }
 
 private:
 
-    void initSimulator()
+    void initSimulator()noexcept
     {
         m_isStopped.store( false );
         m_simulatorThread = std::thread(
@@ -238,7 +238,7 @@ private:
 namespace ServiceProviders::BatteryService
 {
 
-BatteryServiceFake::BatteryServiceFake( std::chrono::seconds _measurementPeriod )
+BatteryServiceFake::BatteryServiceFake( std::chrono::seconds _measurementPeriod )noexcept
     :   m_pBatterySimImpl{
             std::make_unique<BatterySimulatorImpl>( _measurementPeriod , this )
         }
@@ -248,12 +248,12 @@ BatteryServiceFake::BatteryServiceFake( std::chrono::seconds _measurementPeriod 
 BatteryServiceFake::~BatteryServiceFake() = default;
 
 std::chrono::seconds
-BatteryServiceFake::getMeasurmentPeriod() const
+BatteryServiceFake::getMeasurmentPeriod() const noexcept
 {
     return m_pBatterySimImpl->getMeasurmentPeriod();
 };
 
-void BatteryServiceFake::startBatteryMeasure()
+void BatteryServiceFake::startBatteryMeasure() noexcept
 {
     m_pBatterySimImpl->startSimulation();
 }

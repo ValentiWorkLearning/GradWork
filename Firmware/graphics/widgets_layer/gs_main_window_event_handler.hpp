@@ -25,19 +25,19 @@ class MainWindowHandler
 
 public:
 
-    explicit MainWindowHandler( IGsMainWindowModel* _pMainWindowModel );
+    explicit MainWindowHandler( IGsMainWindowModel* _pMainWindowModel )noexcept;
 
     ~MainWindowHandler() override = default;
 
 protected:
 
-    void handleEventImpl( const Events::TButtonsEvents& _event, const std::any& _eventData ) override;
+    void handleEventImpl( const Events::TButtonsEvents& _event, const std::any& _eventData )noexcept override;
 
 private:
 
-    void navigateToNextPage();
+    void navigateToNextPage()noexcept;
 
-    void navigateToPreviousPage();
+    void navigateToPreviousPage()noexcept;
 
 private:
 
@@ -45,6 +45,6 @@ private:
 };
 
 std::unique_ptr<Graphics::IEventHandler>
-createMainWindowEventHandler(IGsMainWindowModel* );
+createMainWindowEventHandler(IGsMainWindowModel* )noexcept;
 
 };

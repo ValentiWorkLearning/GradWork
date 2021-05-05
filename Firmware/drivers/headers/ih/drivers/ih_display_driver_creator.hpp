@@ -4,5 +4,5 @@
 
 namespace DisplayCreator
 {
-    std::unique_ptr<DisplayDriver::IDisplayDriver> createDisplayDriver();
+    std::unique_ptr<DisplayDriver::IDisplayDriver> createDisplayDriver()noexcept;
 }

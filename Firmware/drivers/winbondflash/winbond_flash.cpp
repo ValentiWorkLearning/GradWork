@@ -26,7 +26,7 @@ WinbondFlash::requestWriteBlock(
         const std::uint32_t _address
     ,   const std::uint8_t* _blockData
     ,   const std::uint8_t _blockSize
-)
+)noexcept
 {
     Interface::Spi::Transaction requestWriteEnable = writeTransaction(
         WindbondCommandSet::WriteEnable
@@ -64,7 +64,7 @@ void
 WinbondFlash::requestReadBlock(
         const std::uint32_t _address
     ,   const std::uint8_t _blockSize
-)
+)noexcept
 {
     Interface::Spi::Transaction requestRead = writeTransaction(
             WindbondCommandSet::ReadData
@@ -91,7 +91,7 @@ void
 WinbondFlash::requestFastReadBlock(
         const std::uint32_t _address
     ,   const std::uint8_t _blockSize
-)
+)noexcept
 {
     Interface::Spi::Transaction requestRead = writeTransaction(
             WindbondCommandSet::ReadData
@@ -116,7 +116,7 @@ WinbondFlash::requestFastReadBlock(
 }
 
 void
-WinbondFlash::requestChipErase()
+WinbondFlash::requestChipErase()noexcept
 {
     Interface::Spi::Transaction chipEraseTransaction = writeTransaction(
             WindbondCommandSet::ChipErase
@@ -126,7 +126,7 @@ WinbondFlash::requestChipErase()
 }
 
 void
-WinbondFlash::requestDeviceId()
+WinbondFlash::requestDeviceId()noexcept
 {
     Interface::Spi::Transaction requestId = writeTransaction(
             WindbondCommandSet::ReadUniqueId
@@ -160,7 +160,7 @@ WinbondFlash::requestDeviceId()
 }
 
 void
-WinbondFlash::requestJEDEDCId()
+WinbondFlash::requestJEDEDCId()noexcept
 {
     Interface::Spi::Transaction requestIdCommandTransaction = writeTransaction(
             WindbondCommandSet::ReadJedecId
@@ -184,7 +184,7 @@ WinbondFlash::requestJEDEDCId()
 }
 
 void
-WinbondFlash::requestEnterSleepMode()
+WinbondFlash::requestEnterSleepMode()noexcept
 {
     Interface::Spi::Transaction requestPowerdown = writeTransaction(
             WindbondCommandSet::PowerDownMode
@@ -194,7 +194,7 @@ WinbondFlash::requestEnterSleepMode()
 }
 
 void
-WinbondFlash::requestRestoreFromSleepMode()
+WinbondFlash::requestRestoreFromSleepMode()noexcept
 {
     Interface::Spi::Transaction requestRestoreFromSleep
             = writeTransaction(
@@ -205,7 +205,7 @@ WinbondFlash::requestRestoreFromSleepMode()
 };
 
 IFlashStorageDriver::TDeviceIdType&
-WinbondFlash::getDeviceUniqueId()
+WinbondFlash::getDeviceUniqueId()noexcept
 {
     return m_spiFlashId;
 }

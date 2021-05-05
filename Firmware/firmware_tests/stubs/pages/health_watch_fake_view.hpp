@@ -12,22 +12,22 @@ class FakeHealthPage
 
 public:
 
-	FakeHealthPage(std::string_view _pageName)
+	FakeHealthPage(std::string_view _pageName)noexcept
 		:	FakeBasePage{ _pageName }
 	{
 	}
 
 public:
 
-	void setStepsCount(std::uint8_t _newStepsValue)override
+	void setStepsCount(std::uint8_t _newStepsValue)noexcept override
 	{
 	}
 
-	void setHeartrate(std::uint8_t _newHeartrateValue)override
+	void setHeartrate(std::uint8_t _newHeartrateValue)noexcept override
 	{
 	}
 
-	void setCalloriesCount(std::uint8_t _newCalloriesCount)override
+	void setCalloriesCount(std::uint8_t _newCalloriesCount)noexcept override
 	{
 	}
 };

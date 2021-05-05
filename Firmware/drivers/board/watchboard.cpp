@@ -25,7 +25,7 @@ namespace
 
 namespace
 {
-    static void TimerExpiredCallback( void* _pExpiredContext )
+    static void TimerExpiredCallback( void* _pExpiredContext )noexcept
     {
         std::coroutine_handle<>::from_address(_pExpiredContext).resume();
     }
@@ -44,12 +44,12 @@ auto operator co_await( std::chrono::milliseconds _duration)
         {
         }
 
-        bool await_ready()const
+        bool await_ready()const noexcept
         {
             return false;
         }
 #if defined (USE_DEVICE_SPECIFIC)
-        void await_suspend(std::coroutine_handle<> _coroLedHandle)
+        void await_suspend(std::coroutine_handle<> _coroLedHandle)noexcept
         {
             ret_code_t errorCode{};
             errorCode = app_timer_start(
@@ -60,17 +60,17 @@ auto operator co_await( std::chrono::milliseconds _duration)
             APP_ERROR_CHECK( errorCode );
         }
 
-        void await_resume()
+        void await_resume()noexcept
         {
             app_timer_stop(m_ledDriverTimer);
         }
 #else
-        bool await_suspend(std::coroutine_handle<> _coroLedHandle)
+        bool await_suspend(std::coroutine_handle<> _coroLedHandle)noexcept
         {
             return false;
         }
 
-        void await_resume()
+        void await_resume()noexcept
         {
         }
 #endif
@@ -86,7 +86,7 @@ namespace WatchBoard
 {
 
 void
-Board::initBoard()
+Board::initBoard()noexcept
 {
 #if defined (USE_DEVICE_SPECIFIC)
     /* Configure board. */
@@ -104,7 +104,7 @@ Board::initBoard()
 }
 
 void
-Board::initBoardTimer()
+Board::initBoardTimer()noexcept
 {
 #if defined (USE_DEVICE_SPECIFIC)
     ret_code_t errorCode{};
@@ -120,7 +120,7 @@ Board::initBoardTimer()
 }
 
 void
-Board::initBoardSpiFlash()
+Board::initBoardSpiFlash()noexcept
 {
 #if defined (USE_DEVICE_SPECIFIC)
 
@@ -149,14 +149,14 @@ Board::initBoardSpiFlash()
 #endif
 }
 
-Board::Board()
+Board::Board()noexcept
 {
     initBoard();
     initBoardTimer();
 }
 
 void
-Board::ledToggle()
+Board::ledToggle()noexcept
 {
 #if defined (USE_DEVICE_SPECIFIC)
     using namespace std::chrono_literals;
@@ -171,7 +171,7 @@ Board::ledToggle()
 }
 
 std::uint32_t
-Board::convertToTimerTicks( std::chrono::milliseconds _interval )
+Board::convertToTimerTicks( std::chrono::milliseconds _interval )noexcept
 {
 #if defined (USE_DEVICE_SPECIFIC)
     std::uint32_t timerTicksValue = APP_TIMER_TICKS( _interval.count() );
@@ -182,12 +182,12 @@ Board::convertToTimerTicks( std::chrono::milliseconds _interval )
 
 
 Hal::ButtonsDriver*
-Board::getButtonsDriver()
+Board::getButtonsDriver()noexcept
 {
     return &m_buttonsDriver;
 }
 
-TBoardPtr createBoard()
+TBoardPtr createBoard()noexcept
 {
     return std::make_unique<Board>();
 }

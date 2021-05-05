@@ -27,9 +27,9 @@ public:
 
 public:
 
-    virtual void onHeartrateChanged ( std::uint8_t _newHeartrateLevel ) = 0;
+    virtual void onHeartrateChanged ( std::uint8_t _newHeartrateLevel )noexcept = 0;
 
-    virtual void setSensorLocation( SensorLocation _sensorLocation ) = 0;
+    virtual void setSensorLocation( SensorLocation _sensorLocation )noexcept = 0;
 
 };
 

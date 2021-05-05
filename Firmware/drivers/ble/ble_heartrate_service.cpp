@@ -13,7 +13,7 @@ namespace
 namespace Ble::HeartrateService
 {
 
-NordicHeartrateService::NordicHeartrateService()
+NordicHeartrateService::NordicHeartrateService()noexcept
 {
     initService();
 }
@@ -21,7 +21,7 @@ NordicHeartrateService::NordicHeartrateService()
 NordicHeartrateService::~NordicHeartrateService()= default;
 
 void
-NordicHeartrateService::onHeartrateChanged ( std::uint8_t _newHeartrateLevel )
+NordicHeartrateService::onHeartrateChanged ( std::uint8_t _newHeartrateLevel )noexcept
 {
     ret_code_t errorCode = ble_hrs_heart_rate_measurement_send(
             &m_hrs
@@ -31,7 +31,7 @@ NordicHeartrateService::onHeartrateChanged ( std::uint8_t _newHeartrateLevel )
 }
 
 void
-NordicHeartrateService::initService()
+NordicHeartrateService::initService()noexcept
 {
     ble_hrs_init_t heartrateDescriptor{};
     std::uint8_t bodySensorLocation = BLE_HRS_BODY_SENSOR_LOCATION_FINGER;
@@ -48,7 +48,7 @@ NordicHeartrateService::initService()
 }
 
 void
-NordicHeartrateService::setSensorLocation( Ble::HeartrateService::SensorLocation _sensorLocation )
+NordicHeartrateService::setSensorLocation( Ble::HeartrateService::SensorLocation _sensorLocation )noexcept
 {
     // TODO me?
 }

@@ -25,9 +25,9 @@ public:
 
 public:
 
-    virtual std::chrono::seconds getMeasurmentPeriod() const = 0;
+    virtual std::chrono::seconds getMeasurmentPeriod() const noexcept = 0;
 
-    virtual void startBatteryMeasure() = 0;
+    virtual void startBatteryMeasure()noexcept = 0;
 
     Simple::Signal<void(std::uint8_t)> onBatteryLevelChangedSig;
 

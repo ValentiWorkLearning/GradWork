@@ -8,7 +8,7 @@
 namespace Graphics::Views
 {
 
-HealthPage::HealthPage( const Theme::IThemeController* _themeController )
+HealthPage::HealthPage( const Theme::IThemeController* _themeController )noexcept
 	:	PageViewObject<IHealthWatchPage>{ _themeController, IHealthWatchPage::HealthPageName }
 	,	m_mainLabelStyleDark{}
 	,	m_healthPageIconStyle{}
@@ -25,7 +25,7 @@ void HealthPage::initPageWidgets(
 		lv_obj_t* _parent
     ,   const std::uint32_t _displayWidth
     ,   const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	initHeartrateWidgets(_parent, _displayWidth, _displayHeight );
 	initCalloriesCounter(_parent, _displayWidth, _displayHeight );
@@ -33,7 +33,7 @@ void HealthPage::initPageWidgets(
 	initPageTitle(_parent, _displayWidth, _displayHeight );
 }
 
-void HealthPage::unloadWidgets()
+void HealthPage::unloadWidgets()noexcept
 {
 	Meta::tupleApply(
 			[]( auto&& _nodeToReset ){ _nodeToReset.reset(); }
@@ -52,19 +52,19 @@ void HealthPage::unloadWidgets()
 	);
 }
 
-void HealthPage::setStepsCount(std::uint8_t _newStepsValue)
+void HealthPage::setStepsCount(std::uint8_t _newStepsValue)noexcept
 {
 }
 
-void HealthPage::setHeartrate(std::uint8_t _newHeartrateValue)
+void HealthPage::setHeartrate(std::uint8_t _newHeartrateValue)noexcept
 {
 }
 
-void HealthPage::setCalloriesCount(std::uint8_t _newCalloriesCount)
+void HealthPage::setCalloriesCount(std::uint8_t _newCalloriesCount)noexcept
 {
 }
 
-void HealthPage::initStyles()
+void HealthPage::initStyles()noexcept
 {
 	auto pThemeProvider = PageViewObject::getThemeController();
 	if (!pThemeProvider )
@@ -117,7 +117,7 @@ void HealthPage::initStyles()
 	lv_style_set_line_rounded(&m_pulseLineStyle, true);
 }
 
-void HealthPage::resetStyle()
+void HealthPage::resetStyle()noexcept
 {
 	Meta::tupleApply(
 		[](auto&& _nodeToReset) { 	lv_style_reset( &_nodeToReset ); }
@@ -139,7 +139,7 @@ void HealthPage::initPageTitle(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	m_pHealthPageLabel.reset( lv_label_create( _parentObject ) );
 
@@ -170,7 +170,7 @@ void HealthPage::initHeartrateWidgets(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	m_pHeartBeatsLabel.reset( lv_label_create(_parentObject) );
 
@@ -219,7 +219,7 @@ void HealthPage::initCalloriesCounter(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	m_pKcalLabel.reset( lv_label_create(_parentObject) );
 
@@ -251,7 +251,7 @@ void HealthPage::initStepsCounter(
 		lv_obj_t* _parentObject
 	,	const std::uint32_t _displayWidth
 	,	const std::uint32_t _displayHeight
-)
+)noexcept
 {
 	m_pStepsLabel.reset( lv_label_create(_parentObject) );
 
@@ -292,7 +292,7 @@ void HealthPage::initStepsCounter(
 
 
 std::unique_ptr<IHealthWatchPage>
-createHeartrateWatchView( const Theme::IThemeController* _themeController )
+createHeartrateWatchView( const Theme::IThemeController* _themeController )noexcept
 {
 	return std::make_unique<HealthPage>( _themeController );
 }

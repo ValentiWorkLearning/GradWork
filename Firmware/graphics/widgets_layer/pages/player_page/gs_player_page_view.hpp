@@ -18,29 +18,29 @@ class PlayerPage
 
 public:
 
-    explicit PlayerPage( const Theme::IThemeController* _themeController );
+    explicit PlayerPage( const Theme::IThemeController* _themeController )noexcept;
 
     ~PlayerPage() override = default;
 
 public:
 
-    void setPause() override;
+    void setPause()noexcept override;
 
-    void setPlaying() override;
+    void setPlaying()noexcept override;
 
 protected:
 
-    void resetStyle() override;
+    void resetStyle()noexcept override;
 
-    void initStyles() override;
+    void initStyles()noexcept override;
 
     void initPageWidgets(
             lv_obj_t* _parent
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    ) override;
+    )noexcept override;
 
-    void unloadWidgets() override;
+    void unloadWidgets()noexcept override;
 
 private:
 
@@ -48,25 +48,25 @@ private:
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initPlayIcon(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-   );
+   )noexcept;
 
     void initNextSongIcon(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
     void initPrevSongIcon(
             lv_obj_t* _parentObject
         ,   const std::uint32_t _displayWidth
         ,   const std::uint32_t _displayHeight
-    );
+    )noexcept;
 
 private:
 
@@ -91,6 +91,6 @@ private:
 
 std::unique_ptr<IPlayerWatchPage> createPlayerWatchView(
     const Theme::IThemeController* _themeController
-);
+)noexcept;
 
 }

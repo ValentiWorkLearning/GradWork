@@ -51,7 +51,7 @@ namespace Ble::Stack
 {
 
 
-BleStackKeeper::BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )
+BleStackKeeper::BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )noexcept
     :   m_isConnected{ false }
     ,   m_connectionHandle{ BLE_CONN_HANDLE_INVALID }
     ,   m_pServiceCreator{ std::move( _pServiceCreator ) }
@@ -68,7 +68,7 @@ BleStackKeeper::BleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreato
     startAdvertising( EraseBondsConfig::DontEraseBounds );
 }
 
-void BleStackKeeper::initGapModule()
+void BleStackKeeper::initGapModule()noexcept
 {
     ret_code_t              errCode{};
     ble_gap_conn_params_t   gapConnectionParams{};
@@ -98,7 +98,7 @@ void BleStackKeeper::initGapModule()
     APP_ERROR_CHECK( errCode );
 }
 
-void BleStackKeeper::initGatt()
+void BleStackKeeper::initGatt()noexcept
 {
     auto gattEventCallback = cbc::obtain_connector(
         [ this ]( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt_t const * _pEvent )
@@ -111,7 +111,7 @@ void BleStackKeeper::initGatt()
     APP_ERROR_CHECK( errorCode );
 }
 
-void BleStackKeeper::initDbDiscovery()
+void BleStackKeeper::initDbDiscovery()noexcept
 {
     ble_db_discovery_init_t dbInit{};
 
@@ -129,7 +129,7 @@ void BleStackKeeper::initDbDiscovery()
     APP_ERROR_CHECK( errorCode );
 }
 
-void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt_t const * _pEvent )
+void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt_t const * _pEvent )noexcept
 {
     Meta::UnuseVar( _pGatt );
 
@@ -146,13 +146,13 @@ void BleStackKeeper::gattEventHandler( nrf_ble_gatt_t * _pGatt, nrf_ble_gatt_evt
     }
 }
 
-void BleStackKeeper::bleEventHandlerLink( ble_evt_t const * _pBleEvent, void * _pContext )
+void BleStackKeeper::bleEventHandlerLink( ble_evt_t const * _pBleEvent, void * _pContext )noexcept
 {
     TThis* pThis = reinterpret_cast<TThis*>( _pContext );
     pThis->bleEventHandler( _pBleEvent );
 }
 
-void BleStackKeeper::bleStackInit()
+void BleStackKeeper::bleStackInit()noexcept
 {
     ret_code_t errCode{};
 
@@ -183,7 +183,7 @@ void BleStackKeeper::bleStackInit()
 }
 
 
-void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
+void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )noexcept
 {
     //copied as is from https://github.com/NordicPlayground/nRF52-Bluetooth-Course/blob/master/main.c
 
@@ -259,7 +259,7 @@ void BleStackKeeper::bleEventHandler( ble_evt_t const* _pBleEvent )
 }
 
 
-void BleStackKeeper::initAdvertising()
+void BleStackKeeper::initAdvertising()noexcept
 {
     ret_code_t errCode{};
     ble_advertising_init_t initAdvertisingParams{};
@@ -291,7 +291,7 @@ void BleStackKeeper::initAdvertising()
     ble_advertising_conn_cfg_tag_set( &m_advertising, StackConstants::AppBleConnCfgTag );
 }
 
-void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )
+void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )noexcept
 {
     ret_code_t errorCode{};
 
@@ -353,7 +353,7 @@ void BleStackKeeper::advertisingEventHandler( ble_adv_evt_t _pAdvertisingEvent )
     }
 }
 
-void BleStackKeeper::initPeerManager()
+void BleStackKeeper::initPeerManager()noexcept
 {
     ble_gap_sec_params_t securityParams{};
     ret_code_t           errorCode{};
@@ -392,7 +392,7 @@ void BleStackKeeper::initPeerManager()
     APP_ERROR_CHECK( errorCode );
 }
 
-void BleStackKeeper::connectionParamsEventHandler( ble_conn_params_evt_t * _pEvent )
+void BleStackKeeper::connectionParamsEventHandler( ble_conn_params_evt_t * _pEvent )noexcept
 {
     ret_code_t errCode{};
 
@@ -403,13 +403,13 @@ void BleStackKeeper::connectionParamsEventHandler( ble_conn_params_evt_t * _pEve
     }
 }
 
-void BleStackKeeper::connectionParamsErrorHandler( std::uint32_t _nrfError )
+void BleStackKeeper::connectionParamsErrorHandler( std::uint32_t _nrfError )noexcept
 {
 
 }
 
 
-void BleStackKeeper::initConnectionParams()
+void BleStackKeeper::initConnectionParams()noexcept
 {
     ret_code_t             errCode{};
     ble_conn_params_init_t connectionParams{};
@@ -444,7 +444,7 @@ void BleStackKeeper::initConnectionParams()
     APP_ERROR_CHECK( errCode );
 }
 
-void BleStackKeeper::peerListGet(pm_peer_id_t* _pPeers, uint32_t* _pPeersSize)
+void BleStackKeeper::peerListGet(pm_peer_id_t* _pPeers, uint32_t* _pPeersSize)noexcept
 {
     pm_peer_id_t peerId{};
     std::uint32_t peersToCopy{};
@@ -462,7 +462,7 @@ void BleStackKeeper::peerListGet(pm_peer_id_t* _pPeers, uint32_t* _pPeersSize)
     }
 }
 
-void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
+void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )noexcept
 {
     ret_code_t errCode{};
 
@@ -583,7 +583,7 @@ void BleStackKeeper::peerManagerEventHandler( pm_evt_t const * _pPeerEvent )
 }
 
 
-void BleStackKeeper::startAdvertising( EraseBondsConfig _eraseBonds )
+void BleStackKeeper::startAdvertising( EraseBondsConfig _eraseBonds )noexcept
 {
     if( _eraseBonds == EraseBondsConfig::EraseBoundsPolicy )
     {
@@ -623,7 +623,7 @@ void BleStackKeeper::startAdvertising( EraseBondsConfig _eraseBonds )
     }
 }
 
-void BleStackKeeper::deleteBonds()
+void BleStackKeeper::deleteBonds()noexcept
 {
     ret_code_t errCode{};
 
@@ -634,7 +634,7 @@ void BleStackKeeper::deleteBonds()
 }
 
 
-void BleStackKeeper::initServices()
+void BleStackKeeper::initServices()noexcept
 {
     ret_code_t errCode{};
     nrf_ble_qwr_init_t qwrInit{};
@@ -658,32 +658,32 @@ void BleStackKeeper::initServices()
 }
 
 Ble::BatteryService::IBatteryLevelService&
-BleStackKeeper::getBatteryService()
+BleStackKeeper::getBatteryService()noexcept
 {
     return *m_batteryService.get();
 }
 
 const Ble::BatteryService::IBatteryLevelService&
-BleStackKeeper::getBatteryService() const
+BleStackKeeper::getBatteryService() const noexcept
 {
     return *m_batteryService.get();
 }
 
 
 Ble::DateTimeService::IDateTimeService&
-BleStackKeeper::getDateTimeService()
+BleStackKeeper::getDateTimeService()noexcept
 {
     return *m_dateTimeService.get();
 }
 
 const Ble::DateTimeService::IDateTimeService&
-BleStackKeeper::getDateTimeService() const
+BleStackKeeper::getDateTimeService() const noexcept
 {
     return *m_dateTimeService.get();
 }
 
 std::unique_ptr<IBleSoftDevice>
-createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )
+createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator )noexcept
 {
     return std::make_unique<BleStackKeeper>( std::move( _pServiceCreator ) );
 }

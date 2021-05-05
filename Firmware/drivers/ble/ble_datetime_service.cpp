@@ -27,7 +27,7 @@ DateTimeServiceNordic::DateTimeServiceNordic( const std::any& _pGattQueue )
 }
 
 void
-DateTimeServiceNordic::initService( const std::any& _pGattQueue )
+DateTimeServiceNordic::initService( const std::any& _pGattQueue )noexcept
 {
     ret_code_t errorCode{};
     ble_cts_c_init_t ctsInit{};
@@ -50,7 +50,7 @@ DateTimeServiceNordic::initService( const std::any& _pGattQueue )
 }
 
 void
-DateTimeServiceNordic::serviceEventHandler( ble_cts_c_t * _pCurrentTimeService, ble_cts_c_evt_t * _pEvent )
+DateTimeServiceNordic::serviceEventHandler( ble_cts_c_t * _pCurrentTimeService, ble_cts_c_evt_t * _pEvent )noexcept
 {
     ret_code_t errorCode{};
 
@@ -98,7 +98,7 @@ DateTimeServiceNordic::serviceEventHandler( ble_cts_c_t * _pCurrentTimeService, 
 
 
 void
-DateTimeServiceNordic::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )
+DateTimeServiceNordic::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )noexcept
 {
     ble_db_discovery_evt_t* pEvent = std::any_cast<ble_db_discovery_evt_t*>( _pBleDbDiscoveryEvent );
     ble_cts_c_on_db_disc_evt( &m_currentTimeService, pEvent );

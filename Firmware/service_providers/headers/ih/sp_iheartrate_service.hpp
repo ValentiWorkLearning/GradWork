@@ -20,7 +20,7 @@ public:
 
     virtual ~IHeartrateService() = default;
 
-    virtual void startMeasure() = 0;
+    virtual void startMeasure()noexcept = 0;
 
     Simple::Signal<void()> onMeasureStarted;
     Simple::Signal<void()> onMeasureFailed;

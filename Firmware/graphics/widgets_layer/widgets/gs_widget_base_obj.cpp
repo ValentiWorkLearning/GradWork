@@ -13,7 +13,7 @@ namespace Graphics::Widgets
 template< typename TBaseWidgetInterface >
 WidgetBaseObj<TBaseWidgetInterface>::WidgetBaseObj(
         const Theme::IThemeController* _themeController
-    )
+    )noexcept
     :   m_isWidgetVisible{ false }
     ,   m_pThemeController{ _themeController }
 {
@@ -21,7 +21,7 @@ WidgetBaseObj<TBaseWidgetInterface>::WidgetBaseObj(
 
 template< typename TBaseWidgetInterface >
 void
-WidgetBaseObj<TBaseWidgetInterface>::show()
+WidgetBaseObj<TBaseWidgetInterface>::show() noexcept
 {
     m_isWidgetVisible = true;
 }
@@ -29,21 +29,21 @@ WidgetBaseObj<TBaseWidgetInterface>::show()
 
 template< typename TBaseWidgetInterface >
 void
-WidgetBaseObj<TBaseWidgetInterface>::hide()
+WidgetBaseObj<TBaseWidgetInterface>::hide()noexcept
 {
     m_isWidgetVisible = false;
 }
 
 template< typename TBaseWidgetInterface >
 bool
-WidgetBaseObj<TBaseWidgetInterface>::isVisible()const
+WidgetBaseObj<TBaseWidgetInterface>::isVisible()const noexcept
 {
     return m_isWidgetVisible;
 }
 
 template< typename TBaseWidgetInterface >
 typename WidgetBaseObj<TBaseWidgetInterface>::ShowParams
-WidgetBaseObj<TBaseWidgetInterface>::getShowParams()
+WidgetBaseObj<TBaseWidgetInterface>::getShowParams()noexcept
 {
     auto pThemeProvider = getThemeController();
     if (!pThemeProvider)
@@ -60,7 +60,7 @@ WidgetBaseObj<TBaseWidgetInterface>::getShowParams()
 
 template<typename TBaseWidgetInterface>
 const Theme::IThemeController*
-WidgetBaseObj<TBaseWidgetInterface>::getThemeController() const
+WidgetBaseObj<TBaseWidgetInterface>::getThemeController() const noexcept
 {
     return m_pThemeController;
 }

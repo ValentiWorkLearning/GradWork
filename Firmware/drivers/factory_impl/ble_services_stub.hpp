@@ -13,12 +13,12 @@ class StubBatteryService
 
 public:
 
-    StubBatteryService();
+    StubBatteryService()noexcept;
     ~StubBatteryService()override = default;
 
 public:
 
-    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel ) override;
+    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )noexcept override;
 
 };
 
@@ -33,11 +33,11 @@ class StubDateTimeService
 
 public:
 
-    StubDateTimeService();
+    StubDateTimeService()noexcept;
 
 public:
 
-    void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )override;
+    void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )noexcept override;
 
 public:
 
@@ -55,16 +55,16 @@ class StubHeartrateService
 
 public:
 
-    StubHeartrateService();
+    StubHeartrateService()noexcept;
 
 public:
 
     virtual ~StubHeartrateService()override = default;
 
 public:
-    void onHeartrateChanged ( std::uint8_t _newHeartrateLevel ) override;
+    void onHeartrateChanged ( std::uint8_t _newHeartrateLevel )noexcept override;
 
-    void setSensorLocation( SensorLocation _sensorLocation ) override;
+    void setSensorLocation( SensorLocation _sensorLocation )noexcept override;
 };
 
 }

@@ -19,13 +19,13 @@ public:
     using Ptr = std::unique_ptr<IPagesCreator>;
 
     [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IClockWatchPage>
-        createClockPage(Theme::IThemeController* _pThemeController) = 0;
+        createClockPage(Theme::IThemeController* _pThemeController)noexcept = 0;
 
     [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IHealthWatchPage>
-        createHealthPage(Theme::IThemeController* _pThemeController) = 0;
+        createHealthPage(Theme::IThemeController* _pThemeController)noexcept = 0;
 
     [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IPlayerWatchPage>
-      createPlayerPage(Theme::IThemeController* _pThemeController) = 0;
+      createPlayerPage(Theme::IThemeController* _pThemeController)noexcept = 0;
 
     virtual ~IPagesCreator() = default;
 };

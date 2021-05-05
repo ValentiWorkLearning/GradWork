@@ -28,26 +28,26 @@ public:
 
 public:
 
-    [[nodiscard]] TBatteryServicePtr getBatteryService() override;
-    [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) override;
-    [[nodiscard]] THeartrateServicePtr getHeartrateService() override;
+    [[nodiscard]] TBatteryServicePtr getBatteryService()noexcept override;
+    [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue )noexcept override;
+    [[nodiscard]] THeartrateServicePtr getHeartrateService()noexcept override;
 
 };
 
 [[nodiscard]] IBleServiceFactory::TDateTimeServicePtr
-NordicServiceFactory::getDateTimeService( const std::any& _gattQueue )
+NordicServiceFactory::getDateTimeService( const std::any& _gattQueue )noexcept
 {
     return std::make_unique<Ble::DateTimeService::DateTimeServiceNordic>( _gattQueue );
 }
 
 [[nodiscard]] IBleServiceFactory::TBatteryServicePtr
-NordicServiceFactory::getBatteryService()
+NordicServiceFactory::getBatteryService()noexcept
 {
     return std::make_unique<Ble::BatteryService::BatteryLevelService>();
 }
 
 [[nodiscard]] IBleServiceFactory::THeartrateServicePtr
-NordicServiceFactory::getHeartrateService()
+NordicServiceFactory::getHeartrateService()noexcept
 {
     return std::make_unique<Ble::HeartrateService::NordicHeartrateService>();
 }
@@ -63,27 +63,27 @@ public:
 
 public:
 
-    [[nodiscard]] TBatteryServicePtr getBatteryService() override;
-    [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue ) override;
-    [[nodiscard]] THeartrateServicePtr getHeartrateService() override;
+    [[nodiscard]] TBatteryServicePtr getBatteryService()noexcept override;
+    [[nodiscard]] TDateTimeServicePtr getDateTimeService( const std::any& _gattQueue )noexcept override;
+    [[nodiscard]] THeartrateServicePtr getHeartrateService()noexcept override;
 };
 
 
 [[nodiscard]] IBleServiceFactory::TDateTimeServicePtr
-DesktopFakeBleServiceFactory::getDateTimeService( const std::any& _gattQueue )
+DesktopFakeBleServiceFactory::getDateTimeService( const std::any& _gattQueue )noexcept
 {
     Meta::UnuseVar( _gattQueue );
     return std::make_unique<Ble::DateTimeService::StubDateTimeService>();
 }
 
 [[nodiscard]] IBleServiceFactory::TBatteryServicePtr
-DesktopFakeBleServiceFactory::getBatteryService()
+DesktopFakeBleServiceFactory::getBatteryService()noexcept
 {
     return std::make_unique<Ble::BatteryService::StubBatteryService>();
 }
 
 [[nodiscard]] IBleServiceFactory::THeartrateServicePtr
-DesktopFakeBleServiceFactory::getHeartrateService()
+DesktopFakeBleServiceFactory::getHeartrateService()noexcept
 {
     return std::make_unique<Ble::HeartrateService::StubHeartrateService>();
 }
@@ -92,7 +92,7 @@ DesktopFakeBleServiceFactory::getHeartrateService()
 
 
 
-TBleFactoryPtr getBleServiceFactory()
+TBleFactoryPtr getBleServiceFactory()noexcept
 {
 #if defined (USE_BLE_SERVICES)
     return std::make_unique<NordicServiceFactory>();
