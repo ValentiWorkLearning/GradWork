@@ -15,21 +15,21 @@ template<std::uint8_t GpioPinNumber, Direction pinDirection>
 GpioPin<GpioPinNumber,pinDirection>::GpioPin()noexcept
 {
      if( m_pinDirection ==  Direction::Output )
-        Gpio::Pins::nrf_gpio_cfg_output( m_pinNumber );
+        nrf_gpio_cfg_output( m_pinNumber );
 }
 
 template<std::uint8_t GpioPinNumber, Direction pinDirection>
 void
 GpioPin<GpioPinNumber,pinDirection>::set()noexcept
 {
-    Gpio::Pins::nrf_gpio_pin_set( m_pinNumber );
+    nrf_gpio_pin_set( m_pinNumber );
 }
 
 template<std::uint8_t GpioPinNumber, Direction pinDirection>
 void
 GpioPin<GpioPinNumber,pinDirection>::reset()noexcept
 {
-    Gpio::Pins::nrf_gpio_pin_clear( m_pinNumber );
+    nrf_gpio_pin_clear( m_pinNumber );
 }
 
 #else
