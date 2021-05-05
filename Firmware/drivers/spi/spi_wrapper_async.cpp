@@ -203,7 +203,7 @@ SpiBusAsync::transmitCompleted()noexcept
         --m_transmitContext->fullDmaTransactionsCount;
 
         m_pSpiBackendImpl->sendChunk(
-            m_transmitContext->pDataToTransmit + getTransitionOffset()
+            m_transmitContext->pDataToTransmit + DmaBufferSize * getTransitionOffset()
             , Interface::Spi::SpiBusAsync::DmaBufferSize
         );
     }
@@ -235,7 +235,7 @@ SpiBusAsync::transmitCompleted()noexcept
 std::size_t
 SpiBusAsync::getTransitionOffset() noexcept
 {
-    return m_transmitContext->completedTransactionsCount++;
+    return ++m_transmitContext->completedTransactionsCount;
 }
 
 std::coroutine_handle<>
