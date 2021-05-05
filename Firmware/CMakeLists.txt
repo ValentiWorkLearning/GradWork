@@ -8,7 +8,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set(CMAKE_MODULE_PATH "${PROJECT_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH} )
     set(CPU_FLAGS -mcpu=cortex-m4 -mfloat-abi=hard -mfpu=fpv4-sp-d16)
     set(COMMON_FLAGS 
-        -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums 
+        -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums -fno-exceptions
         ${CPU_FLAGS}
     )
     set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake )
@@ -90,7 +90,7 @@ endif()
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     set_target_properties( ${NORDIC_TARGET} PROPERTIES SUFFIX ".out" )
-    option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" ON )
+    option( EXECUTE_MCU_FLASHING "Execute binary flashing to target MCU" OFF )
     option( CREATE_NORDIC_FIRMWARE "Execute firmware bin and hex files creation" ON )
 
     if( CREATE_NORDIC_FIRMWARE )
