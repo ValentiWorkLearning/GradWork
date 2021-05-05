@@ -56,6 +56,7 @@ public:
                 );
             }
         );
+        return stream;
     }
 
 protected:

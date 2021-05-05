@@ -71,18 +71,18 @@ public:
             ,   .completedTransactionsCount = 0
         };
 
-        m_transmitContext = newContext;
+        m_transmitContext = std::move(newContext);
 
         if (FullDmaTransactionsCount)
         {
-            --m_transmitContext->fullDmaTransactionsCount;
+            --m_transmitContext.fullDmaTransactionsCount;
             m_backendImpl.sendChunk(
                 _pBuffer
                 , DmaBufferSize
             );
         }
         else {
-            m_transmitContext->chunkedTransactionBufSize = 0;
+            m_transmitContext.chunkedTransactionBufSize = 0;
             m_backendImpl.sendChunk(
                 _pBuffer
                 , _pBufferSize
@@ -106,36 +106,36 @@ private:
     void transmitCompleted()noexcept
     {
         const bool isAllDmaTransactionsProceeded =
-            m_transmitContext->fullDmaTransactionsCount == 0;
+            m_transmitContext.fullDmaTransactionsCount == 0;
         const bool isAllChunckedTransactionsCompleted =
-            m_transmitContext->chunkedTransactionBufSize == 0;
+            m_transmitContext.chunkedTransactionBufSize == 0;
 
         if (!isAllDmaTransactionsProceeded)
         {
-            --m_transmitContext->fullDmaTransactionsCount;
+            --m_transmitContext.fullDmaTransactionsCount;
 
             m_backendImpl.sendChunk(
-                m_transmitContext->pDataToTransmit + getTransitionOffset()
+                m_transmitContext.pDataToTransmit + DmaBufferSize*getTransitionOffset()
                 , DmaBufferSize
             );
         }
         else if (!isAllChunckedTransactionsCompleted)
         {
-            const size_t transmissionOffset = m_transmitContext->computeChunkOffsetWithDma
+            const size_t transmissionOffset = m_transmitContext.computeChunkOffsetWithDma
                 ? DmaBufferSize
                 * getTransitionOffset() : 0;
 
             const size_t TransmitBufferSize =
-                m_transmitContext->chunkedTransactionBufSize;
-            m_transmitContext->chunkedTransactionBufSize = 0;
+                m_transmitContext.chunkedTransactionBufSize;
+            m_transmitContext.chunkedTransactionBufSize = 0;
 
             m_backendImpl.sendChunk(
-                m_transmitContext->pDataToTransmit + transmissionOffset
+                m_transmitContext.pDataToTransmit + transmissionOffset
                 , TransmitBufferSize
             );
         }
         else {
-            if (m_transmitContext->restoreInSpiCtx) {
+            if (m_transmitContext.restoreInSpiCtx) {
                 m_coroHandle.resume();
             }
             else {
@@ -147,7 +147,7 @@ private:
 private:
     std::size_t getTransitionOffset() noexcept
     {
-        return m_transmitContext->completedTransactionsCount++;
+        return ++m_transmitContext.completedTransactionsCount;
     }
 
 private:
@@ -164,7 +164,7 @@ private:
         size_t completedTransactionsCount = 0;
     };
 
-    std::optional<TransactionContext> m_transmitContext;
+    TransactionContext m_transmitContext;
     DmaBufferType DmaArrayTransmit;
     DmaBufferType DmaArrayReceive;
 };

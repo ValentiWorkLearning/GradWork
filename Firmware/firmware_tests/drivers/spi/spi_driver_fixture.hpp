@@ -7,17 +7,20 @@
 #include "spi_fake_backend.hpp"
 
 #include <vector>
-
-using TTestParameter = std::vector<std::byte>;
+#include <string>
+#include <tuple>
 
 class SpiDriverTest
 	: public ::testing::Test
-    , public ::testing::WithParamInterface<TTestParameter>
+    , public ::testing::WithParamInterface<std::tuple<std::uint16_t,std::string_view>>
 {
 
-protected:
+
+public:
 
 	using TTestDriver = Interface::SpiTemplated::SpiBus<Testing::Spi::SpiBusBackendStub>;
+
+protected:
 
 	void SetUp()override
 	{
@@ -65,7 +68,8 @@ protected:
         };
     }
 
-    std::vector<std::byte> TransactionsToDataStream()
+    using TDataStream = std::vector<std::byte>;
+    TDataStream TransactionsToDataStream()
     {
         return testSpiDriver.getBackendImpl().getTransmittedData();
     }
