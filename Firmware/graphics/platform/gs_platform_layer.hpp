@@ -46,7 +46,7 @@ private:
 
 #if defined USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
     using TSpiBus = Interface::SpiTemplated::SpiBus<
-        Interface::SpiTemplated::NordicSpi<Interface::SpiTemplated::SpiInstance::M1>
+        Interface::SpiTemplated::NordicSpi<Interface::SpiTemplated::SpiInstance::M2>
     >;
     using TDisplayDriver =
          DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
