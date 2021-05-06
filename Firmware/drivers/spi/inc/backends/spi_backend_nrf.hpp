@@ -9,6 +9,9 @@
 #include <pca10040.h>
 #include <nrfx_spim.h>
 
+#define FMT_HEADER_ONLY
+#include <fmt/core.h>
+#include <logger/logger_service.hpp>
 
 namespace Interface::SpiTemplated
 {
@@ -44,10 +47,10 @@ class NordicSpi
 public:
     using This_t = NordicSpi<PeripheralInstance>;
     NordicSpi()noexcept
-        : m_spiHandle{
-        reinterpret_cast<NRF_SPIM_Type*>(PeripheralInstance::Register),
-        PeripheralInstance::DriverInstance
-    }
+        :   m_spiHandle{
+                reinterpret_cast<NRF_SPIM_Type*>(PeripheralInstance::Register),
+                PeripheralInstance::DriverInstance
+            }
     {
         nrfx_spim_config_t spiConfig{};
 
@@ -66,7 +69,7 @@ public:
             nrfx_spim_init(
             &m_spiHandle,
             &spiConfig,
-            spimEventHandler,
+            spimEventHandlerThisOne,
             this
             )
         );
@@ -79,16 +82,16 @@ public:
     {
         nrfx_spim_xfer_desc_t xferDesc =
             NRFX_SPIM_XFER_TX(
-                _pBuffer
-                , _bufferSize
+                _pBuffer,
+                _bufferSize
             );
 
         nrfx_err_t transmissionError = nrfx_spim_xfer(
-            &m_spiHandle
-            , &xferDesc
-            , 0
+            &m_spiHandle,
+            &xferDesc,
+            0
         );
-
+        LOG_DEBUG(fmt::format("XFER error is: {0}\n",transmissionError));
         APP_ERROR_CHECK(transmissionError);
     }
 
@@ -100,11 +103,13 @@ public:
 
 private:
 
-    static void spimEventHandler(
+    static void spimEventHandlerThisOne(
         nrfx_spim_evt_t const* _pEvent
         , void* _pContext
     )noexcept
     {
+        LOG_DEBUG_ENDL("static void spimEventHandlerThisOne(");
+
         if (_pEvent->type == NRFX_SPIM_EVENT_DONE)
         {
             auto pThis = reinterpret_cast<This_t*>(_pContext);
