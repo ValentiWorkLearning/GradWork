@@ -27,6 +27,7 @@ namespace SpiInstance
 
         static constexpr std::uint32_t Register = NRF_SPIM1_BASE;
         static constexpr uint8_t DriverInstance = NRFX_SPIM1_INST_IDX;
+        static constexpr size_t HandleIdx = 0;
     };
 	struct M2
     {
@@ -37,7 +38,22 @@ namespace SpiInstance
 
         static constexpr std::uint32_t Register = NRF_SPIM2_BASE;
         static constexpr uint8_t DriverInstance = NRFX_SPIM2_INST_IDX;
+        static constexpr size_t HandleIdx = 1;
     };
+
+    constexpr size_t InstanceCount = 2;
+    static std::array<nrfx_spim_t,InstanceCount> HandleStorage{
+            nrfx_spim_t{                                                           
+                .p_reg        = NRF_SPIM1,
+                .drv_inst_idx = NRFX_SPIM1_INST_IDX
+            },
+            nrfx_spim_t{                                                           
+                .p_reg        = NRF_SPIM2,
+                .drv_inst_idx = NRFX_SPIM2_INST_IDX
+            }
+    };
+
+    static std::array<TTransactionCompletedHandler,InstanceCount> Completitions{};
 }
 
 template<typename PeripheralInstance>
@@ -47,11 +63,8 @@ class NordicSpi
 public:
     using This_t = NordicSpi<PeripheralInstance>;
     NordicSpi()noexcept
-        :   m_spiHandle{
-                reinterpret_cast<NRF_SPIM_Type*>(PeripheralInstance::Register),
-                PeripheralInstance::DriverInstance
-            }
     {
+
         nrfx_spim_config_t spiConfig{};
 
         spiConfig.sck_pin = PeripheralInstance::ClockPin;
@@ -61,13 +74,13 @@ public:
         spiConfig.ss_active_high = false;
         spiConfig.irq_priority = NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY;
         spiConfig.orc = 0xFF;
-        spiConfig.frequency = NRF_SPIM_FREQ_8M;
+        spiConfig.frequency = NRF_SPIM_FREQ_125K;
         spiConfig.mode = NRF_SPIM_MODE_0;
         spiConfig.bit_order = NRF_SPIM_BIT_ORDER_MSB_FIRST;
 
         APP_ERROR_CHECK(
             nrfx_spim_init(
-            &m_spiHandle,
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx],
             &spiConfig,
             spimEventHandlerThisOne,
             this
@@ -87,25 +100,24 @@ public:
             );
 
         nrfx_err_t transmissionError = nrfx_spim_xfer(
-            &m_spiHandle,
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx],
             &xferDesc,
             0
         );
-        LOG_DEBUG(fmt::format("XFER error is: {0}\n",transmissionError));
         APP_ERROR_CHECK(transmissionError);
     }
 
     using TTransactionCompletedHandler = std::function<void()>;
-    void setTransactionCompletedHandler(TTransactionCompletedHandler&& _handler)noexcept
+    void setTransactionCompletedHandler(const TTransactionCompletedHandler& _handler)noexcept
     {
-        m_transactionCompleted = std::move(_handler);
+        m_transactionCompleted = _handler;
     }
 
 private:
 
     static void spimEventHandlerThisOne(
-        nrfx_spim_evt_t const* _pEvent
-        , void* _pContext
+        nrfx_spim_evt_t const* _pEvent,
+        void* _pContext
     )noexcept
     {
         LOG_DEBUG_ENDL("static void spimEventHandlerThisOne(");
@@ -118,7 +130,6 @@ private:
     }
 
 public:
-    nrfx_spim_t m_spiHandle;
     TTransactionCompletedHandler m_transactionCompleted;
 };
 
