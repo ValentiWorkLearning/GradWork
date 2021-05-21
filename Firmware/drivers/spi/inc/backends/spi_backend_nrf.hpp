@@ -52,8 +52,6 @@ namespace SpiInstance
                 .drv_inst_idx = NRFX_SPIM2_INST_IDX
             }
     };
-
-    static std::array<TTransactionCompletedHandler,InstanceCount> Completitions{};
 }
 
 template<typename PeripheralInstance>
