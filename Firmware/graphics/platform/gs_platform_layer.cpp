@@ -77,7 +77,6 @@ PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )noexcept
     getHardwareDisplayDriver()->onRectArreaFilled.connect(
         [this,_displayDriver]
         {
-            LOG_DEBUG_ENDL("lv_disp_flush_ready CALLED");
             lv_disp_flush_ready( _displayDriver );
         }
     );
