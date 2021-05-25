@@ -37,6 +37,10 @@ public:
 
     TImplementation* operator ->() noexcept{ return Ptr(); }
 
+    TImplementation* get() noexcept{ return Ptr(); }
+
+    const TImplementation* get()const noexcept{ return Ptr(); }
+
     const TImplementation* operator ->() const noexcept{ return Ptr(); }
 
     TImplementation& operator *() noexcept{ return *Ptr(); }

@@ -122,9 +122,6 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
             , TBaseSpiDisplay::TColor* _colorToFill
         ) noexcept
         {
-            for( size_t i{}; i< 2400; ++i ){
-                _colorToFill[i] = 0xF800;
-            }
 
             const std::uint16_t DisplayHeight = TBaseSpiDisplay::getHeight();
             const std::uint16_t DisplayWidth = TBaseSpiDisplay::getWidth();
@@ -142,44 +139,11 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
 
                 co_await TBaseSpiDisplay::m_displayInitialized;
 
-                //co_await setAddrWindow(_x, _y, _width, _height);
-
-                std::uint16_t width = _width - _x;
-                std::uint16_t height = _height - _y;
-
-                std::uint16_t correctedX = _x;
-                std::uint16_t correctedY = _y;
-
-                uint32_t xa = ((uint32_t)correctedX << 16) | (correctedX + width); // (_x+_width-1);
-                int32_t ya = ((uint32_t)correctedY << 16) | (correctedY + height); //(_y+_height-1);
-
-                using TCommandsArray = std::array<std::uint8_t,5>;
-                static TCommandsArray xAxisCommand{};
-                xAxisCommand[0] = static_cast<std::uint8_t>( 0x2a );
-                xAxisCommand[1] = static_cast<std::uint8_t>( xa >> 24 );
-                xAxisCommand[2] = static_cast<std::uint8_t>( xa >> 16 );
-                xAxisCommand[3] = static_cast<std::uint8_t>( xa >> 8 );
-                xAxisCommand[4] = static_cast<std::uint8_t>( xa );
-
-                static TCommandsArray yAxisCommand{};
-                yAxisCommand[0] = static_cast<std::uint8_t>( 0x2b );
-                yAxisCommand[1] = static_cast<std::uint8_t>( ya >> 24 );
-                yAxisCommand[2] = static_cast<std::uint8_t>( ya >> 16 );
-                yAxisCommand[3] = static_cast<std::uint8_t>( ya >> 8 );
-                yAxisCommand[4] = static_cast<std::uint8_t>( ya );
-
-                constexpr std::uint8_t CmdSize = 1;
-                constexpr std::uint8_t ArgSize = 4;
-
-                co_await TBaseSpiDisplay::sendCommandImplFast(xAxisCommand.data());
-                co_await TBaseSpiDisplay::sendChunkFast(xAxisCommand.data()+CmdSize, ArgSize);
-
-                co_await TBaseSpiDisplay::sendCommandImplFast(yAxisCommand.data());
-                co_await TBaseSpiDisplay::sendChunkFast(yAxisCommand.data()+CmdSize, ArgSize);
+                co_await setAddrWindow(_x, _y, _width, _height);
 
                 static std::uint8_t RamWriteCmd{0x2C};
 
-                co_await TBaseSpiDisplay::sendCommandImplFast(&RamWriteCmd);  //LCD_WriteCMD(GRAMWR);
+                co_await TBaseSpiDisplay::sendCommandImplFast(&RamWriteCmd);
 
                 TBaseSpiDisplay::setDcPin();
                 co_await TBaseSpiDisplay::sendChunkFast(reinterpret_cast<const std::uint8_t*>(_colorToFill),     TransferBufferSize);
@@ -201,8 +165,6 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
             TBaseSpiDisplay::resetResetPin();
             Delay::waitFor(100);
             TBaseSpiDisplay::setResetPin();
-            //static std::array Test = std::array<std::uint8_t, CommandsSize>{0x01,0x02,0x03,0x04,0x05,0x06,0x07,0x08,0x09,0x0A};
-            //co_await TBaseSpiDisplay::sendChunk(Test.data(), Test.size());
             size_t CommandCount = InitializationCommands::CommandsTransactionsCount;
             const std::uint8_t* pBuffer = InitializationCommands::Commands.data();
             while (CommandCount--)
@@ -236,25 +198,23 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
             std::uint16_t correctedX = _x;
             std::uint16_t correctedY = _y;
 
-            uint32_t xa = ((uint32_t)correctedX << 16) | (correctedX + width);// (_x+_width-1);
+            uint32_t xa = ((uint32_t)correctedX << 16) | (correctedX + width); // (_x+_width-1);
             int32_t ya = ((uint32_t)correctedY << 16) | (correctedY + height); //(_y+_height-1);
 
-            static std::array xAxisCommand =
-                std::array{
-                        static_cast<std::uint8_t>(0x2a)
-                    ,   static_cast<std::uint8_t>(xa >> 24)
-                    ,   static_cast<std::uint8_t>(xa >> 16)
-                    ,   static_cast<std::uint8_t>(xa >> 8)
-                    ,   static_cast<std::uint8_t>(xa)
-            };
-            static std::array yAxisCommand =
-                std::array{
-                        static_cast<std::uint8_t>(0x2b)
-                    ,   static_cast<std::uint8_t>(ya >> 24)
-                    ,   static_cast<std::uint8_t>(ya >> 16)
-                    ,   static_cast<std::uint8_t>(ya >> 8)
-                    ,   static_cast<std::uint8_t>(ya)
-            };
+            using TCommandsArray = std::array<std::uint8_t,5>;
+            static TCommandsArray xAxisCommand{};
+            xAxisCommand[0] = static_cast<std::uint8_t>( 0x2a );
+            xAxisCommand[1] = static_cast<std::uint8_t>( xa >> 24 );
+            xAxisCommand[2] = static_cast<std::uint8_t>( xa >> 16 );
+            xAxisCommand[3] = static_cast<std::uint8_t>( xa >> 8 );
+            xAxisCommand[4] = static_cast<std::uint8_t>( xa );
+
+            static TCommandsArray yAxisCommand{};
+            yAxisCommand[0] = static_cast<std::uint8_t>( 0x2b );
+            yAxisCommand[1] = static_cast<std::uint8_t>( ya >> 24 );
+            yAxisCommand[2] = static_cast<std::uint8_t>( ya >> 16 );
+            yAxisCommand[3] = static_cast<std::uint8_t>( ya >> 8 );
+            yAxisCommand[4] = static_cast<std::uint8_t>( ya );
 
             co_await CoroUtils::when_all_sequence(
                 TBaseSpiDisplay::sendCommandFast(xAxisCommand.data(), xAxisCommand.size())

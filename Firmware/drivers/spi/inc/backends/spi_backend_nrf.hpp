@@ -24,9 +24,6 @@ namespace SpiInstance
         static constexpr std::uint8_t MisoPin = SPIM1_MISO_PIN;
         static constexpr std::uint8_t MosiPin = SPIM1_MOSI_PIN;
         static constexpr std::uint8_t SlaveSelectPin = SPIM1_SS_PIN;
-
-        static constexpr std::uint32_t Register = NRF_SPIM1_BASE;
-        static constexpr uint8_t DriverInstance = NRFX_SPIM1_INST_IDX;
         static constexpr size_t HandleIdx = 0;
     };
 	struct M2
@@ -36,8 +33,6 @@ namespace SpiInstance
         static constexpr std::uint8_t MosiPin = SPIM2_MOSI_PIN;
         static constexpr std::uint8_t SlaveSelectPin = SPIM2_SS_PIN;
 
-        static constexpr std::uint32_t Register = NRF_SPIM2_BASE;
-        static constexpr uint8_t DriverInstance = NRFX_SPIM2_INST_IDX;
         static constexpr size_t HandleIdx = 1;
     };
 
@@ -72,7 +67,7 @@ public:
         spiConfig.ss_active_high = false;
         spiConfig.irq_priority = NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY;
         spiConfig.orc = 0xFF;
-        spiConfig.frequency = NRF_SPIM_FREQ_125K;
+        spiConfig.frequency = NRF_SPIM_FREQ_8M;
         spiConfig.mode = NRF_SPIM_MODE_0;
         spiConfig.bit_order = NRF_SPIM_BIT_ORDER_MSB_FIRST;
 
@@ -118,8 +113,6 @@ private:
         void* _pContext
     )noexcept
     {
-        LOG_DEBUG_ENDL("static void spimEventHandlerThisOne(");
-
         if (_pEvent->type == NRFX_SPIM_EVENT_DONE)
         {
             auto pThis = reinterpret_cast<This_t*>(_pContext);

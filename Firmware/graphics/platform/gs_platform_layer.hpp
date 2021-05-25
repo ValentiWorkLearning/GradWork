@@ -20,6 +20,8 @@ namespace DisplayDriver {
     #include <backends/spi_backend_nrf.hpp>
 #endif
 
+#include <utils/FastPimpl.hpp>
+
 namespace Graphics
 {
 
@@ -57,7 +59,7 @@ private:
         #if defined USE_HARDWARE_DISPLAY_BACKEND
         return m_hardwareDisplayDriver;
         #elif USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
-        return &m_hardwareDisplayDriver;
+        return m_hardwareDisplayDriver.get();
         #else
             return nullptr;
         #endif
@@ -71,7 +73,7 @@ private:
 private:
 
 #if defined USE_HARDWARE_DISPLAY_BACKEND || USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
-    TDisplayDriver m_hardwareDisplayDriver;
+    std::unique_ptr<TDisplayDriver> m_hardwareDisplayDriver;
 #endif
 
 #if defined USE_WINSDL_BACKEND

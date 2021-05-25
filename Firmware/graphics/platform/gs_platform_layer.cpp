@@ -33,7 +33,12 @@ PlatformBackend::PlatformBackend()noexcept
 #endif
 
 #if defined (USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND)
-PlatformBackend::PlatformBackend()noexcept = default;
+PlatformBackend::PlatformBackend()noexcept
+    :   m_hardwareDisplayDriver{
+        std::make_unique<TDisplayDriver>()
+    }
+{
+};
 #endif
 
 #if defined USE_HARDWARE_DISPLAY_BACKEND || defined USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
@@ -62,6 +67,9 @@ PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )noexcept
             CoroUtils::CoroQueueMainLoop::GetInstance().processQueue();
         }
     );
+
+    if(!_displayDriver)
+        return;
 
     _displayDriver->flush_cb = hardwareDriverCallback;
     _displayDriver->wait_cb = waitCallback;
