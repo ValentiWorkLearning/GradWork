@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "lvgl.h"
+#include <lvgl.h>
 
 #ifdef USE_WINSDL_BACKEND
 #include <thread>
@@ -54,10 +54,12 @@ private:
          DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
 #endif
 
+#if defined USE_HARDWARE_DISPLAY_BACKEND || USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
     auto getHardwareDisplayDriver()noexcept
     {
         return m_hardwareDisplayDriver.get();
     }
+#endif
 private:
 
     void indevPlatformInit()noexcept;
