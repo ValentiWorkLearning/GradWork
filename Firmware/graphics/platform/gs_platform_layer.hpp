@@ -71,7 +71,7 @@ private:
 #if defined USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
     std::unique_ptr<TDisplayDriver> m_hardwareDisplayDriver;
 #elif defined  USE_HARDWARE_DISPLAY_BACKEND
-    TDisplayDriver m_hardwareDisplayDriver
+    TDisplayDriver m_hardwareDisplayDriver;
 #endif
 
 #if defined USE_WINSDL_BACKEND
