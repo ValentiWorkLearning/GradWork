@@ -1,6 +1,7 @@
 #pragma once
 
-#include "utils/SimpleSignal.hpp"
+#include <utils/SimpleSignal.hpp>
+#include <cstdint>
 
 namespace DisplayDriver
 {

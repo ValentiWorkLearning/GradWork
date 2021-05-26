@@ -6,6 +6,7 @@
 #include <memory>
 #include <functional>
 #include <list>
+#include <limits>
 //#include <vector>
 #include <algorithm>
 #include <string>

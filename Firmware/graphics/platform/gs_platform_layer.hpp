@@ -42,7 +42,7 @@ private:
 
     static constexpr std::uint32_t LvglNotificationTime = 15;
 #if defined USE_HARDWARE_DISPLAY_BACKEND
-    using TDisplayDriver = std::unique_ptr<DisplayDriver::IDisplayDriver>
+    using TDisplayDriver = std::unique_ptr<DisplayDriver::IDisplayDriver>;
 #endif
 
 
@@ -56,13 +56,7 @@ private:
 
     auto getHardwareDisplayDriver()noexcept
     {
-        #if defined USE_HARDWARE_DISPLAY_BACKEND
-        return m_hardwareDisplayDriver;
-        #elif USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
         return m_hardwareDisplayDriver.get();
-        #else
-            return nullptr;
-        #endif
     }
 private:
 
