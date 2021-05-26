@@ -100,6 +100,28 @@ public:
         APP_ERROR_CHECK(transmissionError);
     }
 
+    void receiveChunk(
+        const std::uint8_t* _pTransmitZeroArray,
+        const std::uint8_t* _pDestinationArray,
+        size_t _bufferSize
+    )
+    {
+        nrfx_spim_xfer_desc_t xferDesc =
+            NRFX_SPIM_XFER_TRX(
+                _pTransmitZeroArray,
+                _bufferSize,
+                _pDestinationArray,
+                _bufferSize
+            );
+
+        nrfx_err_t transmissionError = nrfx_spim_xfer(
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx],
+            &xferDesc,
+            0
+        );
+        APP_ERROR_CHECK(transmissionError);
+    }
+
     using TTransactionCompletedHandler = std::function<void()>;
     void setTransactionCompletedHandler(const TTransactionCompletedHandler& _handler)noexcept
     {

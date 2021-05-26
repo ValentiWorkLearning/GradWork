@@ -98,6 +98,15 @@ public:
         m_transactionCompleted = std::move(_handler);
     }
 
+    void receiveChunk(
+        const std::uint8_t* _pTransmitZeroArray,
+        const std::uint8_t* _pDestinationArray,
+        size_t _transmitSize
+    )
+    {
+
+    }
+
 private:
 
     std::atomic_bool m_newDataArrived;

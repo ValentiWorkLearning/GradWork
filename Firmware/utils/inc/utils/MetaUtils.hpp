@@ -72,4 +72,8 @@ struct HasType<ToDetect,TypeList<>>
     static const bool value = false;
 };
 
+
+template<class... Ts> struct overload : Ts... { using Ts::operator()...; };
+template<class... Ts> overload(Ts...)->overload<Ts...>;
+
 };

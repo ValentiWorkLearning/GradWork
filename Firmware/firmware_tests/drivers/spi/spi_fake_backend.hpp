@@ -22,6 +22,15 @@ public:
         m_completedTransaction();
     }
 
+    void receiveChunk(
+        const std::uint8_t* _pTransmitZeroArray,
+        const std::uint8_t* _pDestinationArray,
+        size_t _transmitSize
+    )
+    {
+
+    }
+
 public:
 
     using TTransactionCompletedHandler = std::function<void()>;

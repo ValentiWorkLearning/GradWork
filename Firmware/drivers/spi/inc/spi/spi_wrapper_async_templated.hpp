@@ -24,9 +24,6 @@ public:
 
     SpiBus()noexcept
     {
-        m_backendImpl.setTransactionCompletedHandler(
-            [this] { transmitCompleted(); }
-        );
     }
     ~SpiBus() = default;
 
@@ -45,14 +42,43 @@ public:
         return DmaArrayTransmit;
     }
 
+    constexpr DmaBufferType& getDmaBufferReceive() noexcept
+    {
+        return DmaArrayReceive;
+    }
+
+    void reseiveBuffer(
+        std::uint16_t _pBufferSize,
+        void* _pUserData,
+        bool _restoreInSpiCtx
+    )
+    {
+        m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+
+        std::fill_n(
+            DmaArrayTransmit.begin(),
+            DmaArrayTransmit.end(),
+            std::uint8_t{}
+        );
+
+        m_backendImpl.receiveChunk(
+            DmaArrayTransmit.data(),
+            DmaArrayReceive.data(),
+            _pBufferSize
+        );
+    }
+
     void transmitBuffer(
-        const std::uint8_t* _pBuffer
-        , std::uint16_t _pBufferSize
-        , void* _pUserData
-        , bool restoreInSpiCtx
+        const std::uint8_t* _pBuffer,
+        std::uint16_t _pBufferSize,
+        void* _pUserData,
+        bool _restoreInSpiCtx
     )noexcept
     {
         m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+        m_backendImpl.setTransactionCompletedHandler(
+            [this] { transmitCompleted(); }
+        );
 
         const size_t TransferBufferSize = _pBufferSize;
         const size_t FullDmaTransactionsCount =
@@ -63,7 +89,7 @@ public:
 
         TransactionContext newContext
         {
-                .restoreInSpiCtx = restoreInSpiCtx
+                .restoreInSpiCtx = _restoreInSpiCtx
             ,   .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma
             ,   .pDataToTransmit = _pBuffer
             ,   .fullDmaTransactionsCount = FullDmaTransactionsCount
@@ -77,15 +103,15 @@ public:
         {
             --m_transmitContext.fullDmaTransactionsCount;
             m_backendImpl.sendChunk(
-                _pBuffer
-                , DmaBufferSize
+                _pBuffer,
+                DmaBufferSize
             );
         }
         else {
             m_transmitContext.chunkedTransactionBufSize = 0;
             m_backendImpl.sendChunk(
-                _pBuffer
-                , _pBufferSize
+                _pBuffer,
+                _pBufferSize
             );
         }
     }
@@ -163,6 +189,7 @@ private:
         size_t chunkedTransactionBufSize = 0;
         size_t completedTransactionsCount = 0;
     };
+
 
     TransactionContext m_transmitContext;
     DmaBufferType DmaArrayTransmit;
