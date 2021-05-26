@@ -24,6 +24,18 @@
 #include "st7789_draft.hpp"
 
 
+CoroUtils::Task<int> coroutineTask() {
+    int b = 32;
+
+    co_return b;
+}
+
+void showFlashDeviceId()
+{
+    CoroUtils::Task<int> task = coroutineTask();
+    int testValue = co_await task;
+}
+
  int main()
  {
      using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
@@ -42,6 +54,9 @@
      //    ,  240
      //};
      //displayCoro.fillRectangle(0, 0, 0, 0, nullptr);
+
+     showFlashDeviceId();
+
      while(true)
      {
          using namespace std::chrono_literals;
