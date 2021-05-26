@@ -146,7 +146,10 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
                 co_await TBaseSpiDisplay::sendCommandImplFast(&RamWriteCmd);
 
                 TBaseSpiDisplay::setDcPin();
-                co_await TBaseSpiDisplay::sendChunkFast(reinterpret_cast<const std::uint8_t*>(_colorToFill),     TransferBufferSize);
+                co_await TBaseSpiDisplay::sendChunk(
+                    reinterpret_cast<const std::uint8_t*>(_colorToFill),
+                    TransferBufferSize
+                );
                 TBaseSpiDisplay::resetDcPin();
 
                 TBaseSpiDisplay::onRectArreaFilled.emitLater();
