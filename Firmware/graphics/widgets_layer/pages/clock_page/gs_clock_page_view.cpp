@@ -163,7 +163,7 @@ void ClockWatch::initClockLabels(
 	lv_obj_align(
 			m_pSecondsLabel.get()
 		,	LV_ALIGN_TOP_RIGHT
-		, -(DisplayWidth/12)
+		, -static_cast<std::int16_t>(DisplayWidth/12)
 		,	DisplayHeight / 3 + DisplayHeight / 20
 	);
 }
