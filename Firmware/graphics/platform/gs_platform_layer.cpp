@@ -6,6 +6,9 @@
 #include <utils/CallbackConnector.hpp>
 #include <utils/CoroUtils.hpp>
 
+#include <ih/drivers/ih_display_idisplay.hpp>
+#include <ih/drivers/ih_display_driver_creator.hpp>
+
 #if defined USE_HARDWARE_DISPLAY_BACKEND || defined USE_HARDWARE_TEMPLATED_DISPLAY_BACKEND
 #include <app_timer.h>
 #include <nrf_drv_clock.h>
@@ -21,8 +24,6 @@ namespace Graphics
 
 
 #if defined (USE_HARDWARE_DISPLAY_BACKEND)
-#include <ih/drivers/ih_display_idisplay.hpp>
-#include <ih/drivers/ih_display_driver_creator.hpp>
 
 PlatformBackend::PlatformBackend()noexcept
     :   m_hardwareDisplayDriver{
