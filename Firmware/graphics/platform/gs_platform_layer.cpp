@@ -63,8 +63,8 @@ PlatformBackend::platformDependentInit( lv_disp_drv_t* _displayDriver )noexcept
     auto waitCallback = cbc::obtain_connector(
         [](lv_disp_drv_t * disp_drv)
         {
-            Simple::Lib::ExecuteLaterPool::Instance().processQueue();
             CoroUtils::CoroQueueMainLoop::GetInstance().processQueue();
+            Simple::Lib::ExecuteLaterPool::Instance().processQueue();
         }
     );
 
