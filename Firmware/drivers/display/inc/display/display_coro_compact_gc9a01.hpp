@@ -6,7 +6,7 @@ namespace DisplayDriver
 {
 
 namespace InitializationCommands {
-
+// clang-format off
 constexpr std::size_t CommandsSize = 328;
 constexpr std::size_t CommandsTransactionsCount = 59;
 static auto Commands = std::array<std::uint8_t, CommandsSize>
@@ -92,6 +92,7 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
     ,   0x11,   0,      120
     ,   0x29,   0,      120
 };
+// clang-format on
 }
     template<typename TSpiBusInstance, std::uint16_t Width, std::uint16_t Height >
     class GC9A01Compact
