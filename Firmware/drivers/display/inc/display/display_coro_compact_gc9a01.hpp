@@ -2,10 +2,8 @@
 
 #include "display_spi_common_coro.hpp"
 
-namespace DisplayDriver
+namespace DisplayDriver::InitializationCommands
 {
-
-namespace InitializationCommands {
 // clang-format off
 constexpr std::size_t CommandsSize = 328;
 constexpr std::size_t CommandsTransactionsCount = 59;
@@ -93,137 +91,140 @@ static auto Commands = std::array<std::uint8_t, CommandsSize>
     ,   0x29,   0,      120
 };
 // clang-format on
-}
-    template<typename TSpiBusInstance, std::uint16_t Width, std::uint16_t Height >
-    class GC9A01Compact
-        : public BaseSpiDisplayCoroutine<GC9A01Compact<TSpiBusInstance,Width,Height>, TSpiBusInstance,Width,Height >
+} // namespace DisplayDriver::InitializationCommands
+
+namespace DisplayDriver
+{
+template <typename TSpiBusInstance, std::uint16_t Width, std::uint16_t Height>
+class GC9A01Compact
+    : public BaseSpiDisplayCoroutine<
+          GC9A01Compact<TSpiBusInstance, Width, Height>,
+          TSpiBusInstance,
+          Width,
+          Height>
+{
+    using TBaseSpiDisplay = BaseSpiDisplayCoroutine<
+        GC9A01Compact<TSpiBusInstance, Width, Height>,
+        TSpiBusInstance,
+        Width,
+        Height>;
+
+public:
+    void turnOn() noexcept
     {
-        using TBaseSpiDisplay =
-            BaseSpiDisplayCoroutine<
-                GC9A01Compact<
-                    TSpiBusInstance,
-                    Width,
-                    Height
-                >,
-                TSpiBusInstance,
-                Width,
-                Height
-           >;
-    public:
+    }
 
-        void turnOn()noexcept{}
+    void turnOff() noexcept
+    {
+    }
 
-        void turnOff()noexcept{}
+    void fillRectangle(
+        std::uint16_t _x,
+        std::uint16_t _y,
+        std::uint16_t _width,
+        std::uint16_t _height,
+        TBaseSpiDisplay::TColor* _colorToFill) noexcept
+    {
 
-        void fillRectangle(
-            std::uint16_t _x
-            , std::uint16_t _y
-            , std::uint16_t _width
-            , std::uint16_t _height
-            , TBaseSpiDisplay::TColor* _colorToFill
-        ) noexcept
+        const std::uint16_t DisplayHeight = TBaseSpiDisplay::getHeight();
+        const std::uint16_t DisplayWidth = TBaseSpiDisplay::getWidth();
+
+        const bool isCoordsValid{!((_x >= DisplayWidth) || (_y >= DisplayHeight))};
+        if (isCoordsValid)
         {
+            if (_width >= DisplayWidth)
+                _width = DisplayWidth - _x;
+            if (_height >= DisplayHeight)
+                _height = DisplayHeight - _y;
 
-            const std::uint16_t DisplayHeight = TBaseSpiDisplay::getHeight();
-            const std::uint16_t DisplayWidth = TBaseSpiDisplay::getWidth();
+            const size_t BytesSizeX = (_width - _x + 1);
+            const size_t BytesSizeY = (_height - _y + 1);
+            const size_t BytesSquare = BytesSizeX * BytesSizeY;
+            const size_t TransferBufferSize
+                = (BytesSquare * sizeof(typename TBaseSpiDisplay::TColor));
 
-            const bool isCoordsValid{ !((_x >= DisplayWidth) || (_y >= DisplayHeight)) };
-            if (isCoordsValid)
+            co_await TBaseSpiDisplay::m_displayInitialized;
+
+            co_await setAddrWindow(_x, _y, _width, _height);
+
+            static std::uint8_t RamWriteCmd{0x2C};
+
+            co_await TBaseSpiDisplay::sendCommandImplFast(&RamWriteCmd);
+
+            TBaseSpiDisplay::setDcPin();
+            co_await TBaseSpiDisplay::sendChunk(
+                reinterpret_cast<const std::uint8_t*>(_colorToFill), TransferBufferSize);
+            TBaseSpiDisplay::resetDcPin();
+
+            TBaseSpiDisplay::onRectArreaFilled.emitLater();
+        }
+    }
+
+    void initialize() noexcept
+    {
+        initDisplay();
+    }
+
+public:
+    void initDisplay() noexcept
+    {
+        TBaseSpiDisplay::resetResetPin();
+        Delay::waitFor(100);
+        TBaseSpiDisplay::setResetPin();
+        size_t CommandCount = InitializationCommands::CommandsTransactionsCount;
+        const std::uint8_t* pBuffer = InitializationCommands::Commands.data();
+        while (CommandCount--)
+        {
+            const std::uint8_t* Command = pBuffer++;
+            const std::uint8_t NumArgs = *pBuffer++;
+            const std::uint8_t Delay = *pBuffer++;
+
+            co_await TBaseSpiDisplay::sendCommandImpl(Command);
+            if (NumArgs)
             {
-                if (_width >= DisplayWidth) _width = DisplayWidth - _x;
-                if (_height >= DisplayHeight) _height = DisplayHeight - _y;
-
-                const size_t BytesSizeX = (_width - _x + 1);
-                const size_t BytesSizeY = (_height - _y + 1);
-                const size_t BytesSquare = BytesSizeX * BytesSizeY;
-                const size_t TransferBufferSize = (BytesSquare * sizeof(typename TBaseSpiDisplay::TColor));
-
-                co_await TBaseSpiDisplay::m_displayInitialized;
-
-                co_await setAddrWindow(_x, _y, _width, _height);
-
-                static std::uint8_t RamWriteCmd{0x2C};
-
-                co_await TBaseSpiDisplay::sendCommandImplFast(&RamWriteCmd);
-
-                TBaseSpiDisplay::setDcPin();
-                co_await TBaseSpiDisplay::sendChunk(
-                    reinterpret_cast<const std::uint8_t*>(_colorToFill),
-                    TransferBufferSize
-                );
-                TBaseSpiDisplay::resetDcPin();
-
-                TBaseSpiDisplay::onRectArreaFilled.emitLater();
+                co_await TBaseSpiDisplay::sendChunk(pBuffer++, NumArgs);
+                pBuffer += (NumArgs - 1);
             }
+            if (Delay)
+                Delay::waitFor(Delay);
         }
+        TBaseSpiDisplay::m_displayInitialized.set();
+    }
 
-        void initialize()noexcept
-        {
-            initDisplay();
-        }
+    CoroUtils::VoidTask setAddrWindow(
+        std::uint16_t _x,
+        std::uint16_t _y,
+        std::uint16_t _width,
+        std::uint16_t _height) noexcept
+    {
+        // TODO be careful here;
+        std::uint16_t width = _width - _x;
+        std::uint16_t height = _height - _y;
 
-    public:
+        std::uint16_t correctedX = _x;
+        std::uint16_t correctedY = _y;
 
-        void initDisplay() noexcept
-        {
-            TBaseSpiDisplay::resetResetPin();
-            Delay::waitFor(100);
-            TBaseSpiDisplay::setResetPin();
-            size_t CommandCount = InitializationCommands::CommandsTransactionsCount;
-            const std::uint8_t* pBuffer = InitializationCommands::Commands.data();
-            while (CommandCount--)
-            {
-                const std::uint8_t* Command = pBuffer++;
-                const std::uint8_t NumArgs = *pBuffer++;
-                const std::uint8_t Delay = *pBuffer++;
+        std::uint32_t xa = (static_cast<std::uint32_t>(correctedX << 16)) | (correctedX + width);
+        std::uint32_t ya = (static_cast<std::uint32_t>(correctedY << 16)) | (correctedY + height);
 
-                co_await TBaseSpiDisplay::sendCommandImpl(Command);
-                if (NumArgs) {
-                    co_await TBaseSpiDisplay::sendChunk(pBuffer++, NumArgs);
-                    pBuffer += (NumArgs - 1);
-                }
-                if (Delay)
-                    Delay::waitFor(Delay);
-            }
-            TBaseSpiDisplay::m_displayInitialized.set();
-        }
+        using TCommandsArray = std::array<std::uint8_t, 5>;
+        static TCommandsArray xAxisCommand{};
+        xAxisCommand[0] = static_cast<std::uint8_t>(0x2a);
+        xAxisCommand[1] = static_cast<std::uint8_t>(xa >> 24);
+        xAxisCommand[2] = static_cast<std::uint8_t>(xa >> 16);
+        xAxisCommand[3] = static_cast<std::uint8_t>(xa >> 8);
+        xAxisCommand[4] = static_cast<std::uint8_t>(xa);
 
-        CoroUtils::VoidTask setAddrWindow(
-            std::uint16_t _x
-            , std::uint16_t _y
-            , std::uint16_t _width
-            , std::uint16_t _height
-        ) noexcept
-        {
-            // TODO be careful here;
-            std::uint16_t width = _width - _x;
-            std::uint16_t height = _height - _y;
+        static TCommandsArray yAxisCommand{};
+        yAxisCommand[0] = static_cast<std::uint8_t>(0x2b);
+        yAxisCommand[1] = static_cast<std::uint8_t>(ya >> 24);
+        yAxisCommand[2] = static_cast<std::uint8_t>(ya >> 16);
+        yAxisCommand[3] = static_cast<std::uint8_t>(ya >> 8);
+        yAxisCommand[4] = static_cast<std::uint8_t>(ya);
 
-            std::uint16_t correctedX = _x;
-            std::uint16_t correctedY = _y;
-
-            uint32_t xa = ((uint32_t)correctedX << 16) | (correctedX + width); // (_x+_width-1);
-            int32_t ya = ((uint32_t)correctedY << 16) | (correctedY + height); //(_y+_height-1);
-
-            using TCommandsArray = std::array<std::uint8_t,5>;
-            static TCommandsArray xAxisCommand{};
-            xAxisCommand[0] = static_cast<std::uint8_t>( 0x2a );
-            xAxisCommand[1] = static_cast<std::uint8_t>( xa >> 24 );
-            xAxisCommand[2] = static_cast<std::uint8_t>( xa >> 16 );
-            xAxisCommand[3] = static_cast<std::uint8_t>( xa >> 8 );
-            xAxisCommand[4] = static_cast<std::uint8_t>( xa );
-
-            static TCommandsArray yAxisCommand{};
-            yAxisCommand[0] = static_cast<std::uint8_t>( 0x2b );
-            yAxisCommand[1] = static_cast<std::uint8_t>( ya >> 24 );
-            yAxisCommand[2] = static_cast<std::uint8_t>( ya >> 16 );
-            yAxisCommand[3] = static_cast<std::uint8_t>( ya >> 8 );
-            yAxisCommand[4] = static_cast<std::uint8_t>( ya );
-
-            co_await CoroUtils::when_all_sequence(
-                TBaseSpiDisplay::sendCommandFast(xAxisCommand.data(), xAxisCommand.size())
-                , TBaseSpiDisplay::sendCommandFast(yAxisCommand.data(), yAxisCommand.size())
-            );
-        }
-    };
+        co_await CoroUtils::when_all_sequence(
+            TBaseSpiDisplay::sendCommandFast(xAxisCommand.data(), xAxisCommand.size()),
+            TBaseSpiDisplay::sendCommandFast(yAxisCommand.data(), yAxisCommand.size()));
+    }
+};
 }; // namespace DisplayDriver

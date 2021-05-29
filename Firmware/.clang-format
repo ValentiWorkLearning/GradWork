@@ -1,0 +1,20 @@
+﻿---
+BasedOnStyle: Microsoft
+AccessModifierOffset: '-4'
+AlignAfterOpenBracket: AlwaysBreak
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AlwaysBreakAfterDefinitionReturnType: None
+BinPackArguments: 'false'
+BinPackParameters: 'false'
+BreakBeforeBinaryOperators: All
+BreakInheritanceList: BeforeComma
+ColumnLimit: '100'
+CompactNamespaces: 'true'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'true'
+ContinuationIndentWidth: '4'
+ExperimentalAutoDetectBinPacking: 'false'
+Language: Cpp
+PointerAlignment: Left
+ReflowComments: 'true'
+
+...

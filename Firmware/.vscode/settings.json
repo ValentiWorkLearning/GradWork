@@ -113,5 +113,6 @@
         "csignal": "cpp",
         "typeindex": "cpp",
         "span": "cpp"
-    }
+    },
+    "editor.formatOnSave": true
 }
