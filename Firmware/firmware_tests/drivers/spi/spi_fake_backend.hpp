@@ -80,9 +80,9 @@ public:
         return stream;
     }
 
-    void setReceivedStream(TDataStream&& _receivedStream)
+    void setReceivedStream(const TDataStream& _receivedStream)
     {
-        m_dataStreamReceived = std::move(_receivedStream);
+        m_dataStreamReceived = _receivedStream;
     }
 
 protected:

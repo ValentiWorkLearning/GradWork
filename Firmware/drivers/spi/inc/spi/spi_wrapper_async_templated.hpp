@@ -51,8 +51,7 @@ public:
         m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
         m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
-        m_backendImpl.xferChunk(_transmitArray, _receiveArray);
-        
+
         TransactionContext newContext{
             .restoreInSpiCtx = _restoreInSpiCtx,
             .computeChunkOffsetWithDma = 0,
@@ -62,6 +61,8 @@ public:
             .completedTransactionsCount = 0};
 
         m_transmitContext = std::move(newContext);
+
+        m_backendImpl.xferChunk(_transmitArray, _receiveArray);
     }
 
     void transmitBuffer(
