@@ -5,6 +5,8 @@
 
 #include "spi_driver_fixture.hpp"
 
+#include <utils/coroutine/SyncWait.hpp>
+
 constexpr inline std::uint16_t Null = 0;
 constexpr inline std::uint16_t SmallerThanSingleDmaTransaction =
     SpiDriverTest::TTestDriver::DmaBufferSize - 2;

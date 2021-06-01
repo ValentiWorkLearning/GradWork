@@ -11,6 +11,7 @@ target_include_directories(
     INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/inc
+    ${CMAKE_CURRENT_LIST_DIR}/inc/utils/coroutine
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )

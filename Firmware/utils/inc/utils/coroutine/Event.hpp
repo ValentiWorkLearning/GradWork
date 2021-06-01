@@ -41,14 +41,6 @@ struct Event
         }
     }
 
-    void wait()
-    {
-        while (!m_isSet.load(std::memory_order_acquire))
-        {
-            std::this_thread::yield();
-        }
-    }
-
     bool isSet() const noexcept
     {
         return m_isSet;

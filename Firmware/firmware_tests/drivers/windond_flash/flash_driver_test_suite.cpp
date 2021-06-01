@@ -6,6 +6,7 @@
 #include "flash_fixture.hpp"
 
 #include <utils/CoroUtils.hpp>
+#include <utils/coroutine/SyncWait.hpp>
 
 TEST_F(FlashDriverTest, RequestJedecId)
 {
