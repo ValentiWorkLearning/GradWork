@@ -1,6 +1,5 @@
 add_library(
     windbond_spi_flash_driver
-    winbond_flash.cpp
     winbond_driver_creator.cpp
     )
 
@@ -33,9 +32,14 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         PRIVATE
         USE_DEVICE_SPECIFIC
     )
+    target_sources(
+        windbond_spi_flash_driver
+        PRIVATE
+        winbond_flash.cpp
+    )
 # elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
 #     target_sources(
-#         buttons_driver
+#         windbond_spi_flash_driver
 #         PRIVATE
 #         bt_win32_hardware_buttons_manual_backend.cpp
 #     )

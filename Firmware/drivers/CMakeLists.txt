@@ -12,7 +12,4 @@ add_subdirectory(buttons)
 
 add_subdirectory(display)
 add_subdirectory(spi)
-
-if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    add_subdirectory(winbondflash)
-endif()
+add_subdirectory(winbondflash)

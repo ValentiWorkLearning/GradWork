@@ -18,9 +18,7 @@ template <typename SpiBackendImpl> class SpiBus : private Utils::noncopyable
 {
 
 public:
-    SpiBus() noexcept
-    {
-    }
+    SpiBus() noexcept = default;
     ~SpiBus() = default;
 
 public:

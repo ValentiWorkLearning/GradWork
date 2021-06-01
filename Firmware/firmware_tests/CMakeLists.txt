@@ -31,7 +31,10 @@ add_executable(
     drivers/spi/spi_driver_fixture.hpp
     drivers/spi/spi_fake_backend.hpp
     drivers/spi/spi_driver_test_suite.cpp
- )
+
+    drivers/windond_flash/flash_driver_test_suite.cpp
+    drivers/windond_flash/flash_fixture.hpp
+)
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
@@ -53,13 +56,15 @@ target_link_libraries(
     gmock
     gtest_main
 
+    UtilsLibrary
+
     watch_graphics
     watch_display
     lvgl_lib
     drivers_ih
 
     buttons_driver
-    UtilsLibrary
+    windbond_spi_flash_driver
 )
 
 target_compile_features(
