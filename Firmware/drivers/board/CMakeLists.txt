@@ -21,6 +21,7 @@ target_link_libraries(
     logger_service
     platform_delay
     drivers_ih
+    fmt
 )
 
 target_compile_features(

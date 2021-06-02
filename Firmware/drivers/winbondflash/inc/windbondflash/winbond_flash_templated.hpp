@@ -31,23 +31,37 @@ public:
     {
     }
 
-    void requestDeviceId() noexcept
+    CoroUtils::Task<std::span<std::uint8_t>> requestDeviceId() noexcept
     {
+        auto receivedData = co_await prepareXferTransaction(
+            WindbondCommandSet::ReadUniqueId,
+
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte);
+        co_return std::span(receivedData.data(), receivedData.size());
     }
 
     CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
     {
-        co_await prepareXferTransaction(
+        auto receivedData = co_await prepareXferTransaction(
             WindbondCommandSet::ReadJedecId,
             WindbondCommandSet::DummyByte,
             WindbondCommandSet::DummyByte,
             WindbondCommandSet::DummyByte);
 
         std::uint32_t JedecDeviceId{};
-        const auto& dmaReceiveBuffer = getSpiBus()->getDmaBufferReceive();
         for (std::size_t i{}; i < WindbondCommandSet::JedecIdLength; ++i)
         {
-            JedecDeviceId |= (dmaReceiveBuffer[i] << (16 - i * 8));
+            JedecDeviceId |= (receivedData[i] << (16 - i * 8));
         }
 
         co_return JedecDeviceId;
@@ -69,11 +83,11 @@ private:
         processTransmitBuffer(transmitBuffer, std::forward_as_tuple(argList...));
 
         constexpr std::size_t TransmitSize = sizeof...(argList);
-        constexpr std::size_t ReceiveSize = TransmitSize - 1;
+        constexpr std::size_t ReceiveSize = TransmitSize;
 
         return xferTransaction(
             std::span(transmitBuffer.data(), TransmitSize),
-            std::span(getSpiBus()->getDmaBufferReceive().data(), ReceiveSize));
+            std::span(receiveBuffer.data(), TransmitSize));
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
@@ -81,7 +95,7 @@ private:
         std::span<std::uint8_t> _pReceiveBuffer) noexcept
     {
         co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
-        co_return _pReceiveBuffer;
+        co_return std::span(_pReceiveBuffer.data() + 1, _pReceiveBuffer.size() - 1);
     }
 
     template <

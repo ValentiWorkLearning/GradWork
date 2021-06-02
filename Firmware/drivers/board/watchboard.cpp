@@ -23,6 +23,10 @@ APP_TIMER_DEF(m_ledDriverTimer);
 #include "delay/delay_provider.hpp"
 #include "logger/logger_service.hpp"
 
+#define FMT_HEADER_ONLY
+#include <fmt/core.h>
+#include <fmt/ranges.h>
+
 namespace
 {
 static void TimerExpiredCallback(void* _pExpiredContext) noexcept
@@ -115,6 +119,9 @@ void Board::initBoardSpiFlash() noexcept
         const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
         LOG_DEBUG("Jedec Id is:");
         LOG_DEBUG_ENDL(JedecId);
+
+        const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
+        LOG_DEBUG_ENDL(fmt::format("{}", DeviceId));
     }
 }
 
