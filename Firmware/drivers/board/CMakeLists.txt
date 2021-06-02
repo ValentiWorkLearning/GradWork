@@ -14,6 +14,8 @@ target_link_libraries(
     watchboard
     PUBLIC
     buttons_driver
+    spi
+    windbond_spi_flash_driver
     PRIVATE
     UtilsLibrary
     logger_service
@@ -33,13 +35,11 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         NordicSDK::Common
         NordicSDK::Bsp
         NordicSDK::App::Timer
-
-        windbond_spi_flash_driver
     )
 
     target_compile_definitions(
         watchboard
-        PRIVATE
+        PUBLIC
         USE_DEVICE_SPECIFIC
     )
     target_compile_options(

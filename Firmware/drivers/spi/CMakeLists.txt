@@ -25,6 +25,7 @@ target_include_directories(
     spi
     PUBLIC
     ${CMAKE_CURRENT_LIST_DIR}/inc
+    ${CMAKE_CURRENT_LIST_DIR}/inc/backends
 )
 
 target_link_libraries(
@@ -33,7 +34,6 @@ target_link_libraries(
     UtilsLibrary
     drivers_ih
     etl
-    fmt
     logger_service
 )
 target_compile_features(

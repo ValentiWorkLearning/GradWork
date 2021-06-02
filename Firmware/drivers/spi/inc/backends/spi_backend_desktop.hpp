@@ -1,21 +1,21 @@
 #pragma once
 
-#include <iostream>
 #include <array>
-#include <chrono>
-#include <thread>
-#include <cstdint>
-#include <vector>
-#include <queue>
 #include <atomic>
-#include <functional>
-#include <mutex>
+#include <chrono>
 #include <condition_variable>
+#include <cstdint>
+#include <functional>
+#include <iostream>
+#include <mutex>
+#include <queue>
+#include <thread>
+#include <vector>
+#include <span>
 
 #include <utils/MetaUtils.hpp>
 
 #define USE_THREADING_ASYNC_BACKEND
-
 
 namespace Interface::SpiTemplated
 {
@@ -25,38 +25,35 @@ class SpiBusDesktopBackend
 
 public:
     SpiBusDesktopBackend()
-        :   m_newDataArrived{ false }
-        ,   m_pDataBuffer{ nullptr }
-        ,   m_bufferTransmitSize{}
-        ,   m_processSpiTransactions{true}
+        : m_newDataArrived{false}
+        , m_pDataBuffer{nullptr}
+        , m_bufferTransmitSize{}
+        , m_processSpiTransactions{true}
     {
-#ifdef  USE_THREADING_ASYNC_BACKEND
+#ifdef USE_THREADING_ASYNC_BACKEND
 
-        m_dmaThread = std::make_unique<std::thread>(
-            [this]
+        m_dmaThread = std::make_unique<std::thread>([this] {
+            while (m_processSpiTransactions)
             {
-                while (m_processSpiTransactions)
+                if (m_newDataArrived)
                 {
-                    if(m_newDataArrived)
+                    using namespace std::chrono_literals;
+                    // std::this_thread::sleep_for(1500ms);
+
+                    std::cout << "TRANSMIT SOME DATA:" << ' ';
+
+                    for (size_t i{}; i < m_bufferTransmitSize; ++i)
                     {
-                        using namespace std::chrono_literals;
-                        //std::this_thread::sleep_for(1500ms);
-
-                        std::cout << "TRANSMIT SOME DATA:" << ' ';
-
-                        for (size_t i{}; i < m_bufferTransmitSize; ++i)
-                        {
-                            std::cout << std::hex << static_cast<std::int16_t>(m_pDataBuffer[i]) << ' ';
-                        }
-                        std::cout << std::endl;
-
-                        m_newDataArrived.store(false);
-                        m_transactionCompleted();
+                        std::cout << std::hex << static_cast<std::int16_t>(m_pDataBuffer[i]) << ' ';
                     }
+                    std::cout << std::endl;
+
+                    m_newDataArrived.store(false);
+                    m_transactionCompleted();
                 }
             }
-       );
-#endif  //  USE_THREADING_ASYNC_BACKEND
+        });
+#endif //  USE_THREADING_ASYNC_BACKEND
     }
 
     ~SpiBusDesktopBackend()
@@ -67,27 +64,22 @@ public:
     }
 
 public:
-
-    void sendChunk(
-        const std::uint8_t* _pBuffer
-        , const size_t _bufferSize
-    )noexcept
+    void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
-        m_bufferTransmitSize.store( _bufferSize );
-        m_pDataBuffer.store( _pBuffer );
-        m_newDataArrived.store( true, std::memory_order_release );
+        m_bufferTransmitSize.store(_bufferSize);
+        m_pDataBuffer.store(_pBuffer);
+        m_newDataArrived.store(true, std::memory_order_release);
 
 #ifndef USE_THREADING_ASYNC_BACKEND
         std::cout << "TRANSMIT SOME DATA:" << ' ';
 
-        for ( size_t i{}; i < m_bufferTransmitSize; ++i )
+        for (size_t i{}; i < m_bufferTransmitSize; ++i)
         {
-            std::cout << std::hex
-                      << static_cast<std::int16_t>( m_pDataBuffer[i] ) << ' ';
+            std::cout << std::hex << static_cast<std::int16_t>(m_pDataBuffer[i]) << ' ';
         }
         std::cout << std::endl;
 
-        m_newDataArrived.store( false );
+        m_newDataArrived.store(false);
         m_transactionCompleted();
 #endif
     }
@@ -98,17 +90,13 @@ public:
         m_transactionCompleted = std::move(_handler);
     }
 
-    void receiveChunk(
-        const std::uint8_t* _pTransmitZeroArray,
-        const std::uint8_t* _pDestinationArray,
-        size_t _transmitSize
-    )
+    void xferChunk(
+        std::span<const std::uint8_t> _transmitArray,
+        std::span<std::uint8_t> _receiveArray)
     {
-
     }
 
 private:
-
     std::atomic_bool m_newDataArrived;
     std::atomic_bool m_processSpiTransactions;
     std::atomic<const std::uint8_t*> m_pDataBuffer;
@@ -117,4 +105,4 @@ private:
     std::unique_ptr<std::thread> m_dmaThread;
     TTransactionCompletedHandler m_transactionCompleted;
 };
-}
+} // namespace Interface::SpiTemplated

@@ -1,61 +1,51 @@
 #pragma once
 
-#include <memory>
 #include <atomic>
+#include <memory>
 
-#include <etl/vector.h>
 #include <etl/queue.h>
+#include <etl/vector.h>
 
-#include <pca10040.h>
 #include <nrfx_spim.h>
+#include <pca10040.h>
 
-#define FMT_HEADER_ONLY
-#include <fmt/core.h>
-#include <logger/logger_service.hpp>
+#include <span>
 
 namespace Interface::SpiTemplated
 {
 
 namespace SpiInstance
 {
-	struct M1
-    {
-        static constexpr std::uint8_t ClockPin = SPIM1_SCK_PIN;
-        static constexpr std::uint8_t MisoPin = SPIM1_MISO_PIN;
-        static constexpr std::uint8_t MosiPin = SPIM1_MOSI_PIN;
-        static constexpr std::uint8_t SlaveSelectPin = SPIM1_SS_PIN;
-        static constexpr size_t HandleIdx = 0;
-    };
-	struct M2
-    {
-        static constexpr std::uint8_t ClockPin = SPIM2_SCK_PIN;
-        static constexpr std::uint8_t MisoPin = SPIM2_MISO_PIN;
-        static constexpr std::uint8_t MosiPin = SPIM2_MOSI_PIN;
-        static constexpr std::uint8_t SlaveSelectPin = SPIM2_SS_PIN;
+struct M1
+{
+    static constexpr std::uint8_t ClockPin = SPIM1_SCK_PIN;
+    static constexpr std::uint8_t MisoPin = SPIM1_MISO_PIN;
+    static constexpr std::uint8_t MosiPin = SPIM1_MOSI_PIN;
+    static constexpr std::uint8_t SlaveSelectPin = SPIM1_SS_PIN;
+    static constexpr size_t HandleIdx = 0;
+};
+struct M2
+{
+    static constexpr std::uint8_t ClockPin = SPIM2_SCK_PIN;
+    static constexpr std::uint8_t MisoPin = SPIM2_MISO_PIN;
+    static constexpr std::uint8_t MosiPin = SPIM2_MOSI_PIN;
+    static constexpr std::uint8_t SlaveSelectPin = SPIM2_SS_PIN;
 
-        static constexpr size_t HandleIdx = 1;
-    };
+    static constexpr size_t HandleIdx = 1;
+};
 
-    constexpr size_t InstanceCount = 2;
-    static std::array<nrfx_spim_t,InstanceCount> HandleStorage{
-            nrfx_spim_t{                                                           
-                .p_reg        = NRF_SPIM1,
-                .drv_inst_idx = NRFX_SPIM1_INST_IDX
-            },
-            nrfx_spim_t{                                                           
-                .p_reg        = NRF_SPIM2,
-                .drv_inst_idx = NRFX_SPIM2_INST_IDX
-            }
-    };
-}
+constexpr size_t InstanceCount = 2;
+static std::array<nrfx_spim_t, InstanceCount> HandleStorage{
+    nrfx_spim_t{.p_reg = NRF_SPIM1, .drv_inst_idx = NRFX_SPIM1_INST_IDX},
+    nrfx_spim_t{.p_reg = NRF_SPIM2, .drv_inst_idx = NRFX_SPIM2_INST_IDX}};
+} // namespace SpiInstance
 
-template<typename PeripheralInstance>
-class NordicSpi
+template <typename PeripheralInstance> class NordicSpi
 {
 
 public:
     using This_t = NordicSpi<PeripheralInstance>;
-    NordicSpi()noexcept
+    NordicSpi() noexcept
     {
 
         nrfx_spim_config_t spiConfig{};
@@ -71,69 +61,45 @@ public:
         spiConfig.mode = NRF_SPIM_MODE_0;
         spiConfig.bit_order = NRF_SPIM_BIT_ORDER_MSB_FIRST;
 
-        APP_ERROR_CHECK(
-            nrfx_spim_init(
+        APP_ERROR_CHECK(nrfx_spim_init(
             &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx],
             &spiConfig,
             spimEventHandlerThisOne,
-            this
-            )
-        );
+            this));
     }
 
-    void sendChunk(
-        const std::uint8_t* _pBuffer
-        , const size_t _bufferSize
-    )noexcept
+    void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
-        nrfx_spim_xfer_desc_t xferDesc =
-            NRFX_SPIM_XFER_TX(
-                _pBuffer,
-                _bufferSize
-            );
+        nrfx_spim_xfer_desc_t xferDesc = NRFX_SPIM_XFER_TX(_pBuffer, _bufferSize);
 
         nrfx_err_t transmissionError = nrfx_spim_xfer(
-            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx],
-            &xferDesc,
-            0
-        );
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx], &xferDesc, 0);
         APP_ERROR_CHECK(transmissionError);
     }
 
-    void receiveChunk(
-        const std::uint8_t* _pTransmitZeroArray,
-        const std::uint8_t* _pDestinationArray,
-        size_t _bufferSize
-    )
+    void xferChunk(
+        std::span<const std::uint8_t> _transmitArray,
+        std::span<std::uint8_t> _receiveArray)
     {
-        nrfx_spim_xfer_desc_t xferDesc =
-            NRFX_SPIM_XFER_TRX(
-                _pTransmitZeroArray,
-                _bufferSize,
-                _pDestinationArray,
-                _bufferSize
-            );
+        nrfx_spim_xfer_desc_t xferDesc = NRFX_SPIM_XFER_TRX(
+            _transmitArray.data(),
+            _transmitArray.size(),
+            _receiveArray.data(),
+            _receiveArray.size());
 
         nrfx_err_t transmissionError = nrfx_spim_xfer(
-            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx],
-            &xferDesc,
-            0
-        );
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx], &xferDesc, 0);
         APP_ERROR_CHECK(transmissionError);
     }
 
     using TTransactionCompletedHandler = std::function<void()>;
-    void setTransactionCompletedHandler(const TTransactionCompletedHandler& _handler)noexcept
+    void setTransactionCompletedHandler(const TTransactionCompletedHandler& _handler) noexcept
     {
         m_transactionCompleted = _handler;
     }
 
 private:
-
-    static void spimEventHandlerThisOne(
-        nrfx_spim_evt_t const* _pEvent,
-        void* _pContext
-    )noexcept
+    static void spimEventHandlerThisOne(nrfx_spim_evt_t const* _pEvent, void* _pContext) noexcept
     {
         if (_pEvent->type == NRFX_SPIM_EVENT_DONE)
         {
@@ -146,4 +112,4 @@ public:
     TTransactionCompletedHandler m_transactionCompleted;
 };
 
-}
+} // namespace Interface::SpiTemplated
