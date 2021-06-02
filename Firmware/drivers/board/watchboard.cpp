@@ -121,7 +121,7 @@ void Board::initBoardSpiFlash() noexcept
         LOG_DEBUG_ENDL(JedecId);
 
         const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
-        LOG_DEBUG_ENDL(fmt::format("{}", DeviceId));
+        LOG_DEBUG_ENDL(fmt::format("{:02X}", fmt::join(DeviceId, "")));
     }
 }
 

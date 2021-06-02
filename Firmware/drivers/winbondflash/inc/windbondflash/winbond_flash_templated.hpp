@@ -5,6 +5,9 @@
 #include <span>
 #include <utils/CoroUtils.hpp>
 
+#include <tuple>
+#include <utility>
+
 namespace ExternalFlash
 {
 
@@ -34,12 +37,12 @@ public:
     CoroUtils::Task<std::span<std::uint8_t>> requestDeviceId() noexcept
     {
         auto receivedData = co_await prepareXferTransaction(
-            WindbondCommandSet::ReadUniqueId,
-
-            WindbondCommandSet::DummyByte,
-            WindbondCommandSet::DummyByte,
-            WindbondCommandSet::DummyByte,
-            WindbondCommandSet::DummyByte,
+            std::forward_as_tuple(
+                WindbondCommandSet::ReadUniqueId,
+                WindbondCommandSet::DummyByte,
+                WindbondCommandSet::DummyByte,
+                WindbondCommandSet::DummyByte,
+                WindbondCommandSet::DummyByte),
 
             WindbondCommandSet::DummyByte,
             WindbondCommandSet::DummyByte,
@@ -53,7 +56,7 @@ public:
     CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
     {
         auto receivedData = co_await prepareXferTransaction(
-            WindbondCommandSet::ReadJedecId,
+            std::forward_as_tuple(WindbondCommandSet::ReadJedecId),
             WindbondCommandSet::DummyByte,
             WindbondCommandSet::DummyByte,
             WindbondCommandSet::DummyByte);
@@ -76,26 +79,33 @@ public:
     }
 
 private:
-    template <typename... Args> auto prepareXferTransaction(Args&&... argList)
+    template <typename TCommand, typename... Args>
+    auto prepareXferTransaction(TCommand&& _command, Args&&... _argList)
     {
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
-        processTransmitBuffer(transmitBuffer, std::forward_as_tuple(argList...));
+        processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
+        processTransmitBuffer(
+            std::span(transmitBuffer.data() + std::tuple_size_v<TCommand>, transmitBuffer.size()),
+            std::forward_as_tuple(_argList...));
 
-        constexpr std::size_t TransmitSize = sizeof...(argList);
+        constexpr std::size_t TransmitSize = std::tuple_size_v<TCommand> + sizeof...(_argList);
         constexpr std::size_t ReceiveSize = TransmitSize;
-
+        constexpr std::size_t Skip = std::tuple_size_v<TCommand>;
         return xferTransaction(
             std::span(transmitBuffer.data(), TransmitSize),
-            std::span(receiveBuffer.data(), TransmitSize));
+            std::span(receiveBuffer.data(), TransmitSize),
+            Skip);
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
         std::span<const std::uint8_t> _pTransmitCommand,
-        std::span<std::uint8_t> _pReceiveBuffer) noexcept
+        std::span<std::uint8_t> _pReceiveBuffer,
+        std::size_t _skipBytes) noexcept
     {
         co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
-        co_return std::span(_pReceiveBuffer.data() + 1, _pReceiveBuffer.size() - 1);
+        co_return std::span(
+            _pReceiveBuffer.data() + _skipBytes, _pReceiveBuffer.size() - _skipBytes);
     }
 
     template <
