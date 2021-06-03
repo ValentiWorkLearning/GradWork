@@ -6,9 +6,9 @@
 
 namespace ServiceProviders::HeartrateService::Settings
 {
-    using namespace std::chrono_literals;
-    constexpr std::chrono::seconds MeasurmentPeriod = 12s;
-}
+using namespace std::chrono_literals;
+constexpr std::chrono::seconds MeasurmentPeriod = 12s;
+} // namespace ServiceProviders::HeartrateService::Settings
 
 namespace ServiceProviders::HeartrateService
 {
@@ -17,10 +17,9 @@ class IHeartrateService
 {
 
 public:
-
     virtual ~IHeartrateService() = default;
 
-    virtual void startMeasure()noexcept = 0;
+    virtual void startMeasure() noexcept = 0;
 
     Simple::Signal<void()> onMeasureStarted;
     Simple::Signal<void()> onMeasureFailed;
@@ -28,4 +27,4 @@ public:
     Simple::Signal<void(std::uint8_t)> onHeartrateDataReady;
 };
 
-} // namespace ServiceProviders::BatteryService
+} // namespace ServiceProviders::HeartrateService

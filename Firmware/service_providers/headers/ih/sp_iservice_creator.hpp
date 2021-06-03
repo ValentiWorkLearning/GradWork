@@ -4,17 +4,17 @@
 
 namespace ServiceProviders::BatteryService
 {
-    class IBatteryLevelAppService;
+class IBatteryLevelAppService;
 }
 
 namespace ServiceProviders::HeartrateService
 {
-    class IHeartrateService;
+class IHeartrateService;
 }
 
 namespace ServiceProviders::DateTimeService
 {
-    class IDateTimeService;
+class IDateTimeService;
 }
 
 namespace ServiceProviders
@@ -24,17 +24,16 @@ class IServiceCreator
 {
 
 public:
-
     [[nodiscard]] virtual std::unique_ptr<BatteryService::IBatteryLevelAppService>
-    getBatteryService()noexcept = 0;
+    getBatteryService() noexcept = 0;
 
     [[nodiscard]] virtual std::unique_ptr<HeartrateService::IHeartrateService>
-    getHeartrateService()noexcept = 0;
+    getHeartrateService() noexcept = 0;
 
     [[nodiscard]] virtual std::unique_ptr<DateTimeService::IDateTimeService>
-    getDateTimeService()noexcept = 0;
+    getDateTimeService() noexcept = 0;
 
     virtual ~IServiceCreator() = default;
 };
 
-}
+} // namespace ServiceProviders

@@ -2,31 +2,24 @@
 
 #include <gmock/gmock.h>
 
-#include"base_mocked_page.hpp"
+#include "base_mocked_page.hpp"
 
 #include "ih/pages/gs_iplayer_page_view.hpp"
 
-class FakePlayerPage
-	: public FakeBasePage<Graphics::Views::IPlayerWatchPage>
+class FakePlayerPage : public FakeBasePage<Graphics::Views::IPlayerWatchPage>
 {
 
 public:
-
-	FakePlayerPage(std::string_view _pageName)noexcept
-		: FakeBasePage{ _pageName }
-	{
-	}
+    FakePlayerPage(std::string_view _pageName) noexcept : FakeBasePage{_pageName}
+    {
+    }
 
 public:
+    void setPause() noexcept override
+    {
+    }
 
-	void setPause()noexcept override
-	{
-	}
-
-	void setPlaying()noexcept override
-	{
-	}
+    void setPlaying() noexcept override
+    {
+    }
 };
-
-
-

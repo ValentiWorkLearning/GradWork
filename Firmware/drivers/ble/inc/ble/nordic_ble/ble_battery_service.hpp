@@ -9,25 +9,20 @@
 
 namespace Ble::BatteryService
 {
-    inline constexpr std::uint8_t InitialBatteryLevel = 100;
+inline constexpr std::uint8_t InitialBatteryLevel = 100;
 
-class BatteryLevelService
-    :   public IBatteryLevelService
+class BatteryLevelService : public IBatteryLevelService
 {
 
 public:
-
-    BatteryLevelService()noexcept;
-    ~BatteryLevelService()override = default;
+    BatteryLevelService() noexcept;
+    ~BatteryLevelService() override = default;
 
 public:
-
-    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )noexcept override;
+    void onBatteryLevelChanged(std::uint8_t _newBatteryLevel) noexcept override;
 
 private:
-
-    void initService()noexcept;
+    void initService() noexcept;
 };
 
-
-}
+} // namespace Ble::BatteryService

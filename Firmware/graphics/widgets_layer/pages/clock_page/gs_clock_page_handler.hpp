@@ -9,39 +9,32 @@
 
 #include <memory>
 
-
 namespace Graphics::Views
 {
 
 class IClockWatchPage;
 
 class ClockPageHandler
-    :   public Events::EventHandler<
-                Graphics::IEventHandler
-            ,   Events::TDateTimeEvents
-        >
+    : public Events::EventHandler<Graphics::IEventHandler, Events::TDateTimeEvents>
 {
 
 public:
-
-    explicit ClockPageHandler( IClockWatchPage* _clockPageView )noexcept;
+    explicit ClockPageHandler(IClockWatchPage* _clockPageView) noexcept;
 
     ~ClockPageHandler() override = default;
 
 protected:
-
-    void handleEventImpl( const Events::TDateTimeEvents& _event, const std::any& _eventData )noexcept override;
-
-private:
-
-    bool shouldApplyNewDate( const TimeWrapper& _toCheck )noexcept;
-
-    static std::string formatToFullDate( const TimeWrapper& _toFormat )noexcept;
-
-    static std::string formatDoubleDigitsNumber( std::uint8_t _toFormat )noexcept;
+    void handleEventImpl(const Events::TDateTimeEvents& _event, const std::any& _eventData) noexcept
+        override;
 
 private:
+    bool shouldApplyNewDate(const TimeWrapper& _toCheck) noexcept;
 
+    static std::string formatToFullDate(const TimeWrapper& _toFormat) noexcept;
+
+    static std::string formatDoubleDigitsNumber(std::uint8_t _toFormat) noexcept;
+
+private:
     bool m_forceUpdateAfterVisibilityChange;
     IClockWatchPage* m_pClockWatchView;
 
@@ -49,7 +42,6 @@ private:
     std::string m_fullDateString;
 };
 
-Graphics::TEventHandlerPtr
-createPageWatchHandler( IClockWatchPage* _clockPage)noexcept;
+Graphics::TEventHandlerPtr createPageWatchHandler(IClockWatchPage* _clockPage) noexcept;
 
-};
+}; // namespace Graphics::Views

@@ -7,49 +7,50 @@
 
 namespace
 {
-    Graphics::Widgets::IBatteryWidget::BatteryStatus toBatteryStatus( std::uint8_t _batteryValue )noexcept
-    {
-        if( _batteryValue <= 25 )
-            return Graphics::Widgets::IBatteryWidget::BatteryStatus::QuaterCharge;
-        else if( _batteryValue >25 && _batteryValue <= 50 )
-            return Graphics::Widgets::IBatteryWidget::BatteryStatus::HalfCharged;
-        else if( _batteryValue > 50 && _batteryValue <= 75 )
-            return Graphics::Widgets::IBatteryWidget::BatteryStatus::Charge75Percents;
-        else if( _batteryValue > 75 && _batteryValue <= 90 )
-            return Graphics::Widgets::IBatteryWidget::BatteryStatus::Charged90Percents;
-        else
-            return Graphics::Widgets::IBatteryWidget::BatteryStatus::FullCharged;
-    }
+Graphics::Widgets::IBatteryWidget::BatteryStatus toBatteryStatus(
+    std::uint8_t _batteryValue) noexcept
+{
+    if (_batteryValue <= 25)
+        return Graphics::Widgets::IBatteryWidget::BatteryStatus::QuaterCharge;
+    else if (_batteryValue > 25 && _batteryValue <= 50)
+        return Graphics::Widgets::IBatteryWidget::BatteryStatus::HalfCharged;
+    else if (_batteryValue > 50 && _batteryValue <= 75)
+        return Graphics::Widgets::IBatteryWidget::BatteryStatus::Charge75Percents;
+    else if (_batteryValue > 75 && _batteryValue <= 90)
+        return Graphics::Widgets::IBatteryWidget::BatteryStatus::Charged90Percents;
+    else
+        return Graphics::Widgets::IBatteryWidget::BatteryStatus::FullCharged;
 }
+} // namespace
 
 namespace Graphics::Widgets
 {
 
-BatteryWidgetHandler::BatteryWidgetHandler( IBatteryWidget* _bateryWidget )noexcept
-    :   m_pBatteryWidget{ _bateryWidget }
+BatteryWidgetHandler::BatteryWidgetHandler(IBatteryWidget* _bateryWidget) noexcept
+    : m_pBatteryWidget{_bateryWidget}
 {
-
 }
 
-void
-BatteryWidgetHandler::handleEventImpl( const Events::TBatteryEvents& _event, const std::any& _eventData )noexcept
+void BatteryWidgetHandler::handleEventImpl(
+    const Events::TBatteryEvents& _event,
+    const std::any& _eventData) noexcept
 {
-    if( _event != Events::TBatteryEvents::BatteryLevelChanged )
+    if (_event != Events::TBatteryEvents::BatteryLevelChanged)
         return;
 
-    std::uint8_t batteryValue = std::any_cast<std::uint8_t>( _eventData );
+    std::uint8_t batteryValue = std::any_cast<std::uint8_t>(_eventData);
 
-    if( auto pBatteryWidget = m_pBatteryWidget; pBatteryWidget && pBatteryWidget->isVisible() )
+    if (auto pBatteryWidget = m_pBatteryWidget; pBatteryWidget && pBatteryWidget->isVisible())
     {
-        pBatteryWidget->setBatteryLevelPercentage( batteryValue );
-        pBatteryWidget->setBatteryStatus( toBatteryStatus( batteryValue ) );
+        pBatteryWidget->setBatteryLevelPercentage(batteryValue);
+        pBatteryWidget->setBatteryStatus(toBatteryStatus(batteryValue));
     }
 }
 
-std::unique_ptr<Graphics::IEventHandler>
-createBatteryWidgetHandler( IBatteryWidget* _batteryWidget)noexcept
+std::unique_ptr<Graphics::IEventHandler> createBatteryWidgetHandler(
+    IBatteryWidget* _batteryWidget) noexcept
 {
-    return std::make_unique<BatteryWidgetHandler>( _batteryWidget );
+    return std::make_unique<BatteryWidgetHandler>(_batteryWidget);
 }
 
-}
+} // namespace Graphics::Widgets

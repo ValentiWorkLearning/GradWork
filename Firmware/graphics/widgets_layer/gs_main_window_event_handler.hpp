@@ -8,7 +8,7 @@
 
 namespace Graphics::MainWindow
 {
-    class IGsMainWindowModel;
+class IGsMainWindowModel;
 }
 
 namespace Graphics::MainWindow
@@ -17,34 +17,27 @@ namespace Graphics::MainWindow
 class IBatteryWidget;
 
 class MainWindowHandler
-    :   public Events::EventHandler<
-                Graphics::IEventHandler
-            ,   Events::TButtonsEvents
-        >
+    : public Events::EventHandler<Graphics::IEventHandler, Events::TButtonsEvents>
 {
 
 public:
-
-    explicit MainWindowHandler( IGsMainWindowModel* _pMainWindowModel )noexcept;
+    explicit MainWindowHandler(IGsMainWindowModel* _pMainWindowModel) noexcept;
 
     ~MainWindowHandler() override = default;
 
 protected:
-
-    void handleEventImpl( const Events::TButtonsEvents& _event, const std::any& _eventData )noexcept override;
-
-private:
-
-    void navigateToNextPage()noexcept;
-
-    void navigateToPreviousPage()noexcept;
+    void handleEventImpl(const Events::TButtonsEvents& _event, const std::any& _eventData) noexcept
+        override;
 
 private:
+    void navigateToNextPage() noexcept;
 
+    void navigateToPreviousPage() noexcept;
+
+private:
     IGsMainWindowModel* m_pMainWindowModel;
 };
 
-std::unique_ptr<Graphics::IEventHandler>
-createMainWindowEventHandler(IGsMainWindowModel* )noexcept;
+std::unique_ptr<Graphics::IEventHandler> createMainWindowEventHandler(IGsMainWindowModel*) noexcept;
 
-};
+}; // namespace Graphics::MainWindow

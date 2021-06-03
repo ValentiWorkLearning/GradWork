@@ -1,4 +1,4 @@
-//#pragma once 
+//#pragma once
 //#include <iostream>
 //#include <array>
 //#include <chrono>
@@ -10,57 +10,57 @@
 //#include <functional>
 //#include <coroutine>
 //
-//constexpr std::uint8_t NOP = 0x00;
-//constexpr std::uint8_t SWRESET = 0x01;
-//constexpr std::uint8_t SLPIN = 0x10;
-//constexpr std::uint8_t SLPOUT = 0x11;
-//constexpr std::uint8_t NORON = 0x13;
+// constexpr std::uint8_t NOP = 0x00;
+// constexpr std::uint8_t SWRESET = 0x01;
+// constexpr std::uint8_t SLPIN = 0x10;
+// constexpr std::uint8_t SLPOUT = 0x11;
+// constexpr std::uint8_t NORON = 0x13;
 //
-//constexpr std::uint8_t INVOFF = 0x20;
-//constexpr std::uint8_t INVON = 0x21;
-//constexpr std::uint8_t DISPOFF = 0x28;
-//constexpr std::uint8_t DISPON = 0x29;
-//constexpr std::uint8_t CASET = 0x2A;
-//constexpr std::uint8_t RASET = 0x2B;
-//constexpr std::uint8_t RAMWR = 0x2C;
-//constexpr std::uint8_t RAMRD = 0x2E;
+// constexpr std::uint8_t INVOFF = 0x20;
+// constexpr std::uint8_t INVON = 0x21;
+// constexpr std::uint8_t DISPOFF = 0x28;
+// constexpr std::uint8_t DISPON = 0x29;
+// constexpr std::uint8_t CASET = 0x2A;
+// constexpr std::uint8_t RASET = 0x2B;
+// constexpr std::uint8_t RAMWR = 0x2C;
+// constexpr std::uint8_t RAMRD = 0x2E;
 //
-//constexpr std::uint8_t MADCTL = 0x36;
-//constexpr std::uint8_t COLMOD = 0x3A;
+// constexpr std::uint8_t MADCTL = 0x36;
+// constexpr std::uint8_t COLMOD = 0x3A;
 //
-//template< std::uint8_t ... Command>
-//struct CommandDescriptor {};
+// template< std::uint8_t ... Command>
+// struct CommandDescriptor {};
 //
-//template<std::uint8_t Command, std::uint8_t CommandDelay, std::uint8_t ... CommandArgs>
-//struct CommandDescriptor< Command, CommandDelay, CommandArgs...>
+// template<std::uint8_t Command, std::uint8_t CommandDelay, std::uint8_t ... CommandArgs>
+// struct CommandDescriptor< Command, CommandDelay, CommandArgs...>
 //{
 //    std::uint8_t commandDelay = CommandDelay;
 //    std::array<std::uint8_t, sizeof...(CommandArgs) + 1> command{ Command,CommandArgs... };
 //};
 //
-//template<std::uint8_t Command, std::uint8_t CommandDelay>
-//struct CommandDescriptor<Command, CommandDelay>
+// template<std::uint8_t Command, std::uint8_t CommandDelay>
+// struct CommandDescriptor<Command, CommandDelay>
 //{
 //    std::uint8_t commandDelay = CommandDelay;
 //    std::array<std::uint8_t, 1> command{ Command };
 //};
 //
-//template<std::uint8_t Command>
-//struct CommandDescriptor<Command>
+// template<std::uint8_t Command>
+// struct CommandDescriptor<Command>
 //{
 //    std::uint8_t commandDelay = 0;
 //    std::array<std::uint8_t, 1> command{ Command };
 //};
 //
-//constexpr std::uint8_t bitwiseResolutionConstant()
+// constexpr std::uint8_t bitwiseResolutionConstant()
 //{
 //    return  320 >> 8;
 //}
 //
-//inline constexpr std::uint8_t DefaultDelay = 0;
+// inline constexpr std::uint8_t DefaultDelay = 0;
 //
 //
-//static const auto Commands = std::array<std::uint8_t, 320>
+// static const auto Commands = std::array<std::uint8_t, 320>
 //{
 //    /***Cmd****Argc****delay****argv*****************************/
 //    0xFE, 0, 0
@@ -145,7 +145,7 @@
 //};
 //
 //
-//static constexpr std::tuple CommandsArray = {
+// static constexpr std::tuple CommandsArray = {
 //        CommandDescriptor<0xFE>{}
 //    ,   CommandDescriptor<0xEF>{}
 //    ,   CommandDescriptor<0xEB,DefaultDelay, 0x14>{}
@@ -210,8 +210,10 @@
 //    ,   CommandDescriptor<0xf2,DefaultDelay,0x45,0x09,0x08,0x08,0x26,0x2a>{}
 //    ,   CommandDescriptor<0xf3,DefaultDelay,0x43,0x70,0x72,0x36,0x37,0x6f>{}
 //
-//    ,   CommandDescriptor<0x62,DefaultDelay,0x18,0x0d,0x71,0xED,0x70,0x70,0x18,0x0F,0x71,0xEF,0x70,0x70>{}
-//    ,   CommandDescriptor<0x63,DefaultDelay,0x18,0x11,0x71,0xf1,0x70,0x70,0x18,0x13,0x71,0xf3,0x70,0x70>{}
+//    ,
+//    CommandDescriptor<0x62,DefaultDelay,0x18,0x0d,0x71,0xED,0x70,0x70,0x18,0x0F,0x71,0xEF,0x70,0x70>{}
+//    ,
+//    CommandDescriptor<0x63,DefaultDelay,0x18,0x11,0x71,0xf1,0x70,0x70,0x18,0x13,0x71,0xf3,0x70,0x70>{}
 //    ,   CommandDescriptor<0x64,DefaultDelay,0x28,0x29,0xF1,0x01,0xf1,0x00,0x07>{}
 //    ,   CommandDescriptor<0x66,DefaultDelay,0x3c,0x00,0xCD,0x67,0x45,0x45,0x10,0x00,0x00,0x00>{}
 //    ,   CommandDescriptor<0x67,DefaultDelay,0x00,0x3c,0x00,0x00,0x00,0x01,0x54,0x10,0x32,0x98>{}
@@ -228,11 +230,11 @@
 //
 //
 //
-//class ST7789Coroutine
+// class ST7789Coroutine
 //    : public DisplayDriver::BaseSpiDisplayCoroutine
 //{
 //    using BaseDisplay_t = DisplayDriver::BaseSpiDisplayCoroutine;
-//public:
+// public:
 //
 //    explicit ST7789Coroutine(
 //        std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
@@ -258,7 +260,8 @@
 //        BaseDisplay_t::setResetPin();
 //
 //        co_await launchInit(
-//            std::make_integer_sequence<std::size_t, std::tuple_size<decltype(CommandsArray)>::value> {}
+//            std::make_integer_sequence<std::size_t,
+//            std::tuple_size<decltype(CommandsArray)>::value> {}
 //        );
 //
 //        LOG_DEBUG_ENDL("Display initialized");
@@ -284,7 +287,7 @@
 //    {
 //        co_await fillRectImpl();
 //    }
-//private:
+// private:
 //
 //    template<std::size_t... Indexes>
 //    CoroUtils::VoidTask launchInit(std::integer_sequence<std::size_t, Indexes...>)
@@ -303,7 +306,7 @@
 //        co_await m_displayInitialized;
 //        printf("CoroUtils::VoidTask fillRectImpl()\n!");
 //    }
-//private:
+// private:
 //
 //    void initColumnRow(
 //        std::uint16_t _width

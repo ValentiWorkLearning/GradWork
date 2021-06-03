@@ -10,14 +10,15 @@
 #include <tuple>
 #include <vector>
 
-//TODO Fix include more clearly
+// TODO Fix include more clearly
 #include "../spi/spi_fake_backend.hpp"
 
 class FlashDriverTest : public ::testing::Test
 {
 
 public:
-    using TFlashTestDriver = ExternalFlash::WinbondFlashDriver<Interface::SpiTemplated::SpiBus<Testing::Spi::SpiBusBackendStub>>;
+    using TFlashTestDriver = ExternalFlash::WinbondFlashDriver<
+        Interface::SpiTemplated::SpiBus<Testing::Spi::SpiBusBackendStub>>;
 
 protected:
     void SetUp() override
@@ -25,6 +26,5 @@ protected:
     }
 
 protected:
-
     TFlashTestDriver flashDriver;
 };

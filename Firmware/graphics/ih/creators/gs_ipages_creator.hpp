@@ -6,10 +6,10 @@
 
 namespace Graphics::Views
 {
-    class IClockWatchPage;
-    class IHealthWatchPage;
-    class IPlayerWatchPage;
-}
+class IClockWatchPage;
+class IHealthWatchPage;
+class IPlayerWatchPage;
+} // namespace Graphics::Views
 
 namespace Graphics::Views
 {
@@ -18,16 +18,16 @@ class IPagesCreator
 public:
     using Ptr = std::unique_ptr<IPagesCreator>;
 
-    [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IClockWatchPage>
-        createClockPage(Theme::IThemeController* _pThemeController)noexcept = 0;
+    [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IClockWatchPage> createClockPage(
+        Theme::IThemeController* _pThemeController) noexcept = 0;
 
-    [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IHealthWatchPage>
-        createHealthPage(Theme::IThemeController* _pThemeController)noexcept = 0;
+    [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IHealthWatchPage> createHealthPage(
+        Theme::IThemeController* _pThemeController) noexcept = 0;
 
-    [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IPlayerWatchPage>
-      createPlayerPage(Theme::IThemeController* _pThemeController)noexcept = 0;
+    [[nodiscard]] virtual std::unique_ptr<Graphics::Views::IPlayerWatchPage> createPlayerPage(
+        Theme::IThemeController* _pThemeController) noexcept = 0;
 
     virtual ~IPagesCreator() = default;
 };
 
-}
+} // namespace Graphics::Views

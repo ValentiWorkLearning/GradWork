@@ -42,10 +42,9 @@ TEST_P(SpiDriverTest, CheckRandomSequenceWithLengthTransmissionCorrect)
     std::random_device randomDevice;
     std::mt19937 generator(randomDevice());
     std::uniform_int_distribution<> distribution(0x00, 0xFF);
-    std::ranges::generate(
-        ExpectedStream, [&distribution, generator]() mutable {
-            return std::byte(distribution(generator));
-        });
+    std::ranges::generate(ExpectedStream, [&distribution, generator]() mutable {
+        return std::byte(distribution(generator));
+    });
 
     co_await sendChunk(
         reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size());
@@ -73,24 +72,16 @@ TEST_F(SpiDriverTest, CheckXferTransaction)
 
     testSpiDriver.getBackendImpl().setReceivedStream(ExpectedStream);
 
-    auto receivedStreamSpan =
-    CoroUtils::syncWait(
-            xferTransaction(
-                std::span(
-                    reinterpret_cast<const std::uint8_t*>(transmitBuffer.data()),
-                    ReceivedDataLength + 1),
-                std::span(testSpiDriver.getDmaBufferReceive().data(), ReceivedDataLength))
-    );
-
+    auto receivedStreamSpan = CoroUtils::syncWait(xferTransaction(
+        std::span(
+            reinterpret_cast<const std::uint8_t*>(transmitBuffer.data()), ReceivedDataLength + 1),
+        std::span(testSpiDriver.getDmaBufferReceive().data(), ReceivedDataLength)));
 
     TDataStream receivedStream;
     std::ranges::transform(
-        receivedStreamSpan,
-        std::back_inserter(receivedStream),
-        [](auto receivedItem) {
+        receivedStreamSpan, std::back_inserter(receivedStream), [](auto receivedItem) {
             return static_cast<std::byte>(receivedItem);
-        }
-    );
+        });
 
     EXPECT_EQ(ExpectedStream, receivedStream);
 }

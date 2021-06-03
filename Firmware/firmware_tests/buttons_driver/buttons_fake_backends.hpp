@@ -12,7 +12,6 @@ public:
     Simple::Signal<void()> onTimerExpired;
 
 public:
-
     bool isTimerEllapsed() const
     {
         return m_isTimerEllapsed;
@@ -29,7 +28,6 @@ public:
     }
 
 public:
-
     void ellapseTimer()
     {
         m_isTimerEllapsed = true;
@@ -37,7 +35,6 @@ public:
     }
 
 private:
-
     bool m_isTimerEllapsed = false;
 };
 
@@ -48,15 +45,14 @@ public:
     Simple::Signal<void(ButtonId, ButtonBackendEvent)> onButtonEvent;
 
 public:
-
-    void fakeButtonPress( ButtonId _buttonId )
+    void fakeButtonPress(ButtonId _buttonId)
     {
-        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kPressed );
+        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kPressed);
     }
-    void fakeButtonRelease( ButtonId _buttonId )
+    void fakeButtonRelease(ButtonId _buttonId)
     {
-        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kReleased );
+        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kReleased);
     }
 };
 
-}
+} // namespace Buttons

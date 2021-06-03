@@ -8,23 +8,23 @@ namespace Graphics::StubWidgets
 {
 StubWidgetsCreator::~StubWidgetsCreator() = default;
 
-std::unique_ptr<Graphics::Widgets::IBluetoothWidget>
-StubWidgetsCreator::createBluetoothWidget(Graphics::Theme::IThemeController * _pThemeController)noexcept
+std::unique_ptr<Graphics::Widgets::IBluetoothWidget> StubWidgetsCreator::createBluetoothWidget(
+    Graphics::Theme::IThemeController* _pThemeController) noexcept
 {
-	return std::make_unique<BluetoothWidgetStub>();
+    return std::make_unique<BluetoothWidgetStub>();
 }
-std::unique_ptr<Graphics::Widgets::IPagesSwitch>
-StubWidgetsCreator::createPagesSwitchWidget(Graphics::Theme::IThemeController* _pThemeController)noexcept
+std::unique_ptr<Graphics::Widgets::IPagesSwitch> StubWidgetsCreator::createPagesSwitchWidget(
+    Graphics::Theme::IThemeController* _pThemeController) noexcept
 {
-	return std::make_unique<PagesSwitchWidgetStub>();
+    return std::make_unique<PagesSwitchWidgetStub>();
 }
-std::unique_ptr<Graphics::Widgets::IBatteryWidget>
-StubWidgetsCreator::createBatteryWidget(Graphics::Theme::IThemeController* _pThemeController)noexcept
+std::unique_ptr<Graphics::Widgets::IBatteryWidget> StubWidgetsCreator::createBatteryWidget(
+    Graphics::Theme::IThemeController* _pThemeController) noexcept
 {
-	return std::make_unique<BatteryWidgetStub>();
+    return std::make_unique<BatteryWidgetStub>();
 }
-Graphics::Widgets::IWidgetsCreator::Ptr createStubWidgetsCreator()noexcept
+Graphics::Widgets::IWidgetsCreator::Ptr createStubWidgetsCreator() noexcept
 {
-	return std::make_unique<StubWidgetsCreator>();
+    return std::make_unique<StubWidgetsCreator>();
 }
-}
+} // namespace Graphics::StubWidgets

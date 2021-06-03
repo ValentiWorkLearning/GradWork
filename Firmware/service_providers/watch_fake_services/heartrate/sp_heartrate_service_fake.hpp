@@ -7,24 +7,20 @@
 namespace ServiceProviders::HeartrateService
 {
 
-class HeartrateServiceFake :
-    public IHeartrateService
+class HeartrateServiceFake : public IHeartrateService
 {
 
 public:
-
-    explicit HeartrateServiceFake()noexcept;
+    explicit HeartrateServiceFake() noexcept;
 
     ~HeartrateServiceFake();
 
 public:
-
-    void startMeasure()noexcept override;
+    void startMeasure() noexcept override;
 
 private:
-
     class HeartrateSimulatorImpl;
     std::unique_ptr<HeartrateSimulatorImpl> m_pHeartrateSimImpl;
 };
 
-}
+} // namespace ServiceProviders::HeartrateService

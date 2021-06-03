@@ -78,8 +78,7 @@ protected:
 
     auto xferChunk(
         std::span<const std::uint8_t> _pTrasnmitBuffer,
-        std::span<std::uint8_t> _pReceiveBuffer
-    ) noexcept
+        std::span<std::uint8_t> _pReceiveBuffer) noexcept
     {
         return StubXferAwaiter{
             .restoreInSpiCtx = true,
@@ -90,8 +89,7 @@ protected:
 
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
         std::span<const std::uint8_t> _pTransmitCommand,
-        std::span<std::uint8_t> _pReceiveBuffer
-    ) noexcept
+        std::span<std::uint8_t> _pReceiveBuffer) noexcept
     {
         co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
         co_return _pReceiveBuffer;

@@ -5,25 +5,22 @@
 namespace ServiceProviders
 {
 
-class FakeServiceCreator
-    :   public IServiceCreator
+class FakeServiceCreator : public IServiceCreator
 {
 
 public:
-
     [[nodiscard]] std::unique_ptr<BatteryService::IBatteryLevelAppService>
-    getBatteryService()noexcept override;
+    getBatteryService() noexcept override;
 
     [[nodiscard]] std::unique_ptr<HeartrateService::IHeartrateService>
-    getHeartrateService()noexcept override;
+    getHeartrateService() noexcept override;
 
-    [[nodiscard]] std::unique_ptr<DateTimeService::IDateTimeService>
-    getDateTimeService()noexcept override;
+    [[nodiscard]] std::unique_ptr<DateTimeService::IDateTimeService> getDateTimeService() noexcept
+        override;
 
-    ~FakeServiceCreator()override = default;
-
+    ~FakeServiceCreator() override = default;
 };
 
-std::unique_ptr<IServiceCreator> getFakeServiceCreator()noexcept;
+std::unique_ptr<IServiceCreator> getFakeServiceCreator() noexcept;
 
-}
+} // namespace ServiceProviders

@@ -5,29 +5,21 @@
 
 #include "widgets_layer/gs_event_handler_base.hpp"
 
-
 namespace FakeButton
 {
 
 class FakeButtonEventsHandler
-    :   public Graphics::Events::EventHandler<
-            Graphics::IEventHandler
-        ,   Graphics::Events::TButtonsEvents
-    >
+    : public Graphics::Events::
+          EventHandler<Graphics::IEventHandler, Graphics::Events::TButtonsEvents>
 {
 
 public:
-
-    explicit FakeButtonEventsHandler()
-        :   m_button{}
-    {
-    };
+    explicit FakeButtonEventsHandler() : m_button{} {};
 
     ~FakeButtonEventsHandler() override = default;
 
 public:
-
-    bool hasEvents()const
+    bool hasEvents() const
     {
         return !m_receivedEvents.empty();
     }
@@ -37,9 +29,9 @@ public:
         return m_receivedEvents.size();
     }
 
-    Graphics::Events::TButtonsEvents getEventAt( size_t _eventIndex )
+    Graphics::Events::TButtonsEvents getEventAt(size_t _eventIndex)
     {
-        return m_receivedEvents.at( _eventIndex );
+        return m_receivedEvents.at(_eventIndex);
     }
 
     Graphics::Events::TButtonsEvents getLastEvent() const
@@ -53,11 +45,12 @@ public:
     }
 
 protected:
-
-    void handleEventImpl(const Graphics::Events::TButtonsEvents& _event, const std::any& _eventData)noexcept override
+    void handleEventImpl(
+        const Graphics::Events::TButtonsEvents& _event,
+        const std::any& _eventData) noexcept override
     {
-        m_receivedEvents.push_back( _event );
-        m_button = std::any_cast<Buttons::ButtonId>( _eventData );
+        m_receivedEvents.push_back(_event);
+        m_button = std::any_cast<Buttons::ButtonId>(_eventData);
     }
 
 private:
@@ -68,9 +61,9 @@ private:
 
 using TFakeButtonsHandlerPtr = std::unique_ptr<FakeButtonEventsHandler>;
 
-TFakeButtonsHandlerPtr createFakeButtonsHandler()noexcept
+TFakeButtonsHandlerPtr createFakeButtonsHandler() noexcept
 {
     return std::make_unique<FakeButtonEventsHandler>();
 }
 
-}
+} // namespace FakeButton

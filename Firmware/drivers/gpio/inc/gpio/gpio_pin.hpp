@@ -2,49 +2,45 @@
 
 #include <memory>
 
-#if defined (USE_DEVICE_SPECIFIC)
+#if defined(USE_DEVICE_SPECIFIC)
 #include "pca10040.h"
 #endif
 
 namespace Gpio::Pins
 {
-#if defined (USE_DEVICE_SPECIFIC)
-    inline constexpr std::uint8_t Display_DataCommand = DISP_DC_PIN;
-    inline constexpr std::uint8_t Display_Reset = DISP_RST;
-    inline constexpr std::uint8_t LedPin = 13;
+#if defined(USE_DEVICE_SPECIFIC)
+inline constexpr std::uint8_t Display_DataCommand = DISP_DC_PIN;
+inline constexpr std::uint8_t Display_Reset = DISP_RST;
+inline constexpr std::uint8_t LedPin = 13;
 #else
-    inline constexpr std::uint8_t Display_DataCommand = 0;
-    inline constexpr std::uint8_t Display_Reset = 0;
-    inline constexpr std::uint8_t LedPin = 0;
+inline constexpr std::uint8_t Display_DataCommand = 0;
+inline constexpr std::uint8_t Display_Reset = 0;
+inline constexpr std::uint8_t LedPin = 0;
 #endif
 
-}//namespace Gpio::Pins
+} // namespace Gpio::Pins
 
 namespace Gpio
 {
 
-
 enum class Direction
 {
-        Input
-    ,   Output
+    Input,
+    Output
 };
 
-template<std::uint8_t GpioPinNumber, Direction pinDirection>
-class GpioPin
+template <std::uint8_t GpioPinNumber, Direction pinDirection> class GpioPin
 {
 
 public:
-
-    GpioPin()noexcept;
+    GpioPin() noexcept;
 
     ~GpioPin();
 
 public:
+    void set() noexcept;
 
-    void set()noexcept;
-
-    void reset()noexcept;
+    void reset() noexcept;
 
 private:
     Direction m_pinDirection = pinDirection;

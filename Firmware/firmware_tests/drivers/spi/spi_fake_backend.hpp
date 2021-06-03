@@ -42,8 +42,7 @@ public:
 
         auto streamSpan = std::span(
             reinterpret_cast<const std::uint8_t*>(m_dataStreamReceived.data()),
-            m_dataStreamReceived.size()
-        );
+            m_dataStreamReceived.size());
 
         BusTransactionsReceive.emplace_back(streamSpan.data(), streamSpan.size());
         std::ranges::copy(streamSpan, _receiveArray.begin());
@@ -68,7 +67,9 @@ public:
     {
         TDataStream stream;
         std::for_each(
-            BusTransactionsTransmit.cbegin(), BusTransactionsTransmit.cend(), [&stream](const auto& _transaction) {
+            BusTransactionsTransmit.cbegin(),
+            BusTransactionsTransmit.cend(),
+            [&stream](const auto& _transaction) {
                 const auto& [pArray, blockSize] = _transaction;
                 auto arraySpan = std::span{pArray, blockSize};
                 std::transform(

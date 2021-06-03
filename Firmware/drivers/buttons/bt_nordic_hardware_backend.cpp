@@ -35,8 +35,8 @@ void NordicTimerBackend::initialize()
         LOG_DEBUG_ENDL("m_isTimerEllapsed = true;");
     });
 
-    errorCode
-        = app_timer_create(&m_buttonsDriverTimer, APP_TIMER_MODE_SINGLE_SHOT, timerExpiredCallback);
+    errorCode =
+        app_timer_create(&m_buttonsDriverTimer, APP_TIMER_MODE_SINGLE_SHOT, timerExpiredCallback);
     APP_ERROR_CHECK(errorCode);
     m_isTimerEllapsed = true;
 }
@@ -87,16 +87,16 @@ void NordicButtonsBackend::initNordicButtonsBackend()
     constexpr std::uint8_t ButtonsCount = BUTTONS_NUMBER;
     using TButtonsDescriptor = std::array<app_button_cfg_t, ButtonsCount>;
 
-    auto buttonEventCallback
-        = cbc::obtain_connector([this](uint8_t _pinNumber, uint8_t _buttonAction) {
-              handleHardwareButtonEvent(_pinNumber, _buttonAction);
-          });
+    auto buttonEventCallback =
+        cbc::obtain_connector([this](uint8_t _pinNumber, uint8_t _buttonAction) {
+            handleHardwareButtonEvent(_pinNumber, _buttonAction);
+        });
 
-    static TButtonsDescriptor BoardButtons
-        = {app_button_cfg_t{BUTTON_1, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback},
-           app_button_cfg_t{BUTTON_2, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback},
-           app_button_cfg_t{BUTTON_3, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback},
-           app_button_cfg_t{BUTTON_4, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback}};
+    static TButtonsDescriptor BoardButtons = {
+        app_button_cfg_t{BUTTON_1, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback},
+        app_button_cfg_t{BUTTON_2, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback},
+        app_button_cfg_t{BUTTON_3, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback},
+        app_button_cfg_t{BUTTON_4, APP_BUTTON_ACTIVE_LOW, BUTTON_PULL, buttonEventCallback}};
 
     constexpr auto ButtonDetectionDelay = APP_TIMER_TICKS(50);
     errorCode = app_button_init(BoardButtons.data(), BoardButtons.size(), ButtonDetectionDelay);

@@ -5,12 +5,12 @@
 
 namespace Graphics
 {
-    class PlatformBackend;
+class PlatformBackend;
 };
 
 namespace Graphics::MainWindow
 {
-    class IGsMainWindowModel;
+class IGsMainWindowModel;
 };
 
 namespace Graphics
@@ -20,30 +20,25 @@ class LvglGraphicsService
 {
 
 public:
+    explicit LvglGraphicsService() noexcept;
 
-    explicit LvglGraphicsService()noexcept;
+    ~LvglGraphicsService() noexcept;
 
-    ~LvglGraphicsService()noexcept;
-
-    void executeGlTask()noexcept;
+    void executeGlTask() noexcept;
 
 public:
-
-    Graphics::MainWindow::IGsMainWindowModel& getMainWindow()noexcept;
+    Graphics::MainWindow::IGsMainWindowModel& getMainWindow() noexcept;
 
     Graphics::MainWindow::IGsMainWindowModel& getMainWindow() const noexcept;
 
 private:
-
     void initMainWindow() noexcept;
 
 private:
-
     class GSLvglServiceImpl;
     std::unique_ptr<GSLvglServiceImpl> m_pGraphicsServiceImpl;
-
 };
 
-std::unique_ptr<LvglGraphicsService> createGraphicsService()noexcept;
+std::unique_ptr<LvglGraphicsService> createGraphicsService() noexcept;
 
-};
+}; // namespace Graphics

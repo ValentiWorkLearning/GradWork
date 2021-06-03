@@ -11,29 +11,20 @@
 // https://m.habr.com/ru/post/519464/ // C++20 coroutines
 // https://mariusbancila.ro/blog/2020/06/22/a-cpp20-coroutine-example/
 
-void spiBackendImplTransmit(
-    std::uint8_t* _pBuffer
-    , std::uint16_t _bufferSize
-    , void* _pUserData
-)
+void spiBackendImplTransmit(std::uint8_t* _pBuffer, std::uint16_t _bufferSize, void* _pUserData)
 {
-    std::thread dmaThread = std::thread(
-        [_pUserData]
-        {
-            using namespace std::chrono_literals;
-            std::this_thread::sleep_for(500ms);
+    std::thread dmaThread = std::thread([_pUserData] {
+        using namespace std::chrono_literals;
+        std::this_thread::sleep_for(500ms);
 
-            std::cout << "TRANSMIT SOME DATA" << "THREAD:" << std::this_thread::get_id() << std::endl;
-            std::coroutine_handle<>::from_address(_pUserData).resume();
-        }
-        );
+        std::cout << "TRANSMIT SOME DATA"
+                  << "THREAD:" << std::this_thread::get_id() << std::endl;
+        std::coroutine_handle<>::from_address(_pUserData).resume();
+    });
     dmaThread.detach();
 }
 
-auto spiTrasnmitCommandBufferAsync(
-    std::uint8_t* _pBuffer
-    , std::uint16_t _bufferSize
-)
+auto spiTrasnmitCommandBufferAsync(std::uint8_t* _pBuffer, std::uint16_t _bufferSize)
 {
     std::cout << "Toggle GPIO ON" << std::endl;
     struct Awaiter
@@ -55,37 +46,33 @@ auto spiTrasnmitCommandBufferAsync(
         }
     };
 
-    return Awaiter{
-            .pBuffer = _pBuffer
-        ,   .bufferSize = _bufferSize
-    };
+    return Awaiter{.pBuffer = _pBuffer, .bufferSize = _bufferSize};
 }
 
-auto commandBufferFirst = std::array{ 0x00u, 0x01u, 0x02u, 0x03u };
-auto commandBufferSecond = std::array{ 0x04u, 0x05u, 0x06u, 0x07u,0x08u };
+auto commandBufferFirst = std::array{0x00u, 0x01u, 0x02u, 0x03u};
+auto commandBufferSecond = std::array{0x04u, 0x05u, 0x06u, 0x07u, 0x08u};
 
 struct DisplayInitializedEvent
 {
     DisplayInitializedEvent() = default;
 
     DisplayInitializedEvent(const DisplayInitializedEvent&) = delete;
-    DisplayInitializedEvent& operator = (const  DisplayInitializedEvent&) = delete;
+    DisplayInitializedEvent& operator=(const DisplayInitializedEvent&) = delete;
 
     DisplayInitializedEvent(DisplayInitializedEvent&&) = delete;
-    DisplayInitializedEvent& operator =(DisplayInitializedEvent&&) = delete;
+    DisplayInitializedEvent& operator=(DisplayInitializedEvent&&) = delete;
 
     struct DisplayAwaiter
     {
-        DisplayAwaiter(const DisplayInitializedEvent& _event)
-            : m_event{ _event }
+        DisplayAwaiter(const DisplayInitializedEvent& _event) : m_event{_event}
         {
         }
-        bool await_ready()const
+        bool await_ready() const
         {
             return m_event.m_isNotified;
         }
 
-        bool await_suspend(std::coroutine_handle<> _coroHandle)noexcept
+        bool await_suspend(std::coroutine_handle<> _coroHandle) noexcept
         {
             m_coroHandle = _coroHandle;
             if (m_event.m_isNotified)
@@ -99,6 +86,7 @@ struct DisplayInitializedEvent
         }
 
         friend DisplayInitializedEvent;
+
     private:
         const DisplayInitializedEvent& m_event;
         std::coroutine_handle<> m_coroHandle;
@@ -106,7 +94,7 @@ struct DisplayInitializedEvent
 
     auto operator co_await() const noexcept
     {
-        return DisplayAwaiter{ *this };
+        return DisplayAwaiter{*this};
     }
 
     void notify()
@@ -122,7 +110,7 @@ struct DisplayInitializedEvent
         }
     }
 
-    mutable std::atomic<bool> m_isNotified{ false };
+    mutable std::atomic<bool> m_isNotified{false};
     mutable std::atomic<void*> m_pSuspendedWaiter;
 };
 
@@ -130,20 +118,21 @@ struct Display
 {
     Display()
     {
-        //initDisplay();
+        // initDisplay();
     }
 
     void fillRectangle(
-        std::uint16_t _x
-        , std::uint16_t _y
-        , std::uint16_t _width
-        , std::uint16_t _height
-        , std::uint16_t* _colorToFill
-    )
+        std::uint16_t _x,
+        std::uint16_t _y,
+        std::uint16_t _width,
+        std::uint16_t _height,
+        std::uint16_t* _colorToFill)
     {
-        std::cout << "void fillRectangle(); SUSPEND" << "THREAD:" << std::this_thread::get_id() << std::endl;
+        std::cout << "void fillRectangle(); SUSPEND"
+                  << "THREAD:" << std::this_thread::get_id() << std::endl;
         co_await m_initializedEvent;
-        std::cout << "void fillRectangle(); RESUMED" << "THREAD:" << std::this_thread::get_id() << std::endl;
+        std::cout << "void fillRectangle(); RESUMED"
+                  << "THREAD:" << std::this_thread::get_id() << std::endl;
 
         /*co_await spiTrasnmitCommandBufferAsync(
             reinterpret_cast<std::uint8_t*>(commandBufferFirst.data())
@@ -168,16 +157,12 @@ struct Display
     DisplayInitializedEvent m_initializedEvent;
 };
 
-
-
-
 // We have to define the 'resumable' class for the way
 // of communicating between the coroutine and usual function
 class resumable
 {
 public:
-
-    // Here we declare the promise type with necessary functions 
+    // Here we declare the promise type with necessary functions
     struct promise_type
     {
         // //declaration of the coroutine handle alias- basic type for operating with coroutine;
@@ -191,7 +176,7 @@ public:
         {
             return std::suspend_always();
         }
-        auto final_suspend()noexcept
+        auto final_suspend() noexcept
         {
             return std::suspend_always();
         }
@@ -201,16 +186,16 @@ public:
             std::terminate();
         }
 
-        void return_void() {}
+        void return_void()
+        {
+        }
     };
 
-    //declaration of the coroutine handle alias- basic type for operating with coroutine;
+    // declaration of the coroutine handle alias- basic type for operating with coroutine;
     using coro_handle = std::coroutine_handle<promise_type>;
 
 public:
-
-    resumable(coro_handle handle)
-        : m_coroutineHandle{ handle }
+    resumable(coro_handle handle) : m_coroutineHandle{handle}
     {
     }
 
@@ -224,6 +209,7 @@ public:
 
         return !m_coroutineHandle.done();
     }
+
 private:
     coro_handle m_coroutineHandle;
 };
@@ -239,9 +225,10 @@ resumable foo()
 }
 
 ////For using co_await operator we have to use the concept of 'awaitable entity'
-////the main idea is quite simple - to provide the implementation for the customization_point of the coroutine
+////the main idea is quite simple - to provide the implementation for the customization_point of the
+///coroutine
 
-//int main()
+// int main()
 //{
 //    auto resumableObject = foo();
 //    resumableObject.resume();
@@ -250,23 +237,16 @@ resumable foo()
 //    return 0;
 //}
 
-
-
-
 class ST7789CppCoro : public DisplayDriver::BaseSpiDisplayCoroutine
 {
     using BaseDisplay_t = DisplayDriver::BaseSpiDisplayCoroutine;
-public:
 
+public:
     explicit ST7789CppCoro(
-            std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr
-        ,   std::uint16_t _width
-        ,   std::uint16_t _height
-    )   :     DisplayDriver::BaseSpiDisplayCoroutine(
-            std::move(_busPtr)
-        ,   _width
-        ,   _height
-    )
+        std::unique_ptr<Interface::Spi::SpiBusAsync>&& _busPtr,
+        std::uint16_t _width,
+        std::uint16_t _height)
+        : DisplayDriver::BaseSpiDisplayCoroutine(std::move(_busPtr), _width, _height)
     {
         initDisplay();
         LOG_DEBUG_ENDL("Display initialized");
@@ -276,59 +256,52 @@ public:
     {
     }
 
-    void turnOn()noexcept override
+    void turnOn() noexcept override
     {
     }
 
-    void turnOff()noexcept override
+    void turnOff() noexcept override
     {
     }
 
     void fillRectangle(
-        std::uint16_t _x
-        , std::uint16_t _y
-        , std::uint16_t _width
-        , std::uint16_t _height
-        , IDisplayDriver::TColor* _color
-    )noexcept override
+        std::uint16_t _x,
+        std::uint16_t _y,
+        std::uint16_t _width,
+        std::uint16_t _height,
+        IDisplayDriver::TColor* _color) noexcept override
     {
     }
 
 private:
-
-    cppcoro::task<> sendInitialCommand( const std::uint8_t* _pBuffer, const std::uint16_t _bufferSize )
+    cppcoro::task<> sendInitialCommand(
+        const std::uint8_t* _pBuffer,
+        const std::uint16_t _bufferSize)
     {
         const std::uint8_t* commandBuf = _pBuffer;
         const std::uint8_t* ArgBuf = _pBuffer + 1;
-        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
+        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>(_bufferSize - 1);
 
-        co_await sendCommandImpl( _pBuffer);
-        co_await sendChunk( ArgBuf, ArgsBufferSize );
+        co_await sendCommandImpl(_pBuffer);
+        co_await sendChunk(ArgBuf, ArgsBufferSize);
     }
 
-    void initDisplay()noexcept
+    void initDisplay() noexcept
     {
         BaseDisplay_t::resetResetPin();
         Delay::waitFor(100);
         BaseDisplay_t::setResetPin();
 
-
         co_await std::apply(
-                [this](const auto&... _commandDescriptor)
-                {
-                    return cppcoro::when_all( sendInitialCommand(
-                                _commandDescriptor.command.data()
-                            ,   _commandDescriptor.command.size()
-                        )...
-                    ); 
-                }
-            ,   CommandsArray
-        );
+            [this](const auto&... _commandDescriptor) {
+                return cppcoro::when_all(sendInitialCommand(
+                    _commandDescriptor.command.data(), _commandDescriptor.command.size())...);
+            },
+            CommandsArray);
     }
 };
 
-
-     /*ST7789CppCoro displayCoro{
-         Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M2>(),
-             240, 240
-     };*/
+/*ST7789CppCoro displayCoro{
+    Interface::Spi::createSpiBusAsync<Interface::Spi::SpiInstance::M2>(),
+        240, 240
+};*/
