@@ -2,10 +2,27 @@
 
 #include <memory>
 
-#include "utils/FastPimpl.hpp"
-#include "utils/Platform.hpp"
+#include <lvgl.h>
 
-#include "lvgl.h"
+#ifdef USE_WINSDL_BACKEND
+#include <chrono>
+#include <thread>
+#endif // USE_WINSDL_BACKEND
+
+namespace DisplayDriver
+{
+class IDisplayDriver;
+}
+
+#if defined(USE_HARDWARE_DISPLAY_BACKEND)
+#include <backends/spi_backend_nrf.hpp>
+#include <display/display_coro_compact_gc9a01.hpp>
+#include <spi/spi_wrapper_async_templated.hpp>
+
+using TSpiBus = Interface::SpiTemplated::SpiBus<
+    Interface::SpiTemplated::NordicSpi<Interface::SpiTemplated::SpiInstance::M2>>;
+using TDisplayDriver = DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
+#endif
 
 namespace Graphics
 {
@@ -14,26 +31,31 @@ class PlatformBackend
 {
 
 public:
+    PlatformBackend() noexcept;
 
-    explicit PlatformBackend();
+    void platformDependentInit(lv_disp_drv_t* _displayDriver) noexcept;
 
-    void platformDependentInit( lv_disp_drv_t* _displayDriver );
+    void initPlatformGfxTimer() noexcept;
 
-    void executeTask();
-
-    void initPlatformGfxTimer();
-
-    ~PlatformBackend();
+    void executeLvTaskHandler() noexcept;
 
 private:
+    static constexpr std::uint32_t LvglNotificationTime = 15;
 
-    static constexpr inline std::size_t kImplSize = Platform::GraphicsBackendSize;
-    static constexpr inline std::size_t kImplAlignment = Platform::GraphicsBackendAlignment;
+private:
+    void indevPlatformInit() noexcept;
 
-    class PlatformBackendImpl;
-    Utils::FastPimpl<PlatformBackendImpl,kImplSize,kImplAlignment> m_pBackendImpl;
+    void memoryMonitor(lv_timer_t* _param) noexcept;
+
+private:
+#if defined (USE_HARDWARE_DISPLAY_BACKEND)
+    std::unique_ptr<TDisplayDriver> m_hardwareDisplayDriver;
+#endif
+
+#if defined USE_WINSDL_BACKEND
+    std::thread m_tickThread;
+    lv_indev_drv_t m_indevDriver;
+#endif
 };
 
-std::unique_ptr<PlatformBackend> createPlatformBackend();
-
-};
+} // namespace Graphics

@@ -9,29 +9,29 @@
 namespace Graphics::Widgets
 {
 
-BluetoothWidgetHandler::BluetoothWidgetHandler( IBluetoothWidget* _bluetoothWidget )
-    :   m_pBluetoothWidget{ _bluetoothWidget }
+BluetoothWidgetHandler::BluetoothWidgetHandler(IBluetoothWidget* _bluetoothWidget) noexcept
+    : m_pBluetoothWidget{_bluetoothWidget}
 {
-
 }
 
-void
-BluetoothWidgetHandler::handleEvent( const Events::TEvent& _event )
+void BluetoothWidgetHandler::handleEventImpl(
+    const Events::TBleClientEvents& _event,
+    const std::any& _eventData) noexcept
 {
-    Events::TBleClientEvents bleClientEvent { std::any_cast<Events::TBleClientEvents>( _event.eventType ) };
-    if( bleClientEvent == Events::TBleClientEvents::DeviceConnected )
-        m_pBluetoothWidget->setBluetoothStatus( IBluetoothWidget::BluetoothStatus::Connected );
-    else if( bleClientEvent == Events::TBleClientEvents::DeviceDisconnected )
-        m_pBluetoothWidget->setBluetoothStatus( IBluetoothWidget::BluetoothStatus::Disconnected );
-    else{
-        assert( false );
+    if (_event == Events::TBleClientEvents::DeviceConnected)
+        m_pBluetoothWidget->setBluetoothStatus(IBluetoothWidget::BluetoothStatus::Connected);
+    else if (_event == Events::TBleClientEvents::DeviceDisconnected)
+        m_pBluetoothWidget->setBluetoothStatus(IBluetoothWidget::BluetoothStatus::Disconnected);
+    else
+    {
+        assert(false);
     }
 }
 
-std::unique_ptr<Graphics::IEventHandler>
-createBluetoothWidgetHandler(IBluetoothWidget* _bluetoothWidget)
+std::unique_ptr<Graphics::IEventHandler> createBluetoothWidgetHandler(
+    IBluetoothWidget* _bluetoothWidget) noexcept
 {
-    return std::make_unique<BluetoothWidgetHandler>( _bluetoothWidget );
+    return std::make_unique<BluetoothWidgetHandler>(_bluetoothWidget);
 }
 
-}
+} // namespace Graphics::Widgets

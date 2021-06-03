@@ -4,5 +4,5 @@
 
 namespace Delay
 {
-    void waitFor(std::uint16_t _toWaitBlocking );
+void waitFor(std::uint16_t _toWaitBlocking);
 } // namespace Delay

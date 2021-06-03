@@ -10,124 +10,109 @@
 namespace Graphics::Views
 {
 
-ClockPageHandler::ClockPageHandler( IClockWatchPage* _clockPageView )
-    :   forceUpdateAfterVisibilityChange{false}
-    ,   m_pClockWatchView{ _clockPageView }
-    ,   m_lastReceivedTime{ std::tm{} }
+ClockPageHandler::ClockPageHandler(IClockWatchPage* _clockPageView) noexcept
+    : m_forceUpdateAfterVisibilityChange{true}
+    , m_pClockWatchView{_clockPageView}
+    , m_lastReceivedTime{std::tm{}}
 {
 }
 
-void ClockPageHandler::handleEvent( const Events::TEvent& _event )
+void ClockPageHandler::handleEventImpl(
+    const Events::TDateTimeEvents& _event,
+    const std::any& _eventData) noexcept
 {
-// TODO move this to baseHandler, replace to virtual functions like
-// Handle BatteryEvent, Handle HeartRateEvent
-// Think about metatype resistartion through using std::variant<TEvent1, TEvent2,TEvent...>
-// Or fo instance consider using static visitor idiom for decalring possible visitable types like
-// EventHandlerVisitor<TEvent1,TEvent2,TEvent3>
 
-	Events::TDateTimeEvents dateTimeEvents { std::any_cast<Events::TDateTimeEvents>( _event.eventType ) };
-	TimeWrapper newDateTime { std::any_cast<TimeWrapper>( _event.eventData ) };
+    if (_event != Events::TDateTimeEvents::DateTimeChanged)
+        return;
 
-	Meta::UnuseVar( dateTimeEvents );
+    TimeWrapper newDateTime{std::any_cast<TimeWrapper>(_eventData)};
 
-	auto pClockView { m_pClockWatchView };
-	if (!pClockView)
-		return;
+    auto pClockView{m_pClockWatchView};
+    if (!pClockView)
+        return;
 
-	if (!pClockView->isVisible())
-	{
-		forceUpdateAfterVisibilityChange = true;
-		return;
-	}
+    if (!pClockView->isVisible())
+    {
+        m_forceUpdateAfterVisibilityChange = true;
+        return;
+    }
 
-	if( newDateTime.getSeconds() != m_lastReceivedTime.getSeconds() || forceUpdateAfterVisibilityChange)
-		pClockView->setSeconds(
-			formatDoubleDigitsNumber(
-					static_cast<std::uint8_t>( newDateTime.getSeconds().count() )
-				)
-		);
+    if (newDateTime.getSeconds() != m_lastReceivedTime.getSeconds() ||
+        m_forceUpdateAfterVisibilityChange)
+        pClockView->setSeconds(
+            formatDoubleDigitsNumber(static_cast<std::uint8_t>(newDateTime.getSeconds().count())));
 
-	if( newDateTime.getMinutes() != m_lastReceivedTime.getMinutes() || forceUpdateAfterVisibilityChange)
-		pClockView->setMinutes(
-			formatDoubleDigitsNumber(
-				static_cast<std::uint8_t>( newDateTime.getMinutes().count() )
-			)
-		);
+    if (newDateTime.getMinutes() != m_lastReceivedTime.getMinutes() ||
+        m_forceUpdateAfterVisibilityChange)
+        pClockView->setMinutes(
+            formatDoubleDigitsNumber(static_cast<std::uint8_t>(newDateTime.getMinutes().count())));
 
-	if( newDateTime.getHours() != m_lastReceivedTime.getHours() || forceUpdateAfterVisibilityChange)
-		pClockView->setHours(
-			formatDoubleDigitsNumber(
-				static_cast<std::uint8_t>( newDateTime.getHours().count() )
-			)
-		);
+    if (newDateTime.getHours() != m_lastReceivedTime.getHours() ||
+        m_forceUpdateAfterVisibilityChange)
+        pClockView->setHours(
+            formatDoubleDigitsNumber(static_cast<std::uint8_t>(newDateTime.getHours().count())));
 
-	bool bApplyNewDate{ shouldApplyNewDate( newDateTime ) || forceUpdateAfterVisibilityChange };
+    if (newDateTime.getWeekDayString() != m_lastReceivedTime.getWeekDayString() ||
+        m_forceUpdateAfterVisibilityChange)
+        pClockView->setWeekday(newDateTime.getWeekDayString());
 
-	forceUpdateAfterVisibilityChange = false;
+    const bool bShouldApplyNewDate{shouldApplyNewDate(newDateTime)};
 
-	m_lastReceivedTime = newDateTime;
+    if (bShouldApplyNewDate)
+    {
+        m_fullDateString = ClockPageHandler::formatToFullDate(newDateTime);
+        pClockView->setFullDate(m_fullDateString);
+    }
 
-	pClockView->setWeekday( m_lastReceivedTime.getWeekDayString() );
-
-	m_fullDateString = ClockPageHandler::formatToFullDate( m_lastReceivedTime );
-	pClockView->setFullDate( m_fullDateString );
-
+    m_forceUpdateAfterVisibilityChange = false;
+    m_lastReceivedTime = newDateTime;
 }
 
-bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck)
+bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck) noexcept
 {
-	return	_toCheck.getWeekday() != m_lastReceivedTime.getWeekday()
-		|| _toCheck.getMonthDay() != m_lastReceivedTime.getMonthDay()
-		||	_toCheck.getYear() != m_lastReceivedTime.getYear();
+    return m_lastReceivedTime.getMonthDay() != _toCheck.getMonthDay() ||
+           m_lastReceivedTime.getMonth() != _toCheck.getMonth() ||
+           m_lastReceivedTime.getYear() != _toCheck.getYear() || m_forceUpdateAfterVisibilityChange;
 }
 
-std::string
-Graphics::Views::ClockPageHandler::formatToFullDate( const TimeWrapper& _toFormat )
+std::string Graphics::Views::ClockPageHandler::formatToFullDate(
+    const TimeWrapper& _toFormat) noexcept
 {
     constexpr std::uint8_t arraySize = 5;
     std::array<char, arraySize> tempStr{};
 
-	auto fastConvert = [&tempStr]( std::uint16_t _value )
-	{
-		auto [p, ec] = std::to_chars(
-            	tempStr.data()
-        	,   tempStr.data() + tempStr.size()
-        	,   _value
-    	);
+    auto fastConvert = [&tempStr](std::uint16_t _value) {
+        auto [p, ec] = std::to_chars(tempStr.data(), tempStr.data() + tempStr.size(), _value);
 
-		return std::string_view( tempStr.data(), p - tempStr.data() );
-	};
+        return std::string_view(tempStr.data(), p - tempStr.data());
+    };
 
-	std::string toReturn{ _toFormat.getMonthString() };
-	toReturn += '/';
-	toReturn += fastConvert( _toFormat.getMonthDay() );
-	toReturn += '/';
-	toReturn += fastConvert( _toFormat.getYear() );
+    std::string toReturn{_toFormat.getMonthString()};
+    toReturn += '/';
+    toReturn += formatDoubleDigitsNumber(_toFormat.getMonthDay());
+    toReturn += '/';
+    toReturn += fastConvert(_toFormat.getYear());
 
-	return toReturn;
+    return toReturn;
 }
 
-std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat)
+std::string ClockPageHandler::formatDoubleDigitsNumber(std::uint8_t _toFormat) noexcept
 {
-	constexpr std::uint8_t arraySize = 4;
+    constexpr std::uint8_t arraySize = 4;
     std::array<char, arraySize> tempStr{};
 
-    auto [p, ec] = std::to_chars(
-            tempStr.data()
-        ,   tempStr.data() + tempStr.size()
-        ,   _toFormat
-    );
+    auto [p, ec] = std::to_chars(tempStr.data(), tempStr.data() + tempStr.size(), _toFormat);
 
-    auto digits = std::string_view( tempStr.data(), p - tempStr.data() );
+    auto digits = std::string_view(tempStr.data(), p - tempStr.data());
 
-	if( _toFormat < 10 )
-		return "0" + std::string( digits.data() );
-	return std::string( digits.data() );
+    if (_toFormat < 10)
+        return "0" + std::string(digits.data());
+    return std::string(digits.data());
 }
 
-std::unique_ptr<Graphics::IEventHandler>
-createPageWatchHandler( IClockWatchPage* _clockPage )
+std::unique_ptr<Graphics::IEventHandler> createPageWatchHandler(
+    IClockWatchPage* _clockPage) noexcept
 {
-	return std::make_unique<ClockPageHandler>( _clockPage );
+    return std::make_unique<ClockPageHandler>(_clockPage);
 }
-}
+} // namespace Graphics::Views

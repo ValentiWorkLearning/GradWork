@@ -1,6 +1,7 @@
 add_library(
     watchboard
     watchboard.cpp
+    inc/board/hardware_usings.hpp
 )
 
 target_include_directories(
@@ -11,10 +12,22 @@ target_include_directories(
 
 target_link_libraries(
     watchboard
+    PUBLIC
+    buttons_driver
+    spi
+    windbond_spi_flash_driver
     PRIVATE
     UtilsLibrary
     logger_service
     platform_delay
+    drivers_ih
+    fmt
+)
+
+target_compile_features(
+    watchboard
+    PRIVATE
+    cxx_std_20
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
@@ -27,7 +40,13 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
     target_compile_definitions(
         watchboard
-        PRIVATE
+        PUBLIC
         USE_DEVICE_SPECIFIC
     )
+    target_compile_options(
+        watchboard
+        PRIVATE
+        -fcoroutines
+    )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
 endif()

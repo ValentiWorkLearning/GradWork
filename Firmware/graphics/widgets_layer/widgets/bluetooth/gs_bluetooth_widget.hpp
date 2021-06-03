@@ -7,12 +7,12 @@
 
 #include "utils/MetaUtils.hpp"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace Graphics::Theme
 {
-    class IThemeController;
+class IThemeController;
 }
 
 namespace Graphics::Widgets
@@ -20,52 +20,43 @@ namespace Graphics::Widgets
 
 class IWidgetEventHandler;
 
-class BluetoothWidget
-    :   public WidgetBaseObj<IBluetoothWidget>
+class BluetoothWidget : public WidgetBaseObj<IBluetoothWidget>
 {
 
 public:
-
-    explicit BluetoothWidget( const Theme::IThemeController* _themeController );
+    explicit BluetoothWidget(const Theme::IThemeController* _themeController) noexcept;
 
     ~BluetoothWidget() override = default;
 
 public:
+    void show() noexcept override;
 
-    void show() override;
+    void hide() noexcept override;
 
-    void hide() override;
-
-    void reloadStyle() override;
+    void reloadStyle() noexcept override;
 
 public:
-
-    void setBluetoothStatus( BluetoothStatus _iconToSet ) override;
+    void setBluetoothStatus(BluetoothStatus _iconToSet) noexcept override;
 
 private:
+    void initStyles() noexcept;
 
-    void initStyles();
-
-    void resetStyle();
+    void resetStyle() noexcept;
 
     void initBluetoothIcon(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
-    BluetoothStatus getCurrentStatus() const;
+    BluetoothStatus getCurrentStatus() const noexcept;
 
 private:
-
     BluetoothStatus m_currentStatus;
     lv_style_t m_bluetoothIconStyle;
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBluetoothIcon;
-
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pBluetoothIcon;
 };
 
 std::unique_ptr<IBluetoothWidget> createBluetoothWidget(
-    const Theme::IThemeController* _themeController
-);
+    const Theme::IThemeController* _themeController) noexcept;
 
-};
+}; // namespace Graphics::Widgets

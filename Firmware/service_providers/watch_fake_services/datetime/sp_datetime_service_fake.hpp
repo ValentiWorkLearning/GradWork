@@ -5,28 +5,24 @@
 namespace ServiceProviders::DateTimeService
 {
 
-class DateTimeServiceFake
-    :   public IDateTimeService
+class DateTimeServiceFake : public IDateTimeService
 {
 
 public:
+    explicit DateTimeServiceFake() noexcept;
 
-    explicit DateTimeServiceFake();
-
-    ~DateTimeServiceFake()override;
+    ~DateTimeServiceFake() override;
 
 public:
+    void launchService() noexcept override;
 
-    void launchService() override;
+    void calibrateSource() noexcept override;
 
-    void calibrateSource() override;
-
-    void syncronizeWithBleDts() override;
+    void syncronizeWithBleDts() noexcept override;
 
 private:
-
     class DatetimeSimulatorImpl;
     std::unique_ptr<DatetimeSimulatorImpl> m_pDatetimeSimImpl;
 };
 
-}
+} // namespace ServiceProviders::DateTimeService

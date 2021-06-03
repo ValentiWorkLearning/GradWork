@@ -7,76 +7,65 @@
 
 #include "utils/MetaUtils.hpp"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace Graphics::Theme
 {
-    class IThemeController;
+class IThemeController;
 }
-
 
 namespace Graphics::Widgets
 {
 
-class PagesSwitch
-    :   public WidgetBaseObj<IPagesSwitch>
+class PagesSwitch : public WidgetBaseObj<IPagesSwitch>
 {
 
 public:
-
-    explicit PagesSwitch( const Theme::IThemeController* _themeController );
+    explicit PagesSwitch(const Theme::IThemeController* _themeController) noexcept;
 
     ~PagesSwitch() override = default;
 
 public:
+    void show() noexcept override;
 
-    void show() override;
+    void hide() noexcept override;
 
-    void hide() override;
-
-    void reloadStyle()override;
+    void reloadStyle() noexcept override;
 
 public:
-
-    void setActivePage( std::string_view _pageName ) override;
+    void setActivePage(std::string_view _pageName) noexcept override;
 
 private:
+    void initStyles() noexcept;
 
-    void initStyles();
-
-    void resetStyle();
+    void resetStyle() noexcept;
 
     void initCheckedPages(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
     void initUncheckedPages(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
 private:
-
     static constexpr inline std::uint8_t ArcSize = 16;
 
 private:
-
     lv_style_t m_pointStyle;
+    lv_style_t m_pointStyleChecked;
 
     std::string_view m_activePageName;
 
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pFirstPage;
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pSecondPage;
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pThirdPage;
-
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pFirstPage;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pSecondPage;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pThirdPage;
 };
 
 std::unique_ptr<IPagesSwitch> createPagesSwitch(
-    const Theme::IThemeController* _themeController
-);
+    const Theme::IThemeController* _themeController) noexcept;
 
-};
+}; // namespace Graphics::Widgets

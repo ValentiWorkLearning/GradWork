@@ -7,12 +7,12 @@
 
 #include "utils/MetaUtils.hpp"
 
-#include <string>
 #include <memory>
+#include <string>
 
 namespace Graphics::Theme
 {
-    class IThemeController;
+class IThemeController;
 }
 
 namespace Graphics::Widgets
@@ -20,50 +20,42 @@ namespace Graphics::Widgets
 
 class IWidgetEventHandler;
 
-class BatteryWidget
-    :   public WidgetBaseObj<IBatteryWidget>
+class BatteryWidget : public WidgetBaseObj<IBatteryWidget>
 {
 
 public:
-
-    explicit BatteryWidget( const Theme::IThemeController* _themeController );
+    explicit BatteryWidget(const Theme::IThemeController* _themeController) noexcept;
 
     ~BatteryWidget() override = default;
 
 public:
+    void show() noexcept override;
 
-    void show() override;
+    void hide() noexcept override;
 
-    void hide() override;
-
-    void reloadStyle() override;
+    void reloadStyle() noexcept override;
 
 public:
+    void setBatteryLevelPercentage(const std::uint8_t _newBatteryLevel) noexcept override;
 
-    void setBatteryLevelPercentage( const std::uint8_t _newBatteryLevel ) override;
-
-    void setBatteryStatus( BatteryStatus _iconToSet ) override;
+    void setBatteryStatus(BatteryStatus _iconToSet) noexcept override;
 
 private:
+    void initStyles() noexcept;
 
-    void initStyles();
-
-    void resetStyle();
+    void resetStyle() noexcept;
 
     void initBatteryPercentageLabel(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
     void initBatteryIcon(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
 private:
-
     lv_style_t m_bateryIconStyle;
     lv_style_t m_batteryLabelStyle;
 
@@ -71,13 +63,11 @@ private:
 
     BatteryStatus m_currentStatus;
 
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryIcon;
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pBatteryLabel;
-
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pBatteryIcon;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pBatteryLabel;
 };
 
 std::unique_ptr<IBatteryWidget> createBatteryWidget(
-   const Theme::IThemeController* _themeController
-);
+    const Theme::IThemeController* _themeController) noexcept;
 
-};
+}; // namespace Graphics::Widgets

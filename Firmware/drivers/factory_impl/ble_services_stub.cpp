@@ -1,38 +1,52 @@
 #include "ble_services_stub.hpp"
 
-#include "utils/MetaUtils.hpp"
 #include "logger/logger_service.hpp"
+#include "utils/MetaUtils.hpp"
 
 namespace Ble::BatteryService
 {
 
-StubBatteryService::StubBatteryService()
+StubBatteryService::StubBatteryService() noexcept
 {
-    Logger::Instance().logDebugEndl( "Initialized DesktopStubBatteryService" );
+    LOG_DEBUG_ENDL("Initialized DesktopStubBatteryService");
 }
 
-void
-StubBatteryService::onBatteryLevelChanged ( std::uint8_t _newBatteryLevel )
+void StubBatteryService::onBatteryLevelChanged(std::uint8_t _newBatteryLevel) noexcept
 {
-    Logger::Instance().logDebug("New battery level is:" );
-    Logger::Instance().logDebugEndl( _newBatteryLevel );
+    LOG_DEBUG("New battery level is:");
+    LOG_DEBUG_ENDL(_newBatteryLevel);
 }
 
-}
+} // namespace Ble::BatteryService
 
 namespace Ble::DateTimeService
 {
 
-StubDateTimeService::StubDateTimeService()
+StubDateTimeService::StubDateTimeService() noexcept
 {
-    Logger::Instance().logDebugEndl( "Initialized StubDateTimeService" );
+    LOG_DEBUG_ENDL("Initialized StubDateTimeService");
 }
 
-
-void
-StubDateTimeService::handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )
+void StubDateTimeService::handleDiscoveryEvent(const std::any& _pBleDbDiscoveryEvent) noexcept
 {
-    Meta::UnuseVar( _pBleDbDiscoveryEvent );
+    Meta::UnuseVar(_pBleDbDiscoveryEvent);
 }
 
+} // namespace Ble::DateTimeService
+
+namespace Ble::HeartrateService
+{
+
+StubHeartrateService::StubHeartrateService() noexcept
+{
 }
+
+void StubHeartrateService::onHeartrateChanged(std::uint8_t _heartRate) noexcept
+{
+}
+
+void StubHeartrateService::setSensorLocation(SensorLocation _location) noexcept
+{
+}
+
+} // namespace Ble::HeartrateService

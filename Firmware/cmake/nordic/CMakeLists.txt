@@ -244,7 +244,7 @@ target_link_options(
     PUBLIC
     ${CPU_FLAGS}
     -L${NRF5_SDK_PATH}/modules/nrfx/mdk
-    -Wl,--gc-sections --specs=nano.specs -lc -lnosys -lm
+    -Wl,--print-memory-usage,--gc-sections --specs=nano.specs -lc -lnosys -lm
     -Wl,-Map=${NORDIC_TARGET}.map
     -T ${SDK_DEPENDENT_DIR}/gcc_nrf52.ld
 )
@@ -253,7 +253,7 @@ target_compile_options(
     Common PUBLIC
     --sysroot="${TOOLCHAIN_SYSROOT}"
     $<$<CONFIG:Debug>:-Os>
-    $<$<CONFIG:Release>:-Os>
+    $<$<CONFIG:Release>:-O0>
     ${COMMON_FLAGS}
 )
 
@@ -265,6 +265,8 @@ target_compile_options(
 
 list(APPEND NRFSDK_INCLUDES ${NordicCommonInc} )
 list(APPEND NRFSDK_SOURCES ${NordicCommonSrc} )
+
+set_source_files_properties(${NRFSDK_SOURCES} PROPERTIES LANGUAGE C)
 
 include (CMakePrintHelpers)
 
@@ -488,7 +490,7 @@ declareNordicSdkLibrary(
 
 #BAS Service
 declareNordicSdkLibrary(
-    BleService_BAS
+    BleService_BateryService
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_bas/ble_bas.c"
     NordicSDK::Ble
@@ -496,9 +498,17 @@ declareNordicSdkLibrary(
 
 #CTS_C Service
 declareNordicSdkLibrary(
-    BleService_CTSCLIENT
+    BleService_CurrentTimeClient
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c"
     "${NRF5_SDK_PATH}/components/ble/ble_services/ble_cts_c/ble_cts_c.c"
+    NordicSDK::Ble::ServiceDbDiscovery
+)
+
+#CTS_C Service
+declareNordicSdkLibrary(
+    BleService_HeartrateService
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_hrs"
+    "${NRF5_SDK_PATH}/components/ble/ble_services/ble_hrs/ble_hrs.c"
     NordicSDK::Ble::ServiceDbDiscovery
 )
 

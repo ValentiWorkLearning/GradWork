@@ -1,35 +1,31 @@
 #pragma once
 
-#include "ih/drivers/ih_ible_softdevice.hpp"
 #include "ih/drivers/ih_ble_battery_service.hpp"
 #include "ih/drivers/ih_ble_dts_service.hpp"
 #include "ih/drivers/ih_ble_service_factory.hpp"
+#include "ih/drivers/ih_ible_softdevice.hpp"
 
 #include <atomic>
 
 namespace Ble::Stack
 {
-class DesktopBleStackKeeper
-    :   public IBleSoftDevice
+class DesktopBleStackKeeper : public IBleSoftDevice
 {
 
 public:
-
-    DesktopBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
-    ~DesktopBleStackKeeper()override = default;
+    DesktopBleStackKeeper(ServiceFactory::TBleFactoryPtr&& _pServiceCreator);
+    ~DesktopBleStackKeeper() override = default;
 
 public:
+    Ble::BatteryService::IBatteryLevelService& getBatteryService() noexcept override;
 
-    Ble::BatteryService::IBatteryLevelService& getBatteryService() override;
+    const Ble::BatteryService::IBatteryLevelService& getBatteryService() const noexcept override;
 
-    const Ble::BatteryService::IBatteryLevelService& getBatteryService() const override;
+    Ble::DateTimeService::IDateTimeService& getDateTimeService() noexcept override;
 
-    Ble::DateTimeService::IDateTimeService& getDateTimeService() override;
-
-    const Ble::DateTimeService::IDateTimeService& getDateTimeService() const override;
+    const Ble::DateTimeService::IDateTimeService& getDateTimeService() const noexcept override;
 
 private:
-
     std::atomic<bool> m_isConnected;
 
     ServiceFactory::TBleFactoryPtr m_pServiceCreator;
@@ -37,7 +33,7 @@ private:
     Ble::ServiceFactory::IBleServiceFactory::TDateTimeServicePtr m_dateTimeService;
 };
 
-std::unique_ptr<IBleSoftDevice>
-createBleStackKeeper( ServiceFactory::TBleFactoryPtr&& _pServiceCreator );
+std::unique_ptr<IBleSoftDevice> createBleStackKeeper(
+    ServiceFactory::TBleFactoryPtr&& _pServiceCreator) noexcept;
 
-}
+} // namespace Ble::Stack

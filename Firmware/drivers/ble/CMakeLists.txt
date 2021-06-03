@@ -32,8 +32,9 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         NordicSDK::Bsp::BleButton
         NordicSDK::Ble::PeerManager
         NordicSDK::Ble::ServiceDbDiscovery
-        NordicSDK::BleService::BAS
-        NordicSDK::BleService::CTSCLIENT
+        NordicSDK::BleService::BateryService
+        NordicSDK::BleService::CurrentTimeClient
+        NordicSDK::BleService::HeartrateService
     )
 
     target_sources(
@@ -43,6 +44,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         ble_softdevice.cpp
         ble_battery_service.cpp
         ble_datetime_service.cpp
+        ble_heartrate_service.cpp
     )
 elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
     target_include_directories(

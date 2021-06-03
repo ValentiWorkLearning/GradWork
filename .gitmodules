@@ -7,9 +7,12 @@
 [submodule "Firmware/graphics/lvgl_lib/lvgl_driver_backend/lv_drivers"]
 	path = Firmware/graphics/lvgl_lib/lvgl_driver_backend/lv_drivers
 	url = https://github.com/littlevgl/lv_drivers.git
-[submodule "Firmware/graphics/lvgl_lib/lvgl_driver_backend/SDL-mirror"]
-	path = Firmware/graphics/lvgl_lib/lvgl_driver_backend/SDL-mirror
-	url = https://github.com/spurious/SDL-mirror.git
 [submodule "Firmware/graphics/lvgl_lib/lvgl_library/lvgl"]
 	path = Firmware/graphics/lvgl_lib/lvgl_library/lvgl
 	url = https://github.com/lvgl/lvgl.git
+[submodule "Firmware/3rdparty/googletest"]
+	path = Firmware/3rdparty/googletest
+	url = https://github.com/google/googletest.git
+[submodule "Firmware/3rdparty/cppcoro_lib/cppcoro"]
+	path = Firmware/3rdparty/cppcoro_lib/cppcoro
+	url = https://github.com/lewissbaker/cppcoro.git

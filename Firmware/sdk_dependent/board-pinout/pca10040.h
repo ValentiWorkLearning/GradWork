@@ -74,8 +74,9 @@ extern "C" {
 #define BUTTON_2       17
 #define BUTTON_3       15
 #define BUTTON_4       19
+
 #define BUTTON_STOP    16
-#define BUTTON_PULL    NRF_GPIO_PIN_PULLUP
+#define BUTTON_PULL    NRF_GPIO_PIN_NOPULL
 
 #define BUTTONS_ACTIVE_STATE 0
 

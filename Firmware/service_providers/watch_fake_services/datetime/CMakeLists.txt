@@ -17,6 +17,12 @@ target_link_libraries(
     UtilsLibrary
 )
 
+target_compile_features(
+    datetime_fake_service
+    PRIVATE
+    cxx_std_20
+)   
+
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(datetime_fake_service
         PRIVATE

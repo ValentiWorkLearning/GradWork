@@ -31,7 +31,7 @@ public:
         ,   std::uint8_t _chipSelectPin
         ,   std::uint32_t _pRegister
         ,   std::uint8_t _driverInstance
-    );
+    )noexcept;
 
     ~SpiBus();
 
@@ -40,27 +40,35 @@ public:
     static constexpr std::uint16_t DmaBufferSize = 255;
     using DmaBufferType = etl::vector<std::uint8_t,DmaBufferSize>;
 
-    std::uint16_t getDmaBufferSize();
+    std::uint16_t getDmaBufferSize() noexcept;
 
 public:
 
-    void sendData( std::uint8_t _data );
+    void addXferTransaction( TransactionDescriptor&& _deskcriptor ) noexcept;
 
-    void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize );
+    void sendData( std::uint8_t _data )noexcept;
 
-    void receiveChunk( std::uint8_t* _pBuffer, const size_t _bufferSize );
+    void sendChunk( const std::uint8_t* _pBuffer, const size_t _bufferSize )noexcept;
 
-    DmaBufferType& getDmaBuffer();
+    void xferChunk(
+            const std::uint8_t* _pTransmitBuffer
+        ,   const size_t _transmitBufferSize
+    )noexcept;
+
+    void receiveAsync( const size_t bytesCount )noexcept;
+
+    DmaBufferType& getDmaBufferTransmit()noexcept;
+    DmaBufferType& getDmaBufferReceive()noexcept;
 
     Simple::Signal<void()> onTransactionCompleted;
 
 public:
 
-    void addTransaction( Transaction&& _item );
+    void addTransaction( Transaction&& _item )noexcept;
 
-    void runQueue();
+    void runQueue()noexcept;
 
-    size_t getQueueSize() const;
+    size_t getQueueSize() const noexcept;
 
     enum class TCompletedEvent
     {
@@ -69,16 +77,26 @@ public:
         ,   Unknown
     };
 
-    void handleEvent( TCompletedEvent _eventToHandle );
+    void handleEvent( TCompletedEvent _eventToHandle )noexcept;
 
 private:
 
-    void performTransaction( uint16_t _dataSize );
+    void performTransaction( uint16_t _dataSize )noexcept;
+
+    void setupBlockTransactionInternal(
+            std::function<void()> beforeTransaction
+        ,   std::function<void()> afterTransaction
+        ,   const TransactionDescriptor::DataSequence& dataSequence
+    )noexcept;
+
+    std::uint32_t getTransitionOffset()noexcept;
 
 private:
+
     std::atomic<bool> m_isTransactionCompleted;
+    std::uint32_t m_completedTransitionsCount;
 
-    static constexpr inline int QueueSize = 32;
+    static constexpr inline int QueueSize = 60;
 
     using TTransactionStorage = etl::queue<
             Transaction
@@ -89,11 +107,12 @@ private:
     class SpiBackendImpl;
     std::unique_ptr<SpiBackendImpl> m_pSpiBackendImpl;
 
-    DmaBufferType DmaArray;
+    DmaBufferType DmaArrayTransmit;
+    DmaBufferType DmaArrayReceive;
     TTransactionStorage m_transactionsQueue;
 };
 
 template< typename TSpiInstance >
-std::unique_ptr<SpiBus> createSpiBus();
+std::unique_ptr<SpiBus> createSpiBus()noexcept;
 
 } // namespace Interface

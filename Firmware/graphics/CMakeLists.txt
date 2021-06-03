@@ -1,5 +1,4 @@
-cmake_minimum_required(VERSION 3.12)
-
+cmake_minimum_required(VERSION 3.14)
 set (TARGET_NAME watch_graphics)
 
 add_library( ${TARGET_NAME} STATIC )
@@ -43,12 +42,15 @@ target_sources(
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/clock_page/gs_clock_page_handler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/health_page/gs_health_page_view.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/pages/player_page/gs_player_page_view.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/lvgl_views_creators/gs_widgets_creator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/lvgl_views_creators/gs_pages_creator.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_main_window_event_handler.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_main_window.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_main_window_view.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gs_theme_controller.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gs_event_dispatcher.cpp
     ${CMAKE_CURRENT_LIST_DIR}/gs_lvgl_service.cpp
-)
+    )
 
 target_link_libraries(
     ${TARGET_NAME}
