@@ -23,8 +23,6 @@ add_executable(
 
     main_window/mainwindow_model_test.cpp
 
-    coroutine/display_peripheral_test.cpp
-
     stubs/pages_stub_pages_creator.cpp
     stubs/widgets_stub_pages_creator.cpp
 

@@ -1,43 +1,35 @@
-if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    
-    add_library(
-        spi
-        spi_wrapper.cpp
-        spi_wrapper_async.cpp
-    )
-
-    target_link_libraries( spi PRIVATE NordicSDK::Common )
-    target_compile_options(
+add_library(
     spi
-    PRIVATE
-    -fcoroutines
+    INTERFACE
 )
-elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
 
-    add_library(
+if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+
+    target_link_libraries( spi INTERFACE NordicSDK::Common )
+    target_compile_options(
         spi
-        spi_wrapper_stub.cpp
+        INTERFACE
+        -fcoroutines
     )
 endif()
 
 
 target_include_directories(
     spi
-    PUBLIC
+    INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}/inc
     ${CMAKE_CURRENT_LIST_DIR}/inc/backends
 )
 
 target_link_libraries(
     spi
-    PRIVATE
+    INTERFACE
     UtilsLibrary
-    drivers_ih
     etl
     logger_service
 )
 target_compile_features(
     spi
-    PRIVATE
+    INTERFACE
     cxx_std_20
 )

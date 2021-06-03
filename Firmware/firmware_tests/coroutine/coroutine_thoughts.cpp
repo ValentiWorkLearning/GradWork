@@ -9,13 +9,9 @@
 #include <functional>
 #include <coroutine>
 
-
-#include "ih/drivers/ih_display_idisplay.hpp"
-
-#include "display/display_spi_common_coro.hpp"
-#include "spi/spi_wrapper_async.hpp"
-#include "logger/logger_service.hpp"
-#include "display/display_coro_compact_gc9a01.hpp"
+#include <display/display_spi_common_coro.hpp>
+#include <logger/logger_service.hpp>
+#include <display/display_coro_compact_gc9a01.hpp>
 
 
 #include <spi/spi_wrapper_async_templated.hpp>

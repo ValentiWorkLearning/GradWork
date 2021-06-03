@@ -6,9 +6,6 @@
 #include <utils/CallbackConnector.hpp>
 #include <utils/CoroUtils.hpp>
 
-#include <ih/drivers/ih_display_driver_creator.hpp>
-#include <ih/drivers/ih_display_idisplay.hpp>
-
 #if defined(USE_HARDWARE_DISPLAY_BACKEND)
 #include <app_timer.h>
 #include <nrf_drv_clock.h>
