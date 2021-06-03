@@ -85,8 +85,10 @@ private:
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
         processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
+
         processTransmitBuffer(
-            std::span(transmitBuffer.data() + std::tuple_size_v<TCommand>, transmitBuffer.size()),
+            std::span(
+                transmitBuffer.data() + std::tuple_size_v<TCommand>, TSpiBusInstance::DmaBufferSize),
             std::forward_as_tuple(_argList...));
 
         constexpr std::size_t TransmitSize = std::tuple_size_v<TCommand> + sizeof...(_argList);
