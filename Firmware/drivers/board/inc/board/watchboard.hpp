@@ -4,7 +4,6 @@
 #include "utils/Platform.hpp"
 
 #include "hardware_usings.hpp"
-#include "ih/drivers/ih_iexternal_flash.hpp"
 #include <memory>
 
 namespace WatchBoard
