@@ -5,26 +5,22 @@
 namespace ServiceProviders::BatteryService
 {
 
-class BatteryServiceFake
-    :   public IBatteryLevelAppService
+class BatteryServiceFake : public IBatteryLevelAppService
 {
 
 public:
+    explicit BatteryServiceFake(std::chrono::seconds _measurementPeriod) noexcept;
 
-    explicit BatteryServiceFake( std::chrono::seconds _measurementPeriod );
-
-    ~BatteryServiceFake()override;
+    ~BatteryServiceFake() override;
 
 public:
+    std::chrono::seconds getMeasurmentPeriod() const noexcept override;
 
-    std::chrono::seconds getMeasurmentPeriod() const override;
-
-    void startBatteryMeasure() override;
+    void startBatteryMeasure() noexcept override;
 
 private:
-
     class BatterySimulatorImpl;
     std::unique_ptr<BatterySimulatorImpl> m_pBatterySimImpl;
 };
 
-}
+} // namespace ServiceProviders::BatteryService

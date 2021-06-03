@@ -7,125 +7,97 @@
 #include "ih/pages/gs_ihealth_page_view.hpp"
 #include "ih/pages/gs_iplayer_page_view.hpp"
 
-#include "widgets/battery/gs_battery_widget.hpp"
 #include "widgets/battery/gs_battery_handler.hpp"
+#include "widgets/battery/gs_battery_widget.hpp"
 
 #include <algorithm>
-
 
 namespace Graphics::Views
 {
 
-template< typename ConcretePageView >
+template <typename ConcretePageView>
 PageViewObject<ConcretePageView>::PageViewObject(
-        const Theme::IThemeController* _themeController
-    ,   std::string_view _pageName
-    )
-    :   m_isPageVisible{ false }
-    ,   m_pageName{ _pageName }
-    ,   m_pThemeController{ _themeController }
+    const Theme::IThemeController* _themeController,
+    std::string_view _pageName) noexcept
+    : m_isPageVisible{false}, m_pageName{_pageName}, m_pThemeController{_themeController}
 {
 }
 
-template< typename ConcretePageView >
+template <typename ConcretePageView>
 void PageViewObject<ConcretePageView>::addWidget(
-    Graphics::Widgets::IWidgetObject* _pWidget
-)
+    Graphics::Widgets::IWidgetObject* _pWidget) noexcept
 {
-    m_pWidgetsStorage.push_back( _pWidget );
+    m_pWidgetsStorage.push_back(_pWidget);
 }
 
-template< typename ConcretePageView >
-void PageViewObject<ConcretePageView >::show()
+template <typename ConcretePageView> void PageViewObject<ConcretePageView>::show() noexcept
 {
-    if( m_isPageVisible )
+    if (m_isPageVisible)
         return;
 
     initStyles();
 
-    auto parent = lv_disp_get_scr_act( nullptr );
+    auto parent = lv_disp_get_scr_act(nullptr);
 
-	auto pThemeProvider = PageViewObject::getThemeController();
-	if (!pThemeProvider )
-		return;
+    auto pThemeProvider = PageViewObject::getThemeController();
+    if (!pThemeProvider)
+        return;
 
-	const std::uint32_t DisplayWidth { pThemeProvider->getDisplayWidth() };
-	const std::uint32_t DisplayHeight { pThemeProvider->getDisplayHeight() };
+    const std::uint32_t DisplayWidth{pThemeProvider->getDisplayWidth()};
+    const std::uint32_t DisplayHeight{pThemeProvider->getDisplayHeight()};
 
-    initPageWidgets( parent, DisplayWidth, DisplayHeight );
+    initPageWidgets(parent, DisplayWidth, DisplayHeight);
 
-    executeForEachWidget(
-        []( Graphics::Widgets::IWidgetObject* _pWidget )
-        {
-                _pWidget->show();
-        }
-    );
+    executeForEachWidget([](Graphics::Widgets::IWidgetObject* _pWidget) { _pWidget->show(); });
     m_isPageVisible = true;
 }
 
-template< typename ConcretePageView >
-void PageViewObject<ConcretePageView>::hide()
+template <typename ConcretePageView> void PageViewObject<ConcretePageView>::hide() noexcept
 {
-    if( !m_isPageVisible )
+    if (!m_isPageVisible)
         return;
 
     unloadWidgets();
     resetStyle();
-    executeForEachWidget(
-        []( Graphics::Widgets::IWidgetObject* _pWidget )
-        {
-                _pWidget->hide();
-        }
-    );
+    executeForEachWidget([](Graphics::Widgets::IWidgetObject* _pWidget) { _pWidget->hide(); });
     m_isPageVisible = false;
 }
 
-template< typename ConcretePageView >
-void PageViewObject<ConcretePageView>::reloadStyle()
+template <typename ConcretePageView> void PageViewObject<ConcretePageView>::reloadStyle() noexcept
 {
     hide();
     executeForEachWidget(
-        []( Graphics::Widgets::IWidgetObject* _pWidget )
-        {
-            _pWidget->reloadStyle();
-        }
-    );
+        [](Graphics::Widgets::IWidgetObject* _pWidget) { _pWidget->reloadStyle(); });
     show();
 }
 
-template<typename ConcretePageView>
-std::string_view PageViewObject<ConcretePageView>::getPageName() const
+template <typename ConcretePageView>
+std::string_view PageViewObject<ConcretePageView>::getPageName() const noexcept
 {
     return m_pageName;
 }
 
-template< typename ConcretePageView >
-bool PageViewObject<ConcretePageView>::isVisible() const
+template <typename ConcretePageView>
+bool PageViewObject<ConcretePageView>::isVisible() const noexcept
 {
     return m_isPageVisible;
 }
 
-template< typename ConcretePageView >
-const Theme::IThemeController*
-PageViewObject<ConcretePageView>::getThemeController() const
+template <typename ConcretePageView>
+const Theme::IThemeController* PageViewObject<ConcretePageView>::getThemeController() const noexcept
 {
     return m_pThemeController;
 }
 
-template< typename ConcretePageView >
+template <typename ConcretePageView>
 void PageViewObject<ConcretePageView>::executeForEachWidget(
-    std::function<void(Graphics::Widgets::IWidgetObject*)> _toCall
-)
+    std::function<void(Graphics::Widgets::IWidgetObject*)> _toCall) noexcept
 {
-    std::for_each(
-            m_pWidgetsStorage.begin()
-        ,   m_pWidgetsStorage.end()
-        ,   _toCall
-    );
+    std::for_each(m_pWidgetsStorage.begin(), m_pWidgetsStorage.end(), _toCall);
 }
 
 template class PageViewObject<typename Views::IClockWatchPage>;
 template class PageViewObject<typename Views::IHealthWatchPage>;
 template class PageViewObject<typename Views::IPlayerWatchPage>;
 
-};
+}; // namespace Graphics::Views

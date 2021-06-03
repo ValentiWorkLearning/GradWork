@@ -8,13 +8,11 @@
 namespace Graphics::Widgets
 {
 
-class IPagesSwitch
-    :   public IWidgetObject
+class IPagesSwitch : public IWidgetObject
 {
 
 public:
-
-    virtual void setActivePage( std::string_view _pageName ) = 0;
+    virtual void setActivePage(std::string_view _pageName) = 0;
 };
 
-};
+}; // namespace Graphics::Widgets

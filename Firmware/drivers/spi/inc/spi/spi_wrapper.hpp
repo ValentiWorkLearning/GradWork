@@ -31,7 +31,7 @@ public:
         ,   std::uint8_t _chipSelectPin
         ,   std::uint32_t _pRegister
         ,   std::uint8_t _driverInstance
-    );
+    )noexcept;
 
     ~SpiBus();
 
@@ -113,6 +113,6 @@ private:
 };
 
 template< typename TSpiInstance >
-std::unique_ptr<SpiBus> createSpiBus();
+std::unique_ptr<SpiBus> createSpiBus()noexcept;
 
 } // namespace Interface

@@ -1,37 +1,32 @@
 #include "inc/ble/nordic_ble/ble_heartrate_service.hpp"
 
-#include "ble_hrs.h"
 #include "app_error.h"
+#include "ble_hrs.h"
 
 #include <cstdint>
 
 namespace
 {
-    BLE_HRS_DEF(m_hrs);
+BLE_HRS_DEF(m_hrs);
 }
 
 namespace Ble::HeartrateService
 {
 
-NordicHeartrateService::NordicHeartrateService()
+NordicHeartrateService::NordicHeartrateService() noexcept
 {
     initService();
 }
 
-NordicHeartrateService::~NordicHeartrateService()= default;
+NordicHeartrateService::~NordicHeartrateService() = default;
 
-void
-NordicHeartrateService::onHeartrateChanged ( std::uint8_t _newHeartrateLevel )
+void NordicHeartrateService::onHeartrateChanged(std::uint8_t _newHeartrateLevel) noexcept
 {
-    ret_code_t errorCode = ble_hrs_heart_rate_measurement_send(
-            &m_hrs
-        ,   _newHeartrateLevel
-    );
+    ret_code_t errorCode = ble_hrs_heart_rate_measurement_send(&m_hrs, _newHeartrateLevel);
     APP_ERROR_CHECK(errorCode);
 }
 
-void
-NordicHeartrateService::initService()
+void NordicHeartrateService::initService() noexcept
 {
     ble_hrs_init_t heartrateDescriptor{};
     std::uint8_t bodySensorLocation = BLE_HRS_BODY_SENSOR_LOCATION_FINGER;
@@ -47,10 +42,10 @@ NordicHeartrateService::initService()
     APP_ERROR_CHECK(errorCode);
 }
 
-void
-NordicHeartrateService::setSensorLocation( Ble::HeartrateService::SensorLocation _sensorLocation )
+void NordicHeartrateService::setSensorLocation(
+    Ble::HeartrateService::SensorLocation _sensorLocation) noexcept
 {
     // TODO me?
 }
 
-}
+} // namespace Ble::HeartrateService

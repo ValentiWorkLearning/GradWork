@@ -17,6 +17,6 @@ target_link_libraries(
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    target_compile_definitions(gpio PRIVATE USE_DEVICE_SPECIFIC)
+    target_compile_definitions(gpio PUBLIC USE_DEVICE_SPECIFIC)
     target_link_libraries(gpio PRIVATE NordicSDK::Common )
 endif()

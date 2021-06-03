@@ -5,22 +5,20 @@
 namespace Ble::HeartrateService
 {
 
-class NordicHeartrateService
-    :   public IHeartrateService
+class NordicHeartrateService : public IHeartrateService
 {
 
 public:
-
-    NordicHeartrateService();
-    ~NordicHeartrateService()override;
+    NordicHeartrateService() noexcept;
+    ~NordicHeartrateService() override;
 
 public:
-    void onHeartrateChanged ( std::uint8_t _newHeartrateLevel ) override;
+    void onHeartrateChanged(std::uint8_t _newHeartrateLevel) noexcept override;
 
-    void setSensorLocation( SensorLocation _sensorLocation ) override;
+    void setSensorLocation(SensorLocation _sensorLocation) noexcept override;
 
 private:
-    void initService();
+    void initService() noexcept;
 };
 
-}
+} // namespace Ble::HeartrateService

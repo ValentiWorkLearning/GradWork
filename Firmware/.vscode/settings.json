@@ -3,7 +3,7 @@
     "cmake.preferredGenerators": [
         "Unix Makefiles"
     ],
-    "cmake.parallelJobs": 4,
+    "cmake.parallelJobs": 8,
     "cmake.environment": {
         "NRF5_SDK_PATH": "C://Nordic_dev"
     },
@@ -108,6 +108,11 @@
         "compare": "cpp",
         "coroutine": "cpp",
         "ranges": "cpp",
-        "stop_token": "cpp"
-    }
+        "stop_token": "cpp",
+        "complex": "cpp",
+        "csignal": "cpp",
+        "typeindex": "cpp",
+        "span": "cpp"
+    },
+    "editor.formatOnSave": true
 }

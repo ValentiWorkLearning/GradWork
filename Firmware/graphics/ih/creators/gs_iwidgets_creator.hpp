@@ -6,28 +6,28 @@
 
 namespace Graphics::Widgets
 {
-    class IBluetoothWidget;
-    class IPagesSwitch;
-    class IBatteryWidget;
-}
+class IBluetoothWidget;
+class IPagesSwitch;
+class IBatteryWidget;
+} // namespace Graphics::Widgets
 
 namespace Graphics::Widgets
 {
 class IWidgetsCreator
 {
-   public:
+public:
     using Ptr = std::unique_ptr<IWidgetsCreator>;
 
     [[nodiscard]] virtual std::unique_ptr<Graphics::Widgets::IBluetoothWidget>
-    createBluetoothWidget(Theme::IThemeController* _pThemeController) = 0;
+    createBluetoothWidget(Theme::IThemeController* _pThemeController) noexcept = 0;
 
-    [[nodiscard]] virtual std::unique_ptr<Graphics::Widgets::IPagesSwitch>
-    createPagesSwitchWidget(Theme::IThemeController* _pThemeController) = 0;
+    [[nodiscard]] virtual std::unique_ptr<Graphics::Widgets::IPagesSwitch> createPagesSwitchWidget(
+        Theme::IThemeController* _pThemeController) noexcept = 0;
 
-    [[nodiscard]] virtual std::unique_ptr<Graphics::Widgets::IBatteryWidget>
-    createBatteryWidget(Theme::IThemeController* _pThemeController) = 0;
+    [[nodiscard]] virtual std::unique_ptr<Graphics::Widgets::IBatteryWidget> createBatteryWidget(
+        Theme::IThemeController* _pThemeController) noexcept = 0;
 
     virtual ~IWidgetsCreator() = default;
 };
 
-}
+} // namespace Graphics::Widgets

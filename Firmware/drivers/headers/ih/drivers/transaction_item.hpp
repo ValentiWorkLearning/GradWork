@@ -1,8 +1,8 @@
 #pragma once
 
+#include <cstdint>
 #include <functional>
 #include <variant>
-#include <cstdint>
 
 namespace Interface::Spi
 {
@@ -27,7 +27,7 @@ struct TransactionDescriptor
         const size_t blockSize;
     };
 
-    std::variant<std::uint8_t,DataSequence> transactionData;
+    std::variant<std::uint8_t, DataSequence> transactionData;
 };
 
-};
+}; // namespace Interface::Spi

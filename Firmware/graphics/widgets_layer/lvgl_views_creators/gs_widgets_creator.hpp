@@ -5,25 +5,22 @@
 namespace Graphics::Widgets
 {
 
-class LvglWidgetsCreator
-    :   public IWidgetsCreator
+class LvglWidgetsCreator : public IWidgetsCreator
 {
 public:
-
     ~LvglWidgetsCreator() override;
 
 public:
+    std::unique_ptr<Graphics::Widgets::IBluetoothWidget> createBluetoothWidget(
+        Theme::IThemeController* _pThemeController) noexcept override;
 
-    std::unique_ptr<Graphics::Widgets::IBluetoothWidget>
-        createBluetoothWidget(Theme::IThemeController* _pThemeController) override;
+    std::unique_ptr<Graphics::Widgets::IPagesSwitch> createPagesSwitchWidget(
+        Theme::IThemeController* _pThemeController) noexcept override;
 
-    std::unique_ptr<Graphics::Widgets::IPagesSwitch>
-        createPagesSwitchWidget(Theme::IThemeController* _pThemeController) override;
-
-    std::unique_ptr<Graphics::Widgets::IBatteryWidget>
-        createBatteryWidget(Theme::IThemeController* _pThemeController) override;
+    std::unique_ptr<Graphics::Widgets::IBatteryWidget> createBatteryWidget(
+        Theme::IThemeController* _pThemeController) noexcept override;
 };
 
-IWidgetsCreator::Ptr createLvglWidgetsCreator();
+IWidgetsCreator::Ptr createLvglWidgetsCreator() noexcept;
 
-}
+} // namespace Graphics::Widgets

@@ -1,98 +1,78 @@
 #include "inc/board/watchboard.hpp"
 
-#if defined (USE_DEVICE_SPECIFIC)
+#if defined(USE_DEVICE_SPECIFIC)
 
-#include "pca10040.h"
+#include "app_error.h"
+#include "app_timer.h"
 #include "boards.h"
 #include "bsp.h"
-#include "app_timer.h"
-#include "app_error.h"
+#include "pca10040.h"
 
 namespace
 {
-    APP_TIMER_DEF( m_ledDriverTimer );
+APP_TIMER_DEF(m_ledDriverTimer);
 }
-
-#include "windbondflash/winbond_driver_creator.hpp"
 
 #endif
 
 #include "utils/CallbackConnector.hpp"
+#include "utils/CoroUtils.hpp"
 
-#include "buttons/bt_buttons_driver.hpp"
-#include "buttons/bt_buttons_driver_creator.hpp"
-
-#include "logger/logger_service.hpp"
 #include "delay/delay_provider.hpp"
+#include "logger/logger_service.hpp"
 
-#include <coroutine>
+#define FMT_HEADER_ONLY
+#include <fmt/core.h>
+#include <fmt/ranges.h>
 
 namespace
 {
-    static void TimerExpiredCallback( void* _pExpiredContext )
-    {
-        std::coroutine_handle<>::from_address(_pExpiredContext).resume();
-    }
-}
-
-template<typename  ... Args>
-struct std::coroutine_traits<void, Args...>
+static void TimerExpiredCallback(void* _pExpiredContext) noexcept
 {
-    struct promise_type
-    {
-        void get_return_object(){}
+    std::coroutine_handle<>::from_address(_pExpiredContext).resume();
+}
+} // namespace
 
-        constexpr auto initial_suspend(){ return std::suspend_never{}; }
-
-        constexpr auto final_suspend() noexcept {  return std::suspend_never{}; }
-
-        void return_void(){}
-
-        void unhandled_exception()
-        {
-            APP_ERROR_CHECK(NRF_ERROR_BUSY);
-        }
-    };
-};
-
-auto operator co_await( std::chrono::milliseconds _duration)
+auto operator co_await(std::chrono::milliseconds _duration)
 {
 
     class Awaitable
     {
 
-        public:
-
-        explicit Awaitable(std::chrono::milliseconds _duration)
-            :   m_duration{_duration}
+    public:
+        explicit Awaitable(std::chrono::milliseconds _duration) : m_duration{_duration}
         {
         }
 
-        bool await_ready()const
+        bool await_ready() const noexcept
+        {
+            return false;
+        }
+#if defined(USE_DEVICE_SPECIFIC)
+        void await_suspend(std::coroutine_handle<> _coroLedHandle) noexcept
+        {
+            ret_code_t errorCode{};
+            errorCode = app_timer_start(
+                m_ledDriverTimer, APP_TIMER_TICKS(m_duration.count()), _coroLedHandle.address());
+            APP_ERROR_CHECK(errorCode);
+        }
+
+        void await_resume() noexcept
+        {
+            app_timer_stop(m_ledDriverTimer);
+        }
+#else
+        bool await_suspend(std::coroutine_handle<> _coroLedHandle) noexcept
         {
             return false;
         }
 
-        void await_suspend(std::coroutine_handle<> _coroLedHandle)
+        void await_resume() noexcept
         {
-            ret_code_t errorCode{};
-            errorCode = app_timer_start(
-                    m_ledDriverTimer
-                ,   APP_TIMER_TICKS( m_duration.count() )
-                ,   _coroLedHandle.address()
-            );
-            APP_ERROR_CHECK( errorCode );
         }
-
-        void await_resume()
-        {
-            app_timer_stop(m_ledDriverTimer);
-        }
-
-        private:
-
+#endif
+    private:
         std::chrono::milliseconds m_duration;
-
     };
     return Awaitable{_duration};
 }
@@ -100,122 +80,86 @@ auto operator co_await( std::chrono::milliseconds _duration)
 namespace WatchBoard
 {
 
-void
-Board::initBoard()
+void Board::initBoard() noexcept
 {
-#if defined (USE_DEVICE_SPECIFIC)
+#if defined(USE_DEVICE_SPECIFIC)
     /* Configure board. */
-    bsp_board_init( BSP_INIT_LEDS );
+    bsp_board_init(BSP_INIT_LEDS);
 
-    LOG_DEBUG_ENDL( "Hello from E73 Mod Board!" );
+    LOG_DEBUG_ENDL("Hello from E73 Mod Board!");
 
     ret_code_t errorCode{};
 
     errorCode = app_timer_init();
-    APP_ERROR_CHECK( errorCode );
+    APP_ERROR_CHECK(errorCode);
 #endif
-
-    m_pButtonsDriver = Buttons::createButtonsDriver();
-    m_pButtonsTimer = Buttons::createTimerBackend();
-    m_pButtonsBackend = Buttons::createButtonsBackend();
-
-    m_pButtonsDriver->setButtonsBackend( m_pButtonsBackend.get() );
-    m_pButtonsDriver->setTimer( m_pButtonsTimer.get() );
-
+    m_buttonsDriver.initializeHalDependent();
     initBoardSpiFlash();
 }
 
-void
-Board::initBoardTimer()
+void Board::initBoardTimer() noexcept
 {
+#if defined(USE_DEVICE_SPECIFIC)
     ret_code_t errorCode{};
-    errorCode = app_timer_create(
-            &m_ledDriverTimer
-        ,   APP_TIMER_MODE_SINGLE_SHOT
-        ,   TimerExpiredCallback
-    );
+    errorCode =
+        app_timer_create(&m_ledDriverTimer, APP_TIMER_MODE_SINGLE_SHOT, TimerExpiredCallback);
     APP_ERROR_CHECK(errorCode);
     LOG_DEBUG("LED timer create code is:");
     LOG_DEBUG_ENDL(errorCode);
-}
-
-void
-Board::initBoardSpiFlash()
-{
-#if defined (USE_DEVICE_SPECIFIC)
-
-    m_pFlashDriver = ExternalFlash::createExternalFlashDriver();
-    if( m_pFlashDriver )
-    {
-        m_pFlashDriver->onRequestDeviceIdCompleted.connect(
-            [this]
-            {
-                auto deviceId = m_pFlashDriver->getDeviceUniqueId();
-                LOG_DEBUG_ENDL( deviceId );
-            }
-        );
-
-        m_pFlashDriver->onRequestJedecIdCompleted.connect(
-            [this]( std::uint32_t _jedecId )
-            {
-                LOG_DEBUG("Jedec Id is:");
-                LOG_DEBUG_ENDL( _jedecId );
-            }
-        );
-
-        m_pFlashDriver->requestDeviceId();
-        m_pFlashDriver->requestJEDEDCId();
-    }
 #endif
 }
 
-Board::Board()
+void Board::initBoardSpiFlash() noexcept
+{
+    m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
+    if (m_pFlashDriver)
+    {
+        const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
+        LOG_DEBUG("Jedec Id is:");
+        LOG_DEBUG_ENDL(fmt::format("{:#04x}", JedecId));
+
+        const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
+        LOG_DEBUG_ENDL(fmt::format("{:02X}", fmt::join(DeviceId, "")));
+    }
+}
+
+Board::Board() noexcept
 {
     initBoard();
     initBoardTimer();
 }
 
-void
-Board::ledToggle()
+void Board::ledToggle() noexcept
 {
-#if defined (USE_DEVICE_SPECIFIC)
+#if defined(USE_DEVICE_SPECIFIC)
     using namespace std::chrono_literals;
-    while(true)
+    while (true)
     {
         co_await 300ms;
 
-        LOG_DEBUG_ENDL("LED TIMER EXPIRED");
+        // LOG_DEBUG_ENDL("LED TIMER EXPIRED");
         bsp_board_led_invert(0);
     }
 #endif
 }
 
-std::uint32_t
-Board::convertToTimerTicks( std::chrono::milliseconds _interval )
+std::uint32_t Board::convertToTimerTicks(std::chrono::milliseconds _interval) noexcept
 {
-#if defined (USE_DEVICE_SPECIFIC)
-    std::uint32_t timerTicksValue = APP_TIMER_TICKS( _interval.count() );
+#if defined(USE_DEVICE_SPECIFIC)
+    std::uint32_t timerTicksValue = APP_TIMER_TICKS(_interval.count());
     return timerTicksValue;
 #endif
     return 0;
 }
 
-
-Buttons::IButtonsDriver*
-Board::getButtonsDriver()
+Hal::ButtonsDriver* Board::getButtonsDriver() noexcept
 {
-    return m_pButtonsDriver.get();
+    return &m_buttonsDriver;
 }
 
-Buttons::IButtonsDriver*
-Board::getButtonsDriver() const
-{
-    return m_pButtonsDriver.get();
-}
-
-TBoardPtr createBoard()
+TBoardPtr createBoard() noexcept
 {
     return std::make_unique<Board>();
 }
 
-};
+}; // namespace WatchBoard

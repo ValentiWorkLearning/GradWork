@@ -4,14 +4,11 @@
 
 #include "ih/widgets/gs_ibluetooth_widget.hpp"
 
-
-class BluetoothWidgetStub
-	: public FakeBaseWidget<Graphics::Widgets::IBluetoothWidget>
+class BluetoothWidgetStub : public FakeBaseWidget<Graphics::Widgets::IBluetoothWidget>
 {
 public:
-
-	void setBluetoothStatus(Graphics::Widgets::IBluetoothWidget::BluetoothStatus _iconToSet) override
-	{
-
-	}
+    void setBluetoothStatus(
+        Graphics::Widgets::IBluetoothWidget::BluetoothStatus _iconToSet) override
+    {
+    }
 };

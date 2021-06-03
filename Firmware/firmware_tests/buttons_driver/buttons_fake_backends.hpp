@@ -6,32 +6,28 @@ namespace Buttons
 {
 
 class FakeTimerBackend
-    :   public IButtonTimerWrapper
 {
 
 public:
-
-    virtual ~FakeTimerBackend() = default;
+    Simple::Signal<void()> onTimerExpired;
 
 public:
-
     bool isTimerEllapsed() const
     {
         return m_isTimerEllapsed;
     };
 
-    void startTimer() override
+    void startTimer()
     {
         m_isTimerEllapsed = false;
     }
 
-    void stopTimer() override
+    void stopTimer()
     {
         m_isTimerEllapsed = true;
     }
 
 public:
-
     void ellapseTimer()
     {
         m_isTimerEllapsed = true;
@@ -39,42 +35,24 @@ public:
     }
 
 private:
-
     bool m_isTimerEllapsed = false;
 };
 
-using TFakeTimerBackendPtr = std::unique_ptr<FakeTimerBackend>;
-
-TFakeTimerBackendPtr createFakeTimerBackend()
-{
-    return std::make_unique<FakeTimerBackend>();
-}
-
 class FakeButtonsBackend
-    :   public IButtonsBackend
 {
 
 public:
-
-    virtual ~FakeButtonsBackend() = default;
+    Simple::Signal<void(ButtonId, ButtonBackendEvent)> onButtonEvent;
 
 public:
-
-    void fakeButtonPress( ButtonId _buttonId )
+    void fakeButtonPress(ButtonId _buttonId)
     {
-        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kPressed );
+        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kPressed);
     }
-    void fakeButtonRelease( ButtonId _buttonId )
+    void fakeButtonRelease(ButtonId _buttonId)
     {
-        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kReleased );
+        onButtonEvent.emit(_buttonId, ButtonBackendEvent::kReleased);
     }
 };
 
-using TFakeButtonsBackendPtr = std::unique_ptr<FakeButtonsBackend>;
-
-TFakeButtonsBackendPtr createFakeButtonsBackend()
-{
-    return std::make_unique<FakeButtonsBackend>();
-}
-
-}
+} // namespace Buttons

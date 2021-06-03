@@ -10,66 +10,56 @@
 namespace Graphics::Views
 {
 
-class ClockWatch
-    :   public PageViewObject<IClockWatchPage>
+class ClockWatch : public PageViewObject<IClockWatchPage>
 {
 
 public:
-
-    explicit ClockWatch( const Theme::IThemeController* _themeController );
+    explicit ClockWatch(const Theme::IThemeController* _themeController) noexcept;
 
     ~ClockWatch() override = default;
 
 public:
+    void setHours(const std::string& _newHoursValue) noexcept override;
 
-    void setHours( const std::string& _newHoursValue ) override;
+    void setMinutes(const std::string& _newMinutesValue) noexcept override;
 
-    void setMinutes( const std::string& _newMinutesValue ) override;
+    void setSeconds(const std::string& _newSecondsValue) noexcept override;
 
-    void setSeconds( const std::string& _newSecondsValue ) override;
+    void setWeekday(std::string_view _newWeekDay) noexcept override;
 
-    void setWeekday( std::string_view _newWeekDay ) override;
-
-    void setFullDate( const std::string& _fullDate ) override;
+    void setFullDate(const std::string& _fullDate) noexcept override;
 
 protected:
+    void resetStyle() noexcept override;
 
-    void resetStyle() override;
-
-    void initStyles() override;
+    void initStyles() noexcept override;
 
     void initPageWidgets(
-            lv_obj_t* _parent
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    ) override;
+        lv_obj_t* _parent,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept override;
 
-    void unloadWidgets() override;
+    void unloadWidgets() noexcept override;
 
 private:
-
     void initClockLabels(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
     void initFullDateLabel(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
     void initWeekDayLabel(
-            lv_obj_t* _parentObject
-        ,   const std::uint32_t _displayWidth
-        ,   const std::uint32_t _displayHeight
-    );
+        lv_obj_t* _parentObject,
+        const std::uint32_t _displayWidth,
+        const std::uint32_t _displayHeight) noexcept;
 
-    void restoreLabelsText();
+    void restoreLabelsText() noexcept;
 
 private:
-
     lv_style_t m_hoursLabelStyle;
     lv_style_t m_minutesLabelStyle;
     lv_style_t m_secondsLabelStyle;
@@ -82,17 +72,15 @@ private:
     std::string m_weekdayValue;
     std::string m_fulldateValue;
 
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pHoursLabel;
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pMinutesLabel;
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pSecondsLabel;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pHoursLabel;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pMinutesLabel;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pSecondsLabel;
 
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pFullDateLabel;
-    Meta::PointerWrapper<lv_obj_t,lv_obj_del> m_pWeekDayLabel;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pFullDateLabel;
+    Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pWeekDayLabel;
 };
 
-
 std::unique_ptr<IClockWatchPage> createClockWatchView(
-    const Theme::IThemeController* _themeController
-);
+    const Theme::IThemeController* _themeController) noexcept;
 
-}
+} // namespace Graphics::Views

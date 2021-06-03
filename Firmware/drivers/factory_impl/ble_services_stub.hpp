@@ -7,64 +7,51 @@
 namespace Ble::BatteryService
 {
 
-class StubBatteryService
-    :   public IBatteryLevelService
+class StubBatteryService : public IBatteryLevelService
 {
 
 public:
-
-    StubBatteryService();
-    ~StubBatteryService()override = default;
+    StubBatteryService() noexcept;
+    ~StubBatteryService() override = default;
 
 public:
-
-    void onBatteryLevelChanged ( std::uint8_t _newBatteryLevel ) override;
-
+    void onBatteryLevelChanged(std::uint8_t _newBatteryLevel) noexcept override;
 };
 
-}
-
+} // namespace Ble::BatteryService
 
 namespace Ble::DateTimeService
 {
-class StubDateTimeService
-    :   public IDateTimeService
+class StubDateTimeService : public IDateTimeService
 {
 
 public:
-
-    StubDateTimeService();
-
-public:
-
-    void handleDiscoveryEvent( const std::any& _pBleDbDiscoveryEvent )override;
+    StubDateTimeService() noexcept;
 
 public:
+    void handleDiscoveryEvent(const std::any& _pBleDbDiscoveryEvent) noexcept override;
 
-    virtual ~StubDateTimeService()override = default;
+public:
+    virtual ~StubDateTimeService() override = default;
 };
 
-}
-
+} // namespace Ble::DateTimeService
 
 namespace Ble::HeartrateService
 {
-class StubHeartrateService
-    :   public IHeartrateService
+class StubHeartrateService : public IHeartrateService
 {
 
 public:
-
-    StubHeartrateService();
-
-public:
-
-    virtual ~StubHeartrateService()override = default;
+    StubHeartrateService() noexcept;
 
 public:
-    void onHeartrateChanged ( std::uint8_t _newHeartrateLevel ) override;
+    virtual ~StubHeartrateService() override = default;
 
-    void setSensorLocation( SensorLocation _sensorLocation ) override;
+public:
+    void onHeartrateChanged(std::uint8_t _newHeartrateLevel) noexcept override;
+
+    void setSensorLocation(SensorLocation _sensorLocation) noexcept override;
 };
 
-}
+} // namespace Ble::HeartrateService

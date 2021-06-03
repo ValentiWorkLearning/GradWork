@@ -1,7 +1,7 @@
 add_library(
     buttons_driver
-    bt_buttons_driver.cpp
-    bt_buttons_driver_creator.cpp
+    
+    
     )
 
 target_include_directories(

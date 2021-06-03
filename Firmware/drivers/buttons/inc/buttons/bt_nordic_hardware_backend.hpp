@@ -8,50 +8,44 @@ namespace Buttons
 {
 
 class NordicTimerBackend
-    :   public IButtonTimerWrapper
 {
 
 public:
-
-    NordicTimerBackend();
-
-    virtual ~NordicTimerBackend() = default;
+    Simple::Signal<void()> onTimerExpired;
 
 public:
+    bool isTimerEllapsed() const;
 
-    bool isTimerEllapsed() const override;
+    void startTimer();
 
-    void startTimer() override;
+    void stopTimer();
 
-    void stopTimer() override;
-
-private:
-
-    std::uint32_t convertToTimerTicks( std::chrono::milliseconds _interval );
+    void initialize();
 
 private:
-    const std::chrono::milliseconds m_buttonLongPressDetectionDelay = std::chrono::milliseconds{400};
+    static std::uint32_t convertToTimerTicks(std::chrono::milliseconds _interval);
+
+private:
+    const std::chrono::milliseconds m_buttonLongPressDetectionDelay =
+        std::chrono::milliseconds{400};
 
     std::atomic<bool> m_isTimerEllapsed = false;
+    std::atomic<bool> m_isInitialized = false;
 };
 
 class NordicButtonsBackend
-    :   public IButtonsBackend
 {
 
 public:
+    void initialize();
 
-    NordicButtonsBackend();
-
-    virtual ~NordicButtonsBackend() = default;
+public:
+    Simple::Signal<void(ButtonId, ButtonBackendEvent)> onButtonEvent;
 
 private:
-
     void initNordicButtonsBackend();
 
-    void handleHardwareButtonEvent( std::uint8_t _pinNumber, std::uint8_t _buttonEvent );
+    void handleHardwareButtonEvent(std::uint8_t _pinNumber, std::uint8_t _buttonEvent);
 };
 
-
-
-}
+} // namespace Buttons

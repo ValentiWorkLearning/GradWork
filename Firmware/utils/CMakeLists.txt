@@ -11,6 +11,7 @@ target_include_directories(
     INTERFACE
     ${CMAKE_CURRENT_LIST_DIR}
     ${CMAKE_CURRENT_LIST_DIR}/inc
+    ${CMAKE_CURRENT_LIST_DIR}/inc/utils/coroutine
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )
@@ -19,6 +20,12 @@ if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )
         INTERFACE
         USE_DESKTOP_SIMULATOR
         _CRT_SECURE_NO_WARNINGS
+    )
+elseif( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
+    target_compile_options(
+        UtilsLibrary
+        INTERFACE
+        -fcoroutines
     )
 endif()
 
