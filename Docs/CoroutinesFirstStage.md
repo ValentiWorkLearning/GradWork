@@ -16,6 +16,7 @@
 10. Добавляем черновой вариант драйвера для SPI-FLASH
 11. Добавляем чтение JEDEC ID
 12. Добавляем чтение device id
+13. Ожидание окончания выполнения сопрограммы
 
 ### 0. Перед прочтением
 Заметка предполагает базовое знакомство читателя с сопрогрмаммами/ их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
@@ -1024,3 +1025,406 @@ INSTANTIATE_TEST_SUITE_P(
 
 Переданная лямбда позволяет отформатировать название теста, который выполняется.
 
+
+### 10. Добавляем черновой вариант драйвера для SPI-FLASH
+Рассмотрим добавление драйвера для SPI-FLASH памяти. На первом этапе, рассмотрм получение JEDEC ID и device ID. Условия те-же самые, использовать DMA, ассинхронно, не блокироваться на ожидании событий.
+
+Результат, который мы хотим получить, выглядит следующим образом:
+```cpp
+void Board::initBoardSpiFlash() noexcept
+{
+    m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
+    if (m_pFlashDriver)
+    {
+        const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
+        LOG_DEBUG("Jedec Id is:");
+        LOG_DEBUG_ENDL(fmt::format("{:#04x}", JedecId));
+
+        const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
+        LOG_DEBUG_ENDL(fmt::format("{:02X}", fmt::join(DeviceId, "")));
+    }
+}
+```
+Для этого нам необходимо реализовать примитив, с помощью которого мы сможем вернуть значение на вызвающую сторону. Рассмотрим расширенный интерфейс `Task`, а именно необходимые измненения для добавления поддержки возврата значения.
+1. Необходимо изменить тип `await_resume` у `task_awaitable`:
+```cpp
+decltype(auto) await_resume()
+{
+    return m_coroutine.promise().result();
+}
+```
+2. Добавить метод `.result()` у `promise`:
+```cpp
+TResult& result()
+{
+    return m_coroutineResult;
+}
+```
+3. Добавить у `promise` метод `return_value`:
+```cpp
+void return_value(const TResult& _value)noexcept
+{
+    m_coroutineResult = _value;
+}
+```
+4. Сделать `Task` шаблонным:
+```cpp
+template <typename TResult> struct Task
+```
+5. Добавить member в `promise` для сохранения результата.
+
+Полная реализация измененного `Promise`:
+```cpp
+struct ResultTaskPromise
+{
+    ResultTaskPromise() noexcept = default;
+
+    void unhandled_exception() noexcept
+    {
+        std::terminate();
+    }
+    Task<TResult> get_return_object() noexcept
+    {
+        // Изменили тип возвращаемого объекта, теперь это шаблонный Task<Result>
+        return Task<TResult>{std::coroutine_handle<ResultTaskPromise>::from_promise(*this)};
+    }
+    auto initial_suspend() noexcept
+    {
+        return std::suspend_always{};
+    }
+
+    void return_value(const TResult& _value) noexcept
+    {
+        // добавили метод return value
+        m_coroutineResult = _value;
+    }
+
+    void set_continuation(std::coroutine_handle<> continuation)
+    {
+        m_continuation = continuation;
+    }
+
+    TResult& result()
+    {
+        // добавили метод result для возвращения результата
+        return m_coroutineResult;
+    }
+
+    struct final_awaitable
+    {
+        bool await_ready() noexcept
+        {
+            return false;
+        }
+        template <typename TPromise>
+        void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
+        {
+            ResultTaskPromise& promise = coroutine.promise();
+            if (promise.m_continuation)
+            {
+                promise.m_continuation.resume();
+            }
+        }
+
+        void await_resume() noexcept
+        {
+        }
+    };
+
+    auto final_suspend() noexcept
+    {
+        return final_awaitable{};
+    }
+
+    // добавили поле класса для хранения результата
+    TResult m_coroutineResult;
+    std::coroutine_handle<> m_continuation;
+};
+```
+
+### 11. Добавляем чтение JEDEC ID
+Для чтения JEDEC ID, который представляет собой std::uint32 необходимо добавить в API spi-flash драйвера метод `requestJedecId`:
+```cpp
+CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
+{
+    auto receivedData = co_await prepareXferTransaction(
+        std::forward_as_tuple(WindbondCommandSet::ReadJedecId),
+        WindbondCommandSet::DummyByte,
+        WindbondCommandSet::DummyByte,
+        WindbondCommandSet::DummyByte);
+
+    std::uint32_t JedecDeviceId{};
+    for (std::size_t i{}; i < WindbondCommandSet::JedecIdLength; ++i)
+    {
+        JedecDeviceId |= (receivedData[i] << (16 - i * 8));
+    }
+
+    co_return JedecDeviceId;
+}
+```
+
+Идея с std::forward_as_tuple следующая - все что передано в аргументах -  в функции `prepareXferTransaction` будет рассмотрено как команда + количество dummy-bytes которые нужны для принятия команды. Все что после `forward_as_tuple` - количество dummy-bytes для вычитки данных.
+
+
+Реализация фунеции `prepareXferTransaction` следующая: получаем на вод команду  виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами, после- пустыми посылками. Для возвращаемого значения рассчитываем размер смещения в принмающем буфере, чтобы на сторону клиента драйвера вернулся slice на буфер, где в 0-м элементе лежат необходимые данные.
+// TODO, может, есть способ удобнее?
+Реализация функции имеет вид:
+
+```cpp
+template <typename TCommand, typename... Args>
+auto prepareXferTransaction(TCommand&& _command, Args&&... _argList)
+{
+    auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
+    auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
+    processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
+
+    processTransmitBuffer(
+        std::span(
+            transmitBuffer.data() + std::tuple_size_v<TCommand>, TSpiBusInstance::DmaBufferSize),
+        std::forward_as_tuple(_argList...));
+
+    constexpr std::size_t TransmitSize = std::tuple_size_v<TCommand> + sizeof...(_argList);
+    constexpr std::size_t ReceiveSize = TransmitSize;
+    constexpr std::size_t Skip = std::tuple_size_v<TCommand>;
+    return xferTransaction(
+        std::span(transmitBuffer.data(), TransmitSize),
+        std::span(receiveBuffer.data(), TransmitSize),
+        Skip);
+}
+```
+
+Где `xferTransaction` представлена в виде:
+```cpp
+CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
+    std::span<const std::uint8_t> _pTransmitCommand,
+    std::span<std::uint8_t> _pReceiveBuffer,
+    std::size_t _skipBytes) noexcept
+{
+    co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
+    co_return std::span(_pReceiveBuffer.data() + _skipBytes, _pReceiveBuffer.size() - _skipBytes);
+}
+
+template <
+    typename TTRansmitBuffer,
+    typename TArgsTuple,
+    typename Indexes = std::make_index_sequence<std::tuple_size_v<TArgsTuple>>>
+void processTransmitBuffer(TTRansmitBuffer&& _transmitBuffer, TArgsTuple&& _argsTuple)
+{
+    processTransmitBufferImpl(
+        std::forward<TTRansmitBuffer&&>(_transmitBuffer),
+        std::forward<TArgsTuple&&>(_argsTuple),
+        Indexes{});
+}
+
+template <typename TTRansmitBuffer, typename TArgsTuple, std::size_t... Index>
+void processTransmitBufferImpl(
+    TTRansmitBuffer&& _transmitBuffer,
+    TArgsTuple&& _argsTuple,
+    std::index_sequence<Index...>)
+{
+    ((_transmitBuffer[Index] = std::get<Index>(_argsTuple)), ...);
+}
+```
+### 12. Добавляем чтение device id
+Для поддержки чтения device-id необходимо добавить в API драйвера следующую функцию:
+```cpp
+CoroUtils::Task<std::span<std::uint8_t>> requestDeviceId() noexcept
+{
+    auto receivedData = co_await prepareXferTransaction(
+        std::forward_as_tuple(
+            WindbondCommandSet::ReadUniqueId,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte,
+            WindbondCommandSet::DummyByte),
+
+        WindbondCommandSet::DummyByte,
+        WindbondCommandSet::DummyByte,
+        WindbondCommandSet::DummyByte,
+        WindbondCommandSet::DummyByte,
+        WindbondCommandSet::DummyByte,
+        WindbondCommandSet::DummyByte);
+    co_return std::span(receivedData.data(), receivedData.size());
+}
+```
+На сторону пользователя, в данном случае вернется slice на принимающий DMA-буфер SPI. А далее его можно отформатировать с использованием `fmtlib` или же `std::format`, в зависимости от поддерживаемого компилятора. 
+
+### 13. Ожидание окончания выполнения сопрограммы
+
+Иногда может возникнуть необходимость подождать выполнения сопрограммы, т.е. заблокировать выполнение текущего потока до момента, пока не будет завершена сопрограмма. Для этого можно реализовать примитив SyncWait.
+
+Рассмотрим построение этого примитива( в cppcoro он так-же реализован, данный параграф скорее рассмотрение того, как он работает)
+
+Мы хотим получить интерфейс вида:
+```cpp
+TEST_F(FlashDriverTest, RequestJedecId)
+{
+    auto jedecId = CoroUtils::syncWait(flashDriver.requestJEDEDCId());
+    constexpr std::uint32_t MagicTrashFromRawMemory = 13487565; //  For fun;
+    EXPECT_EQ(jedecId, MagicTrashFromRawMemory);
+}
+```
+Т.е. по вызову `CoroUtils::syncWait` заблокироваться до получения результата.
+
+1. Реализуем `syncWait`
+необходимо получить тип возвращаемого значения из сопрограммы. Для этого необходимо написать небольшую обертку, которая позволит это выполнить. В нашем случае, возвращаемые типы представляют собой Awaitable-примтивы с доступным `operator co_await`.
+
+Примерный интерфейс `syncWait`:
+```cpp
+template <typename TCoroutine>
+auto syncWait(TCoroutine&& _coroutineTask)->//Необходимо получить возвращаемый тип
+```
+Для получения возвращаемого типа реализуем структуру `AwaitResultGetter`:
+```cpp
+template <typename TAwaiter> auto awaiterGetter(TAwaiter&& _awaiter)
+{
+    return static_cast<TAwaiter&&>(_awaiter).operator co_await();
+}
+
+template <typename TAwaitable> struct AwaitResultGetter
+{
+    using Type = decltype(awaiterGetter(std::declval<TAwaitable>()));
+    using Result = decltype(std::declval<Type>().await_resume());
+};
+```
+Где возвращаемый тип может быть получен с помощью вызова `.await_resume` на результате `declval` от awaitable-типа
+
+Вызов `makeSyncWaitTask` представляет собой последовательность вызовов `co_yield co_await`:
+```cpp
+template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
+SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
+{
+    co_yield co_await _awaitable;
+}
+```
+Где `co_await` приостанавливает текущий вызов, а `co_yield` используется для сохранения результата выполненной сопрограммы.
+
+Блокирование текущего потока выполнения реализовано за счет установки `BlockingEvent` в котором при вызове `.wait` происходит lockна `condition_wariable` до момента, пока не будет установлен `atomic_bool` флаг:
+```cpp
+class BlockingEvent
+{
+public:
+    void wait()
+    {
+        std::unique_lock<std::mutex> lock(mutex);
+        condEvent.wait(lock, [this] { return m_isSet.load(std::memory_order_acquire); });
+    }
+
+    void set()
+    {
+        m_isSet.store(true, std::memory_order_release);
+        condEvent.notify_all();
+    }
+
+private:
+    std::atomic_bool m_isSet = false;
+    std::mutex mutex;
+    std::condition_variable condEvent;
+};
+```
+Полная реализация `SyncWait`:
+```cpp
+template <typename TResultType> struct SyncWaitTask
+{
+    struct SyncTaskPromise;
+    using promise_type = SyncTaskPromise;
+    using TResultRef = TResultType&&;
+
+    SyncWaitTask(stdcoro::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
+        : m_suspendedRoutine{_suspendedRoutine}
+    {
+    }
+    ~SyncWaitTask()
+    {
+        if (m_suspendedRoutine)
+            m_suspendedRoutine.destroy();
+    }
+
+    struct FinalAwaitable
+    {
+        bool await_ready() noexcept
+        {
+            return false;
+        }
+        template <typename TPromise>
+        void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
+        {
+            // по окончанию работы сопрограммы устанавливаем  blockingEvent  в set, тем самым
+            // восстанавливая текущий поток выполнения
+            SyncTaskPromise& promise = coroutine.promise();
+            promise.m_event->set();
+        }
+        void await_resume() noexcept
+        {
+        }
+    };
+
+    struct SyncTaskPromise
+    {
+
+        auto get_return_object() noexcept
+        {
+            return SyncWaitTask{stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
+        }
+        void start(BlockingEvent* _pEvent) noexcept
+        {
+            m_event = _pEvent;
+            stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
+        }
+        auto initial_suspend() noexcept
+        {
+            return std::suspend_always{};
+        }
+
+        auto final_suspend() noexcept
+        {
+            return FinalAwaitable{};
+        }
+
+        auto yield_value(TResultRef result) noexcept
+        {
+            // для поддержки operator co_yield
+            m_value = std::addressof(result);
+            return final_suspend();
+        }
+
+        decltype(auto) value() noexcept
+        {
+            return static_cast<TResultRef>(*m_value);
+        }
+
+        void return_void() noexcept
+        {
+        }
+
+        void unhandled_exception()
+        {
+            std::terminate();
+        }
+
+        BlockingEvent* m_event;
+        std::remove_reference_t<TResultType>* m_value;
+    };
+
+    TResultType&& result() noexcept
+    {
+        return m_suspendedRoutine.promise().value();
+    }
+
+    void await_resume()
+    {
+    }
+
+    void start(BlockingEvent& _event)
+    {
+        m_suspendedRoutine.promise().start(&_event);
+    }
+    stdcoro::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
+};
+
+template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
+SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
+{
+    co_yield co_await _awaitable;
+}
+```
