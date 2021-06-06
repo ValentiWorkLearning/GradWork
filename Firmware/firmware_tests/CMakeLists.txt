@@ -13,6 +13,7 @@ enable_testing()
 set (3RDPARTY_DIR "../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR}/googletest "3rdparty/googletest")
 add_subdirectory(coroutine)
+add_subdirectory(article_example)
 
 add_executable(
     ${PROJECT_NAME}

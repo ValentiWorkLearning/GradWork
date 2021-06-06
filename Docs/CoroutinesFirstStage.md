@@ -1330,7 +1330,7 @@ template <typename TResultType> struct SyncWaitTask
     using promise_type = SyncTaskPromise;
     using TResultRef = TResultType&&;
 
-    SyncWaitTask(stdcoro::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
+    SyncWaitTask(std::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
         : m_suspendedRoutine{_suspendedRoutine}
     {
     }
@@ -1347,7 +1347,7 @@ template <typename TResultType> struct SyncWaitTask
             return false;
         }
         template <typename TPromise>
-        void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
+        void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
         {
             // по окончанию работы сопрограммы устанавливаем  blockingEvent  в set, тем самым
             // восстанавливая текущий поток выполнения
@@ -1364,12 +1364,12 @@ template <typename TResultType> struct SyncWaitTask
 
         auto get_return_object() noexcept
         {
-            return SyncWaitTask{stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
+            return SyncWaitTask{std::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
         }
         void start(BlockingEvent* _pEvent) noexcept
         {
             m_event = _pEvent;
-            stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
+            std::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
         }
         auto initial_suspend() noexcept
         {
@@ -1419,7 +1419,7 @@ template <typename TResultType> struct SyncWaitTask
     {
         m_suspendedRoutine.promise().start(&_event);
     }
-    stdcoro::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
+    std::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
 };
 
 template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
@@ -1427,4 +1427,11 @@ SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
 {
     co_yield co_await _awaitable;
 }
+
+Полный пример на котором можно экспериментировать:
+https://godbolt.org/z/8YoxPPYsW
+
+Пример с использованием SPI-интерфейса для инициализации дисплея. Можно экспериментировать.
+https://wandbox.org/permlink/dsL64oCgPxEEph81
+
 ```
