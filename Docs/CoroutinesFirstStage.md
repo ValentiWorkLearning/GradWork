@@ -810,3 +810,217 @@ struct VoidTask
 ```
 
 ### 8. Как это тестировать?
+Реализация SPI-драйвера представляет собой шаблонный класс, в который можно передать backend, который будет использоваться для передачи. Решение было принято с целью повышения тестопригодности модуля. В целом, пользователь работает в основном с несколькими методами:
+
+```cpp
+void transmitBuffer(
+    const std::uint8_t* _pBuffer,
+    std::uint16_t _pBufferSize,
+    void* _pUserData,
+    bool _restoreInSpiCtx) noexcept
+{
+    // установили coroutine_handle
+    m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+    //установили вызов, который будет вызван по окончанию передачи в конкретной реализации SPI
+    m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
+
+    const size_t TransferBufferSize = _pBufferSize;
+    const size_t FullDmaTransactionsCount = TransferBufferSize / DmaBufferSize;
+    const size_t ChunkedTransactionsBufSize = TransferBufferSize % DmaBufferSize;
+    const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
+
+    // сформировали контекст транзакции
+    TransactionContext newContext{.restoreInSpiCtx = _restoreInSpiCtx,
+                                  .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma,
+                                  .pDataToTransmit = _pBuffer,
+                                  .fullDmaTransactionsCount = FullDmaTransactionsCount,
+                                  .chunkedTransactionBufSize = ChunkedTransactionsBufSize,
+                                  .completedTransactionsCount = 0};
+
+    m_transmitContext = std::move(newContext);
+
+    // выполнили передачу данных
+    if (FullDmaTransactionsCount)
+    {
+        --m_transmitContext.fullDmaTransactionsCount;
+        m_backendImpl.sendChunk(_pBuffer, DmaBufferSize);
+    }
+    else
+    {
+        m_transmitContext.chunkedTransactionBufSize = 0;
+        m_backendImpl.sendChunk(_pBuffer, _pBufferSize);
+    }
+}
+```
+
+По окончанию передачи данных, в реализации backend вызвается `TransactionCompletedHandler`. Рассмотрим фрагмент реализации для Nordic:
+```cpp
+template <typename PeripheralInstance> class NordicSpi
+{
+
+public:
+    using This_t = NordicSpi<PeripheralInstance>;
+    NordicSpi() noexcept
+    {
+
+        nrfx_spim_config_t spiConfig{};
+
+        // конфигурация SPI пропущена .... //
+        //инициализация модуля SPIM. если вместо spimEventHandlerThisOne и this передать nullptr и
+        //nullptr - передача будет выполнена без использования EasyDMA, т.е. в блокирующем режиме
+        APP_ERROR_CHECK(nrfx_spim_init(
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx],
+            &spiConfig,
+            spimEventHandlerThisOne,
+            this));
+    }
+
+    void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
+    {
+        // формирование дескриптора на передачу данных
+        nrfx_spim_xfer_desc_t xferDesc = NRFX_SPIM_XFER_TX(_pBuffer, _bufferSize);
+
+        // выполнение транзакции
+        nrfx_err_t transmissionError = nrfx_spim_xfer(
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx], &xferDesc, 0);
+        APP_ERROR_CHECK(transmissionError);
+    }
+
+    void xferChunk(
+        std::span<const std::uint8_t> _transmitArray,
+        std::span<std::uint8_t> _receiveArray)
+    {
+        // формирование transmit-receive транзакции
+        nrfx_spim_xfer_desc_t xferDesc = NRFX_SPIM_XFER_TRX(
+            _transmitArray.data(),
+            _transmitArray.size(),
+            _receiveArray.data(),
+            _receiveArray.size());
+
+        nrfx_err_t transmissionError = nrfx_spim_xfer(
+            &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx], &xferDesc, 0);
+        APP_ERROR_CHECK(transmissionError);
+    }
+
+    using TTransactionCompletedHandler = std::function<void()>;
+    void setTransactionCompletedHandler(const TTransactionCompletedHandler& _handler) noexcept
+    {
+        m_transactionCompleted = _handler;
+    }
+
+private:
+    static void spimEventHandlerThisOne(nrfx_spim_evt_t const* _pEvent, void* _pContext) noexcept
+    {
+        // данный обработчик вызывается по окончании передачи данных при помощи EasyDMA
+        if (_pEvent->type == NRFX_SPIM_EVENT_DONE)
+        {
+            // вызываем ранее установленный callback на драйвере верхнего уровня.
+            auto pThis = reinterpret_cast<This_t*>(_pContext);
+            pThis->m_transactionCompleted();
+        }
+    }
+
+public:
+    TTransactionCompletedHandler m_transactionCompleted;
+};
+
+```
+
+В свою очередь, для тестирования драйвера верхнего уровня необходимо релизовать соответствующий `stub-backend` + реализовать тесты.
+Рассматривамеые тестовые сценарии:
+* передача блока данных меньше размера DMA буфера
+* передача блока данных рамзером с DMA буфер
+* передача нескольких блоков данных размером с DMA буфер
+* передача нескольких блоков размером с DMA буфер и неполного блока
+
+### 9. Добавляем параметрические тесты в GTest
+
+Тестирование будем производить с использованием GTest фреймворка. С целью избегания copy-paste для тестов с вышеупомянутыми сценариями- воспользуемся функционалом, позволяющим инстанцировать параметрические тесты.
+
+Для поддержки параметрических тестов в фикстуре необходимо добавить еще однин класс, от которого идет наследование помимо базового `::testing::Test`. Для поддержки параметрических тестов необходимо добавить наследование от `::testing::WithParamInterface`.
+
+В нашем случае это будет `std::tuple` вида:
+```cpp
+public ::testing::WithParamInterface<std::tuple<std::uint16_t, std::string_view>>
+```
+
+Где `std::string_view` будет соответствовать названию теста, а `std::uint16_t` - использоваться для задавания размера тестового буфера данных для отправки.
+
+Реализация stub-backend для SPI драйвера представляет собой хранилище spi-транзакций, которые добавляются при каждом вызове `sendChunk`. После чего, по окончании передачи данных может быть выполнено преобразование из отправленных транзакций в полноценный буфер с целью сравнения данных, которые были поставлены на отправку и данных, которы были переданы в драйвер низкого уровня.
+
+Реализация данных функций представлена ниже:
+
+```cpp
+void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
+{
+    BusTransactionsTransmit.emplace_back(_pBuffer, _bufferSize);
+    m_completedTransaction();
+}
+using TDataStream = std::vector<std::byte>;
+TDataStream getTransmittedData() const
+{
+    TDataStream stream;
+    std::for_each(
+        BusTransactionsTransmit.cbegin(),
+        BusTransactionsTransmit.cend(),
+        [&stream](const auto& _transaction) {
+            const auto& [pArray, blockSize] = _transaction;
+            auto arraySpan = std::span{pArray, blockSize};
+            std::transform(
+                arraySpan.begin(),
+                arraySpan.end(),
+                std::back_inserter(stream),
+                [](std::uint8_t _dataByte) { return std::byte{_dataByte}; });
+        });
+    return stream;
+}
+```
+ Для работы с параметрическими тестами необходимо добавить его определение + инстанцирование.
+
+Определение параметрического теста будет иметь вид:
+
+```cpp
+TEST_P(SpiDriverTest, CheckRandomSequenceWithLengthTransmissionCorrect)
+{
+    // получаем размер последовательности
+    const std::uint16_t TransactionLength{std::get<0>(GetParam())};
+    TDataStream ExpectedStream{TransactionLength};
+
+    std::random_device randomDevice;
+    std::mt19937 generator(randomDevice());
+    std::uniform_int_distribution<> distribution(0x00, 0xFF);
+    // формируем случайную посылку
+    std::ranges::generate(ExpectedStream, [&distribution, generator]() mutable {
+        return std::byte(distribution(generator));
+    });
+
+    co_await sendChunk(
+        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size());
+    // проверяем соответствие данных, которые должны были быть переданы данным, которые были отправлены в spi-backend
+    EXPECT_EQ(TransactionsToDataStream(), ExpectedStream);
+}
+
+```
+
+Инстанцирование параметрического теста представлено на фрагменте ниже:
+
+```cpp
+INSTANTIATE_TEST_SUITE_P(
+    SpiDriverTesting,
+    SpiDriverTest,
+    ::testing::Values(
+        std::make_tuple(Null, "Null"),
+        std::make_tuple(SmallerThanSingleDmaTransaction, "SmallerThanSingleDmaTransaction"),
+        std::make_tuple(EqualsToSingleDmaTransaction, "EqualsToSingleDmaTransaction"),
+        std::make_tuple(ThreeDmaTransactions, "ThreeDmaTransactions"),
+        std::make_tuple(SingleDmaAndChunk, "SingleDmaAndChunk"),
+        std::make_tuple(ThreeDmaAndChunk, "ThreeDmaAndChunk"),
+        std::make_tuple(StressChunked, "StressChunked")),
+    [](const auto& testParam) {
+        const auto& suiteName = std::get<1>(testParam.param);
+        return std::string(suiteName.data());
+    });
+```
+
+Переданная лямбда позволяет отформатировать название теста, который выполняется.
+
