@@ -594,9 +594,9 @@ int main()
 
 ### 7. Как работает Task из cppcoro
 
-`VoidTask` будет частичным примером из библиотеки cppcoro,т.к. в ее реализации `VoidTask` это специализация шаблонного класса `Task` вида `Task<void>`. Разберемся, как он устроен и как он работает.
+`VoidTask` будет частичным примером из библиотеки cppcoro, т.к. в ее реализации `VoidTask` это специализация шаблонного класса `Task` вида `Task<void>`. Разберемся, как он устроен и как он работает.
 
-Прежде всего, для сопрограммы необходимо реализовать `promise_type`.  В нашем случае, т.к. сопрограмма приостанавливае свое выполнение после создания- у `promise_type` вызов `initial_suspend` должен вернуть `std::suspend_always`. Отметим, что так-же `promise_type` должен реализовать обработку поведения в случае выброса необработанного исключения(в нашем случае можем уйти в `std::terminate`), и определить тип вовзращаемого объекта наружу, т.е. реализовать метод `get_return_object`.
+Прежде всего, для сопрограммы необходимо реализовать `promise_type`.  В нашем случае, т.к. сопрограмма приостанавливает свое выполнение после создания- у `promise_type` вызов `initial_suspend` должен вернуть `std::suspend_always`. Отметим, что так-же `promise_type` должен реализовать обработку поведения в случае выброса необработанного исключения(в нашем случае можем уйти в `std::terminate`), и определить тип возвращаемого объекта наружу, т.е. реализовать метод `get_return_object`.
 ```cpp
 struct task_promise
     {
@@ -658,7 +658,7 @@ void set_continuation(std::coroutine_handle<> continuation)
     m_continuation = continuation;
 }
 ```
-Для вызова установленного `continuation` необходимо реализовать у promise метод `final_suspend`. В методе `final_suspend` вместо `std::suspend_always/std::suspend_never` можно вернуть пользовательский Awaitable-тип, для котрого будет сгенерирован вызов co_await.
+Для вызова установленного `continuation` необходимо реализовать у promise метод `final_suspend`. В методе `final_suspend` вместо `std::suspend_always/std::suspend_never` можно вернуть пользовательский Awaitable-тип, для которого будет сгенерирован вызов `co_await`.
 
 ```cpp
 struct final_awaitable
@@ -723,7 +723,7 @@ struct VoidTask
         {
             bool await_ready() noexcept
             {
-                // await_ready -false, вызов тела await_suspend является необходимым
+                // await_ready - false, вызов тела await_suspend является необходимым
                 return false;
             }
             template <typename TPromise>
