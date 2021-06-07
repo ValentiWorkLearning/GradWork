@@ -136,9 +136,13 @@ void Board::ledToggle() noexcept
     while (true)
     {
         co_await 300ms;
-
         // LOG_DEBUG_ENDL("LED TIMER EXPIRED");
         bsp_board_led_invert(0);
+        co_await 100ms;
+        bsp_board_led_invert(0);
+        co_await 100ms;
+        bsp_board_led_invert(0);
+        co_await 100ms;
     }
 #endif
 }
