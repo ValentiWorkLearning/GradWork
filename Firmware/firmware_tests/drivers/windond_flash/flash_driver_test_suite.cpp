@@ -13,4 +13,6 @@ TEST_F(FlashDriverTest, RequestJedecId)
     auto jedecId = CoroUtils::syncWait(flashDriver.requestJEDEDCId());
     constexpr std::uint32_t MagicTrashFromRawMemory = 13487565; //  For fun;
     EXPECT_EQ(jedecId, MagicTrashFromRawMemory);
+
+    flashDriver.requestChipErase();
 }

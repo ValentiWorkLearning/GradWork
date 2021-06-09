@@ -21,6 +21,7 @@ public:
         const std::uint8_t* _blockData,
         const std::uint8_t _blockSize) noexcept
     {
+
     }
 
     void requestReadBlock(const std::uint32_t _address, const std::uint8_t _blockSize) noexcept
@@ -30,8 +31,19 @@ public:
     {
     }
 
-    void requestChipErase() noexcept
+    CoroUtils::VoidTask requestChipErase() noexcept
     {
+        co_await prepareXferTransaction(std::forward_as_tuple(WindbondCommandSet::ChipErase));
+    }
+
+    CoroUtils::VoidTask requestPowerDown() noexcept
+    {
+        co_await prepareXferTransaction(std::forward_as_tuple(WindbondCommandSet::PowerDownMode));
+    }
+
+    CoroUtils::VoidTask resumePowerDown() noexcept
+    {
+        co_await prepareXferTransaction(std::forward_as_tuple(WindbondCommandSet::ResumePowerDownMode));
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> requestDeviceId() noexcept
