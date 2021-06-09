@@ -1,10 +1,10 @@
 ### Practical C++20 coroutines notes for ARM Cortex-M
 
-Достаточно много времени прошло с предыдущей заметки на тему использования сопрограмм. Изначально было в планах продемонстрировать на чем-то концепцию и как именно их можно было применять. На тот момент вариант примера в виде мигания светодиодиком подошел отлично. Но он был слишком простой. Необходимо было придумать что-то более сложное и более полезное, что-ли. Таким образом и появилась идея переписать драйвер дисплея и SPI-FLASH в проекте-долгострое.
+Достаточно много времени прошло с предыдущей заметки на тему использования сопрограмм. Изначально было в планах продемонстрировать на чем-то концепцию и как именно их можно было применять. На тот момент вариант примера в виде мигания светодиодиком подошел отлично. Но он был слишком простой. Необходимо было придумать что-то более сложное и более полезное, что ли. Таким образом и появилась идея переписать драйвер дисплея и SPI-FLASH в проекте-долгострое.
 
 Небольшой план, что будет в заметке:
 
-1. Предистория с транзакциями
+1. Предыстория с транзакциями
 2. Как это работает в общих чертах
 3. Работаем с SPI интерфейсом
 4. Массив команд инициализации
@@ -19,13 +19,13 @@
 13. Ожидание окончания выполнения сопрограммы
 
 ### 0. Перед прочтением
-Заметка предполагает базовое знакомство читателя с сопрогрмаммами/ их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
+Заметка предполагает базовое знакомство читателя с сопрогрмаммами / их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
 
-https://blog.panicsoftware.com/your-first-coroutine/
-https://lewissbaker.github.io/2017/09/25/coroutine-theory
-https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
-https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
-https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
+* https://blog.panicsoftware.com/your-first-coroutine/
+* https://lewissbaker.github.io/2017/09/25/coroutine-theory
+* https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
+* https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
+* https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
 
 В заметке изложение материала может показаться непоследовательным. Предложения буду рад увидеть в виде issues или же в комментариях/сообщениях в Telegram.
 
@@ -55,8 +55,7 @@ template <typename... Args> void sendChunk(Args... _chunkArgs) noexcept
     chunkTransaction.beforeTransaction = [this] { setDcPin(); };
 
     chunkTransaction.transactionAction = [this, chunkToSend = std::move(chunk)] {
-        m_pBusPtr->sendChunk(
-            reinterpret_cast<const std::uint8_t*>(chunkToSend.data()), chunkToSend.size());
+        m_pBusPtr->sendChunk(chunkToSend.data(), chunkToSend.size());
     };
 
     chunkTransaction.afterTransaction = [this] { resetDcPin(); };
@@ -85,7 +84,7 @@ https://habr.com/ru/post/201826/
 https://habr.com/ru/company/yandex/blog/240525/
 https://habr.com/ru/post/340732/
 
-И было принято решение о переписывании на сопрограммы часть существующих драйверов.
+И было принято решение о переписывании на сопрограммы части существующих драйверов.
 
 ### 2. Как это работает в общих чертах
 Для разработчиков, которые имели дело с C#/Python/JS не являются чем-то новым ключевые слова `yeild`, `await`,`async`.(Да, они тут приведены в общем варианте, без принадлежности к конкретному языку). В кратце, идея сопрограмм состоит в возможности приостановки функции в любом месте исполнения с последствующим восстановлением ее работы из прерванной точки. Фактически, мы получаем легковесные потоки уровня пользователя, т.е. для переключения сопрограмм нам нет необходимости обращаться к ядру ОС/etc.
@@ -320,7 +319,7 @@ void initDisplay() noexcept
 Как может выглядеть процедура отправки дисплейного буфера? Т.к. в проекте используется библиотека LVGL -  фреймбуфер может быть non-screen-sized, т.е. не полностью соответствовать размеру буфера экрана, что позволяет выполнять отрисовку фрагментами.(Иногда может не быть возможности поместить полностью в память буфер дисплея)
 
 Для реализации функции отправки нам необходимо выполнить отправку команд на установку области экрана, в которую будет осуществлена отрисовка, после чего отправить команду на запись в память дисплея и выполнить отправку дисплейного буфера.
-Что-же. В синхронном варианте, данный код мог-бы иметь вид:
+Что-же. В синхронном варианте, данный код мог бы иметь вид:
 ```cpp
 void fillRectangle(
     std::uint16_t _x,
@@ -333,11 +332,11 @@ void fillRectangle(
     const std::uint16_t DisplayHeight = TBaseSpiDisplay::getHeight();
     const std::uint16_t DisplayWidth = TBaseSpiDisplay::getWidth();
 
-    const bool isCoordsValid{!((_x >= DisplayWidth) || (_y >= DisplayHeight))};
+    const bool isCoordsValid{!((_x >= DisplayWidth) || (_y >= DisplayHeight))}; // Не знакю как работает LVGL, но возможно правильнее было бы проверять `_x + _width < DisplayWidth && _y + _height < DisplayHeight`
     if (isCoordsValid)
     {
         //Определяем размеры буфера для отправки
-        const size_t BytesSizeX = (_width - _x + 1);
+        const size_t BytesSizeX = (_width - _x + 1); // Опять же я не знаю как работает LVGL, но выглядит подозрительно.
         const size_t BytesSizeY = (_height - _y + 1);
         const size_t BytesSquare = BytesSizeX * BytesSizeY;
         const size_t TransferBufferSize = (BytesSquare * sizeof(typename TBaseSpiDisplay::TColor));
@@ -417,6 +416,27 @@ template <std::uint8_t Command> struct CommandDescriptor<Command>
     std::uint8_t commandDelay = 0;
     std::array<std::uint8_t, 1> command{Command};
 };
+
+// Мне не очень нравится что каждая команда создает свой класс. На первый взгляд достаточно было бы использовать
+//
+// template <std::size_t N>
+// struct CommandDescriptor
+// {
+//     std::uint8_t delay;
+//     std::array<std::uint8_t, N> command;
+// };
+//
+// но у меня не получилось написать deduction guideline для вывода N. Эту проблему все еще можно решить вспомагательной функцией
+//
+// template <std::uint8_t... Command>
+// consteval auto makeCommandDescriptor(std::uint8_t delay = 0) {
+//     return CommandDescriptor<sizeof...(Command)>{
+//         .delay = delay,
+//         .command = {Command...},
+//     };
+// }
+//
+// но выглядит уже не так изящно.
 ```
 В свою очередь, для создания таблицы команд для инициализации было необходимо их сохранить в tuple. В первой итерации, это выглядело вот так:
 ```cpp
@@ -477,6 +497,7 @@ template <typename... Tasks> struct WhenAllSequence {
   //  Хранилище переданных задач
   std::tuple<Tasks...> m_taskList;
 
+  // Этот конструктор не используется в этом фрагменте кода. Ну и мне кажется что его использование в данном случае выглядело бы логичнее.
   explicit WhenAllSequence(Tasks &&... tasks) noexcept
       : m_taskList(std::move(tasks)...) {}
 
@@ -515,11 +536,20 @@ template <typename... Args> auto when_all_sequence(Args &&... args) noexcept {
 }
 
 } // namespace CoroUtils
+    
+// Я не уверен что понимаю зачем нужен класс WhenAllSequence. Это нельзя реализовать так
+//
+// VoidTask when_all_sequence(auto... args) noexcept { // pass arguments by value to store them inside `when_all_sequence` coroutine
+//     (co_await args, ...);
+// }
+//
+// ?
+
 ```
 
 Таким образом, получаем возможность не дублировать написание `co_await` для последовательно выполняемых сопрограмм. 
 
-В данной реализации у нас появился возвращаемый тип `VoidTask`. Он нам необходим для приостановки выполнения `await_suspend` т.к. в ином случае при выполнении `co_await` для первого из переданных аргумнетов в `launchAll` будет выполнено возващение на вызывающую сторону, после чего вызов `handle.resume()` что не совсем соотвествует ожидаемому результату.Восстановление ожидающей сопрограммы должно быть выполнено только после окончания работы всех переданных.
+В данной реализации у нас появился возвращаемый тип `VoidTask`. Он нам необходим для приостановки выполнения `await_suspend` т.к. в ином случае при выполнении `co_await` для первого из переданных аргумнетов в `launchAll` будет выполнено возващение на вызывающую сторону, после чего вызов `handle.resume()` что не совсем соотвествует ожидаемому результату. Восстановление ожидающей сопрограммы должно быть выполнено только после окончания работы всех переданных задач.
 
 Рассмотрим реализацию типа `VoidTask`.
 Данный тип представляет собой "ленивую" задачу которая не выполняется до момента вызова на ней оператора `co_await`. Изначально задача приостановлена. Рассмотрим небольшой пример ее работы прежде чем описывать детали реализации.
@@ -552,7 +582,7 @@ struct Promise
 {
     auto initial_suspend() noexcept
     {
-        return std::suspend_never{};
+        return std::suspend_always{};
     }
     auto final_suspend() noexcept
     {
@@ -623,7 +653,7 @@ struct task_promise
 
 В свою очередь, VoidTask должен определить у себя оператор `co_await` для возможности его вызова.
 
-`operator co_await` должен вернуть на вызвающую сторону `task_promise`, который имеет возможность восстановить выполнение приостановленной сопрограммы и дополнительно установить `continuation`, т.е. сопрограмму, которая будет восстановлена после окончания работы текущей сопрограммы.
+`operator co_await` должен вернуть на вызвающую сторону `task_awaitable`, который имеет возможность восстановить выполнение приостановленной сопрограммы и дополнительно установить `continuation`, т.е. сопрограмму, которая будет восстановлена после окончания работы текущей сопрограммы.
 ```cpp
     struct task_awaitable
     {
@@ -638,6 +668,8 @@ struct task_promise
         {
             // Подробное описание, почему выполняется сначала resume и только поле этого установка continuation :
             // https://github.com/lewissbaker/cppcoro/blob/a87e97fe5b6091ca9f6de4637736b8e0d8b109cf/include/cppcoro/task.hpp#L314
+    
+            // Используемый компилятор не поддерживает symmetric control transfer? Я не знаю на счет msvc, но если мне не изменяет память, gcc и clang уже довольно давно поддерживают эту фичу.
 
             m_coroutine.resume();
             m_coroutine.promise().set_continuation(awaitingRoutine);
@@ -671,6 +703,7 @@ struct final_awaitable
     template <typename TPromise>
     void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
     {
+        // Тоже самое здесь: если есть поддержка symmetric transfer, лучше использовать его.
         task_promise& promise = coroutine.promise();
         if (promise.m_continuation)
         {
@@ -1166,7 +1199,7 @@ CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
 Идея с std::forward_as_tuple следующая - все что передано в аргументах -  в функции `prepareXferTransaction` будет рассмотрено как команда + количество dummy-bytes которые нужны для принятия команды. Все что после `forward_as_tuple` - количество dummy-bytes для вычитки данных.
 
 
-Реализация фунеции `prepareXferTransaction` следующая: получаем на вод команду  виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами, после- пустыми посылками. Для возвращаемого значения рассчитываем размер смещения в принмающем буфере, чтобы на сторону клиента драйвера вернулся slice на буфер, где в 0-м элементе лежат необходимые данные.
+Реализация фунеции `prepareXferTransaction` следующая: получаем на вход команду в виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами, после- пустыми посылками. Для возвращаемого значения рассчитываем размер смещения в принмающем буфере, чтобы на сторону клиента драйвера вернулся slice на буфер, где в 0-м элементе лежат необходимые данные.
 // TODO, может, есть способ удобнее?
 Реализация функции имеет вид:
 
@@ -1299,8 +1332,10 @@ SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
 ```
 Где `co_await` приостанавливает текущий вызов, а `co_yield` используется для сохранения результата выполненной сопрограммы.
 
-Блокирование текущего потока выполнения реализовано за счет установки `BlockingEvent` в котором при вызове `.wait` происходит lockна `condition_wariable` до момента, пока не будет установлен `atomic_bool` флаг:
+Блокирование текущего потока выполнения реализовано за счет установки `BlockingEvent` в котором при вызове `.wait` происходит lock на `condition_variable` до момента, пока не будет установлен `atomic_bool` флаг:
 ```cpp
+// Я плохо представляю некоторые детали, но возможно что в данном случае нет необходимости заморачиваться с многопоточкой и достаточно было бы однопоточного рантайма.
+
 class BlockingEvent
 {
 public:
@@ -1330,7 +1365,7 @@ template <typename TResultType> struct SyncWaitTask
     using promise_type = SyncTaskPromise;
     using TResultRef = TResultType&&;
 
-    SyncWaitTask(std::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
+    SyncWaitTask(stdcoro::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
         : m_suspendedRoutine{_suspendedRoutine}
     {
     }
@@ -1347,7 +1382,7 @@ template <typename TResultType> struct SyncWaitTask
             return false;
         }
         template <typename TPromise>
-        void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
+        void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
         {
             // по окончанию работы сопрограммы устанавливаем  blockingEvent  в set, тем самым
             // восстанавливая текущий поток выполнения
@@ -1364,12 +1399,12 @@ template <typename TResultType> struct SyncWaitTask
 
         auto get_return_object() noexcept
         {
-            return SyncWaitTask{std::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
+            return SyncWaitTask{stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
         }
         void start(BlockingEvent* _pEvent) noexcept
         {
             m_event = _pEvent;
-            std::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
+            stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
         }
         auto initial_suspend() noexcept
         {
@@ -1419,7 +1454,7 @@ template <typename TResultType> struct SyncWaitTask
     {
         m_suspendedRoutine.promise().start(&_event);
     }
-    std::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
+    stdcoro::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
 };
 
 template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
@@ -1427,11 +1462,4 @@ SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
 {
     co_yield co_await _awaitable;
 }
-
-Полный пример на котором можно экспериментировать:
-https://godbolt.org/z/8YoxPPYsW
-
-Пример с использованием SPI-интерфейса для инициализации дисплея. Можно экспериментировать.
-https://wandbox.org/permlink/dsL64oCgPxEEph81
-
 ```
