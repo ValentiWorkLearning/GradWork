@@ -74,15 +74,13 @@ public:
     TDataStream getTransmittedData() const
     {
         TDataStream stream;
-        std::for_each(
-            BusTransactionsTransmit.cbegin(),
-            BusTransactionsTransmit.cend(),
+        std::ranges::for_each(
+            BusTransactionsTransmit,
             [&stream](const auto& _transaction) {
                 const auto& [pArray, blockSize] = _transaction;
                 auto arraySpan = std::span{pArray, blockSize};
-                std::transform(
-                    arraySpan.begin(),
-                    arraySpan.end(),
+                std::ranges::transform(
+                    arraySpan,
                     std::back_inserter(stream),
                     [](std::uint8_t _dataByte) { return std::byte{_dataByte}; });
             });
