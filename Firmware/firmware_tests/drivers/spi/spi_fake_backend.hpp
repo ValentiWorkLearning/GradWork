@@ -50,6 +50,14 @@ public:
         m_completedTransaction();
     }
 
+    void setCsPinHigh() noexcept
+    {
+    }
+
+    void setCsPinLow() noexcept
+    {
+    }
+
 public:
     using TTransactionCompletedHandler = std::function<void()>;
     void setTransactionCompletedHandler(TTransactionCompletedHandler&& _handler)

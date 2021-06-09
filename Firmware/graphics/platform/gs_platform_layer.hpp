@@ -20,7 +20,7 @@ class IDisplayDriver;
 #include <spi/spi_wrapper_async_templated.hpp>
 
 using TSpiBus = Interface::SpiTemplated::SpiBus<
-    Interface::SpiTemplated::NordicSpi<Interface::SpiTemplated::SpiInstance::M2>>;
+    Interface::SpiTemplated::NordicSpi<Interface::SpiTemplated::SpiInstance::M2,Interface::SpiTemplated::SpiInstance::ChipSelectDrivenByDriver>>;
 using TDisplayDriver = DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
 #endif
 

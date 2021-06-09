@@ -1,4 +1,5 @@
 #include "display_common_coroutine.hpp"
+#include <array>
 
 namespace DisplayDriver::InitializationCommands
 {

@@ -98,6 +98,17 @@ public:
             m_backendImpl.sendChunk(_pBuffer, _pBufferSize);
         }
     }
+public:
+
+    void setCsPinHigh() noexcept
+    {
+        getBackendImpl().setCsPinHigh();
+    }
+
+    void setCsPinLow() noexcept
+    {
+        getBackendImpl().setCsPinLow();
+    }
 
 public:
     SpiBackendImpl& getBackendImpl() noexcept

@@ -80,34 +80,44 @@ public:
 
 private:
     template <typename TCommand, typename... Args>
-    auto prepareXferTransaction(TCommand&& _command, Args&&... _argList)
+    CoroUtils::Task<std::span<std::uint8_t>>
+    prepareXferTransaction(TCommand&& _command, Args&&... _argList)
     {
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
+
+        getSpiBus()->setCsPinLow();
+
         processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
 
-        processTransmitBuffer(
-            std::span(
-                transmitBuffer.data() + std::tuple_size_v<TCommand>, TSpiBusInstance::DmaBufferSize),
-            std::forward_as_tuple(_argList...));
+        constexpr std::size_t CommandSize = std::tuple_size_v<TCommand>;
 
-        constexpr std::size_t TransmitSize = std::tuple_size_v<TCommand> + sizeof...(_argList);
-        constexpr std::size_t ReceiveSize = TransmitSize;
-        constexpr std::size_t Skip = std::tuple_size_v<TCommand>;
-        return xferTransaction(
-            std::span(transmitBuffer.data(), TransmitSize),
-            std::span(receiveBuffer.data(), TransmitSize),
-            Skip);
+        co_await xferTransaction(
+            std::span(transmitBuffer.data(), CommandSize),
+            std::span(receiveBuffer.data(), CommandSize)
+        );
+
+        constexpr std::size_t DummyListSize = sizeof...(_argList);
+
+        processTransmitBuffer(transmitBuffer, std::forward_as_tuple(_argList...));
+
+        auto receivedBlockSpan = co_await xferTransaction(
+            std::span(transmitBuffer.data(), DummyListSize),
+            std::span(receiveBuffer.data(), DummyListSize)
+        );
+
+        getSpiBus()->setCsPinHigh();
+        co_return receivedBlockSpan;
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
         std::span<const std::uint8_t> _pTransmitCommand,
-        std::span<std::uint8_t> _pReceiveBuffer,
-        std::size_t _skipBytes) noexcept
+        std::span<std::uint8_t> _pReceiveBuffer
+    ) noexcept
     {
         co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
         co_return std::span(
-            _pReceiveBuffer.data() + _skipBytes, _pReceiveBuffer.size() - _skipBytes);
+            _pReceiveBuffer.data(), _pReceiveBuffer.size());
     }
 
     template <

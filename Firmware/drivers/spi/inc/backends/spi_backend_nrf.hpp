@@ -10,6 +10,7 @@
 #include <pca10040.h>
 
 #include <span>
+#include <cassert>
 
 namespace Interface::SpiTemplated
 {
@@ -34,17 +35,25 @@ struct M2
     static constexpr size_t HandleIdx = 1;
 };
 
+struct ChipSelectDrivenByDriver
+{
+};
+
+struct ChipSelectDrivenByUser
+{
+};
+
 constexpr size_t InstanceCount = 2;
 static std::array<nrfx_spim_t, InstanceCount> HandleStorage{
     nrfx_spim_t{.p_reg = NRF_SPIM1, .drv_inst_idx = NRFX_SPIM1_INST_IDX},
     nrfx_spim_t{.p_reg = NRF_SPIM2, .drv_inst_idx = NRFX_SPIM2_INST_IDX}};
 } // namespace SpiInstance
 
-template <typename PeripheralInstance> class NordicSpi
+template <typename PeripheralInstance,typename ChipSelectDrivingPolicy> class NordicSpi
 {
 
 public:
-    using This_t = NordicSpi<PeripheralInstance>;
+    using This_t = NordicSpi<PeripheralInstance,ChipSelectDrivingPolicy>;
     NordicSpi() noexcept
     {
 
@@ -53,7 +62,12 @@ public:
         spiConfig.sck_pin = PeripheralInstance::ClockPin;
         spiConfig.mosi_pin = PeripheralInstance::MosiPin;
         spiConfig.miso_pin = PeripheralInstance::MisoPin;
-        spiConfig.ss_pin = PeripheralInstance::SlaveSelectPin;
+
+        if constexpr(std::is_same_v<ChipSelectDrivingPolicy,Interface::SpiTemplated::SpiInstance::ChipSelectDrivenByDriver>)
+            spiConfig.ss_pin = PeripheralInstance::SlaveSelectPin;
+        else
+            spiConfig.ss_pin = NRF_SPIM_PIN_NOT_CONNECTED;
+
         spiConfig.ss_active_high = false;
         spiConfig.irq_priority = NRFX_SPIM_DEFAULT_CONFIG_IRQ_PRIORITY;
         spiConfig.orc = 0xFF;
@@ -91,6 +105,30 @@ public:
             &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx], &xferDesc, 0);
         APP_ERROR_CHECK(transmissionError);
     }
+
+    void setCsPinHigh() noexcept
+    {
+        if constexpr(std::is_same_v<ChipSelectDrivingPolicy,Interface::SpiTemplated::SpiInstance::ChipSelectDrivenByDriver>)
+        {
+            //The pin should be not touched by user. Probably the wrong driving policy was choosen!
+            ASSERT(false);
+        }
+        else
+            nrf_gpio_pin_set(PeripheralInstance::SlaveSelectPin);
+    }
+
+    void setCsPinLow() noexcept
+    {
+        if constexpr(std::is_same_v<ChipSelectDrivingPolicy,Interface::SpiTemplated::SpiInstance::ChipSelectDrivenByDriver>)
+        {
+            //The pin should be not touched by user. Probably the wrong driving policy was choosen!
+            ASSERT(false);
+        }
+        else
+            nrf_gpio_pin_clear(PeripheralInstance::SlaveSelectPin);
+    }
+
+public:
 
     using TTransactionCompletedHandler = std::function<void()>;
     void setTransactionCompletedHandler(const TTransactionCompletedHandler& _handler) noexcept
