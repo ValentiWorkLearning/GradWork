@@ -21,7 +21,6 @@ public:
         const std::uint8_t* _blockData,
         const std::uint8_t _blockSize) noexcept
     {
-
     }
 
     void requestReadBlock(const std::uint32_t _address, const std::uint8_t _blockSize) noexcept
@@ -43,7 +42,8 @@ public:
 
     CoroUtils::VoidTask resumePowerDown() noexcept
     {
-        co_await prepareXferTransaction(std::forward_as_tuple(WindbondCommandSet::ResumePowerDownMode));
+        co_await prepareXferTransaction(
+            std::forward_as_tuple(WindbondCommandSet::ResumePowerDownMode));
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> requestDeviceId() noexcept
@@ -92,8 +92,9 @@ public:
 
 private:
     template <typename TCommand, typename... Args>
-    CoroUtils::Task<std::span<std::uint8_t>>
-    prepareXferTransaction(TCommand&& _command, Args&&... _argList)
+    CoroUtils::Task<std::span<std::uint8_t>> prepareXferTransaction(
+        TCommand&& _command,
+        Args&&... _argList)
     {
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
@@ -104,10 +105,7 @@ private:
 
         constexpr std::size_t CommandSize = std::tuple_size_v<TCommand>;
 
-        co_await xferTransaction(
-            std::span(transmitBuffer.data(), CommandSize),
-            std::span(receiveBuffer.data(), CommandSize)
-        );
+        co_await transmitChunk(std::span(transmitBuffer.data(), CommandSize));
 
         constexpr std::size_t DummyListSize = sizeof...(_argList);
 
@@ -115,21 +113,18 @@ private:
 
         auto receivedBlockSpan = co_await xferTransaction(
             std::span(transmitBuffer.data(), DummyListSize),
-            std::span(receiveBuffer.data(), DummyListSize)
-        );
+            std::span(receiveBuffer.data(), DummyListSize));
 
         getSpiBus()->setCsPinHigh();
-        co_return receivedBlockSpan;
+        co_return std::span(receiveBuffer.data(), DummyListSize);
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
         std::span<const std::uint8_t> _pTransmitCommand,
-        std::span<std::uint8_t> _pReceiveBuffer
-    ) noexcept
+        std::span<std::uint8_t> _pReceiveBuffer) noexcept
     {
         co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
-        co_return std::span(
-            _pReceiveBuffer.data(), _pReceiveBuffer.size());
+        co_return std::span(_pReceiveBuffer.data(), _pReceiveBuffer.size());
     }
 
     template <
@@ -176,6 +171,30 @@ private:
         }
     };
 
+    struct TransmitAwaiter
+    {
+        bool restoreInSpiCtx = false;
+        std::span<const std::uint8_t> pTransmitBuffer;
+        This_t* pThis;
+
+        bool await_ready() const noexcept
+        {
+            const bool isAwaitReady = pTransmitBuffer.size() == 0;
+            return isAwaitReady;
+        }
+        void await_resume() const noexcept
+        {
+        }
+        void await_suspend(std::coroutine_handle<> thisCoroutine) const
+        {
+            pThis->getSpiBus()->transmitBuffer(
+                pTransmitBuffer.data(),
+                pTransmitBuffer.size(),
+                thisCoroutine.address(),
+                restoreInSpiCtx);
+        }
+    };
+
     auto getSpiBus() noexcept
     {
         return &m_spiBus;
@@ -190,6 +209,12 @@ private:
             .pTransmitBuffer = _pTrasnmitBuffer,
             .pReceiveBuffer = _pReceiveBuffer,
             .pThis = this};
+    }
+
+    auto transmitChunk(std::span<const std::uint8_t> _pTrasnmitBuffer) noexcept
+    {
+        return TransmitAwaiter{
+            .restoreInSpiCtx = true, .pTransmitBuffer = _pTrasnmitBuffer, .pThis = this};
     }
 
 private:

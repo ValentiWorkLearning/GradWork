@@ -55,7 +55,7 @@ public:
             .computeChunkOffsetWithDma = 0,
             .pDataToTransmit = _transmitArray.data(),
             .fullDmaTransactionsCount = 0,
-            .chunkedTransactionBufSize = _transmitArray.size(),
+            .chunkedTransactionBufSize = 0,
             .completedTransactionsCount = 0};
 
         m_transmitContext = std::move(newContext);
