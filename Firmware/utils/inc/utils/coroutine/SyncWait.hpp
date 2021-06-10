@@ -8,10 +8,27 @@
 
 namespace CoroUtils
 {
-template <typename TAwaiter> auto awaiterGetter(TAwaiter&& _awaiter)
+
+template <typename TAwaiter>
+auto awaiterGetterImpl(TAwaiter&& _awaiter, int)
+    -> decltype(static_cast<TAwaiter&&>(_awaiter).operator co_await())
 {
     return static_cast<TAwaiter&&>(_awaiter).operator co_await();
 }
+
+template <typename TAwaiter>
+auto awaiterGetterImpl(TAwaiter&& _awaiter, long)
+    -> decltype(operator co_await(static_cast<TAwaiter&&>(_awaiter)))
+{
+    return operator co_await(static_cast<TAwaiter&&>(_awaiter));
+}
+
+template <typename TAwaiter>
+auto awaiterGetter(TAwaiter&& _awaiter) -> decltype(awaiterGetterImpl(_awaiter,0))
+{
+    return awaiterGetterImpl(static_cast<TAwaiter&&>(_awaiter), 0);
+}
+
 
 class BlockingEvent
 {

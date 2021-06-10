@@ -25,8 +25,8 @@ TEST_F(SpiDriverTest, ExpectAnyTransmissionOccured)
     static constexpr std::byte DataBlock{223};
     static const TDataStream ExpectedStream{DataBlock};
 
-    co_await sendChunk(
-        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size());
+    CoroUtils::syncWait(sendChunk(
+        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()));
 
     constexpr size_t TransactionsCount = 1;
 
