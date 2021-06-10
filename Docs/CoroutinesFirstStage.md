@@ -1166,64 +1166,70 @@ CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
 Идея с std::forward_as_tuple следующая - все что передано в аргументах -  в функции `prepareXferTransaction` будет рассмотрено как команда + количество dummy-bytes которые нужны для принятия команды. Все что после `forward_as_tuple` - количество dummy-bytes для вычитки данных.
 
 
-Реализация фунеции `prepareXferTransaction` следующая: получаем на вод команду  виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами, после- пустыми посылками. Для возвращаемого значения рассчитываем размер смещения в принмающем буфере, чтобы на сторону клиента драйвера вернулся slice на буфер, где в 0-м элементе лежат необходимые данные.
-// TODO, может, есть способ удобнее?
+Реализация фунеции `prepareXferTransaction` следующая: получаем на ввод команду  виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами,передаем, после- пустыми посылками. Для возвращаемого значения возвращаем slice на буфер с принятыми данными
+
 Реализация функции имеет вид:
 
 ```cpp
-template <typename TCommand, typename... Args>
-auto prepareXferTransaction(TCommand&& _command, Args&&... _argList)
-{
-    auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
-    auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
-    processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
+    template <typename TCommand, typename... Args>
+    CoroUtils::Task<std::span<std::uint8_t>> prepareXferTransaction(
+        TCommand&& _command,
+        Args&&... _argList)
+    {
+        auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
+        auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
 
-    processTransmitBuffer(
-        std::span(
-            transmitBuffer.data() + std::tuple_size_v<TCommand>, TSpiBusInstance::DmaBufferSize),
-        std::forward_as_tuple(_argList...));
+        getSpiBus()->setCsPinLow();
 
-    constexpr std::size_t TransmitSize = std::tuple_size_v<TCommand> + sizeof...(_argList);
-    constexpr std::size_t ReceiveSize = TransmitSize;
-    constexpr std::size_t Skip = std::tuple_size_v<TCommand>;
-    return xferTransaction(
-        std::span(transmitBuffer.data(), TransmitSize),
-        std::span(receiveBuffer.data(), TransmitSize),
-        Skip);
-}
+        processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
+
+        constexpr std::size_t CommandSize = std::tuple_size_v<TCommand>;
+
+        co_await transmitChunk(std::span(transmitBuffer.data(), CommandSize));
+
+        constexpr std::size_t DummyListSize = sizeof...(_argList);
+
+        processTransmitBuffer(transmitBuffer, std::forward_as_tuple(_argList...));
+
+        auto receivedBlockSpan = co_await xferTransaction(
+            std::span(transmitBuffer.data(), DummyListSize),
+            std::span(receiveBuffer.data(), DummyListSize));
+
+        getSpiBus()->setCsPinHigh();
+        co_return std::span(receiveBuffer.data(), DummyListSize);
+    }
 ```
 
 Где `xferTransaction` представлена в виде:
 ```cpp
-CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
-    std::span<const std::uint8_t> _pTransmitCommand,
-    std::span<std::uint8_t> _pReceiveBuffer,
-    std::size_t _skipBytes) noexcept
-{
-    co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
-    co_return std::span(_pReceiveBuffer.data() + _skipBytes, _pReceiveBuffer.size() - _skipBytes);
-}
+    CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
+        std::span<const std::uint8_t> _pTransmitCommand,
+        std::span<std::uint8_t> _pReceiveBuffer) noexcept
+    {
+        co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
+        co_return std::span(_pReceiveBuffer.data(), _pReceiveBuffer.size());
+    }
 
-template <
-    typename TTRansmitBuffer,
-    typename TArgsTuple,
-    typename Indexes = std::make_index_sequence<std::tuple_size_v<TArgsTuple>>>
-void processTransmitBuffer(TTRansmitBuffer&& _transmitBuffer, TArgsTuple&& _argsTuple)
-{
-    processTransmitBufferImpl(
-        std::forward<TTRansmitBuffer&&>(_transmitBuffer),
-        std::forward<TArgsTuple&&>(_argsTuple),
-        Indexes{});
-}
+    template <
+        typename TTRansmitBuffer,
+        typename TArgsTuple,
+        typename Indexes = std::make_index_sequence<std::tuple_size_v<TArgsTuple>>>
+    void processTransmitBuffer(TTRansmitBuffer&& _transmitBuffer, TArgsTuple&& _argsTuple)
+    {
+        processTransmitBufferImpl(
+            std::forward<TTRansmitBuffer&&>(_transmitBuffer),
+            std::forward<TArgsTuple&&>(_argsTuple),
+            Indexes{});
+    }
 
-template <typename TTRansmitBuffer, typename TArgsTuple, std::size_t... Index>
-void processTransmitBufferImpl(
-    TTRansmitBuffer&& _transmitBuffer,
-    TArgsTuple&& _argsTuple,
-    std::index_sequence<Index...>)
-{
-    ((_transmitBuffer[Index] = std::get<Index>(_argsTuple)), ...);
-}
+    template <typename TTRansmitBuffer, typename TArgsTuple, std::size_t... Index>
+    void processTransmitBufferImpl(
+        TTRansmitBuffer&& _transmitBuffer,
+        TArgsTuple&& _argsTuple,
+        std::index_sequence<Index...>)
+    {
+        ((_transmitBuffer[Index] = std::get<Index>(_argsTuple)), ...);
+    }
 ```
 ### 12. Добавляем чтение device id
 Для поддержки чтения device-id необходимо добавить в API драйвера следующую функцию:
