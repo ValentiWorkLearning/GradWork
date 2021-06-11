@@ -46,8 +46,8 @@ TEST_P(SpiDriverTest, CheckRandomSequenceWithLengthTransmissionCorrect)
         return std::byte(distribution(generator));
     });
 
-    co_await sendChunk(
-        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size());
+    CoroUtils::syncWait(sendChunk(
+        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()));
     EXPECT_EQ(TransactionsToDataStream(), ExpectedStream);
 }
 
