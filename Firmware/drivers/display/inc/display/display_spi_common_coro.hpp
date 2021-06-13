@@ -2,56 +2,51 @@
 
 #include <gpio/gpio_pin.hpp>
 
-#include <spi/spi_wrapper_async_templated.hpp>
 #include <delay/delay_provider.hpp>
+#include <spi/spi_wrapper_async_templated.hpp>
 
-#include <utils/SimpleSignal.hpp>
 #include <utils/CoroUtils.hpp>
+#include <utils/SimpleSignal.hpp>
 
-#include <memory>
-#include <cstdint>
 #include <array>
-
+#include <cstdint>
+#include <memory>
 
 namespace DisplayDriver
 {
-template <typename TConcreteDisplay,typename TSpiBusInstance,std::uint16_t Width, std::uint16_t Height>
+template <
+    typename TConcreteDisplay,
+    typename TSpiBusInstance,
+    std::uint16_t Width,
+    std::uint16_t Height>
 class BaseSpiDisplayCoroutine
 {
-    using This_t = BaseSpiDisplayCoroutine<TConcreteDisplay, TSpiBusInstance,Width, Height>;
-public:
+    using This_t = BaseSpiDisplayCoroutine<TConcreteDisplay, TSpiBusInstance, Width, Height>;
 
-    void turnOn()noexcept
+public:
+    void turnOn() noexcept
     {
         pOffspring()->turnOn();
     }
 
-    void turnOff()noexcept
+    void turnOff() noexcept
     {
         pOffspring()->turnOff();
     }
 
     using TColor = std::uint16_t;
 
-
     void fillRectangle(
-        std::uint16_t _x
-        , std::uint16_t _y
-        , std::uint16_t _width
-        , std::uint16_t _height
-        , TColor* _color
-    ) noexcept
+        std::uint16_t _x,
+        std::uint16_t _y,
+        std::uint16_t _width,
+        std::uint16_t _height,
+        TColor* _color) noexcept
     {
-        pOffspring()->fillRectangle(
-            _x,
-            _y,
-            _width,
-            _height,
-            _color
-        );
+        pOffspring()->fillRectangle(_x, _y, _width, _height, _color);
     }
 
-    void initialize()noexcept
+    void initialize() noexcept
     {
         pOffspring()->initialize();
     };
@@ -64,7 +59,6 @@ public:
     Simple::Signal<void()> onRectArreaFilled;
 
 protected:
-
     struct Awaiter
     {
         bool resetDcPin = false;
@@ -80,7 +74,7 @@ protected:
         }
         void await_resume() const noexcept
         {
-            if( resetDcPin )
+            if (resetDcPin)
                 pBaseDisplay->setDcPin();
         }
         void await_suspend(std::coroutine_handle<> thisCoroutine) const
@@ -89,124 +83,91 @@ protected:
                 pBaseDisplay->resetDcPin();
 
             pBaseDisplay->getSpiBus()->transmitBuffer(
-                    pTransmitBuffer
-                ,   bufferSize
-                ,   thisCoroutine.address()
-                ,   restoreInSpiCtx
-            );
+                pTransmitBuffer, bufferSize, thisCoroutine.address(), restoreInSpiCtx);
         }
     };
 
-    auto sendCommandImpl(
-            const std::uint8_t* _command
-    )noexcept
+    auto sendCommandImpl(const std::uint8_t* _command) noexcept
     {
-        return Awaiter
-        {
-                .resetDcPin = true
-            ,   .restoreInSpiCtx = false
-            ,   .pTransmitBuffer = _command
-            ,   .pBaseDisplay = this
-            ,   .bufferSize = 1
-        };
+        return Awaiter{
+            .resetDcPin = true,
+            .restoreInSpiCtx = false,
+            .pTransmitBuffer = _command,
+            .pBaseDisplay = this,
+            .bufferSize = 1};
     }
 
-    auto sendCommandImplFast(
-            const std::uint8_t* _command
-    )noexcept
+    auto sendCommandImplFast(const std::uint8_t* _command) noexcept
     {
-        return Awaiter
-        {
-                .resetDcPin = true
-            ,   .restoreInSpiCtx = true
-            ,   .pTransmitBuffer = _command
-            ,   .pBaseDisplay = this
-            ,   .bufferSize = 1
-        };
+        return Awaiter{
+            .resetDcPin = true,
+            .restoreInSpiCtx = true,
+            .pTransmitBuffer = _command,
+            .pBaseDisplay = this,
+            .bufferSize = 1};
     }
 
-    auto sendChunk(
-            const std::uint8_t* _pBuffer
-        ,   std::size_t _bufferSize
-    )noexcept
+    auto sendChunk(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept
     {
-        return Awaiter
-        {
-                .pTransmitBuffer = _pBuffer
-            ,   .pBaseDisplay = this
-            ,   .bufferSize = static_cast<std::uint16_t>( _bufferSize ) 
-        };
+        return Awaiter{
+            .pTransmitBuffer = _pBuffer,
+            .pBaseDisplay = this,
+            .bufferSize = static_cast<std::uint16_t>(_bufferSize)};
     }
 
-    auto sendChunkFast(
-            const std::uint8_t* _pBuffer
-        ,   std::size_t _bufferSize
-    )noexcept
+    auto sendChunkFast(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept
     {
-        return Awaiter
-        {
-                .restoreInSpiCtx = true
-            ,   .pTransmitBuffer = _pBuffer
-            ,   .pBaseDisplay = this
-            ,   .bufferSize = static_cast<std::uint16_t>( _bufferSize ) 
-        };
+        return Awaiter{
+            .restoreInSpiCtx = true,
+            .pTransmitBuffer = _pBuffer,
+            .pBaseDisplay = this,
+            .bufferSize = static_cast<std::uint16_t>(_bufferSize)};
     }
 
-    auto sendCommand(
-            const std::uint8_t* _pBuffer
-        ,   std::size_t _bufferSize
-    )noexcept
+    auto sendCommand(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept
     {
         const std::uint8_t* commandBuf = _pBuffer;
         const std::uint8_t* ArgBuf = _pBuffer + 1;
-        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
+        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>(_bufferSize - 1);
 
         return CoroUtils::when_all_sequence(
-                sendCommandImpl( commandBuf )
-            ,   ArgsBufferSize > 0 ? sendChunk( ArgBuf, ArgsBufferSize): sendChunk(nullptr,0)
-        );
+            sendCommandImpl(commandBuf),
+            ArgsBufferSize > 0 ? sendChunk(ArgBuf, ArgsBufferSize) : sendChunk(nullptr, 0));
     }
 
-    auto sendCommandFast(
-            const std::uint8_t* _pBuffer
-        ,   std::size_t _bufferSize
-    )noexcept
+    auto sendCommandFast(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept
     {
         const std::uint8_t* commandBuf = _pBuffer;
         const std::uint8_t* ArgBuf = _pBuffer + 1;
-        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>( _bufferSize - 1 );
+        const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>(_bufferSize - 1);
 
         return CoroUtils::when_all_sequence(
-                sendCommandImplFast( commandBuf )
-            ,   ArgsBufferSize > 0 ? sendChunk( ArgBuf, ArgsBufferSize): sendChunk(nullptr,0)
-        );
+            sendCommandImplFast(commandBuf),
+            ArgsBufferSize > 0 ? sendChunk(ArgBuf, ArgsBufferSize) : sendChunk(nullptr, 0));
     }
-
 
 protected:
-
-    void resetDcPin()noexcept
+    void resetDcPin() noexcept
     {
         m_dcPin.reset();
     }
 
-    void setDcPin()noexcept
+    void setDcPin() noexcept
     {
         m_dcPin.set();
     }
 
-    void resetResetPin()noexcept
+    void resetResetPin() noexcept
     {
         m_resetPin.reset();
     }
 
-    void setResetPin()noexcept
+    void setResetPin() noexcept
     {
         m_resetPin.set();
     }
 
 protected:
-
     constexpr std::uint16_t getWidth() const noexcept
     {
         return m_width;
@@ -230,7 +191,6 @@ protected:
     }
 
 private:
-
     const std::uint16_t m_width = Width;
     const std::uint16_t m_height = Height;
 
@@ -239,4 +199,4 @@ private:
     TSpiBusInstance m_spiBus;
 };
 
-}
+} // namespace DisplayDriver
