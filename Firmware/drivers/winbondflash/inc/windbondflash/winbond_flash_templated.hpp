@@ -7,6 +7,7 @@
 
 #include <tuple>
 #include <utility>
+#include <cassert>
 
 namespace ExternalFlash
 {
@@ -16,15 +17,65 @@ template <typename TSpiBusInstance> class WinbondFlashDriver
     using This_t = WinbondFlashDriver<TSpiBusInstance>;
 
 public:
-    void requestWriteBlock(
+    CoroUtils::VoidTask pageWrite(
         const std::uint32_t _address,
-        const std::uint8_t* _blockData,
-        const std::uint8_t _blockSize) noexcept
+        std::span<const std::uint8_t> _blockData) noexcept
     {
+        constexpr std::uint16_t PageSize = 256;
+
+        assert(_blockData.size() > PageSize);
+
+        using TTuple = decltype(std::declval<std::forward_as_tuple(WindbondCommandSet::WriteEnable)>());
+        constexpr bool ManageSpiTransactions = false;
+
+        getSpiBus()->setCsPinLow();
+        co_await prepareXferTransaction<TTuple, ManageSpiTransactions>(
+            std::forward_as_tuple(WindbondCommandSet::WriteEnable,
+            static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
+            static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
+            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)
+            )
+        );
+
+        co_await transmitChunk(std::span(_blockData.data(), _blockData.size()));
+
+        getSpiBus()->setCsPinHigh();
+
     }
 
-    void requestReadBlock(const std::uint32_t _address, const std::uint8_t _blockSize) noexcept
+    CoroUtils::Task<std::span<std::uint8_t>> requestReadBlock(
+        const std::uint32_t _address,
+        const std::uint8_t _blockSize) noexcept
     {
+        constexpr std::uint16_t PageSize = 256;
+
+        assert(_blockSize > PageSize);
+
+        using TTuple =
+            decltype(std::declval<std::forward_as_tuple(WindbondCommandSet::WriteEnable)>());
+        constexpr bool ManageSpiTransactions = false;
+
+        getSpiBus()->setCsPinLow();
+        co_await prepareXferTransaction<TTuple, ManageSpiTransactions>(std::forward_as_tuple(
+            WindbondCommandSet::ReadData,
+            static_cast<std::uint8_t>((_address & 0x00'FF'00'00 )>> 16),
+            static_cast<std::uint8_t>((_address & 0x00'00'FF'00 )>> 8),
+            static_cast<std::uint8_t>(_address & 0x00'00'00'FF))
+        );
+
+        auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
+        auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
+
+        std::fill_n(
+            transmitBuffer.begin(), transmitBuffer.end(), _blockSize, WindbondCommandSet::DummyByte);
+
+        auto receivedData = co_await xferTransaction(
+            std::span(transmitBuffer.data(), _blockSize),
+            std::span(receiveBuffer.data(), _blockSize));
+
+        getSpiBus()->setCsPinHigh();
+
+        co_return receivedData;
     }
     void requestFastReadBlock(const std::uint32_t _address, const std::uint8_t _blockSize) noexcept
     {
@@ -82,16 +133,19 @@ public:
         co_return JedecDeviceId;
     }
 
-    void requestEnterSleepMode() noexcept
+
+    const auto getSpiBus() const noexcept
     {
+        return &m_spiBus;
     }
 
-    void requestRestoreFromSleepMode() noexcept
+    auto getSpiBus() noexcept
     {
+        return &m_spiBus;
     }
 
 private:
-    template <typename TCommand, typename... Args>
+    template <typename TCommand, bool manageCsPin = true, typename... Args>
     CoroUtils::Task<std::span<std::uint8_t>> prepareXferTransaction(
         TCommand&& _command,
         Args&&... _argList)
@@ -99,9 +153,10 @@ private:
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
 
-        getSpiBus()->setCsPinLow();
+        if constexpr (manageCsPin)
+            getSpiBus()->setCsPinLow();
 
-        processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
+        processTransmitBuffer(transmitBuffer, std::forward<TCommand>(_command));
 
         constexpr std::size_t CommandSize = std::tuple_size_v<TCommand>;
 
@@ -115,8 +170,29 @@ private:
             std::span(transmitBuffer.data(), DummyListSize),
             std::span(receiveBuffer.data(), DummyListSize));
 
-        getSpiBus()->setCsPinHigh();
+        if constexpr (manageCsPin)
+            getSpiBus()->setCsPinHigh();
+
         co_return std::span(receiveBuffer.data(), DummyListSize);
+    }
+
+    template <typename TTuple, bool manageCsPin = true>
+    CoroUtils::VoidTask prepareXferTransaction(TTuple&& _command)
+    {
+        auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
+        auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
+
+        if constexpr (manageCsPin)
+            getSpiBus()->setCsPinLow();
+
+        processTransmitBuffer(transmitBuffer, std::forward<TTuple>(_command));
+
+        constexpr std::size_t CommandSize = 1;
+
+        co_await transmitChunk(std::span(transmitBuffer.data(), CommandSize));
+
+        if constexpr (manageCsPin)
+            getSpiBus()->setCsPinHigh();
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
@@ -194,11 +270,6 @@ private:
                 restoreInSpiCtx);
         }
     };
-
-    auto getSpiBus() noexcept
-    {
-        return &m_spiBus;
-    }
 
     auto xferChunk(
         std::span<const std::uint8_t> _pTrasnmitBuffer,

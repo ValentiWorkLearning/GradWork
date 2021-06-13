@@ -19,10 +19,16 @@ class FlashDriverTest : public ::testing::Test
 public:
     using TFlashTestDriver = ExternalFlash::WinbondFlashDriver<
         Interface::SpiTemplated::SpiBus<Testing::Spi::SpiBusBackendStub>>;
+    using TDataStream = std::vector<std::byte>;
 
 protected:
     void SetUp() override
     {
+    }
+
+    void setReceivedSpiStream(const TDataStream& _steram)
+    {
+        flashDriver.getSpiBus()->getBackendImpl().setReceivedStream(_steram);
     }
 
 protected:

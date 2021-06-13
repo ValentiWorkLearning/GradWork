@@ -10,9 +10,19 @@
 
 TEST_F(FlashDriverTest, RequestJedecId)
 {
-    auto jedecId = CoroUtils::syncWait(flashDriver.requestJEDEDCId());
-    constexpr std::uint32_t MagicTrashFromRawMemory = 13487565; //  For fun;
-    EXPECT_EQ(jedecId, MagicTrashFromRawMemory);
+    TDataStream ExpectedStream{std::byte(0xEF), std::byte(0x40), std::byte(0x18)};
 
-    flashDriver.requestChipErase();
+    setReceivedSpiStream(ExpectedStream);
+
+    auto fToJedecId = [](const TDataStream& _jedecId) {
+        std::uint32_t result{};
+        result |= std::to_integer<std::uint32_t>(_jedecId[0]) << 16;
+        result |= std::to_integer<std::uint32_t>(_jedecId[1]) << 8;
+        result |= std::to_integer<std::uint32_t>(_jedecId[2]);
+
+        return result;
+    };
+
+    auto jedecId = CoroUtils::syncWait(flashDriver.requestJEDEDCId());
+    EXPECT_EQ(jedecId, fToJedecId(ExpectedStream));
 }
