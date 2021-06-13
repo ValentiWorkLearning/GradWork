@@ -33,6 +33,8 @@ add_executable(
 
     drivers/windond_flash/flash_driver_test_suite.cpp
     drivers/windond_flash/flash_fixture.hpp
+    drivers/spi/mock_gpio.hpp
+    drivers/spi/mock_spi.hpp
 )
 
 mark_as_advanced(

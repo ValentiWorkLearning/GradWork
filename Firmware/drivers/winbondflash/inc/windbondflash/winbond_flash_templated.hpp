@@ -23,9 +23,15 @@ public:
     {
         constexpr std::uint16_t PageSize = 256;
 
-        assert(_blockData.size() > PageSize);
+        assert(_blockData.size() < PageSize);
 
-        using TTuple = decltype(std::declval<std::forward_as_tuple(WindbondCommandSet::WriteEnable)>());
+        using TTuple = decltype(
+            std::forward_as_tuple(WindbondCommandSet::WriteEnable,
+            static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
+            static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
+            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)
+            )
+        );
         constexpr bool ManageSpiTransactions = false;
 
         getSpiBus()->setCsPinLow();
@@ -159,8 +165,8 @@ private:
         processTransmitBuffer(transmitBuffer, std::forward<TCommand>(_command));
 
         constexpr std::size_t CommandSize = std::tuple_size_v<TCommand>;
-
-        co_await transmitChunk(std::span(transmitBuffer.data(), CommandSize));
+        const auto spanToSend = std::span(transmitBuffer.data(), CommandSize);
+        co_await transmitChunk(spanToSend);
 
         constexpr std::size_t DummyListSize = sizeof...(_argList);
 

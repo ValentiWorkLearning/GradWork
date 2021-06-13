@@ -196,8 +196,8 @@ struct VoidTask
         }
         void await_suspend(stdcoro::coroutine_handle<> awaitingRoutine)
         {
-            m_coroutine.resume();
             m_coroutine.promise().set_continuation(awaitingRoutine);
+            m_coroutine.resume();
         }
 
         void await_resume()

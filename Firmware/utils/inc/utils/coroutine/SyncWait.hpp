@@ -188,11 +188,9 @@ struct SyncTaskPromise<void>
         {
             return false;
         }
-        template <typename TPromise>
-        void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
+        void await_suspend(stdcoro::coroutine_handle<SyncTaskPromise<void>> coroutine) noexcept
         {
-            SyncTaskPromise<void>& promise = coroutine.promise();
-            promise.m_event->set();
+            coroutine.promise().m_event->set();
         }
         void await_resume() noexcept
         {
@@ -229,11 +227,10 @@ struct SyncTaskPromise<void>
     BlockingEvent* m_event;
 };
 
-
 template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
 SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
 {
-    if constexpr(!std::is_same_v<TTaskResult,void>)
+    if constexpr (!std::is_same_v<TTaskResult, void>)
         co_yield co_await _awaitable;
     else
         co_await _awaitable;
@@ -248,6 +245,7 @@ auto syncWait(TCoroutine&& _coroutineTask)
     -> AwaitResultGetter<decltype(static_cast<TCoroutine&&>(_coroutineTask))>::Result
 {
     BlockingEvent waitOn;
+
     auto task = makeSyncWaitTask(_coroutineTask);
     task.start(waitOn);
     waitOn.wait();

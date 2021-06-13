@@ -12,6 +12,7 @@
 
 // TODO Fix include more clearly
 #include "../spi/spi_fake_backend.hpp"
+#include "../spi/mock_gpio.hpp"
 
 class FlashDriverTest : public ::testing::Test
 {
@@ -29,6 +30,16 @@ protected:
     void setReceivedSpiStream(const TDataStream& _steram)
     {
         flashDriver.getSpiBus()->getBackendImpl().setReceivedStream(_steram);
+    }
+
+    decltype(auto) getMockGpio()
+    {
+        return flashDriver.getSpiBus()->getBackendImpl().accesToCsPin();
+    }
+
+    TDataStream TransactionsToDataStream()
+    {
+        return flashDriver.getSpiBus()->getBackendImpl().getTransmittedData();
     }
 
 protected:

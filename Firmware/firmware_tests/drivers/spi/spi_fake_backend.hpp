@@ -7,6 +7,8 @@
 #include <vector>
 
 #include <utils/CoroUtils.hpp>
+#include "mock_gpio.hpp"
+#include "mock_spi.hpp"
 
 namespace Testing::Spi
 {
@@ -52,10 +54,12 @@ public:
 
     void setCsPinHigh() noexcept
     {
+        m_csPin.setGpioHigh();
     }
 
     void setCsPinLow() noexcept
     {
+        m_csPin.setGpioLow();
     }
 
 public:
@@ -92,6 +96,30 @@ public:
         m_dataStreamReceived = _receivedStream;
     }
 
+    using TCSPinAccessor = testing::NiceMock<Gpio::MockGpio>;
+    using TMockerSpi = testing::NiceMock<SpiMock::SpiMocker>;
+
+    TCSPinAccessor& accesToCsPin()
+    {
+        return m_csPin;
+    }
+
+    const TCSPinAccessor& accesToCsPin() const
+    {
+        return m_csPin;
+    }
+
+    TMockerSpi& accessToSpiMock()
+    {
+        return m_spiMocker;
+    }
+
+    const TMockerSpi& accessToSpiMock() const
+    {
+        return m_spiMocker;
+    }
+
+
 protected:
     using TTransacation = std::pair<const std::uint8_t*, size_t>;
     std::vector<TTransacation> BusTransactionsTransmit;
@@ -100,6 +128,8 @@ protected:
 private:
     TTransactionCompletedHandler m_completedTransaction;
     TDataStream m_dataStreamReceived;
+    TCSPinAccessor m_csPin;
+    TMockerSpi m_spiMocker;
 };
 
 } // namespace Testing::Spi
