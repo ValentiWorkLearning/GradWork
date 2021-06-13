@@ -11,7 +11,7 @@ public:
     ~SpiMocker() = default;
 
 public:
-    MOCK_METHOD(std::span<std::uint8_t>, receivedData, ());
+    MOCK_METHOD(std::span<const std::uint8_t>, receivedData, ());
     MOCK_METHOD(void, sentData, (std::span<const std::uint8_t>));
 
 private:

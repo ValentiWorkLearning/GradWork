@@ -9,6 +9,9 @@
 #include <utils/CoroUtils.hpp>
 #include <utils/coroutine/SyncWait.hpp>
 
+using ::testing::Return;
+using ::testing::ContainerEq;
+
 TEST_F(FlashDriverTest, RequestJedecId)
 {
     EXPECT_CALL(getMockGpio(), setGpioLow()).Times(1);
@@ -16,7 +19,9 @@ TEST_F(FlashDriverTest, RequestJedecId)
 
     TDataStream ExpectedStream{std::byte(0xEF), std::byte(0x40), std::byte(0x18)};
 
-    setReceivedSpiStream(ExpectedStream);
+    EXPECT_CALL(spiMockAccess(), receivedData)
+        .Times(1)
+        .WillOnce(Return(std::span(reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size())));
 
     auto fToJedecId = [](const TDataStream& _jedecId) {
         std::uint32_t result{};
@@ -40,6 +45,22 @@ TEST_F(FlashDriverTest, RequestWriteBlock)
     auto TransmitData{std::array<std::uint8_t, 7>{0xEF, 0xFF, 0x18, 0x19, 0x20, 0x21, 0x22}};
 
     constexpr std::uint32_t address{0x10'00};
+    constexpr std::size_t ProgramPageCommandLength = 4;
+    constexpr const std::array<std::uint8_t, ProgramPageCommandLength> pageProgramCommand{
+        WindbondCommandSet::PageProgram,
+        static_cast<std::uint8_t>(address >> 16),
+        static_cast<std::uint8_t>(address >> 8),
+        static_cast<std::uint8_t>(address)};
+
+    testing::Sequence sequence;
+
+    // https://gist.github.com/cppengineer/f1b6bc0f04ac7c29e963364f2c564a5e
+
+    const auto& commandSpan = std::span(pageProgramCommand.data(), pageProgramCommand.size());
+    EXPECT_CALL(spiMockAccess(), sentData).With(commandSpan)
+        .Times(1)
+        .InSequence(sequence);
+
 
     auto task = flashDriver.pageWrite(address, std::span(TransmitData.data(), TransmitData.size()));
     CoroUtils::syncWait(task);

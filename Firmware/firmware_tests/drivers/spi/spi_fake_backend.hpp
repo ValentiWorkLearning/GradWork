@@ -20,17 +20,15 @@ public:
     void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
         BusTransactionsTransmit.emplace_back(_pBuffer, _bufferSize);
+        m_spiMocker.sentData(std::span(_pBuffer,_bufferSize));
         m_completedTransaction();
     }
 
     void receiveChunk(std::uint8_t* _pDestinationArray, size_t _receiveSize)
     {
+        const auto& receivedRange = m_spiMocker.receivedData();
         auto arraySpan = std::span(_pDestinationArray, _receiveSize);
-        std::ranges::transform(
-            m_dataStreamReceived.begin(),
-            m_dataStreamReceived.begin() + _receiveSize,
-            arraySpan.begin(),
-            [](const std::byte _byte) { return static_cast<std::uint8_t>(_byte); });
+        std::ranges::copy_n(receivedRange.begin(), _receiveSize, arraySpan.begin() );
 
         m_completedTransaction();
     }
@@ -42,9 +40,11 @@ public:
         BusTransactionsTransmit.emplace_back(_transmitArray.data(), _transmitArray.size());
         BusTransactionsTransmit.emplace_back(_transmitArray.data(), _receiveArray.size());
 
+        const auto& receivedRange = m_spiMocker.receivedData();
+
         auto streamSpan = std::span(
-            reinterpret_cast<const std::uint8_t*>(m_dataStreamReceived.data()),
-            m_dataStreamReceived.size());
+            reinterpret_cast<const std::uint8_t*>(receivedRange.data()),
+            receivedRange.size());
 
         BusTransactionsReceive.emplace_back(streamSpan.data(), streamSpan.size());
         std::ranges::copy(streamSpan, _receiveArray.begin());
@@ -91,11 +91,6 @@ public:
         return stream;
     }
 
-    void setReceivedStream(const TDataStream& _receivedStream)
-    {
-        m_dataStreamReceived = _receivedStream;
-    }
-
     using TCSPinAccessor = testing::NiceMock<Gpio::MockGpio>;
     using TMockerSpi = testing::NiceMock<SpiMock::SpiMocker>;
 
@@ -127,7 +122,6 @@ protected:
 
 private:
     TTransactionCompletedHandler m_completedTransaction;
-    TDataStream m_dataStreamReceived;
     TCSPinAccessor m_csPin;
     TMockerSpi m_spiMocker;
 };

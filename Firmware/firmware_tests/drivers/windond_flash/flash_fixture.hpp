@@ -27,14 +27,14 @@ protected:
     {
     }
 
-    void setReceivedSpiStream(const TDataStream& _steram)
-    {
-        flashDriver.getSpiBus()->getBackendImpl().setReceivedStream(_steram);
-    }
-
     decltype(auto) getMockGpio()
     {
         return flashDriver.getSpiBus()->getBackendImpl().accesToCsPin();
+    }
+
+    decltype(auto) spiMockAccess()
+    {
+        return flashDriver.getSpiBus()->getBackendImpl().accessToSpiMock();
     }
 
     TDataStream TransactionsToDataStream()
