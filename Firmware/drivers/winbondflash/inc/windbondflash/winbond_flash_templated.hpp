@@ -25,8 +25,8 @@ public:
 
         assert(_blockData.size() < PageSize);
 
-        using TTuple = decltype(
-            std::forward_as_tuple(WindbondCommandSet::WriteEnable,
+        using TTupleProgram = decltype(
+            std::forward_as_tuple(WindbondCommandSet::PageProgram,
             static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
             static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
             static_cast<std::uint8_t>(_address & 0x00'00'00'FF)
@@ -35,8 +35,13 @@ public:
         constexpr bool ManageSpiTransactions = false;
 
         getSpiBus()->setCsPinLow();
-        co_await prepareXferTransaction<TTuple, ManageSpiTransactions>(
-            std::forward_as_tuple(WindbondCommandSet::WriteEnable,
+
+        using TTupleWe = decltype(std::forward_as_tuple(WindbondCommandSet::WriteEnable));
+        co_await prepareXferTransaction<TTupleWe, ManageSpiTransactions>(
+            std::forward_as_tuple(WindbondCommandSet::WriteEnable));
+
+        co_await prepareXferTransaction<TTupleProgram, ManageSpiTransactions>(
+            std::forward_as_tuple(WindbondCommandSet::PageProgram,
             static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
             static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
             static_cast<std::uint8_t>(_address & 0x00'00'00'FF)
@@ -193,7 +198,7 @@ private:
 
         processTransmitBuffer(transmitBuffer, std::forward<TTuple>(_command));
 
-        constexpr std::size_t CommandSize = 1;
+        constexpr std::size_t CommandSize = std::tuple_size_v<TTuple>;
 
         co_await transmitChunk(std::span(transmitBuffer.data(), CommandSize));
 
