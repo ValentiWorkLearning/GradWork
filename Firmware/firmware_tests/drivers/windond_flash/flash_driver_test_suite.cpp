@@ -86,6 +86,55 @@ TEST_F(FlashDriverTest, RequestWriteBlock)
 
     auto task = flashDriver.pageWrite(address, std::span(TransmitData.data(), TransmitData.size()));
     CoroUtils::syncWait(task);
+}
 
-    //EXPECT_EQ(jedecId, fToJedecId(ExpectedStream));
+TEST_F(FlashDriverTest, RequestReadBlock)
+{
+
+    EXPECT_CALL(getMockGpio(), setGpioLow()).Times(1);
+    EXPECT_CALL(getMockGpio(), setGpioHigh()).Times(1);
+
+    using TStream = std::array<std::uint8_t, 7>;
+
+    auto ReceiveData{
+        TStream{0xEF, 0xFF, 0x18, 0x19, 0x20, 0x21, 0x22}};
+
+    auto Dummy{TStream{}};
+
+    EXPECT_CALL(spiMockAccess(), receivedData)
+        .Times(1)
+        .WillOnce(Return(std::span(
+            reinterpret_cast<const std::uint8_t*>(ReceiveData.data()), ReceiveData.size())));
+
+    constexpr std::uint32_t address{0x10'00};
+
+    constexpr std::size_t ReadCommandLength = 4;
+    constexpr const std::array<std::uint8_t, ReadCommandLength> readCommand{
+        WindbondCommandSet::ReadData,
+        static_cast<std::uint8_t>((address & 0x00'FF'00'00) >> 16),
+        static_cast<std::uint8_t>((address & 0x00'00'FF'00) >> 8),
+        static_cast<std::uint8_t>(address & 0x00'00'00'FF)};
+
+    testing::Sequence sequence;
+
+    // https://gist.github.com/cppengineer/f1b6bc0f04ac7c29e963364f2c564a5e
+
+    const auto DummySpan = std::span<const std::uint8_t>(Dummy.data(), Dummy.size());
+
+    const auto ReadDataSpan =
+        std::span<const std::uint8_t>(readCommand.data(), readCommand.size());
+
+    EXPECT_CALL(spiMockAccess(), sentData)
+        .With(SpanChecker(ReadDataSpan))
+        .Times(1)
+        .InSequence(sequence);
+    EXPECT_CALL(spiMockAccess(), sentData)
+        .With(SpanChecker(std::span(DummySpan.data(), DummySpan.size())))
+        .Times(1)
+        .InSequence(sequence);
+
+    auto task = flashDriver.requestReadBlock(address, ReceiveData.size());
+    auto readSpan = CoroUtils::syncWait(task);
+
+    EXPECT_TRUE(std::ranges::equal(readSpan, ReceiveData));
 }

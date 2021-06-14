@@ -55,7 +55,7 @@ public:
     {
         constexpr std::uint16_t PageSize = 256;
 
-        assert(_blockSize > PageSize);
+        assert(_blockSize < PageSize);
 
         using TTupleRead = decltype(std::forward_as_tuple(
             WindbondCommandSet::ReadData,
@@ -77,7 +77,6 @@ public:
 
         std::fill_n(
             transmitBuffer.begin(),
-            transmitBuffer.end(),
             _blockSize,
             WindbondCommandSet::DummyByte);
 

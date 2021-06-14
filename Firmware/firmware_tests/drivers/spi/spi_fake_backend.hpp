@@ -38,8 +38,9 @@ public:
         std::span<std::uint8_t> _receiveArray)
     {
         BusTransactionsTransmit.emplace_back(_transmitArray.data(), _transmitArray.size());
-        BusTransactionsTransmit.emplace_back(_transmitArray.data(), _receiveArray.size());
+        BusTransactionsTransmit.emplace_back(_receiveArray.data(), _receiveArray.size());
 
+        m_spiMocker.sentData(std::span(_transmitArray.data(), _transmitArray.size()));
         const auto& receivedRange = m_spiMocker.receivedData();
 
         auto streamSpan = std::span(
