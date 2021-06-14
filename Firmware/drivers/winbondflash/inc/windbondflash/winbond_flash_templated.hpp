@@ -5,9 +5,9 @@
 #include <span>
 #include <utils/CoroUtils.hpp>
 
+#include <cassert>
 #include <tuple>
 #include <utility>
-#include <cassert>
 
 namespace ExternalFlash
 {
@@ -25,13 +25,11 @@ public:
 
         assert(_blockData.size() < PageSize);
 
-        using TTupleProgram = decltype(
-            std::forward_as_tuple(WindbondCommandSet::PageProgram,
+        using TTupleProgram = decltype(std::forward_as_tuple(
+            WindbondCommandSet::PageProgram,
             static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
             static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
-            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)
-            )
-        );
+            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
         constexpr bool ManageSpiTransactions = false;
 
         getSpiBus()->setCsPinLow();
@@ -40,18 +38,15 @@ public:
         co_await prepareXferTransaction<TTupleWe, ManageSpiTransactions>(
             std::forward_as_tuple(WindbondCommandSet::WriteEnable));
 
-        co_await prepareXferTransaction<TTupleProgram, ManageSpiTransactions>(
-            std::forward_as_tuple(WindbondCommandSet::PageProgram,
+        co_await prepareXferTransaction<TTupleProgram, ManageSpiTransactions>(std::forward_as_tuple(
+            WindbondCommandSet::PageProgram,
             static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
             static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
-            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)
-            )
-        );
+            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
 
         co_await transmitChunk(std::span(_blockData.data(), _blockData.size()));
 
         getSpiBus()->setCsPinHigh();
-
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> requestReadBlock(
@@ -62,23 +57,29 @@ public:
 
         assert(_blockSize > PageSize);
 
-        using TTuple =
-            decltype(std::declval<std::forward_as_tuple(WindbondCommandSet::WriteEnable)>());
+        using TTupleRead = decltype(std::forward_as_tuple(
+            WindbondCommandSet::ReadData,
+            static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
+            static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
+            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
         constexpr bool ManageSpiTransactions = false;
 
         getSpiBus()->setCsPinLow();
-        co_await prepareXferTransaction<TTuple, ManageSpiTransactions>(std::forward_as_tuple(
+
+        co_await prepareXferTransaction<TTupleRead, ManageSpiTransactions>(std::forward_as_tuple(
             WindbondCommandSet::ReadData,
-            static_cast<std::uint8_t>((_address & 0x00'FF'00'00 )>> 16),
-            static_cast<std::uint8_t>((_address & 0x00'00'FF'00 )>> 8),
-            static_cast<std::uint8_t>(_address & 0x00'00'00'FF))
-        );
+            static_cast<std::uint8_t>((_address & 0x00'FF'00'00) >> 16),
+            static_cast<std::uint8_t>((_address & 0x00'00'FF'00) >> 8),
+            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
 
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
 
         std::fill_n(
-            transmitBuffer.begin(), transmitBuffer.end(), _blockSize, WindbondCommandSet::DummyByte);
+            transmitBuffer.begin(),
+            transmitBuffer.end(),
+            _blockSize,
+            WindbondCommandSet::DummyByte);
 
         auto receivedData = co_await xferTransaction(
             std::span(transmitBuffer.data(), _blockSize),
@@ -143,7 +144,6 @@ public:
 
         co_return JedecDeviceId;
     }
-
 
     const auto getSpiBus() const noexcept
     {
