@@ -51,7 +51,7 @@ public:
 
     CoroUtils::Task<std::span<std::uint8_t>> requestReadBlock(
         const std::uint32_t _address,
-        const std::uint8_t _blockSize) noexcept
+        const std::uint16_t _blockSize) noexcept
     {
         constexpr std::uint16_t PageSize = 256;
 
