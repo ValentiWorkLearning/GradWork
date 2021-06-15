@@ -82,10 +82,11 @@ template <typename TResult> struct Task
         {
             return !m_coroutine || m_coroutine.done();
         }
-        void await_suspend(stdcoro::coroutine_handle<> awaitingRoutine)
+        auto await_suspend(stdcoro::coroutine_handle<> awaitingRoutine)
         {
+            // https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
             m_coroutine.promise().set_continuation(awaitingRoutine);
-            m_coroutine.resume();
+            return m_coroutine;
         }
 
         decltype(auto) await_resume()
@@ -194,10 +195,11 @@ struct VoidTask
         {
             return !m_coroutine || m_coroutine.done();
         }
-        void await_suspend(stdcoro::coroutine_handle<> awaitingRoutine)
+        auto await_suspend(stdcoro::coroutine_handle<> awaitingRoutine)
         {
+            // https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
             m_coroutine.promise().set_continuation(awaitingRoutine);
-            m_coroutine.resume();
+            return m_coroutine;
         }
 
         void await_resume()
