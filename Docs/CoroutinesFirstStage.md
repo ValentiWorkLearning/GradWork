@@ -1,10 +1,10 @@
 ### Practical C++20 coroutines notes for ARM Cortex-M
 
-Достаточно много времени прошло с предыдущей заметки на тему использования сопрограмм. Изначально было в планах продемонстрировать на чем-то концепцию и как именно их можно было применять. На тот момент вариант примера в виде мигания светодиодиком подошел отлично. Но он был слишком простой. Необходимо было придумать что-то более сложное и более полезное, что-ли. Таким образом и появилась идея переписать драйвер дисплея и SPI-FLASH в проекте-долгострое.
+Достаточно много времени прошло с предыдущей заметки на тему использования сопрограмм. Изначально было в планах продемонстрировать на чем-то концепцию и как именно их можно было применять. На тот момент вариант примера в виде мигания светодиодиком подошел отлично. Но он был слишком простой. Необходимо было придумать что-то более сложное и более полезное, что ли. Таким образом и появилась идея переписать драйвер дисплея и SPI-FLASH в проекте-долгострое.
 
 Небольшой план, что будет в заметке:
 
-1. Предистория с транзакциями
+1. Предыстория с транзакциями
 2. Как это работает в общих чертах
 3. Работаем с SPI интерфейсом
 4. Массив команд инициализации
@@ -19,13 +19,13 @@
 13. Ожидание окончания выполнения сопрограммы
 
 ### 0. Перед прочтением
-Заметка предполагает базовое знакомство читателя с сопрогрмаммами/ их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
+Заметка предполагает базовое знакомство читателя с сопрогрмаммами / их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
 
-https://blog.panicsoftware.com/your-first-coroutine/
-https://lewissbaker.github.io/2017/09/25/coroutine-theory
-https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
-https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
-https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
+* https://blog.panicsoftware.com/your-first-coroutine/
+* https://lewissbaker.github.io/2017/09/25/coroutine-theory
+* https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
+* https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
+* https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
 
 В заметке изложение материала может показаться непоследовательным. Предложения буду рад увидеть в виде issues или же в комментариях/сообщениях в Telegram.
 
@@ -320,7 +320,7 @@ void initDisplay() noexcept
 Как может выглядеть процедура отправки дисплейного буфера? Т.к. в проекте используется библиотека LVGL - фреймбуфер может быть non-screen-sized, т.е. не полностью соответствовать размеру буфера экрана, что позволяет выполнять отрисовку фрагментами.(Иногда может не быть возможности поместить полностью в память буфер дисплея)
 
 Для реализации функции отправки нам необходимо выполнить отправку команд на установку области экрана, в которую будет осуществлена отрисовка, после чего отправить команду на запись в память дисплея и выполнить отправку дисплейного буфера.
-Что-же. В синхронном варианте, данный код мог-бы иметь вид:
+Что-же. В синхронном варианте, данный код мог бы иметь вид:
 ```cpp
 void fillRectangle(
     std::uint16_t _x,
@@ -519,7 +519,7 @@ template <typename... Args> auto when_all_sequence(Args &&... args) noexcept {
 
 Таким образом, получаем возможность не дублировать написание `co_await` для последовательно выполняемых сопрограмм. 
 
-В данной реализации у нас появился возвращаемый тип `VoidTask`. Он нам необходим для приостановки выполнения `await_suspend` т.к. в ином случае при выполнении `co_await` для первого из переданных аргумнетов в `launchAll` будет выполнено возващение на вызывающую сторону, после чего вызов `handle.resume()` что не совсем соотвествует ожидаемому результату.Восстановление ожидающей сопрограммы должно быть выполнено только после окончания работы всех переданных.
+В данной реализации у нас появился возвращаемый тип `VoidTask`. Он нам необходим для приостановки выполнения `await_suspend` т.к. в ином случае при выполнении `co_await` для первого из переданных аргумнетов в `launchAll` будет выполнено возващение на вызывающую сторону, после чего вызов `handle.resume()` что не совсем соотвествует ожидаемому результату. Восстановление ожидающей сопрограммы должно быть выполнено только после окончания работы всех переданных задач.
 
 Рассмотрим реализацию типа `VoidTask`.
 Данный тип представляет собой "ленивую" задачу которая не выполняется до момента вызова на ней оператора `co_await`. Изначально задача приостановлена. Рассмотрим небольшой пример ее работы, прежде чем описывать детали реализации.
@@ -623,7 +623,7 @@ struct task_promise
 
 В свою очередь, VoidTask должен определить у себя оператор `co_await` для возможности его вызова.
 
-`operator co_await` должен вернуть на вызвающую сторону `task_promise`, который имеет возможность восстановить выполнение приостановленной сопрограммы и дополнительно установить `continuation`, т.е. сопрограмму, которая будет восстановлена после окончания работы текущей сопрограммы.
+`operator co_await` должен вернуть на вызвающую сторону `task_awaitable`, который имеет возможность восстановить выполнение приостановленной сопрограммы и дополнительно установить `continuation`, т.е. сопрограмму, которая будет восстановлена после окончания работы текущей сопрограммы.
 ```cpp
     struct task_awaitable
     {
@@ -634,13 +634,14 @@ struct task_promise
         {
             return !m_coroutine || m_coroutine.done();
         }
-        void await_suspend(std::coroutine_handle<> awaitingRoutine)
+        auto await_suspend(std::coroutine_handle<> awaitingRoutine)
         {
-            // Подробное описание, почему выполняется сначала resume и только поле этого установка continuation :
-            // https://github.com/lewissbaker/cppcoro/blob/a87e97fe5b6091ca9f6de4637736b8e0d8b109cf/include/cppcoro/task.hpp#L314
+            // Используем symmetric-transfer
+            // Подробнее можно ознакомиться:
+            // https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
 
-            m_coroutine.resume();
             m_coroutine.promise().set_continuation(awaitingRoutine);
+            return m_coroutine;
         }
 
         void await_resume()
@@ -669,13 +670,10 @@ struct final_awaitable
         return false;
     }
     template <typename TPromise>
-    void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
+    auto await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
     {
         task_promise& promise = coroutine.promise();
-        if (promise.m_continuation)
-        {
-            promise.m_continuation.resume();
-        }
+        return promise.m_continuation;
     }
 
     void await_resume() noexcept
@@ -728,15 +726,11 @@ struct VoidTask
                 return false;
             }
             template <typename TPromise>
-            void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
+            auto await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
             {
-                //получаем promise из сопрограммы. если у него установлен continuation, т.е.
-                //сопрограмма в которой было приостанолвено выполнение- восстанавливаем ее работу.
+                // https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
                 task_promise& promise = coroutine.promise();
-                if (promise.m_continuation)
-                {
-                    promise.m_continuation.resume();
-                }
+                return promise.m_continuation;
             }
 
             void await_resume() noexcept
@@ -766,10 +760,10 @@ struct VoidTask
         {
             return !m_coroutine || m_coroutine.done();
         }
-        void await_suspend(std::coroutine_handle<> awaitingRoutine)
+        auto await_suspend(std::coroutine_handle<> awaitingRoutine)
         {
-            m_coroutine.resume();
             m_coroutine.promise().set_continuation(awaitingRoutine);
+            return m_coroutine;
         }
 
         void await_resume()
@@ -1162,7 +1156,7 @@ CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
 Идея с std::forward_as_tuple следующая - все что передано в аргументах -  в функции `prepareXferTransaction` будет рассмотрено как команда + количество dummy-bytes которые нужны для принятия команды. Все что после `forward_as_tuple` - количество dummy-bytes для вычитки данных.
 
 
-Реализация фунеции `prepareXferTransaction` следующая: получаем на ввод команду виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами, передаем, после- пустыми посылками. Для возвращаемого значения возвращаем slice на буфер с принятыми данными
+Реализация фунеции `prepareXferTransaction` следующая: получаем на вход команду в виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами, передаем, после- пустыми посылками. Для возвращаемого значения возвращаем slice на буфер с принятыми данными
 
 Реализация функции имеет вид:
 

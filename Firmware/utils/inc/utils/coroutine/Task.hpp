@@ -50,13 +50,11 @@ template <typename TResult> struct Task
                 return false;
             }
             template <typename TPromise>
-            void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
+            auto await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
             {
+                // https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
                 ResultTaskPromise& promise = coroutine.promise();
-                if (promise.m_continuation)
-                {
-                    promise.m_continuation.resume();
-                }
+                return promise.m_continuation;
             }
 
             void await_resume() noexcept
@@ -159,13 +157,11 @@ struct VoidTask
                 return false;
             }
             template <typename TPromise>
-            void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
+            auto await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
             {
+                // https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
                 task_promise& promise = coroutine.promise();
-                if (promise.m_continuation)
-                {
-                    promise.m_continuation.resume();
-                }
+                return promise.m_continuation;
             }
 
             void await_resume() noexcept
