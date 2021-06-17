@@ -1181,7 +1181,8 @@ F 0 "C23" H 1650 6625 50  0000 L CNN
 F 1 "10 uF" V 1475 6425 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0603_HandSoldering" H 1663 6400 50  0001 C CNN
 F 3 "~" H 1625 6550 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 1625 6550 50  0001 C CNN "LCSC"
+F 4 "" H 1625 6550 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 1625 6550 50  0001 C CNN "lcsc"
 	1    1625 6550
 	1    0    0    -1  
 $EndComp
@@ -1208,7 +1209,8 @@ F 0 "C24" H 1800 4625 50  0000 L CNN
 F 1 "10 uF" V 1625 4425 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0603_HandSoldering" H 1813 4400 50  0001 C CNN
 F 3 "~" H 1775 4550 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 1775 4550 50  0001 C CNN "LCSC"
+F 4 "" H 1775 4550 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 1775 4550 50  0001 C CNN "lcsc"
 	1    1775 4550
 	1    0    0    -1  
 $EndComp
@@ -1234,7 +1236,8 @@ F 0 "C27" H 3000 6950 50  0000 L CNN
 F 1 "10 uF" V 2825 6750 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0603_HandSoldering" H 3013 6725 50  0001 C CNN
 F 3 "~" H 2975 6875 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 2975 6875 50  0001 C CNN "LCSC"
+F 4 "" H 2975 6875 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 2975 6875 50  0001 C CNN "lcsc"
 	1    2975 6875
 	1    0    0    -1  
 $EndComp
@@ -1251,7 +1254,8 @@ F 0 "C28" H 3375 4450 50  0000 L CNN
 F 1 "10 uF" V 3200 4250 50  0000 L CNN
 F 2 "Capacitors_SMD:C_0603_HandSoldering" H 3388 4225 50  0001 C CNN
 F 3 "~" H 3350 4375 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 3350 4375 50  0001 C CNN "LCSC"
+F 4 "" H 3350 4375 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 3350 4375 50  0001 C CNN "lcsc"
 	1    3350 4375
 	1    0    0    -1  
 $EndComp
