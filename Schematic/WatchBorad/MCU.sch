@@ -584,20 +584,6 @@ Wire Notes Line
 	11100 575  7650 575 
 Text Notes 8925 725  0    50   ~ 0
 SPI FLASH Memory\n
-$Comp
-L W25Q16BVSSIG:MX25R1635F U?
-U 1 1 5ECE6AE0
-P 9250 1525
-AR Path="/5ECE6AE0" Ref="U?"  Part="1" 
-AR Path="/5E9B1DCE/5ECE6AE0" Ref="U4"  Part="1" 
-F 0 "U4" H 9250 2195 50  0000 C CNN
-F 1 "MX25R1635F" H 9250 2104 50  0000 C CNN
-F 2 "SMD_Packages:SOIC-8-N" H 9250 1525 50  0001 L BNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Macronix-MX25R1635FM2IL0_C152602.pdf" H 9250 1525 50  0001 L BNN
-F 4 "https://lcsc.com/product-detail/FLASH_MXIC-Macronix-MX25R1635FM2IL0_C152602.html" H 9250 1525 50  0001 C CNN "lcsc"
-	1    9250 1525
-	1    0    0    -1  
-$EndComp
 Text Label 6600 2150 0    50   ~ 0
 FLASH_CS
 Text Label 6600 2250 0    50   ~ 0
@@ -2019,4 +2005,18 @@ F 3 "https://www.buydisplay.com/download/ic/GC9A01A.pdf" H 10000 4400 50  0001 C
 $EndComp
 Text Label 6700 4650 2    50   ~ 0
 DISP_DC
+$Comp
+L W25Q16BVSSIG:MX25R1635F U?
+U 1 1 5ECE6AE0
+P 9250 1525
+AR Path="/5ECE6AE0" Ref="U?"  Part="1" 
+AR Path="/5E9B1DCE/5ECE6AE0" Ref="U4"  Part="1" 
+F 0 "U4" H 9250 2195 50  0000 C CNN
+F 1 "MX25R1635F" H 9250 2104 50  0000 C CNN
+F 2 "LocalFootprints:W25Q128JVPIQ" H 9250 1525 50  0001 L BNN
+F 3 "https://datasheet.lcsc.com/szlcsc/Macronix-MX25R1635FM2IL0_C152602.pdf" H 9250 1525 50  0001 L BNN
+F 4 "https://lcsc.com/product-detail/FLASH_MXIC-Macronix-MX25R1635FM2IL0_C152602.html" H 9250 1525 50  0001 C CNN "lcsc"
+	1    9250 1525
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
