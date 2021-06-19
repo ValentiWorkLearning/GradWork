@@ -1,0 +1,138 @@
+name: CI
+
+# Controls when the action will run. Triggers the workflow on push or pull request
+# events but only for the master branch
+on:
+  push:
+    branches: [ master,dev/develop,dev/coroutine,dev/build_ci_speedup]
+  pull_request:
+    branches: [ master,dev/develop,dev/coroutine]
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "build"
+  build-windows-simulator:
+    # The type of runner that the job will run on
+    runs-on: windows-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install conan
+      uses:  BSFishy/pip-action@v1
+      with:
+        packages: |
+          conan
+
+    - name: Setup conan dependencies
+      run: |
+        conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+
+    - name: Download libraries from Conan
+      run: |
+        mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
+        conan install ${{ github.workspace }}/Firmware/conanfile.txt --install-folder ${{ runner.workspace }}/build/vsfirmwarebuild/
+
+    #Install the latest cmake
+    - name : Get the latest CMake version
+      uses: lukka/get-cmake@latest
+
+    - name: Run CMakeLists build for MSVC compiler
+      uses: lukka/run-cmake@v2
+      with:
+        cmakeGenerator: Ninja
+        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
+        cmakeBuildType: Debug
+        cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR"'
+        buildDirectory: '${{ runner.workspace }}/build/vsfirmwarebuild'
+        buildWithCMake: true
+    - name : Run firmware testing
+      run: |
+        cd ${{ runner.workspace }}/build/vsfirmwarebuild/bin
+        .\FirmwareTesting.exe
+  build-arm:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    #Install the latest cmake
+    - name : Get the latest CMake version
+      uses: lukka/get-cmake@latest
+
+    # - name: Get the latest arm-none-eabi-gcc
+    #   uses: fiam/arm-none-eabi-gcc@v1
+    #   with:
+    #     release: '10-2020-q2'
+    #     directory: ${{ github.workspace }}/toolchain
+    - name: Cache GCC toolchain
+      id: cache-gcc-toolchain
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/gcc_toolchain_10_2_q4
+        key: ${{runner.os}}-toolchain-v10_2_q4
+
+    - name: Get the latest arm-gcc-none-eabi-gcc
+      uses: wei/wget@v1
+      if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
+      id: download-arm-gcc
+      with:
+        args: 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2'
+
+    - name: Unpack arm-gcc-compiler
+      if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
+      run: |
+        mkdir gcc_toolchain_10_2_q4
+        tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/gcc_toolchain_10_2_q4
+
+    - name: Cache NordicSDK
+      id: cache-nordic-sdk
+      uses: actions/cache@v2
+      with:
+        path: ${{ github.workspace }}/Nrf52SDKv16_0
+        key: ${{runner.os}}-nordic-sdk-v16-0
+
+    - name: Get NRF52 16.0 SDK
+      uses: wei/wget@v1
+      id: download-nrf52sdk
+      if: steps.cache-nordic-sdk.outputs.cache-hit != 'true'
+      with:
+        args: 'https://www.nordicsemi.com/-/media/Software-and-other-downloads/SDKs/nRF5/Binaries/nRF5SDK160098a08e2.zip'
+    
+    - name: Unpack NordicSDK
+      if: steps.cache-nordic-sdk.outputs.cache-hit != 'true'
+      run: |
+        mkdir Nrf52SDKv16_0
+        unzip nRF5SDK160098a08e2.zip -d Nrf52SDKv16_0
+        mv Nrf52SDKv16_0/components/boards/pca10040.h Nrf52SDKv16_0/components/boards/pca10040_1.h
+
+    - name: Run CMakeLists generation for GCC compiler
+      uses: lukka/run-cmake@v2
+      with:
+        cmakeGenerator: Ninja
+        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
+        cmakeBuildType: Debug
+        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_10_2_q4/gcc-arm-none-eabi-10-2020-q4-major'
+        buildWithCMake: true
+
+    # # Runs a set of commands using the runners shell
+    # - name: Run a multi-line script
+    #   run: |
+    #     echo Add other actions to build,
+    #     echo test, and deploy your project.

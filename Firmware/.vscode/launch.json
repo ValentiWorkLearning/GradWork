@@ -1,0 +1,38 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+        "type": "cortex-debug",
+        "request": "launch",
+        "name": "Debug J-Link",
+        "cwd": "${workspaceRoot}",
+        "executable": "${workspaceRoot}//build//theOpenWatch.out",
+        "serverpath": "JLinkGDBServerCL.exe", 
+        "servertype": "jlink",
+        "device": "NRF52",
+        "armToolchainPath": "C://gcc_arm_none_eabi_10_2_q4//bin",
+        "interface": "swd",
+        "serialNumber": "", //if you have more than one J-Link probe add the serial number here 
+        "runToMain": true,
+        "svdFile": "${workspaceRoot}//nrf52_headers//nrf52.svd",
+
+        "swoConfig": {
+                "source": "probe",
+                "enabled": true,
+                "swoFrequency": 0,
+                "cpuFrequency": 0,
+                "decoders": [
+                    {
+                        "encoding": "utf8",
+                        "port": 0,
+                        "label": "SWO",
+                        "type": "console"
+                    }
+                ]
+        }
+        }
+        ]
+    }
