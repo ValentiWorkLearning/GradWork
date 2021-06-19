@@ -1,7 +1,7 @@
-1.D_TVS
+1. D_TVS
 https://lcsc.com/product-detail/TVS_PN-SILICON-PESDU0521P1_C499647.html
 
-2.Schottky Barrier
+2. Schottky Barrier
 https://lcsc.com/product-detail/Schottky-Barrier-Diodes-SBD_Shandong-Jingdao-Microelectronics-SS12_C353243.html
 
 3. Switches
@@ -16,21 +16,23 @@ https://www.digikey.com/en/products/detail/bosch-sensortec/BHI160B/9674245
 
 https://lcsc.com/product-detail/Motion-Sensors-Accelerometers_Bosch-Sensortec-BHI160B_C464452.html
 
+https://github.com/BoschSensortec/BMA400-API
+
 5. FLASH Memory:
 
 Replacement:
 
 https://lcsc.com/product-detail/FLASH_Winbond-Elec-W25Q128JVPIQTR_C190862.html
 
-6.BMS:
+6. BMS:
 
 https://lcsc.com/product-detail/_STMicroelectronics_STC3100IQT_STC3100IQT_C155587.html
 
-7.Switching controllers:
+7. Switching controllers:
 
 https://lcsc.com/product-detail/Switching-Controllers_Texas-Instruments_TPS2115APWR_Texas-Instruments-Texas-Instruments-TPS2115APWR_C70287.html
 
-8.Supervisors
+8. Supervisors
 https://lcsc.com/product-detail/Microprocessor-Microcontroller-Supervisors_ON-Semiconductor-ON-Semiconductor-MAX809STRG_C9965.html
 
 9. DC-DC Converter
