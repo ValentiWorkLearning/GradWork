@@ -518,7 +518,7 @@ Wire Wire Line
 Wire Wire Line
 	1400 3525 1400 3750
 $Comp
-L Device:Crystal_GND24_Small X1
+L WatchBorad-rescue:Crystal_GND24_Small-Device X1
 U 1 1 5EAD6468
 P 1400 3425
 F 0 "X1" H 1450 3575 50  0000 L CNN
@@ -803,8 +803,6 @@ Text Label 6750 4450 2    50   ~ 0
 DISP_SDA
 Text Label 6825 4850 2    50   ~ 0
 DISP_RESET
-Text Label 6850 4650 2    50   ~ 0
-DISP_FMARK
 Text Label 7050 2050 2    50   ~ 0
 Backlight_EN_DIM
 Wire Wire Line
@@ -814,7 +812,7 @@ MPU_INT
 Wire Wire Line
 	6350 2950 6725 2950
 $Comp
-L Sensor_Motion:BNO055 U?
+L WatchBorad-rescue:BNO055-Sensor_Motion U?
 U 1 1 5F46C7F5
 P 4525 6550
 AR Path="/5F46C7F5" Ref="U?"  Part="1" 
@@ -1066,24 +1064,13 @@ Wire Wire Line
 Text Label 9425 4350 0    50   ~ 0
 DISP_SCLK
 Text Label 9425 4150 0    50   ~ 0
-DISP_FMARK
+DISP_DC
 Wire Wire Line
 	9425 4150 10000 4150
 Text Label 9600 3650 0    50   ~ 0
 LEDK
 Text Notes 9600 3300 0    50   ~ 0
 Display module without touch panel\n
-$Comp
-L Connector_Generic:Conn_01x12 J2
-U 1 1 5F7CA256
-P 10200 4050
-F 0 "J2" H 10280 4042 50  0000 L CNN
-F 1 "Conn_01x12" H 10280 3951 50  0000 L CNN
-F 2 "" H 10200 4050 50  0001 C CNN
-F 3 "https://www.buydisplay.com/download/manual/ER-TFT1.28-1_Datasheet.pdf" H 10200 4050 50  0001 C CNN
-	1    10200 4050
-	1    0    0    -1  
-$EndComp
 $Comp
 L power:GND #PWR?
 U 1 1 5F8BBF9F
@@ -2017,4 +2004,17 @@ Wire Wire Line
 Text Label 8075 5375 0    50   ~ 0
 LEDA
 NoConn ~ 2800 2650
+$Comp
+L GC9A01:GC9A01 U11
+U 1 1 60CF55BA
+P 10250 4050
+F 0 "U11" H 10428 4046 50  0000 L CNN
+F 1 "GC9A01" H 10428 3955 50  0000 L CNN
+F 2 "LocalFootprints:GC9A01_disp" H 10000 4400 50  0001 C CNN
+F 3 "https://www.buydisplay.com/download/ic/GC9A01A.pdf" H 10000 4400 50  0001 C CNN
+	1    10250 4050
+	1    0    0    -1  
+$EndComp
+Text Label 6700 4650 2    50   ~ 0
+DISP_DC
 $EndSCHEMATC

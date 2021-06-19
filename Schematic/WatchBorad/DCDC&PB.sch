@@ -14,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L DCDC_Local:TPS62740DSST U?
+L WatchBorad-rescue:TPS62740DSST-DCDC_Local U?
 U 1 1 5F9A3890
 P 4000 1875
 AR Path="/5E9C1C3A/5F9A3890" Ref="U?"  Part="1" 

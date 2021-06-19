@@ -16,4 +16,5 @@
   (lib (name LocalLedDrivers)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/LedDrivers/LocalLedDrivers.lib)(options "")(descr ""))
   (lib (name OnOffControllers)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/OnOffcontrollers/OnOffControllers.lib)(options "")(descr ""))
   (lib (name LocalSensors)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/LocalSensors/LocalSensors.lib)(options "")(descr ""))
+  (lib (name GC9A01)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/GC9A01/GC9A01.lib)(options "")(descr ""))
 )

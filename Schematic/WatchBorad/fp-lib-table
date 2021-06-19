@@ -7,4 +7,5 @@
   (lib (name testpoints)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/testpoints/testpoints.pretty)(options "")(descr ""))
   (lib (name LocalFootprints)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/Footprints)(options "")(descr ""))
   (lib (name USB)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/USB_connectors)(options "")(descr ""))
+  (lib (name Footprints)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/Footprints.pretty)(options "")(descr ""))
 )
