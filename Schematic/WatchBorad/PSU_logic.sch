@@ -37,7 +37,7 @@ AR Path="/5ED3F98E/5F943E27" Ref="C?"  Part="1"
 AR Path="/5F913559/5F943E27" Ref="C29"  Part="1" 
 F 0 "C29" H 5450 2675 50  0000 L CNN
 F 1 "100 nF" V 5275 2475 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 5463 2450 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 5463 2450 50  0001 C CNN
 F 3 "~" H 5425 2600 50  0001 C CNN
 	1    5425 2600
 	1    0    0    -1  
@@ -70,7 +70,7 @@ AR Path="/5ED3F98E/5F943E36" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943E36" Ref="R25"  Part="1" 
 F 0 "R25" H 8095 1196 50  0000 L CNN
 F 1 "10k" H 8095 1105 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 7955 1150 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 7955 1150 50  0001 C CNN
 F 3 "~" H 8025 1150 50  0001 C CNN
 	1    8025 1150
 	1    0    0    -1  
@@ -110,7 +110,7 @@ AR Path="/5ED3F98E/5F943E4B" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943E4B" Ref="R21"  Part="1" 
 F 0 "R21" V 4975 1575 50  0000 L CNN
 F 1 "10k" V 4975 1875 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 5005 1775 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 5005 1775 50  0001 C CNN
 F 3 "~" H 5075 1775 50  0001 C CNN
 	1    5075 1775
 	0    1    1    0   
@@ -220,7 +220,7 @@ AR Path="/5ED3F98E/5F943E82" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943E82" Ref="R17"  Part="1" 
 F 0 "R17" H 3150 2550 50  0000 L CNN
 F 1 "10k" H 3100 2650 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 2955 2575 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 2955 2575 50  0001 C CNN
 F 3 "~" H 3025 2575 50  0001 C CNN
 	1    3025 2575
 	-1   0    0    1   
@@ -234,7 +234,7 @@ AR Path="/5ED3F98E/5F943E88" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943E88" Ref="R18"  Part="1" 
 F 0 "R18" H 3000 1850 50  0000 L CNN
 F 1 "10k" H 3000 1975 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 3130 1900 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3130 1900 50  0001 C CNN
 F 3 "~" H 3200 1900 50  0001 C CNN
 	1    3200 1900
 	-1   0    0    1   
@@ -372,7 +372,7 @@ AR Path="/5ED3F98E/5F943ECC" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943ECC" Ref="R24"  Part="1" 
 F 0 "R24" V 7043 4925 50  0000 C CNN
 F 1 "330" V 7134 4925 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 7180 4925 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 7180 4925 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 7250 4925 50  0001 C CNN
 	1    7250 4925
 	0    1    1    0   
@@ -401,7 +401,7 @@ AR Path="/5ED3F98E/5F943EDA" Ref="C?"  Part="1"
 AR Path="/5F913559/5F943EDA" Ref="C30"  Part="1" 
 F 0 "C30" H 6500 4700 50  0000 L CNN
 F 1 "100 nF" V 6325 4500 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 6513 4475 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 6513 4475 50  0001 C CNN
 F 3 "~" H 6475 4625 50  0001 C CNN
 	1    6475 4625
 	1    0    0    -1  
@@ -416,7 +416,7 @@ AR Path="/5ED3F98E/5F943EE0" Ref="C?"  Part="1"
 AR Path="/5F913559/5F943EE0" Ref="C31"  Part="1" 
 F 0 "C31" H 7100 4700 50  0000 L CNN
 F 1 "100 nF" V 6950 4450 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 7113 4475 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 7113 4475 50  0001 C CNN
 F 3 "~" H 7075 4625 50  0001 C CNN
 	1    7075 4625
 	1    0    0    -1  
@@ -693,7 +693,7 @@ AR Path="/5ED3F98E/5F943F65" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943F65" Ref="R20"  Part="1" 
 F 0 "R20" V 3600 4625 50  0000 L CNN
 F 1 "10k" V 3450 4600 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 3455 4675 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3455 4675 50  0001 C CNN
 F 3 "~" H 3525 4675 50  0001 C CNN
 	1    3525 4675
 	0    1    -1   0   
@@ -724,7 +724,7 @@ AR Path="/5ED3F98E/5F943F7B" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943F7B" Ref="R23"  Part="1" 
 F 0 "R23" H 5575 4600 50  0000 L CNN
 F 1 "10k" V 5875 4550 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 5730 4625 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 5730 4625 50  0001 C CNN
 F 3 "~" H 5800 4625 50  0001 C CNN
 	1    5800 4625
 	1    0    0    1   
@@ -843,7 +843,7 @@ AR Path="/5ED3F98E/5F943FCB" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943FCB" Ref="R22"  Part="1" 
 F 0 "R22" V 5125 6275 50  0000 L CNN
 F 1 "200k 0.1%" V 5200 6125 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 5230 6325 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 5230 6325 50  0001 C CNN
 F 3 "~" H 5300 6325 50  0001 C CNN
 	1    5300 6325
 	0    1    1    0   
@@ -873,7 +873,7 @@ AR Path="/5ED3F98E/5F943FE9" Ref="R?"  Part="1"
 AR Path="/5F913559/5F943FE9" Ref="R19"  Part="1" 
 F 0 "R19" H 3475 6800 50  0000 L CNN
 F 1 "0.15 Ohm" V 3300 6675 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 3330 6850 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3330 6850 50  0001 C CNN
 F 3 "~" H 3400 6850 50  0001 C CNN
 F 4 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_UNI-ROYAL-Uniroyal-Elec-0603WAF150LT5E_C45879.html" V 3400 6850 50  0001 C CNN "lcsc"
 	1    3400 6850
@@ -965,7 +965,7 @@ AR Path="/5F7F86D0/5F961CF4" Ref="R?"  Part="1"
 AR Path="/5F913559/5F961CF4" Ref="R15"  Part="1" 
 F 0 "R15" V 1843 1650 50  0000 C CNN
 F 1 "330" V 1934 1650 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 1980 1650 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 1980 1650 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 2050 1650 50  0001 C CNN
 	1    2050 1650
 	0    1    1    0   
@@ -979,7 +979,7 @@ AR Path="/5F7F86D0/5F966531" Ref="R?"  Part="1"
 AR Path="/5F913559/5F966531" Ref="R16"  Part="1" 
 F 0 "R16" V 1843 2275 50  0000 C CNN
 F 1 "330" V 1934 2275 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric_Pad0.98x0.95mm_HandSolder" V 1980 2275 50  0001 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 1980 2275 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 2050 2275 50  0001 C CNN
 	1    2050 2275
 	0    1    1    0   
@@ -1179,7 +1179,7 @@ AR Path="/5F988DA5/600EBF62" Ref="C?"  Part="1"
 AR Path="/5F913559/600EBF62" Ref="C23"  Part="1" 
 F 0 "C23" H 1650 6625 50  0000 L CNN
 F 1 "10 uF" V 1475 6425 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 1663 6400 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1663 6400 50  0001 C CNN
 F 3 "~" H 1625 6550 50  0001 C CNN
 F 4 "" H 1625 6550 50  0001 C CNN "LCSC"
 F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 1625 6550 50  0001 C CNN "lcsc"
@@ -1207,7 +1207,7 @@ AR Path="/5F988DA5/600FA946" Ref="C?"  Part="1"
 AR Path="/5F913559/600FA946" Ref="C24"  Part="1" 
 F 0 "C24" H 1800 4625 50  0000 L CNN
 F 1 "10 uF" V 1625 4425 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 1813 4400 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1813 4400 50  0001 C CNN
 F 3 "~" H 1775 4550 50  0001 C CNN
 F 4 "" H 1775 4550 50  0001 C CNN "LCSC"
 F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 1775 4550 50  0001 C CNN "lcsc"
@@ -1234,7 +1234,7 @@ AR Path="/5F988DA5/6018A9C5" Ref="C?"  Part="1"
 AR Path="/5F913559/6018A9C5" Ref="C27"  Part="1" 
 F 0 "C27" H 3000 6950 50  0000 L CNN
 F 1 "10 uF" V 2825 6750 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 3013 6725 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 3013 6725 50  0001 C CNN
 F 3 "~" H 2975 6875 50  0001 C CNN
 F 4 "" H 2975 6875 50  0001 C CNN "LCSC"
 F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 2975 6875 50  0001 C CNN "lcsc"
@@ -1252,7 +1252,7 @@ AR Path="/5F988DA5/6018B92A" Ref="C?"  Part="1"
 AR Path="/5F913559/6018B92A" Ref="C28"  Part="1" 
 F 0 "C28" H 3375 4450 50  0000 L CNN
 F 1 "10 uF" V 3200 4250 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 3388 4225 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 3388 4225 50  0001 C CNN
 F 3 "~" H 3350 4375 50  0001 C CNN
 F 4 "" H 3350 4375 50  0001 C CNN "LCSC"
 F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 3350 4375 50  0001 C CNN "lcsc"
@@ -1270,7 +1270,7 @@ AR Path="/5ED3F98E/6018C57C" Ref="C?"  Part="1"
 AR Path="/5F913559/6018C57C" Ref="C25"  Part="1" 
 F 0 "C25" H 2325 2600 50  0000 L CNN
 F 1 "100 nF" V 2175 2350 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 2338 2375 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2338 2375 50  0001 C CNN
 F 3 "~" H 2300 2525 50  0001 C CNN
 	1    2300 2525
 	1    0    0    -1  
@@ -1285,7 +1285,7 @@ AR Path="/5ED3F98E/601A13B5" Ref="C?"  Part="1"
 AR Path="/5F913559/601A13B5" Ref="C26"  Part="1" 
 F 0 "C26" H 2625 2600 50  0000 L CNN
 F 1 "100 nF" V 2475 2350 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric_Pad1.08x0.95mm_HandSolder" H 2638 2375 50  0001 C CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 2638 2375 50  0001 C CNN
 F 3 "~" H 2600 2525 50  0001 C CNN
 	1    2600 2525
 	1    0    0    -1  
