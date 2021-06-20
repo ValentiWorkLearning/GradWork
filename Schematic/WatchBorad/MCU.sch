@@ -1990,8 +1990,8 @@ AR Path="/5E9B1DCE/5ECE6AE0" Ref="U4"  Part="1"
 F 0 "U4" H 9250 2195 50  0000 C CNN
 F 1 "MX25R1635F" H 9250 2104 50  0000 C CNN
 F 2 "LocalFootprints:W25Q128JVPIQ" H 9250 1525 50  0001 L BNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Macronix-MX25R1635FM2IL0_C152602.pdf" H 9250 1525 50  0001 L BNN
-F 4 "https://lcsc.com/product-detail/FLASH_MXIC-Macronix-MX25R1635FM2IL0_C152602.html" H 9250 1525 50  0001 C CNN "lcsc"
+F 3 "https://datasheet.lcsc.com/lcsc/1809140423_Winbond-Elec-W25Q128JVPIQ_C190862.pdf" H 9250 1525 50  0001 L BNN
+F 4 "https://lcsc.com/product-detail/FLASH_Winbond-Elec-W25Q128JVPIQTR_C190862.html" H 9250 1525 50  0001 C CNN "lcsc"
 	1    9250 1525
 	1    0    0    -1  
 $EndComp
