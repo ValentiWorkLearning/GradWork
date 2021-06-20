@@ -2086,7 +2086,7 @@
   )
 
   (module Capacitor_SMD:C_0603_1608Metric (layer F.Cu) (tedit 5F68FEEE) (tstamp 60CE6A76)
-    (at 83.6 83.175 90)
+    (at 83.6 82.675 90)
     (descr "Capacitor SMD 0603 (1608 Metric), square (rectangular) end terminal, IPC_7351 nominal, (Body size source: IPC-SM-782 page 76, https://www.pcb-3d.com/wordpress/wp-content/uploads/ipc-sm-782a_amendment_1_and_2.pdf), generated with kicad-footprint-generator")
     (tags capacitor)
     (path /5F913559/6018A9C5)
@@ -4130,7 +4130,7 @@
   )
 
   (module Inductors_SMD:L_0805_HandSoldering (layer F.Cu) (tedit 58307B90) (tstamp 5F80FAC1)
-    (at 85.25 85.8)
+    (at 85.25 85.3)
     (descr "Resistor SMD 0805, hand soldering")
     (tags "resistor 0805")
     (path /5F988DA5/5F9A38A1)
@@ -4729,7 +4729,7 @@
   )
 
   (module Housings_SON:WSON-12-1EP_3x2mm_Pitch0.5mm (layer F.Cu) (tedit 59D7B228) (tstamp 5F80FDF8)
-    (at 86.15 82.45 180)
+    (at 86.15 81.95 180)
     (descr "WSON-12 http://www.ti.com/lit/ds/symlink/lm27762.pdf")
     (tags WSON-12)
     (path /5F988DA5/5F9A3890)
@@ -5127,7 +5127,7 @@
     (fill (arc_segments 32) (thermal_gap 0.508) (thermal_bridge_width 0.508))
     (polygon
       (pts
-        (xy 107.4 81.8) (xy 101 81.8) (xy 101 86.4) (xy 107.4 86.4)
+        (xy 107.4 80.9) (xy 96.3 80.85) (xy 96.3 86.35) (xy 107.4 86.4)
       )
     )
   )
