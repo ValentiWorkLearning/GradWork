@@ -584,13 +584,9 @@ Wire Notes Line
 	11100 575  7650 575 
 Text Notes 8925 725  0    50   ~ 0
 SPI FLASH Memory\n
-Text Label 6600 2150 0    50   ~ 0
-FLASH_CS
-Text Label 6600 2250 0    50   ~ 0
-FLASH_MISO
-Text Label 6600 2350 0    50   ~ 0
+Text Label 6750 3550 0    50   ~ 0
 FLASH_SCK
-Text Label 6600 2450 0    50   ~ 0
+Text Label 6750 3750 0    50   ~ 0
 FLASH_MOSI
 Wire Wire Line
 	6600 2150 6350 2150
@@ -600,26 +596,6 @@ Wire Wire Line
 	6600 2350 6350 2350
 Wire Wire Line
 	6350 2450 6600 2450
-Wire Wire Line
-	6725 3450 6350 3450
-Wire Wire Line
-	6725 3550 6350 3550
-Text Label 6725 3450 2    50   ~ 0
-P16
-Text Label 6725 3550 2    50   ~ 0
-P17
-Wire Wire Line
-	6725 3750 6350 3750
-Wire Wire Line
-	6725 3850 6350 3850
-Text Label 6725 3750 2    50   ~ 0
-P19
-Text Label 6725 3850 2    50   ~ 0
-P20
-Text Label 6725 3350 2    50   ~ 0
-P15
-Wire Wire Line
-	6725 3350 6350 3350
 Text HLabel 1100 2475 2    50   Input ~ 0
 PB_1_MCU
 Text HLabel 1100 2575 2    50   Input ~ 0
@@ -2019,4 +1995,28 @@ F 4 "https://lcsc.com/product-detail/FLASH_MXIC-Macronix-MX25R1635FM2IL0_C152602
 	1    9250 1525
 	1    0    0    -1  
 $EndComp
+Text Label 6750 3350 0    50   ~ 0
+FLASH_CS
+Text Label 6750 3450 0    50   ~ 0
+FLASH_MISO
+Wire Wire Line
+	6350 3350 6750 3350
+Wire Wire Line
+	6350 3450 6750 3450
+Wire Wire Line
+	6350 3550 6750 3550
+Wire Wire Line
+	6350 3750 6750 3750
+Text Label 6600 2150 0    50   ~ 0
+P3
+Text Label 6600 2250 0    50   ~ 0
+P4
+Text Label 6600 2350 0    50   ~ 0
+P5
+Text Label 6600 2450 0    50   ~ 0
+P6
+Text Label 6750 3850 0    50   ~ 0
+P20
+Wire Wire Line
+	6350 3850 6750 3850
 $EndSCHEMATC

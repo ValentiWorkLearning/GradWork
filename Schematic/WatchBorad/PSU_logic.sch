@@ -348,21 +348,6 @@ F 3 "" H 7450 2275 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 $Comp
-L PowerMuxes:TPS2115APWR U?
-U 1 1 5F943EC6
-P 8375 4425
-AR Path="/5E9C1C3A/5F943EC6" Ref="U?"  Part="1" 
-AR Path="/5ED3F98E/5F943EC6" Ref="U?"  Part="1" 
-AR Path="/5F913559/5F943EC6" Ref="U8"  Part="1" 
-F 0 "U8" H 8375 4950 60  0000 C CNN
-F 1 "TPS2115APWR" H 8375 4825 60  0000 C CNN
-F 2 "Housings_SSOP:TSSOP-8_4.4x3mm_Pitch0.65mm" H 8375 4915 60  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/1809131529_Texas-Instruments-TPS2115APWR_C70287.pdf" H 8375 4175 60  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Switching-Controllers_Texas-Instruments_TPS2115APWR_Texas-Instruments-Texas-Instruments-TPS2115APWR_C70287.html" H 8375 4425 50  0001 C CNN "lcsc"
-	1    8375 4425
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:R R?
 U 1 1 5F943ECC
 P 7250 4925
@@ -385,8 +370,6 @@ Wire Wire Line
 	9200 4925 9175 4925
 Wire Wire Line
 	9200 4675 9200 4925
-Wire Wire Line
-	9200 4925 9425 4925
 Connection ~ 9200 4925
 NoConn ~ 9175 4575
 Text Notes 9225 4575 0    50   ~ 0
@@ -476,8 +459,6 @@ Text Label 1475 4250 2    50   ~ 0
 V_USB
 Text Notes 775  5125 0    50   ~ 0
 USB for power \nsupply only\n
-Wire Wire Line
-	9175 4175 9800 4175
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F943F05
@@ -1316,4 +1297,23 @@ Wire Wire Line
 Connection ~ 2600 2825
 Wire Wire Line
 	2600 2825 3025 2825
+Wire Wire Line
+	9200 4925 9425 4925
+Wire Wire Line
+	9175 4175 9800 4175
+$Comp
+L PowerMuxes:TPS2115APWR U?
+U 1 1 5F943EC6
+P 8375 4425
+AR Path="/5E9C1C3A/5F943EC6" Ref="U?"  Part="1" 
+AR Path="/5ED3F98E/5F943EC6" Ref="U?"  Part="1" 
+AR Path="/5F913559/5F943EC6" Ref="U8"  Part="1" 
+F 0 "U8" H 8375 4950 60  0000 C CNN
+F 1 "TPS2115APWR" H 8375 4825 60  0000 C CNN
+F 2 "Housings_SSOP:TSSOP-8_4.4x3mm_Pitch0.65mm" H 8375 4915 60  0001 C CNN
+F 3 "https://datasheet.lcsc.com/szlcsc/1809131529_Texas-Instruments-TPS2115APWR_C70287.pdf" H 8375 4175 60  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Switching-Controllers_Texas-Instruments_TPS2115APWR_Texas-Instruments-Texas-Instruments-TPS2115APWR_C70287.html" H 8375 4425 50  0001 C CNN "lcsc"
+	1    8375 4425
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
