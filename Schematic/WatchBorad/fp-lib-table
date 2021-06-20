@@ -8,4 +8,5 @@
   (lib (name LocalFootprints)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/Footprints)(options "")(descr ""))
   (lib (name USB)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/USB_connectors)(options "")(descr ""))
   (lib (name Footprints)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/Footprints.pretty)(options "")(descr ""))
+  (lib (name OmronSwitch)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/B3U-3000P/)(options "")(descr ""))
 )

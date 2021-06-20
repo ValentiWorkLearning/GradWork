@@ -191,9 +191,9 @@ AR Path="/5ED3F98E/5F943E75" Ref="SW?"  Part="1"
 AR Path="/5F913559/5F943E75" Ref="SW2"  Part="1" 
 F 0 "SW2" V 3050 1350 50  0000 C CNN
 F 1 "SW_Push" H 3050 1000 50  0000 C CNN
-F 2 "Buttons_Switches_SMD:SW_SPST_B3U-3000P-B" H 3050 1275 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Omron-Electronics-B3U-3000PM-B_C306884.pdf" H 3050 1275 50  0001 C CNN
-F 4 "https://lcsc.com/products/Tactile-Switches_427.html?q=b3u-3000" H 3050 1075 50  0001 C CNN "lcsc"
+F 2 "OmronSwitch:SW_B3U-3000P" H 3050 1275 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2012042009_Omron-Electronics-B3U-3000P_C963349.pdf" H 3050 1275 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Tactile-Switches_Omron-Electronics-B3U-3000P_C963349.html" H 3050 1075 50  0001 C CNN "lcsc"
 	1    3050 1075
 	0    -1   -1   0   
 $EndComp
@@ -205,9 +205,9 @@ AR Path="/5ED3F98E/5F943E7C" Ref="SW?"  Part="1"
 AR Path="/5F913559/5F943E7C" Ref="SW1"  Part="1" 
 F 0 "SW1" V 2925 2125 50  0000 C CNN
 F 1 "SW_Push" H 2875 1900 50  0000 C CNN
-F 2 "Buttons_Switches_SMD:SW_SPST_B3U-3000P-B" H 2875 2150 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Omron-Electronics-B3U-3000PM-B_C306884.pdf" H 2875 2150 50  0001 C CNN
-F 4 "https://lcsc.com/products/Tactile-Switches_427.html?q=b3u-3000" H 2875 1950 50  0001 C CNN "lcsc"
+F 2 "OmronSwitch:SW_B3U-3000P" H 2875 2150 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2012042009_Omron-Electronics-B3U-3000P_C963349.pdf" H 2875 2150 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Tactile-Switches_Omron-Electronics-B3U-3000P_C963349.html" H 2875 1950 50  0001 C CNN "lcsc"
 	1    2875 1950
 	0    -1   -1   0   
 $EndComp
@@ -490,9 +490,9 @@ AR Path="/5ED3F98E/5F943F10" Ref="D?"  Part="1"
 AR Path="/5F913559/5F943F10" Ref="D1"  Part="1" 
 F 0 "D1" V 1229 4604 50  0000 L CNN
 F 1 "D_TVS" V 1320 4604 50  0000 L CNN
-F 2 "" H 1275 4525 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/2003282109_PN-SILICON-PESDU0521P1_C499647.pdf" H 1275 4525 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/TVS_PN-SILICON-PESDU0521P1_C499647.html" V 1275 4525 50  0001 C CNN "lcsc"
+F 2 "LocalFootprints:TVS_DFN1006" H 1275 4525 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2012141705_Leiditech-ESDA05CP_C384839.pdf" H 1275 4525 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/TVS_Leiditech-ESDA05CP_C384839.html" V 1275 4525 50  0001 C CNN "lcsc"
 	1    1275 4525
 	0    1    1    0   
 $EndComp

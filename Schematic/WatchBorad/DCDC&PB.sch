@@ -268,9 +268,9 @@ AR Path="/5F7F86D0/5F9A3909" Ref="SW?"  Part="1"
 AR Path="/5F988DA5/5F9A3909" Ref="SW3"  Part="1" 
 F 0 "SW3" H 7975 5060 50  0000 C CNN
 F 1 "SW_Push" H 7975 4969 50  0000 C CNN
-F 2 "Buttons_Switches_SMD:SW_SPST_B3U-3000P-B" H 7975 4975 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Omron-Electronics-B3U-3000PM-B_C306884.pdf" H 7975 4975 50  0001 C CNN
-F 4 "https://lcsc.com/products/Tactile-Switches_427.html?q=b3u-3000" H 7975 4775 50  0001 C CNN "lcsc"
+F 2 "OmronSwitch:SW_B3U-3000P" H 7975 4975 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2012042009_Omron-Electronics-B3U-3000P_C963349.pdf" H 7975 4975 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Tactile-Switches_Omron-Electronics-B3U-3000P_C963349.html" H 7975 4775 50  0001 C CNN "lcsc"
 	1    7975 4775
 	0    -1   -1   0   
 $EndComp
@@ -283,9 +283,9 @@ AR Path="/5F7F86D0/5F9A3910" Ref="SW?"  Part="1"
 AR Path="/5F988DA5/5F9A3910" Ref="SW4"  Part="1" 
 F 0 "SW4" H 8675 5060 50  0000 C CNN
 F 1 "SW_Push" H 8675 4969 50  0000 C CNN
-F 2 "Buttons_Switches_SMD:SW_SPST_B3U-3000P-B" H 8675 4975 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Omron-Electronics-B3U-3000PM-B_C306884.pdf" H 8675 4975 50  0001 C CNN
-F 4 "https://lcsc.com/products/Tactile-Switches_427.html?q=b3u-3000" H 8675 4775 50  0001 C CNN "lcsc"
+F 2 "OmronSwitch:SW_B3U-3000P" H 8675 4975 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2012042009_Omron-Electronics-B3U-3000P_C963349.pdf" H 8675 4975 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Tactile-Switches_Omron-Electronics-B3U-3000P_C963349.html" H 8675 4775 50  0001 C CNN "lcsc"
 	1    8675 4775
 	0    -1   -1   0   
 $EndComp
@@ -298,9 +298,9 @@ AR Path="/5F7F86D0/5F9A3917" Ref="SW?"  Part="1"
 AR Path="/5F988DA5/5F9A3917" Ref="SW5"  Part="1" 
 F 0 "SW5" H 9400 5060 50  0000 C CNN
 F 1 "SW_Push" H 9400 4969 50  0000 C CNN
-F 2 "Buttons_Switches_SMD:SW_SPST_B3U-3000P-B" H 9400 4975 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Omron-Electronics-B3U-3000PM-B_C306884.pdf" H 9400 4975 50  0001 C CNN
-F 4 "https://lcsc.com/products/Tactile-Switches_427.html?q=b3u-3000" H 9400 4775 50  0001 C CNN "lcsc"
+F 2 "OmronSwitch:SW_B3U-3000P" H 9400 4975 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2012042009_Omron-Electronics-B3U-3000P_C963349.pdf" H 9400 4975 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Tactile-Switches_Omron-Electronics-B3U-3000P_C963349.html" H 9400 4775 50  0001 C CNN "lcsc"
 	1    9400 4775
 	0    -1   -1   0   
 $EndComp
@@ -578,8 +578,8 @@ AR Path="/5F988DA5/5F9A39A9" Ref="D2"  Part="1"
 F 0 "D2" V 3729 4704 50  0000 L CNN
 F 1 "1A 20V" V 3820 4704 50  0000 L CNN
 F 2 "Diodes_SMD:D_SMA_Handsoldering" H 3775 4625 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/1901021833_Shandong-Jingdao-Microelectronics-SS12_C353243.pdf" H 3775 4625 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Schottky-Barrier-Diodes-SBD_Shandong-Jingdao-Microelectronics-SS12_C353243.html" V 3775 4625 50  0001 C CNN "lcsc"
+F 3 "https://datasheet.lcsc.com/lcsc/2004140934_Slkor-SLKORMICRO-Elec-SS12_C513476.pdf" H 3775 4625 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Schottky-Barrier-Diodes-SBD_Slkor-SLKORMICRO-Elec-SS12_C513476.html" V 3775 4625 50  0001 C CNN "lcsc"
 	1    3775 4625
 	0    1    1    0   
 $EndComp
