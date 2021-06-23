@@ -762,6 +762,11 @@
       (net 45 /MCU/FLASH_MISO))
     (pad 1 smd rect (at -2.845 -1.905 180) (size 1.04 0.44) (layers F.Cu F.Paste F.Mask)
       (net 46 /MCU/FLASH_CS))
+    (model ${KICAD_LIBRARIES_ROOT}/3DModels/WSON/WSON_8.step
+      (at (xyz 0 0 0))
+      (scale (xyz 1 1 1))
+      (rotate (xyz 0 0 0))
+    )
   )
 
   (module Resistor_SMD:R_0603_1608Metric (layer B.Cu) (tedit 5F68FEEE) (tstamp 5F80FC64)
