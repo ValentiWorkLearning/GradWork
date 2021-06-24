@@ -22,7 +22,9 @@
 ### 0. Перед прочтением
 Заметка предполагает базовое знакомство читателя с сопрогрмаммами / их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
 
-* https://blog.panicsoftware.com/your-first-coroutine/
+* [YOUR FIRST COROUTINE,panicsoftware](https://blog.panicsoftware.com/your-first-coroutine/)
+
+Серия статей от автора библиотеки [cppcoro](https://github.com/lewissbaker/cppcoro)
 * https://lewissbaker.github.io/2017/09/25/coroutine-theory
 * https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
 * https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
@@ -81,10 +83,11 @@ sendCommand(DisplayReg::CASET, 0x00, 0, 0, 240);
 4. Или вернуть состояние порта D/C в исходное состояние и перейти к обработке следующей транзакции
 
 Недостатки стали проявляться при попытке реализации драйвера для SPI-FLASH которая должна была быть использована в связке с Little FS. Где-то в тот-же период времени было найдено предложение в стандарт С++20 по сопрограммам, просмотрена серия мотивирующих статей:
-* https://habr.com/ru/company/yandex/blog/420861/
-* https://habr.com/ru/post/201826/
-* https://habr.com/ru/company/yandex/blog/240525/
-* https://habr.com/ru/post/340732/
+* [Готовимся к С++20. Coroutines TS на реальном примере](https://habr.com/ru/company/yandex/blog/420861/)
+
+* [Асинхронность: назад в будущее](https://habr.com/ru/post/201826/)
+* [Асинхронность 2: телепортация сквозь порталы](https://habr.com/ru/company/yandex/blog/240525/)
+* [Асинхронность 3: Субъекторная модель](https://habr.com/ru/post/340732/)
 
 И было принято решение о переписывании на сопрограммы части существующих драйверов.
 
@@ -1452,8 +1455,8 @@ https://wandbox.org/permlink/dsL64oCgPxEEph81
 * https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
 * https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
 * https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
-* https://gist.github.com/MattPD/9b55db49537a90545a90447392ad3aeb - собрание ссылок по сопрограммам
+* https://gist.github.com/MattPD/9b55db49537a90545a90447392ad3aeb - собрание ссылок и материалов по сопрограммам(доклады, библиотеки, примеры)
 * https://github.com/lewissbaker/cppcoro - библиотека, с которой разбирался в процессе написания заметки
-* https://github.com/bbelson2/coro-mc-wwl-code - репозиторий из исследования https://ieeexplore.ieee.org/abstract/document/8995550 (C++20 Coroutines on Microcontrollers—What We Learned)
+* https://github.com/bbelson2/coro-mc-wwl-code - репозиторий из исследования [C++20 Coroutines on Microcontrollers—What We Learned](https://ieeexplore.ieee.org/abstract/document/8995550)
 
 P.S. В дальнейшем хотелось бы раписать про особенности работы сопрограмм, использование пользовательских аллокаторов для них, применение в связке с библиотеками.
