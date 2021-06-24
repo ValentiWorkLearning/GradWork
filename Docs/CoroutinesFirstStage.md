@@ -1446,7 +1446,7 @@ SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& awaitable)
 https://godbolt.org/z/8YoxPPYsW
 
 Пример с использованием SPI-интерфейса для инициализации дисплея. Можно экспериментировать.
-https://wandbox.org/permlink/dsL64oCgPxEEph81
+https://wandbox.org/permlink/y6s7UVqLQUBy67xK
 
 
 ## Полезные ссылки и материалы
