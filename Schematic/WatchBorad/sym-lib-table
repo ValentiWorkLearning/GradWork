@@ -18,4 +18,5 @@
   (lib (name LocalSensors)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/LocalSensors/LocalSensors.lib)(options "")(descr ""))
   (lib (name GC9A01)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/GC9A01/GC9A01.lib)(options "")(descr ""))
   (lib (name OmronSwitch)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/B3U-3000P/B3U-3000P.lib)(options "")(descr ""))
+  (lib (name 2021-06-21_20-09-55)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/LSM6DSL/2021-06-21_20-09-55.lib)(options "")(descr ""))
 )

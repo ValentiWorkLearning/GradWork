@@ -14,7 +14,7 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L WatchBorad-rescue:TPS62740DSST-DCDC_Local U?
+L WatchBorad-rescue:TPS62740DSST-DCDC_Local-WatchBorad-rescue U?
 U 1 1 5F9A3890
 P 4000 1875
 AR Path="/5E9C1C3A/5F9A3890" Ref="U?"  Part="1" 
@@ -83,10 +83,10 @@ AR Path="/5E9C1C3A/5F9A38AC" Ref="U?"  Part="1"
 AR Path="/5F7F86D0/5F9A38AC" Ref="U?"  Part="1" 
 AR Path="/5F988DA5/5F9A38AC" Ref="U9"  Part="1" 
 F 0 "U9" H 2500 2967 50  0000 C CNN
-F 1 "MAX809STRG" H 2500 2876 50  0000 C CNN
+F 1 "MAX809S" H 2500 2876 50  0000 C CNN
 F 2 "TO_SOT_Packages_SMD:SOT-23" H 2800 2600 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/ON-Semicon-ON-MAX809STRG_C9965.pdf" H 2800 2600 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Microprocessor-Microcontroller-Supervisors_ON-Semiconductor-ON-Semiconductor-MAX809STRG_C9965.html" H 2500 2500 50  0001 C CNN "lcsc"
+F 3 "https://datasheet.lcsc.com/lcsc/1901021830_Youtai-Semiconductor-Co-Ltd-MAX809S_C347371.pdf" H 2800 2600 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Microprocessor-Microcontroller-Supervisors_UMW-Youtai-Semiconductor-Co-Ltd-MAX809S_C347371.html" H 2500 2500 50  0001 C CNN "lcsc"
 	1    2500 2500
 	1    0    0    -1  
 $EndComp
@@ -98,7 +98,7 @@ Wire Wire Line
 	2800 2500 2900 2500
 Wire Wire Line
 	3775 2050 3775 2500
-Text Label 3075 2500 0    50   ~ 0
+Text Label 3175 2500 0    50   ~ 0
 DCDC_ENABLE
 Text Notes 1800 3000 0    50   ~ 0
 V_OUT_MUX always > 1.0 \nRESET Output Guaranteed to VCC = 1.0 V.

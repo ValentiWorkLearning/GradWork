@@ -371,9 +371,6 @@ Wire Wire Line
 Wire Wire Line
 	9200 4675 9200 4925
 Connection ~ 9200 4925
-NoConn ~ 9175 4575
-Text Notes 9225 4575 0    50   ~ 0
-Internal pull-up\n
 $Comp
 L Device:C C?
 U 1 1 5F943EDA
@@ -779,90 +776,17 @@ Wire Wire Line
 	5350 4275 5800 4275
 Text Label 2650 6325 2    50   ~ 0
 V_Battery_P
-$Comp
-L BatteryManagmentLocal:STC3100IQT U?
-U 1 1 5F943FA7
-P 4475 6375
-AR Path="/5E9C1C3A/5F943FA7" Ref="U?"  Part="1" 
-AR Path="/5F7F86D0/5F943FA7" Ref="U?"  Part="1" 
-AR Path="/5ED3F98E/5F943FA7" Ref="U?"  Part="1" 
-AR Path="/5F913559/5F943FA7" Ref="U6"  Part="1" 
-F 0 "U6" H 4475 6790 50  0000 C CNN
-F 1 "STC3100IQT" H 4475 6675 50  0000 C CNN
-F 2 "Housings_DFN_QFN:DFN-8-1EP_3x3mm_Pitch0.5mm" H 4600 7150 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/1804172029_STMicroelectronics-STC3100IQT_C155587.pdf" H 4475 6375 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/_STMicroelectronics_STC3100IQT_STC3100IQT_C155587.html" H 4850 7000 50  0001 C CNN "lcsc"
-	1    4475 6375
-	-1   0    0    -1  
-$EndComp
-Text Label 2225 6425 0    50   ~ 0
-V_Battery_N
-Wire Wire Line
-	3400 6425 3400 6700
-Wire Wire Line
-	3775 6525 3775 7175
-Wire Wire Line
-	3400 7000 3400 7175
-Text Notes 3800 7475 2    50   ~ 0
-GND (pin 5) should be directly \nconnected to negedge resistor\npin that is connected to GND plane 
 Wire Wire Line
 	3925 6225 2975 6225
 Wire Wire Line
 	2975 7025 2975 7175
-Connection ~ 3400 7175
-Wire Wire Line
-	2975 7175 3400 7175
-NoConn ~ 5025 6225
-$Comp
-L Device:R R?
-U 1 1 5F943FCB
-P 5300 6325
-AR Path="/5EA4867C/5F943FCB" Ref="R?"  Part="1" 
-AR Path="/5E9C1C3A/5F943FCB" Ref="R?"  Part="1" 
-AR Path="/5F7F86D0/5F943FCB" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F943FCB" Ref="R?"  Part="1" 
-AR Path="/5F913559/5F943FCB" Ref="R22"  Part="1" 
-F 0 "R22" V 5125 6275 50  0000 L CNN
-F 1 "200k 0.1%" V 5200 6125 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 5230 6325 50  0001 C CNN
-F 3 "~" H 5300 6325 50  0001 C CNN
-	1    5300 6325
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	5150 6325 5025 6325
-Wire Wire Line
-	5450 6325 5600 6325
-Wire Wire Line
-	3775 7175 3400 7175
-Wire Wire Line
-	3775 6525 3925 6525
-Text Notes 4725 6850 2    50   ~ 0
-9 pin directly \nto plan GND\n
 Text Notes 4550 5775 2    100  ~ 0
 Fuel gauge
 Wire Notes Line
 	2000 5500 2000 7775
-$Comp
-L Device:R R?
-U 1 1 5F943FE9
-P 3400 6850
-AR Path="/5EA4867C/5F943FE9" Ref="R?"  Part="1" 
-AR Path="/5E9C1C3A/5F943FE9" Ref="R?"  Part="1" 
-AR Path="/5F7F86D0/5F943FE9" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F943FE9" Ref="R?"  Part="1" 
-AR Path="/5F913559/5F943FE9" Ref="R19"  Part="1" 
-F 0 "R19" H 3475 6800 50  0000 L CNN
-F 1 "0.15 Ohm" V 3300 6675 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3330 6850 50  0001 C CNN
-F 3 "~" H 3400 6850 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Chip-Resistor-Surface-Mount_UNI-ROYAL-Uniroyal-Elec-0603WAF150LT5E_C45879.html" V 3400 6850 50  0001 C CNN "lcsc"
-	1    3400 6850
-	-1   0    0    1   
-$EndComp
-Text Label 6000 6425 0    50   ~ 0
+Text Label 5650 6225 0    50   ~ 0
 SDA_FG
-Text Label 6000 6525 0    50   ~ 0
+Text Label 5650 6325 0    50   ~ 0
 SCL_FG
 Wire Notes Line
 	2000 5500 6925 5500
@@ -870,10 +794,6 @@ Wire Notes Line
 	2000 7775 6925 7775
 Wire Notes Line
 	6925 5500 6925 7775
-Text HLabel 6275 6425 2    50   BiDi ~ 0
-SDA_FG
-Text HLabel 6275 6525 2    50   Input ~ 0
-SCL_FG
 $Comp
 L power:GND #PWR?
 U 1 1 5F943FFA
@@ -891,14 +811,7 @@ F 3 "" H 3925 7175 50  0001 C CNN
 	1    3925 7175
 	1    0    0    -1  
 $EndComp
-Connection ~ 3775 7175
-Wire Wire Line
-	3925 6600 3925 7175
 Connection ~ 3925 7175
-Wire Wire Line
-	3775 7175 3925 7175
-Wire Wire Line
-	5600 6325 5600 7175
 $Comp
 L power:GND #PWR?
 U 1 1 5F944005
@@ -916,16 +829,12 @@ F 3 "" H 5600 7175 50  0001 C CNN
 	1    5600 7175
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	1900 6425 3400 6425
 Text Label 5750 4275 2    50   ~ 0
 V_Battery_P
 Wire Wire Line
 	1100 6325 1625 6325
 Wire Wire Line
 	1100 6800 1625 6800
-Wire Wire Line
-	1900 6800 1900 6425
 Wire Notes Line
 	1975 3575 1975 7075
 Wire Notes Line
@@ -934,9 +843,6 @@ Wire Notes Line
 	525  7075 525  3575
 Wire Notes Line
 	525  3575 1975 3575
-Wire Wire Line
-	3400 6425 3925 6425
-Connection ~ 3400 6425
 $Comp
 L Device:R R?
 U 1 1 5F961CF4
@@ -976,10 +882,8 @@ Connection ~ 2875 2275
 Wire Wire Line
 	2875 2275 3025 2275
 Wire Wire Line
-	5025 6425 6275 6425
-Wire Wire Line
-	5025 6525 6275 6525
-Text Notes 5725 6200 0    50   ~ 0
+	5525 6325 6275 6325
+Text Notes 5650 6025 0    50   ~ 0
 PUs next to MCU\n
 $Comp
 L power:+BATT #PWR?
@@ -1146,7 +1050,7 @@ Wire Wire Line
 Wire Wire Line
 	675  3325 675  3400
 Text Notes 6650 3925 0    50   ~ 0
-D1| D0 | VI(IN2) > VI(IN1) |  OUT\n0  |1  |No  |IN1\n0  |1  |Yes  |IN2
+EN| VSNS | VI(IN2) > VI(IN1) |  OUT\n0  |<0.8V  |No  |IN1\n0  |<0.8V  |Yes  |IN2
 Text Notes 7400 5150 0    50   ~ 0
 1.5A\n
 $Comp
@@ -1204,24 +1108,6 @@ Wire Wire Line
 	1775 4250 1775 4400
 Wire Wire Line
 	1275 4250 1775 4250
-$Comp
-L Device:C C?
-U 1 1 6018A9C5
-P 2975 6875
-AR Path="/5EA4867C/6018A9C5" Ref="C?"  Part="1" 
-AR Path="/5E9C1C3A/6018A9C5" Ref="C?"  Part="1" 
-AR Path="/5F7F86D0/6018A9C5" Ref="C?"  Part="1" 
-AR Path="/5F988DA5/6018A9C5" Ref="C?"  Part="1" 
-AR Path="/5F913559/6018A9C5" Ref="C27"  Part="1" 
-F 0 "C27" H 3000 6950 50  0000 L CNN
-F 1 "10 uF" V 2825 6750 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 3013 6725 50  0001 C CNN
-F 3 "~" H 2975 6875 50  0001 C CNN
-F 4 "" H 2975 6875 50  0001 C CNN "LCSC"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 2975 6875 50  0001 C CNN "lcsc"
-	1    2975 6875
-	1    0    0    -1  
-$EndComp
 $Comp
 L Device:C C?
 U 1 1 6018B92A
@@ -1302,18 +1188,82 @@ Wire Wire Line
 Wire Wire Line
 	9175 4175 9800 4175
 $Comp
-L PowerMuxes:TPS2115APWR U?
-U 1 1 5F943EC6
+L Device:C C?
+U 1 1 60DA5CC8
+P 2975 6875
+AR Path="/5EA4867C/60DA5CC8" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/60DA5CC8" Ref="C?"  Part="1" 
+AR Path="/5ED3F98E/60DA5CC8" Ref="C?"  Part="1" 
+AR Path="/5F913559/60DA5CC8" Ref="C27"  Part="1" 
+F 0 "C27" H 3000 6950 50  0000 L CNN
+F 1 "100 nF" V 2825 6750 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 3013 6725 50  0001 C CNN
+F 3 "~" H 2975 6875 50  0001 C CNN
+	1    2975 6875
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3925 6825 3925 7175
+Wire Wire Line
+	2975 7175 3925 7175
+Wire Wire Line
+	5525 6225 6275 6225
+$Comp
+L WatchBorad-rescue:MAX17048G+T10-BatteryManagmentLocal U6
+U 1 1 60DA50F9
+P 3925 6325
+AR Path="/60DA50F9" Ref="U6"  Part="1" 
+AR Path="/5F913559/60DA50F9" Ref="U6"  Part="1" 
+F 0 "U6" H 4725 6712 60  0000 C CNN
+F 1 "MAX17048G+T10" H 4725 6606 60  0000 C CNN
+F 2 "21-0168E_T822-3_MXM" H 4700 6575 60  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2106070437_Maxim-Integrated-MAX17048G-T10_C2682616.pdf" H 4725 6606 60  0001 C CNN
+F 4 "https://lcsc.com/product-detail/PMIC-Battery-Management_Maxim-Integrated-MAX17048G-T10_C2682616.html" H 3925 6325 50  0001 C CNN "lcsc"
+	1    3925 6325
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5525 6725 5600 6725
+Wire Wire Line
+	5600 6725 5600 6825
+Wire Wire Line
+	5525 6825 5600 6825
+Connection ~ 5600 6825
+Wire Wire Line
+	5600 6825 5600 7175
+Text HLabel 6275 6325 2    50   Input ~ 0
+SCL_FG
+Text HLabel 6275 6225 2    50   BiDi ~ 0
+SDA_FG
+Wire Wire Line
+	1900 6800 1900 7175
+Wire Wire Line
+	1900 7175 2975 7175
+Connection ~ 2975 7175
+Wire Wire Line
+	3925 6725 3925 6825
+Connection ~ 3925 6825
+Text HLabel 6275 6425 2    50   Output ~ 0
+FG_OD_ALRT_N
+Wire Wire Line
+	5525 6425 6275 6425
+Text Label 5625 6425 0    50   ~ 0
+FG_OD_ALRT_N
+$Comp
+L WatchBorad-rescue:TPS2113APWR-PowerMuxes U8
+U 1 1 60E7E02D
 P 8375 4425
-AR Path="/5E9C1C3A/5F943EC6" Ref="U?"  Part="1" 
-AR Path="/5ED3F98E/5F943EC6" Ref="U?"  Part="1" 
-AR Path="/5F913559/5F943EC6" Ref="U8"  Part="1" 
-F 0 "U8" H 8375 4950 60  0000 C CNN
-F 1 "TPS2115APWR" H 8375 4825 60  0000 C CNN
-F 2 "Housings_SSOP:TSSOP-8_4.4x3mm_Pitch0.65mm" H 8375 4915 60  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/1809131529_Texas-Instruments-TPS2115APWR_C70287.pdf" H 8375 4175 60  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Switching-Controllers_Texas-Instruments_TPS2115APWR_Texas-Instruments-Texas-Instruments-TPS2115APWR_C70287.html" H 8375 4425 50  0001 C CNN "lcsc"
+F 0 "U8" H 8375 5062 60  0000 C CNN
+F 1 "TPS2113APWR" H 8375 4956 60  0000 C CNN
+F 2 "PowerMuxesFP:TPS2115APWR" H 8375 4915 60  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/Texas-Instruments-TI-TPS2113APWR_C130052.pdf" H 8375 4175 60  0001 C CNN
+F 4 "https://lcsc.com/product-detail/PMIC-Power-Distribution-Switches_Texas-Instruments_TPS2113APWR_Texas-Instruments-Texas-Instruments-TPS2113APWR_C130052.html" H 8375 4425 50  0001 C CNN "lcsc"
 	1    8375 4425
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	9175 4575 9200 4575
+Wire Wire Line
+	9200 4575 9200 4675
+Connection ~ 9200 4675
 $EndSCHEMATC
