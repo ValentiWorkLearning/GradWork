@@ -1209,7 +1209,7 @@ Wire Wire Line
 Wire Wire Line
 	5525 6225 6275 6225
 $Comp
-L WatchBorad-rescue:MAX17048G+T10-BatteryManagmentLocal U6
+L WatchBorad-rescue:MAX17048G+T10-BatteryManagmentLocal-WatchBorad-rescue U6
 U 1 1 60DA50F9
 P 3925 6325
 AR Path="/60DA50F9" Ref="U6"  Part="1" 
@@ -1250,7 +1250,7 @@ Wire Wire Line
 Text Label 5625 6425 0    50   ~ 0
 FG_OD_ALRT_N
 $Comp
-L WatchBorad-rescue:TPS2113APWR-PowerMuxes U8
+L WatchBorad-rescue:TPS2113APWR-PowerMuxes-WatchBorad-rescue U8
 U 1 1 60E7E02D
 P 8375 4425
 F 0 "U8" H 8375 5062 60  0000 C CNN

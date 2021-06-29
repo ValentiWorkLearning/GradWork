@@ -109,23 +109,6 @@ Text Label 2800 2650 0    50   ~ 0
 Length
 Text Notes 2300 -950 0    50   ~ 0
 https://devzone.nordicsemi.com/nordic/nordic-blog/b/blog/posts/nfc-tag-antenna-tuning
-$Comp
-L Device:C C19
-U 1 1 5EACB58A
-P 7725 3025
-F 0 "C19" H 7840 3071 50  0000 L CNN
-F 1 "130 pF" H 7840 2980 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 7763 2875 50  0001 C CNN
-F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 7725 3025 50  0001 C CNN
-	1    7725 3025
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7725 2875 7725 2750
-Text Label 7050 2750 0    50   ~ 0
-NFC1
-Text Label 7050 2850 0    50   ~ 0
-NFC2
 Text Notes 1925 4175 0    50   ~ 0
 The SWDCLK line has an internal pull-down resistor.\nThe SWDIO line has an internal pull-up resistor.\n
 Text Label 4025 4150 0    50   ~ 0
@@ -342,24 +325,6 @@ Connection ~ 1800 1350
 Text Label 4025 3950 0    50   ~ 0
 SWD_RESET
 Wire Wire Line
-	7725 2750 8025 2750
-Connection ~ 7725 2750
-$Comp
-L Device:Antenna_Loop AE2
-U 1 1 5EB3E2CF
-P 8025 2550
-F 0 "AE2" H 8255 2518 50  0000 L CNN
-F 1 "Antenna_Loop" H 8255 2473 50  0001 L CNN
-F 2 "" H 8025 2550 50  0001 C CNN
-F 3 "~" H 8025 2550 50  0001 C CNN
-	1    8025 2550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	8125 2850 8125 2750
-Wire Wire Line
-	7250 2850 8125 2850
-Wire Wire Line
 	4025 3950 4550 3950
 Wire Wire Line
 	4025 4050 4550 4050
@@ -518,9 +483,11 @@ Wire Wire Line
 Wire Wire Line
 	1400 3525 1400 3750
 $Comp
-L WatchBorad-rescue:Crystal_GND24_Small-Device-WatchBorad-rescue X1
+L WatchBorad-rescue:Crystal_GND24_Small-Device-WatchBorad-rescue-WatchBorad-rescue X1
 U 1 1 5EAD6468
 P 1400 3425
+AR Path="/5EAD6468" Ref="X1"  Part="1" 
+AR Path="/5E9B1DCE/5EAD6468" Ref="X1"  Part="1" 
 F 0 "X1" H 1450 3575 50  0000 L CNN
 F 1 "Crystal_GND24_Small" H 1544 3380 50  0001 L CNN
 F 2 "Crystals:Crystal_SMD_2016-4pin_2.0x1.6mm" H 1400 3425 50  0001 C CNN
@@ -584,9 +551,9 @@ Wire Notes Line
 	11100 575  7650 575 
 Text Notes 8925 725  0    50   ~ 0
 SPI FLASH Memory\n
-Text Label 6750 3550 0    50   ~ 0
+Text Label 6800 4850 2    50   ~ 0
 FLASH_SCK
-Text Label 6750 3750 0    50   ~ 0
+Text Label 6600 4650 0    50   ~ 0
 FLASH_MOSI
 Wire Wire Line
 	6600 2150 6350 2150
@@ -757,14 +724,12 @@ Wire Notes Line
 	700  2000 700  1600
 Text Notes 950  1775 0    50   ~ 0
 Power HL\n\n
-Text Label 6700 4750 2    50   ~ 0
+Text Label 6750 3450 0    50   ~ 0
 DISP_CS
-Text Label 6800 4550 2    50   ~ 0
+Text Label 6750 3550 0    50   ~ 0
 DISP_SCLK
-Text Label 6750 4450 2    50   ~ 0
+Text Label 6800 3750 0    50   ~ 0
 DISP_SDA
-Text Label 6825 4850 2    50   ~ 0
-DISP_RESET
 Text Label 7050 2050 2    50   ~ 0
 Backlight_EN_DIM
 Wire Wire Line
@@ -809,88 +774,55 @@ Wire Wire Line
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F6067FE
-P 7475 4325
+P 8250 3750
 AR Path="/5EA4867C/5F6067FE" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F6067FE" Ref="TP6"  Part="1" 
-F 0 "TP6" H 7533 4397 50  0000 L CNN
-F 1 "TestPoint" H 7533 4352 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 7675 4325 50  0001 C CNN
-F 3 "~" H 7675 4325 50  0001 C CNN
-	1    7475 4325
+F 0 "TP6" H 8308 3822 50  0000 L CNN
+F 1 "TestPoint" H 8308 3777 50  0001 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8450 3750 50  0001 C CNN
+F 3 "~" H 8450 3750 50  0001 C CNN
+	1    8250 3750
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F619095
-P 7700 4325
+P 8100 3550
 AR Path="/5EA4867C/5F619095" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F619095" Ref="TP7"  Part="1" 
-F 0 "TP7" H 7758 4397 50  0000 L CNN
-F 1 "TestPoint" H 7758 4352 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 7900 4325 50  0001 C CNN
-F 3 "~" H 7900 4325 50  0001 C CNN
-	1    7700 4325
+F 0 "TP7" H 8158 3622 50  0000 L CNN
+F 1 "TestPoint" H 8158 3577 50  0001 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8300 3550 50  0001 C CNN
+F 3 "~" H 8300 3550 50  0001 C CNN
+	1    8100 3550
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F62BA5E
-P 7925 4325
+P 7900 3300
 AR Path="/5EA4867C/5F62BA5E" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F62BA5E" Ref="TP8"  Part="1" 
-F 0 "TP8" H 7983 4397 50  0000 L CNN
-F 1 "TestPoint" H 7983 4352 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8125 4325 50  0001 C CNN
-F 3 "~" H 8125 4325 50  0001 C CNN
-	1    7925 4325
+F 0 "TP8" H 7958 3372 50  0000 L CNN
+F 1 "TestPoint" H 7958 3327 50  0001 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8100 3300 50  0001 C CNN
+F 3 "~" H 8100 3300 50  0001 C CNN
+	1    7900 3300
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F63E448
-P 8150 4325
+P 8000 3450
 AR Path="/5EA4867C/5F63E448" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F63E448" Ref="TP9"  Part="1" 
-F 0 "TP9" H 8208 4397 50  0000 L CNN
-F 1 "TestPoint" H 8208 4352 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8350 4325 50  0001 C CNN
-F 3 "~" H 8350 4325 50  0001 C CNN
-	1    8150 4325
+F 0 "TP9" H 8058 3522 50  0000 L CNN
+F 1 "TestPoint" H 8058 3477 50  0001 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8200 3450 50  0001 C CNN
+F 3 "~" H 8200 3450 50  0001 C CNN
+	1    8000 3450
 	1    0    0    -1  
 $EndComp
-$Comp
-L Connector:TestPoint TP?
-U 1 1 5F650E32
-P 8350 4325
-AR Path="/5EA4867C/5F650E32" Ref="TP?"  Part="1" 
-AR Path="/5E9B1DCE/5F650E32" Ref="TP10"  Part="1" 
-F 0 "TP10" H 8408 4397 50  0000 L CNN
-F 1 "TestPoint" H 8408 4352 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8550 4325 50  0001 C CNN
-F 3 "~" H 8550 4325 50  0001 C CNN
-	1    8350 4325
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7475 4450 7475 4325
-Wire Wire Line
-	6350 4450 7475 4450
-Wire Wire Line
-	7700 4550 7700 4325
-Wire Wire Line
-	6350 4550 7700 4550
-Wire Wire Line
-	7925 4650 7925 4325
-Wire Wire Line
-	6350 4650 7925 4650
-Wire Wire Line
-	8150 4750 8150 4325
-Wire Wire Line
-	6350 4750 8150 4750
-Wire Wire Line
-	8350 4850 8350 4325
-Wire Wire Line
-	6350 4850 8350 4850
 Wire Notes Line
 	8875 4900 11150 4900
 Wire Notes Line
@@ -1172,14 +1104,14 @@ $EndComp
 $Comp
 L power:GND #PWR?
 U 1 1 5FB07C4A
-P 8000 3225
+P 8750 3250
 AR Path="/5FB07C4A" Ref="#PWR?"  Part="1" 
 AR Path="/5E9B1DCE/5FB07C4A" Ref="#PWR016"  Part="1" 
-F 0 "#PWR016" H 8000 2975 50  0001 C CNN
-F 1 "GND" H 8000 3075 50  0000 C CNN
-F 2 "" H 8000 3225 50  0001 C CNN
-F 3 "" H 8000 3225 50  0001 C CNN
-	1    8000 3225
+F 0 "#PWR016" H 8750 3000 50  0001 C CNN
+F 1 "GND" H 8750 3100 50  0000 C CNN
+F 2 "" H 8750 3250 50  0001 C CNN
+F 3 "" H 8750 3250 50  0001 C CNN
+	1    8750 3250
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -1232,10 +1164,8 @@ Text Label 6625 4250 0    50   ~ 0
 HEART_IRD
 Text Label 6625 4350 0    50   ~ 0
 HEART_RD
-Text HLabel 6725 3250 2    50   Output ~ 0
+Text HLabel 6850 4750 2    50   Output ~ 0
 Enable_motor
-Wire Wire Line
-	6350 3250 6725 3250
 Wire Wire Line
 	6625 4250 6350 4250
 Wire Wire Line
@@ -1478,36 +1408,11 @@ F 3 "~" H 5475 6050 50  0001 C CNN
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7250 3200 7725 3200
+	8875 3175 8875 3200
 Wire Wire Line
-	8000 3200 8000 3225
-Wire Wire Line
-	7725 3175 7725 3200
-Connection ~ 7725 3200
-Wire Wire Line
-	7725 3200 8000 3200
-Wire Wire Line
-	7250 2875 7250 2850
-Wire Wire Line
-	7250 3175 7250 3200
+	8400 3175 8400 3200
 Text Label 6775 3050 2    50   ~ 0
 MPU_INT_2
-$Comp
-L Device:C C18
-U 1 1 5EACAA30
-P 7250 3025
-F 0 "C18" H 7365 3071 50  0000 L CNN
-F 1 "130 pF" H 7365 2980 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 7288 2875 50  0001 C CNN
-F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 7250 3025 50  0001 C CNN
-	1    7250 3025
-	1    0    0    -1  
-$EndComp
-Connection ~ 7250 2850
-Wire Wire Line
-	6350 2850 7250 2850
-Wire Wire Line
-	6350 2750 7725 2750
 $Comp
 L Device:R R?
 U 1 1 5FFF65BE
@@ -1704,7 +1609,7 @@ F 3 "https://www.buydisplay.com/download/ic/GC9A01A.pdf" H 10000 4400 50  0001 C
 	1    10250 4050
 	1    0    0    -1  
 $EndComp
-Text Label 6700 4650 2    50   ~ 0
+Text Label 7050 3350 2    50   ~ 0
 DISP_DC
 $Comp
 L W25Q16BVSSIG:MX25R1635F U?
@@ -1720,18 +1625,10 @@ F 4 "https://lcsc.com/product-detail/FLASH_Winbond-Elec-W25Q128JVPIQTR_C190862.h
 	1    9250 1525
 	1    0    0    -1  
 $EndComp
-Text Label 6750 3350 0    50   ~ 0
+Text Label 6600 4550 0    50   ~ 0
 FLASH_CS
-Text Label 6750 3450 0    50   ~ 0
+Text Label 6600 4450 0    50   ~ 0
 FLASH_MISO
-Wire Wire Line
-	6350 3350 6750 3350
-Wire Wire Line
-	6350 3450 6750 3450
-Wire Wire Line
-	6350 3550 6750 3550
-Wire Wire Line
-	6350 3750 6750 3750
 Text Label 6600 2150 0    50   ~ 0
 P3
 Text Label 6600 2250 0    50   ~ 0
@@ -1740,12 +1637,10 @@ Text Label 6600 2350 0    50   ~ 0
 P5
 Text Label 6600 2450 0    50   ~ 0
 P6
-Text Label 6750 3850 0    50   ~ 0
-P20
-Wire Wire Line
-	6350 3850 6750 3850
+Text Label 6750 3250 0    50   ~ 0
+P17
 $Comp
-L WatchBorad-rescue:LSM6DSLTR-2021-06-21_20-09-55 U1
+L WatchBorad-rescue:LSM6DSLTR-2021-06-21_20-09-55-WatchBorad-rescue U1
 U 1 1 60D5E125
 P 2950 6350
 AR Path="/60D5E125" Ref="U1"  Part="1" 
@@ -2002,4 +1897,103 @@ Text Label 2975 4775 0    50   ~ 0
 FG_OD_ALRT_N
 Text Label 6875 3150 2    50   ~ 0
 FG_OD_ALRT_N
+Wire Wire Line
+	6350 4850 6800 4850
+Wire Wire Line
+	6350 3750 8250 3750
+Wire Wire Line
+	6600 4450 6350 4450
+Wire Wire Line
+	8400 2875 8400 2850
+$Comp
+L Device:C C18
+U 1 1 5EACAA30
+P 8400 3025
+F 0 "C18" H 8515 3071 50  0000 L CNN
+F 1 "130 pF" H 8515 2980 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 8438 2875 50  0001 C CNN
+F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 8400 3025 50  0001 C CNN
+	1    8400 3025
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C19
+U 1 1 5EACB58A
+P 8875 3025
+F 0 "C19" H 8990 3071 50  0000 L CNN
+F 1 "130 pF" H 8990 2980 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 8913 2875 50  0001 C CNN
+F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 8875 3025 50  0001 C CNN
+	1    8875 3025
+	1    0    0    -1  
+$EndComp
+Text Label 8200 2850 0    50   ~ 0
+NFC2
+Text Label 8200 2750 0    50   ~ 0
+NFC1
+Wire Wire Line
+	8875 2875 8875 2750
+Wire Wire Line
+	8400 3200 8750 3200
+Wire Wire Line
+	9275 2850 9275 2750
+Connection ~ 8875 2750
+Wire Wire Line
+	8875 2750 9175 2750
+Connection ~ 8400 2850
+Wire Wire Line
+	8400 2850 9275 2850
+$Comp
+L Device:Antenna_Loop AE2
+U 1 1 5EB3E2CF
+P 9175 2550
+F 0 "AE2" H 9405 2518 50  0000 L CNN
+F 1 "Antenna_Loop" H 9405 2473 50  0001 L CNN
+F 2 "" H 9175 2550 50  0001 C CNN
+F 3 "~" H 9175 2550 50  0001 C CNN
+	1    9175 2550
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8750 3250 8750 3200
+Connection ~ 8750 3200
+Wire Wire Line
+	8750 3200 8875 3200
+Wire Wire Line
+	6350 2750 8875 2750
+Wire Wire Line
+	6350 2850 8400 2850
+Wire Wire Line
+	6350 3550 8100 3550
+Wire Wire Line
+	6350 4550 6600 4550
+Wire Wire Line
+	6350 3450 8000 3450
+Wire Wire Line
+	6850 4750 6350 4750
+$Comp
+L Connector:TestPoint TP?
+U 1 1 5F650E32
+P 8350 3850
+AR Path="/5EA4867C/5F650E32" Ref="TP?"  Part="1" 
+AR Path="/5E9B1DCE/5F650E32" Ref="TP10"  Part="1" 
+F 0 "TP10" H 8408 3922 50  0000 L CNN
+F 1 "TestPoint" H 8408 3877 50  0001 L CNN
+F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8550 3850 50  0001 C CNN
+F 3 "~" H 8550 3850 50  0001 C CNN
+	1    8350 3850
+	1    0    0    -1  
+$EndComp
+Text Label 7200 3850 2    50   ~ 0
+DISP_RESET
+Wire Wire Line
+	6350 3850 8350 3850
+Wire Wire Line
+	7900 3350 7900 3300
+Wire Wire Line
+	6350 3350 7900 3350
+Wire Wire Line
+	6600 4650 6350 4650
+Wire Wire Line
+	6750 3250 6350 3250
 $EndSCHEMATC

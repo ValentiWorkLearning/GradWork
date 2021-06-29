@@ -572,11 +572,11 @@ X VCC 8 700 400 200 L 40 40 0 0 W
 ENDDRAW
 ENDDEF
 #
-# WatchBorad-rescue_Crystal_GND24_Small-Device-WatchBorad-rescue
+# WatchBorad-rescue_Crystal_GND24_Small-Device-WatchBorad-rescue-WatchBorad-rescue
 #
-DEF WatchBorad-rescue_Crystal_GND24_Small-Device-WatchBorad-rescue Y 0 40 Y N 1 F N
+DEF WatchBorad-rescue_Crystal_GND24_Small-Device-WatchBorad-rescue-WatchBorad-rescue Y 0 40 Y N 1 F N
 F0 "Y" 50 175 50 H V L CNN
-F1 "WatchBorad-rescue_Crystal_GND24_Small-Device-WatchBorad-rescue" 50 100 50 H V L CNN
+F1 "WatchBorad-rescue_Crystal_GND24_Small-Device-WatchBorad-rescue-WatchBorad-rescue" 50 100 50 H V L CNN
 F2 "" 0 0 50 H I C CNN
 F3 "" 0 0 50 H I C CNN
 $FPLIST
@@ -595,11 +595,11 @@ X 4 4 0 100 25 D 30 50 1 1 P
 ENDDRAW
 ENDDEF
 #
-# WatchBorad-rescue_LSM6DSLTR-2021-06-21_20-09-55
+# WatchBorad-rescue_LSM6DSLTR-2021-06-21_20-09-55-WatchBorad-rescue
 #
-DEF WatchBorad-rescue_LSM6DSLTR-2021-06-21_20-09-55 U 0 10 Y Y 1 L N
+DEF WatchBorad-rescue_LSM6DSLTR-2021-06-21_20-09-55-WatchBorad-rescue U 0 10 Y Y 1 L N
 F0 "U" 900 400 60 H V C CNN
-F1 "WatchBorad-rescue_LSM6DSLTR-2021-06-21_20-09-55" 900 300 60 H V C CNN
+F1 "WatchBorad-rescue_LSM6DSLTR-2021-06-21_20-09-55-WatchBorad-rescue" 900 300 60 H V C CNN
 F2 "QFN_6DSLTR_STM" 900 240 60 H I C CNN
 F3 "" 0 0 60 H V C CNN
 $FPLIST
@@ -629,11 +629,11 @@ X INT2 9 1800 -500 300 L 59 59 1 1 U
 ENDDRAW
 ENDDEF
 #
-# WatchBorad-rescue_MAX17048G+T10-BatteryManagmentLocal
+# WatchBorad-rescue_MAX17048G+T10-BatteryManagmentLocal-WatchBorad-rescue
 #
-DEF WatchBorad-rescue_MAX17048G+T10-BatteryManagmentLocal U 0 10 Y Y 1 L N
+DEF WatchBorad-rescue_MAX17048G+T10-BatteryManagmentLocal-WatchBorad-rescue U 0 10 Y Y 1 L N
 F0 "U" 750 425 60 H V C CNN
-F1 "WatchBorad-rescue_MAX17048G+T10-BatteryManagmentLocal" 750 325 60 H V C CNN
+F1 "WatchBorad-rescue_MAX17048G+T10-BatteryManagmentLocal-WatchBorad-rescue" 750 325 60 H V C CNN
 F2 "21-0168E_T822-3_MXM" 775 250 60 H I C CNN
 F3 "" 0 100 60 H V C CNN
 $FPLIST
@@ -658,11 +658,11 @@ X EPAD 9 1600 -500 300 L 59 59 1 1 U
 ENDDRAW
 ENDDEF
 #
-# WatchBorad-rescue_TPS2113APWR-PowerMuxes
+# WatchBorad-rescue_TPS2113APWR-PowerMuxes-WatchBorad-rescue
 #
-DEF WatchBorad-rescue_TPS2113APWR-PowerMuxes U 0 10 Y Y 1 F N
+DEF WatchBorad-rescue_TPS2113APWR-PowerMuxes-WatchBorad-rescue U 0 10 Y Y 1 F N
 F0 "U" 0 575 60 H V C CNN
-F1 "WatchBorad-rescue_TPS2113APWR-PowerMuxes" 0 375 60 H V C CNN
+F1 "WatchBorad-rescue_TPS2113APWR-PowerMuxes-WatchBorad-rescue" 0 375 60 H V C CNN
 F2 "PowerMuxesFP:TPS2115APWR" 0 490 60 H I C CNN
 F3 "" 0 -250 60 H I C CNN
 $FPLIST
@@ -692,11 +692,11 @@ X IN1 8 -800 50 300 R 59 59 1 1 I
 ENDDRAW
 ENDDEF
 #
-# WatchBorad-rescue_TPS62740DSST-DCDC_Local-WatchBorad-rescue
+# WatchBorad-rescue_TPS62740DSST-DCDC_Local-WatchBorad-rescue-WatchBorad-rescue
 #
-DEF WatchBorad-rescue_TPS62740DSST-DCDC_Local-WatchBorad-rescue U 0 10 Y Y 1 F N
+DEF WatchBorad-rescue_TPS62740DSST-DCDC_Local-WatchBorad-rescue-WatchBorad-rescue U 0 10 Y Y 1 F N
 F0 "U" 800 350 60 H V C CNN
-F1 "WatchBorad-rescue_TPS62740DSST-DCDC_Local-WatchBorad-rescue" 775 250 60 H V C CNN
+F1 "WatchBorad-rescue_TPS62740DSST-DCDC_Local-WatchBorad-rescue-WatchBorad-rescue" 775 250 60 H V C CNN
 F2 "Housings_SON:WSON-12-1EP_3x2mm_Pitch0.5mm" 800 240 60 H I C CNN
 F3 "" 0 0 60 H I C CNN
 F4 "https://lcsc.com/product-detail/DC-DC-Converters_Texas-Instruments_TPS62740DSSR_Texas-Instruments-Texas-Instruments-TPS62740DSSR_C128606.html" 625 625 50 H I C CNN "LCSC"
