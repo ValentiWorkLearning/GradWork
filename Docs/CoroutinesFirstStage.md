@@ -1460,3 +1460,4 @@ https://wandbox.org/permlink/y6s7UVqLQUBy67xK
 * https://github.com/bbelson2/coro-mc-wwl-code - репозиторий из исследования [C++20 Coroutines on Microcontrollers—What We Learned](https://ieeexplore.ieee.org/abstract/document/8995550)
 
 P.S. В дальнейшем хотелось бы раписать про особенности работы сопрограмм, использование пользовательских аллокаторов для них, применение в связке с библиотеками.
+Выражаю благодарность @magras, @shiz01, @Dr_Zlo13 за вычитку материала и помощь в подготовке.
