@@ -3,7 +3,7 @@
   (general
     (thickness 1.6)
     (drawings 1)
-    (tracks 328)
+    (tracks 323)
     (zones 0)
     (modules 112)
     (nets 90)
@@ -4181,10 +4181,10 @@
       (net 13 /DCDC&PB/L_SW_0))
     (pad 1 smd rect (at -0.95 -1.25 180) (size 0.5 0.25) (layers F.Cu F.Paste F.Mask)
       (net 12 /DCDC&PB/DCDC_VIN))
-    (model ${KISYS3DMOD}/Housings_SON.3dshapes/WSON-12-1EP_3x2mm_Pitch0.5mm.wrl
+    (model ${KICAD_LIBRARIES_ROOT}/3DModels/WSON/WSON_12.step
       (at (xyz 0 0 0))
-      (scale (xyz 1 1 1))
-      (rotate (xyz 0 0 0))
+      (scale (xyz 1 0.8 0.5))
+      (rotate (xyz -90 0 -90))
     )
   )
 
@@ -4457,11 +4457,6 @@
   (segment (start 91.9 91.1) (end 92.2 91.1) (width 0.4) (layer F.Cu) (net 1))
   (segment (start 92.7 90.6) (end 92.7 90.2) (width 0.4) (layer F.Cu) (net 1))
   (segment (start 92.2 91.1) (end 92.7 90.6) (width 0.4) (layer F.Cu) (net 1))
-  (via (at 88.15 79.1) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 1))
-  (segment (start 88.8 79.75) (end 88.15 79.1) (width 0.15) (layer B.Cu) (net 1))
-  (segment (start 88.8 80.49) (end 88.8 79.75) (width 0.15) (layer B.Cu) (net 1))
-  (segment (start 88.775 81.75) (end 88.775 79.725) (width 0.3) (layer F.Cu) (net 1))
-  (segment (start 88.775 79.725) (end 88.15 79.1) (width 0.3) (layer F.Cu) (net 1))
   (via (at 88.777923 93.63499) (size 0.8) (drill 0.4) (layers F.Cu B.Cu) (net 2))
   (segment (start 87.65 93.35) (end 88.492933 93.35) (width 0.25) (layer F.Cu) (net 2))
   (segment (start 88.492933 93.35) (end 88.777923 93.63499) (width 0.25) (layer F.Cu) (net 2))
