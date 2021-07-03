@@ -1162,14 +1162,12 @@ F 3 "" H 2325 975 50  0001 C CNN
 $EndComp
 Text Label 6625 4250 0    50   ~ 0
 HEART_IRD
-Text Label 6625 4350 0    50   ~ 0
+Text Label 6700 4350 0    50   ~ 0
 HEART_RD
 Text HLabel 6850 4750 2    50   Output ~ 0
 Enable_motor
 Wire Wire Line
 	6625 4250 6350 4250
-Wire Wire Line
-	6350 4350 6625 4350
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5FD9ED2F
@@ -1996,4 +1994,6 @@ Wire Wire Line
 	6600 4650 6350 4650
 Wire Wire Line
 	6750 3250 6350 3250
+Wire Wire Line
+	6350 4350 6700 4350
 $EndSCHEMATC
