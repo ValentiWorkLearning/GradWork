@@ -628,6 +628,7 @@ struct task_promise
 В свою очередь, VoidTask должен определить у себя оператор `co_await` для возможности его вызова.
 
 `operator co_await` должен вернуть на вызвающую сторону `task_awaitable`, который имеет возможность восстановить выполнение приостановленной сопрограммы и дополнительно установить `continuation`, т.е. сопрограмму, которая будет восстановлена после окончания работы текущей сопрограммы.
+
 ```cpp
     struct task_awaitable
     {
@@ -1161,7 +1162,7 @@ CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
 Идея с `std::forward_as_tuple` следующая - все что передано в аргументах -  в функции `prepareXferTransaction` будет рассмотрено как команда + количество dummy-bytes которые нужны для принятия команды. Все что после `forward_as_tuple` - количество dummy-bytes для вычитки данных.
 
 
-Реализация фунеции `prepareXferTransaction` следующая: получаем на вход команду в виде tuple + количество пустых посылок. Далее, заполняем передащий буфер сначала командой и ее аргументами, передаем, после- пустыми посылками. Для возвращаемого значения возвращаем slice на буфер с принятыми данными
+Реализация функции `prepareXferTransaction` следующая: получаем на вход команду в виде tuple + количество пустых посылок. Далее, заполняем передащий буфер сначала командой и ее аргументами, передаем, после- пустыми посылками. Для возвращаемого значения возвращаем slice на буфер с принятыми данными
 
 Реализация функции имеет вид:
 
@@ -1433,7 +1434,7 @@ template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitab
 SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& awaitable)
 {
     if constexpr (!std::is_same_v<TTaskResult, void>)
-        coyield co_await awaitable;
+        co_yield co_await awaitable;
     else
         co_await awaitable;
 }
