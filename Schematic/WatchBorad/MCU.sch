@@ -563,45 +563,17 @@ Wire Wire Line
 	6600 2350 6350 2350
 Wire Wire Line
 	6350 2450 6600 2450
-Text HLabel 1100 2475 2    50   Input ~ 0
+Text HLabel 1150 2400 2    50   Input ~ 0
 PB_1_MCU
-Text HLabel 1100 2575 2    50   Input ~ 0
+Text HLabel 1150 2500 2    50   Input ~ 0
 PB_2_MCU
-Text HLabel 1100 2675 2    50   Input ~ 0
+Text HLabel 1150 2650 2    50   Input ~ 0
 PB_3_MCU
-Text HLabel 1100 2775 2    50   Input ~ 0
+Text HLabel 1150 2750 2    50   Input ~ 0
 PB_4_MCU
-Text HLabel 1100 2875 2    50   Input ~ 0
+Text HLabel 1150 2850 2    50   Input ~ 0
 PB_5_MCU
-Wire Wire Line
-	1100 2475 925  2475
-Wire Wire Line
-	1100 2575 925  2575
-Wire Wire Line
-	1100 2675 925  2675
-Wire Wire Line
-	1100 2775 925  2775
-Wire Wire Line
-	1100 2875 925  2875
-Text Label 925  2475 0    50   ~ 0
-P15
-Text Label 925  2575 0    50   ~ 0
-P16
-Text Label 925  2675 0    50   ~ 0
-P17
-Text Label 925  2775 0    50   ~ 0
-P19
-Text Label 925  2875 0    50   ~ 0
-P20
-Wire Notes Line
-	725  2950 1800 2950
-Wire Notes Line
-	1800 2950 1800 2225
-Wire Notes Line
-	1800 2225 725  2225
-Wire Notes Line
-	725  2225 725  2950
-Text Notes 1175 2350 0    50   ~ 0
+Text Notes 1150 2350 0    50   ~ 0
 PB\n
 $Comp
 L Connector:Conn_01x07_Female J?
@@ -684,11 +656,11 @@ Wire Notes Line
 	2300 4275 550  4275
 Wire Wire Line
 	6600 3950 6350 3950
-Text Label 6600 4050 0    50   ~ 0
+Text Label 7750 4400 0    50   ~ 0
 HEART_SDA
-Text Label 6600 3950 0    50   ~ 0
+Text Label 7700 4100 0    50   ~ 0
 HEART_INT
-Text Label 6600 4150 0    50   ~ 0
+Text Label 7750 4500 0    50   ~ 0
 HEART_SCL
 Text Label 1675 6700 0    50   ~ 0
 SWD_SWDIO
@@ -1160,14 +1132,12 @@ F 3 "" H 2325 975 50  0001 C CNN
 	1    2325 975 
 	1    0    0    -1  
 $EndComp
-Text Label 6625 4250 0    50   ~ 0
+Text Label 7750 4300 0    50   ~ 0
 HEART_IRD
-Text Label 6700 4350 0    50   ~ 0
+Text Label 7700 4200 0    50   ~ 0
 HEART_RD
 Text HLabel 6850 4750 2    50   Output ~ 0
 Enable_motor
-Wire Wire Line
-	6625 4250 6350 4250
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5FD9ED2F
@@ -1627,10 +1597,6 @@ Text Label 6600 4550 0    50   ~ 0
 FLASH_CS
 Text Label 6600 4450 0    50   ~ 0
 FLASH_MISO
-Text Label 6600 2150 0    50   ~ 0
-P3
-Text Label 6600 2250 0    50   ~ 0
-P4
 Text Label 6600 2350 0    50   ~ 0
 P5
 Text Label 6600 2450 0    50   ~ 0
@@ -1996,4 +1962,44 @@ Wire Wire Line
 	6750 3250 6350 3250
 Wire Wire Line
 	6350 4350 6700 4350
+Text Label 900  2750 2    50   ~ 0
+U_PUSH2
+Text Label 900  2650 2    50   ~ 0
+U_PUSH1
+Wire Wire Line
+	1150 2650 900  2650
+Wire Wire Line
+	900  2750 1150 2750
+Text Label 900  2850 2    50   ~ 0
+U_PUSH3
+Wire Wire Line
+	900  2850 1150 2850
+Text Label 900  2400 2    50   ~ 0
+P_PUSH1
+Text Label 900  2500 2    50   ~ 0
+P_PUSH2
+Wire Wire Line
+	900  2500 1150 2500
+Wire Wire Line
+	1150 2400 900  2400
+Text Label 6600 3950 0    50   ~ 0
+U_PUSH1
+Text Label 6700 4250 0    50   ~ 0
+U_PUSH2
+Wire Wire Line
+	6350 4250 6700 4250
+Text Label 6700 4350 0    50   ~ 0
+U_PUSH3
+Wire Notes Line
+	500  2950 1700 2950
+Wire Notes Line
+	1700 2950 1700 2250
+Wire Notes Line
+	1700 2250 500  2250
+Wire Notes Line
+	500  2250 500  2950
+Text Label 6600 2150 0    50   ~ 0
+P_PUSH1
+Text Label 6600 2250 0    50   ~ 0
+P_PUSH2
 $EndSCHEMATC
