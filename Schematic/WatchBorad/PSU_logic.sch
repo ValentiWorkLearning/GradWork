@@ -1216,7 +1216,7 @@ AR Path="/60DA50F9" Ref="U6"  Part="1"
 AR Path="/5F913559/60DA50F9" Ref="U6"  Part="1" 
 F 0 "U6" H 4725 6712 60  0000 C CNN
 F 1 "MAX17048G+T10" H 4725 6606 60  0000 C CNN
-F 2 "21-0168E_T822-3_MXM" H 4700 6575 60  0001 C CNN
+F 2 "LocalFootprints:MAX17048G" H 4700 6575 60  0001 C CNN
 F 3 "https://datasheet.lcsc.com/lcsc/2106070437_Maxim-Integrated-MAX17048G-T10_C2682616.pdf" H 4725 6606 60  0001 C CNN
 F 4 "https://lcsc.com/product-detail/PMIC-Battery-Management_Maxim-Integrated-MAX17048G-T10_C2682616.html" H 3925 6325 50  0001 C CNN "lcsc"
 	1    3925 6325
@@ -1255,7 +1255,7 @@ U 1 1 60E7E02D
 P 8375 4425
 F 0 "U8" H 8375 5062 60  0000 C CNN
 F 1 "TPS2113APWR" H 8375 4956 60  0000 C CNN
-F 2 "PowerMuxesFP:TPS2115APWR" H 8375 4915 60  0001 C CNN
+F 2 "LocalFootprints:TPS2115APWR" H 8375 4915 60  0001 C CNN
 F 3 "https://datasheet.lcsc.com/lcsc/Texas-Instruments-TI-TPS2113APWR_C130052.pdf" H 8375 4175 60  0001 C CNN
 F 4 "https://lcsc.com/product-detail/PMIC-Power-Distribution-Switches_Texas-Instruments_TPS2113APWR_Texas-Instruments-Texas-Instruments-TPS2113APWR_C130052.html" H 8375 4425 50  0001 C CNN "lcsc"
 	1    8375 4425
