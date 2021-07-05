@@ -33,10 +33,6 @@ jobs:
         packages: |
           conan
 
-    - name: Setup conan dependencies
-      run: |
-        conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-
     - name: Download libraries from Conan
       run: |
         mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
