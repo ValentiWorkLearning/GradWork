@@ -1,19 +1,16 @@
 #pragma once
+#include "coroutine_utils.hpp"
+#include "gpio.hpp"
+#include <iostream>
 
-#include <gpio/gpio_pin.hpp>
-
-#include <delay/delay_provider.hpp>
-#include <spi/spi_wrapper_async_templated.hpp>
-
-#include <utils/CoroUtils.hpp>
-#include <utils/SimpleSignal.hpp>
-
-#include <array>
-#include <cstdint>
-#include <memory>
-
-namespace DisplayDriver
+namespace Delay
 {
+void waitFor(std::uint16_t _toWaitBlocking)
+{
+    std::cout << "Wait for" << _toWaitBlocking << "requested\n";
+}
+} // namespace Delay
+
 template <
     typename TConcreteDisplay,
     typename TSpiBusInstance,
@@ -53,16 +50,16 @@ public:
 
     bool isInitialized() const noexcept
     {
-        return m_displayInitialized.isSet();
+        return displayInitialized.isSet();
     }
 
-    Simple::Signal<void()> onRectArreaFilled;
+    CoroUtils::Event displayInitialized;
 
 protected:
     struct Awaiter
     {
         bool resetDcPin = false;
-        bool restoreInSpiCtx = false;
+        bool restoreInSpiCtx = true;
         const std::uint8_t* pTransmitBuffer;
         This_t* pBaseDisplay;
         std::uint16_t bufferSize;
@@ -83,7 +80,7 @@ protected:
                 pBaseDisplay->resetDcPin();
 
             pBaseDisplay->getSpiBus()->transmitBuffer(
-                std::span(pTransmitBuffer, bufferSize), thisCoroutine.address(), restoreInSpiCtx);
+                pTransmitBuffer, bufferSize, thisCoroutine.address(), restoreInSpiCtx);
         }
     };
 
@@ -91,7 +88,6 @@ protected:
     {
         return Awaiter{
             .resetDcPin = true,
-            .restoreInSpiCtx = false,
             .pTransmitBuffer = _command,
             .pBaseDisplay = this,
             .bufferSize = 1};
@@ -101,7 +97,6 @@ protected:
     {
         return Awaiter{
             .resetDcPin = true,
-            .restoreInSpiCtx = true,
             .pTransmitBuffer = _command,
             .pBaseDisplay = this,
             .bufferSize = 1};
@@ -118,7 +113,6 @@ protected:
     auto sendChunkFast(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept
     {
         return Awaiter{
-            .restoreInSpiCtx = true,
             .pTransmitBuffer = _pBuffer,
             .pBaseDisplay = this,
             .bufferSize = static_cast<std::uint16_t>(_bufferSize)};
@@ -130,7 +124,7 @@ protected:
         const std::uint8_t* ArgBuf = _pBuffer + 1;
         const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>(_bufferSize - 1);
 
-        return CoroUtils::when_all_sequence(
+        return when_all_sequence(
             sendCommandImpl(commandBuf),
             ArgsBufferSize > 0 ? sendChunk(ArgBuf, ArgsBufferSize) : sendChunk(nullptr, 0));
     }
@@ -141,7 +135,7 @@ protected:
         const std::uint8_t* ArgBuf = _pBuffer + 1;
         const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>(_bufferSize - 1);
 
-        return CoroUtils::when_all_sequence(
+        return when_all_sequence(
             sendCommandImplFast(commandBuf),
             ArgsBufferSize > 0 ? sendChunk(ArgBuf, ArgsBufferSize) : sendChunk(nullptr, 0));
     }
@@ -183,8 +177,6 @@ protected:
         return &m_spiBus;
     }
 
-    CoroUtils::Event m_displayInitialized;
-
     auto pOffspring()
     {
         return static_cast<TConcreteDisplay*>(this);
@@ -198,5 +190,3 @@ private:
     Gpio::DisplayResetPin m_resetPin;
     TSpiBusInstance m_spiBus;
 };
-
-} // namespace DisplayDriver

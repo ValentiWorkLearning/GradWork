@@ -64,6 +64,15 @@ public:
     }
 
 public:
+
+    void setCsPinHigh() noexcept
+    {
+    }
+
+    void setCsPinLow() noexcept
+    {
+    }
+
     void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
         m_bufferTransmitSize.store(_bufferSize);

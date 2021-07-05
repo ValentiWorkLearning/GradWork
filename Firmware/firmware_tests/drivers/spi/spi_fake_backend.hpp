@@ -7,6 +7,8 @@
 #include <vector>
 
 #include <utils/CoroUtils.hpp>
+#include "mock_gpio.hpp"
+#include "mock_spi.hpp"
 
 namespace Testing::Spi
 {
@@ -18,17 +20,15 @@ public:
     void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
         BusTransactionsTransmit.emplace_back(_pBuffer, _bufferSize);
+        m_spiMocker.sentData(std::span(_pBuffer,_bufferSize));
         m_completedTransaction();
     }
 
     void receiveChunk(std::uint8_t* _pDestinationArray, size_t _receiveSize)
     {
+        const auto& receivedRange = m_spiMocker.receivedData();
         auto arraySpan = std::span(_pDestinationArray, _receiveSize);
-        std::ranges::transform(
-            m_dataStreamReceived.begin(),
-            m_dataStreamReceived.begin() + _receiveSize,
-            arraySpan.begin(),
-            [](const std::byte _byte) { return static_cast<std::uint8_t>(_byte); });
+        std::ranges::copy_n(receivedRange.begin(), _receiveSize, arraySpan.begin() );
 
         m_completedTransaction();
     }
@@ -38,16 +38,29 @@ public:
         std::span<std::uint8_t> _receiveArray)
     {
         BusTransactionsTransmit.emplace_back(_transmitArray.data(), _transmitArray.size());
-        BusTransactionsTransmit.emplace_back(_transmitArray.data(), _receiveArray.size());
+        BusTransactionsTransmit.emplace_back(_receiveArray.data(), _receiveArray.size());
+
+        m_spiMocker.sentData(std::span(_transmitArray.data(), _transmitArray.size()));
+        const auto& receivedRange = m_spiMocker.receivedData();
 
         auto streamSpan = std::span(
-            reinterpret_cast<const std::uint8_t*>(m_dataStreamReceived.data()),
-            m_dataStreamReceived.size());
+            reinterpret_cast<const std::uint8_t*>(receivedRange.data()),
+            receivedRange.size());
 
         BusTransactionsReceive.emplace_back(streamSpan.data(), streamSpan.size());
         std::ranges::copy(streamSpan, _receiveArray.begin());
 
         m_completedTransaction();
+    }
+
+    void setCsPinHigh() noexcept
+    {
+        m_csPin.setGpioHigh();
+    }
+
+    void setCsPinLow() noexcept
+    {
+        m_csPin.setGpioLow();
     }
 
 public:
@@ -66,25 +79,42 @@ public:
     TDataStream getTransmittedData() const
     {
         TDataStream stream;
-        std::for_each(
-            BusTransactionsTransmit.cbegin(),
-            BusTransactionsTransmit.cend(),
+        std::ranges::for_each(
+            BusTransactionsTransmit,
             [&stream](const auto& _transaction) {
                 const auto& [pArray, blockSize] = _transaction;
                 auto arraySpan = std::span{pArray, blockSize};
-                std::transform(
-                    arraySpan.begin(),
-                    arraySpan.end(),
+                std::ranges::transform(
+                    arraySpan,
                     std::back_inserter(stream),
                     [](std::uint8_t _dataByte) { return std::byte{_dataByte}; });
             });
         return stream;
     }
 
-    void setReceivedStream(const TDataStream& _receivedStream)
+    using TCSPinAccessor = testing::NiceMock<Gpio::MockGpio>;
+    using TMockerSpi = testing::NiceMock<SpiMock::SpiMocker>;
+
+    TCSPinAccessor& accesToCsPin()
     {
-        m_dataStreamReceived = _receivedStream;
+        return m_csPin;
     }
+
+    const TCSPinAccessor& accesToCsPin() const
+    {
+        return m_csPin;
+    }
+
+    TMockerSpi& accessToSpiMock()
+    {
+        return m_spiMocker;
+    }
+
+    const TMockerSpi& accessToSpiMock() const
+    {
+        return m_spiMocker;
+    }
+
 
 protected:
     using TTransacation = std::pair<const std::uint8_t*, size_t>;
@@ -93,7 +123,8 @@ protected:
 
 private:
     TTransactionCompletedHandler m_completedTransaction;
-    TDataStream m_dataStreamReceived;
+    TCSPinAccessor m_csPin;
+    TMockerSpi m_spiMocker;
 };
 
 } // namespace Testing::Spi

@@ -13,6 +13,7 @@ enable_testing()
 set (3RDPARTY_DIR "../3rdparty")
 add_subdirectory( ${3RDPARTY_DIR}/googletest "3rdparty/googletest")
 add_subdirectory(coroutine)
+add_subdirectory(article_example)
 
 add_executable(
     ${PROJECT_NAME}
@@ -32,6 +33,8 @@ add_executable(
 
     drivers/windond_flash/flash_driver_test_suite.cpp
     drivers/windond_flash/flash_fixture.hpp
+    drivers/spi/mock_gpio.hpp
+    drivers/spi/mock_spi.hpp
 )
 
 mark_as_advanced(

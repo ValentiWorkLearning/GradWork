@@ -7,6 +7,8 @@
 
 #include <utils/coroutine/SyncWait.hpp>
 
+using ::testing::Return;
+
 constexpr inline std::uint16_t Null = 0;
 constexpr inline std::uint16_t SmallerThanSingleDmaTransaction =
     SpiDriverTest::TTestDriver::DmaBufferSize - 2;
@@ -25,8 +27,8 @@ TEST_F(SpiDriverTest, ExpectAnyTransmissionOccured)
     static constexpr std::byte DataBlock{223};
     static const TDataStream ExpectedStream{DataBlock};
 
-    co_await sendChunk(
-        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size());
+    CoroUtils::syncWait(sendChunk(
+        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()));
 
     constexpr size_t TransactionsCount = 1;
 
@@ -46,8 +48,8 @@ TEST_P(SpiDriverTest, CheckRandomSequenceWithLengthTransmissionCorrect)
         return std::byte(distribution(generator));
     });
 
-    co_await sendChunk(
-        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size());
+    CoroUtils::syncWait(sendChunk(
+        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()));
     EXPECT_EQ(TransactionsToDataStream(), ExpectedStream);
 }
 
@@ -70,7 +72,11 @@ TEST_F(SpiDriverTest, CheckXferTransaction)
         return std::byte(distribution(generator));
     });
 
-    testSpiDriver.getBackendImpl().setReceivedStream(ExpectedStream);
+    EXPECT_CALL(
+        testSpiDriver.getBackendImpl().accessToSpiMock(),
+        receivedData()).Times(1).WillOnce(
+            Return(std::span(reinterpret_cast<std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()))
+        );
 
     auto receivedStreamSpan = CoroUtils::syncWait(xferTransaction(
         std::span(

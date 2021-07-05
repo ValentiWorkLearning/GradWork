@@ -1,5 +1,5 @@
 #pragma once
-
+#include <array>
 #include <atomic>
 #include <coroutine>
 #include <cstdint>
@@ -7,14 +7,9 @@
 #include <optional>
 #include <span>
 
-#include <etl/vector.h>
-#include <utils/CoroUtils.hpp>
-#include <utils/Noncopyable.hpp>
+#include "coroutine_utils.hpp"
 
-namespace Interface::SpiTemplated
-{
-
-template <typename SpiBackendImpl> class SpiBus : private Utils::noncopyable
+template <typename SpiBackendImpl> class SpiBus
 {
 
 public:
@@ -23,7 +18,7 @@ public:
 
 public:
     static constexpr std::uint16_t DmaBufferSize = 255;
-    using DmaBufferType = etl::vector<std::uint8_t, DmaBufferSize>;
+    using DmaBufferType = std::array<std::uint8_t, DmaBufferSize>;
 
     constexpr std::uint16_t getDmaBufferSize() noexcept
     {
@@ -55,7 +50,7 @@ public:
             .computeChunkOffsetWithDma = 0,
             .pDataToTransmit = _transmitArray.data(),
             .fullDmaTransactionsCount = 0,
-            .chunkedTransactionBufSize = 0,
+            .chunkedTransactionBufSize = _transmitArray.size(),
             .completedTransactionsCount = 0};
 
         m_transmitContext = std::move(newContext);
@@ -64,14 +59,15 @@ public:
     }
 
     void transmitBuffer(
-        std::span<const std::uint8_t> _pBuffer,
+        const std::uint8_t* _pBuffer,
+        std::uint16_t _pBufferSize,
         void* _pUserData,
         bool _restoreInSpiCtx) noexcept
     {
         m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
         m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
-        const size_t TransferBufferSize = _pBuffer.size();
+        const size_t TransferBufferSize = _pBufferSize;
         const size_t FullDmaTransactionsCount = TransferBufferSize / DmaBufferSize;
         const size_t ChunkedTransactionsBufSize = TransferBufferSize % DmaBufferSize;
         const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
@@ -79,7 +75,7 @@ public:
         TransactionContext newContext{
             .restoreInSpiCtx = _restoreInSpiCtx,
             .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma,
-            .pDataToTransmit = _pBuffer.data(),
+            .pDataToTransmit = _pBuffer,
             .fullDmaTransactionsCount = FullDmaTransactionsCount,
             .chunkedTransactionBufSize = ChunkedTransactionsBufSize,
             .completedTransactionsCount = 0};
@@ -89,24 +85,13 @@ public:
         if (FullDmaTransactionsCount)
         {
             --m_transmitContext.fullDmaTransactionsCount;
-            m_backendImpl.sendChunk(_pBuffer.data(), DmaBufferSize);
+            m_backendImpl.sendChunk(_pBuffer, DmaBufferSize);
         }
         else
         {
             m_transmitContext.chunkedTransactionBufSize = 0;
-            m_backendImpl.sendChunk(_pBuffer.data(), _pBuffer.size());
+            m_backendImpl.sendChunk(_pBuffer, _pBufferSize);
         }
-    }
-public:
-
-    void setCsPinHigh() noexcept
-    {
-        getBackendImpl().setCsPinHigh();
-    }
-
-    void setCsPinLow() noexcept
-    {
-        getBackendImpl().setCsPinLow();
     }
 
 public:
@@ -184,5 +169,3 @@ private:
     DmaBufferType DmaArrayTransmit;
     DmaBufferType DmaArrayReceive;
 };
-
-} // namespace Interface::SpiTemplated
