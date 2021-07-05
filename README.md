@@ -8,6 +8,10 @@ Development board for smart-handwatch based on NRF52832 E73 module with C++17/CM
 * Port of LVGL 8.0 library for ST7789V/GC9A01 display and NRFSDK
 * Simulator for fimware development without target MCU
 * CI for Windows Simulator build and GCC build for target
+
+### Article:
+[C++20 Coroutines on NRF52832 with GTest](https://habr.com/ru/post/566070/)
+
 ![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.1/photo_2020-04-12_14-58-51.jpg "Revision v1.0")
 
 ![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.1/photo_2020-04-12_14-58-50.jpg "Revision v1.0")
