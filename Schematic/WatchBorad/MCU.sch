@@ -551,7 +551,7 @@ Wire Notes Line
 	11100 575  7650 575 
 Text Notes 8925 725  0    50   ~ 0
 SPI FLASH Memory\n
-Text Label 6800 4850 2    50   ~ 0
+Text Label 6850 4750 2    50   ~ 0
 FLASH_SCK
 Text Label 6600 4650 0    50   ~ 0
 FLASH_MOSI
@@ -1136,7 +1136,7 @@ Text Label 7750 4300 0    50   ~ 0
 HEART_IRD
 Text Label 7700 4200 0    50   ~ 0
 HEART_RD
-Text HLabel 6850 4750 2    50   Output ~ 0
+Text HLabel 6800 4850 2    50   Output ~ 0
 Enable_motor
 $Comp
 L Connector:TestPoint TP?
