@@ -751,7 +751,7 @@ AR Path="/5EA4867C/5F6067FE" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5F6067FE" Ref="TP6"  Part="1" 
 F 0 "TP6" H 8308 3822 50  0000 L CNN
 F 1 "TestPoint" H 8308 3777 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8450 3750 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8450 3750 50  0001 C CNN
 F 3 "~" H 8450 3750 50  0001 C CNN
 	1    8250 3750
 	1    0    0    -1  
@@ -764,7 +764,7 @@ AR Path="/5EA4867C/5F619095" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5F619095" Ref="TP7"  Part="1" 
 F 0 "TP7" H 8158 3622 50  0000 L CNN
 F 1 "TestPoint" H 8158 3577 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8300 3550 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8300 3550 50  0001 C CNN
 F 3 "~" H 8300 3550 50  0001 C CNN
 	1    8100 3550
 	1    0    0    -1  
@@ -777,7 +777,7 @@ AR Path="/5EA4867C/5F62BA5E" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5F62BA5E" Ref="TP8"  Part="1" 
 F 0 "TP8" H 7958 3372 50  0000 L CNN
 F 1 "TestPoint" H 7958 3327 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8100 3300 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8100 3300 50  0001 C CNN
 F 3 "~" H 8100 3300 50  0001 C CNN
 	1    7900 3300
 	1    0    0    -1  
@@ -790,7 +790,7 @@ AR Path="/5EA4867C/5F63E448" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5F63E448" Ref="TP9"  Part="1" 
 F 0 "TP9" H 8058 3522 50  0000 L CNN
 F 1 "TestPoint" H 8058 3477 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8200 3450 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8200 3450 50  0001 C CNN
 F 3 "~" H 8200 3450 50  0001 C CNN
 	1    8000 3450
 	1    0    0    -1  
@@ -1146,7 +1146,7 @@ AR Path="/5EA4867C/5FD9ED2F" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5FD9ED2F" Ref="TP1"  Part="1" 
 F 0 "TP1" H 700 6650 50  0000 L CNN
 F 1 "TestPoint" H 733 6602 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 875 6575 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 875 6575 50  0001 C CNN
 F 3 "~" H 875 6575 50  0001 C CNN
 	1    675  6575
 	1    0    0    -1  
@@ -1159,7 +1159,7 @@ AR Path="/5EA4867C/5FD9FCBC" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5FD9FCBC" Ref="TP2"  Part="1" 
 F 0 "TP2" H 925 6650 50  0000 L CNN
 F 1 "TestPoint" H 958 6602 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 1100 6575 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 1100 6575 50  0001 C CNN
 F 3 "~" H 1100 6575 50  0001 C CNN
 	1    900  6575
 	1    0    0    -1  
@@ -1172,7 +1172,7 @@ AR Path="/5EA4867C/5FDA011E" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5FDA011E" Ref="TP3"  Part="1" 
 F 0 "TP3" H 1150 6650 50  0000 L CNN
 F 1 "TestPoint" H 1183 6602 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 1325 6575 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 1325 6575 50  0001 C CNN
 F 3 "~" H 1325 6575 50  0001 C CNN
 	1    1125 6575
 	1    0    0    -1  
@@ -1185,7 +1185,7 @@ AR Path="/5EA4867C/5FDA04CF" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5FDA04CF" Ref="TP4"  Part="1" 
 F 0 "TP4" H 1375 6650 50  0000 L CNN
 F 1 "TestPoint" H 1408 6602 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 1550 6575 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 1550 6575 50  0001 C CNN
 F 3 "~" H 1550 6575 50  0001 C CNN
 	1    1350 6575
 	1    0    0    -1  
@@ -1943,7 +1943,7 @@ AR Path="/5EA4867C/5F650E32" Ref="TP?"  Part="1"
 AR Path="/5E9B1DCE/5F650E32" Ref="TP10"  Part="1" 
 F 0 "TP10" H 8408 3922 50  0000 L CNN
 F 1 "TestPoint" H 8408 3877 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 8550 3850 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8550 3850 50  0001 C CNN
 F 3 "~" H 8550 3850 50  0001 C CNN
 	1    8350 3850
 	1    0    0    -1  

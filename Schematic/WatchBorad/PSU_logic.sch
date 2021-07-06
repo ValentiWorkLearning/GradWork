@@ -142,7 +142,7 @@ AR Path="/5ED3F98E/5F943E5B" Ref="TP?"  Part="1"
 AR Path="/5F913559/5F943E5B" Ref="TP11"  Part="1" 
 F 0 "TP11" H 7633 1847 50  0000 L CNN
 F 1 "TestPoint" H 7633 1802 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 7775 1775 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 7775 1775 50  0001 C CNN
 F 3 "~" H 7775 1775 50  0001 C CNN
 	1    7575 1775
 	1    0    0    -1  
@@ -466,7 +466,7 @@ AR Path="/5ED3F98E/5F943F05" Ref="TP?"  Part="1"
 AR Path="/5F913559/5F943F05" Ref="TP12"  Part="1" 
 F 0 "TP12" H 9858 4147 50  0000 L CNN
 F 1 "TestPoint" H 9858 4102 50  0001 L CNN
-F 2 "Measurement_Points:Measurement_Point_Round-SMD-Pad_Small" H 10000 4075 50  0001 C CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 10000 4075 50  0001 C CNN
 F 3 "~" H 10000 4075 50  0001 C CNN
 	1    9800 4075
 	1    0    0    -1  
@@ -1107,7 +1107,7 @@ Wire Wire Line
 Wire Wire Line
 	1775 4250 1775 4400
 Wire Wire Line
-	1275 4250 1775 4250
+	1275 4250 1550 4250
 $Comp
 L Device:C C?
 U 1 1 6018B92A
@@ -1266,4 +1266,21 @@ Wire Wire Line
 Wire Wire Line
 	9200 4575 9200 4675
 Connection ~ 9200 4675
+$Comp
+L Connector:TestPoint TP?
+U 1 1 60EA81F2
+P 1550 4250
+AR Path="/5E9C1C3A/60EA81F2" Ref="TP?"  Part="1" 
+AR Path="/5ED3F98E/60EA81F2" Ref="TP?"  Part="1" 
+AR Path="/5F913559/60EA81F2" Ref="TP5"  Part="1" 
+F 0 "TP5" H 1608 4322 50  0000 L CNN
+F 1 "TestPoint" H 1608 4277 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 1750 4250 50  0001 C CNN
+F 3 "~" H 1750 4250 50  0001 C CNN
+	1    1550 4250
+	1    0    0    -1  
+$EndComp
+Connection ~ 1550 4250
+Wire Wire Line
+	1550 4250 1775 4250
 $EndSCHEMATC
