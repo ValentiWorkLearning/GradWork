@@ -558,11 +558,7 @@ FLASH_MOSI
 Wire Wire Line
 	6600 2150 6350 2150
 Wire Wire Line
-	6350 2250 6600 2250
-Wire Wire Line
 	6600 2350 6350 2350
-Wire Wire Line
-	6350 2450 6600 2450
 Text HLabel 1150 2400 2    50   Input ~ 0
 PB_1_MCU
 Text HLabel 1150 2500 2    50   Input ~ 0
@@ -702,12 +698,10 @@ Text Label 6750 3550 0    50   ~ 0
 DISP_SCLK
 Text Label 6800 3750 0    50   ~ 0
 DISP_SDA
-Text Label 7050 2050 2    50   ~ 0
+Text Label 7100 2450 2    50   ~ 0
 Backlight_EN_DIM
 Wire Wire Line
 	6350 2050 7050 2050
-Text Label 6775 2950 2    50   ~ 0
-MPU_INT_1
 $Comp
 L Device:C C?
 U 1 1 5F46C82F
@@ -1597,9 +1591,9 @@ Text Label 6600 4550 0    50   ~ 0
 FLASH_CS
 Text Label 6600 4450 0    50   ~ 0
 FLASH_MISO
-Text Label 6600 2350 0    50   ~ 0
+Text Label 6750 2950 2    50   ~ 0
 P5
-Text Label 6600 2450 0    50   ~ 0
+Text Label 7050 2050 2    50   ~ 0
 P6
 Text Label 6750 3250 0    50   ~ 0
 P17
@@ -1638,8 +1632,6 @@ Wire Wire Line
 Connection ~ 2925 6950
 Wire Wire Line
 	2925 6950 2925 6850
-Wire Wire Line
-	6350 2950 6775 2950
 Wire Wire Line
 	6350 3050 6775 3050
 Text Notes 2950 5675 0    50   ~ 0
@@ -2000,6 +1992,14 @@ Wire Notes Line
 	500  2250 500  2950
 Text Label 6600 2150 0    50   ~ 0
 P_PUSH1
-Text Label 6600 2250 0    50   ~ 0
+Text Label 6600 2350 0    50   ~ 0
 P_PUSH2
+Wire Wire Line
+	6350 2450 7100 2450
+Wire Wire Line
+	6750 2950 6350 2950
+Text Label 6950 2250 2    50   ~ 0
+MPU_INT_1
+Wire Wire Line
+	6350 2250 6950 2250
 $EndSCHEMATC
