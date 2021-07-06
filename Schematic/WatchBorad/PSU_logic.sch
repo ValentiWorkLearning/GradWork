@@ -561,7 +561,7 @@ AR Path="/5ED3F98E/5F943F36" Ref="BT?"  Part="1"
 AR Path="/5F913559/5F943F36" Ref="BT1"  Part="1" 
 F 0 "BT1" H 1218 6746 50  0000 L CNN
 F 1 "Battery_Cell" H 1218 6655 50  0000 L CNN
-F 2 "Battery_Holders:Keystone_107_1x23mm-CoinCell" V 1100 6710 50  0001 C CNN
+F 2 "LocalFootprints:BatteryPads" V 1100 6710 50  0001 C CNN
 F 3 "https://aliexpress.ru/item/33000396152.html?spm=a2g0o.productlist.0.0.43416af464CXwu&algo_pvid=e6706777-cde6-4668-9867-8799ba4921bb&algo_expid=e6706777-cde6-4668-9867-8799ba4921bb-0&btsid=0b8b037215874644191236041ea897&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_" V 1100 6710 50  0001 C CNN
 	1    1100 6650
 	-1   0    0    -1  
