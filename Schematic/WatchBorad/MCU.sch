@@ -551,7 +551,7 @@ Wire Notes Line
 	11100 575  7650 575 
 Text Notes 8925 725  0    50   ~ 0
 SPI FLASH Memory\n
-Text Label 6850 4750 2    50   ~ 0
+Text Label 6600 4750 0    50   ~ 0
 FLASH_SCK
 Text Label 6600 4650 0    50   ~ 0
 FLASH_MOSI
@@ -652,11 +652,11 @@ Wire Notes Line
 	2300 4275 550  4275
 Wire Wire Line
 	6600 3950 6350 3950
-Text Label 7750 4400 0    50   ~ 0
+Text Label 8200 4400 0    50   ~ 0
 HEART_SDA
-Text Label 7700 4100 0    50   ~ 0
+Text Label 8150 4100 0    50   ~ 0
 HEART_INT
-Text Label 7750 4500 0    50   ~ 0
+Text Label 8200 4500 0    50   ~ 0
 HEART_SCL
 Text Label 1675 6700 0    50   ~ 0
 SWD_SWDIO
@@ -1126,9 +1126,9 @@ F 3 "" H 2325 975 50  0001 C CNN
 	1    2325 975 
 	1    0    0    -1  
 $EndComp
-Text Label 7750 4300 0    50   ~ 0
+Text Label 8200 4300 0    50   ~ 0
 HEART_IRD
-Text Label 7700 4200 0    50   ~ 0
+Text Label 8150 4200 0    50   ~ 0
 HEART_RD
 Text HLabel 6800 4850 2    50   Output ~ 0
 Enable_motor
@@ -1858,8 +1858,6 @@ Wire Wire Line
 Wire Wire Line
 	6350 3750 8250 3750
 Wire Wire Line
-	6600 4450 6350 4450
-Wire Wire Line
 	8400 2875 8400 2850
 $Comp
 L Device:C C18
@@ -1922,11 +1920,7 @@ Wire Wire Line
 Wire Wire Line
 	6350 3550 8100 3550
 Wire Wire Line
-	6350 4550 6600 4550
-Wire Wire Line
 	6350 3450 8000 3450
-Wire Wire Line
-	6850 4750 6350 4750
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F650E32
@@ -1948,8 +1942,6 @@ Wire Wire Line
 	7900 3350 7900 3300
 Wire Wire Line
 	6350 3350 7900 3350
-Wire Wire Line
-	6600 4650 6350 4650
 Wire Wire Line
 	6750 3250 6350 3250
 Wire Wire Line
@@ -2002,4 +1994,64 @@ Text Label 6950 2250 2    50   ~ 0
 MPU_INT_1
 Wire Wire Line
 	6350 2250 6950 2250
+$Comp
+L Connector:TestPoint TP?
+U 1 1 60F01B53
+P 7200 4450
+AR Path="/5EA4867C/60F01B53" Ref="TP?"  Part="1" 
+AR Path="/5E9B1DCE/60F01B53" Ref="TP16"  Part="1" 
+F 0 "TP16" H 7258 4522 50  0000 L CNN
+F 1 "TestPoint" H 7258 4477 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 7400 4450 50  0001 C CNN
+F 3 "~" H 7400 4450 50  0001 C CNN
+	1    7200 4450
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 60F12FC7
+P 7450 4550
+AR Path="/5EA4867C/60F12FC7" Ref="TP?"  Part="1" 
+AR Path="/5E9B1DCE/60F12FC7" Ref="TP17"  Part="1" 
+F 0 "TP17" H 7508 4622 50  0000 L CNN
+F 1 "TestPoint" H 7508 4577 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 7650 4550 50  0001 C CNN
+F 3 "~" H 7650 4550 50  0001 C CNN
+	1    7450 4550
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 60F24537
+P 7700 4650
+AR Path="/5EA4867C/60F24537" Ref="TP?"  Part="1" 
+AR Path="/5E9B1DCE/60F24537" Ref="TP18"  Part="1" 
+F 0 "TP18" H 7758 4722 50  0000 L CNN
+F 1 "TestPoint" H 7758 4677 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 7900 4650 50  0001 C CNN
+F 3 "~" H 7900 4650 50  0001 C CNN
+	1    7700 4650
+	1    0    0    -1  
+$EndComp
+$Comp
+L Connector:TestPoint TP?
+U 1 1 60F35800
+P 7950 4750
+AR Path="/5EA4867C/60F35800" Ref="TP?"  Part="1" 
+AR Path="/5E9B1DCE/60F35800" Ref="TP19"  Part="1" 
+F 0 "TP19" H 8008 4822 50  0000 L CNN
+F 1 "TestPoint" H 8008 4777 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8150 4750 50  0001 C CNN
+F 3 "~" H 8150 4750 50  0001 C CNN
+	1    7950 4750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6350 4750 7950 4750
+Wire Wire Line
+	6350 4650 7700 4650
+Wire Wire Line
+	6350 4550 7450 4550
+Wire Wire Line
+	6350 4450 7200 4450
 $EndSCHEMATC
