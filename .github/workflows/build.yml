@@ -124,7 +124,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_10_3/10 2021.07'
+        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_10_3/gcc-arm-none-eabi-10.3-2021.07'
         buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
