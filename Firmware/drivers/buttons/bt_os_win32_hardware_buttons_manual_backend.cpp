@@ -1,4 +1,4 @@
-#include "inc/buttons/bt_win32_hardware_buttons_manual_backend.hpp"
+#include "inc/buttons/bt_os_hardware_buttons_manual_backend.hpp"
 
 #include "utils/CallbackConnector.hpp"
 #include "utils/MetaUtils.hpp"
@@ -8,11 +8,11 @@
 namespace Buttons
 {
 
-Win32TimerBackend::Win32TimerBackend() : m_isTimerEllapsed{true}
+OsTimerBackend::OsTimerBackend() : m_isTimerEllapsed{true}
 {
 }
 
-void Win32TimerBackend::startTimer()
+void OsTimerBackend::startTimer()
 {
     if (!m_isTimerEllapsed)
     {
@@ -32,27 +32,26 @@ void Win32TimerBackend::startTimer()
     m_isTimerEllapsed = false;
 }
 
-void Win32TimerBackend::stopTimer()
+void OsTimerBackend::stopTimer()
 {
     KillTimer(nullptr, TimerId);
     m_isTimerEllapsed = true;
 }
 
-void Win32TimerBackend::initialize()
+void OsTimerBackend::initialize()
 {
 }
 
-bool Win32TimerBackend::isTimerEllapsed() const
+bool OsTimerBackend::isTimerEllapsed() const
 {
     return m_isTimerEllapsed;
 }
 
-Win32ButtonsBackend::Win32ButtonsBackend()
+OsButtonsBackend::OsButtonsBackend()
 {
-    initWin32ApiHook();
 }
 
-void Win32ButtonsBackend::initWin32ApiHook()
+void OsButtonsBackend::initialize()
 {
     HINSTANCE appInstance = GetModuleHandle(nullptr);
 
@@ -93,10 +92,6 @@ void Win32ButtonsBackend::initWin32ApiHook()
 
     SetWindowsHookEx(
         WH_KEYBOARD_LL, reinterpret_cast<HOOKPROC>(hookKeyboardCallback), appInstance, 0);
-}
-
-void Win32ButtonsBackend::initialize()
-{
 }
 
 } // namespace Buttons

@@ -281,7 +281,11 @@ set (LVGL_HEADERS
 add_library( ${TARGET_NAME} STATIC ${LVGL_SOURCES} )
 
 if( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
-    target_compile_options( ${TARGET_NAME} PUBLIC /wd4576 /std:c++latest )
+    target_compile_options(
+        ${TARGET_NAME}
+        PUBLIC
+        $<$<CXX_COMPILER_ID:MSVC>:/wd4576 /std:c++latest>
+    )
 endif()
 
 target_compile_features(

@@ -7,11 +7,11 @@
 namespace Buttons
 {
 
-class Win32TimerBackend
+class OsTimerBackend
 {
 
 public:
-    Win32TimerBackend();
+    OsTimerBackend();
 
 public:
     Simple::Signal<void()> onTimerExpired;
@@ -31,20 +31,17 @@ private:
     std::atomic<bool> m_isTimerEllapsed = false;
 };
 
-class Win32ButtonsBackend
+class OsButtonsBackend
 {
 
 public:
-    Win32ButtonsBackend();
+    OsButtonsBackend();
 
 public:
     Simple::Signal<void(ButtonId, ButtonBackendEvent)> onButtonEvent;
 
 public:
     void initialize();
-
-private:
-    void initWin32ApiHook();
 };
 
 } // namespace Buttons
