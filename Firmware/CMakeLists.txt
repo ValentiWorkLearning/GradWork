@@ -76,7 +76,7 @@ target_compile_features(
 target_compile_options(
     ${NORDIC_TARGET}
     PRIVATE
-    $<$<CXX_COMPILER_ID:GCC>:-fcoroutines>
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )

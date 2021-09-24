@@ -50,5 +50,5 @@ endif()
 target_compile_options(
     watchboard
     PRIVATE
-    $<$<CXX_COMPILER_ID:GCC>:-fcoroutines>
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
 )

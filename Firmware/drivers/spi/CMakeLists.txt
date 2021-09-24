@@ -11,7 +11,7 @@ endif()
 target_compile_options(
     spi
     INTERFACE
-    $<$<CXX_COMPILER_ID:GCC>:-fcoroutines>
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
 )
 
 target_include_directories(
