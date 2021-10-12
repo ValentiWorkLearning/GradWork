@@ -11,6 +11,7 @@
 .idea
 cmake-build-debug
 build-Firmware-ARM_Toolchain-Debug
+build-Firmware-Desktop_Qt_5_15_2_GCC_64bit-Debug
 test/build
 out
 

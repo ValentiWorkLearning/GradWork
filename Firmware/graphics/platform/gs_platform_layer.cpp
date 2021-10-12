@@ -82,10 +82,10 @@ void PlatformBackend::executeLvTaskHandler() noexcept
 #include <chrono>
 #include <thread>
 
-#include "lv_drivers/display/monitor.h"
-#include "lv_drivers/indev/keyboard.h"
-#include "lv_drivers/indev/mouse.h"
-#include "lvgl/lvgl.h"
+#include <lv_drivers/sdl/sdl.h>
+#include <lv_drivers/indev/keyboard.h>
+#include <lv_drivers/indev/mouse.h>
+#include <lvgl/lvgl.h>
 
 #include <fmt/format.h>
 
@@ -99,8 +99,8 @@ PlatformBackend::PlatformBackend() noexcept
 
 void PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver) noexcept
 {
-    monitor_init();
-    _displayDriver->flush_cb = monitor_flush;
+    sdl_init();
+    _displayDriver->flush_cb = sdl_display_flush;
 }
 
 void PlatformBackend::initPlatformGfxTimer() noexcept
@@ -111,9 +111,8 @@ void PlatformBackend::initPlatformGfxTimer() noexcept
 
 void PlatformBackend::indevPlatformInit() noexcept
 {
-
     m_indevDriver.type = LV_INDEV_TYPE_POINTER;
-    m_indevDriver.read_cb = mouse_read;
+    m_indevDriver.read_cb = sdl_mouse_read;
     lv_indev_drv_register(&m_indevDriver);
 
     auto memoryMonitorTask =
