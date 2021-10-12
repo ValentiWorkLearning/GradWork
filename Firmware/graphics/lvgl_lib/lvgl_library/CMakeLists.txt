@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.14)
+option(REDUCE_LVGL_BINARY_SIZE OFF)
 
 set (TARGET_NAME lvgl_lib)
 
@@ -355,3 +356,10 @@ target_compile_options(
     PUBLIC
     ${COMMON_FLAGS}
 )
+if(REDUCE_LVGL_BINARY_SIZE)
+    target_compile_options(
+        ${TARGET_NAME}
+        PUBLIC
+        -Os
+    )
+endif()
