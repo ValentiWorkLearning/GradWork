@@ -49,7 +49,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR"'
+        cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Release'
         buildDirectory: '${{ runner.workspace }}/build/vsfirmwarebuild'
         buildWithCMake: true
     - name : Run firmware testing

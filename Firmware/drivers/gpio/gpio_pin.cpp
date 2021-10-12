@@ -52,4 +52,6 @@ template <std::uint8_t GpioPinNumber, Direction pinDirection>
 GpioPin<GpioPinNumber, pinDirection>::~GpioPin() = default;
 
 template class GpioPin<Gpio::Pins::Display_DataCommand, Direction::Output>;
+template class GpioPin<Gpio::Pins::Display_Reset, Direction::Output>;
+template class GpioPin<Gpio::Pins::LedPin, Direction::Output>;
 }; // namespace Gpio

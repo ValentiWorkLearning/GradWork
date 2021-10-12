@@ -77,7 +77,7 @@ void PlatformBackend::executeLvTaskHandler() noexcept
 } // namespace Graphics
 #endif
 
-#if defined USE_WINSDL_BACKEND
+#if defined USE_SDL_BACKEND
 
 #include <chrono>
 #include <thread>
@@ -92,7 +92,10 @@ void PlatformBackend::executeLvTaskHandler() noexcept
 namespace Graphics
 {
 
-PlatformBackend::PlatformBackend() noexcept = default;
+PlatformBackend::PlatformBackend() noexcept
+{
+    m_isTickThreadRunning.store(false);
+};
 
 void PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver) noexcept
 {
@@ -102,14 +105,6 @@ void PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver) noexc
 
 void PlatformBackend::initPlatformGfxTimer() noexcept
 {
-    m_tickThread = std::thread([] {
-        while (true)
-        {
-            lv_tick_inc(LvglNotificationTime);
-            std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
-        }
-    });
-    m_tickThread.detach();
     indevPlatformInit();
     lv_indev_drv_init(&m_indevDriver);
 }
@@ -144,6 +139,18 @@ void PlatformBackend::memoryMonitor(lv_timer_t* _param) noexcept
 
 void PlatformBackend::executeLvTaskHandler() noexcept
 {
+    if(!m_isTickThreadRunning)
+    {
+        m_isTickThreadRunning = true;
+        m_tickThread = std::thread([this] {
+            while (m_isTickThreadRunning)
+            {
+                lv_tick_inc(LvglNotificationTime);
+                std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
+            }
+        });
+        m_tickThread.detach();
+    }
     lv_task_handler();
     std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
 }
