@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.14)
 
 project(coroutine_experiments C CXX)
 
+if( UNIX )
+    find_package(Threads REQUIRED)
+endif()
+
 add_executable(coroutine_experiments_app ${PROJECT_SOURCES})
 
 target_sources(
@@ -30,3 +34,6 @@ target_link_libraries(
     UtilsLibrary
     logger_service
 )
+if(UNIX)
+    target_link_libraries( coroutine_experiments_app PUBLIC Threads::Threads)
+endif()
