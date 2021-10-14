@@ -159,7 +159,7 @@ jobs:
       uses: lukka/get-cmake@latest
     
     - name: Set up GCC 11
-    uses: egor-tensin/setup-gcc@v1
+      uses: egor-tensin/setup-gcc@v1
       with:
         version: 11
         platform: x64
