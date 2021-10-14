@@ -127,9 +127,14 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
 
     option( ENABLE_SANITIZE_BUILD "Build simultator with ASAN support" OFF)
     list(APPEND EXTRA_LIBS vcruntime user32 gdi32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32)
-
     if( ${ENABLE_SANITIZE_BUILD} )
-        target_compile_options( ${NORDIC_TARGET} PUBLIC  /fsanitize=address )
+        if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+            set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /fsanitize=address")
+        else()
+            set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+            set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+            set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+        endif()
     endif()
 endif()
 

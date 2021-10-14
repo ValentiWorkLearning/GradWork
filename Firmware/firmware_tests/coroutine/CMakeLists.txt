@@ -22,9 +22,13 @@ target_compile_features(
     cxx_std_20
 )
 
-if( ${ENABLE_SANITIZE_BUILD} )
-        target_compile_options( coroutine_experiments_app PRIVATE /fsanitize=address )
-    endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /fsanitize=address")
+else()
+    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+    set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+    set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+endif()
 
 target_link_libraries(
     coroutine_experiments_app
