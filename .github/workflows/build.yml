@@ -50,7 +50,7 @@ jobs:
         buildWithCMake: true
     - name : Run firmware testing
       run: |
-        cd ${{ env.buildDir }}/bin
+        cd ${{ env.buildDir }}/x64
         dir
         .\FirmwareTesting.exe
   build-arm:
@@ -129,3 +129,45 @@ jobs:
     #   run: |
     #     echo Add other actions to build,
     #     echo test, and deploy your project.
+  build-linux-desktop:
+    runs-on: ubuntu-latest
+    env:
+      buildDir: '${{ github.workspace }}/build'
+    steps:
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install conan
+      uses:  BSFishy/pip-action@v1
+      with:
+        packages: |
+          conan
+
+    #Install the latest cmake
+    - name : Get the latest CMake version
+      uses: lukka/get-cmake@latest
+    
+    - name: Set up GCC 11
+    uses: egor-tensin/setup-gcc@v1
+      with:
+        version: 11
+        platform: x64
+
+    - name: Run CMakeLists generation for GCC compiler
+      uses: lukka/run-cmake@v2
+      with:
+        cmakeGenerator: Unix Makefiles
+        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
+        cmakeBuildType: Debug
+        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=OFF -DPACKAGE_TESTS=ON -DENABLE_SANITIZE_BUILD=ON'
+        buildDirectory: ${{ env.buildDir }}
+        buildWithCMake: true
