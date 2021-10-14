@@ -51,7 +51,6 @@ jobs:
     - name : Run firmware testing
       run: |
         cd ${{ env.buildDir }}\Debug
-        dir
         .\FirmwareTesting.exe
   build-arm:
 
@@ -175,3 +174,8 @@ jobs:
         cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=OFF -DPACKAGE_TESTS=ON -DENABLE_SANITIZE_BUILD=ON'
         buildDirectory: ${{ env.buildDir }}
         buildWithCMake: true
+
+    - name : Run firmware testing
+      run: |
+        cd ${{ env.buildDir }}
+        ./FirmwareTesting
