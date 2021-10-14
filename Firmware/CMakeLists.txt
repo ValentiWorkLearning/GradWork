@@ -95,6 +95,12 @@ target_compile_features(
     cxx_std_20
 )
 
+target_compile_options(
+    ${NORDIC_TARGET}
+    PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
+)
+
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(
         ${NORDIC_TARGET} PRIVATE

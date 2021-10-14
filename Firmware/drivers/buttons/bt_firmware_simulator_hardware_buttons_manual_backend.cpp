@@ -1,3 +1,4 @@
+
 #include "inc/buttons/bt_firmware_simulator_hardware_buttons_manual_backend.hpp"
 
 #include <utils/CallbackConnector.hpp>
@@ -9,6 +10,7 @@
 
 namespace Buttons
 {
+
 
 FirmwareSimulatorTimerBackend::FirmwareSimulatorTimerBackend() : m_isTimerEllapsed{true}
 {

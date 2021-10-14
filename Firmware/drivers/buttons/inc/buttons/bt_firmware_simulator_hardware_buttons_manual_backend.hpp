@@ -6,7 +6,6 @@
 
 namespace Buttons
 {
-
 class FirmwareSimulatorTimerBackend
 {
 
@@ -42,7 +41,6 @@ public:
 
 public:
     void initialize();
-
 private:
     void initInternals();
 };

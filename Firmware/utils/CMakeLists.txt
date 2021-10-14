@@ -36,3 +36,8 @@ target_link_libraries(
     etl
     logger_service
 )
+target_compile_options(
+    UtilsLibrary
+    INTERFACE
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
+)

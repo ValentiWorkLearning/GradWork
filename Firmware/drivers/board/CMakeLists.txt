@@ -43,10 +43,12 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         PUBLIC
         USE_DEVICE_SPECIFIC
     )
-    target_compile_options(
-        watchboard
-        PRIVATE
-        -fcoroutines
-    )
 elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
 endif()
+
+
+target_compile_options(
+    watchboard
+    PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
+)

@@ -23,8 +23,10 @@ using TFlashDriver = ExternalFlash::WinbondFlashDriver<
 #else
 using BoardTimer = Buttons::NordicTimerBackend;
 using ButtonsBackend = Buttons::NordicButtonsBackend;
-using TFlashDriver = ExternalFlash::WinbondFlashDriver<Interface::SpiTemplated::SpiBus<
-    Interface::SpiTemplated::NordicSpi<Interface::SpiTemplated::SpiInstance::M1,Interface::SpiTemplated::SpiInstance::ChipSelectDrivenByUser>>>;
+using TFlashDriver = ExternalFlash::WinbondFlashDriver<
+    Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::NordicSpi<
+        Interface::SpiTemplated::SpiInstance::M1,
+        Interface::SpiTemplated::SpiInstance::ChipSelectDrivenByUser>>>;
 #endif
 
 using ButtonsDriver = Buttons::ButtonsDriverTemplate<BoardTimer, ButtonsBackend>;
