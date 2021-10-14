@@ -77,48 +77,42 @@ void PlatformBackend::executeLvTaskHandler() noexcept
 } // namespace Graphics
 #endif
 
-#if defined USE_WINSDL_BACKEND
+#if defined USE_SDL_BACKEND
 
 #include <chrono>
 #include <thread>
 
-#include "lv_drivers/display/monitor.h"
-#include "lv_drivers/indev/keyboard.h"
-#include "lv_drivers/indev/mouse.h"
-#include "lvgl/lvgl.h"
+#include <lv_drivers/sdl/sdl.h>
+#include <lv_drivers/indev/keyboard.h>
+#include <lv_drivers/indev/mouse.h>
+#include <lvgl/lvgl.h>
 
 #include <fmt/format.h>
 
 namespace Graphics
 {
 
-PlatformBackend::PlatformBackend() noexcept = default;
+PlatformBackend::PlatformBackend() noexcept
+{
+    m_isTickThreadRunning.store(false);
+};
 
 void PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver) noexcept
 {
-    monitor_init();
-    _displayDriver->flush_cb = monitor_flush;
+    sdl_init();
+    _displayDriver->flush_cb = sdl_display_flush;
 }
 
 void PlatformBackend::initPlatformGfxTimer() noexcept
 {
-    m_tickThread = std::thread([] {
-        while (true)
-        {
-            lv_tick_inc(LvglNotificationTime);
-            std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
-        }
-    });
-    m_tickThread.detach();
     indevPlatformInit();
     lv_indev_drv_init(&m_indevDriver);
 }
 
 void PlatformBackend::indevPlatformInit() noexcept
 {
-
     m_indevDriver.type = LV_INDEV_TYPE_POINTER;
-    m_indevDriver.read_cb = mouse_read;
+    m_indevDriver.read_cb = sdl_mouse_read;
     lv_indev_drv_register(&m_indevDriver);
 
     auto memoryMonitorTask =
@@ -144,6 +138,18 @@ void PlatformBackend::memoryMonitor(lv_timer_t* _param) noexcept
 
 void PlatformBackend::executeLvTaskHandler() noexcept
 {
+    if(!m_isTickThreadRunning)
+    {
+        m_isTickThreadRunning = true;
+        m_tickThread = std::thread([this] {
+            while (m_isTickThreadRunning)
+            {
+                lv_tick_inc(LvglNotificationTime);
+                std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
+            }
+        });
+        m_tickThread.detach();
+    }
     lv_task_handler();
     std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
 }

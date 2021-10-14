@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 3.14)
 
 project(coroutine_experiments C CXX)
 
+if( UNIX )
+    find_package(Threads REQUIRED)
+endif()
+
 add_executable(coroutine_experiments_app ${PROJECT_SOURCES})
 
 target_sources(
@@ -18,9 +22,13 @@ target_compile_features(
     cxx_std_20
 )
 
-if( ${ENABLE_SANITIZE_BUILD} )
-        target_compile_options( coroutine_experiments_app PRIVATE /fsanitize=address )
-    endif()
+if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /fsanitize=address")
+else()
+    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+    set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+    set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+endif()
 
 target_link_libraries(
     coroutine_experiments_app
@@ -30,3 +38,6 @@ target_link_libraries(
     UtilsLibrary
     logger_service
 )
+if(UNIX)
+    target_link_libraries( coroutine_experiments_app PUBLIC Threads::Threads)
+endif()

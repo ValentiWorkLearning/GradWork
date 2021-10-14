@@ -60,7 +60,12 @@ private:
     {
         // https://github.com/ikonopistsev/btdef/blob/4893ca36f5a251147c57ecfa460acfbe717f69c3/util/time_zone.hpp
         // https://science.ksc.nasa.gov/software/winvn/userguide/3_1_4.htm
+#ifdef WIN32
         _putenv_s("TZ", "UTC");
         _tzset();
+#else
+        putenv("TZ=UTC");
+        tzset();
+#endif
     }
 };

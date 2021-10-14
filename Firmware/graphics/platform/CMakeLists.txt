@@ -32,7 +32,7 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR"  )
     target_compile_definitions(
         graphics_backend
         PRIVATE
-        USE_WINSDL_BACKEND
+        USE_SDL_BACKEND
     )
     target_link_libraries(
         graphics_backend

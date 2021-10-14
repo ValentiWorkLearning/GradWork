@@ -13,9 +13,9 @@ inline constexpr std::uint8_t Display_DataCommand = DISP_DC_PIN;
 inline constexpr std::uint8_t Display_Reset = DISP_RST;
 inline constexpr std::uint8_t LedPin = 13;
 #else
-inline constexpr std::uint8_t Display_DataCommand = 0;
-inline constexpr std::uint8_t Display_Reset = 0;
-inline constexpr std::uint8_t LedPin = 0;
+inline constexpr std::uint8_t Display_DataCommand = 26;
+inline constexpr std::uint8_t Display_Reset = 31;
+inline constexpr std::uint8_t LedPin = 13;
 #endif
 
 } // namespace Gpio::Pins

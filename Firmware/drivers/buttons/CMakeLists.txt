@@ -38,17 +38,10 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         USE_DEVICE_SPECIFIC
     )
 elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
-    if(WIN32)
-        target_sources(
-            buttons_driver
-            PRIVATE
-            bt_os_win32_hardware_buttons_manual_backend.cpp
-        )
-    elseif(UNIX)
-        target_sources(
-            buttons_driver
-            PRIVATE
-            bt_os_stub_hardware_buttons_backend.cpp
-        )
-    endif()
+    string(TOLOWER ${TARGET_PLATFORM} BUTTONS_PLATFORM_NAME)
+    target_sources(
+        buttons_driver
+        PRIVATE
+        bt_${BUTTONS_PLATFORM_NAME}_hardware_buttons_manual_backend.cpp
+    )
 endif()

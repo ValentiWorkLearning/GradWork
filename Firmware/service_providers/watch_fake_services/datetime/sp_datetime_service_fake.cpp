@@ -89,6 +89,7 @@ private:
 
 #ifdef USE_DESKTOP_SIMULATOR
 
+#ifdef WIN32
 #include <atomic>
 #include <condition_variable>
 #include <coroutine>
@@ -175,6 +176,8 @@ template <typename... Args> struct std::coroutine_traits<void, Args...>
     };
 };
 
+
+
 namespace ServiceProviders::DateTimeService
 {
 
@@ -226,8 +229,50 @@ private:
 };
 
 } // namespace ServiceProviders::DateTimeService
+#else
 
-#endif
+namespace ServiceProviders::DateTimeService
+{
+
+class DateTimeServiceFake::DatetimeSimulatorImpl
+{
+
+public:
+public:
+    explicit DatetimeSimulatorImpl(const IDateTimeService* _pAppService)
+        : m_pDateTimeService{_pAppService}
+    {
+        initSimulator();
+    }
+
+    ~DatetimeSimulatorImpl() = default;
+
+public:
+    void launchService() noexcept
+    {
+    }
+
+    void calibrateSource() noexcept
+    {
+    }
+
+    void syncronizeWithBleDts() noexcept
+    {
+    }
+
+private:
+    void initSimulator() noexcept
+    {
+         m_pDateTimeService->onDateTimeChanged.emit(TimeWrapper("1971/01/9 13:24:43", '/', ':'));
+    }
+
+private:
+    const IDateTimeService* m_pDateTimeService;
+};
+}
+#endif//WIN32
+
+#endif //FIRMWARE_SIMULATOR
 
 namespace ServiceProviders::DateTimeService
 {
