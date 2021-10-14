@@ -128,7 +128,7 @@ jobs:
     #   run: |
     #     echo Add other actions to build,
     #     echo test, and deploy your project.
-  build-linux-desktop:
+  build-linux-desktop-simulator:
     runs-on: ubuntu-latest
     env:
       buildDir: '${{ github.workspace }}/build'
