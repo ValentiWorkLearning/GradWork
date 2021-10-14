@@ -15,7 +15,7 @@ jobs:
     # The type of runner that the job will run on
     runs-on: windows-latest
     env:
-      buildDir: '${{ github.workspace }}/build'
+      buildDir: '${{ github.workspace }}\build'
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -50,7 +50,7 @@ jobs:
         buildWithCMake: true
     - name : Run firmware testing
       run: |
-        cd ${{ env.buildDir }}
+        cd ${{ env.buildDir }}\Debug
         dir
         .\FirmwareTesting.exe
   build-arm:
