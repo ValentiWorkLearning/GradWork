@@ -14,7 +14,8 @@ jobs:
   build-windows-simulator:
     # The type of runner that the job will run on
     runs-on: windows-latest
-
+    env:
+      buildDir: '${{ github.workspace }}/build'
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -33,11 +34,6 @@ jobs:
         packages: |
           conan
 
-    - name: Download libraries from Conan
-      run: |
-        mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
-        conan install ${{ github.workspace }}/Firmware/conanfile.txt --install-folder ${{ runner.workspace }}/build/vsfirmwarebuild/
-
     #Install the latest cmake
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
@@ -50,11 +46,12 @@ jobs:
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
         cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Release'
-        buildDirectory: '${{ runner.workspace }}/build/vsfirmwarebuild'
+        buildDirectory: ${{ env.buildDir }}
         buildWithCMake: true
     - name : Run firmware testing
       run: |
-        cd ${{ runner.workspace }}/build/vsfirmwarebuild/bin
+        cd ${{ env.buildDir }}
+        dir
         .\FirmwareTesting.exe
   build-arm:
 
