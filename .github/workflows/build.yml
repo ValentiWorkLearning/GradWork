@@ -153,7 +153,7 @@ jobs:
 
     - name: Intall system required packages
       run: |
-        apt-get install -y libegl-dev
+        sudo apt-get install -y libegl-dev
     #Install the latest cmake
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
