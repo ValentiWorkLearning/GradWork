@@ -50,7 +50,7 @@ jobs:
         buildWithCMake: true
     - name : Run firmware testing
       run: |
-        cd ${{ env.buildDir }}/x64
+        cd ${{ env.buildDir }}/x64/Debug
         dir
         .\FirmwareTesting.exe
   build-arm:
