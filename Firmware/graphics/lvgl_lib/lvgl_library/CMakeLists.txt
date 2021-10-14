@@ -360,6 +360,6 @@ if(REDUCE_LVGL_BINARY_SIZE)
     target_compile_options(
         ${TARGET_NAME}
         PUBLIC
-        -Os
+        $<$<CXX_COMPILER_ID:GNU>:-Os>
     )
 endif()
