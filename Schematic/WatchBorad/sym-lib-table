@@ -20,4 +20,5 @@
   (lib (name PowerMuxes)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/PowerMuxes/PowerMuxes.lib)(options "")(descr ""))
   (lib (name 2021-06-21_20-09-55)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/LSM6DSL/2021-06-21_20-09-55.lib)(options "")(descr "")(disabled))
   (lib (name LSM6DSLTR)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/LSM6DSLTR/LSM6DSLTR.lib)(options "")(descr ""))
+  (lib (name M41T62Q6F)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/M41T62Q6F/M41T62Q6F.lib)(options "")(descr ""))
 )

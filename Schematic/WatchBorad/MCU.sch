@@ -1,7 +1,7 @@
 EESchema Schematic File Version 4
 EELAYER 30 0
 EELAYER END
-$Descr A4 11693 8268
+$Descr A3 16535 11693
 encoding utf-8
 Sheet 2 4
 Title ""
@@ -397,7 +397,7 @@ U 1 1 5EAFAA45
 P 2600 3425
 F 0 "X2" H 2600 3558 50  0000 C CNN
 F 1 "Crystal_Small" H 2600 3559 50  0001 C CNN
-F 2 "Crystals:Crystal_SMD_3215-2pin_3.2x1.5mm" H 2600 3425 50  0001 C CNN
+F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 2600 3425 50  0001 C CNN
 F 3 "https://datasheet.lcsc.com/lcsc/2104141604_TKD-SF32WK32768D31T002_C271654.pdf" H 2600 3425 50  0001 C CNN
 F 4 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" H 2600 3425 50  0001 C CNN "lcsc"
 	1    2600 3425
@@ -720,9 +720,9 @@ $EndComp
 Text Label 2525 6650 0    50   ~ 0
 MPU_INT_1
 Text Label 4775 6350 0    50   ~ 0
-MPU_SDA
+I2C_SDA
 Text Label 4775 6450 0    50   ~ 0
-MPU_SCL
+I2C_SCL
 Wire Notes Line
 	6825 7700 2350 7700
 Wire Notes Line
@@ -730,9 +730,9 @@ Wire Notes Line
 Wire Notes Line
 	2350 5125 4900 5125
 Text Label 6600 2650 0    50   ~ 0
-MPU_SCL
+I2C_SCL
 Text Label 6600 2550 0    50   ~ 0
-MPU_SDA
+I2C_SDA
 Wire Wire Line
 	6600 2550 6350 2550
 Wire Wire Line
@@ -2054,4 +2054,108 @@ Wire Wire Line
 	6350 4550 7450 4550
 Wire Wire Line
 	6350 4450 7200 4450
+Wire Notes Line
+	11150 6650 7000 6650
+Text Notes 7150 6800 0    50   ~ 0
+RTC_I2C
+Wire Wire Line
+	9100 7550 8800 7550
+Wire Wire Line
+	10500 7550 10800 7550
+$Comp
+L power:GND #PWR0105
+U 1 1 61774516
+P 8550 9200
+F 0 "#PWR0105" H 8550 8950 50  0001 C CNN
+F 1 "GND" H 8555 9027 50  0000 C CNN
+F 2 "" H 8550 9200 50  0001 C CNN
+F 3 "" H 8550 9200 50  0001 C CNN
+	1    8550 9200
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR0106
+U 1 1 61788AB0
+P 8950 7100
+F 0 "#PWR0106" H 8950 6950 50  0001 C CNN
+F 1 "+3.3V" H 8965 7273 50  0000 C CNN
+F 2 "" H 8950 7100 50  0001 C CNN
+F 3 "" H 8950 7100 50  0001 C CNN
+	1    8950 7100
+	1    0    0    -1  
+$EndComp
+Text Label 8800 7550 2    50   ~ 0
+I2C_SCL
+Text Label 10800 7550 0    50   ~ 0
+I2C_SDA
+$Comp
+L M41T62Q6F:M41T62Q6F U?
+U 1 1 617DA662
+P 9800 8050
+F 0 "U?" H 9800 9220 50  0000 C CNN
+F 1 "M41T62Q6F" H 9800 9129 50  0000 C CNN
+F 2 "QFN50P300X300X100-17N" H 9800 8050 50  0001 L BNN
+F 3 "https://datasheet.lcsc.com/lcsc/1806121917_STMicroelectronics-M41T62Q6F_C113207.pdf" H 9800 8050 50  0001 L BNN
+F 4 "M41T62Q6F" H 9800 8050 50  0001 L BNN "MPN"
+F 5 "1224441" H 9800 8050 50  0001 L BNN "OC_FARNELL"
+F 6 "56P9316" H 9800 8050 50  0001 L BNN "OC_NEWARK"
+F 7 "QFN-16" H 9800 8050 50  0001 L BNN "PACKAGE"
+F 8 "STMICROELECTRONICS" H 9800 8050 50  0001 L BNN "SUPPLIER"
+F 9 "https://lcsc.com/product-detail/Real-time-Clocks-span-style-background-color-ff0-RTC-span_STMicroelectronics-M41T62Q6F_C113207.html" H 9800 8050 50  0001 C CNN "lcsc"
+	1    9800 8050
+	1    0    0    -1  
+$EndComp
+Wire Notes Line
+	11150 6650 11150 9500
+Wire Notes Line
+	11150 9500 7000 9500
+Wire Notes Line
+	7000 6650 7000 9500
+Wire Wire Line
+	8550 9050 8550 9200
+Wire Wire Line
+	8550 9050 8700 9050
+$Comp
+L Device:Crystal_Small Y1
+U 1 1 6171009D
+P 7800 7900
+F 0 "Y1" V 7850 8100 50  0000 R CNN
+F 1 "Crystal_Small" V 7750 8500 50  0000 R CNN
+F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 7800 7900 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2104141604_TKD-SF32WK32768D31T002_C271654.pdf" H 7800 7900 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" V 7800 7900 50  0001 C CNN "LCSC"
+	1    7800 7900
+	0    -1   -1   0   
+$EndComp
+Text Label 8000 8100 0    50   ~ 0
+XO_RTC
+Text Label 8000 7700 0    50   ~ 0
+XI_RTC
+Wire Wire Line
+	7800 7800 7800 7700
+Wire Wire Line
+	7800 7700 8000 7700
+Wire Wire Line
+	7800 8000 7800 8100
+Wire Wire Line
+	7800 8100 8000 8100
+Text Label 8800 7750 2    50   ~ 0
+XI_RTC
+Wire Wire Line
+	8800 7750 9100 7750
+Text Label 10800 7250 0    50   ~ 0
+XO_RTC
+Wire Wire Line
+	10800 7250 10500 7250
+Wire Wire Line
+	8950 7100 8950 7250
+Wire Wire Line
+	8950 7250 9100 7250
+Wire Wire Line
+	9100 8950 8700 8950
+Wire Wire Line
+	8700 8950 8700 9050
+Connection ~ 8700 9050
+Wire Wire Line
+	8700 9050 9100 9050
 $EndSCHEMATC
