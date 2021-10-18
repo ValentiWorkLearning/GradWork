@@ -387,58 +387,8 @@ Wire Notes Line
 	725  3000 3225 3000
 Text Notes 1725 3125 0    50   ~ 0
 Crystal oscillators
-Text Notes 2375 3850 0    50   ~ 0
-32.768 KHz\n
 Text Notes 1250 3875 0    50   ~ 0
 32 MHz
-$Comp
-L Device:Crystal_Small X2
-U 1 1 5EAFAA45
-P 2600 3425
-F 0 "X2" H 2600 3558 50  0000 C CNN
-F 1 "Crystal_Small" H 2600 3559 50  0001 C CNN
-F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 2600 3425 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/lcsc/2104141604_TKD-SF32WK32768D31T002_C271654.pdf" H 2600 3425 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" H 2600 3425 50  0001 C CNN "lcsc"
-	1    2600 3425
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2350 3750 2850 3750
-Wire Wire Line
-	2850 3725 2850 3750
-Wire Wire Line
-	2350 3725 2350 3750
-$Comp
-L Device:C C8
-U 1 1 5EAF844F
-P 2350 3575
-F 0 "C8" H 2075 3650 50  0000 L CNN
-F 1 "10 pF" H 2050 3525 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 2388 3425 50  0001 C CNN
-F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 2350 3575 50  0001 C CNN
-	1    2350 3575
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2350 3425 2500 3425
-$Comp
-L Device:C C11
-U 1 1 5EAF8448
-P 2850 3575
-F 0 "C11" H 2965 3621 50  0000 L CNN
-F 1 "10 pF" H 2965 3530 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 2888 3425 50  0001 C CNN
-F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 2850 3575 50  0001 C CNN
-	1    2850 3575
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2700 3425 2850 3425
-Text Label 2850 3425 2    50   ~ 0
-XL2
-Text Label 2350 3425 0    50   ~ 0
-XL1
 Connection ~ 1400 3750
 Wire Wire Line
 	1650 3750 1400 3750
@@ -729,9 +679,9 @@ Wire Notes Line
 	2350 7700 2350 5125
 Wire Notes Line
 	2350 5125 4900 5125
-Text Label 6600 2650 0    50   ~ 0
-I2C_SCL
 Text Label 6600 2550 0    50   ~ 0
+I2C_SCL
+Text Label 6600 2650 0    50   ~ 0
 I2C_SDA
 Wire Wire Line
 	6600 2550 6350 2550
@@ -917,24 +867,6 @@ F 1 "GND" H 825 3625 50  0000 C CNN
 F 2 "" H 825 3775 50  0001 C CNN
 F 3 "" H 825 3775 50  0001 C CNN
 	1    825  3775
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2350 3750 2275 3750
-Wire Wire Line
-	2275 3750 2275 3775
-Connection ~ 2350 3750
-$Comp
-L power:GND #PWR?
-U 1 1 5FC6D69A
-P 2275 3775
-AR Path="/5FC6D69A" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5FC6D69A" Ref="#PWR07"  Part="1" 
-F 0 "#PWR07" H 2275 3525 50  0001 C CNN
-F 1 "GND" H 2275 3625 50  0000 C CNN
-F 2 "" H 2275 3775 50  0001 C CNN
-F 3 "" H 2275 3775 50  0001 C CNN
-	1    2275 3775
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -2116,27 +2048,27 @@ Wire Wire Line
 $Comp
 L Device:Crystal_Small Y1
 U 1 1 6171009D
-P 7800 7900
-F 0 "Y1" V 7850 8100 50  0000 R CNN
-F 1 "Crystal_Small" V 7750 8500 50  0000 R CNN
-F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 7800 7900 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/lcsc/2104141604_TKD-SF32WK32768D31T002_C271654.pdf" H 7800 7900 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" V 7800 7900 50  0001 C CNN "LCSC"
-	1    7800 7900
+P 2600 3500
+F 0 "Y1" V 2650 3700 50  0000 R CNN
+F 1 "Crystal_Small" V 2550 4100 50  0000 R CNN
+F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 2600 3500 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/2104141604_TKD-SF32WK32768D31T002_C271654.pdf" H 2600 3500 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" V 2600 3500 50  0001 C CNN "LCSC"
+	1    2600 3500
 	0    -1   -1   0   
 $EndComp
-Text Label 8000 8100 0    50   ~ 0
+Text Label 2800 3700 0    50   ~ 0
 XO_RTC
-Text Label 8000 7700 0    50   ~ 0
+Text Label 2800 3300 0    50   ~ 0
 XI_RTC
 Wire Wire Line
-	7800 7800 7800 7700
+	2600 3400 2600 3300
 Wire Wire Line
-	7800 7700 8000 7700
+	2600 3300 2800 3300
 Wire Wire Line
-	7800 8000 7800 8100
+	2600 3600 2600 3700
 Wire Wire Line
-	7800 8100 8000 8100
+	2600 3700 2800 3700
 Text Label 8800 7750 2    50   ~ 0
 XI_RTC
 Wire Wire Line
@@ -2208,4 +2140,6 @@ F 3 "" H 10900 7100 50  0001 C CNN
 	1    10900 7100
 	1    0    0    -1  
 $EndComp
+Text Notes 2125 3700 0    50   ~ 0
+32.768 KHz\n
 $EndSCHEMATC
