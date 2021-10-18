@@ -14,20 +14,6 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L OnOffControllers:max16054azt+t U?
-U 1 1 5F943E21
-P 5600 1775
-AR Path="/5ED3F98E/5F943E21" Ref="U?"  Part="1" 
-AR Path="/5F913559/5F943E21" Ref="U7"  Part="1" 
-F 0 "U7" H 6400 2162 60  0000 C CNN
-F 1 "max16054azt+t" H 6400 2056 60  0000 C CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23-6_Handsoldering" H 6400 2015 60  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Maxim-Integrated-MAX16054AZT-T_C79401.pdf" H 5600 1775 60  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Interface-Specialized_Maxim-Integrated-MAX16054AZT-T_C79401.html" H 5450 2025 50  0001 C CNN "lcsc"
-	1    5600 1775
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C?
 U 1 1 5F943E27
 P 5425 2600
@@ -1283,4 +1269,18 @@ $EndComp
 Connection ~ 1550 4250
 Wire Wire Line
 	1550 4250 1775 4250
+$Comp
+L OnOffControllers:max16054azt+t U?
+U 1 1 5F943E21
+P 5600 1775
+AR Path="/5ED3F98E/5F943E21" Ref="U?"  Part="1" 
+AR Path="/5F913559/5F943E21" Ref="U7"  Part="1" 
+F 0 "U7" H 6400 2162 60  0000 C CNN
+F 1 "max16054azt+t" H 6400 2056 60  0000 C CNN
+F 2 "TO_SOT_Packages_SMD:SOT-23-6_Handsoldering" H 6400 2015 60  0001 C CNN
+F 3 "https://datasheet.lcsc.com/szlcsc/Maxim-Integrated-MAX16054AZT-T_C79401.pdf" H 5600 1775 60  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Interface-Specialized_Maxim-Integrated-MAX16054AZT-T_C79401.html" H 5450 2025 50  0001 C CNN "lcsc"
+	1    5600 1775
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC
