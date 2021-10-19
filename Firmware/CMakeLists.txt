@@ -1,5 +1,7 @@
 cmake_minimum_required(VERSION 3.14)
 
+set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set( CONAN_DISABLE_CHECK_COMPILER TRUE )
 set( TARGET_PLATFORM "FIRMWARE_SIMULATOR" CACHE STRING "Target platform for application building")
 message( "Current building platform is ${TARGET_PLATFORM}")
@@ -113,6 +115,8 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         PRIVATE
         -O0
         -fcoroutines
+        -fnothrow-opt
+        -fno-threadsafe-statics
     )
 endif()
 
