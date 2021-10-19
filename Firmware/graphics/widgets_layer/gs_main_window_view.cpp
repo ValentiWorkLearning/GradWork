@@ -23,7 +23,7 @@ void MainWindowView::initBackground() noexcept
 
     auto createAlignedRect = [this](auto _aligmentType, lv_style_t* _style) {
         lv_obj_t* pObject{nullptr};
-        auto parent = lv_scr_act();
+        auto parent = m_pWindowRoot.get();
 
         pObject = lv_obj_create(parent);
         lv_obj_set_size(pObject, MainWindowView::Width, MainWindowView::Height / 2);
@@ -55,7 +55,7 @@ void MainWindowView::initBackground() noexcept
     m_pYan.reset(createAlignedRect(LV_ALIGN_TOP_MID, &m_yanStyle));
 
     auto createAlignedCircle = [this](auto _aligmentType, lv_style_t* _style) {
-        auto parent = lv_scr_act();
+        auto parent = m_pWindowRoot.get();
         lv_obj_t* pCircle = lv_obj_create(parent);
 
         lv_obj_set_size(pCircle, MainWindowView::Width / 2, MainWindowView::Height / 2);
@@ -95,9 +95,23 @@ void MainWindowView::resetBackgroundStyle() noexcept
 
 void MainWindowView::initMask() noexcept
 {
-    constexpr std::uint8_t RoundedArea = 240;
-    lv_draw_mask_radius_init(&radiusParam, &maskArea, RoundedArea, false);
-    m_maskId = lv_draw_mask_add(&radiusParam, nullptr);
+    m_pWindowRoot.reset(lv_obj_create(lv_scr_act()));
+    auto container = m_pWindowRoot.get();
+    lv_obj_set_size(container,  MainWindowView::Width,  MainWindowView::Height);
+    lv_obj_center(container);
+    lv_obj_set_style_radius(container, LV_RADIUS_CIRCLE, LV_PART_MAIN);
+    lv_obj_set_scrollbar_mode(container,LV_SCROLLBAR_MODE_OFF);
+    lv_obj_set_style_pad_all(container,0,LV_PART_MAIN);
+    lv_obj_set_style_clip_corner(container,true,LV_PART_MAIN);
+    lv_obj_set_style_border_width(container,0,LV_PART_MAIN);
+
+// The drawing mask implementation causes the crash with the access violation.
+// For the current LVGL 8.0 latest version the solution hasn't been found
+// The best we can do now is an attempt to use the container for all of the widgtes with the given set of styles
+
+//    constexpr std::uint8_t RoundedArea = 240;
+//    lv_draw_mask_radius_init(&radiusParam, &maskArea, RoundedArea, false);
+//    m_maskId = lv_draw_mask_add(&radiusParam, nullptr);
 
     // m_pObjMask.reset( lv_objmask_create( lv_disp_get_scr_act( nullptr ), nullptr ) );
 

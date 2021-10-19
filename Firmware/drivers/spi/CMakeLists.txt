@@ -6,13 +6,13 @@ add_library(
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
     target_link_libraries( spi INTERFACE NordicSDK::Common )
-    target_compile_options(
-        spi
-        INTERFACE
-        -fcoroutines
-    )
 endif()
 
+target_compile_options(
+    spi
+    INTERFACE
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
+)
 
 target_include_directories(
     spi

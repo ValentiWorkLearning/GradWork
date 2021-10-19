@@ -71,35 +71,8 @@ public:
 private:
     void initLvglLogger() noexcept
     {
-        auto lvglLoggerCallback = cbc::obtain_connector([](lv_log_level_t level,
-                                                           const char* file,
-                                                           std::uint32_t line,
-                                                           const char* functionName,
-                                                           const char* dsc) {
-            switch (level)
-            {
-            case LV_LOG_LEVEL_ERROR:
-                LOG_DEBUG("[ERROR]:");
-                break;
-            case LV_LOG_LEVEL_WARN:
-                LOG_DEBUG("[WARNING]:");
-                break;
-            case LV_LOG_LEVEL_INFO:
-                LOG_DEBUG("[INFO]:");
-                break;
-            case LV_LOG_LEVEL_TRACE:
-                LOG_DEBUG("[TRACE]:");
-                break;
-
-            default:
-                LOG_DEBUG("[LVGL_LOG]:");
-            }
-            LOG_DEBUG("File:");
-            LOG_DEBUG(file);
-            LOG_DEBUG(":");
-            LOG_DEBUG(":functon");
-            LOG_DEBUG(functionName);
-            LOG_DEBUG_ENDL(dsc);
+        auto lvglLoggerCallback = cbc::obtain_connector([](const char* loggerMessage) {
+            LOG_DEBUG_ENDL(loggerMessage);
         });
 #if LV_USE_LOG == 1
         lv_log_register_print_cb(lvglLoggerCallback);
