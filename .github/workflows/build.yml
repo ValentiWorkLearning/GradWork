@@ -44,13 +44,9 @@ jobs:
         cmakeGenerator: Ninja
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
-        cmakeBuildType: Debug
+        cmakeBuildType: Release
         cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Release'
         buildDirectory: ${{ env.buildDir }}
-    - name : Run simulator build
-      run: |
-        cd ${{ env.buildDir }}
-        cmake --build . --config Release
     - name : Run firmware testing
       run: |
         cd ${{ env.buildDir }}\Debug
