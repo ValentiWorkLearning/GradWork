@@ -38,16 +38,15 @@ jobs:
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
 
-    - name: Run CMakeLists build for MSVC compiler
+    - name: Run CMakeLists generation for MSVC compiler
       uses: lukka/run-cmake@v2
       with:
         cmakeGenerator: Ninja
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
-        cmakeBuildType: Debug
+        cmakeBuildType: Release
         cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Release'
         buildDirectory: ${{ env.buildDir }}
-        buildWithCMake: true
     - name : Run firmware testing
       run: |
         cd ${{ env.buildDir }}\Debug
