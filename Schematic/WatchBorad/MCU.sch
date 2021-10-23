@@ -94,19 +94,15 @@ U 1 1 5EAD751A
 P 3150 2550
 F 0 "AE1" H 3625 2700 50  0000 R CNN
 F 1 "Antenna_Chip" H 3800 2575 50  0000 R CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 3050 2725 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/TDK-ANT016008LCS2442MA2_C209892.pdf" H 3050 2725 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Antennas_TDK-ANT016008LCS2442MA2_C209892.html" H 3150 2550 50  0001 C CNN "lcsc"
+F 2 "" H 3050 2725 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/1809191926_YAGEO-ANT2012LL13R2400A_C141581.pdf" H 3050 2725 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Antennas_YAGEO-ANT2012LL13R2400A_C141581.html" H 3150 2550 50  0001 C CNN "lcsc"
 	1    3150 2550
 	-1   0    0    -1  
 $EndComp
 Connection ~ 3475 2650
 Wire Wire Line
 	3250 2650 3475 2650
-Wire Wire Line
-	3050 2650 2800 2650
-Text Label 2800 2650 0    50   ~ 0
-Length
 Text Notes 2300 -950 0    50   ~ 0
 https://devzone.nordicsemi.com/nordic/nordic-blog/b/blog/posts/nfc-tag-antenna-tuning
 Text Notes 1925 4175 0    50   ~ 0
@@ -386,7 +382,7 @@ Wire Notes Line
 Wire Notes Line
 	725  3000 3225 3000
 Text Notes 1725 3125 0    50   ~ 0
-Crystal oscillators
+Crystal oscillator\n
 Text Notes 1250 3875 0    50   ~ 0
 32 MHz
 Connection ~ 1400 3750
@@ -433,7 +429,7 @@ Wire Wire Line
 Wire Wire Line
 	1400 3525 1400 3750
 $Comp
-L WatchBorad-rescue:Crystal_GND24_Small-Device-WatchBorad-rescue-WatchBorad-rescue X1
+L WatchBorad-rescue:Crystal_GND24_Small-Device-WatchBorad-rescue-WatchBorad-rescue-WatchBorad-rescue X1
 U 1 1 5EAD6468
 P 1400 3425
 AR Path="/5EAD6468" Ref="X1"  Part="1" 
@@ -1297,7 +1293,6 @@ Wire Wire Line
 	6400 5925 6675 5925
 Text Label 6475 5925 0    50   ~ 0
 LEDA
-NoConn ~ 2800 2650
 $Comp
 L GC9A01:GC9A01 U11
 U 1 1 60CF55BA
@@ -1338,7 +1333,7 @@ P6
 Text Label 6750 3250 0    50   ~ 0
 P17
 $Comp
-L WatchBorad-rescue:LSM6DSLTR-2021-06-21_20-09-55-WatchBorad-rescue U1
+L WatchBorad-rescue:LSM6DSLTR-2021-06-21_20-09-55-WatchBorad-rescue-WatchBorad-rescue U1
 U 1 1 60D5E125
 P 1300 7050
 AR Path="/60D5E125" Ref="U1"  Part="1" 
@@ -1793,166 +1788,62 @@ Wire Wire Line
 Wire Wire Line
 	6350 4450 7200 4450
 Wire Notes Line
-	9550 7200 5400 7200
-Text Notes 5550 7350 0    50   ~ 0
-RTC_I2C
-Wire Wire Line
-	8900 8100 9100 8100
-$Comp
-L power:GND #PWR0105
-U 1 1 61774516
-P 6950 9750
-F 0 "#PWR0105" H 6950 9500 50  0001 C CNN
-F 1 "GND" H 6955 9577 50  0000 C CNN
-F 2 "" H 6950 9750 50  0001 C CNN
-F 3 "" H 6950 9750 50  0001 C CNN
-	1    6950 9750
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:+3.3V #PWR0106
-U 1 1 61788AB0
-P 7350 7650
-F 0 "#PWR0106" H 7350 7500 50  0001 C CNN
-F 1 "+3.3V" H 7365 7823 50  0000 C CNN
-F 2 "" H 7350 7650 50  0001 C CNN
-F 3 "" H 7350 7650 50  0001 C CNN
-	1    7350 7650
-	1    0    0    -1  
-$EndComp
-Text Label 6850 8100 2    50   ~ 0
-I2C_SCL
-Text Label 9200 8100 0    50   ~ 0
-I2C_SDA
-Wire Notes Line
-	9550 7200 9550 10050
-Wire Notes Line
-	9550 10050 5400 10050
-Wire Notes Line
-	5400 7200 5400 10050
-Wire Wire Line
-	6950 9600 6950 9750
-Wire Wire Line
-	6950 9600 7100 9600
-$Comp
-L Device:Crystal_Small Y1
-U 1 1 6171009D
-P 2600 3500
-F 0 "Y1" V 2650 3700 50  0000 R CNN
-F 1 "Crystal_Small" V 2550 4100 50  0000 R CNN
-F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 2600 3500 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/lcsc/2104141604_TKD-SF32WK32768D31T002_C271654.pdf" H 2600 3500 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" V 2600 3500 50  0001 C CNN "LCSC"
-	1    2600 3500
-	0    -1   -1   0   
-$EndComp
-Text Label 2800 3700 0    50   ~ 0
-XO_RTC
-Text Label 2800 3300 0    50   ~ 0
-XI_RTC
-Wire Wire Line
-	2600 3400 2600 3300
-Wire Wire Line
-	2600 3300 2800 3300
-Wire Wire Line
-	2600 3600 2600 3700
-Wire Wire Line
-	2600 3700 2800 3700
-Text Label 7200 8300 2    50   ~ 0
-XI_RTC
-Wire Wire Line
-	7200 8300 7500 8300
-Text Label 8900 7600 0    50   ~ 0
-XO_RTC
-Wire Wire Line
-	7350 7800 7500 7800
-Wire Wire Line
-	7500 9500 7100 9500
-Wire Wire Line
-	7100 9500 7100 9600
-Connection ~ 7100 9600
-Wire Wire Line
-	7100 9600 7500 9600
-$Comp
-L Device:R R19
-U 1 1 619E23FE
-P 6950 7850
-F 0 "R19" H 7020 7896 50  0000 L CNN
-F 1 "10k" H 7020 7805 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 6880 7850 50  0001 C CNN
-F 3 "~" H 6950 7850 50  0001 C CNN
-	1    6950 7850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	6950 7700 7350 7700
-Wire Wire Line
-	7350 7650 7350 7700
-Connection ~ 7350 7700
-Wire Wire Line
-	7350 7700 7350 7800
-Wire Wire Line
-	6950 8000 6950 8100
-Wire Wire Line
-	6950 8100 7500 8100
-Wire Wire Line
-	6950 8100 6850 8100
-Connection ~ 6950 8100
-$Comp
-L Device:R R22
-U 1 1 61A1EFF3
-P 9100 7950
-F 0 "R22" H 9170 7996 50  0000 L CNN
-F 1 "10k" H 9170 7905 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 9030 7950 50  0001 C CNN
-F 3 "~" H 9100 7950 50  0001 C CNN
-	1    9100 7950
-	1    0    0    -1  
-$EndComp
-Connection ~ 9100 8100
-Wire Wire Line
-	9100 8100 9200 8100
-Wire Wire Line
-	8900 7600 8900 7800
-Wire Wire Line
-	9100 7800 9100 7650
-Wire Wire Line
-	9100 7650 9300 7650
-$Comp
-L power:+3.3V #PWR012
-U 1 1 61A48329
-P 9300 7650
-F 0 "#PWR012" H 9300 7500 50  0001 C CNN
-F 1 "+3.3V" H 9315 7823 50  0000 C CNN
-F 2 "" H 9300 7650 50  0001 C CNN
-F 3 "" H 9300 7650 50  0001 C CNN
-	1    9300 7650
-	1    0    0    -1  
-$EndComp
-Text Notes 2125 3700 0    50   ~ 0
-32.768 KHz\n
-Wire Notes Line
 	2650 6075 1250 6075
 $Comp
-L M41T62Q6F:M41T62Q6F U12
-U 1 1 617DA662
-P 8200 8600
-F 0 "U12" H 8200 9770 50  0000 C CNN
-F 1 "M41T62Q6F" H 8200 9679 50  0000 C CNN
-F 2 "QFN50P300X300X100-17N" H 8200 8600 50  0001 L BNN
-F 3 "https://datasheet.lcsc.com/lcsc/1806121917_STMicroelectronics-M41T62Q6F_C113207.pdf" H 8200 8600 50  0001 L BNN
-F 4 "M41T62Q6F" H 8200 8600 50  0001 L BNN "MPN"
-F 5 "1224441" H 8200 8600 50  0001 L BNN "OC_FARNELL"
-F 6 "56P9316" H 8200 8600 50  0001 L BNN "OC_NEWARK"
-F 7 "QFN-16" H 8200 8600 50  0001 L BNN "PACKAGE"
-F 8 "STMICROELECTRONICS" H 8200 8600 50  0001 L BNN "SUPPLIER"
-F 9 "https://lcsc.com/product-detail/Real-time-Clocks-span-style-background-color-ff0-RTC-span_STMicroelectronics-M41T62Q6F_C113207.html" H 8200 8600 50  0001 C CNN "lcsc"
-	1    8200 8600
+L power:+3.3V #PWR?
+U 1 1 617ECB05
+P 925 7450
+AR Path="/5E9C1C3A/617ECB05" Ref="#PWR?"  Part="1" 
+AR Path="/5F7F86D0/617ECB05" Ref="#PWR?"  Part="1" 
+AR Path="/5F988DA5/617ECB05" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/617ECB05" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 925 7300 50  0001 C CNN
+F 1 "+3.3V" H 940 7623 50  0000 C CNN
+F 2 "" H 925 7450 50  0001 C CNN
+F 3 "" H 925 7450 50  0001 C CNN
+	1    925  7450
+	0    -1   -1   0   
+$EndComp
+Wire Wire Line
+	925  7450 1050 7450
+Connection ~ 1050 7450
+$Comp
+L power:+3.3V #PWR?
+U 1 1 618207A7
+P 3675 7650
+AR Path="/5E9C1C3A/618207A7" Ref="#PWR?"  Part="1" 
+AR Path="/5F7F86D0/618207A7" Ref="#PWR?"  Part="1" 
+AR Path="/5F988DA5/618207A7" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/618207A7" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 3675 7500 50  0001 C CNN
+F 1 "+3.3V" H 3690 7823 50  0000 C CNN
+F 2 "" H 3675 7650 50  0001 C CNN
+F 3 "" H 3675 7650 50  0001 C CNN
+	1    3675 7650
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3675 7650 3325 7650
+Connection ~ 3325 7650
+$Comp
+L power:GND #PWR?
+U 1 1 61835D4B
+P 2800 2725
+AR Path="/61835D4B" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/61835D4B" Ref="#PWR?"  Part="1" 
+F 0 "#PWR?" H 2800 2475 50  0001 C CNN
+F 1 "GND" H 2800 2575 50  0000 C CNN
+F 2 "" H 2800 2725 50  0001 C CNN
+F 3 "" H 2800 2725 50  0001 C CNN
+	1    2800 2725
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7500 9300 7100 9300
+	2800 2725 2800 2650
 Wire Wire Line
-	7100 9300 7100 9500
-Connection ~ 7100 9500
+	2800 2650 3050 2650
+Text Label 6475 4050 0    50   ~ 0
+I2C_SDA_STBY
+Text Label 6475 4150 0    50   ~ 0
+I2C_SCL_STBY
 $EndSCHEMATC

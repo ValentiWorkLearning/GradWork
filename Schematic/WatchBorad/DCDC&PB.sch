@@ -14,22 +14,6 @@ Comment3 ""
 Comment4 ""
 $EndDescr
 $Comp
-L WatchBorad-rescue:TPS62740DSST-DCDC_Local-WatchBorad-rescue-WatchBorad-rescue U?
-U 1 1 5F9A3890
-P 4000 1875
-AR Path="/5E9C1C3A/5F9A3890" Ref="U?"  Part="1" 
-AR Path="/5F7F86D0/5F9A3890" Ref="U?"  Part="1" 
-AR Path="/5F988DA5/5F9A3890" Ref="U10"  Part="1" 
-AR Path="/5F9A3890" Ref="U10"  Part="1" 
-F 0 "U10" H 4800 2262 60  0000 C CNN
-F 1 "TPS62740DSST" H 4800 2125 60  0000 C CNN
-F 2 "Housings_SON:WSON-12-1EP_3x2mm_Pitch0.5mm" H 4800 2115 60  0001 C CNN
-F 3 "http://www.ti.com/lit/ds/slvsb02b/slvsb02b.pdf" H 4000 1875 60  0001 C CNN
-F 4 "https://lcsc.com/product-detail/DC-DC-Converters_Texas-Instruments_TPS62740DSSR_Texas-Instruments-Texas-Instruments-TPS62740DSSR_C128606.html" H 4000 1875 50  0001 C CNN "lcsc"
-	1    4000 1875
-	1    0    0    -1  
-$EndComp
-$Comp
 L Device:C C?
 U 1 1 5F9A3897
 P 3400 1950
@@ -47,32 +31,26 @@ F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	4000 1775 3900 1775
-Wire Wire Line
 	3400 1775 3400 1800
 Wire Wire Line
 	3400 2100 3400 2175
 $Comp
 L pspice:INDUCTOR L?
 U 1 1 5F9A38A1
-P 6325 1775
+P 4800 1425
 AR Path="/5E9C1C3A/5F9A38A1" Ref="L?"  Part="1" 
 AR Path="/5F7F86D0/5F9A38A1" Ref="L?"  Part="1" 
 AR Path="/5F988DA5/5F9A38A1" Ref="L1"  Part="1" 
-F 0 "L1" H 6325 1900 50  0000 C CNN
-F 1 "2.2 uH 13.75 mOHM 1.2 A" H 6275 1700 50  0000 C CNN
-F 2 "Inductors_SMD:L_0805_HandSoldering" H 6325 1775 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/1908221840_Sunltech-Tech-SLM20162R2MIT_C412023.pdf" H 6325 1775 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Power-Inductors_Sunltech-Tech-SLM20162R2MIT_C412023.html" H 6325 1775 50  0001 C CNN "lcsc"
-	1    6325 1775
+F 0 "L1" H 4800 1550 50  0000 C CNN
+F 1 "2.2 uH 13.75 mOHM 1.2 A" H 4750 1350 50  0000 C CNN
+F 2 "Inductors_SMD:L_0805_HandSoldering" H 4800 1425 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/szlcsc/1908221840_Sunltech-Tech-SLM20162R2MIT_C412023.pdf" H 4800 1425 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Power-Inductors_Sunltech-Tech-SLM20162R2MIT_C412023.html" H 4800 1425 50  0001 C CNN "lcsc"
+	1    4800 1425
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5600 1775 6075 1775
-Text Notes 3675 2725 0    50   ~ 0
-Vout = 3.3V\n
-Text Label 5675 1775 0    50   ~ 0
-L_SW_0
+Text Label 4200 1675 0    50   ~ 0
+L_SW_1
 Text Label 3850 1775 2    50   ~ 0
 V_OUT_MUX
 $Comp
@@ -93,73 +71,55 @@ $EndComp
 Text Label 1600 2325 0    50   ~ 0
 V_OUT_MUX
 Wire Wire Line
-	3775 2050 4000 2050
-Wire Wire Line
 	2800 2500 2900 2500
-Wire Wire Line
-	3775 2050 3775 2500
 Text Label 3175 2500 0    50   ~ 0
 DCDC_ENABLE
 Text Notes 1800 3000 0    50   ~ 0
 V_OUT_MUX always > 1.0 \nRESET Output Guaranteed to VCC = 1.0 V.
+Connection ~ 7675 1775
 Wire Wire Line
-	3600 2975 4000 2975
-Text Notes 3700 3150 0    50   ~ 0
-LOAD(out)\nis disabled
-NoConn ~ 5600 2275
-Wire Wire Line
-	5600 2175 6800 2175
-Wire Wire Line
-	6800 2175 6800 1775
-Connection ~ 6800 1775
-Wire Wire Line
-	6800 1775 7025 1775
+	7675 1775 7900 1775
 $Comp
 L Device:C C?
 U 1 1 5F9A38C2
-P 7025 1925
+P 7900 1925
 AR Path="/5EA4867C/5F9A38C2" Ref="C?"  Part="1" 
 AR Path="/5E9C1C3A/5F9A38C2" Ref="C?"  Part="1" 
 AR Path="/5F7F86D0/5F9A38C2" Ref="C?"  Part="1" 
 AR Path="/5F988DA5/5F9A38C2" Ref="C35"  Part="1" 
-F 0 "C35" H 7050 2000 50  0000 L CNN
-F 1 "10 uF" V 6875 1800 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 7063 1775 50  0001 C CNN
-F 3 "~" H 7025 1925 50  0001 C CNN
-F 4 "" H 7025 1925 50  0001 C CNN "LCSC"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 7025 1925 50  0001 C CNN "lcsc"
-	1    7025 1925
+F 0 "C35" H 8050 1975 50  0000 L CNN
+F 1 "10 uF" H 8025 1900 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 7938 1775 50  0001 C CNN
+F 3 "~" H 7900 1925 50  0001 C CNN
+F 4 "" H 7900 1925 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 7900 1925 50  0001 C CNN "lcsc"
+	1    7900 1925
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	7025 2075 7025 2875
-NoConn ~ 5600 2375
-Text Notes 5675 2150 0    50   ~ 0
-Connect this pin(5) directly \nto the output capacitor\n with a short trace
-Text Notes 4300 1450 0    100  ~ 0
+Text Notes 4025 1325 0    100  ~ 0
 DCDC converter 3.3V\n\n
-Text HLabel 7100 1775 2    50   Output ~ 0
+Text HLabel 7975 1775 2    50   Output ~ 0
 V3V3
 Wire Wire Line
-	7100 1775 7025 1775
-Connection ~ 7025 1775
+	7975 1775 7900 1775
+Connection ~ 7900 1775
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F9A38D0
-P 7025 1650
+P 7900 1650
 AR Path="/5EA4867C/5F9A38D0" Ref="TP?"  Part="1" 
 AR Path="/5E9C1C3A/5F9A38D0" Ref="TP?"  Part="1" 
 AR Path="/5F7F86D0/5F9A38D0" Ref="TP?"  Part="1" 
 AR Path="/5F988DA5/5F9A38D0" Ref="TP15"  Part="1" 
-F 0 "TP15" H 7083 1722 50  0000 L CNN
-F 1 "TestPoint" H 7083 1677 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 7225 1650 50  0001 C CNN
-F 3 "~" H 7225 1650 50  0001 C CNN
-	1    7025 1650
+F 0 "TP15" H 7958 1722 50  0000 L CNN
+F 1 "TestPoint" H 7958 1677 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8100 1650 50  0001 C CNN
+F 3 "~" H 8100 1650 50  0001 C CNN
+	1    7900 1650
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	7025 1650 7025 1775
+	7900 1650 7900 1775
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F9A38D7
@@ -181,51 +141,29 @@ Wire Wire Line
 Wire Notes Line
 	1025 1025 1025 3350
 Wire Notes Line
-	7550 1025 7550 3350
+	9100 1025 9100 3350
 Wire Notes Line
-	1025 1025 7550 1025
+	1025 1025 9100 1025
 Wire Notes Line
-	1025 3350 7550 3350
+	1025 3350 9100 3350
 Wire Wire Line
-	4000 2325 3900 2325
-Wire Wire Line
-	3900 2325 3900 2425
-Wire Wire Line
-	3900 2625 4000 2625
-Wire Wire Line
-	4000 2525 3900 2525
-Connection ~ 3900 2525
-Wire Wire Line
-	3900 2525 3900 2625
-Connection ~ 3900 2425
-Wire Wire Line
-	3900 2425 3900 2525
-Wire Wire Line
-	3900 2425 4000 2425
-Wire Wire Line
-	3900 2325 3900 1775
-Connection ~ 3900 2325
-Connection ~ 3900 1775
-Wire Wire Line
-	3900 1775 3400 1775
-Wire Wire Line
-	6575 1775 6800 1775
+	7450 1775 7675 1775
 $Comp
 L power:+3.3V #PWR?
 U 1 1 5F9A38F1
-P 6800 1650
+P 7675 1650
 AR Path="/5E9C1C3A/5F9A38F1" Ref="#PWR?"  Part="1" 
 AR Path="/5F7F86D0/5F9A38F1" Ref="#PWR?"  Part="1" 
 AR Path="/5F988DA5/5F9A38F1" Ref="#PWR053"  Part="1" 
-F 0 "#PWR053" H 6800 1500 50  0001 C CNN
-F 1 "+3.3V" H 6815 1823 50  0000 C CNN
-F 2 "" H 6800 1650 50  0001 C CNN
-F 3 "" H 6800 1650 50  0001 C CNN
-	1    6800 1650
+F 0 "#PWR053" H 7675 1500 50  0001 C CNN
+F 1 "+3.3V" H 7690 1823 50  0000 C CNN
+F 2 "" H 7675 1650 50  0001 C CNN
+F 3 "" H 7675 1650 50  0001 C CNN
+	1    7675 1650
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6800 1650 6800 1675
+	7675 1650 7675 1675
 Text Notes 2850 2600 0    50   ~ 0
 PP output\n
 $Comp
@@ -258,7 +196,7 @@ Connection ~ 2000 2675
 Wire Wire Line
 	2000 2675 2200 2675
 Text Notes 1700 3075 0    50   ~ 0
-If V_OUT_MUX below 3.0V than DC/DC is off
+If V_OUT_MUX below 2.93V than DC/DC is off
 $Comp
 L Switch:SW_Push SW?
 U 1 1 5F9A3909
@@ -439,23 +377,6 @@ F 3 "" H 1600 2675 50  0001 C CNN
 $EndComp
 Text HLabel 1600 2325 0    50   Input ~ 0
 DCDC_VIN
-$Comp
-L power:GND #PWR?
-U 1 1 5F9A3967
-P 3600 2975
-AR Path="/5F9A3967" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5F9A3967" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F9A3967" Ref="#PWR?"  Part="1" 
-AR Path="/5E9C1C3A/5F9A3967" Ref="#PWR?"  Part="1" 
-AR Path="/5F7F86D0/5F9A3967" Ref="#PWR?"  Part="1" 
-AR Path="/5F988DA5/5F9A3967" Ref="#PWR051"  Part="1" 
-F 0 "#PWR051" H 3600 2725 50  0001 C CNN
-F 1 "GND" H 3600 2825 50  0000 C CNN
-F 2 "" H 3600 2975 50  0001 C CNN
-F 3 "" H 3600 2975 50  0001 C CNN
-	1    3600 2975
-	1    0    0    -1  
-$EndComp
 $Comp
 L MotorLocal:Motor_DC M?
 U 1 1 5F9A3975
@@ -681,57 +602,41 @@ F 3 "" H 3400 2175 50  0001 C CNN
 	1    3400 2175
 	1    0    0    -1  
 $EndComp
-Wire Wire Line
-	5600 2775 5700 2775
-Wire Wire Line
-	5700 2775 5700 2875
-Wire Wire Line
-	5700 2875 5600 2875
-Connection ~ 5700 2875
-Wire Wire Line
-	5700 2875 6200 2875
 $Comp
 L power:GND #PWR?
 U 1 1 5FC58698
-P 6200 2975
+P 6225 3075
 AR Path="/5FC58698" Ref="#PWR?"  Part="1" 
 AR Path="/5E9B1DCE/5FC58698" Ref="#PWR?"  Part="1" 
 AR Path="/5ED3F98E/5FC58698" Ref="#PWR?"  Part="1" 
 AR Path="/5E9C1C3A/5FC58698" Ref="#PWR?"  Part="1" 
 AR Path="/5F7F86D0/5FC58698" Ref="#PWR?"  Part="1" 
 AR Path="/5F988DA5/5FC58698" Ref="#PWR052"  Part="1" 
-F 0 "#PWR052" H 6200 2725 50  0001 C CNN
-F 1 "GND" H 6200 2825 50  0000 C CNN
-F 2 "" H 6200 2975 50  0001 C CNN
-F 3 "" H 6200 2975 50  0001 C CNN
-	1    6200 2975
+F 0 "#PWR052" H 6225 2825 50  0001 C CNN
+F 1 "GND" H 6225 2925 50  0000 C CNN
+F 2 "" H 6225 3075 50  0001 C CNN
+F 3 "" H 6225 3075 50  0001 C CNN
+	1    6225 3075
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6200 2975 6200 2875
-Connection ~ 6200 2875
-Wire Wire Line
-	6200 2875 7025 2875
+	6225 3075 6225 2975
 $Comp
 L power:PWR_FLAG #FLG?
 U 1 1 5FCE6443
-P 6575 1450
+P 7325 1650
 AR Path="/5F913559/5FCE6443" Ref="#FLG?"  Part="1" 
 AR Path="/5F988DA5/5FCE6443" Ref="#FLG04"  Part="1" 
-F 0 "#FLG04" H 6575 1525 50  0001 C CNN
-F 1 "PWR_FLAG" H 6575 1623 50  0000 C CNN
-F 2 "" H 6575 1450 50  0001 C CNN
-F 3 "~" H 6575 1450 50  0001 C CNN
-	1    6575 1450
+F 0 "#FLG04" H 7325 1725 50  0001 C CNN
+F 1 "PWR_FLAG" H 7325 1823 50  0000 C CNN
+F 2 "" H 7325 1650 50  0001 C CNN
+F 3 "~" H 7325 1650 50  0001 C CNN
+	1    7325 1650
 	1    0    0    -1  
 $EndComp
+Connection ~ 7675 1675
 Wire Wire Line
-	6575 1450 6575 1675
-Wire Wire Line
-	6575 1675 6800 1675
-Connection ~ 6800 1675
-Wire Wire Line
-	6800 1675 6800 1775
+	7675 1675 7675 1775
 Connection ~ 2675 5175
 Text HLabel 6675 5250 0    50   Output ~ 0
 PB_5_MCU_N
@@ -881,4 +786,336 @@ Wire Wire Line
 Connection ~ 7975 5850
 Wire Wire Line
 	7975 5850 8425 5850
+$Comp
+L WatchBorad-rescue:LTC3533-DCDC_Local U?
+U 1 1 61909063
+P 4775 2275
+F 0 "U?" H 4775 2825 50  0000 C CNN
+F 1 "LTC3533" H 4775 2300 50  0000 C CNN
+F 2 "Housings_DFN_QFN:DFN-14-1EP_3x4mm_Pitch0.5mm" H 4775 2375 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/1912111437_Analog-Devices-LTC3533EDE-TRPBF_C461524.pdf" H 4775 2375 50  0001 C CNN
+	1    4775 2275
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4625 2875 4625 2975
+Wire Wire Line
+	4625 2975 4725 2975
+Wire Wire Line
+	4725 2875 4725 2975
+Connection ~ 4725 2975
+Wire Wire Line
+	4725 2975 4825 2975
+Wire Wire Line
+	4825 2875 4825 2975
+Connection ~ 4825 2975
+Wire Wire Line
+	4825 2975 4925 2975
+Wire Wire Line
+	4925 2875 4925 2975
+Connection ~ 4925 2975
+Wire Wire Line
+	4550 1425 4175 1425
+Wire Wire Line
+	4175 1425 4175 1675
+Wire Wire Line
+	4175 1675 4575 1675
+Wire Wire Line
+	5050 1425 5400 1425
+Wire Wire Line
+	5400 1425 5400 1675
+Wire Wire Line
+	5400 1675 4975 1675
+$Comp
+L Device:R R?
+U 1 1 6191DAA1
+P 4150 2750
+AR Path="/5EA4867C/6191DAA1" Ref="R?"  Part="1" 
+AR Path="/5F7F86D0/6191DAA1" Ref="R?"  Part="1" 
+AR Path="/5F988DA5/6191DAA1" Ref="R?"  Part="1" 
+F 0 "R?" H 4220 2796 50  0000 L CNN
+F 1 "33.2k" H 4220 2705 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 4080 2750 50  0001 C CNN
+F 3 "~" H 4150 2750 50  0001 C CNN
+	1    4150 2750
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4625 2975 4150 2975
+Wire Wire Line
+	4150 2975 4150 2900
+Connection ~ 4625 2975
+Wire Wire Line
+	4150 2600 4150 2475
+Wire Wire Line
+	4150 2475 4275 2475
+Wire Wire Line
+	3400 1775 4000 1775
+Text Notes 7500 1400 0    50   ~ 0
+Vout = 3.3V\n
+Wire Wire Line
+	3775 2500 3775 2375
+Wire Wire Line
+	3775 2375 4275 2375
+Wire Wire Line
+	4000 1775 4000 2075
+Wire Wire Line
+	4000 2075 4275 2075
+Wire Wire Line
+	4275 2175 4000 2175
+Wire Wire Line
+	4000 2175 4000 2075
+Connection ~ 4000 2075
+$Comp
+L Device:R R?
+U 1 1 6193FCF4
+P 5400 2725
+AR Path="/5EA4867C/6193FCF4" Ref="R?"  Part="1" 
+AR Path="/5F7F86D0/6193FCF4" Ref="R?"  Part="1" 
+AR Path="/5F988DA5/6193FCF4" Ref="R?"  Part="1" 
+F 0 "R?" H 5470 2771 50  0000 L CNN
+F 1 "200k" H 5470 2680 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 5330 2725 50  0001 C CNN
+F 3 "~" H 5400 2725 50  0001 C CNN
+	1    5400 2725
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4925 2975 5400 2975
+Wire Wire Line
+	7900 2075 7900 2150
+$Comp
+L Device:C C?
+U 1 1 619482E5
+P 5750 2725
+AR Path="/5EA4867C/619482E5" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/619482E5" Ref="C?"  Part="1" 
+AR Path="/5F7F86D0/619482E5" Ref="C?"  Part="1" 
+AR Path="/5F988DA5/619482E5" Ref="C?"  Part="1" 
+F 0 "C?" H 5775 2800 50  0000 L CNN
+F 1 "100 nF" H 5775 2625 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 5788 2575 50  0001 C CNN
+F 3 "~" H 5750 2725 50  0001 C CNN
+	1    5750 2725
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5400 2875 5400 2975
+Connection ~ 5400 2975
+Wire Wire Line
+	5400 2975 5750 2975
+Wire Wire Line
+	5750 2875 5750 2975
+Wire Wire Line
+	5325 2475 5400 2475
+Wire Wire Line
+	5750 2475 5750 2575
+Wire Wire Line
+	5400 2575 5400 2475
+Connection ~ 5400 2475
+Text Label 5025 1675 0    50   ~ 0
+L_SW_2
+Wire Wire Line
+	5325 2075 5475 2075
+Wire Wire Line
+	5325 2175 5475 2175
+Wire Wire Line
+	5475 2175 5475 2075
+$Comp
+L Device:C C?
+U 1 1 61961E73
+P 7450 1925
+AR Path="/5EA4867C/61961E73" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/61961E73" Ref="C?"  Part="1" 
+AR Path="/5F7F86D0/61961E73" Ref="C?"  Part="1" 
+AR Path="/5F988DA5/61961E73" Ref="C?"  Part="1" 
+F 0 "C?" H 7600 1975 50  0000 L CNN
+F 1 "10 uF" H 7575 1900 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 7488 1775 50  0001 C CNN
+F 3 "~" H 7450 1925 50  0001 C CNN
+F 4 "" H 7450 1925 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 7450 1925 50  0001 C CNN "lcsc"
+	1    7450 1925
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	5475 2075 5475 1775
+Connection ~ 5475 2075
+Connection ~ 7450 1775
+Wire Wire Line
+	7450 2075 7450 2150
+Wire Wire Line
+	7450 2150 7900 2150
+Connection ~ 7900 2150
+Wire Wire Line
+	7900 2150 7900 2975
+Wire Wire Line
+	7325 1650 7325 1675
+Wire Wire Line
+	7325 1675 7675 1675
+$Comp
+L Device:R R?
+U 1 1 619772C6
+P 6775 1925
+AR Path="/5EA4867C/619772C6" Ref="R?"  Part="1" 
+AR Path="/5F7F86D0/619772C6" Ref="R?"  Part="1" 
+AR Path="/5F988DA5/619772C6" Ref="R?"  Part="1" 
+F 0 "R?" H 6845 1971 50  0000 L CNN
+F 1 "340k" H 6845 1880 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 6705 1925 50  0001 C CNN
+F 3 "~" H 6775 1925 50  0001 C CNN
+	1    6775 1925
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 6197810D
+P 7100 2725
+AR Path="/5EA4867C/6197810D" Ref="R?"  Part="1" 
+AR Path="/5F7F86D0/6197810D" Ref="R?"  Part="1" 
+AR Path="/5F988DA5/6197810D" Ref="R?"  Part="1" 
+F 0 "R?" H 7170 2771 50  0000 L CNN
+F 1 "200k" H 7170 2680 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 7030 2725 50  0001 C CNN
+F 3 "~" H 7100 2725 50  0001 C CNN
+	1    7100 2725
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7100 2875 7100 2975
+Wire Wire Line
+	7100 2975 7900 2975
+Connection ~ 5750 2975
+Wire Wire Line
+	5400 2475 5750 2475
+Wire Wire Line
+	7100 2275 7100 2375
+$Comp
+L Device:R R?
+U 1 1 61996769
+P 6375 2375
+AR Path="/5EA4867C/61996769" Ref="R?"  Part="1" 
+AR Path="/5F7F86D0/61996769" Ref="R?"  Part="1" 
+AR Path="/5F988DA5/61996769" Ref="R?"  Part="1" 
+F 0 "R?" V 6325 2125 50  0000 L CNN
+F 1 "107k" V 6375 2275 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 6305 2375 50  0001 C CNN
+F 3 "~" H 6375 2375 50  0001 C CNN
+	1    6375 2375
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	5475 1775 6775 1775
+Wire Wire Line
+	5325 2275 6775 2275
+Connection ~ 6775 1775
+$Comp
+L Device:C C?
+U 1 1 619CAFA1
+P 6375 2600
+AR Path="/5EA4867C/619CAFA1" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/619CAFA1" Ref="C?"  Part="1" 
+AR Path="/5F7F86D0/619CAFA1" Ref="C?"  Part="1" 
+AR Path="/5F988DA5/619CAFA1" Ref="C?"  Part="1" 
+F 0 "C?" V 6325 2375 50  0000 L CNN
+F 1 "4.7 pF" V 6500 2475 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 6413 2450 50  0001 C CNN
+F 3 "~" H 6375 2600 50  0001 C CNN
+	1    6375 2600
+	0    1    1    0   
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 619CBCE2
+P 6825 2375
+AR Path="/5EA4867C/619CBCE2" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/619CBCE2" Ref="C?"  Part="1" 
+AR Path="/5F7F86D0/619CBCE2" Ref="C?"  Part="1" 
+AR Path="/5F988DA5/619CBCE2" Ref="C?"  Part="1" 
+F 0 "C?" V 6775 2150 50  0000 L CNN
+F 1 "330 pF" V 6950 2250 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 6863 2225 50  0001 C CNN
+F 3 "~" H 6825 2375 50  0001 C CNN
+	1    6825 2375
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	6775 1775 7100 1775
+Wire Wire Line
+	5325 2375 6050 2375
+Wire Wire Line
+	6975 2375 7025 2375
+Connection ~ 7100 2375
+Wire Wire Line
+	7100 2375 7100 2575
+Wire Wire Line
+	6050 2375 6050 2600
+Wire Wire Line
+	6050 2600 6225 2600
+Connection ~ 6050 2375
+Wire Wire Line
+	6050 2375 6225 2375
+Wire Wire Line
+	6525 2375 6675 2375
+Wire Wire Line
+	7025 2600 7025 2375
+Wire Wire Line
+	6525 2600 7025 2600
+Connection ~ 7025 2375
+Wire Wire Line
+	7025 2375 7100 2375
+$Comp
+L Device:R R?
+U 1 1 619E85E1
+P 7100 1925
+AR Path="/5EA4867C/619E85E1" Ref="R?"  Part="1" 
+AR Path="/5F7F86D0/619E85E1" Ref="R?"  Part="1" 
+AR Path="/5F988DA5/619E85E1" Ref="R?"  Part="1" 
+F 0 "R?" H 7170 1971 50  0000 L CNN
+F 1 "6.49k" H 7170 1880 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 7030 1925 50  0001 C CNN
+F 3 "~" H 7100 1925 50  0001 C CNN
+	1    7100 1925
+	1    0    0    -1  
+$EndComp
+Connection ~ 7100 1775
+Wire Wire Line
+	7100 1775 7450 1775
+Wire Wire Line
+	6775 2075 6775 2175
+Connection ~ 6775 2275
+Wire Wire Line
+	6775 2275 7100 2275
+$Comp
+L Device:C C?
+U 1 1 619ED8AC
+P 6950 2175
+AR Path="/5EA4867C/619ED8AC" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/619ED8AC" Ref="C?"  Part="1" 
+AR Path="/5F7F86D0/619ED8AC" Ref="C?"  Part="1" 
+AR Path="/5F988DA5/619ED8AC" Ref="C?"  Part="1" 
+F 0 "C?" V 6900 2400 50  0000 L CNN
+F 1 "47 pF" V 7000 2400 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 6988 2025 50  0001 C CNN
+F 3 "~" H 6950 2175 50  0001 C CNN
+	1    6950 2175
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	7100 2075 7100 2175
+Wire Wire Line
+	6800 2175 6775 2175
+Connection ~ 6775 2175
+Wire Wire Line
+	6775 2175 6775 2275
+Wire Wire Line
+	5750 2975 6225 2975
+Connection ~ 7100 2975
+Connection ~ 6225 2975
+Wire Wire Line
+	6225 2975 7100 2975
+Text Label 5975 2275 0    50   ~ 0
+DCDC_FB
+Text Label 5700 2375 0    50   ~ 0
+COMP
 $EndSCHEMATC
