@@ -88,18 +88,6 @@ Wire Wire Line
 	3475 3025 3475 3125
 Text Notes 2300 -850 0    50   ~ 0
 https://devzone.nordicsemi.com/nordic/short-range-guides/b/hardware-and-layout/posts/general-pcb-design-guidelines-for-nrf52
-$Comp
-L Device:Antenna_Chip AE1
-U 1 1 5EAD751A
-P 3150 2550
-F 0 "AE1" H 3625 2700 50  0000 R CNN
-F 1 "Antenna_Chip" H 3800 2575 50  0000 R CNN
-F 2 "" H 3050 2725 50  0001 C CNN
-F 3 "https://datasheet.lcsc.com/lcsc/1809191926_YAGEO-ANT2012LL13R2400A_C141581.pdf" H 3050 2725 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Antennas_YAGEO-ANT2012LL13R2400A_C141581.html" H 3150 2550 50  0001 C CNN "lcsc"
-	1    3150 2550
-	-1   0    0    -1  
-$EndComp
 Connection ~ 3475 2650
 Wire Wire Line
 	3250 2650 3475 2650
@@ -1846,4 +1834,16 @@ Text Label 6475 4050 0    50   ~ 0
 I2C_SDA_STBY
 Text Label 6475 4150 0    50   ~ 0
 I2C_SCL_STBY
+$Comp
+L Device:Antenna_Chip AE1
+U 1 1 5EAD751A
+P 3150 2550
+F 0 "AE1" H 3625 2700 50  0000 R CNN
+F 1 "Antenna_Chip" H 3800 2575 50  0000 R CNN
+F 2 "ANT2012LL13R2400A:ANT2012LL13R2400A" H 3050 2725 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/1809191926_YAGEO-ANT2012LL13R2400A_C141581.pdf" H 3050 2725 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Antennas_YAGEO-ANT2012LL13R2400A_C141581.html" H 3150 2550 50  0001 C CNN "lcsc"
+	1    3150 2550
+	-1   0    0    -1  
+$EndComp
 $EndSCHEMATC
