@@ -45,7 +45,7 @@ jobs:
         cmake --build . --config Release
     - name : Run firmware testing
       run: |
-        cd ${{ env.buildDir }}
+        cd ${{ env.buildDir }}/Release
         .\FirmwareTesting.exe
   build-arm:
 
