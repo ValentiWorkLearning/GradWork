@@ -82,9 +82,9 @@ void PlatformBackend::executeLvTaskHandler() noexcept
 #include <chrono>
 #include <thread>
 
-#include <lv_drivers/sdl/sdl.h>
 #include <lv_drivers/indev/keyboard.h>
 #include <lv_drivers/indev/mouse.h>
+#include <lv_drivers/sdl/sdl.h>
 #include <lvgl/lvgl.h>
 
 #include <fmt/format.h>
@@ -93,9 +93,7 @@ namespace Graphics
 {
 
 PlatformBackend::PlatformBackend() noexcept
-{
-    m_isTickThreadRunning.store(false);
-};
+    : m_isTickThreadRunning{false}, m_indevDriver{}, m_tickThread{nullptr} {};
 
 void PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver) noexcept
 {
@@ -138,17 +136,17 @@ void PlatformBackend::memoryMonitor(lv_timer_t* _param) noexcept
 
 void PlatformBackend::executeLvTaskHandler() noexcept
 {
-    if(!m_isTickThreadRunning)
+    if (!m_isTickThreadRunning)
     {
         m_isTickThreadRunning = true;
-        m_tickThread = std::thread([this] {
+        m_tickThread = std::make_unique<std::thread>([this] {
             while (m_isTickThreadRunning)
             {
                 lv_tick_inc(LvglNotificationTime);
                 std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
             }
         });
-        m_tickThread.detach();
+        m_tickThread->detach();
     }
     lv_task_handler();
     std::this_thread::sleep_for(std::chrono::milliseconds(LvglNotificationTime));
