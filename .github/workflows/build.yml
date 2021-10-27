@@ -40,7 +40,7 @@ jobs:
 
     - name: Run build for MSVC compiler
       run: |
-        cmake -G"Visual Studio 16 2019" -Ax64 -S"${{ github.workspace }}/Firmware/" -B"${{ env.buildDir }}" -DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE=Release'
+        cmake -G"Visual Studio 16 2019" -Ax64 -S"${{ github.workspace }}/Firmware/" -B"${{ env.buildDir }}" -DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE=Release
         cd ${{ env.buildDir }}
         cmake --build . --config Release
     - name : Run firmware testing
