@@ -1189,7 +1189,6 @@ F 4 "https://lcsc.com/product-detail/Interface-Specialized_Maxim-Integrated-MAX1
 	1    5025 1350
 	1    0    0    -1  
 $EndComp
-NoConn ~ 6625 1350
 Text Notes 6800 1550 0    50   ~ 0
 default level is "0"
 Text Label 7775 1450 2    50   ~ 0
@@ -1446,4 +1445,19 @@ Text Notes 7725 3500 0    50   ~ 0
 32.768 KHz\n
 NoConn ~ 10175 2350
 NoConn ~ 8775 2450
+$Comp
+L Connector:TestPoint TP20
+U 1 1 6186C8E6
+P 6700 1220
+F 0 "TP20" H 6758 1292 50  0000 L CNN
+F 1 "TestPoint" H 6758 1247 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 6900 1220 50  0001 C CNN
+F 3 "~" H 6900 1220 50  0001 C CNN
+	1    6700 1220
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6625 1350 6700 1350
+Wire Wire Line
+	6700 1220 6700 1350
 $EndSCHEMATC
