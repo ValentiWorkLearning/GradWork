@@ -28,7 +28,7 @@
         {
             "name": "x86-Release",
             "generator": "Ninja",
-            "configurationType": "RelWithDebInfo",
+            "configurationType": "Release",
             "buildRoot": "${projectDir}\\out\\buildx86_release\\${name}",
             "installRoot": "${projectDir}\\out\\install\\${name}",
             "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\" -DPACKAGE_TESTS=ON",
