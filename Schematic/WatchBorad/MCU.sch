@@ -37,6 +37,7 @@ F 0 "C15" H 3950 2975 50  0000 L CNN
 F 1 "0.8 pF" H 3875 2775 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 4163 2725 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 4125 2875 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CG0R8C500NT_C501845.html" H 4125 2875 50  0001 C CNN "lcsc"
 	1    4125 2875
 	1    0    0    -1  
 $EndComp
@@ -77,6 +78,7 @@ F 0 "C13" H 3525 2975 50  0000 L CNN
 F 1 "0.8 pF" H 3525 2775 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3513 2725 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 3475 2875 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CG0R8C500NT_C501845.html" H 3475 2875 50  0001 C CNN "lcsc"
 	1    3475 2875
 	1    0    0    -1  
 $EndComp
@@ -156,6 +158,7 @@ F 0 "C10" H 2850 1225 50  0000 L CNN
 F 1 "100 nF" V 2675 1025 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 2863 1000 50  0001 C CNN
 F 3 "~" H 2825 1150 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 2825 1150 50  0001 C CNN "lcsc"
 	1    2825 1150
 	1    0    0    -1  
 $EndComp
@@ -170,6 +173,7 @@ F 0 "C12" H 3150 1225 50  0000 L CNN
 F 1 "100 nF" V 2975 1025 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3163 1000 50  0001 C CNN
 F 3 "~" H 3125 1150 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 3125 1150 50  0001 C CNN "lcsc"
 	1    3125 1150
 	1    0    0    -1  
 $EndComp
@@ -214,6 +218,7 @@ F 0 "C7" H 2175 1225 50  0000 L CNN
 F 1 "100 nF" V 2000 1025 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 2188 1000 50  0001 C CNN
 F 3 "~" H 2150 1150 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 2150 1150 50  0001 C CNN "lcsc"
 	1    2150 1150
 	1    0    0    -1  
 $EndComp
@@ -266,6 +271,7 @@ F 0 "C5" H 1825 1225 50  0000 L CNN
 F 1 "100 pF" V 1650 1025 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1838 1000 50  0001 C CNN
 F 3 "~" H 1800 1150 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 1800 1150 50  0001 C CNN "lcsc"
 	1    1800 1150
 	1    0    0    -1  
 $EndComp
@@ -289,6 +295,7 @@ F 0 "C3" H 1500 1225 50  0000 L CNN
 F 1 "100 pF" V 1325 1025 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1513 1000 50  0001 C CNN
 F 3 "~" H 1475 1150 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 1475 1150 50  0001 C CNN "lcsc"
 	1    1475 1150
 	1    0    0    -1  
 $EndComp
@@ -390,6 +397,7 @@ F 0 "C1" H 875 3650 50  0000 L CNN
 F 1 "10 pF" H 850 3525 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1188 3425 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 1150 3575 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603JRNPO9BN100_C106245.html" H 1150 3575 50  0001 C CNN "lcsc"
 	1    1150 3575
 	1    0    0    -1  
 $EndComp
@@ -403,6 +411,7 @@ F 0 "C4" H 1765 3621 50  0000 L CNN
 F 1 "10 pF" H 1765 3530 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1688 3425 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 1650 3575 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603JRNPO9BN100_C106245.html" H 1650 3575 50  0001 C CNN "lcsc"
 	1    1650 3575
 	1    0    0    -1  
 $EndComp
@@ -567,6 +576,7 @@ F 0 "C16" H 1075 7725 50  0000 L CNN
 F 1 "100 nF" V 900 7525 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1088 7500 50  0001 C CNN
 F 3 "~" H 1050 7650 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 1050 7650 50  0001 C CNN "lcsc"
 	1    1050 7650
 	1    0    0    -1  
 $EndComp
@@ -1226,6 +1236,7 @@ F 0 "C22" H 10800 1400 50  0000 L CNN
 F 1 "100 nF" H 10750 1300 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 10663 1225 50  0001 C CNN
 F 3 "~" H 10625 1375 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 10625 1375 50  0001 C CNN "lcsc"
 	1    10625 1375
 	1    0    0    -1  
 $EndComp
@@ -1291,6 +1302,7 @@ F 0 "U11" H 10428 4046 50  0000 L CNN
 F 1 "GC9A01" H 10428 3955 50  0000 L CNN
 F 2 "LocalFootprints:GC9A01_disp" H 10000 4400 50  0001 C CNN
 F 3 "https://www.buydisplay.com/download/ic/GC9A01A.pdf" H 10000 4400 50  0001 C CNN
+F 4 "https://www.aliexpress.com/item/1005002297668304.html?spm=a2g0o.productlist.0.0.2d323cfbmTWYJD&algo_pvid=a7cd72c7-e7b7-4a28-818d-25cad6b70960&algo_exp_id=a7cd72c7-e7b7-4a28-818d-25cad6b70960-0&pdp_ext_f=%7B%22sku_id%22%3A%2212000021496494507%22%7D" H 10250 4050 50  0001 C CNN "lcsc"
 	1    10250 4050
 	1    0    0    -1  
 $EndComp
@@ -1390,6 +1402,7 @@ F 0 "C14" H 3350 7900 50  0000 L CNN
 F 1 "100 nF" V 3175 7700 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3363 7675 50  0001 C CNN
 F 3 "~" H 3325 7825 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 3325 7825 50  0001 C CNN "lcsc"
 	1    3325 7825
 	1    0    0    -1  
 $EndComp
@@ -1588,6 +1601,7 @@ F 0 "C18" H 8515 3071 50  0000 L CNN
 F 1 "130 pF" H 8515 2980 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 8438 2875 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 8400 3025 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CG131J500NT_C327424.html" H 8400 3025 50  0001 C CNN "lcsc"
 	1    8400 3025
 	1    0    0    -1  
 $EndComp
@@ -1599,6 +1613,7 @@ F 0 "C19" H 8990 3071 50  0000 L CNN
 F 1 "130 pF" H 8990 2980 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 8913 2875 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CGR82C500NT_C501852.html" H 8875 3025 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_FH-Guangdong-Fenghua-Advanced-Tech-0603CG131J500NT_C327424.html" H 8875 3025 50  0001 C CNN "lcsc"
 	1    8875 3025
 	1    0    0    -1  
 $EndComp

@@ -25,6 +25,7 @@ F 0 "C29" H 4875 2250 50  0000 L CNN
 F 1 "100 nF" V 4700 2050 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 4888 2025 50  0001 C CNN
 F 3 "~" H 4850 2175 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 4850 2175 50  0001 C CNN "lcsc"
 	1    4850 2175
 	1    0    0    -1  
 $EndComp
@@ -307,6 +308,7 @@ F 0 "C30" H 7275 5850 50  0000 L CNN
 F 1 "100 nF" V 7100 5650 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 7288 5625 50  0001 C CNN
 F 3 "~" H 7250 5775 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 7250 5775 50  0001 C CNN "lcsc"
 	1    7250 5775
 	1    0    0    -1  
 $EndComp
@@ -322,6 +324,7 @@ F 0 "C31" H 7875 5850 50  0000 L CNN
 F 1 "100 nF" V 7725 5600 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 7888 5625 50  0001 C CNN
 F 3 "~" H 7850 5775 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 7850 5775 50  0001 C CNN "lcsc"
 	1    7850 5775
 	1    0    0    -1  
 $EndComp
@@ -1036,6 +1039,7 @@ F 0 "C25" H 1750 2675 50  0000 L CNN
 F 1 "100 nF" V 1600 2425 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 1763 2450 50  0001 C CNN
 F 3 "~" H 1725 2600 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 1725 2600 50  0001 C CNN "lcsc"
 	1    1725 2600
 	1    0    0    -1  
 $EndComp
@@ -1051,6 +1055,7 @@ F 0 "C26" H 2050 2675 50  0000 L CNN
 F 1 "100 nF" V 1900 2425 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 2063 2450 50  0001 C CNN
 F 3 "~" H 2025 2600 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 2025 2600 50  0001 C CNN "lcsc"
 	1    2025 2600
 	1    0    0    -1  
 $EndComp
@@ -1096,6 +1101,7 @@ F 0 "C27" H 3000 6950 50  0000 L CNN
 F 1 "100 nF" V 2825 6750 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3013 6725 50  0001 C CNN
 F 3 "~" H 2975 6875 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 2975 6875 50  0001 C CNN "lcsc"
 	1    2975 6875
 	1    0    0    -1  
 $EndComp
@@ -1298,6 +1304,7 @@ F 0 "C6" H 10500 3400 50  0000 L CNN
 F 1 "100 nF" H 10450 3300 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 10363 3225 50  0001 C CNN
 F 3 "~" H 10325 3375 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 10325 3375 50  0001 C CNN "lcsc"
 	1    10325 3375
 	1    0    0    -1  
 $EndComp
@@ -1425,7 +1432,8 @@ F 0 "Y1" V 8250 3500 50  0000 R CNN
 F 1 "Crystal_Small" V 8150 3900 50  0000 R CNN
 F 2 "Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm" H 8200 3300 50  0001 C CNN
 F 3 "https://datasheet.lcsc.com/lcsc/2104141604_TKD-SF32WK32768D31T002_C271654.pdf" H 8200 3300 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" V 8200 3300 50  0001 C CNN "LCSC"
+F 4 "" V 8200 3300 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Crystals_TKD-SF32WK32768D31T002_C271654.html" H 8200 3300 50  0001 C CNN "lcsc"
 	1    8200 3300
 	0    -1   -1   0   
 $EndComp

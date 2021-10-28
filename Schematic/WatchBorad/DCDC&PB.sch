@@ -108,6 +108,7 @@ F 0 "C32" H 2025 2575 50  0000 L CNN
 F 1 "100 nF" V 1875 2325 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 2038 2350 50  0001 C CNN
 F 3 "~" H 2000 2500 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 2000 2500 50  0001 C CNN "lcsc"
 	1    2000 2500
 	1    0    0    -1  
 $EndComp
@@ -318,6 +319,7 @@ F 0 "M1" H 3125 4500 50  0000 L CNN
 F 1 "Motor_DC" V 3150 4300 50  0001 L CNN
 F 2 "LocalFootprints:VibrationMorot4x4x11" H 2975 4460 50  0001 C CNN
 F 3 "https://www.aliexpress.com/item/32844746278.html?spm=a2g0o.productlist.0.0.24ef228a6Cfn5S&algo_pvid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25&algo_expid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25-0&btsid=0b8b15c915866028623212205ec781&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_" H 2975 4460 50  0001 C CNN
+F 4 "https://www.aliexpress.com/item/32844746278.html?spm=a2g0o.productlist.0.0.24ef228a6Cfn5S&algo_pvid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25&algo_expid=3165a7c1-ba73-4c2c-bb27-6dacea1bed25-0&btsid=0b8b15c915866028623212205ec781&ws_ab_test=searchweb0_0,searchweb201602_,searchweb201603_" H 2975 4550 50  0001 C CNN "lcsc"
 	1    2975 4550
 	1    0    0    -1  
 $EndComp
@@ -416,6 +418,7 @@ F 0 "C34" H 3515 4671 50  0000 L CNN
 F 1 "100n X7R 16V" H 3175 4475 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 3438 4475 50  0001 C CNN
 F 3 "~" H 3400 4625 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_Samsung-Electro-Mechanics-CL10B104KO8NNNC_C66501.html" H 3400 4625 50  0001 C CNN "lcsc"
 	1    3400 4625
 	1    0    0    -1  
 $EndComp
@@ -644,6 +647,7 @@ F 0 "C36" H 7750 5575 50  0000 L CNN
 F 1 "100 nF" V 7600 5325 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 7763 5350 50  0001 C CNN
 F 3 "~" H 7725 5500 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 7725 5500 50  0001 C CNN "lcsc"
 	1    7725 5500
 	1    0    0    -1  
 $EndComp
@@ -659,6 +663,7 @@ F 0 "C37" H 8450 5575 50  0000 L CNN
 F 1 "100 nF" V 8300 5325 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 8463 5350 50  0001 C CNN
 F 3 "~" H 8425 5500 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 8425 5500 50  0001 C CNN "lcsc"
 	1    8425 5500
 	1    0    0    -1  
 $EndComp
@@ -674,6 +679,7 @@ F 0 "C38" H 9175 5575 50  0000 L CNN
 F 1 "100 nF" V 9025 5325 50  0000 L CNN
 F 2 "Capacitor_SMD:C_0603_1608Metric" H 9188 5350 50  0001 C CNN
 F 3 "~" H 9150 5500 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 9150 5500 50  0001 C CNN "lcsc"
 	1    9150 5500
 	1    0    0    -1  
 $EndComp
@@ -738,6 +744,7 @@ F 0 "U12" H 4950 2970 50  0000 C CNN
 F 1 "TPS73501DRBR" H 4950 2879 50  0000 C CNN
 F 2 "TPS73501DRBR:TPS73501DRBR" H 4950 2400 50  0001 L BNN
 F 3 "" H 4950 2400 50  0001 L BNN
+F 4 "https://lcsc.com/product-detail/Linear-Voltage-Regulators-LDO_Texas-Instruments-TPS73501DRBR_C130077.html" H 4950 2400 50  0001 C CNN "lcsc"
 	1    4950 2400
 	1    0    0    -1  
 $EndComp
