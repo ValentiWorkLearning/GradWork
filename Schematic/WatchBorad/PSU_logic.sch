@@ -53,6 +53,7 @@ F 0 "R21" V 4400 1150 50  0000 L CNN
 F 1 "10k" V 4400 1450 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4430 1350 50  0001 C CNN
 F 3 "~" H 4500 1350 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 4500 1350 50  0001 C CNN "lcsc"
 	1    4500 1350
 	0    1    1    0   
 $EndComp
@@ -153,6 +154,7 @@ F 0 "R17" H 2575 2625 50  0000 L CNN
 F 1 "10k" H 2525 2725 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2380 2650 50  0001 C CNN
 F 3 "~" H 2450 2650 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 2450 2650 50  0001 C CNN "lcsc"
 	1    2450 2650
 	-1   0    0    1   
 $EndComp
@@ -167,6 +169,7 @@ F 0 "R18" H 2425 1925 50  0000 L CNN
 F 1 "10k" H 2425 2050 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2555 1975 50  0001 C CNN
 F 3 "~" H 2625 1975 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 2625 1975 50  0001 C CNN "lcsc"
 	1    2625 1975
 	-1   0    0    1   
 $EndComp
@@ -284,6 +287,7 @@ F 0 "R24" V 7818 6075 50  0000 C CNN
 F 1 "330" V 7909 6075 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 7955 6075 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 8025 6075 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 8025 6075 50  0001 C CNN "lcsc"
 	1    8025 6075
 	0    1    1    0   
 $EndComp
@@ -597,6 +601,7 @@ F 0 "R20" V 2825 4800 50  0000 L CNN
 F 1 "10k" V 2675 4775 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2680 4850 50  0001 C CNN
 F 3 "~" H 2750 4850 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 2750 4850 50  0001 C CNN "lcsc"
 	1    2750 4850
 	0    1    -1   0   
 $EndComp
@@ -628,6 +633,7 @@ F 0 "R23" H 4800 4775 50  0000 L CNN
 F 1 "10k" V 5100 4725 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4955 4800 50  0001 C CNN
 F 3 "~" H 5025 4800 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 5025 4800 50  0001 C CNN "lcsc"
 	1    5025 4800
 	1    0    0    1   
 $EndComp
@@ -774,6 +780,7 @@ F 0 "R15" V 1268 1725 50  0000 C CNN
 F 1 "330" V 1359 1725 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1405 1725 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 1475 1725 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 1475 1725 50  0001 C CNN "lcsc"
 	1    1475 1725
 	0    1    1    0   
 $EndComp
@@ -788,6 +795,7 @@ F 0 "R16" V 1268 2350 50  0000 C CNN
 F 1 "330" V 1359 2350 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1405 2350 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 1475 2350 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 1475 2350 50  0001 C CNN "lcsc"
 	1    1475 2350
 	0    1    1    0   
 $EndComp
@@ -1345,6 +1353,7 @@ F 0 "R2" H 10445 2446 50  0000 L CNN
 F 1 "10k" H 10445 2355 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 10305 2400 50  0001 C CNN
 F 3 "~" H 10375 2400 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 10375 2400 50  0001 C CNN "lcsc"
 	1    10375 2400
 	1    0    0    -1  
 $EndComp
@@ -1358,6 +1367,7 @@ F 0 "R1" H 8395 2346 50  0000 L CNN
 F 1 "10k" H 8395 2255 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 8255 2300 50  0001 C CNN
 F 3 "~" H 8325 2300 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 8325 2300 50  0001 C CNN "lcsc"
 	1    8325 2300
 	1    0    0    -1  
 $EndComp

@@ -186,6 +186,7 @@ F 0 "R31" H 8045 5546 50  0000 L CNN
 F 1 "10k" H 8045 5455 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 7905 5500 50  0001 C CNN
 F 3 "~" H 7975 5500 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 7975 5500 50  0001 C CNN "lcsc"
 	1    7975 5500
 	1    0    0    -1  
 $EndComp
@@ -202,6 +203,7 @@ F 0 "R32" H 8745 5546 50  0000 L CNN
 F 1 "10k" H 8745 5455 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 8605 5500 50  0001 C CNN
 F 3 "~" H 8675 5500 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 8675 5500 50  0001 C CNN "lcsc"
 	1    8675 5500
 	1    0    0    -1  
 $EndComp
@@ -227,6 +229,7 @@ F 0 "R33" H 9470 5546 50  0000 L CNN
 F 1 "10k" H 9470 5455 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 9330 5500 50  0001 C CNN
 F 3 "~" H 9400 5500 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 9400 5500 50  0001 C CNN "lcsc"
 	1    9400 5500
 	1    0    0    -1  
 $EndComp
@@ -353,6 +356,7 @@ F 0 "R27" H 2745 5546 50  0000 L CNN
 F 1 "10k" H 2745 5455 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2605 5500 50  0001 C CNN
 F 3 "~" H 2675 5500 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 2675 5500 50  0001 C CNN "lcsc"
 	1    2675 5500
 	1    0    0    -1  
 $EndComp
@@ -367,6 +371,7 @@ F 0 "R26" V 2193 5175 50  0000 C CNN
 F 1 "330" V 2284 5175 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 2330 5175 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 2400 5175 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 2400 5175 50  0001 C CNN "lcsc"
 	1    2400 5175
 	0    1    1    0   
 $EndComp
@@ -583,6 +588,7 @@ F 0 "R28" V 7050 4800 50  0000 C CNN
 F 1 "330" V 7050 5350 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 7030 5050 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 7100 5050 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 7100 5050 50  0001 C CNN "lcsc"
 	1    7100 5050
 	0    1    1    0   
 $EndComp
@@ -597,6 +603,7 @@ F 0 "R29" V 7050 4900 50  0000 C CNN
 F 1 "330" V 7050 5450 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 7030 5150 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 7100 5150 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 7100 5150 50  0001 C CNN "lcsc"
 	1    7100 5150
 	0    1    1    0   
 $EndComp
@@ -611,6 +618,7 @@ F 0 "R30" V 7050 5000 50  0000 C CNN
 F 1 "330" V 7050 5550 50  0000 C CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 7030 5250 50  0001 C CNN
 F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 7100 5250 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 7100 5250 50  0001 C CNN "lcsc"
 	1    7100 5250
 	0    1    1    0   
 $EndComp
@@ -792,6 +800,7 @@ F 0 "R19" H 7370 2846 50  0000 L CNN
 F 1 "220k" H 7370 2755 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 7230 2800 50  0001 C CNN
 F 3 "~" H 7300 2800 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_FH-Guangdong-Fenghua-Advanced-Tech-RS-03K224JT_C118377.html" H 7300 2800 50  0001 C CNN "lcsc"
 	1    7300 2800
 	1    0    0    -1  
 $EndComp
@@ -803,6 +812,7 @@ F 0 "R3" H 7370 2496 50  0000 L CNN
 F 1 "330k" H 7370 2405 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 7230 2450 50  0001 C CNN
 F 3 "~" H 7300 2450 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Resistor-Today-AECR0603F330KK9_C328354.html" H 7300 2450 50  0001 C CNN "lcsc"
 	1    7300 2450
 	1    0    0    -1  
 $EndComp

@@ -992,6 +992,7 @@ F 0 "R12" H 10095 1321 50  0000 L CNN
 F 1 "10k" H 10095 1230 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 9955 1275 50  0001 C CNN
 F 3 "~" H 10025 1275 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 10025 1275 50  0001 C CNN "lcsc"
 	1    10025 1275
 	1    0    0    -1  
 $EndComp
@@ -1010,6 +1011,7 @@ F 0 "R13" H 10370 1321 50  0000 L CNN
 F 1 "10k" H 10370 1230 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 10230 1275 50  0001 C CNN
 F 3 "~" H 10300 1275 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 10300 1275 50  0001 C CNN "lcsc"
 	1    10300 1275
 	1    0    0    -1  
 $EndComp
@@ -1060,6 +1062,7 @@ F 0 "R14" H 8820 6646 50  0000 L CNN
 F 1 "10k" H 8820 6555 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 8680 6600 50  0001 C CNN
 F 3 "~" H 8750 6600 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 8750 6600 50  0001 C CNN "lcsc"
 	1    8750 6600
 	1    0    0    -1  
 $EndComp
@@ -1147,6 +1150,7 @@ F 0 "R11" H 8520 1096 50  0000 L CNN
 F 1 "10k" H 8520 1005 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 8380 1050 50  0001 C CNN
 F 3 "~" H 8450 1050 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 8450 1050 50  0001 C CNN "lcsc"
 	1    8450 1050
 	1    0    0    -1  
 $EndComp
@@ -1243,6 +1247,7 @@ F 0 "R10" H 3620 4671 50  0000 L CNN
 F 1 "10k" H 3620 4580 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3480 4625 50  0001 C CNN
 F 3 "~" H 3550 4625 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 3550 4625 50  0001 C CNN "lcsc"
 	1    3550 4625
 	1    0    0    -1  
 $EndComp
@@ -1801,6 +1806,7 @@ F 0 "R4" H 1180 6296 50  0000 L CNN
 F 1 "10k" H 1180 6205 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1040 6250 50  0001 C CNN
 F 3 "~" H 1110 6250 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 1110 6250 50  0001 C CNN "lcsc"
 	1    1110 6250
 	1    0    0    -1  
 $EndComp
@@ -1816,6 +1822,7 @@ F 0 "R5" H 1450 6296 50  0000 L CNN
 F 1 "10k" H 1450 6205 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1310 6250 50  0001 C CNN
 F 3 "~" H 1380 6250 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 1380 6250 50  0001 C CNN "lcsc"
 	1    1380 6250
 	1    0    0    -1  
 $EndComp
@@ -1831,6 +1838,7 @@ F 0 "R6" H 1780 6296 50  0000 L CNN
 F 1 "10k" H 1780 6205 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 1640 6250 50  0001 C CNN
 F 3 "~" H 1710 6250 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 1710 6250 50  0001 C CNN "lcsc"
 	1    1710 6250
 	1    0    0    -1  
 $EndComp
@@ -1846,6 +1854,7 @@ F 0 "R7" H 4030 6286 50  0000 L CNN
 F 1 "10k" H 4030 6195 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 3890 6240 50  0001 C CNN
 F 3 "~" H 3960 6240 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 3960 6240 50  0001 C CNN "lcsc"
 	1    3960 6240
 	1    0    0    -1  
 $EndComp
@@ -1861,6 +1870,7 @@ F 0 "R9" H 4710 6286 50  0000 L CNN
 F 1 "10k" H 4710 6195 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4570 6240 50  0001 C CNN
 F 3 "~" H 4640 6240 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 4640 6240 50  0001 C CNN "lcsc"
 	1    4640 6240
 	1    0    0    -1  
 $EndComp
@@ -1876,6 +1886,7 @@ F 0 "R8" H 4420 6286 50  0000 L CNN
 F 1 "10k" H 4420 6195 50  0000 L CNN
 F 2 "Resistor_SMD:R_0603_1608Metric" V 4280 6240 50  0001 C CNN
 F 3 "~" H 4350 6240 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 4350 6240 50  0001 C CNN "lcsc"
 	1    4350 6240
 	1    0    0    -1  
 $EndComp
