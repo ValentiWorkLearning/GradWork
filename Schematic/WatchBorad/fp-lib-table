@@ -12,4 +12,5 @@
   (lib (name M41T62Q6F)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/M41T62Q6F)(options "")(descr ""))
   (lib (name TPS73501DRBR)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/TPS73501DRBR/)(options "")(descr ""))
   (lib (name ANT2012LL13R2400A)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/YAGEO_RF/ANT2012LL13R2400A.pretty)(options "")(descr ""))
+  (lib (name LSM6DSRTR)(type KiCad)(uri ${KICAD_LIBRARIES_ROOT}/LSM6DSRTR/)(options "")(descr ""))
 )

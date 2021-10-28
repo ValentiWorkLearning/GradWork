@@ -564,34 +564,6 @@ Text Label 7100 2450 2    50   ~ 0
 Backlight_EN_DIM
 Wire Wire Line
 	6350 2050 7050 2050
-$Comp
-L Device:C C?
-U 1 1 5F46C82F
-P 1050 7650
-AR Path="/5EA4867C/5F46C82F" Ref="C?"  Part="1" 
-AR Path="/5E9C1C3A/5F46C82F" Ref="C?"  Part="1" 
-AR Path="/5E9B1DCE/5F46C82F" Ref="C16"  Part="1" 
-AR Path="/5F46C82F" Ref="C?"  Part="1" 
-F 0 "C16" H 1075 7725 50  0000 L CNN
-F 1 "100 nF" V 900 7525 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 1088 7500 50  0001 C CNN
-F 3 "~" H 1050 7650 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 1050 7650 50  0001 C CNN "lcsc"
-	1    1050 7650
-	1    0    0    -1  
-$EndComp
-Text Label 875  7350 0    50   ~ 0
-MPU_INT_1
-Text Label 3125 7050 0    50   ~ 0
-I2C_SDA
-Text Label 3125 7150 0    50   ~ 0
-I2C_SCL
-Wire Notes Line
-	5175 8400 700  8400
-Wire Notes Line
-	700  8400 700  5825
-Wire Notes Line
-	700  5825 3250 5825
 Text Label 6600 2550 0    50   ~ 0
 I2C_SCL
 Text Label 6600 2650 0    50   ~ 0
@@ -856,23 +828,6 @@ $EndComp
 Connection ~ 9225 3850
 $Comp
 L power:+3.3V #PWR?
-U 1 1 5FA32972
-P 1025 6450
-AR Path="/5E9C1C3A/5FA32972" Ref="#PWR?"  Part="1" 
-AR Path="/5F7F86D0/5FA32972" Ref="#PWR?"  Part="1" 
-AR Path="/5F988DA5/5FA32972" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5FA32972" Ref="#PWR09"  Part="1" 
-F 0 "#PWR09" H 1025 6300 50  0001 C CNN
-F 1 "+3.3V" H 1040 6623 50  0000 C CNN
-F 2 "" H 1025 6450 50  0001 C CNN
-F 3 "" H 1025 6450 50  0001 C CNN
-	1    1025 6450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1050 7500 1050 7450
-$Comp
-L power:+3.3V #PWR?
 U 1 1 5FAACA94
 P 5750 1275
 AR Path="/5E9C1C3A/5FAACA94" Ref="#PWR?"  Part="1" 
@@ -1085,68 +1040,8 @@ $EndComp
 Wire Wire Line
 	10500 1125 10625 1125
 Connection ~ 10500 1125
-$Comp
-L Device:R R?
-U 1 1 5F46C853
-P 4150 6750
-AR Path="/5EA4867C/5F46C853" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F46C853" Ref="R?"  Part="1" 
-AR Path="/5F46C853" Ref="R?"  Part="1" 
-AR Path="/5E9B1DCE/5F46C853" Ref="R8"  Part="1" 
-F 0 "R8" H 4220 6796 50  0000 L CNN
-F 1 "10k" H 4220 6705 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 4080 6750 50  0001 C CNN
-F 3 "~" H 4150 6750 50  0001 C CNN
-	1    4150 6750
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5F46C86E
-P 1300 6700
-AR Path="/5EA4867C/5F46C86E" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F46C86E" Ref="R?"  Part="1" 
-AR Path="/5F46C86E" Ref="R?"  Part="1" 
-AR Path="/5E9B1DCE/5F46C86E" Ref="R5"  Part="1" 
-F 0 "R5" H 1370 6746 50  0000 L CNN
-F 1 "10k" H 1370 6655 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 1230 6700 50  0001 C CNN
-F 3 "~" H 1300 6700 50  0001 C CNN
-	1    1300 6700
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5F46C868
-P 825 6675
-AR Path="/5EA4867C/5F46C868" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F46C868" Ref="R?"  Part="1" 
-AR Path="/5F46C868" Ref="R?"  Part="1" 
-AR Path="/5E9B1DCE/5F46C868" Ref="R4"  Part="1" 
-F 0 "R4" H 895 6721 50  0000 L CNN
-F 1 "10k" H 895 6630 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 755 6675 50  0001 C CNN
-F 3 "~" H 825 6675 50  0001 C CNN
-	1    825  6675
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	6875 3150 6350 3150
-$Comp
-L Device:R R?
-U 1 1 5FD423EF
-P 3825 6750
-AR Path="/5EA4867C/5FD423EF" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5FD423EF" Ref="R?"  Part="1" 
-AR Path="/5FD423EF" Ref="R?"  Part="1" 
-AR Path="/5E9B1DCE/5FD423EF" Ref="R7"  Part="1" 
-F 0 "R7" H 3895 6796 50  0000 L CNN
-F 1 "10k" H 3895 6705 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3755 6750 50  0001 C CNN
-F 3 "~" H 3825 6750 50  0001 C CNN
-	1    3825 6750
-	1    0    0    -1  
-$EndComp
 Wire Wire Line
 	8875 3175 8875 3200
 Wire Wire Line
@@ -1332,223 +1227,8 @@ Text Label 7050 2050 2    50   ~ 0
 P6
 Text Label 6750 3250 0    50   ~ 0
 P17
-$Comp
-L WatchBorad-rescue:LSM6DSLTR-2021-06-21_20-09-55-WatchBorad-rescue-WatchBorad-rescue U1
-U 1 1 60D5E125
-P 1300 7050
-AR Path="/60D5E125" Ref="U1"  Part="1" 
-AR Path="/5E9B1DCE/60D5E125" Ref="U1"  Part="1" 
-F 0 "U1" H 2200 7437 60  0000 C CNN
-F 1 "LSM6DSLTR" H 2200 7331 60  0000 C CNN
-F 2 "LocalFootprints:LSM6DSLTR" H 2200 7290 60  0001 C CNN
-F 3 "" H 1300 7050 60  0000 C CNN
-	1    1300 7050
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 60D9BCF3
-P 1275 7850
-AR Path="/60D9BCF3" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/60D9BCF3" Ref="#PWR0101"  Part="1" 
-F 0 "#PWR0101" H 1275 7600 50  0001 C CNN
-F 1 "GND" H 1280 7677 50  0000 C CNN
-F 2 "" H 1275 7850 50  0001 C CNN
-F 3 "" H 1275 7850 50  0001 C CNN
-	1    1275 7850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1275 7850 1275 7650
-Wire Wire Line
-	1275 7550 1300 7550
-Wire Wire Line
-	1300 7650 1275 7650
-Connection ~ 1275 7650
-Wire Wire Line
-	1275 7650 1275 7550
 Wire Wire Line
 	6350 3050 6775 3050
-Text Notes 1300 6375 0    50   ~ 0
-LSM6DSL addr is 1101011b
-Wire Wire Line
-	1300 6550 1300 6450
-Wire Wire Line
-	1300 6850 1300 7050
-Wire Wire Line
-	1300 7450 1050 7450
-$Comp
-L power:GND #PWR?
-U 1 1 5FA84810
-P 1050 7850
-AR Path="/5FA84810" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5FA84810" Ref="#PWR011"  Part="1" 
-F 0 "#PWR011" H 1050 7600 50  0001 C CNN
-F 1 "GND" H 1055 7677 50  0000 C CNN
-F 2 "" H 1050 7850 50  0001 C CNN
-F 3 "" H 1050 7850 50  0001 C CNN
-	1    1050 7850
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C?
-U 1 1 5F46C829
-P 3325 7825
-AR Path="/5EA4867C/5F46C829" Ref="C?"  Part="1" 
-AR Path="/5E9C1C3A/5F46C829" Ref="C?"  Part="1" 
-AR Path="/5E9B1DCE/5F46C829" Ref="C14"  Part="1" 
-AR Path="/5F46C829" Ref="C?"  Part="1" 
-F 0 "C14" H 3350 7900 50  0000 L CNN
-F 1 "100 nF" V 3175 7700 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 3363 7675 50  0001 C CNN
-F 3 "~" H 3325 7825 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 3325 7825 50  0001 C CNN "lcsc"
-	1    3325 7825
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3325 7675 3325 7650
-Wire Wire Line
-	3325 7650 3100 7650
-Wire Wire Line
-	3325 7975 3325 8100
-$Comp
-L power:GND #PWR?
-U 1 1 60F5C10B
-P 3325 8100
-AR Path="/60F5C10B" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/60F5C10B" Ref="#PWR0102"  Part="1" 
-F 0 "#PWR0102" H 3325 7850 50  0001 C CNN
-F 1 "GND" H 3330 7927 50  0000 C CNN
-F 2 "" H 3325 8100 50  0001 C CNN
-F 3 "" H 3325 8100 50  0001 C CNN
-	1    3325 8100
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	1050 7800 1050 7850
-Wire Wire Line
-	1025 6450 1025 7250
-Connection ~ 1150 6450
-Wire Wire Line
-	1150 6450 1300 6450
-Wire Wire Line
-	1025 6450 825  6450
-Connection ~ 1025 6450
-Wire Wire Line
-	1025 6450 1150 6450
-Wire Wire Line
-	1300 7250 1025 7250
-Wire Wire Line
-	1300 7150 1150 7150
-Wire Wire Line
-	1150 6450 1150 7150
-Wire Wire Line
-	825  6825 825  7350
-Wire Wire Line
-	825  6450 825  6525
-Wire Wire Line
-	3825 7150 3825 6900
-Wire Wire Line
-	825  7350 1300 7350
-Connection ~ 3675 6425
-Wire Wire Line
-	3825 6425 3675 6425
-$Comp
-L power:+3.3V #PWR?
-U 1 1 6123BFAB
-P 3675 6425
-AR Path="/5E9C1C3A/6123BFAB" Ref="#PWR?"  Part="1" 
-AR Path="/5F7F86D0/6123BFAB" Ref="#PWR?"  Part="1" 
-AR Path="/5F988DA5/6123BFAB" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/6123BFAB" Ref="#PWR0103"  Part="1" 
-F 0 "#PWR0103" H 3675 6275 50  0001 C CNN
-F 1 "+3.3V" H 3690 6598 50  0000 C CNN
-F 2 "" H 3675 6425 50  0001 C CNN
-F 3 "" H 3675 6425 50  0001 C CNN
-	1    3675 6425
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3825 6425 3825 6600
-Wire Wire Line
-	3550 6425 3550 6600
-Wire Wire Line
-	3550 6425 3675 6425
-Wire Wire Line
-	3100 7050 3550 7050
-Wire Wire Line
-	3550 6900 3550 7050
-Wire Wire Line
-	3100 7150 3825 7150
-$Comp
-L Device:R R?
-U 1 1 5F46C84B
-P 3550 6750
-AR Path="/5EA4867C/5F46C84B" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F46C84B" Ref="R?"  Part="1" 
-AR Path="/5F46C84B" Ref="R?"  Part="1" 
-AR Path="/5E9B1DCE/5F46C84B" Ref="R6"  Part="1" 
-F 0 "R6" H 3620 6796 50  0000 L CNN
-F 1 "10k" H 3620 6705 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 3480 6750 50  0001 C CNN
-F 3 "~" H 3550 6750 50  0001 C CNN
-	1    3550 6750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	3825 6425 4150 6425
-Connection ~ 3825 6425
-Wire Wire Line
-	4150 6900 4150 7250
-Wire Wire Line
-	4150 7250 3100 7250
-$Comp
-L Device:R R?
-U 1 1 6147056A
-P 4475 6750
-AR Path="/5EA4867C/6147056A" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/6147056A" Ref="R?"  Part="1" 
-AR Path="/6147056A" Ref="R?"  Part="1" 
-AR Path="/5E9B1DCE/6147056A" Ref="R9"  Part="1" 
-F 0 "R9" H 4545 6796 50  0000 L CNN
-F 1 "10k" H 4545 6705 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 4405 6750 50  0001 C CNN
-F 3 "~" H 4475 6750 50  0001 C CNN
-	1    4475 6750
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4150 6425 4150 6600
-Wire Wire Line
-	4150 6425 4475 6425
-Wire Wire Line
-	4475 6425 4475 6600
-Connection ~ 4150 6425
-Wire Wire Line
-	4475 6900 4475 7550
-Wire Wire Line
-	3100 7550 4475 7550
-Text Label 3125 7250 0    50   ~ 0
-NC_PU
-Text Label 3150 7550 0    50   ~ 0
-MPU_INT_2
-Wire Notes Line
-	3225 5825 3225 6125
-Wire Notes Line
-	3225 6125 5175 6125
-Wire Notes Line
-	5175 6125 5175 8400
-Wire Notes Line
-	1250 6875 1550 6875
-Wire Notes Line
-	1550 6875 1550 6525
-Wire Notes Line
-	1550 6525 2650 6525
-Wire Notes Line
-	2650 6525 2650 6075
-Wire Notes Line
-	1250 6075 1250 6875
 Text HLabel 2925 4775 0    50   Input ~ 0
 FG_OD_ALRT_N
 $Comp
@@ -1790,44 +1470,6 @@ Wire Wire Line
 	6350 4550 7450 4550
 Wire Wire Line
 	6350 4450 7200 4450
-Wire Notes Line
-	2650 6075 1250 6075
-$Comp
-L power:+3.3V #PWR?
-U 1 1 617ECB05
-P 925 7450
-AR Path="/5E9C1C3A/617ECB05" Ref="#PWR?"  Part="1" 
-AR Path="/5F7F86D0/617ECB05" Ref="#PWR?"  Part="1" 
-AR Path="/5F988DA5/617ECB05" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/617ECB05" Ref="#PWR02"  Part="1" 
-F 0 "#PWR02" H 925 7300 50  0001 C CNN
-F 1 "+3.3V" H 940 7623 50  0000 C CNN
-F 2 "" H 925 7450 50  0001 C CNN
-F 3 "" H 925 7450 50  0001 C CNN
-	1    925  7450
-	0    -1   -1   0   
-$EndComp
-Wire Wire Line
-	925  7450 1050 7450
-Connection ~ 1050 7450
-$Comp
-L power:+3.3V #PWR?
-U 1 1 618207A7
-P 3675 7650
-AR Path="/5E9C1C3A/618207A7" Ref="#PWR?"  Part="1" 
-AR Path="/5F7F86D0/618207A7" Ref="#PWR?"  Part="1" 
-AR Path="/5F988DA5/618207A7" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/618207A7" Ref="#PWR06"  Part="1" 
-F 0 "#PWR06" H 3675 7500 50  0001 C CNN
-F 1 "+3.3V" H 3690 7823 50  0000 C CNN
-F 2 "" H 3675 7650 50  0001 C CNN
-F 3 "" H 3675 7650 50  0001 C CNN
-	1    3675 7650
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	3675 7650 3325 7650
-Connection ~ 3325 7650
 $Comp
 L power:GND #PWR?
 U 1 1 61835D4B
@@ -1860,5 +1502,381 @@ F 3 "https://datasheet.lcsc.com/lcsc/1809191926_YAGEO-ANT2012LL13R2400A_C141581.
 F 4 "https://lcsc.com/product-detail/Antennas_YAGEO-ANT2012LL13R2400A_C141581.html" H 3150 2550 50  0001 C CNN "lcsc"
 	1    3150 2550
 	-1   0    0    -1  
+$EndComp
+Wire Notes Line
+	5175 8400 700  8400
+Wire Wire Line
+	4350 6030 4640 6030
+Connection ~ 4350 6030
+Wire Wire Line
+	4350 6090 4350 6030
+Wire Wire Line
+	4160 6030 4350 6030
+Wire Wire Line
+	4640 6030 4640 6090
+Wire Wire Line
+	3810 7000 4640 7000
+Wire Wire Line
+	4640 7000 4640 6390
+Wire Wire Line
+	3810 6900 4350 6900
+Wire Wire Line
+	4350 6900 4350 6390
+Wire Notes Line
+	2810 5810 2810 6000
+Wire Notes Line
+	4040 5810 2810 5810
+Wire Notes Line
+	4040 6480 4040 5810
+Wire Notes Line
+	3880 6480 4040 6480
+Wire Notes Line
+	3880 6000 3880 6480
+Wire Notes Line
+	2810 6000 3880 6000
+Connection ~ 4160 6030
+Wire Wire Line
+	4160 6030 3960 6030
+Wire Wire Line
+	4160 6030 4160 5900
+$Comp
+L power:+3.3V #PWR09
+U 1 1 61C0E946
+P 4160 5900
+F 0 "#PWR09" H 4160 5750 50  0001 C CNN
+F 1 "+3.3V" H 4175 6073 50  0000 C CNN
+F 2 "" H 4160 5900 50  0001 C CNN
+F 3 "" H 4160 5900 50  0001 C CNN
+	1    4160 5900
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	3960 6400 3960 6390
+Wire Wire Line
+	3810 6400 3960 6400
+Wire Wire Line
+	3960 6090 3960 6030
+Text Notes 2820 5960 0    50   ~ 0
+LSM6DSL addr is 1101011b
+Connection ~ 970  5920
+Wire Wire Line
+	850  5920 970  5920
+Wire Wire Line
+	850  7200 850  5920
+Wire Wire Line
+	2410 7200 850  7200
+$Comp
+L LSM6DSRTR:LSM6DSRTR U1
+U 1 1 617DAA03
+P 2310 6400
+F 0 "U1" H 3110 6665 50  0000 C CNN
+F 1 "LSM6DSRTR" H 3110 6574 50  0000 C CNN
+F 2 "LSM6DSRTR:LSM6DSRTR_LGA-14L" H 2310 6800 50  0001 L CNN
+F 3 "https://www.st.com/resource/en/datasheet/lsm6dsr.pdf" H 2310 6900 50  0001 L CNN
+F 4 "2/4/8/16g" H 2310 7000 50  0001 L CNN "accel range"
+F 5 "No" H 2310 7100 50  0001 L CNN "automotive"
+F 6 "IC" H 2310 7200 50  0001 L CNN "category"
+F 7 "Sensors" H 2310 7300 50  0001 L CNN "device class L1"
+F 8 "Motion Sensors" H 2310 7400 50  0001 L CNN "device class L2"
+F 9 "Inertial Measurement Units (IMUs)" H 2310 7500 50  0001 L CNN "device class L3"
+F 10 "INEMO INERTIAL MODULE: 3D ACCELE" H 2310 7600 50  0001 L CNN "digikey description"
+F 11 "497-19479-1-ND" H 2310 7700 50  0001 L CNN "digikey part number"
+F 12 "https://www.st.com/content/ccc/resource/technical/document/technical_note/73/17/9c/16/dd/96/4a/01/CD00134799.pdf/files/CD00134799.pdf/jcr:content/translations/en.CD00134799.pdf" H 2310 7800 50  0001 L CNN "footprint url"
+F 13 "125/250/500/1000/2000/4000°/s" H 2310 7900 50  0001 L CNN "gyro range"
+F 14 "0.86mm" H 2310 8000 50  0001 L CNN "height"
+F 15 "Yes" H 2310 8100 50  0001 L CNN "lead free"
+F 16 "9b4a8bc0f8564d61" H 2310 8200 50  0001 L CNN "library id"
+F 17 "STMicroelectronics" H 2310 8300 50  0001 L CNN "manufacturer"
+F 18 "3.6V" H 2310 8400 50  0001 L CNN "max supply voltage"
+F 19 "1.62V" H 2310 8500 50  0001 L CNN "min supply voltage"
+F 20 "In a Pack of 2, LSM6DSRTR STMicroelectronics, 3-Axis Accelerometer, Gyroscope, 14-Pin LGA" H 2310 8600 50  0001 L CNN "mouser description"
+F 21 "511-LSM6DSRTR" H 2310 8700 50  0001 L CNN "mouser part number"
+F 22 "360-1200uA" H 2310 8800 50  0001 L CNN "operating supply current"
+F 23 "LGA14L" H 2310 8900 50  0001 L CNN "package"
+F 24 "Yes" H 2310 9000 50  0001 L CNN "rohs"
+F 25 "I2C,SPI" H 2310 9100 50  0001 L CNN "sensor output"
+F 26 "Temperature,Accelerometer,Gyroscope" H 2310 9200 50  0001 L CNN "sensor type"
+F 27 "+85°C" H 2310 9300 50  0001 L CNN "temperature range high"
+F 28 "-40°C" H 2310 9400 50  0001 L CNN "temperature range low"
+F 29 "https://www.lcsc.com/product-detail/Motion-Sensors-Accelerometers_STMicroelectronics-LSM6DSRTR_C784817.html" H 2310 6400 50  0001 C CNN "lcsc"
+	1    2310 6400
+	1    0    0    -1  
+$EndComp
+Connection ~ 1110 5920
+Wire Wire Line
+	1110 5920 970  5920
+Wire Wire Line
+	970  7100 970  5920
+Wire Wire Line
+	2410 7100 970  7100
+Wire Wire Line
+	1110 7000 2410 7000
+Wire Wire Line
+	1110 7000 1110 6400
+Wire Wire Line
+	1380 6900 2410 6900
+Wire Wire Line
+	1380 6400 1380 6900
+Wire Wire Line
+	1710 6800 2410 6800
+Wire Wire Line
+	1710 6800 1710 6400
+Wire Wire Line
+	1380 5920 1380 6100
+Connection ~ 1380 5920
+Wire Wire Line
+	1710 5920 1710 6100
+Wire Wire Line
+	1380 5920 1710 5920
+Wire Wire Line
+	1110 5920 1380 5920
+Wire Wire Line
+	1380 5920 1380 5890
+Wire Wire Line
+	1110 6100 1110 5920
+Wire Wire Line
+	2090 6400 2090 6500
+Connection ~ 2090 6400
+Wire Wire Line
+	2090 6350 2090 6400
+$Comp
+L power:+3.3V #PWR?
+U 1 1 6123BFAB
+P 1380 5890
+AR Path="/5E9C1C3A/6123BFAB" Ref="#PWR?"  Part="1" 
+AR Path="/5F7F86D0/6123BFAB" Ref="#PWR?"  Part="1" 
+AR Path="/5F988DA5/6123BFAB" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/6123BFAB" Ref="#PWR0103"  Part="1" 
+F 0 "#PWR0103" H 1380 5740 50  0001 C CNN
+F 1 "+3.3V" H 1395 6063 50  0000 C CNN
+F 2 "" H 1380 5890 50  0001 C CNN
+F 3 "" H 1380 5890 50  0001 C CNN
+	1    1380 5890
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2410 6500 2090 6500
+Wire Wire Line
+	2090 6400 2410 6400
+$Comp
+L power:+3.3V #PWR06
+U 1 1 61ABDECF
+P 2090 6350
+F 0 "#PWR06" H 2090 6200 50  0001 C CNN
+F 1 "+3.3V" H 2105 6523 50  0000 C CNN
+F 2 "" H 2090 6350 50  0001 C CNN
+F 3 "" H 2090 6350 50  0001 C CNN
+	1    2090 6350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5F46C82F
+P 950 7850
+AR Path="/5EA4867C/5F46C82F" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/5F46C82F" Ref="C?"  Part="1" 
+AR Path="/5E9B1DCE/5F46C82F" Ref="C16"  Part="1" 
+AR Path="/5F46C82F" Ref="C?"  Part="1" 
+F 0 "C16" H 975 7925 50  0000 L CNN
+F 1 "100 nF" V 800 7725 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 988 7700 50  0001 C CNN
+F 3 "~" H 950 7850 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 950 7850 50  0001 C CNN "lcsc"
+	1    950  7850
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5FA84810
+P 1130 8150
+AR Path="/5FA84810" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/5FA84810" Ref="#PWR011"  Part="1" 
+F 0 "#PWR011" H 1130 7900 50  0001 C CNN
+F 1 "GND" H 1135 7977 50  0000 C CNN
+F 2 "" H 1130 8150 50  0001 C CNN
+F 3 "" H 1130 8150 50  0001 C CNN
+	1    1130 8150
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+3.3V #PWR?
+U 1 1 617ECB05
+P 1130 7460
+AR Path="/5E9C1C3A/617ECB05" Ref="#PWR?"  Part="1" 
+AR Path="/5F7F86D0/617ECB05" Ref="#PWR?"  Part="1" 
+AR Path="/5F988DA5/617ECB05" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/617ECB05" Ref="#PWR02"  Part="1" 
+F 0 "#PWR02" H 1130 7310 50  0001 C CNN
+F 1 "+3.3V" H 1145 7633 50  0000 C CNN
+F 2 "" H 1130 7460 50  0001 C CNN
+F 3 "" H 1130 7460 50  0001 C CNN
+	1    1130 7460
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:C C?
+U 1 1 5F46C829
+P 1320 7850
+AR Path="/5EA4867C/5F46C829" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/5F46C829" Ref="C?"  Part="1" 
+AR Path="/5E9B1DCE/5F46C829" Ref="C14"  Part="1" 
+AR Path="/5F46C829" Ref="C?"  Part="1" 
+F 0 "C14" H 1345 7925 50  0000 L CNN
+F 1 "100 nF" V 1170 7725 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 1358 7700 50  0001 C CNN
+F 3 "~" H 1320 7850 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 1320 7850 50  0001 C CNN "lcsc"
+	1    1320 7850
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	1320 8100 1130 8100
+Wire Wire Line
+	1130 8100 1130 8150
+Wire Wire Line
+	950  8100 1130 8100
+Connection ~ 1130 8100
+Wire Wire Line
+	1130 7530 1130 7460
+Wire Wire Line
+	950  7530 1130 7530
+Connection ~ 1130 7530
+Wire Wire Line
+	1130 7530 1320 7530
+Wire Wire Line
+	950  8000 950  8100
+Wire Wire Line
+	950  7530 950  7700
+Wire Wire Line
+	1320 7530 1320 7700
+Wire Wire Line
+	1320 8000 1320 8100
+Connection ~ 3930 7300
+Wire Wire Line
+	3930 7200 3930 7300
+Wire Wire Line
+	3810 7200 3930 7200
+Wire Wire Line
+	3930 7300 3930 7390
+Wire Wire Line
+	3810 7300 3930 7300
+Text Label 3910 7000 0    50   ~ 0
+MPU_INT_2
+Text Label 2220 6800 2    50   ~ 0
+NC_PU
+$Comp
+L power:GND #PWR?
+U 1 1 60D9BCF3
+P 3930 7390
+AR Path="/60D9BCF3" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/60D9BCF3" Ref="#PWR0101"  Part="1" 
+F 0 "#PWR0101" H 3930 7140 50  0001 C CNN
+F 1 "GND" H 3935 7217 50  0000 C CNN
+F 2 "" H 3930 7390 50  0001 C CNN
+F 3 "" H 3930 7390 50  0001 C CNN
+	1    3930 7390
+	1    0    0    -1  
+$EndComp
+Text Label 2220 6900 2    50   ~ 0
+I2C_SCL
+Text Label 2220 7000 2    50   ~ 0
+I2C_SDA
+Text Label 3910 6900 0    50   ~ 0
+MPU_INT_1
+Wire Notes Line
+	700  5650 5180 5650
+Wire Notes Line
+	5180 5650 5180 8400
+Wire Notes Line
+	700  5650 700  8400
+$Comp
+L Device:R R?
+U 1 1 5F46C868
+P 1110 6250
+AR Path="/5EA4867C/5F46C868" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/5F46C868" Ref="R?"  Part="1" 
+AR Path="/5F46C868" Ref="R?"  Part="1" 
+AR Path="/5E9B1DCE/5F46C868" Ref="R4"  Part="1" 
+F 0 "R4" H 1180 6296 50  0000 L CNN
+F 1 "10k" H 1180 6205 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 1040 6250 50  0001 C CNN
+F 3 "~" H 1110 6250 50  0001 C CNN
+	1    1110 6250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F46C86E
+P 1380 6250
+AR Path="/5EA4867C/5F46C86E" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/5F46C86E" Ref="R?"  Part="1" 
+AR Path="/5F46C86E" Ref="R?"  Part="1" 
+AR Path="/5E9B1DCE/5F46C86E" Ref="R5"  Part="1" 
+F 0 "R5" H 1450 6296 50  0000 L CNN
+F 1 "10k" H 1450 6205 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 1310 6250 50  0001 C CNN
+F 3 "~" H 1380 6250 50  0001 C CNN
+	1    1380 6250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F46C84B
+P 1710 6250
+AR Path="/5EA4867C/5F46C84B" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/5F46C84B" Ref="R?"  Part="1" 
+AR Path="/5F46C84B" Ref="R?"  Part="1" 
+AR Path="/5E9B1DCE/5F46C84B" Ref="R6"  Part="1" 
+F 0 "R6" H 1780 6296 50  0000 L CNN
+F 1 "10k" H 1780 6205 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 1640 6250 50  0001 C CNN
+F 3 "~" H 1710 6250 50  0001 C CNN
+	1    1710 6250
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5FD423EF
+P 3960 6240
+AR Path="/5EA4867C/5FD423EF" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/5FD423EF" Ref="R?"  Part="1" 
+AR Path="/5FD423EF" Ref="R?"  Part="1" 
+AR Path="/5E9B1DCE/5FD423EF" Ref="R7"  Part="1" 
+F 0 "R7" H 4030 6286 50  0000 L CNN
+F 1 "10k" H 4030 6195 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 3890 6240 50  0001 C CNN
+F 3 "~" H 3960 6240 50  0001 C CNN
+	1    3960 6240
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 6147056A
+P 4640 6240
+AR Path="/5EA4867C/6147056A" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/6147056A" Ref="R?"  Part="1" 
+AR Path="/6147056A" Ref="R?"  Part="1" 
+AR Path="/5E9B1DCE/6147056A" Ref="R9"  Part="1" 
+F 0 "R9" H 4710 6286 50  0000 L CNN
+F 1 "10k" H 4710 6195 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 4570 6240 50  0001 C CNN
+F 3 "~" H 4640 6240 50  0001 C CNN
+	1    4640 6240
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F46C853
+P 4350 6240
+AR Path="/5EA4867C/5F46C853" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/5F46C853" Ref="R?"  Part="1" 
+AR Path="/5F46C853" Ref="R?"  Part="1" 
+AR Path="/5E9B1DCE/5F46C853" Ref="R8"  Part="1" 
+F 0 "R8" H 4420 6286 50  0000 L CNN
+F 1 "10k" H 4420 6195 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 4280 6240 50  0001 C CNN
+F 3 "~" H 4350 6240 50  0001 C CNN
+	1    4350 6240
+	1    0    0    -1  
 $EndComp
 $EndSCHEMATC
