@@ -16,69 +16,25 @@ $EndDescr
 $Comp
 L Device:C C?
 U 1 1 5F943E27
-P 4850 2175
+P 7110 1300
 AR Path="/5EA4867C/5F943E27" Ref="C?"  Part="1" 
 AR Path="/5E9C1C3A/5F943E27" Ref="C?"  Part="1" 
 AR Path="/5ED3F98E/5F943E27" Ref="C?"  Part="1" 
 AR Path="/5F913559/5F943E27" Ref="C29"  Part="1" 
-F 0 "C29" H 4875 2250 50  0000 L CNN
-F 1 "100 nF" V 4700 2050 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 4888 2025 50  0001 C CNN
-F 3 "~" H 4850 2175 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 4850 2175 50  0001 C CNN "lcsc"
-	1    4850 2175
-	1    0    0    -1  
+F 0 "C29" H 7135 1375 50  0000 L CNN
+F 1 "100 nF" V 6960 1175 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 7148 1150 50  0001 C CNN
+F 3 "~" H 7110 1300 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 7110 1300 50  0001 C CNN "lcsc"
+	1    7110 1300
+	0    -1   -1   0   
 $EndComp
-Wire Wire Line
-	5025 1850 4850 1850
-Wire Wire Line
-	4850 1850 4850 2025
-Wire Wire Line
-	6625 1850 6875 1850
-Text Label 4575 1850 0    50   ~ 0
+Text Label 6420 1300 0    50   ~ 0
 V_Battery_P
-Connection ~ 4850 1850
-Wire Wire Line
-	6625 1450 6825 1450
-Wire Wire Line
-	5025 1350 4650 1350
-$Comp
-L Device:R R?
-U 1 1 5F943E4B
-P 4500 1350
-AR Path="/5EA4867C/5F943E4B" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F943E4B" Ref="R?"  Part="1" 
-AR Path="/5F913559/5F943E4B" Ref="R21"  Part="1" 
-F 0 "R21" V 4400 1150 50  0000 L CNN
-F 1 "10k" V 4400 1450 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 4430 1350 50  0001 C CNN
-F 3 "~" H 4500 1350 50  0001 C CNN
-F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 4500 1350 50  0001 C CNN "lcsc"
-	1    4500 1350
-	0    1    1    0   
-$EndComp
-Wire Wire Line
-	4350 1350 4100 1350
-Text Notes 4575 1575 0    50   ~ 0
-Int 63KOhm PU\n
 Wire Notes Line
 	600  675  600  3250
 Text Notes 5200 950  0    50   ~ 0
 ON/OFF with two PB\n\n
-$Comp
-L Connector:TestPoint TP?
-U 1 1 5F943E5B
-P 6825 1450
-AR Path="/5E9C1C3A/5F943E5B" Ref="TP?"  Part="1" 
-AR Path="/5ED3F98E/5F943E5B" Ref="TP?"  Part="1" 
-AR Path="/5F913559/5F943E5B" Ref="TP11"  Part="1" 
-F 0 "TP11" H 6883 1522 50  0000 L CNN
-F 1 "TestPoint" H 6883 1477 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 7025 1450 50  0001 C CNN
-F 3 "~" H 7025 1450 50  0001 C CNN
-	1    6825 1450
-	1    0    0    -1  
-$EndComp
 Text HLabel 1100 1725 0    50   Output ~ 0
 PB_1_MCU
 Text HLabel 1100 2350 0    50   Output ~ 0
@@ -222,57 +178,38 @@ Wire Wire Line
 	2475 900  2475 950 
 Wire Wire Line
 	2300 900  2300 1825
-Wire Wire Line
-	3150 1525 3150 1450
-Text Notes 4350 2625 2    50   ~ 0
+Text Notes 4430 2130 2    50   ~ 0
 PB1 && PB2 => OUT=~OUT\n
 Text Label 2375 900  0    50   ~ 0
 V_Battery_P
 $Comp
 L power:GND #PWR?
 U 1 1 5F943EB2
-P 4100 1350
+P 7000 2600
 AR Path="/5F943EB2" Ref="#PWR?"  Part="1" 
 AR Path="/5E9B1DCE/5F943EB2" Ref="#PWR?"  Part="1" 
 AR Path="/5ED3F98E/5F943EB2" Ref="#PWR?"  Part="1" 
 AR Path="/5F913559/5F943EB2" Ref="#PWR035"  Part="1" 
-F 0 "#PWR035" H 4100 1100 50  0001 C CNN
-F 1 "GND" H 4100 1200 50  0000 C CNN
-F 2 "" H 4100 1350 50  0001 C CNN
-F 3 "" H 4100 1350 50  0001 C CNN
-	1    4100 1350
-	0    1    1    0   
+F 0 "#PWR035" H 7000 2350 50  0001 C CNN
+F 1 "GND" H 7000 2450 50  0000 C CNN
+F 2 "" H 7000 2600 50  0001 C CNN
+F 3 "" H 7000 2600 50  0001 C CNN
+	1    7000 2600
+	1    0    0    -1  
 $EndComp
 $Comp
 L power:GND #PWR?
 U 1 1 5F943EB8
-P 4850 2450
+P 6840 3520
 AR Path="/5F943EB8" Ref="#PWR?"  Part="1" 
 AR Path="/5E9B1DCE/5F943EB8" Ref="#PWR?"  Part="1" 
 AR Path="/5ED3F98E/5F943EB8" Ref="#PWR?"  Part="1" 
 AR Path="/5F913559/5F943EB8" Ref="#PWR037"  Part="1" 
-F 0 "#PWR037" H 4850 2200 50  0001 C CNN
-F 1 "GND" H 4850 2300 50  0000 C CNN
-F 2 "" H 4850 2450 50  0001 C CNN
-F 3 "" H 4850 2450 50  0001 C CNN
-	1    4850 2450
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	4850 2325 4850 2450
-$Comp
-L power:GND #PWR?
-U 1 1 5F943EBF
-P 6875 1850
-AR Path="/5F943EBF" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5F943EBF" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F943EBF" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5F943EBF" Ref="#PWR043"  Part="1" 
-F 0 "#PWR043" H 6875 1600 50  0001 C CNN
-F 1 "GND" H 6875 1700 50  0000 C CNN
-F 2 "" H 6875 1850 50  0001 C CNN
-F 3 "" H 6875 1850 50  0001 C CNN
-	1    6875 1850
+F 0 "#PWR037" H 6840 3270 50  0001 C CNN
+F 1 "GND" H 6840 3370 50  0000 C CNN
+F 2 "" H 6840 3520 50  0001 C CNN
+F 3 "" H 6840 3520 50  0001 C CNN
+	1    6840 3520
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -814,20 +751,18 @@ Wire Wire Line
 $Comp
 L power:+BATT #PWR?
 U 1 1 5F9B18FF
-P 4500 1850
+P 6900 1140
 AR Path="/5E9C1C3A/5F9B18FF" Ref="#PWR?"  Part="1" 
 AR Path="/5F7F86D0/5F9B18FF" Ref="#PWR?"  Part="1" 
 AR Path="/5ED3F98E/5F9B18FF" Ref="#PWR?"  Part="1" 
 AR Path="/5F913559/5F9B18FF" Ref="#PWR036"  Part="1" 
-F 0 "#PWR036" H 4500 1700 50  0001 C CNN
-F 1 "+BATT" H 4515 2023 50  0000 C CNN
-F 2 "" H 4500 1850 50  0001 C CNN
-F 3 "" H 4500 1850 50  0001 C CNN
-	1    4500 1850
+F 0 "#PWR036" H 6900 990 50  0001 C CNN
+F 1 "+BATT" H 6915 1313 50  0000 C CNN
+F 2 "" H 6900 1140 50  0001 C CNN
+F 3 "" H 6900 1140 50  0001 C CNN
+	1    6900 1140
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	4500 1850 4850 1850
 $Comp
 L power:+BATT #PWR?
 U 1 1 5F9B686B
@@ -1189,27 +1124,6 @@ $EndComp
 Connection ~ 1550 4250
 Wire Wire Line
 	1550 4250 1775 4250
-$Comp
-L OnOffControllers:max16054azt+t U?
-U 1 1 5F943E21
-P 5025 1350
-AR Path="/5ED3F98E/5F943E21" Ref="U?"  Part="1" 
-AR Path="/5F913559/5F943E21" Ref="U7"  Part="1" 
-F 0 "U7" H 5825 1737 60  0000 C CNN
-F 1 "max16054azt+t" H 5825 1631 60  0000 C CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23-6_Handsoldering" H 5825 1590 60  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Maxim-Integrated-MAX16054AZT-T_C79401.pdf" H 5025 1350 60  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Interface-Specialized_Maxim-Integrated-MAX16054AZT-T_C79401.html" H 4875 1600 50  0001 C CNN "lcsc"
-	1    5025 1350
-	1    0    0    -1  
-$EndComp
-Text Notes 6800 1550 0    50   ~ 0
-default level is "0"
-Text Label 7775 1450 2    50   ~ 0
-PWR_SW_EN_N
-Connection ~ 6825 1450
-Wire Wire Line
-	6825 1450 7775 1450
 Text Label 10525 5725 2    50   ~ 0
 PWR_SW_EN_N
 Wire Wire Line
@@ -1373,8 +1287,6 @@ F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC060
 $EndComp
 Text Label 10475 2550 0    50   ~ 0
 I2C_SDA_STBY
-Wire Wire Line
-	3150 1450 5025 1450
 Text Label 7750 2550 0    50   ~ 0
 I2C_SCL_STBY
 Text Label 5575 6325 0    50   ~ 0
@@ -1382,13 +1294,9 @@ I2C_SCL_STBY
 Text Label 5575 6225 0    50   ~ 0
 I2C_SDA_STBY
 Wire Notes Line
-	7125 3250 7125 1625
-Wire Notes Line
 	8150 1625 8150 675 
 Wire Notes Line
 	600  675  8150 675 
-Wire Notes Line
-	7125 1625 8150 1625
 $Comp
 L power:+BATT #PWR?
 U 1 1 61AF93FF
@@ -1466,16 +1374,154 @@ NoConn ~ 8775 2450
 $Comp
 L Connector:TestPoint TP20
 U 1 1 6186C8E6
-P 6700 1220
-F 0 "TP20" H 6758 1292 50  0000 L CNN
-F 1 "TestPoint" H 6758 1247 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 6900 1220 50  0001 C CNN
-F 3 "~" H 6900 1220 50  0001 C CNN
-	1    6700 1220
+P 3790 1490
+F 0 "TP20" H 3848 1562 50  0000 L CNN
+F 1 "TestPoint" H 3848 1517 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 3990 1490 50  0001 C CNN
+F 3 "~" H 3990 1490 50  0001 C CNN
+	1    3790 1490
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	6840 3340 6840 3520
+Wire Wire Line
+	3150 1300 4170 1300
+Wire Wire Line
+	3150 1300 3150 1525
+$Comp
+L power:GND #PWR0102
+U 1 1 6187DAB4
+P 7360 1300
+F 0 "#PWR0102" H 7360 1050 50  0001 C CNN
+F 1 "GND" H 7365 1127 50  0000 C CNN
+F 2 "" H 7360 1300 50  0001 C CNN
+F 3 "" H 7360 1300 50  0001 C CNN
+	1    7360 1300
+	0    -1   -1   0   
+$EndComp
+$Comp
+L power:GND #PWR0105
+U 1 1 6188464D
+P 4110 1720
+F 0 "#PWR0105" H 4110 1470 50  0001 C CNN
+F 1 "GND" H 4115 1547 50  0000 C CNN
+F 2 "" H 4110 1720 50  0001 C CNN
+F 3 "" H 4110 1720 50  0001 C CNN
+	1    4110 1720
 	1    0    0    -1  
 $EndComp
 Wire Wire Line
-	6625 1350 6700 1350
+	4170 1600 4110 1600
 Wire Wire Line
-	6700 1220 6700 1350
+	4110 1600 4110 1720
+Wire Wire Line
+	4170 1500 4100 1500
+Wire Wire Line
+	4100 1500 4100 1450
+Wire Wire Line
+	4100 1400 4170 1400
+Wire Wire Line
+	6370 1300 6900 1300
+Wire Wire Line
+	6900 1140 6900 1300
+Connection ~ 6900 1300
+Wire Wire Line
+	6900 1300 6960 1300
+Wire Wire Line
+	7260 1300 7360 1300
+$Comp
+L Connector:TestPoint TP?
+U 1 1 5F943E5B
+P 6740 1600
+AR Path="/5E9C1C3A/5F943E5B" Ref="TP?"  Part="1" 
+AR Path="/5ED3F98E/5F943E5B" Ref="TP?"  Part="1" 
+AR Path="/5F913559/5F943E5B" Ref="TP11"  Part="1" 
+F 0 "TP11" H 6798 1672 50  0000 L CNN
+F 1 "TestPoint" H 6798 1627 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 6940 1600 50  0001 C CNN
+F 3 "~" H 6940 1600 50  0001 C CNN
+	1    6740 1600
+	1    0    0    -1  
+$EndComp
+Text Notes 6710 1700 0    50   ~ 0
+default level is "0"
+Text Label 7680 1600 2    50   ~ 0
+PWR_SW_EN_N
+Wire Wire Line
+	6370 1600 6740 1600
+Wire Wire Line
+	6740 1600 7680 1600
+Connection ~ 6740 1600
+Wire Wire Line
+	3790 1490 3790 1450
+Wire Wire Line
+	3790 1450 4100 1450
+Connection ~ 4100 1450
+Wire Wire Line
+	4100 1450 4100 1400
+$Comp
+L Device:C C8
+U 1 1 6189A4CE
+P 7000 2350
+F 0 "C8" H 7115 2396 50  0000 L CNN
+F 1 "100 nF" H 7115 2305 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 7038 2200 50  0001 C CNN
+F 3 "~" H 7000 2350 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 7000 2350 50  0001 C CNN "lcsc"
+	1    7000 2350
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R?
+U 1 1 5F943E4B
+P 6660 2110
+AR Path="/5EA4867C/5F943E4B" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/5F943E4B" Ref="R?"  Part="1" 
+AR Path="/5F913559/5F943E4B" Ref="R21"  Part="1" 
+F 0 "R21" V 6560 1910 50  0000 L CNN
+F 1 "10k" V 6560 2210 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 6590 2110 50  0001 C CNN
+F 3 "~" H 6660 2110 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 6660 2110 50  0001 C CNN "lcsc"
+	1    6660 2110
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+BATT #PWR0106
+U 1 1 61996A40
+P 7000 2050
+F 0 "#PWR0106" H 7000 1900 50  0001 C CNN
+F 1 "+BATT" H 7015 2223 50  0000 C CNN
+F 2 "" H 7000 2050 50  0001 C CNN
+F 3 "" H 7000 2050 50  0001 C CNN
+	1    7000 2050
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	6450 1500 6450 2110
+Wire Wire Line
+	6450 2110 6510 2110
+Wire Wire Line
+	6370 1500 6450 1500
+Wire Wire Line
+	7000 2110 7000 2200
+Wire Wire Line
+	6810 2110 7000 2110
+Wire Wire Line
+	7000 2110 7000 2050
+Connection ~ 7000 2110
+Wire Wire Line
+	7000 2500 7000 2600
+$Comp
+L SN74LVC2G74:SN74LVC2G74-EP_DCU_8 U7
+U 1 1 617F76E5
+P 4170 1300
+F 0 "U7" H 5270 1687 60  0000 C CNN
+F 1 "SN74LVC2G74-EP_DCU_8" H 5270 1581 60  0000 C CNN
+F 2 "SN74LVC2G74:SN74LVC2G74" H 5270 1540 60  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/1809142018_Texas-Instruments-SN74LVC2G74DCUR_C7851.pdf" H 4170 1300 60  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Flip-Flops_Texas-Instruments-SN74LVC2G74DCUR_C7851.html" H 4170 1300 50  0001 C CNN "lcsc"
+	1    4170 1300
+	1    0    0    -1  
+$EndComp
 $EndSCHEMATC

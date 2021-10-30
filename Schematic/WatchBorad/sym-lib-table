@@ -22,4 +22,5 @@
   (lib (name M41T62Q6F)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/M41T62Q6F/M41T62Q6F.lib)(options "")(descr ""))
   (lib (name TPS73501DRBR)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/TPS73501DRBR/TPS73501DRBR.lib)(options "")(descr ""))
   (lib (name LSM6DSRTR)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/LSM6DSRTR/LSM6DSRTR.lib)(options "")(descr ""))
+  (lib (name SN74LVC2G74)(type Legacy)(uri ${KICAD_LIBRARIES_ROOT}/SN74LVC2G74/SN74LVC2G74.lib)(options "")(descr ""))
 )
