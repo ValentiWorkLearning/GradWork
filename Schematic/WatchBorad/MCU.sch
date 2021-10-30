@@ -1578,32 +1578,7 @@ F 0 "U1" H 3110 6665 50  0000 C CNN
 F 1 "LSM6DSRTR" H 3110 6574 50  0000 C CNN
 F 2 "LSM6DSRTR:LSM6DSRTR_LGA-14L" H 2310 6800 50  0001 L CNN
 F 3 "https://www.st.com/resource/en/datasheet/lsm6dsr.pdf" H 2310 6900 50  0001 L CNN
-F 4 "2/4/8/16g" H 2310 7000 50  0001 L CNN "accel range"
-F 5 "No" H 2310 7100 50  0001 L CNN "automotive"
-F 6 "IC" H 2310 7200 50  0001 L CNN "category"
-F 7 "Sensors" H 2310 7300 50  0001 L CNN "device class L1"
-F 8 "Motion Sensors" H 2310 7400 50  0001 L CNN "device class L2"
-F 9 "Inertial Measurement Units (IMUs)" H 2310 7500 50  0001 L CNN "device class L3"
-F 10 "INEMO INERTIAL MODULE: 3D ACCELE" H 2310 7600 50  0001 L CNN "digikey description"
-F 11 "497-19479-1-ND" H 2310 7700 50  0001 L CNN "digikey part number"
-F 12 "https://www.st.com/content/ccc/resource/technical/document/technical_note/73/17/9c/16/dd/96/4a/01/CD00134799.pdf/files/CD00134799.pdf/jcr:content/translations/en.CD00134799.pdf" H 2310 7800 50  0001 L CNN "footprint url"
-F 13 "125/250/500/1000/2000/4000°/s" H 2310 7900 50  0001 L CNN "gyro range"
-F 14 "0.86mm" H 2310 8000 50  0001 L CNN "height"
-F 15 "Yes" H 2310 8100 50  0001 L CNN "lead free"
-F 16 "9b4a8bc0f8564d61" H 2310 8200 50  0001 L CNN "library id"
-F 17 "STMicroelectronics" H 2310 8300 50  0001 L CNN "manufacturer"
-F 18 "3.6V" H 2310 8400 50  0001 L CNN "max supply voltage"
-F 19 "1.62V" H 2310 8500 50  0001 L CNN "min supply voltage"
-F 20 "In a Pack of 2, LSM6DSRTR STMicroelectronics, 3-Axis Accelerometer, Gyroscope, 14-Pin LGA" H 2310 8600 50  0001 L CNN "mouser description"
-F 21 "511-LSM6DSRTR" H 2310 8700 50  0001 L CNN "mouser part number"
-F 22 "360-1200uA" H 2310 8800 50  0001 L CNN "operating supply current"
-F 23 "LGA14L" H 2310 8900 50  0001 L CNN "package"
-F 24 "Yes" H 2310 9000 50  0001 L CNN "rohs"
-F 25 "I2C,SPI" H 2310 9100 50  0001 L CNN "sensor output"
-F 26 "Temperature,Accelerometer,Gyroscope" H 2310 9200 50  0001 L CNN "sensor type"
-F 27 "+85°C" H 2310 9300 50  0001 L CNN "temperature range high"
-F 28 "-40°C" H 2310 9400 50  0001 L CNN "temperature range low"
-F 29 "https://www.lcsc.com/product-detail/Motion-Sensors-Accelerometers_STMicroelectronics-LSM6DSRTR_C784817.html" H 2310 6400 50  0001 C CNN "lcsc"
+F 4 "https://www.lcsc.com/product-detail/Motion-Sensors-Accelerometers_STMicroelectronics-LSM6DSRTR_C784817.html" H 2310 6400 50  0001 C CNN "lcsc"
 	1    2310 6400
 	1    0    0    -1  
 $EndComp

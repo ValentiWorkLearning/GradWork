@@ -1186,12 +1186,7 @@ F 0 "U10" H 9475 4220 50  0000 C CNN
 F 1 "M41T62Q6F" H 9475 4129 50  0000 C CNN
 F 2 "QFN50P300X300X100-17N" H 9475 3050 50  0001 L BNN
 F 3 "https://datasheet.lcsc.com/lcsc/1806121917_STMicroelectronics-M41T62Q6F_C113207.pdf" H 9475 3050 50  0001 L BNN
-F 4 "M41T62Q6F" H 9475 3050 50  0001 L BNN "MPN"
-F 5 "1224441" H 9475 3050 50  0001 L BNN "OC_FARNELL"
-F 6 "56P9316" H 9475 3050 50  0001 L BNN "OC_NEWARK"
-F 7 "QFN-16" H 9475 3050 50  0001 L BNN "PACKAGE"
-F 8 "STMICROELECTRONICS" H 9475 3050 50  0001 L BNN "SUPPLIER"
-F 9 "https://lcsc.com/product-detail/Real-time-Clocks-span-style-background-color-ff0-RTC-span_STMicroelectronics-M41T62Q6F_C113207.html" H 9475 3050 50  0001 C CNN "lcsc"
+F 4 "https://lcsc.com/product-detail/Real-time-Clocks-span-style-background-color-ff0-RTC-span_STMicroelectronics-M41T62Q6F_C113207.html" H 9475 3050 50  0001 C CNN "lcsc"
 	1    9475 3050
 	1    0    0    -1  
 $EndComp
