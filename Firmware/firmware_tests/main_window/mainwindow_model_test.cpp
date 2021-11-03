@@ -10,7 +10,7 @@
 
 TEST_F(MainWindowTest, InitialSetupMainWindow)
 {
-    ASSERT_EQ(
+    EXPECT_EQ(
         m_pMainWindow->getActivePage().getPageName(),
         Graphics::Views::IClockWatchPage::ClockPageName);
 }
@@ -19,7 +19,7 @@ TEST_F(MainWindowTest, ChangeActivePage)
 {
     m_pMainWindow->setPageActive(Graphics::Views::IHealthWatchPage::HealthPageName);
 
-    ASSERT_EQ(
+    EXPECT_EQ(
         m_pMainWindow->getActivePage().getPageName(),
         Graphics::Views::IHealthWatchPage::HealthPageName);
 }
@@ -33,7 +33,7 @@ TEST_F(MainWindowTest, HandleNavigateToNextPage_ButtonClickEvent)
 
     m_pMainWindow->getEventDispatcher().processEventQueue();
 
-    ASSERT_EQ(
+    EXPECT_EQ(
         m_pMainWindow->getActivePage().getPageName(),
         Graphics::Views::IHealthWatchPage::HealthPageName);
 }
@@ -49,7 +49,7 @@ TEST_F(MainWindowTest, HandleNavigateNextFromLastPage_ButtonClickEvent)
 
     m_pMainWindow->getEventDispatcher().processEventQueue();
 
-    ASSERT_EQ(
+    EXPECT_EQ(
         m_pMainWindow->getActivePage().getPageName(),
         Graphics::Views::IClockWatchPage::ClockPageName);
 }
@@ -63,7 +63,7 @@ TEST_F(MainWindowTest, HandleNavigateToPreviousPageFromInitialState_ButtonClickE
 
     m_pMainWindow->getEventDispatcher().processEventQueue();
 
-    ASSERT_EQ(
+    EXPECT_EQ(
         m_pMainWindow->getActivePage().getPageName(),
         Graphics::Views::IPlayerWatchPage::PlayerPageName);
 }
