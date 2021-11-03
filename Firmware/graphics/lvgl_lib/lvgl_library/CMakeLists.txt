@@ -356,6 +356,11 @@ target_compile_options(
     PUBLIC
     ${COMMON_FLAGS}
 )
+target_link_libraries(
+    ${TARGET_NAME}
+    PUBLIC
+    lvgl_fonts
+)
 if(REDUCE_LVGL_BINARY_SIZE)
     target_compile_options(
         ${TARGET_NAME}

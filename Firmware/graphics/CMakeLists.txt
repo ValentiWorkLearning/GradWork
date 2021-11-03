@@ -3,8 +3,9 @@ set (TARGET_NAME watch_graphics)
 
 add_library( ${TARGET_NAME} STATIC )
 
-add_subdirectory (lvgl_lib)
-add_subdirectory (platform)
+add_subdirectory(lvgl_lib)
+add_subdirectory(platform)
+add_subdirectory(fonts)
 
 target_include_directories(
     ${TARGET_NAME}
@@ -21,16 +22,6 @@ target_include_directories(
 target_sources(
     ${TARGET_NAME}
     PRIVATE
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova12px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova16px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova24px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova30px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova36px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/LcdNova68px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/IconFont16px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/IconFont24px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/IconFont35px.cpp
-    ${CMAKE_CURRENT_LIST_DIR}/fonts/PlayerIcons68px.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/gs_page_view_object.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/battery/gs_battery_widget.cpp
     ${CMAKE_CURRENT_LIST_DIR}/widgets_layer/widgets/battery/gs_battery_handler.cpp
@@ -56,6 +47,7 @@ target_link_libraries(
     ${TARGET_NAME}
     PRIVATE
     lvgl_lib
+    lvgl_fonts
     etl
     UtilsLibrary
     logger_service
