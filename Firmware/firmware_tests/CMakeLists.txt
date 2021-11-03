@@ -11,13 +11,13 @@ set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 enable_testing()
 set (3RDPARTY_DIR "../3rdparty")
-add_subdirectory( ${3RDPARTY_DIR}/googletest "3rdparty/googletest")
+find_package(GTest REQUIRED)
 add_subdirectory(coroutine)
 add_subdirectory(article_example)
 
 add_executable(
     ${PROJECT_NAME}
-    main.cpp
+    
     buttons_driver/buttons_driver_test.cpp
 
     clock_page_handler/clock_page_view_handler_test.cpp
@@ -53,10 +53,10 @@ target_include_directories(
 
 target_link_libraries(
     ${PROJECT_NAME}
-    gtest
-    gmock
-    gtest_main
-
+    GTest::gtest
+    GTest::gmock
+    GTest::gtest_main
+    GTest::gmock_main
     UtilsLibrary
 
     watch_graphics

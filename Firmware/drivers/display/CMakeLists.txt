@@ -27,5 +27,4 @@ target_link_libraries(
     gpio
     etl
     logger_service
-    fmt
 )

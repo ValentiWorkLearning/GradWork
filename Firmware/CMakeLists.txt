@@ -43,7 +43,7 @@ elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
 
     include(${CMAKE_BINARY_DIR}/conan.cmake)
 
-    conan_cmake_configure(REQUIRES sdl/2.0.16
+    conan_cmake_configure(REQUIRES sdl/2.0.16 gtest/1.11.0
                           GENERATORS cmake_find_package)
 
     conan_cmake_autodetect(settings)

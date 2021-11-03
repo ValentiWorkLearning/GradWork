@@ -41,4 +41,9 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
         PRIVATE
         LoggerDesktop
     )
+    target_link_libraries(
+        logger_service
+        PRIVATE
+        fmt::fmt
+    )
 endif()

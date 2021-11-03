@@ -38,19 +38,14 @@ jobs:
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
 
-    - name: Run CMakeLists build for MSVC compiler
-      uses: lukka/run-cmake@v2
-      with:
-        cmakeGenerator: Ninja
-        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
-        cmakeBuildType: Debug
-        cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Release'
-        buildDirectory: ${{ env.buildDir }}
-        buildWithCMake: true
+    - name: Run build for MSVC compiler
+      run: |
+        cmake -G"Visual Studio 16 2019" -Ax64 -S"${{ github.workspace }}/Firmware/" -B"${{ env.buildDir }}" -DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE=Release
+        cd ${{ env.buildDir }}
+        cmake --build . --config Release
     - name : Run firmware testing
       run: |
-        cd ${{ env.buildDir }}\Debug
+        cd ${{ env.buildDir }}/Release
         .\FirmwareTesting.exe
   build-arm:
 

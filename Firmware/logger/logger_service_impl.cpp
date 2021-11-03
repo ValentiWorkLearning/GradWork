@@ -21,6 +21,8 @@
 #include "SEGGER_RTT.h"
 #elif defined(LoggerDesktop)
 #include <cstdio>
+#include <fmt/core.h>
+#include <fmt/color.h>
 #if defined USE_MSVC_DEBUG_OUT
 #include <Windows.h>
 #endif
@@ -141,7 +143,7 @@ class Logger::LoggerImpl
 public:
     void logString(std::string_view _toLog) const noexcept
     {
-        printf(_toLog.data());
+        fmt::print(fg(fmt::color::steel_blue),"{}",_toLog.data());
 #if defined USE_MSVC_DEBUG_OUT
         OutputDebugString(_toLog.data());
 #endif
