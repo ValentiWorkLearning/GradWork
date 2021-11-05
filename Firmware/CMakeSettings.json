@@ -7,8 +7,9 @@
             "inheritEnvironments": [ "msvc_x64_x64" ],
             "buildRoot": "${projectDir}\\build_simulator\\${name}",
             "installRoot": "${projectDir}\\build_simulator\\${name}",
-            "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\" -DPACKAGE_TESTS=ON",
+            "cmakeCommandArgs": "-DTARGET_PLATFORM:STRING=\"FIRMWARE_SIMULATOR\" -DPACKAGE_TESTS=ON -DENABLE_SANITIZE_BUILD=ON",
             "buildCommandArgs": "",
+            "addressSanitizerEnabled": true,
             "ctestCommandArgs": ""
         },
         {
@@ -37,9 +38,9 @@
         },
         {
             "name": "ArmToolchainBareMetalDebug",
-            "cacheRoot": "D:/GradWork/coolthings/GradWork/Firmware/build",
+            "cacheRoot": "${projectDir}\\build_firmware",
             "inheritEnvironments": [],
-            "cacheGenerationCommand": "cmake -G\"Ninja\" -DTARGET_PLATFORM:STRING=\"ARM_CORTEX\" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=ON -DPACKAGE_TESTS=OFF  -S${projectDir}\\ -B${projectDir}\\build"
+            "cacheGenerationCommand": "cmake -G\"Ninja\" -DTARGET_PLATFORM:STRING=\"ARM_CORTEX\" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=ON -DPACKAGE_TESTS=OFF  -S${projectDir}\\ -B${projectDir}\\build_firmware"
         }
     ]
 }
