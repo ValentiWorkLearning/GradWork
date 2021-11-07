@@ -48,7 +48,7 @@ AR Path="/5ED3F98E/5F943E66" Ref="VT?"  Part="1"
 AR Path="/5F913559/5F943E66" Ref="VT1"  Part="1" 
 F 0 "VT1" H 3254 1725 50  0000 L CNN
 F 1 "SL2300" H 3255 1680 50  0001 L CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23" H 3125 1725 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 3125 1725 50  0001 C CNN
 F 3 "https://datasheet.lcsc.com/szlcsc/1906271838_SLKORMICRO-Elec-SL2300_C350314.pdf" H 3125 1725 50  0001 C CNN
 F 4 "https://lcsc.com/product-detail/MOSFET_Slkor-SLKORMICRO-Elec-SL2300_C350314.html" H 3125 1725 50  0001 C CNN "lcsc"
 	1    3125 1725
@@ -63,7 +63,7 @@ AR Path="/5ED3F98E/5F943E6D" Ref="VT?"  Part="1"
 AR Path="/5F913559/5F943E6D" Ref="VT2"  Part="1" 
 F 0 "VT2" H 3254 2350 50  0000 L CNN
 F 1 "SL2300" H 3255 2305 50  0001 L CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23" H 3125 2350 50  0001 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 3125 2350 50  0001 C CNN
 F 3 "https://datasheet.lcsc.com/szlcsc/1906271838_SLKORMICRO-Elec-SL2300_C350314.pdf" H 3125 2350 50  0001 C CNN
 F 4 "https://lcsc.com/product-detail/MOSFET_Slkor-SLKORMICRO-Elec-SL2300_C350314.html" H 3125 2350 50  0001 C CNN "lcsc"
 	1    3125 2350
@@ -197,99 +197,20 @@ F 3 "" H 6800 2740 50  0001 C CNN
 	1    6800 2740
 	1    0    0    -1  
 $EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 5F943EB8
-P 6840 3520
-AR Path="/5F943EB8" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5F943EB8" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F943EB8" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5F943EB8" Ref="#PWR037"  Part="1" 
-F 0 "#PWR037" H 6840 3270 50  0001 C CNN
-F 1 "GND" H 6840 3370 50  0000 C CNN
-F 2 "" H 6840 3520 50  0001 C CNN
-F 3 "" H 6840 3520 50  0001 C CNN
-	1    6840 3520
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:R R?
-U 1 1 5F943ECC
-P 8025 6075
-AR Path="/5EA4867C/5F943ECC" Ref="R?"  Part="1" 
-AR Path="/5E9C1C3A/5F943ECC" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F943ECC" Ref="R?"  Part="1" 
-AR Path="/5F913559/5F943ECC" Ref="R24"  Part="1" 
-F 0 "R24" V 7818 6075 50  0000 C CNN
-F 1 "330" V 7909 6075 50  0000 C CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 7955 6075 50  0001 C CNN
-F 3 "https://lcsc.com/product-detail/Others_Viking-Tech-ARG03FTC3300_C217969.html" H 8025 6075 50  0001 C CNN
-F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_Walsin-Tech-Corp-WR06X331JTL_C384242.html" H 8025 6075 50  0001 C CNN "lcsc"
-	1    8025 6075
-	0    1    1    0   
-$EndComp
-Text Label 8200 6075 0    50   ~ 0
-Rlim
-Wire Wire Line
-	9975 5825 9950 5825
-Wire Wire Line
-	9975 6075 9950 6075
-Wire Wire Line
-	9975 5825 9975 6075
-Connection ~ 9975 6075
-$Comp
-L Device:C C?
-U 1 1 5F943EDA
-P 7250 5775
-AR Path="/5EA4867C/5F943EDA" Ref="C?"  Part="1" 
-AR Path="/5E9C1C3A/5F943EDA" Ref="C?"  Part="1" 
-AR Path="/5ED3F98E/5F943EDA" Ref="C?"  Part="1" 
-AR Path="/5F913559/5F943EDA" Ref="C30"  Part="1" 
-F 0 "C30" H 7275 5850 50  0000 L CNN
-F 1 "100 nF" V 7100 5650 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 7288 5625 50  0001 C CNN
-F 3 "~" H 7250 5775 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 7250 5775 50  0001 C CNN "lcsc"
-	1    7250 5775
-	1    0    0    -1  
-$EndComp
-$Comp
-L Device:C C?
-U 1 1 5F943EE0
-P 7850 5775
-AR Path="/5EA4867C/5F943EE0" Ref="C?"  Part="1" 
-AR Path="/5E9C1C3A/5F943EE0" Ref="C?"  Part="1" 
-AR Path="/5ED3F98E/5F943EE0" Ref="C?"  Part="1" 
-AR Path="/5F913559/5F943EE0" Ref="C31"  Part="1" 
-F 0 "C31" H 7875 5850 50  0000 L CNN
-F 1 "100 nF" V 7725 5600 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 7888 5625 50  0001 C CNN
-F 3 "~" H 7850 5775 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_YAGEO-CC0603KRX7R9BB104_C14663.html" H 7850 5775 50  0001 C CNN "lcsc"
-	1    7850 5775
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	7250 5625 7250 5525
-Wire Wire Line
-	7250 5925 7250 6075
-Wire Wire Line
-	7850 5925 7850 6075
-Text Label 7650 5525 0    50   ~ 0
+Text Label 8040 5030 2    50   ~ 0
 V_USB
-NoConn ~ 9950 5425
-Text Label 10500 5325 2    50   ~ 0
+Text Label 9750 5190 2    50   ~ 0
 V_OUT_MUX
-Text Notes 8275 4750 0    100  ~ 0
+Text Notes 8225 4780 0    100  ~ 0
 Power Mux\n
 Wire Notes Line
-	11150 4550 11150 6450
+	11100 4580 11100 6480
 Wire Notes Line
-	11150 6450 7025 6450
+	11100 6480 6975 6480
 Wire Notes Line
-	7025 6450 7025 4550
+	6975 6480 6975 4580
 Wire Notes Line
-	7025 4550 11150 4550
+	6975 4580 11100 4580
 $Comp
 L USB_connectors:TYPE-C-31-M-17 J?
 U 1 1 5F943EF2
@@ -327,25 +248,20 @@ USB for power \nsupply only\n
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F943F05
-P 10575 5225
+P 9820 5100
 AR Path="/5EA4867C/5F943F05" Ref="TP?"  Part="1" 
 AR Path="/5E9C1C3A/5F943F05" Ref="TP?"  Part="1" 
 AR Path="/5ED3F98E/5F943F05" Ref="TP?"  Part="1" 
 AR Path="/5F913559/5F943F05" Ref="TP12"  Part="1" 
-F 0 "TP12" H 10633 5297 50  0000 L CNN
-F 1 "TestPoint" H 10633 5252 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 10775 5225 50  0001 C CNN
-F 3 "~" H 10775 5225 50  0001 C CNN
-	1    10575 5225
+F 0 "TP12" H 9878 5172 50  0000 L CNN
+F 1 "TestPoint" H 9878 5127 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 10020 5100 50  0001 C CNN
+F 3 "~" H 10020 5100 50  0001 C CNN
+	1    9820 5100
 	1    0    0    -1  
 $EndComp
-Text HLabel 10650 5325 2    50   Output ~ 0
+Text HLabel 9920 5190 2    50   Output ~ 0
 V_OUT_MUX
-Connection ~ 10575 5325
-Wire Wire Line
-	10575 5325 10650 5325
-Wire Wire Line
-	10575 5225 10575 5325
 $Comp
 L Device:D_TVS D?
 U 1 1 5F943F10
@@ -369,20 +285,6 @@ Wire Wire Line
 Connection ~ 1275 4825
 Wire Wire Line
 	1275 4825 1475 4825
-Wire Wire Line
-	7800 5625 7850 5625
-Wire Wire Line
-	7250 5525 7400 5525
-Wire Wire Line
-	8175 6075 8350 6075
-Connection ~ 7850 5625
-Wire Wire Line
-	7850 5625 8350 5625
-Connection ~ 7850 6075
-Wire Wire Line
-	7850 6075 7875 6075
-Wire Wire Line
-	7250 6075 7650 6075
 $Comp
 L power:+5V #PWR?
 U 1 1 5F943F24
@@ -401,23 +303,6 @@ Connection ~ 1150 4250
 Wire Wire Line
 	1150 4250 1275 4250
 $Comp
-L power:+5V #PWR?
-U 1 1 5F943F2C
-P 7400 5525
-AR Path="/5E9C1C3A/5F943F2C" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F943F2C" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5F943F2C" Ref="#PWR041"  Part="1" 
-F 0 "#PWR041" H 7400 5375 50  0001 C CNN
-F 1 "+5V" H 7415 5698 50  0000 C CNN
-F 2 "" H 7400 5525 50  0001 C CNN
-F 3 "" H 7400 5525 50  0001 C CNN
-	1    7400 5525
-	1    0    0    -1  
-$EndComp
-Connection ~ 7400 5525
-Wire Wire Line
-	7400 5525 8350 5525
-$Comp
 L Device:Battery_Cell BT?
 U 1 1 5F943F36
 P 1100 6650
@@ -435,7 +320,7 @@ Wire Wire Line
 	1100 6450 1100 6325
 Wire Wire Line
 	1100 6750 1100 6800
-Text Label 7800 5625 0    50   ~ 0
+Text Label 7420 5490 0    50   ~ 0
 V_Battery_P
 Text Notes 1025 3850 0    100  ~ 0
 PSU
@@ -452,39 +337,6 @@ F 1 "GND" H 1475 4675 50  0000 C CNN
 F 2 "" H 1475 4825 50  0001 C CNN
 F 3 "" H 1475 4825 50  0001 C CNN
 	1    1475 4825
-	1    0    0    -1  
-$EndComp
-$Comp
-L power:GND #PWR?
-U 1 1 5F943F46
-P 7650 6075
-AR Path="/5F943F46" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5F943F46" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F943F46" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5F943F46" Ref="#PWR042"  Part="1" 
-F 0 "#PWR042" H 7650 5825 50  0001 C CNN
-F 1 "GND" H 7650 5925 50  0000 C CNN
-F 2 "" H 7650 6075 50  0001 C CNN
-F 3 "" H 7650 6075 50  0001 C CNN
-	1    7650 6075
-	1    0    0    -1  
-$EndComp
-Connection ~ 7650 6075
-Wire Wire Line
-	7650 6075 7850 6075
-$Comp
-L power:GND #PWR?
-U 1 1 5F943F4E
-P 10200 6075
-AR Path="/5F943F4E" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5F943F4E" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F943F4E" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5F943F4E" Ref="#PWR045"  Part="1" 
-F 0 "#PWR045" H 10200 5825 50  0001 C CNN
-F 1 "GND" H 10200 5925 50  0000 C CNN
-F 2 "" H 10200 6075 50  0001 C CNN
-F 3 "" H 10200 6075 50  0001 C CNN
-	1    10200 6075
 	1    0    0    -1  
 $EndComp
 $Comp
@@ -892,10 +744,6 @@ Wire Wire Line
 	5925 5000 6200 5000
 Wire Wire Line
 	5925 4925 5925 5000
-Text Notes 7425 5075 0    50   ~ 0
-EN| VSNS | VI(IN2) > VI(IN1) |  OUT\n0  |<0.8V  |No  |IN1\n0  |<0.8V  |Yes  |IN2
-Text Notes 8175 6300 0    50   ~ 0
-1.5A\n
 $Comp
 L Device:C C?
 U 1 1 600EBF62
@@ -1028,10 +876,6 @@ Wire Wire Line
 Connection ~ 2025 2900
 Wire Wire Line
 	2025 2900 2450 2900
-Wire Wire Line
-	9975 6075 10200 6075
-Wire Wire Line
-	9950 5325 10575 5325
 $Comp
 L Device:C C?
 U 1 1 60DA5CC8
@@ -1096,18 +940,6 @@ Wire Wire Line
 Text Label 5625 6425 0    50   ~ 0
 FG_OD_ALRT_N
 $Comp
-L WatchBorad-rescue:TPS2113APWR-PowerMuxes-WatchBorad-rescue-WatchBorad-rescue U8
-U 1 1 60E7E02D
-P 9150 5575
-F 0 "U8" H 9150 6212 60  0000 C CNN
-F 1 "TPS2113APWR" H 9150 6106 60  0000 C CNN
-F 2 "LocalFootprints:TPS2115APWR" H 9150 6065 60  0001 C CNN
-F 3 "https://datasheet.lcsc.com/lcsc/Texas-Instruments-TI-TPS2113APWR_C130052.pdf" H 9150 5325 60  0001 C CNN
-F 4 "https://lcsc.com/product-detail/PMIC-Power-Distribution-Switches_Texas-Instruments_TPS2113APWR_Texas-Instruments-Texas-Instruments-TPS2113APWR_C130052.html" H 9150 5575 50  0001 C CNN "lcsc"
-	1    9150 5575
-	1    0    0    -1  
-$EndComp
-$Comp
 L Connector:TestPoint TP?
 U 1 1 60EA81F2
 P 1550 4250
@@ -1124,11 +956,7 @@ $EndComp
 Connection ~ 1550 4250
 Wire Wire Line
 	1550 4250 1775 4250
-Text Label 10525 5725 2    50   ~ 0
-PWR_SW_EN_N
-Wire Wire Line
-	9950 5725 10525 5725
-Text Notes 10025 5650 0    50   ~ 0
+Text Notes 9025 5810 0    50   ~ 0
 internal PU\n
 Wire Notes Line
 	600  3250 7125 3250
@@ -1378,8 +1206,6 @@ F 3 "~" H 3990 1490 50  0001 C CNN
 	-1   0    0    1   
 $EndComp
 Wire Wire Line
-	6840 3340 6840 3520
-Wire Wire Line
 	3150 1300 3150 1525
 $Comp
 L power:GND #PWR0102
@@ -1578,4 +1404,151 @@ Wire Wire Line
 	6480 940  6480 890 
 Wire Wire Line
 	6480 1400 6480 1240
+$Comp
+L MosfetLocal:HX2301A VT3
+U 1 1 618A758C
+P 8150 5590
+F 0 "VT3" V 8492 5590 50  0000 C CNN
+F 1 "HX2301A" V 8401 5590 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 8350 5690 50  0001 C CNN
+F 3 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" H 8150 5590 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" H 8150 5590 50  0001 C CNN "lcsc"
+	1    8150 5590
+	0    -1   -1   0   
+$EndComp
+$Comp
+L Device:R R24
+U 1 1 618BB59B
+P 7900 5820
+F 0 "R24" V 7693 5820 50  0000 C CNN
+F 1 "1K" V 7784 5820 50  0000 C CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 7830 5820 50  0001 C CNN
+F 3 "~" H 7900 5820 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" V 7900 5820 50  0001 C CNN "lcsc"
+	1    7900 5820
+	0    1    1    0   
+$EndComp
+$Comp
+L power:+5V #PWR041
+U 1 1 618BC4C0
+P 7560 5810
+F 0 "#PWR041" H 7560 5660 50  0001 C CNN
+F 1 "+5V" H 7575 5983 50  0000 C CNN
+F 2 "" H 7560 5810 50  0001 C CNN
+F 3 "" H 7560 5810 50  0001 C CNN
+	1    7560 5810
+	1    0    0    -1  
+$EndComp
+$Comp
+L Device:R R34
+U 1 1 618BE067
+P 8150 6000
+F 0 "R34" H 8220 6046 50  0000 L CNN
+F 1 "10K" H 8220 5955 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 8080 6000 50  0001 C CNN
+F 3 "~" H 8150 6000 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 8150 6000 50  0001 C CNN "lcsc"
+	1    8150 6000
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8150 5790 8150 5820
+Wire Wire Line
+	8150 5820 8050 5820
+Wire Wire Line
+	8150 5820 8150 5850
+Connection ~ 8150 5820
+$Comp
+L power:+BATT #PWR037
+U 1 1 618D4650
+P 7310 5460
+F 0 "#PWR037" H 7310 5310 50  0001 C CNN
+F 1 "+BATT" H 7325 5633 50  0000 C CNN
+F 2 "" H 7310 5460 50  0001 C CNN
+F 3 "" H 7310 5460 50  0001 C CNN
+	1    7310 5460
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7750 5820 7560 5820
+Wire Wire Line
+	7560 5820 7560 5810
+$Comp
+L power:GND #PWR045
+U 1 1 618E5FB2
+P 8150 6210
+F 0 "#PWR045" H 8150 5960 50  0001 C CNN
+F 1 "GND" H 8155 6037 50  0000 C CNN
+F 2 "" H 8150 6210 50  0001 C CNN
+F 3 "" H 8150 6210 50  0001 C CNN
+	1    8150 6210
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	8150 6210 8150 6150
+$Comp
+L MosfetLocal:HX2301A VT5
+U 1 1 618EF835
+P 8950 5290
+F 0 "VT5" V 9292 5290 50  0000 C CNN
+F 1 "HX2301A" V 9201 5290 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 9150 5390 50  0001 C CNN
+F 3 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" H 8950 5290 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" V 8950 5290 50  0001 C CNN "lcsc"
+	1    8950 5290
+	0    -1   -1   0   
+$EndComp
+Text Label 9000 5890 0    50   ~ 0
+PWR_SW_EN_N
+Wire Wire Line
+	8950 5490 8950 5890
+Wire Wire Line
+	8950 5890 9000 5890
+Wire Wire Line
+	8350 5490 8550 5490
+Wire Wire Line
+	8550 5490 8550 5190
+Wire Wire Line
+	8550 5190 8750 5190
+Wire Wire Line
+	9820 5100 9820 5190
+Wire Wire Line
+	9150 5190 9820 5190
+Wire Wire Line
+	9820 5190 9920 5190
+Connection ~ 9820 5190
+$Comp
+L Device:D D3
+U 1 1 619E667E
+P 8270 5030
+F 0 "D3" H 8270 4813 50  0000 C CNN
+F 1 "D" H 8270 4904 50  0000 C CNN
+F 2 "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 8270 5030 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/1810202112_Guangdong-Hottech-1N5819WS_C191023.pdf" H 8270 5030 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Schottky-Barrier-Diodes-SBD_Guangdong-Hottech-1N5819WS_C191023.html" H 8270 5030 50  0001 C CNN "lcsc"
+	1    8270 5030
+	-1   0    0    1   
+$EndComp
+Wire Wire Line
+	8420 5030 8550 5030
+Wire Wire Line
+	8550 5030 8550 5190
+Connection ~ 8550 5190
+$Comp
+L power:+5V #PWR042
+U 1 1 619F0EBC
+P 7750 5030
+F 0 "#PWR042" H 7750 4880 50  0001 C CNN
+F 1 "+5V" H 7765 5203 50  0000 C CNN
+F 2 "" H 7750 5030 50  0001 C CNN
+F 3 "" H 7750 5030 50  0001 C CNN
+	1    7750 5030
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	7750 5030 8120 5030
+Wire Wire Line
+	7310 5460 7310 5490
+Wire Wire Line
+	7310 5490 7950 5490
 $EndSCHEMATC
