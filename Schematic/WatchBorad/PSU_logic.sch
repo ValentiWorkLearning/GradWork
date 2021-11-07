@@ -1373,7 +1373,7 @@ U 1 1 619E667E
 P 8270 5030
 F 0 "D3" H 8270 4813 50  0000 C CNN
 F 1 "D" H 8270 4904 50  0000 C CNN
-F 2 "Diode_SMD:D_0603_1608Metric_Pad1.05x0.95mm_HandSolder" H 8270 5030 50  0001 C CNN
+F 2 "Diode_SMD:D_SOD-323" H 8270 5030 50  0001 C CNN
 F 3 "https://datasheet.lcsc.com/lcsc/1810202112_Guangdong-Hottech-1N5819WS_C191023.pdf" H 8270 5030 50  0001 C CNN
 F 4 "https://lcsc.com/product-detail/Schottky-Barrier-Diodes-SBD_Guangdong-Hottech-1N5819WS_C191023.html" H 8270 5030 50  0001 C CNN "lcsc"
 	1    8270 5030
