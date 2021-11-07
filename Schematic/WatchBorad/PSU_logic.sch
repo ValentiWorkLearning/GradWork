@@ -355,79 +355,9 @@ F 3 "" H 1100 6325 50  0001 C CNN
 	-1   0    0    -1  
 $EndComp
 Connection ~ 1100 6325
-Wire Wire Line
-	4575 4650 5025 4650
-$Comp
-L BatteryManagmentLocal:BQ21040DBVT U?
-U 1 1 5F943F5D
-P 2975 4550
-AR Path="/5E9C1C3A/5F943F5D" Ref="U?"  Part="1" 
-AR Path="/5F7F86D0/5F943F5D" Ref="U?"  Part="1" 
-AR Path="/5ED3F98E/5F943F5D" Ref="U?"  Part="1" 
-AR Path="/5F913559/5F943F5D" Ref="U5"  Part="1" 
-F 0 "U5" H 3775 4937 60  0000 C CNN
-F 1 "BQ21040DBVT" H 3775 4831 60  0000 C CNN
-F 2 "TO_SOT_Packages_SMD:SOT-23-6" H 3775 4790 60  0001 C CNN
-F 3 "https://datasheet.lcsc.com/szlcsc/Texas-Instruments-TI-BQ21040DBVR_C202311.pdf" H 3775 4831 60  0001 C CNN
-F 4 "https://lcsc.com/product-detail/PMIC-Battery-Management_Texas-Instruments_BQ21040DBVR_Texas-Instruments-Texas-Instruments-BQ21040DBVR_C202311.html" H 2975 4550 50  0001 C CNN "lcsc"
-	1    2975 4550
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2975 4400 2975 4450
-Wire Wire Line
-	2975 4700 2975 4650
-$Comp
-L Device:R R?
-U 1 1 5F943F65
-P 2750 4850
-AR Path="/5EA4867C/5F943F65" Ref="R?"  Part="1" 
-AR Path="/5E9C1C3A/5F943F65" Ref="R?"  Part="1" 
-AR Path="/5F7F86D0/5F943F65" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F943F65" Ref="R?"  Part="1" 
-AR Path="/5F913559/5F943F65" Ref="R20"  Part="1" 
-F 0 "R20" V 2825 4800 50  0000 L CNN
-F 1 "10k" V 2675 4775 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 2680 4850 50  0001 C CNN
-F 3 "~" H 2750 4850 50  0001 C CNN
-F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 2750 4850 50  0001 C CNN "lcsc"
-	1    2750 4850
-	0    1    -1   0   
-$EndComp
-Wire Wire Line
-	2975 4850 2900 4850
-Wire Wire Line
-	2600 4850 2575 4850
-Text Notes 2525 5125 0    50   ~ 0
-Set fast charge\ncurrent to 54 mA
-NoConn ~ 4575 4850
-Wire Wire Line
-	2575 4700 2975 4700
-Wire Wire Line
-	2575 4400 2650 4400
+NoConn ~ 3050 4340
 Text Notes 3650 3900 0    100  ~ 0
 Battery charger\n
-Wire Notes Line
-	2050 5375 2050 3575
-$Comp
-L Device:R R?
-U 1 1 5F943F7B
-P 5025 4800
-AR Path="/5EA4867C/5F943F7B" Ref="R?"  Part="1" 
-AR Path="/5E9C1C3A/5F943F7B" Ref="R?"  Part="1" 
-AR Path="/5F7F86D0/5F943F7B" Ref="R?"  Part="1" 
-AR Path="/5ED3F98E/5F943F7B" Ref="R?"  Part="1" 
-AR Path="/5F913559/5F943F7B" Ref="R23"  Part="1" 
-F 0 "R23" H 4800 4775 50  0000 L CNN
-F 1 "10k" V 5100 4725 50  0000 L CNN
-F 2 "Resistor_SMD:R_0603_1608Metric" V 4955 4800 50  0001 C CNN
-F 3 "~" H 5025 4800 50  0001 C CNN
-F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 5025 4800 50  0001 C CNN "lcsc"
-	1    5025 4800
-	1    0    0    1   
-$EndComp
-Text Label 2750 4400 0    50   ~ 0
-V_USB
 Wire Notes Line
 	5275 3575 5275 5375
 Wire Notes Line
@@ -435,64 +365,20 @@ Wire Notes Line
 Wire Notes Line
 	2050 3575 5275 3575
 $Comp
-L power:+5V #PWR?
-U 1 1 5F943F85
-P 2650 4400
-AR Path="/5E9C1C3A/5F943F85" Ref="#PWR?"  Part="1" 
-AR Path="/5F7F86D0/5F943F85" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F943F85" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5F943F85" Ref="#PWR033"  Part="1" 
-F 0 "#PWR033" H 2650 4250 50  0001 C CNN
-F 1 "+5V" H 2665 4573 50  0000 C CNN
-F 2 "" H 2650 4400 50  0001 C CNN
-F 3 "" H 2650 4400 50  0001 C CNN
-	1    2650 4400
-	1    0    0    -1  
-$EndComp
-Connection ~ 2650 4400
-Wire Wire Line
-	2650 4400 2975 4400
-$Comp
-L power:GND #PWR?
-U 1 1 5F943F8D
-P 2375 4850
-AR Path="/5F943F8D" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5F943F8D" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5F943F8D" Ref="#PWR?"  Part="1" 
-AR Path="/5E9C1C3A/5F943F8D" Ref="#PWR?"  Part="1" 
-AR Path="/5F7F86D0/5F943F8D" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5F943F8D" Ref="#PWR032"  Part="1" 
-F 0 "#PWR032" H 2375 4600 50  0001 C CNN
-F 1 "GND" H 2375 4700 50  0000 C CNN
-F 2 "" H 2375 4850 50  0001 C CNN
-F 3 "" H 2375 4850 50  0001 C CNN
-	1    2375 4850
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	2575 4700 2575 4850
-Connection ~ 2575 4850
-Wire Wire Line
-	2575 4850 2375 4850
-$Comp
 L power:+BATT #PWR?
 U 1 1 5F943F9D
-P 5025 4350
+P 2480 4420
 AR Path="/5E9C1C3A/5F943F9D" Ref="#PWR?"  Part="1" 
 AR Path="/5F7F86D0/5F943F9D" Ref="#PWR?"  Part="1" 
 AR Path="/5ED3F98E/5F943F9D" Ref="#PWR?"  Part="1" 
 AR Path="/5F913559/5F943F9D" Ref="#PWR039"  Part="1" 
-F 0 "#PWR039" H 5025 4200 50  0001 C CNN
-F 1 "+BATT" H 5040 4523 50  0000 C CNN
-F 2 "" H 5025 4350 50  0001 C CNN
-F 3 "" H 5025 4350 50  0001 C CNN
-	1    5025 4350
+F 0 "#PWR039" H 2480 4270 50  0001 C CNN
+F 1 "+BATT" H 2495 4593 50  0000 C CNN
+F 2 "" H 2480 4420 50  0001 C CNN
+F 3 "" H 2480 4420 50  0001 C CNN
+	1    2480 4420
 	-1   0    0    -1  
 $EndComp
-Wire Wire Line
-	5025 4450 5025 4350
-Wire Wire Line
-	4575 4450 5025 4450
 Text Label 2650 6325 2    50   ~ 0
 V_Battery_P
 Wire Wire Line
@@ -544,7 +430,7 @@ F 3 "" H 5600 7175 50  0001 C CNN
 	1    5600 7175
 	1    0    0    -1  
 $EndComp
-Text Label 4975 4450 2    50   ~ 0
+Text Label 2990 4640 2    50   ~ 0
 V_Battery_P
 Wire Wire Line
 	1100 6325 1625 6325
@@ -713,23 +599,6 @@ Wire Wire Line
 Wire Wire Line
 	5925 4200 6000 4200
 $Comp
-L power:GND #PWR?
-U 1 1 5FCEB6E3
-P 5025 5075
-AR Path="/5FCEB6E3" Ref="#PWR?"  Part="1" 
-AR Path="/5E9B1DCE/5FCEB6E3" Ref="#PWR?"  Part="1" 
-AR Path="/5ED3F98E/5FCEB6E3" Ref="#PWR?"  Part="1" 
-AR Path="/5F913559/5FCEB6E3" Ref="#PWR040"  Part="1" 
-F 0 "#PWR040" H 5025 4825 50  0001 C CNN
-F 1 "GND" H 5025 4925 50  0000 C CNN
-F 2 "" H 5025 5075 50  0001 C CNN
-F 3 "" H 5025 5075 50  0001 C CNN
-	1    5025 5075
-	1    0    0    -1  
-$EndComp
-Wire Wire Line
-	5025 4950 5025 5075
-$Comp
 L power:PWR_FLAG #FLG03
 U 1 1 5FCF28D0
 P 5925 4925
@@ -799,25 +668,6 @@ Wire Wire Line
 	1775 4250 1775 4400
 Wire Wire Line
 	1275 4250 1550 4250
-$Comp
-L Device:C C?
-U 1 1 6018B92A
-P 2575 4550
-AR Path="/5EA4867C/6018B92A" Ref="C?"  Part="1" 
-AR Path="/5E9C1C3A/6018B92A" Ref="C?"  Part="1" 
-AR Path="/5F7F86D0/6018B92A" Ref="C?"  Part="1" 
-AR Path="/5F988DA5/6018B92A" Ref="C?"  Part="1" 
-AR Path="/5F913559/6018B92A" Ref="C28"  Part="1" 
-F 0 "C28" H 2600 4625 50  0000 L CNN
-F 1 "10 uF" V 2425 4425 50  0000 L CNN
-F 2 "Capacitor_SMD:C_0603_1608Metric" H 2613 4400 50  0001 C CNN
-F 3 "~" H 2575 4550 50  0001 C CNN
-F 4 "" H 2575 4550 50  0001 C CNN "LCSC"
-F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 2575 4550 50  0001 C CNN "lcsc"
-	1    2575 4550
-	1    0    0    -1  
-$EndComp
-Connection ~ 2575 4700
 $Comp
 L Device:C C?
 U 1 1 6018C57C
@@ -1551,4 +1401,133 @@ Wire Wire Line
 	7310 5460 7310 5490
 Wire Wire Line
 	7310 5490 7950 5490
+$Comp
+L Device:C C?
+U 1 1 6018B92A
+P 4620 4880
+AR Path="/5EA4867C/6018B92A" Ref="C?"  Part="1" 
+AR Path="/5E9C1C3A/6018B92A" Ref="C?"  Part="1" 
+AR Path="/5F7F86D0/6018B92A" Ref="C?"  Part="1" 
+AR Path="/5F988DA5/6018B92A" Ref="C?"  Part="1" 
+AR Path="/5F913559/6018B92A" Ref="C28"  Part="1" 
+F 0 "C28" H 4645 4955 50  0000 L CNN
+F 1 "10 uF" V 4470 4755 50  0000 L CNN
+F 2 "Capacitor_SMD:C_0603_1608Metric" H 4658 4730 50  0001 C CNN
+F 3 "~" H 4620 4880 50  0001 C CNN
+F 4 "" H 4620 4880 50  0001 C CNN "LCSC"
+F 5 "https://lcsc.com/product-detail/Multilayer-Ceramic-Capacitors-MLCC-SMD-SMT_SANYEAR-C0603X5R106M160NT_C466781.html" H 4620 4880 50  0001 C CNN "lcsc"
+	1    4620 4880
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:GND #PWR?
+U 1 1 5F943F8D
+P 4620 5070
+AR Path="/5F943F8D" Ref="#PWR?"  Part="1" 
+AR Path="/5E9B1DCE/5F943F8D" Ref="#PWR?"  Part="1" 
+AR Path="/5ED3F98E/5F943F8D" Ref="#PWR?"  Part="1" 
+AR Path="/5E9C1C3A/5F943F8D" Ref="#PWR?"  Part="1" 
+AR Path="/5F7F86D0/5F943F8D" Ref="#PWR?"  Part="1" 
+AR Path="/5F913559/5F943F8D" Ref="#PWR032"  Part="1" 
+F 0 "#PWR032" H 4620 4820 50  0001 C CNN
+F 1 "GND" H 4620 4920 50  0000 C CNN
+F 2 "" H 4620 5070 50  0001 C CNN
+F 3 "" H 4620 5070 50  0001 C CNN
+	1    4620 5070
+	1    0    0    -1  
+$EndComp
+$Comp
+L power:+5V #PWR?
+U 1 1 5F943F85
+P 4620 4620
+AR Path="/5E9C1C3A/5F943F85" Ref="#PWR?"  Part="1" 
+AR Path="/5F7F86D0/5F943F85" Ref="#PWR?"  Part="1" 
+AR Path="/5ED3F98E/5F943F85" Ref="#PWR?"  Part="1" 
+AR Path="/5F913559/5F943F85" Ref="#PWR033"  Part="1" 
+F 0 "#PWR033" H 4620 4470 50  0001 C CNN
+F 1 "+5V" H 4635 4793 50  0000 C CNN
+F 2 "" H 4620 4620 50  0001 C CNN
+F 3 "" H 4620 4620 50  0001 C CNN
+	1    4620 4620
+	1    0    0    -1  
+$EndComp
+Text Label 4340 4640 0    50   ~ 0
+V_USB
+Wire Notes Line
+	2050 5375 2050 3575
+Text Notes 4330 4200 0    50   ~ 0
+Set fast charge\ncurrent to +-120 mA
+$Comp
+L Device:R R?
+U 1 1 5F943F65
+P 4500 4340
+AR Path="/5EA4867C/5F943F65" Ref="R?"  Part="1" 
+AR Path="/5E9C1C3A/5F943F65" Ref="R?"  Part="1" 
+AR Path="/5F7F86D0/5F943F65" Ref="R?"  Part="1" 
+AR Path="/5ED3F98E/5F943F65" Ref="R?"  Part="1" 
+AR Path="/5F913559/5F943F65" Ref="R20"  Part="1" 
+F 0 "R20" V 4575 4290 50  0000 L CNN
+F 1 "10k" V 4425 4265 50  0000 L CNN
+F 2 "Resistor_SMD:R_0603_1608Metric" V 4430 4340 50  0001 C CNN
+F 3 "~" H 4500 4340 50  0001 C CNN
+F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC0603FR-0710KL_C98220.html" H 4500 4340 50  0001 C CNN "lcsc"
+	1    4500 4340
+	0    -1   1    0   
+$EndComp
+Wire Wire Line
+	4620 4640 4620 4620
+Wire Wire Line
+	4250 4640 4620 4640
+Wire Wire Line
+	4620 4640 4620 4730
+Connection ~ 4620 4640
+Wire Wire Line
+	4620 5070 4620 5030
+$Comp
+L power:GND #PWR040
+U 1 1 61BD9CFF
+P 2920 4490
+F 0 "#PWR040" H 2920 4240 50  0001 C CNN
+F 1 "GND" V 2925 4362 50  0000 R CNN
+F 2 "" H 2920 4490 50  0001 C CNN
+F 3 "" H 2920 4490 50  0001 C CNN
+	1    2920 4490
+	0    1    1    0   
+$EndComp
+Wire Wire Line
+	3050 4490 2920 4490
+$Comp
+L BatteryManagmentLocal:ME4055A U5
+U 1 1 61B5CF1E
+P 3650 4190
+F 0 "U5" H 3650 4405 50  0000 C CNN
+F 1 "ME4055A" H 3650 4314 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23-6" H 3650 4190 50  0001 C CNN
+F 3 "https://datasheet.lcsc.com/lcsc/1809291612_MICRONE-Nanjing-Micro-One-Elec-ME4055AM6G-N_C82121.pdf" H 3650 4190 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/Battery-Management-ICs_MICRONE-Nanjing-Micro-One-Elec-ME4055AM6G-N_C82121.html" H 3650 4190 50  0001 C CNN "lcsc"
+	1    3650 4190
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	2480 4640 2480 4420
+Wire Wire Line
+	2480 4640 3050 4640
+NoConn ~ 4250 4490
+Wire Wire Line
+	4350 4340 4250 4340
+$Comp
+L power:GND #PWR060
+U 1 1 61C7519B
+P 4830 4370
+F 0 "#PWR060" H 4830 4120 50  0001 C CNN
+F 1 "GND" H 4835 4197 50  0000 C CNN
+F 2 "" H 4830 4370 50  0001 C CNN
+F 3 "" H 4830 4370 50  0001 C CNN
+	1    4830 4370
+	1    0    0    -1  
+$EndComp
+Wire Wire Line
+	4830 4370 4830 4340
+Wire Wire Line
+	4830 4340 4650 4340
 $EndSCHEMATC
