@@ -92,9 +92,7 @@ void PlatformBackend::executeLvTaskHandler() noexcept
 namespace Graphics
 {
 
-PlatformBackend::PlatformBackend() noexcept : m_indevDriver{}
-{
-}
+PlatformBackend::PlatformBackend() noexcept = default;
 
 void PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver) noexcept
 {
