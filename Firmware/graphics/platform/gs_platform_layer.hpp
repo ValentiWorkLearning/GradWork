@@ -54,7 +54,7 @@ private:
 #endif
 
 #if defined USE_SDL_BACKEND
-    lv_indev_drv_t m_indevDriver;
+    static inline lv_indev_drv_t m_indevDriver{};
 #endif
 };
 

@@ -103,11 +103,11 @@ void PlatformBackend::platformDependentInit(lv_disp_drv_t* _displayDriver) noexc
 void PlatformBackend::initPlatformGfxTimer() noexcept
 {
     indevPlatformInit();
-    lv_indev_drv_init(&m_indevDriver);
 }
 
 void PlatformBackend::indevPlatformInit() noexcept
 {
+    lv_indev_drv_init(&m_indevDriver);
     m_indevDriver.type = LV_INDEV_TYPE_POINTER;
     m_indevDriver.read_cb = sdl_mouse_read;
     lv_indev_drv_register(&m_indevDriver);

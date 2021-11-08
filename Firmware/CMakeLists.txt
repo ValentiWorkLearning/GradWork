@@ -54,7 +54,7 @@ elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
     conan_cmake_autodetect(settings)
 
     conan_cmake_install(PATH_OR_REFERENCE .
-                        BUILD missing sdl
+                        BUILD missing
                         REMOTE conancenter
                         SETTINGS ${settings})
    find_package(SDL2 REQUIRED)
