@@ -54,9 +54,7 @@ private:
 #endif
 
 #if defined USE_SDL_BACKEND
-    std::unique_ptr<std::thread> m_tickThread;
-     std::atomic_bool m_isTickThreadRunning;
-    lv_indev_drv_t m_indevDriver;
+    static inline lv_indev_drv_t m_indevDriver{};
 #endif
 };
 

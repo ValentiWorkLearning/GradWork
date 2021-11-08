@@ -44,7 +44,12 @@ elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
     include(${CMAKE_BINARY_DIR}/conan.cmake)
 
     conan_cmake_configure(REQUIRES sdl/2.0.16 gtest/1.11.0
-                          GENERATORS cmake_find_package)
+                          GENERATORS cmake_find_package
+                          IMPORTS "bin, *.dll -> ${CMAKE_CURRENT_BINARY_DIR}"
+                          IMPORTS "lib, *.dylib* -> ${CMAKE_CURRENT_BINARY_DIR}"
+                          OPTIONS sdl:shared=True
+                          OPTIONS fmt:shared=True
+                          )
 
     conan_cmake_autodetect(settings)
 
