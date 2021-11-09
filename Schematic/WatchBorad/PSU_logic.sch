@@ -806,7 +806,7 @@ $EndComp
 Connection ~ 1550 4250
 Wire Wire Line
 	1550 4250 1775 4250
-Text Notes 9025 5810 0    50   ~ 0
+Text Notes 9145 4770 0    50   ~ 0
 internal PU\n
 Wire Notes Line
 	600  3250 7125 3250
@@ -1339,21 +1339,17 @@ Wire Wire Line
 $Comp
 L MosfetLocal:HX2301A VT5
 U 1 1 618EF835
-P 8950 5290
-F 0 "VT5" V 9292 5290 50  0000 C CNN
-F 1 "HX2301A" V 9201 5290 50  0000 C CNN
-F 2 "Package_TO_SOT_SMD:SOT-23" H 9150 5390 50  0001 C CNN
-F 3 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" H 8950 5290 50  0001 C CNN
-F 4 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" V 8950 5290 50  0001 C CNN "lcsc"
-	1    8950 5290
-	0    -1   -1   0   
+P 8950 5090
+F 0 "VT5" V 9292 5090 50  0000 C CNN
+F 1 "HX2301A" V 9201 5090 50  0000 C CNN
+F 2 "Package_TO_SOT_SMD:SOT-23" H 9150 5190 50  0001 C CNN
+F 3 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" H 8950 5090 50  0001 C CNN
+F 4 "https://lcsc.com/product-detail/MOSFETs_HX-hengjiaxing-HX2301A_C296298.html" V 8950 5090 50  0001 C CNN "lcsc"
+	1    8950 5090
+	0    1    1    0   
 $EndComp
-Text Label 9000 5890 0    50   ~ 0
+Text Label 9120 4850 0    50   ~ 0
 PWR_SW_EN_N
-Wire Wire Line
-	8950 5490 8950 5890
-Wire Wire Line
-	8950 5890 9000 5890
 Wire Wire Line
 	8350 5490 8550 5490
 Wire Wire Line
@@ -1530,4 +1526,8 @@ Wire Wire Line
 	4830 4370 4830 4340
 Wire Wire Line
 	4830 4340 4650 4340
+Wire Wire Line
+	9120 4850 8950 4850
+Wire Wire Line
+	8950 4850 8950 4890
 $EndSCHEMATC
