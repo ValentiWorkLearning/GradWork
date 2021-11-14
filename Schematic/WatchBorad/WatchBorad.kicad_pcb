@@ -270,7 +270,7 @@
   (module M41T62Q6F:QFN50P300X300X100-17N (layer B.Cu) (tedit 616C8534) (tstamp 6174EEBB)
     (at 83.82 87.33028)
     (path /5F913559/61A98A80)
-    (fp_text reference U10 (at 0.5334 -2.62128) (layer B.SilkS)
+    (fp_text reference U10 (at 0.0508 -2.49428) (layer B.SilkS)
       (effects (font (size 0.8 0.8) (thickness 0.15)) (justify mirror))
     )
     (fp_text value M41T62Q6F (at 18.447795 -4.045795) (layer B.Fab)
