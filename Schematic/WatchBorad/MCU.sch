@@ -554,11 +554,11 @@ Wire Notes Line
 	700  2000 700  1600
 Text Notes 950  1775 0    50   ~ 0
 Power HL\n\n
-Text Label 6750 3450 0    50   ~ 0
+Text Label 7000 3550 2    50   ~ 0
 DISP_CS
-Text Label 6750 3550 0    50   ~ 0
+Text Label 7000 3450 2    50   ~ 0
 DISP_SCLK
-Text Label 6800 3750 0    50   ~ 0
+Text Label 7000 3350 2    50   ~ 0
 DISP_SDA
 Text Label 7100 2450 2    50   ~ 0
 Backlight_EN_DIM
@@ -575,53 +575,53 @@ Wire Wire Line
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F6067FE
-P 8250 3750
+P 8350 3550
 AR Path="/5EA4867C/5F6067FE" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F6067FE" Ref="TP6"  Part="1" 
-F 0 "TP6" H 8308 3822 50  0000 L CNN
-F 1 "TestPoint" H 8308 3777 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8450 3750 50  0001 C CNN
-F 3 "~" H 8450 3750 50  0001 C CNN
-	1    8250 3750
+F 0 "TP6" H 8408 3622 50  0000 L CNN
+F 1 "TestPoint" H 8408 3577 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8550 3550 50  0001 C CNN
+F 3 "~" H 8550 3550 50  0001 C CNN
+	1    8350 3550
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F619095
-P 8100 3550
+P 8100 3450
 AR Path="/5EA4867C/5F619095" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F619095" Ref="TP7"  Part="1" 
-F 0 "TP7" H 8158 3622 50  0000 L CNN
-F 1 "TestPoint" H 8158 3577 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8300 3550 50  0001 C CNN
-F 3 "~" H 8300 3550 50  0001 C CNN
-	1    8100 3550
+F 0 "TP7" H 8158 3522 50  0000 L CNN
+F 1 "TestPoint" H 8158 3477 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8300 3450 50  0001 C CNN
+F 3 "~" H 8300 3450 50  0001 C CNN
+	1    8100 3450
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F62BA5E
-P 7900 3300
+P 7600 3250
 AR Path="/5EA4867C/5F62BA5E" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F62BA5E" Ref="TP8"  Part="1" 
-F 0 "TP8" H 7958 3372 50  0000 L CNN
-F 1 "TestPoint" H 7958 3327 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8100 3300 50  0001 C CNN
-F 3 "~" H 8100 3300 50  0001 C CNN
-	1    7900 3300
+F 0 "TP8" H 7658 3322 50  0000 L CNN
+F 1 "TestPoint" H 7658 3277 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 7800 3250 50  0001 C CNN
+F 3 "~" H 7800 3250 50  0001 C CNN
+	1    7600 3250
 	1    0    0    -1  
 $EndComp
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F63E448
-P 8000 3450
+P 7900 3300
 AR Path="/5EA4867C/5F63E448" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F63E448" Ref="TP9"  Part="1" 
-F 0 "TP9" H 8058 3522 50  0000 L CNN
-F 1 "TestPoint" H 8058 3477 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8200 3450 50  0001 C CNN
-F 3 "~" H 8200 3450 50  0001 C CNN
-	1    8000 3450
+F 0 "TP9" H 7958 3372 50  0000 L CNN
+F 1 "TestPoint" H 7958 3327 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8100 3300 50  0001 C CNN
+F 3 "~" H 8100 3300 50  0001 C CNN
+	1    7900 3300
 	1    0    0    -1  
 $EndComp
 Wire Notes Line
@@ -1199,13 +1199,13 @@ AR Path="/60CF55BA" Ref="U11"  Part="1"
 AR Path="/5E9B1DCE/60CF55BA" Ref="U11"  Part="1" 
 F 0 "U11" H 10428 4046 50  0000 L CNN
 F 1 "GC9A01" H 10428 3955 50  0000 L CNN
-F 2 "LocalFootprints:GC9A01_disp" H 10000 4400 50  0001 C CNN
+F 2 "LocalFootprints:GC9A01_Extended_FPC" H 10000 4400 50  0001 C CNN
 F 3 "https://www.buydisplay.com/download/ic/GC9A01A.pdf" H 10000 4400 50  0001 C CNN
 F 4 "https://www.aliexpress.com/item/1005002297668304.html?spm=a2g0o.productlist.0.0.2d323cfbmTWYJD&algo_pvid=a7cd72c7-e7b7-4a28-818d-25cad6b70960&algo_exp_id=a7cd72c7-e7b7-4a28-818d-25cad6b70960-0&pdp_ext_f=%7B%22sku_id%22%3A%2212000021496494507%22%7D" H 10250 4050 50  0001 C CNN "lcsc"
 	1    10250 4050
 	1    0    0    -1  
 $EndComp
-Text Label 7050 3350 2    50   ~ 0
+Text Label 7000 3750 2    50   ~ 0
 DISP_DC
 $Comp
 L W25Q16BVSSIG:MX25R1635F U?
@@ -1229,8 +1229,8 @@ Text Label 6750 2950 2    50   ~ 0
 P5
 Text Label 7050 2050 2    50   ~ 0
 P6
-Text Label 6750 3250 0    50   ~ 0
-P17
+Text Label 8350 3850 0    50   ~ 0
+P23
 Wire Wire Line
 	6350 3050 6775 3050
 Text HLabel 2925 4775 0    50   Input ~ 0
@@ -1274,8 +1274,6 @@ Text Label 6875 3150 2    50   ~ 0
 FG_OD_ALRT_N
 Wire Wire Line
 	6350 4850 6800 4850
-Wire Wire Line
-	6350 3750 8250 3750
 Wire Wire Line
 	8400 2875 8400 2850
 $Comp
@@ -1338,24 +1336,20 @@ Wire Wire Line
 	6350 2750 8875 2750
 Wire Wire Line
 	6350 2850 8400 2850
-Wire Wire Line
-	6350 3550 8100 3550
-Wire Wire Line
-	6350 3450 8000 3450
 $Comp
 L Connector:TestPoint TP?
 U 1 1 5F650E32
-P 8350 3850
+P 8600 3700
 AR Path="/5EA4867C/5F650E32" Ref="TP?"  Part="1" 
 AR Path="/5E9B1DCE/5F650E32" Ref="TP10"  Part="1" 
-F 0 "TP10" H 8408 3922 50  0000 L CNN
-F 1 "TestPoint" H 8408 3877 50  0001 L CNN
-F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8550 3850 50  0001 C CNN
-F 3 "~" H 8550 3850 50  0001 C CNN
-	1    8350 3850
+F 0 "TP10" H 8658 3772 50  0000 L CNN
+F 1 "TestPoint" H 8658 3727 50  0001 L CNN
+F 2 "TestPoint:TestPoint_Pad_D2.0mm" H 8800 3700 50  0001 C CNN
+F 3 "~" H 8800 3700 50  0001 C CNN
+	1    8600 3700
 	1    0    0    -1  
 $EndComp
-Text Label 7200 3850 2    50   ~ 0
+Text Label 7000 3250 2    50   ~ 0
 DISP_RESET
 Wire Wire Line
 	6350 3850 8350 3850
@@ -1363,8 +1357,6 @@ Wire Wire Line
 	7900 3350 7900 3300
 Wire Wire Line
 	6350 3350 7900 3350
-Wire Wire Line
-	6750 3250 6350 3250
 Wire Wire Line
 	6350 4350 6700 4350
 Text Label 900  2750 2    50   ~ 0
@@ -1865,4 +1857,14 @@ F 4 "https://www.lcsc.com/product-detail/Chip-Resistor-Surface-Mount_YAGEO-RC060
 	1    4350 6240
 	1    0    0    -1  
 $EndComp
+Wire Wire Line
+	6350 3250 7600 3250
+Wire Wire Line
+	6350 3450 8100 3450
+Wire Wire Line
+	6350 3550 8350 3550
+Wire Wire Line
+	8600 3750 8600 3700
+Wire Wire Line
+	6350 3750 8600 3750
 $EndSCHEMATC
