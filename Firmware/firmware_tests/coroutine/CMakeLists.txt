@@ -37,6 +37,7 @@ target_link_libraries(
     watch_display
     UtilsLibrary
     logger_service
+    littlefs
 )
 if(UNIX)
     target_link_libraries( coroutine_experiments_app PUBLIC Threads::Threads)

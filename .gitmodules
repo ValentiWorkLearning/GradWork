@@ -13,3 +13,6 @@
 [submodule "Firmware/3rdparty/cppcoro_lib/cppcoro"]
 	path = Firmware/3rdparty/cppcoro_lib/cppcoro
 	url = https://github.com/lewissbaker/cppcoro.git
+[submodule "Firmware/3rdparty/littlefs_lib/littlefs"]
+	path = Firmware/3rdparty/littlefs_lib/littlefs
+	url = https://github.com/littlefs-project/littlefs.git
