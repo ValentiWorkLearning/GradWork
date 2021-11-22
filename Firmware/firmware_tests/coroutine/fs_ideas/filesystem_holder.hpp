@@ -63,6 +63,11 @@ public:
         lfs_file_close(&m_fsInstance, &nativeHandle);
     }
 
+    TBlockDeviceEntity& getBlockDevice()
+    {
+        return m_blockDeviceHolder;
+    }
+
 private:
 
 private:
@@ -81,6 +86,10 @@ private:
         lfs_size_t size)
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
+        pThis->getBlockDevice().write(
+            (block * c->block_size + off),
+            std::span(reinterpret_cast<const std::uint8_t*>(buffer), size));
+
         return LFS_ERR_OK;
     }
 

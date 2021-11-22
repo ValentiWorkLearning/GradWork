@@ -15,6 +15,11 @@ public:
         return offspring()->getBlocksCount();
     }
 
+    void write(const std::uint32_t _address, std::span<const std::uint8_t> _blockData) noexcept
+    {
+        return offspring()->write(_address, _blockData);
+    }
+
 private:
     constexpr auto offspring()
     {
