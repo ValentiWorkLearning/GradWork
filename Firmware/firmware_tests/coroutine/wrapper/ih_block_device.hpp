@@ -3,10 +3,22 @@
 
 namespace Wrapper
 {
-class IBlockDeviceEntity
+template <typename TImpl> class BlockDeviceEntity
 {
 public:
-    virtual std::uint32_t getBlockSize() const noexcept = 0;
-    virtual std::uint32_t getBlocksCount() const noexcept = 0;
+    constexpr std::uint32_t getBlockSize() const noexcept
+    {
+        return offspring()->getBlockSize();
+    }
+    constexpr std::uint32_t getBlocksCount() const noexcept
+    {
+        return offspring()->getBlocksCount();
+    }
+
+private:
+    constexpr auto offspring()
+    {
+        return static_cast<TImpl*>(this);
+    }
 };
 } // namespace Wrapper

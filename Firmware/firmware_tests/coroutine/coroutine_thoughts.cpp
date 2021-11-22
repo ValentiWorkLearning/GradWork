@@ -20,6 +20,7 @@
 #include "st7789_draft.hpp"
 
 #include "fs_ideas/platform_filesystem.hpp"
+#include "wrapper/heap_block_device.hpp"
 
 CoroUtils::Task<int> coroutineTask()
 {
@@ -36,7 +37,10 @@ void showFlashDeviceId()
 
 void fileTest()
 {
-    auto file = co_await Platform::Fs::Holder::Instance().openFile("test.txt");
+    using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<Wrapper::kBlockSize,Wrapper::kSectorsCount>>;
+    TFilesystem platformFilesystem;
+
+    auto file = co_await platformFilesystem.openFile("test.txt");
     constexpr auto kFileData = std::string_view("Hello world!");
     co_await file.write(
         {reinterpret_cast<const std::uint8_t*>(kFileData.data()), kFileData.size()});
