@@ -14,8 +14,17 @@ target_sources(
     coroutine_thoughts.cpp
     thoughts.hpp
     st7789_draft.hpp
-)
+    fs_ideas/file_handle.hpp
+    fs_ideas/filesystem_holder.hpp
+    fs_ideas/filesystem_holder.cpp
+    fs_ideas/platform_filesystem.hpp "wrapper/ih_block_device.hpp")
 
+target_include_directories(
+    coroutine_experiments_app
+    PRIVATE
+    fs_ideas
+    wrapper
+)
 target_compile_features(
     coroutine_experiments_app
     PRIVATE
