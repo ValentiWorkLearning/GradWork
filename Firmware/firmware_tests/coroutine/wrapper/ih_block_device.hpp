@@ -14,10 +14,26 @@ public:
     {
         return offspring()->getBlocksCount();
     }
-
-    void write(const std::uint32_t _address, std::span<const std::uint8_t> _blockData) noexcept
+    constexpr std::uint32_t getReadSize() const noexcept
     {
-        return offspring()->write(_address, _blockData);
+        return offspring()->getReadSize();
+    }
+    constexpr std::uint32_t getProgSize() const noexcept
+    {
+        return offspring()->getProgSize();
+    }
+    constexpr std::uint32_t getEraseSize() const noexcept
+    {
+        return offspring()->getEraseSize();
+    }
+
+    constexpr void write(std::uint32_t _address, const std::uint8_t* _blockData, std::size_t _blockSize) noexcept
+    {
+        offspring()->write(_address, _blockData, _blockSize);
+    }
+    constexpr void read(std::uint8_t* pblockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
+    {
+        offspring()->read(pblockOut, _address, _blockSize);
     }
 
 private:

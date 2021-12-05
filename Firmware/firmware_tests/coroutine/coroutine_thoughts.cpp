@@ -13,6 +13,7 @@
 #include <display/display_spi_common_coro.hpp>
 #include <logger/logger_service.hpp>
 #include <utils/CoroUtils.hpp>
+#include <utils/coroutine/SyncWait.hpp>
 
 #include <backends/spi_backend_desktop.hpp>
 #include <spi/spi_wrapper_async_templated.hpp>
@@ -34,13 +35,11 @@ void showFlashDeviceId()
     CoroUtils::Task<int> task = coroutineTask();
     int testValue = co_await task;
 }
-
-void fileTest()
+using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<Wrapper::kBlockSize, Wrapper::kSectorsCount>>;
+CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
 {
-    using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<Wrapper::kBlockSize,Wrapper::kSectorsCount>>;
-    TFilesystem platformFilesystem;
 
-    auto file = co_await platformFilesystem.openFile("test.txt");
+    auto file = filesystem.openFile("test.txt");
     constexpr auto kFileData = std::string_view("Hello world!");
     co_await file.write(
         {reinterpret_cast<const std::uint8_t*>(kFileData.data()), kFileData.size()});
@@ -52,7 +51,10 @@ void fileTest()
 int main()
 {
 
-    fileTest();
+    TFilesystem platformFilesystem;
+
+    CoroUtils::syncWait(fileTest(platformFilesystem));
+
     using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
 
     using TDisplayDriver = DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
