@@ -35,7 +35,12 @@ void showFlashDeviceId()
     CoroUtils::Task<int> task = coroutineTask();
     int testValue = co_await task;
 }
-using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<Wrapper::kBlockSize, Wrapper::kSectorsCount>>;
+using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<
+    Wrapper::kBlockSize,
+    Wrapper::kSectorsCount,
+    Wrapper::kReadSize,
+    Wrapper::kEraseSize>>;
+
 CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
 {
 

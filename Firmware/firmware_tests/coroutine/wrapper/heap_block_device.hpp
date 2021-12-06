@@ -5,10 +5,12 @@
 
 namespace Wrapper
 {
-inline constexpr std::size_t kBlockSize = 512;
-inline constexpr std::size_t kSectorsCount = 64;
+inline constexpr std::size_t kBlockSize = 256;
+inline constexpr std::size_t kSectorsCount = 65'536;
+inline constexpr std::size_t kReadSize = 256;
+inline constexpr std::size_t kEraseSize = 4096;
 
-template <std::size_t BlockSize = kBlockSize, std::size_t SectorsCount = kSectorsCount>
+template <std::size_t BlockSize = kBlockSize, std::size_t SectorsCount = kSectorsCount,std::size_t ReadSize = kReadSize, std::size_t EraseSize = kEraseSize>
 class HeapBlockDevice : public BlockDeviceEntity<HeapBlockDevice<BlockSize, SectorsCount>>
 {
 public:
@@ -21,23 +23,23 @@ public:
 
     constexpr std::uint32_t getBlockSize() const noexcept
     {
-        return kBlockSize;
+        return BlockSize;
     }
     constexpr std::uint32_t getBlocksCount() const noexcept
     {
-        return kSectorsCount;
+        return SectorsCount;
     }
     constexpr std::uint32_t getReadSize() const noexcept
     {
-        return 256;
+        return ReadSize;
     }
     constexpr std::uint32_t getProgSize() const noexcept
     {
-        return 256;
+        return ReadSize;
     }
     constexpr std::uint32_t getEraseSize() const noexcept
     {
-        return BlockSize;
+        return EraseSize;
     }
 
     constexpr void write(
