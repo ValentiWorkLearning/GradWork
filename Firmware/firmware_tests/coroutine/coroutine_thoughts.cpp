@@ -62,7 +62,7 @@ void simpleRwTest(TFilesystem& filesystem, std::string_view fileName, std::strin
 CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
 {
 
-    auto fileWrapped = filesystem.openFile("test");
+    /*   auto fileWrapped = filesystem.openFile("test");*/
     constexpr auto kFileData = std::string_view("Hello world!");
     simpleRwTest(filesystem, "helloworld.txt", kFileData);
 
