@@ -6,6 +6,8 @@ if( UNIX )
     find_package(Threads REQUIRED)
 endif()
 
+find_package(spdlog REQUIRED)
+
 add_executable(coroutine_experiments_app ${PROJECT_SOURCES})
 
 target_sources(
@@ -49,6 +51,7 @@ target_link_libraries(
     UtilsLibrary
     logger_service
     littlefs
+    spdlog::spdlog
 )
 if(UNIX)
     target_link_libraries( coroutine_experiments_app PUBLIC Threads::Threads)

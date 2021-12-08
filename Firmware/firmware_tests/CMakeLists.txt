@@ -10,7 +10,6 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 enable_testing()
-set (3RDPARTY_DIR "../3rdparty")
 find_package(GTest REQUIRED)
 add_subdirectory(coroutine)
 add_subdirectory(article_example)

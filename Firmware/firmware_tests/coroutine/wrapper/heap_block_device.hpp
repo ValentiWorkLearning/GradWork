@@ -3,6 +3,8 @@
 #include "ih_block_device.hpp"
 #include <etl/vector.h>
 
+#include <spdlog/spdlog.h>
+
 namespace Wrapper
 {
 inline constexpr std::size_t kBlockSize = 256;
@@ -10,15 +12,19 @@ inline constexpr std::size_t kSectorsCount = 65'536;
 inline constexpr std::size_t kReadSize = 256;
 inline constexpr std::size_t kEraseSize = 4096;
 
-template <std::size_t BlockSize = kBlockSize, std::size_t SectorsCount = kSectorsCount,std::size_t ReadSize = kReadSize, std::size_t EraseSize = kEraseSize>
+template <
+    std::size_t BlockSize = kBlockSize,
+    std::size_t SectorsCount = kSectorsCount,
+    std::size_t ReadSize = kReadSize,
+    std::size_t EraseSize = kEraseSize>
 class HeapBlockDevice : public BlockDeviceEntity<HeapBlockDevice<BlockSize, SectorsCount>>
 {
 public:
-
     HeapBlockDevice()
     {
         m_blockStorage.resize(SectorsCount);
-        std::ranges::for_each(m_blockStorage, [](auto& storageBlock) { std::ranges::fill(storageBlock, 0xFF); });
+        std::ranges::for_each(
+            m_blockStorage, [](auto& storageBlock) { std::ranges::fill(storageBlock, 0xFF); });
     }
 
     constexpr std::uint32_t getBlockSize() const noexcept
@@ -44,35 +50,31 @@ public:
 
     constexpr void write(
         std::uint32_t _address,
-        const std::uint8_t* _blockData, std::size_t _blockSize) noexcept
+        const std::uint8_t* _blockData,
+        std::size_t _blockSize) noexcept
     {
+        spdlog::info(
+            "HeapBlockDevice::WRITE to: address:{0} blockData:{1} blockSize: {2}",
+            _address,
+            _blockData,
+            _blockSize);
         std::size_t requestSize = _blockSize;
         const std::uint8_t* pBlockRequest = static_cast<const std::uint8_t*>(_blockData);
-        while(requestSize>0)
-        {
-            std::uint32_t highPart = _address / getEraseSize();
-            std::uint32_t lowPart = _address % getEraseSize();
-            auto& pBlock = m_blockStorage[highPart];
-            memcpy(pBlock.data() + lowPart, pBlockRequest, getProgSize());
-            
-            pBlockRequest += getProgSize();
-            _address += getProgSize();
-            requestSize -= getProgSize();
-        }
+
+        std::uint32_t highPart = _address / getBlockSize();
+        std::uint32_t lowPart = _address % getBlockSize();
+
+        auto& pBlock = m_blockStorage[highPart];
+        memcpy(pBlock.data() + lowPart, pBlockRequest, _blockSize);
     }
     void read(std::uint8_t* _pBlockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
     {
-        while (_blockSize > 0)
-        {
-            std::uint32_t hi = _address / getEraseSize();
-            std::uint32_t lo = _address % getEraseSize();
+        spdlog::info("HeapBlockDevice::READ to: address:{0} blockSize: {1}", _address, _blockSize);
 
-            memcpy(_pBlockOut, m_blockStorage[hi].data() + lo, getReadSize());
+        std::uint32_t hi = _address / getBlockSize();
+        std::uint32_t lo = _address % getBlockSize();
 
-            _pBlockOut += getReadSize();
-            _address += getReadSize();
-            _blockSize -= getReadSize();
-        }
+        memcpy(_pBlockOut, m_blockStorage[hi].data() + lo, _blockSize);
     }
 
 private:
