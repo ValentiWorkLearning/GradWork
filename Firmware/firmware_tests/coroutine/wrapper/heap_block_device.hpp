@@ -18,10 +18,10 @@ template <
     std::size_t ReadSize = kReadSize,
     std::size_t EraseSize = kEraseSize,
     std::size_t ProgSize = kReadSize>
-class HeapBlockDevice : public BlockDeviceEntity<HeapBlockDevice<BlockSize, SectorsCount>>
+class HeapBlockDevice : public BlockDeviceEntity<HeapBlockDevice<BlockSize, SectorsCount, ReadSize,EraseSize,ProgSize>>
 {
 public:
-    HeapBlockDevice()
+    constexpr HeapBlockDevice()
     {
         m_blockStorage.resize(SectorsCount);
         std::ranges::for_each(
@@ -76,7 +76,7 @@ public:
             requestSize -= getProgSize();
         }
     }
-    void read(std::uint8_t* _pBlockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
+    constexpr void read(std::uint8_t* _pBlockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
     {
         spdlog::info("HeapBlockDevice::READ to: address:{0} blockSize: {1}", _address, _blockSize);
 
