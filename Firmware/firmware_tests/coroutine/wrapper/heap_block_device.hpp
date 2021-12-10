@@ -16,7 +16,8 @@ template <
     std::size_t BlockSize = kBlockSize,
     std::size_t SectorsCount = kSectorsCount,
     std::size_t ReadSize = kReadSize,
-    std::size_t EraseSize = kEraseSize>
+    std::size_t EraseSize = kEraseSize,
+    std::size_t ProgSize = kReadSize>
 class HeapBlockDevice : public BlockDeviceEntity<HeapBlockDevice<BlockSize, SectorsCount>>
 {
 public:
@@ -41,7 +42,7 @@ public:
     }
     constexpr std::uint32_t getProgSize() const noexcept
     {
-        return ReadSize;
+        return ProgSize;
     }
     constexpr std::uint32_t getEraseSize() const noexcept
     {
@@ -58,23 +59,41 @@ public:
             _address,
             _blockData,
             _blockSize);
-        std::size_t requestSize = _blockSize;
-        const std::uint8_t* pBlockRequest = static_cast<const std::uint8_t*>(_blockData);
 
-        std::uint32_t highPart = _address / getBlockSize();
-        std::uint32_t lowPart = _address % getBlockSize();
+        std::uint32_t requestSize = _blockSize;
+        const std::uint8_t* pBlockRequest = _blockData;
+        std::uint32_t blockAddress{ _address };
+        while (requestSize > 0)
+        {
+            std::uint32_t highPart = blockAddress / getBlockSize();
+            std::uint32_t lowPart = blockAddress % getBlockSize();
 
-        auto& pBlock = m_blockStorage[highPart];
-        memcpy(pBlock.data() + lowPart, pBlockRequest, _blockSize);
+            auto& pBlock = m_blockStorage[highPart];
+            memcpy(pBlock.data() + lowPart, pBlockRequest, getProgSize());
+
+            blockAddress += getProgSize();
+            pBlockRequest += getProgSize();
+            requestSize -= getProgSize();
+        }
     }
     void read(std::uint8_t* _pBlockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
     {
         spdlog::info("HeapBlockDevice::READ to: address:{0} blockSize: {1}", _address, _blockSize);
 
-        std::uint32_t hi = _address / getBlockSize();
-        std::uint32_t lo = _address % getBlockSize();
+        std::uint32_t blockSize{ _blockSize };
+        std::uint8_t* pReadBuffer{ _pBlockOut };
+        std::uint32_t blockAddress{ _address };
 
-        memcpy(_pBlockOut, m_blockStorage[hi].data() + lo, _blockSize);
+        while (blockSize > 0)
+        {
+            std::uint32_t hi = blockAddress / getBlockSize();
+            std::uint32_t lo = blockAddress % getBlockSize();
+
+            memcpy(pReadBuffer, m_blockStorage[hi].data() + lo, getReadSize());
+            blockAddress += getReadSize();
+            pReadBuffer += getReadSize();
+            blockSize -= getReadSize();
+        }
     }
 
 private:
