@@ -9,6 +9,8 @@
 #include <span>
 #include <utils/MetaUtils.hpp>
 
+#include <spdlog/spdlog.h>
+
 namespace Platform::Fs
 {
 template <typename TFSHolder> class File;
@@ -52,16 +54,7 @@ public:
     {
         lfs_file_t file{};
         lfs_file_open(&m_fsInstance, &file, path.data(), LFS_O_RDWR | LFS_O_CREAT);
-        return File{file, this};
-    }
-
-    void close(File<This_t>* pFile)noexcept
-    {
-        assert(pFile);
-        if (!pFile)
-            return;
-        auto nativeHandle = pFile->nativeHandle(FilesystemPasskey{});
-        lfs_file_close(&m_fsInstance, &nativeHandle);
+        return File<This_t>{std::move(file), &m_fsInstance };
     }
 
     constexpr TBlockDeviceEntity& getBlockDevice()noexcept
@@ -153,25 +146,26 @@ template <typename TFilesystemHolder> class File
 {
 public:
     explicit constexpr File()noexcept = default;
-    explicit constexpr File(lfs_file_t fileHandle, TFilesystemHolder* pFsHolder)noexcept
-        : m_pFileHandle{fileHandle}, m_pFsHolder{pFsHolder}
+    explicit constexpr File(lfs_file_t&& fileHandle, lfs_t* pFsHolder)noexcept
+        : m_pFileHandle{ std::move( fileHandle )}, m_pFsHolder{ pFsHolder }
     {
+        spdlog::warn("File::File()");
     }
     ~File()
     {
-        if (m_pFsHolder)
-            m_pFsHolder->close(this);
+        lfs_file_close(m_pFsHolder, &m_pFileHandle);
+        spdlog::warn("~File::File()");
     }
     CoroUtils::VoidTask write(std::span<const std::uint8_t> dataHolder)noexcept
     {
-        auto fsInstance = m_pFsHolder->fsInstance();
-        lfs_file_write(&fsInstance, &m_pFileHandle, dataHolder.data(), static_cast<lfs_size_t>(dataHolder.size()));
+        lfs_file_write(m_pFsHolder, &m_pFileHandle, dataHolder.data(), static_cast<lfs_size_t>(dataHolder.size()));
         co_return;
     }
 
-    CoroUtils::Task<std::span<std::uint8_t>> read(std::size_t dataSize)noexcept
+    CoroUtils::Task<std::span<std::uint8_t>> read(std::span<std::uint8_t> outBuffer)noexcept
     {
-        co_return {};
+        lfs_file_read(m_pFsHolder, &m_pFileHandle, outBuffer.data(), static_cast<lfs_size_t>(outBuffer.size()));
+        co_return outBuffer;
     }
 
     lfs_file_t nativeHandle(const FilesystemPasskey& passkey)noexcept
@@ -182,6 +176,6 @@ public:
 
 private:
     lfs_file_t m_pFileHandle;
-    TFilesystemHolder* m_pFsHolder;
+    lfs_t* m_pFsHolder;
 };
 } // namespace Platform::Fs

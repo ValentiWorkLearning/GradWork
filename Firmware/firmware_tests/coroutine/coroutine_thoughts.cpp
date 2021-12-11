@@ -22,6 +22,7 @@
 
 #include "fs_ideas/platform_filesystem.hpp"
 #include "wrapper/heap_block_device.hpp"
+#include <spdlog/spdlog.h>
 
 CoroUtils::Task<int> coroutineTask()
 {
@@ -41,23 +42,30 @@ using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<
     Wrapper::kReadSize,
     Wrapper::kEraseSize>>;
 
-void simpleRwTest(TFilesystem& filesystem, std::string_view fileName, std::string_view fileData)
+CoroUtils::VoidTask simpleRwTest(TFilesystem& filesystem, std::string_view fileName, std::string_view fileData)
 {
+    spdlog::warn("simpleRwTest begin");
     auto lfs = filesystem.fsInstance();
-    auto file = lfs_file_t{};
+    {
+        spdlog::warn("FILE open begin");
+        auto holdedFile = filesystem.openFile(fileName);
+        co_await holdedFile.write(std::span(reinterpret_cast<const std::uint8_t*>(fileData.data()), fileData.size()));
+        spdlog::warn("FILE open finalize");
+    }
 
-    lfs_file_open(&lfs, &file, fileName.data(), LFS_O_RDWR | LFS_O_CREAT);
-    lfs_file_write(&lfs, &file, fileData.data(), fileData.size());
-    lfs_file_close(&lfs, &file);
-    std::vector<char> readFrom;
+    std::vector<std::uint8_t> readFrom;
     readFrom.resize(fileData.size());
 
-    lfs_file_open(&lfs, &file, fileName.data(), LFS_O_RDWR | LFS_O_CREAT);
-    lfs_file_read(&lfs, &file, readFrom.data(), fileData.size());
-    lfs_file_close(&lfs, &file);
+    {
+        spdlog::warn("FILE read begin");
+        auto holdedFile = filesystem.openFile(fileName);
+        //co_await holdedFile.read(std::span(readFrom.data(), fileData.size()));
+        spdlog::warn("FILE read finalize");
+    }
 
-    auto kCompareStringView{std::string_view{readFrom.data(), readFrom.size()}};
+    auto kCompareStringView{std::string_view{reinterpret_cast<const char*>(readFrom.data()), readFrom.size()}};
     assert(fileData == kCompareStringView);
+    spdlog::warn("simpleRwTest finalize");
 }
 CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
 {
@@ -99,7 +107,7 @@ CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
         "$GAGSV,1,1,01,30,23,183,32,,,,,,,,,,,,,7 * 4B\n"
 
     };
-    simpleRwTest(filesystem, "nmeaData.txt", kNmeaDataExample);
+    co_await simpleRwTest(filesystem, "nmeaData.txt", kNmeaDataExample);
 
     /*co_await file.write(
         {reinterpret_cast<const std::uint8_t*>(kFileData.data()), kFileData.size()});
