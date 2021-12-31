@@ -64,15 +64,14 @@ public:
     }
 
     void transmitBuffer(
-        const std::uint8_t* _pBuffer,
-        std::uint16_t _pBufferSize,
+        std::span<const std::uint8_t> _pBuffer,
         void* _pUserData,
         bool _restoreInSpiCtx) noexcept
     {
         m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
         m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
-        const size_t TransferBufferSize = _pBufferSize;
+        const size_t TransferBufferSize = _pBuffer.size();
         const size_t FullDmaTransactionsCount = TransferBufferSize / DmaBufferSize;
         const size_t ChunkedTransactionsBufSize = TransferBufferSize % DmaBufferSize;
         const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
@@ -80,7 +79,7 @@ public:
         TransactionContext newContext{
             .restoreInSpiCtx = _restoreInSpiCtx,
             .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma,
-            .pDataToTransmit = _pBuffer,
+            .pDataToTransmit = _pBuffer.data(),
             .fullDmaTransactionsCount = FullDmaTransactionsCount,
             .chunkedTransactionBufSize = ChunkedTransactionsBufSize,
             .completedTransactionsCount = 0};
@@ -90,12 +89,12 @@ public:
         if (FullDmaTransactionsCount)
         {
             --m_transmitContext.fullDmaTransactionsCount;
-            m_backendImpl.sendChunk(_pBuffer, DmaBufferSize);
+            m_backendImpl.sendChunk(_pBuffer.data(), DmaBufferSize);
         }
         else
         {
             m_transmitContext.chunkedTransactionBufSize = 0;
-            m_backendImpl.sendChunk(_pBuffer, _pBufferSize);
+            m_backendImpl.sendChunk(_pBuffer.data(), _pBuffer.size());
         }
     }
 public:

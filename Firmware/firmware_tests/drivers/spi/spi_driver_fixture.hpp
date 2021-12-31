@@ -41,7 +41,7 @@ protected:
         void await_suspend(std::coroutine_handle<> thisCoroutine) const
         {
             pThis->testSpiDriver.transmitBuffer(
-                pTransmitBuffer, bufferSize, thisCoroutine.address(), restoreInSpiCtx);
+                std::span(pTransmitBuffer, bufferSize), thisCoroutine.address(), restoreInSpiCtx);
         }
     };
 

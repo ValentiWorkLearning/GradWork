@@ -4,9 +4,9 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master,dev/develop,dev/coroutine,dev/build_ci_speedup]
+    branches: [ master,dev/develop,dev/migration_gcc_desktop_build]
   pull_request:
-    branches: [ master,dev/develop,dev/coroutine]
+    branches: [ master,dev/develop]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -14,7 +14,8 @@ jobs:
   build-windows-simulator:
     # The type of runner that the job will run on
     runs-on: windows-latest
-
+    env:
+      buildDir: '${{ github.workspace }}\build'
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
@@ -33,32 +34,18 @@ jobs:
         packages: |
           conan
 
-    - name: Setup conan dependencies
-      run: |
-        conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-
-    - name: Download libraries from Conan
-      run: |
-        mkdir ${{ runner.workspace }}/build/vsfirmwarebuild/Debug
-        conan install ${{ github.workspace }}/Firmware/conanfile.txt --install-folder ${{ runner.workspace }}/build/vsfirmwarebuild/
-
     #Install the latest cmake
     - name : Get the latest CMake version
       uses: lukka/get-cmake@latest
 
-    - name: Run CMakeLists build for MSVC compiler
-      uses: lukka/run-cmake@v2
-      with:
-        cmakeGenerator: Ninja
-        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
-        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
-        cmakeBuildType: Debug
-        cmakeAppendedArgs: '-DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR"'
-        buildDirectory: '${{ runner.workspace }}/build/vsfirmwarebuild'
-        buildWithCMake: true
+    - name: Run build for MSVC compiler
+      run: |
+        cmake -G"Visual Studio 16 2019" -Ax64 -S"${{ github.workspace }}/Firmware/" -B"${{ env.buildDir }}" -DPACKAGE_TESTS=ON -DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE=Release
+        cd ${{ env.buildDir }}
+        cmake --build . --config Release
     - name : Run firmware testing
       run: |
-        cd ${{ runner.workspace }}/build/vsfirmwarebuild/bin
+        cd ${{ env.buildDir }}/Release
         .\FirmwareTesting.exe
   build-arm:
 
@@ -84,21 +71,21 @@ jobs:
       id: cache-gcc-toolchain
       uses: actions/cache@v2
       with:
-        path: ${{ github.workspace }}/gcc_toolchain_10_2_q4
-        key: ${{runner.os}}-toolchain-v10_2_q4
+        path: ${{ github.workspace }}/gcc_toolchain_10_3
+        key: ${{runner.os}}-toolchain-v10_3
 
     - name: Get the latest arm-gcc-none-eabi-gcc
       uses: wei/wget@v1
       if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
       id: download-arm-gcc
       with:
-        args: 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/10-2020q4/gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2'
+        args: 'https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.07/gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2'
 
     - name: Unpack arm-gcc-compiler
       if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
       run: |
-        mkdir gcc_toolchain_10_2_q4
-        tar -xjf gcc-arm-none-eabi-10-2020-q4-major-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/gcc_toolchain_10_2_q4
+        mkdir gcc_toolchain_10_3
+        tar -xjf gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/gcc_toolchain_10_3
 
     - name: Cache NordicSDK
       id: cache-nordic-sdk
@@ -128,7 +115,7 @@ jobs:
         cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
         cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
         cmakeBuildType: Debug
-        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_10_2_q4/gcc-arm-none-eabi-10-2020-q4-major'
+        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=ON -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_10_3/gcc-arm-none-eabi-10.3-2021.07'
         buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
@@ -136,3 +123,54 @@ jobs:
     #   run: |
     #     echo Add other actions to build,
     #     echo test, and deploy your project.
+  build-linux-desktop-simulator:
+    runs-on: ubuntu-latest
+    env:
+      buildDir: '${{ github.workspace }}/build'
+    steps:
+
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+      with:
+        submodules: 'true'
+
+    - name: Setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.8'
+
+    - name: Install conan
+      uses:  BSFishy/pip-action@v1
+      with:
+        packages: |
+          conan
+
+    - name: Intall system required packages
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libegl-dev
+    #Install the latest cmake
+    - name : Get the latest CMake version
+      uses: lukka/get-cmake@latest
+    
+    - name: Set up GCC 11
+      uses: egor-tensin/setup-gcc@v1
+      with:
+        version: 11
+        platform: x64
+
+    - name: Run CMakeLists generation for GCC compiler
+      uses: lukka/run-cmake@v2
+      with:
+        cmakeGenerator: Unix Makefiles
+        cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
+        cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
+        cmakeBuildType: Debug
+        cmakeAppendedArgs : '-DTARGET_PLATFORM:STRING="FIRMWARE_SIMULATOR" -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=OFF -DPACKAGE_TESTS=ON -DENABLE_SANITIZE_BUILD=ON'
+        buildDirectory: ${{ env.buildDir }}
+        buildWithCMake: true
+
+    - name : Run firmware testing
+      run: |
+        cd ${{ env.buildDir }}
+        ./FirmwareTesting

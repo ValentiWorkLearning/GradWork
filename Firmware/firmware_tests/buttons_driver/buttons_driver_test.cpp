@@ -27,12 +27,12 @@ TEST_F(ButtonsDriverTest, SingleClick)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
 }
 
 TEST_F(ButtonsDriverTest, SingleClickDifferentButtons)
@@ -69,12 +69,12 @@ TEST_F(ButtonsDriverTest, SingleClickDifferentButtons)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
 }
 
 TEST_F(ButtonsDriverTest, SingleClickSequenceOfPushRelease)
@@ -111,12 +111,12 @@ TEST_F(ButtonsDriverTest, SingleClickSequenceOfPushRelease)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
 }
 TEST_F(ButtonsDriverTest, DoubleClickWithoutTimeout)
 {
@@ -148,12 +148,12 @@ TEST_F(ButtonsDriverTest, DoubleClickWithoutTimeout)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
 }
 
 TEST_F(ButtonsDriverTest, ThreeSeparateClicksBecauseOfTimeoutBetweenClick)
@@ -201,12 +201,12 @@ TEST_F(ButtonsDriverTest, ThreeSeparateClicksBecauseOfTimeoutBetweenClick)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
 }
 
 TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfInterruptedDoubleClickSequence)
@@ -243,12 +243,12 @@ TEST_F(ButtonsDriverTest, TwoSeparateClicksBecauseOfInterruptedDoubleClickSequen
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestSecondButtonId);
 }
 
 TEST_F(ButtonsDriverTest, DetectLongClickEllapsedTimer)
@@ -273,12 +273,12 @@ TEST_F(ButtonsDriverTest, DetectLongClickEllapsedTimer)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
 }
 
 TEST_F(ButtonsDriverTest, DetectSequenceOfLongClicks)
@@ -312,12 +312,12 @@ TEST_F(ButtonsDriverTest, DetectSequenceOfLongClicks)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
 }
 
 TEST_F(ButtonsDriverTest, DetectSequenceOfDoubleClicks)
@@ -366,12 +366,12 @@ TEST_F(ButtonsDriverTest, DetectSequenceOfDoubleClicks)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
 }
 
 TEST_F(ButtonsDriverTest, DetectButtonClickAfterLongClick)
@@ -405,10 +405,10 @@ TEST_F(ButtonsDriverTest, DetectButtonClickAfterLongClick)
     /*---------------Assertions---------------*/
 
     constexpr size_t EventsCount = eventsToCheck.size();
-    ASSERT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
+    EXPECT_EQ(m_pFakeEventHandler->getEventsCount(), EventsCount);
 
     for (size_t i{}; i < EventsCount; ++i)
-        ASSERT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
+        EXPECT_EQ(m_pFakeEventHandler->getEventAt(i), eventsToCheck[i]);
 
-    ASSERT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
+    EXPECT_EQ(m_pFakeEventHandler->getLastButton(), TestButtonId);
 }

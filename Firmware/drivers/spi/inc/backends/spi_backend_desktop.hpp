@@ -12,6 +12,7 @@
 #include <thread>
 #include <vector>
 #include <span>
+#include <fmt/ranges.h>
 
 #include <utils/MetaUtils.hpp>
 
@@ -26,27 +27,21 @@ class SpiBusDesktopBackend
 public:
     SpiBusDesktopBackend()
         : m_newDataArrived{false}
-        , m_pDataBuffer{nullptr}
+        , m_dataBuffer{}
         , m_bufferTransmitSize{}
         , m_processSpiTransactions{true}
     {
 #ifdef USE_THREADING_ASYNC_BACKEND
 
-        m_dmaThread = std::make_unique<std::thread>([this] {
+        m_dmaThread = std::make_unique<std::thread>([this]()mutable {
             while (m_processSpiTransactions)
             {
                 if (m_newDataArrived)
                 {
                     using namespace std::chrono_literals;
-                    // std::this_thread::sleep_for(1500ms);
 
-                    std::cout << "TRANSMIT SOME DATA:" << ' ';
-
-                    for (size_t i{}; i < m_bufferTransmitSize; ++i)
-                    {
-                        std::cout << std::hex << static_cast<std::int16_t>(m_pDataBuffer[i]) << ' ';
-                    }
-                    std::cout << std::endl;
+                    std::unique_lock<std::mutex>(m_transactionBufferGuard);
+                    fmt::print("[Desktop SPI simultator]{}\n", m_dataBuffer);
 
                     m_newDataArrived.store(false);
                     m_transactionCompleted();
@@ -76,7 +71,11 @@ public:
     void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
         m_bufferTransmitSize.store(_bufferSize);
-        m_pDataBuffer.store(_pBuffer);
+        m_dataBuffer.clear();
+        m_dataBuffer.reserve(_bufferSize);
+
+        std::unique_lock<std::mutex>(m_transactionBufferGuard);
+        std::copy(_pBuffer, _pBuffer + _bufferSize, std::back_inserter(m_dataBuffer));
         m_newDataArrived.store(true, std::memory_order_release);
 
 #ifndef USE_THREADING_ASYNC_BACKEND
@@ -108,7 +107,8 @@ public:
 private:
     std::atomic_bool m_newDataArrived;
     std::atomic_bool m_processSpiTransactions;
-    std::atomic<const std::uint8_t*> m_pDataBuffer;
+    mutable std::mutex m_transactionBufferGuard;
+    std::vector<std::uint8_t> m_dataBuffer;
     std::atomic<size_t> m_bufferTransmitSize;
 
     std::unique_ptr<std::thread> m_dmaThread;

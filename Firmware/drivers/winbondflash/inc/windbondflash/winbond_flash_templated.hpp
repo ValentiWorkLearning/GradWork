@@ -274,8 +274,7 @@ private:
         void await_suspend(std::coroutine_handle<> thisCoroutine) const
         {
             pThis->getSpiBus()->transmitBuffer(
-                pTransmitBuffer.data(),
-                pTransmitBuffer.size(),
+                pTransmitBuffer,
                 thisCoroutine.address(),
                 restoreInSpiCtx);
         }

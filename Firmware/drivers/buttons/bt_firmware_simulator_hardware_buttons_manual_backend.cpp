@@ -1,18 +1,22 @@
-#include "inc/buttons/bt_win32_hardware_buttons_manual_backend.hpp"
 
-#include "utils/CallbackConnector.hpp"
-#include "utils/MetaUtils.hpp"
+#include "inc/buttons/bt_firmware_simulator_hardware_buttons_manual_backend.hpp"
+
+#include <utils/CallbackConnector.hpp>
+#include <utils/MetaUtils.hpp>
+
+#ifdef WIN32
 
 #include <Windows.h>
 
 namespace Buttons
 {
 
-Win32TimerBackend::Win32TimerBackend() : m_isTimerEllapsed{true}
+
+FirmwareSimulatorTimerBackend::FirmwareSimulatorTimerBackend() : m_isTimerEllapsed{true}
 {
 }
 
-void Win32TimerBackend::startTimer()
+void FirmwareSimulatorTimerBackend::startTimer()
 {
     if (!m_isTimerEllapsed)
     {
@@ -32,27 +36,27 @@ void Win32TimerBackend::startTimer()
     m_isTimerEllapsed = false;
 }
 
-void Win32TimerBackend::stopTimer()
+void FirmwareSimulatorTimerBackend::stopTimer()
 {
     KillTimer(nullptr, TimerId);
     m_isTimerEllapsed = true;
 }
 
-void Win32TimerBackend::initialize()
+void FirmwareSimulatorTimerBackend::initialize()
 {
 }
 
-bool Win32TimerBackend::isTimerEllapsed() const
+bool FirmwareSimulatorTimerBackend::isTimerEllapsed() const
 {
     return m_isTimerEllapsed;
 }
 
-Win32ButtonsBackend::Win32ButtonsBackend()
+FirmwareSimulatorButtonsBackend::FirmwareSimulatorButtonsBackend()
 {
-    initWin32ApiHook();
+    initInternals();
 }
 
-void Win32ButtonsBackend::initWin32ApiHook()
+void FirmwareSimulatorButtonsBackend::initInternals()
 {
     HINSTANCE appInstance = GetModuleHandle(nullptr);
 
@@ -95,8 +99,37 @@ void Win32ButtonsBackend::initWin32ApiHook()
         WH_KEYBOARD_LL, reinterpret_cast<HOOKPROC>(hookKeyboardCallback), appInstance, 0);
 }
 
-void Win32ButtonsBackend::initialize()
+void FirmwareSimulatorButtonsBackend::initialize()
 {
 }
 
 } // namespace Buttons
+
+#else
+
+namespace Buttons
+{
+FirmwareSimulatorTimerBackend::FirmwareSimulatorTimerBackend()
+{
+}
+
+bool FirmwareSimulatorTimerBackend::isTimerEllapsed() const
+{
+    return false;
+}
+
+
+void FirmwareSimulatorTimerBackend::startTimer(){}
+
+void FirmwareSimulatorTimerBackend::stopTimer(){}
+
+void FirmwareSimulatorTimerBackend::initialize(){}
+
+
+FirmwareSimulatorButtonsBackend::FirmwareSimulatorButtonsBackend(){}
+
+void FirmwareSimulatorButtonsBackend::initialize(){}
+void FirmwareSimulatorButtonsBackend::initInternals(){}
+
+}
+#endif

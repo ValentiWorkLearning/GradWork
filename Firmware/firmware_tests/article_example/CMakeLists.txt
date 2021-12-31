@@ -14,3 +14,5 @@ target_compile_features(
     PUBLIC
     cxx_std_20
 )
+
+target_compile_options(ArticleExample PUBLIC $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>)

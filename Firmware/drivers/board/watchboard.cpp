@@ -21,7 +21,10 @@ APP_TIMER_DEF(m_ledDriverTimer);
 #include "delay/delay_provider.hpp"
 #include "logger/logger_service.hpp"
 
+#if defined (USE_DEVICE_SPECIFIC)
 #define FMT_HEADER_ONLY
+#endif
+
 #include <fmt/core.h>
 #include <fmt/ranges.h>
 

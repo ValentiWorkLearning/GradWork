@@ -4,15 +4,16 @@ add_library(
 )
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-
     target_link_libraries( spi INTERFACE NordicSDK::Common )
-    target_compile_options(
-        spi
-        INTERFACE
-        -fcoroutines
-    )
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
+    target_link_libraries( spi INTERFACE fmt::fmt )
 endif()
 
+target_compile_options(
+    spi
+    INTERFACE
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
+)
 
 target_include_directories(
     spi

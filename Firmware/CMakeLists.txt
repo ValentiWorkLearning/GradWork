@@ -1,7 +1,9 @@
 cmake_minimum_required(VERSION 3.14)
 
+set (CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 set( CONAN_DISABLE_CHECK_COMPILER TRUE )
-set( TARGET_PLATFORM "ARM_CORTEX" CACHE STRING "Target platform for application building")
+set( TARGET_PLATFORM "FIRMWARE_SIMULATOR" CACHE STRING "Target platform for application building")
 message( "Current building platform is ${TARGET_PLATFORM}")
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
@@ -28,8 +30,35 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     add_subdirectory(cmake/nordic ${CMAKE_BINARY_DIR}/nrfsdk )
 
 elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
-    include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-    conan_basic_setup(TARGETS)
+    if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
+      message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
+      file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.16.1/conan.cmake"
+                    "${CMAKE_BINARY_DIR}/conan.cmake"
+                    EXPECTED_HASH SHA256=396e16d0f5eabdc6a14afddbcfff62a54a7ee75c6da23f32f7a31bc85db23484
+                    TLS_VERIFY ON)
+    endif()
+
+    list(APPEND CMAKE_MODULE_PATH ${CMAKE_BINARY_DIR})
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_BINARY_DIR})
+
+    include(${CMAKE_BINARY_DIR}/conan.cmake)
+
+    conan_cmake_configure(REQUIRES sdl/2.0.16 gtest/1.11.0
+                          GENERATORS cmake_find_package
+                          IMPORTS "bin, *.dll -> ${CMAKE_CURRENT_BINARY_DIR}"
+                          IMPORTS "lib, *.dylib* -> ${CMAKE_CURRENT_BINARY_DIR}"
+                          OPTIONS sdl:shared=True
+                          OPTIONS fmt:shared=True
+                          )
+
+    conan_cmake_autodetect(settings)
+
+    conan_cmake_install(PATH_OR_REFERENCE .
+                        BUILD missing
+                        REMOTE conancenter
+                        SETTINGS ${settings})
+   find_package(SDL2 REQUIRED)
+
 endif()
 
 
@@ -73,6 +102,12 @@ target_compile_features(
     cxx_std_20
 )
 
+target_compile_options(
+    ${NORDIC_TARGET}
+    PRIVATE
+    $<$<CXX_COMPILER_ID:GNU>:-fcoroutines>
+)
+
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries(
         ${NORDIC_TARGET} PRIVATE
@@ -85,6 +120,8 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         PRIVATE
         -O0
         -fcoroutines
+        -fnothrow-opt
+        -fno-threadsafe-statics
     )
 endif()
 
@@ -105,9 +142,14 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
 
     option( ENABLE_SANITIZE_BUILD "Build simultator with ASAN support" OFF)
     list(APPEND EXTRA_LIBS vcruntime user32 gdi32 winmm imm32 ole32 oleaut32 version uuid advapi32 setupapi shell32)
-
     if( ${ENABLE_SANITIZE_BUILD} )
-        target_compile_options( ${NORDIC_TARGET} PUBLIC  /fsanitize=address )
+        if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+            set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /fsanitize=address")
+        else()
+            set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+            set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+            set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+        endif()
     endif()
 endif()
 

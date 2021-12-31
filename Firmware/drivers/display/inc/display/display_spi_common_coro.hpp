@@ -83,7 +83,7 @@ protected:
                 pBaseDisplay->resetDcPin();
 
             pBaseDisplay->getSpiBus()->transmitBuffer(
-                pTransmitBuffer, bufferSize, thisCoroutine.address(), restoreInSpiCtx);
+                std::span(pTransmitBuffer, bufferSize), thisCoroutine.address(), restoreInSpiCtx);
         }
     };
 

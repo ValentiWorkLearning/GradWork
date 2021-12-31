@@ -4,9 +4,10 @@
 
 #include <lvgl.h>
 
-#ifdef USE_WINSDL_BACKEND
+#ifdef USE_SDL_BACKEND
 #include <chrono>
 #include <thread>
+#include <atomic>
 #endif // USE_WINSDL_BACKEND
 
 namespace DisplayDriver
@@ -52,9 +53,8 @@ private:
     std::unique_ptr<TDisplayDriver> m_hardwareDisplayDriver;
 #endif
 
-#if defined USE_WINSDL_BACKEND
-    std::thread m_tickThread;
-    lv_indev_drv_t m_indevDriver;
+#if defined USE_SDL_BACKEND
+    static inline lv_indev_drv_t m_indevDriver{};
 #endif
 };
 

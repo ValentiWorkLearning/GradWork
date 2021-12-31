@@ -1,6 +1,7 @@
 ### Practical C++20 coroutines notes for ARM Cortex-M
 
-Достаточно много времени прошло с предыдущей заметки на тему использования сопрограмм. Изначально было в планах продемонстрировать на чем-то концепцию и как именно их можно было применять. На тот момент вариант примера в виде мигания светодиодиком подошел отлично. Но он был слишком простой. Необходимо было придумать что-то более сложное и более полезное, что ли. Таким образом и появилась идея переписать драйвер дисплея и SPI-FLASH в проекте-долгострое.
+Появилась идея в домашнем проекте попробовать использовать сопрограммы из С++20 на маленькой железке. В качестве модуля для экспериментов был выбран E73 NRF52832. Из инструментария, который использовался в процессе разработки- arm-gcc-gnu-none-eabi 10.2, MSVC для проверки идей и прогона тестов на Windows-платформе.
+Изначально было в планах продемонстрировать на чем-то концепцию и как именно их можно было применять. Была идея адаптирования примера в виде мигания светодиодом, но он был слишком простой. Необходимо было придумать что-то более сложное и более полезное, что ли. Таким образом появилась идея переписать драйвер дисплея и пары фрагментов SPI-FLASH в проекте-долгострое.
 
 Небольшой план, что будет в заметке:
 
@@ -19,9 +20,11 @@
 13. Ожидание окончания выполнения сопрограммы
 
 ### 0. Перед прочтением
-Заметка предполагает базовое знакомство читателя с сопрогрмаммами / их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
+Заметка предполагает базовое знакомство читателя с сопрограммами/их синтаксисом. В силу наличия более подробных статей на тему деталей реализации сопрограмм и их устройства рекомендуются к прочтению следующие материалы:
 
-* https://blog.panicsoftware.com/your-first-coroutine/
+* [YOUR FIRST COROUTINE,panicsoftware](https://blog.panicsoftware.com/your-first-coroutine/)
+
+Серия статей от автора библиотеки [cppcoro](https://github.com/lewissbaker/cppcoro)
 * https://lewissbaker.github.io/2017/09/25/coroutine-theory
 * https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
 * https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
@@ -37,14 +40,14 @@
 
 ### 1. Предыстория с транзакциями
 
-Изначально, идея переписывания с подхода в виде транзакций появилась как только возникла необходимость расширения транзакционности read-транзакциями. Для формирования очереди отправки этот подход был достаточно удобным, но для очереди приема получалось что-то вроде callback-hell подхода.
+Изначально идея переписывания с подхода в виде транзакций появилась как только возникла необходимость расширения транзакционности read-транзакциями. Для формирования очереди отправки этот подход был достаточно удобным, но для очереди приема получалось что-то вроде callback-hell подхода.
 
 В общих чертах, транзакционный подход представлял собой следующую идею:
 ```cpp
-template <typename... Args> void sendCommand(std::uint8_t _command, Args... _commandArgs) noexcept
+template <typename... Args> void sendCommand(std::uint8_t command, Args... commandArgs) noexcept
 {
-    sendCommand(_command);
-    sendChunk(static_cast<std::uint8_t>(_commandArgs)...);
+    sendCommand(command);
+    sendChunk(static_cast<std::uint8_t>(commandArgs)...);
 }
 
 template <typename... Args> void sendChunk(Args... _chunkArgs) noexcept
@@ -74,16 +77,17 @@ sendCommand(DisplayReg::CASET, 0x00, 0, 0, 240);
 ```
 Этот подход достаточно хорошо себя показал в работе. Типовая задача для применения имела следующий вид:
 
-1. Выставить состояние порта D/C для дисплея для выбора типа принимаемых данных (команда или данные) 
-2. Сформировать DMA- транзакцию
-3. По ее окончанию выполнить следующую отправку, если блок данных был не полностью отправлен
-4. Или вернуть состояние порта D/C в исходное состояние и перейти к обработке следующей транзакции
+1. Выставить состояние порта D/C для дисплея для выбора типа принимаемых данных (команда или данные);
+2. Сформировать DMA- транзакцию;
+3. По ее окончанию выполнить следующую отправку, если блок данных был не полностью отправлен;
+4. Или вернуть состояние порта D/C в исходное состояние и перейти к обработке следующей транзакции.
 
 Недостатки стали проявляться при попытке реализации драйвера для SPI-FLASH которая должна была быть использована в связке с Little FS. Где-то в тот-же период времени было найдено предложение в стандарт С++20 по сопрограммам, просмотрена серия мотивирующих статей:
-* https://habr.com/ru/company/yandex/blog/420861/
-* https://habr.com/ru/post/201826/
-* https://habr.com/ru/company/yandex/blog/240525/
-* https://habr.com/ru/post/340732/
+* [Готовимся к С++20. Coroutines TS на реальном примере](https://habr.com/ru/company/yandex/blog/420861/)
+
+* [Асинхронность: назад в будущее](https://habr.com/ru/post/201826/)
+* [Асинхронность 2: телепортация сквозь порталы](https://habr.com/ru/company/yandex/blog/240525/)
+* [Асинхронность 3: Субъекторная модель](https://habr.com/ru/post/340732/)
 
 И было принято решение о переписывании на сопрограммы части существующих драйверов.
 
@@ -243,22 +247,22 @@ void transmitCompleted() noexcept
 ### 4. Итерация на массиве команд инициализации
 Нам будут необходимы несколько всопомогательных функций. Их больше, чем две. но в общем случае представим их так:
 ```cpp
-auto sendCommand(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept
+auto sendCommand(const std::uint8_t* pBuffer, std::size_t bufferSize) noexcept
 {
-    const std::uint8_t* commandBuf = _pBuffer;
-    const std::uint8_t* ArgBuf = _pBuffer + 1;
-    const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>(_bufferSize - 1);
+    const std::uint8_t* commandBuf = pBuffer;
+    const std::uint8_t* ArgBuf = pBuffer + 1;
+    const std::uint16_t ArgsBufferSize = static_cast<std::uint16_t>(bufferSize - 1);
 
     return CoroUtils::when_all_sequence(
         sendCommandImpl(commandBuf),
         ArgsBufferSize > 0 ? sendChunk(ArgBuf, ArgsBufferSize) : sendChunk(nullptr, 0));
 }
 
-auto sendChunk(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept
+auto sendChunk(const std::uint8_t* pBuffer, std::size_t bufferSize) noexcept
 {
-    return Awaiter{.pTransmitBuffer = _pBuffer,
+    return Awaiter{.pTransmitBuffer = pBuffer,
                    .pBaseDisplay = this,
-                   .bufferSize = static_cast<std::uint16_t>(_bufferSize)};
+                   .bufferSize = static_cast<std::uint16_t>(bufferSize)};
 }
 ```
 
@@ -323,27 +327,27 @@ void initDisplay() noexcept
 Что-же. В синхронном варианте, данный код мог бы иметь вид:
 ```cpp
 void fillRectangle(
-    std::uint16_t _x,
-    std::uint16_t _y,
-    std::uint16_t _width,
-    std::uint16_t _height,
-    TBaseSpiDisplay::TColor* _colorToFill) noexcept
+    std::uint16_t x,
+    std::uint16_t y,
+    std::uint16_t width,
+    std::uint16_t height,
+    TBaseSpiDisplay::TColor* colorToFill) noexcept
 {
 
     const std::uint16_t DisplayHeight = TBaseSpiDisplay::getHeight();
     const std::uint16_t DisplayWidth = TBaseSpiDisplay::getWidth();
 
-    const bool isCoordsValid{!((_x >= DisplayWidth) || (_y >= DisplayHeight))};
+    const bool isCoordsValid{!((x >= DisplayWidth) || (y >= DisplayHeight))};
     if (isCoordsValid)
     {
         //Определяем размеры буфера для отправки
-        const size_t BytesSizeX = (_width - _x + 1);
-        const size_t BytesSizeY = (_height - _y + 1);
+        const size_t BytesSizeX = (width - x + 1);
+        const size_t BytesSizeY = (height - y + 1);
         const size_t BytesSquare = BytesSizeX * BytesSizeY;
         const size_t TransferBufferSize = (BytesSquare * sizeof(typename TBaseSpiDisplay::TColor));
 
         //Формируем область экрана для обновления
-        setAddrWindow(_x, _y, _width, _height);
+        setAddrWindow(x, y, width, height);
 
         static std::uint8_t RamWriteCmd{0x2C};
         // Команда на запись в экранный буфер
@@ -354,7 +358,7 @@ void fillRectangle(
         TBaseSpiDisplay::setDcPin();
         // Отправляем дисплейный буфер
         TBaseSpiDisplay::sendChunk(
-            reinterpret_cast<const std::uint8_t*>(_colorToFill), TransferBufferSize);
+            reinterpret_cast<const std::uint8_t*>(colorToFill), TransferBufferSize);
         // Восстанавливаем состояние порта Data/Command
         TBaseSpiDisplay::resetDcPin();
         // Сигнализируем об окончании заполнении области дисплея
@@ -368,7 +372,7 @@ void fillRectangle(
 ```cpp
 
 //Формируем область экрана для обновления
-co_await setAddrWindow(_x, _y, _width, _height); // <=============== co_await here
+co_await setAddrWindow(x, y, width, height); // <=============== co_await here
 
 static std::uint8_t RamWriteCmd{0x2C};
 // Команда на запись в экранный буфер
@@ -377,7 +381,7 @@ co_await TBaseSpiDisplay::sendCommandImplFast(&RamWriteCmd); // <===============
 TBaseSpiDisplay::setDcPin();
 // Отправляем дисплейный буфер
 co_await TBaseSpiDisplay::sendChunk(
-    reinterpret_cast<const std::uint8_t*>(_colorToFill),
+    reinterpret_cast<const std::uint8_t*>(colorToFill),
     TransferBufferSize); // <=============== co_await here
 
 TBaseSpiDisplay::resetDcPin();
@@ -389,7 +393,7 @@ TBaseSpiDisplay::onRectArreaFilled.emitLater();
 Добавлением в трех строках `co_await` мы получили ассинххронный код. Остается только дописать немного примитивов, которые будут нам необходимы, чтобы это все заработало. А именно, реализовать притивы `when_all_sequence` для запуска последовательности и `Task` для вызова `co_await` на возвращаемом результате функции `setAddrWindow`.
 
 ### 5. Для любителей посложнее - итерация на std::tuple<CommandDescriptor>
-Данная идея была первой. Прдеставляем таблицу команд инициализации диспллея в виде std::tuple который в свою очередь состоял бы из Дескрипторов команд.
+Данная идея была первой. Представляем таблицу команд инициализации диспллея в виде std::tuple который в свою очередь состоял бы из Дескрипторов команд.
 Преимущество- нет необходимости указывать количество аргументов у команды. Все, что задано после `DefaultDelay`- будет считаться аргументом команды.
 
 Дескриптор команды был реализован как:
@@ -500,7 +504,7 @@ template <typename... Tasks> struct WhenAllSequence {
 
   template <std::size_t... Indexes>
   VoidTask launchAll(std::integer_sequence<std::size_t, Indexes...>) {
-    // ИСпользуя fold-expression из C++17 - вызываем co_await для каждого
+    // Используя fold-expression из C++17 - вызываем co_await для каждого
     // элемента tuple
     (co_await std::get<Indexes>(m_taskList), ...);
   }
@@ -519,7 +523,7 @@ template <typename... Args> auto when_all_sequence(Args &&... args) noexcept {
 
 Таким образом, получаем возможность не дублировать написание `co_await` для последовательно выполняемых сопрограмм. 
 
-В данной реализации у нас появился возвращаемый тип `VoidTask`. Он нам необходим для приостановки выполнения `await_suspend` т.к. в ином случае при выполнении `co_await` для первого из переданных аргумнетов в `launchAll` будет выполнено возващение на вызывающую сторону, после чего вызов `handle.resume()` что не совсем соотвествует ожидаемому результату. Восстановление ожидающей сопрограммы должно быть выполнено только после окончания работы всех переданных задач.
+В данной реализации у нас появился возвращаемый тип `VoidTask`. Он нам необходим для приостановки выполнения `await_suspend` т.к. в ином случае при выполнении `co_await` для первого из переданных аргументов в `launchAll` будет выполнено возващение на вызывающую сторону, после чего вызов `handle.resume()` что не совсем соотвествует ожидаемому результату. Восстановление ожидающей сопрограммы должно быть выполнено только после окончания работы всех переданных задач.
 
 Рассмотрим реализацию типа `VoidTask`.
 Данный тип представляет собой "ленивую" задачу которая не выполняется до момента вызова на ней оператора `co_await`. Изначально задача приостановлена. Рассмотрим небольшой пример ее работы, прежде чем описывать детали реализации.
@@ -624,6 +628,7 @@ struct task_promise
 В свою очередь, VoidTask должен определить у себя оператор `co_await` для возможности его вызова.
 
 `operator co_await` должен вернуть на вызвающую сторону `task_awaitable`, который имеет возможность восстановить выполнение приостановленной сопрограммы и дополнительно установить `continuation`, т.е. сопрограмму, которая будет восстановлена после окончания работы текущей сопрограммы.
+
 ```cpp
     struct task_awaitable
     {
@@ -653,7 +658,7 @@ struct task_promise
 ```
 Необходимо реализовать у `promise` метод для установки `continuation` и так-же добавить возможность вызова `continuation`.
 
-Реализация установки `continuation` представляет собой дин метод:
+Реализация установки `continuation` представляет собой метод:
 ```cpp
 void set_continuation(std::coroutine_handle<> continuation)
 {
@@ -809,25 +814,25 @@ struct VoidTask
 
 ```cpp
 void transmitBuffer(
-    const std::uint8_t* _pBuffer,
-    std::uint16_t _pBufferSize,
-    void* _pUserData,
-    bool _restoreInSpiCtx) noexcept
+    const std::uint8_t* pBuffer,
+    std::uint16_t pBufferSize,
+    void* pUserData,
+    bool restoreInSpiCtx) noexcept
 {
     // установили coroutine_handle
-    m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+    m_coroHandle = std::coroutine_handle<>::from_address(pUserData);
     //установили вызов, который будет вызван по окончанию передачи в конкретной реализации SPI
     m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
-    const size_t TransferBufferSize = _pBufferSize;
+    const size_t TransferBufferSize = pBufferSize;
     const size_t FullDmaTransactionsCount = TransferBufferSize / DmaBufferSize;
     const size_t ChunkedTransactionsBufSize = TransferBufferSize % DmaBufferSize;
     const bool ComputeChunkOffsetWithDma = FullDmaTransactionsCount >= 1;
 
     // сформировали контекст транзакции
-    TransactionContext newContext{.restoreInSpiCtx = _restoreInSpiCtx,
+    TransactionContext newContext{.restoreInSpiCtx = restoreInSpiCtx,
                                   .computeChunkOffsetWithDma = ComputeChunkOffsetWithDma,
-                                  .pDataToTransmit = _pBuffer,
+                                  .pDataToTransmit = pBuffer,
                                   .fullDmaTransactionsCount = FullDmaTransactionsCount,
                                   .chunkedTransactionBufSize = ChunkedTransactionsBufSize,
                                   .completedTransactionsCount = 0};
@@ -838,12 +843,12 @@ void transmitBuffer(
     if (FullDmaTransactionsCount)
     {
         --m_transmitContext.fullDmaTransactionsCount;
-        m_backendImpl.sendChunk(_pBuffer, DmaBufferSize);
+        m_backendImpl.sendChunk(pBuffer, DmaBufferSize);
     }
     else
     {
         m_transmitContext.chunkedTransactionBufSize = 0;
-        m_backendImpl.sendChunk(_pBuffer, _pBufferSize);
+        m_backendImpl.sendChunk(pBuffer, pBufferSize);
     }
 }
 ```
@@ -870,13 +875,13 @@ public:
             this));
     }
 
-    void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
+    void sendChunk(const std::uint8_t* pBuffer, const size_t bufferSize) noexcept
     {
         // формирование дескриптора на передачу данных
-        nrfx_spim_xfer_desc_t xferDesc = NRFX_SPIM_XFER_TX(_pBuffer, _bufferSize);
+        nrfx_spimxfer_desc_t xferDesc = NRFX_SPIMXFER_TX(pBuffer, bufferSize);
 
         // выполнение транзакции
-        nrfx_err_t transmissionError = nrfx_spim_xfer(
+        nrfx_err_t transmissionError = nrfx_spimxfer(
             &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx], &xferDesc, 0);
         APP_ERROR_CHECK(transmissionError);
     }
@@ -886,13 +891,13 @@ public:
         std::span<std::uint8_t> _receiveArray)
     {
         // формирование transmit-receive транзакции
-        nrfx_spim_xfer_desc_t xferDesc = NRFX_SPIM_XFER_TRX(
+        nrfx_spimxfer_desc_t xferDesc = NRFX_SPIMXFER_TRX(
             _transmitArray.data(),
             _transmitArray.size(),
             _receiveArray.data(),
             _receiveArray.size());
 
-        nrfx_err_t transmissionError = nrfx_spim_xfer(
+        nrfx_err_t transmissionError = nrfx_spimxfer(
             &SpiInstance::HandleStorage[PeripheralInstance::HandleIdx], &xferDesc, 0);
         APP_ERROR_CHECK(transmissionError);
     }
@@ -946,9 +951,9 @@ public ::testing::WithParamInterface<std::tuple<std::uint16_t, std::string_view>
 Реализация данных функций представлена ниже:
 
 ```cpp
-void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
+void sendChunk(const std::uint8_t* pBuffer, const size_t bufferSize) noexcept
 {
-    BusTransactionsTransmit.emplace_back(_pBuffer, _bufferSize);
+    BusTransactionsTransmit.emplace_back(pBuffer, bufferSize);
     m_completedTransaction();
 }
 
@@ -967,6 +972,7 @@ TDataStream getTransmittedData() const
 }
 ```
  Для работы с параметрическими тестами необходимо добавить его определение + инстанцирование.
+ На данном этапе будет опущена реализация примитива SyncWait, она будет приведена далее. Нам она необходима для ожидания окончания работы сопрограммы.
 
 Определение параметрического теста будет иметь вид:
 
@@ -985,8 +991,8 @@ TEST_P(SpiDriverTest, CheckRandomSequenceWithLengthTransmissionCorrect)
         return std::byte(distribution(generator));
     });
 
-    co_await sendChunk(
-        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size());
+    CoroUtils::syncWait(sendChunk(
+        reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()));
     // проверяем соответствие данных, которые должны были быть переданы данным, которые были отправлены в spi-backend
     EXPECT_EQ(TransactionsToDataStream(), ExpectedStream);
 }
@@ -1153,33 +1159,33 @@ CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
 }
 ```
 
-Идея с std::forward_as_tuple следующая - все что передано в аргументах -  в функции `prepareXferTransaction` будет рассмотрено как команда + количество dummy-bytes которые нужны для принятия команды. Все что после `forward_as_tuple` - количество dummy-bytes для вычитки данных.
+Идея с `std::forward_as_tuple` следующая - все что передано в аргументах -  в функции `prepareXferTransaction` будет рассмотрено как команда + количество dummy-bytes которые нужны для принятия команды. Все что после `forward_as_tuple` - количество dummy-bytes для вычитки данных.
 
 
-Реализация фунеции `prepareXferTransaction` следующая: получаем на вход команду в виде tuple + количество пустых посылок. Далеее, заполняем передащий буфер сначала командой и ее аргументами, передаем, после- пустыми посылками. Для возвращаемого значения возвращаем slice на буфер с принятыми данными
+Реализация функции `prepareXferTransaction` следующая: получаем на вход команду в виде tuple + количество пустых посылок. Далее, заполняем передащий буфер сначала командой и ее аргументами, передаем, после- пустыми посылками. Для возвращаемого значения возвращаем slice на буфер с принятыми данными
 
 Реализация функции имеет вид:
 
 ```cpp
     template <typename TCommand, typename... Args>
     CoroUtils::Task<std::span<std::uint8_t>> prepareXferTransaction(
-        TCommand&& _command,
-        Args&&... _argList)
+        TCommand&& command,
+        Args&&... argList)
     {
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
 
         getSpiBus()->setCsPinLow();
 
-        processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(_command));
+        processTransmitBuffer(transmitBuffer, std::forward<TCommand&&>(command));
 
         constexpr std::size_t CommandSize = std::tuple_size_v<TCommand>;
 
         co_await transmitChunk(std::span(transmitBuffer.data(), CommandSize));
 
-        constexpr std::size_t DummyListSize = sizeof...(_argList);
+        constexpr std::size_t DummyListSize = sizeof...(argList);
 
-        processTransmitBuffer(transmitBuffer, std::forward_as_tuple(_argList...));
+        processTransmitBuffer(transmitBuffer, std::forward_as_tuple(argList...));
 
         auto receivedBlockSpan = co_await xferTransaction(
             std::span(transmitBuffer.data(), DummyListSize),
@@ -1193,32 +1199,32 @@ CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
 Где `xferTransaction` представлена в виде:
 ```cpp
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
-        std::span<const std::uint8_t> _pTransmitCommand,
-        std::span<std::uint8_t> _pReceiveBuffer) noexcept
+        std::span<const std::uint8_t> pTransmitCommand,
+        std::span<std::uint8_t> pReceiveBuffer) noexcept
     {
-        co_await xferChunk(_pTransmitCommand, _pReceiveBuffer);
-        co_return std::span(_pReceiveBuffer.data(), _pReceiveBuffer.size());
+        co_await xferChunk(pTransmitCommand, pReceiveBuffer);
+        co_return std::span(pReceiveBuffer.data(), pReceiveBuffer.size());
     }
 
     template <
         typename TTRansmitBuffer,
         typename TArgsTuple,
         typename Indexes = std::make_index_sequence<std::tuple_size_v<TArgsTuple>>>
-    void processTransmitBuffer(TTRansmitBuffer&& _transmitBuffer, TArgsTuple&& _argsTuple)
+    void processTransmitBuffer(TTRansmitBuffer&& transmitBuffer, TArgsTuple&& argsTuple)
     {
         processTransmitBufferImpl(
-            std::forward<TTRansmitBuffer&&>(_transmitBuffer),
-            std::forward<TArgsTuple&&>(_argsTuple),
+            std::forward<TTRansmitBuffer&&>(transmitBuffer),
+            std::forward<TArgsTuple&&>(argsTuple),
             Indexes{});
     }
 
     template <typename TTRansmitBuffer, typename TArgsTuple, std::size_t... Index>
     void processTransmitBufferImpl(
-        TTRansmitBuffer&& _transmitBuffer,
-        TArgsTuple&& _argsTuple,
+        TTRansmitBuffer&& transmitBuffer,
+        TArgsTuple&& argsTuple,
         std::index_sequence<Index...>)
     {
-        ((_transmitBuffer[Index] = std::get<Index>(_argsTuple)), ...);
+        ((transmitBuffer[Index] = std::get<Index>(argsTuple)), ...);
     }
 ```
 ### 12. Добавляем чтение device id
@@ -1288,12 +1294,15 @@ template <typename TAwaitable> struct AwaitResultGetter
 Вызов `makeSyncWaitTask` представляет собой последовательность вызовов `co_yield co_await`:
 ```cpp
 template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
-SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
+SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& awaitable)
 {
-    co_yield co_await _awaitable;
+    co_yield co_await awaitable;
 }
 ```
 Где `co_await` приостанавливает текущий вызов, а `co_yield` используется для сохранения результата выполненной сопрограммы.
+
+
+При этом, необходимо учесть, что при вызове `SyncWait` на VoidTask у нас возвращаемого результата не будет. Проще всего это реализовать через специализацию шаблона для `Promise`.
 
 Блокирование текущего потока выполнения реализовано за счет установки `BlockingEvent` в котором при вызове `.wait` происходит lock на `condition_wariable` до момента, пока не будет установлен `atomic_bool` флаг:
 ```cpp
@@ -1318,16 +1327,19 @@ private:
     std::condition_variable condEvent;
 };
 ```
-Полная реализация `SyncWait`:
+Фрагмент реализации `SyncWait` для типов с вовращаемым результетом не-void:
 ```cpp
-template <typename TResultType> struct SyncWaitTask
-{
-    struct SyncTaskPromise;
-    using promise_type = SyncTaskPromise;
-    using TResultRef = TResultType&&;
+template<typename TResultType>
+struct SyncTaskPromise;
 
-    SyncWaitTask(std::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
-        : m_suspendedRoutine{_suspendedRoutine}
+template <typename TResultType>
+struct SyncWaitTask
+{
+    using promise_type = SyncTaskPromise<TResultType>;
+    using TResultRef = ResultTypeRefHolder<TResultType>::Type;
+
+    SyncWaitTask(stdcoro::coroutine_handle<SyncTaskPromise<TResultType>> suspendedRoutine)
+        : m_suspendedRoutine{suspendedRoutine}
     {
     }
     ~SyncWaitTask()
@@ -1336,73 +1348,7 @@ template <typename TResultType> struct SyncWaitTask
             m_suspendedRoutine.destroy();
     }
 
-    struct FinalAwaitable
-    {
-        bool await_ready() noexcept
-        {
-            return false;
-        }
-        template <typename TPromise>
-        void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
-        {
-            // по окончанию работы сопрограммы устанавливаем  blockingEvent  в set, тем самым
-            // восстанавливая текущий поток выполнения
-            SyncTaskPromise& promise = coroutine.promise();
-            promise.m_event->set();
-        }
-        void await_resume() noexcept
-        {
-        }
-    };
-
-    struct SyncTaskPromise
-    {
-
-        auto get_return_object() noexcept
-        {
-            return SyncWaitTask{std::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
-        }
-        void start(BlockingEvent* _pEvent) noexcept
-        {
-            m_event = _pEvent;
-            std::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
-        }
-        auto initial_suspend() noexcept
-        {
-            return std::suspend_always{};
-        }
-
-        auto final_suspend() noexcept
-        {
-            return FinalAwaitable{};
-        }
-
-        auto yield_value(TResultRef result) noexcept
-        {
-            // для поддержки operator co_yield
-            m_value = std::addressof(result);
-            return final_suspend();
-        }
-
-        decltype(auto) value() noexcept
-        {
-            return static_cast<TResultRef>(*m_value);
-        }
-
-        void return_void() noexcept
-        {
-        }
-
-        void unhandled_exception()
-        {
-            std::terminate();
-        }
-
-        BlockingEvent* m_event;
-        std::remove_reference_t<TResultType>* m_value;
-    };
-
-    TResultType&& result() noexcept
+    decltype(auto) result() noexcept
     {
         return m_suspendedRoutine.promise().value();
     }
@@ -1415,19 +1361,105 @@ template <typename TResultType> struct SyncWaitTask
     {
         m_suspendedRoutine.promise().start(&_event);
     }
-    std::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
+    stdcoro::coroutine_handle<SyncTaskPromise<TResultType>> m_suspendedRoutine;
+};
+
+
+template<typename TResultType>
+struct SyncTaskPromise
+{
+    using TResultRef = TResultType&&;
+
+    struct FinalAwaitable
+    {
+        bool await_ready() noexcept
+        {
+            return false;
+        }
+        template <typename TPromise>
+        void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
+        {
+            SyncTaskPromise& promise = coroutine.promise();
+            promise.m_event->set();
+        }
+        void await_resume() noexcept
+        {
+        }
+    };
+
+    auto get_return_object() noexcept
+    {
+        return SyncWaitTask<TResultType>{ stdcoro::coroutine_handle<SyncTaskPromise<TResultType>>::from_promise(*this) };
+    }
+    void start(BlockingEvent* _pEvent) noexcept
+    {
+        m_event = _pEvent;
+        stdcoro::coroutine_handle<SyncTaskPromise<TResultType>>::from_promise(*this).resume();
+    }
+    auto initial_suspend() noexcept
+    {
+        return std::suspend_always{};
+    }
+
+    auto final_suspend() noexcept
+    {
+        return FinalAwaitable{};
+    }
+
+    auto yield_value(TResultRef result) noexcept
+    {
+        m_value = std::addressof(result);
+        return final_suspend();
+    }
+
+    decltype(auto) value() noexcept
+    {
+        return static_cast<TResultRef>(*m_value);
+    }
+
+    void return_void() noexcept
+    {
+    }
+
+    void unhandled_exception()
+    {
+        std::terminate();
+    }
+
+    BlockingEvent* m_event;
+    std::remove_reference_t<TResultType>* m_value;
 };
 
 template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
-SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
+SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& awaitable)
 {
-    co_yield co_await _awaitable;
+    if constexpr (!std::is_same_v<TTaskResult, void>)
+        co_yield co_await awaitable;
+    else
+        co_await awaitable;
 }
 
+```
+
+
+## Небольшие примеры для экспериментов
 Полный пример на котором можно экспериментировать:
 https://godbolt.org/z/8YoxPPYsW
 
 Пример с использованием SPI-интерфейса для инициализации дисплея. Можно экспериментировать.
-https://wandbox.org/permlink/dsL64oCgPxEEph81
+https://wandbox.org/permlink/y6s7UVqLQUBy67xK
 
-```
+
+## Полезные ссылки и материалы
+* https://blog.panicsoftware.com/your-first-coroutine/
+* https://lewissbaker.github.io/2017/09/25/coroutine-theory
+* https://lewissbaker.github.io/2017/11/17/understanding-operator-co-await
+* https://lewissbaker.github.io/2018/09/05/understanding-the-promise-type
+* https://lewissbaker.github.io/2020/05/11/understanding_symmetric_transfer
+* https://gist.github.com/MattPD/9b55db49537a90545a90447392ad3aeb - собрание ссылок и материалов по сопрограммам(доклады, библиотеки, примеры)
+* https://github.com/lewissbaker/cppcoro - библиотека, с которой разбирался в процессе написания заметки
+* https://github.com/bbelson2/coro-mc-wwl-code - репозиторий из исследования [C++20 Coroutines on Microcontrollers—What We Learned](https://ieeexplore.ieee.org/abstract/document/8995550)
+
+P.S. В дальнейшем хотелось бы раписать про особенности работы сопрограмм, использование пользовательских аллокаторов для них, применение в связке с библиотеками.
+Выражаю благодарность @magras, @shiz01, @Dr_Zlo13 за вычитку материала и помощь в подготовке.
+P.S.S. Статья является пробой пера, буду рад увидеть пожелания/примечания/etc.
