@@ -12,6 +12,12 @@ Development board for smart-handwatch based on NRF52832 E73 module with C++20/CM
 ### Article:
 [C++20 Coroutines on NRF52832 with GTest](https://habr.com/ru/post/566070/)
 
+### Revision v1.2
+![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.2/WatchBorad-top.jpg "Revision v1.2")
+
+![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.2/WatchBorad-Bottom.jpg "Revision v1.2")
+
+### Revision v1.0
 ![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.1/photo_2020-04-12_14-58-51.jpg "Revision v1.0")
 
 ![alt text](https://github.com/ValentiWorkLearning/GradWork/blob/master/Images/v1.1/photo_2020-04-12_14-58-50.jpg "Revision v1.0")
