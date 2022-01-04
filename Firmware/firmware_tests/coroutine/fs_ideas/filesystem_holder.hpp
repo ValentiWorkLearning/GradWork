@@ -36,7 +36,7 @@ public:
     using This_t = Holder<TBlockDeviceEntity>;
 
 public:
-    constexpr Holder()noexcept
+    constexpr Holder() noexcept
     {
         m_fsConfig = createLfsConfig();
         auto error = lfs_mount(&m_fsInstance, &m_fsConfig);
@@ -46,18 +46,24 @@ public:
             lfs_mount(&m_fsInstance, &m_fsConfig);
         }
     }
-    constexpr auto fsInstance() noexcept
+
+    constexpr decltype(auto) fsInstance() noexcept
     {
-        return m_fsInstance;
+        return &m_fsInstance;
     }
-    File<This_t> openFile(std::string_view path)noexcept
+    File<This_t> openFile(std::string_view path) noexcept
     {
-        lfs_file_t file{};
-        lfs_file_open(&m_fsInstance, &file, path.data(), LFS_O_RDWR | LFS_O_CREAT);
-        return File<This_t>{std::move(file), &m_fsInstance };
+        File<This_t> retFile{&m_fsInstance};
+        lfs_file_open(
+            &m_fsInstance,
+            retFile.nativeHandle(FilesystemPasskey{}),
+            path.data(),
+            LFS_O_RDWR | LFS_O_CREAT);
+
+        return retFile;
     }
 
-    constexpr TBlockDeviceEntity& getBlockDevice()noexcept
+    constexpr TBlockDeviceEntity& getBlockDevice() noexcept
     {
         return m_blockDeviceHolder;
     }
@@ -69,7 +75,7 @@ private:
         lfs_block_t block,
         lfs_off_t off,
         void* buffer,
-        lfs_size_t size)noexcept
+        lfs_size_t size) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
         pThis->getBlockDevice().read(
@@ -82,7 +88,7 @@ private:
         lfs_block_t block,
         lfs_off_t off,
         const void* buffer,
-        lfs_size_t size)noexcept
+        lfs_size_t size) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
         pThis->getBlockDevice().write(
@@ -91,13 +97,13 @@ private:
         return LFS_ERR_OK;
     }
 
-    constexpr static int eraseCall(const struct lfs_config* c, lfs_block_t block)noexcept
+    constexpr static int eraseCall(const struct lfs_config* c, lfs_block_t block) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
         return LFS_ERR_OK;
     }
 
-    constexpr static int syncCall(const struct lfs_config* c)noexcept
+    constexpr static int syncCall(const struct lfs_config* c) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
         return LFS_ERR_OK;
@@ -145,37 +151,54 @@ private:
 template <typename TFilesystemHolder> class File
 {
 public:
-    explicit constexpr File()noexcept = default;
-    explicit constexpr File(lfs_file_t&& fileHandle, lfs_t* pFsHolder)noexcept
-        : m_pFileHandle{ std::move( fileHandle )}, m_pFsHolder{ pFsHolder }
+    explicit constexpr File(lfs_t* pFsHolder) noexcept
+        : m_pFileHandle{std::make_unique<lfs_file_t>()}, m_pFsHolder{pFsHolder}
     {
-        spdlog::warn("File::File()");
     }
+
+    constexpr File(File&& otherHandle) noexcept
+        : m_pFileHandle{std::move(otherHandle.m_pFileHandle)}
+        , m_pFsHolder{std::exchange(otherHandle.m_pFsHolder, nullptr)}
+    {
+    }
+
     ~File()
     {
-        lfs_file_close(m_pFsHolder, &m_pFileHandle);
+        if (!m_pFsHolder)
+            return;
+
+        lfs_file_close(m_pFsHolder, m_pFileHandle.get());
         spdlog::warn("~File::File()");
     }
-    CoroUtils::VoidTask write(std::span<const std::uint8_t> dataHolder)noexcept
+
+    CoroUtils::VoidTask write(std::span<const std::uint8_t> dataHolder) noexcept
     {
-        lfs_file_write(m_pFsHolder, &m_pFileHandle, dataHolder.data(), static_cast<lfs_size_t>(dataHolder.size()));
+        lfs_file_write(
+            m_pFsHolder,
+            m_pFileHandle.get(),
+            dataHolder.data(),
+            static_cast<lfs_size_t>(dataHolder.size()));
         co_return;
     }
 
-    CoroUtils::Task<std::span<std::uint8_t>> read(std::span<std::uint8_t> outBuffer)noexcept
+    CoroUtils::Task<std::span<std::uint8_t>> read(std::span<std::uint8_t> outBuffer) noexcept
     {
-        lfs_file_read(m_pFsHolder, &m_pFileHandle, outBuffer.data(), static_cast<lfs_size_t>(outBuffer.size()));
+        lfs_file_read(
+            m_pFsHolder,
+            m_pFileHandle.get(),
+            outBuffer.data(),
+            static_cast<lfs_size_t>(outBuffer.size()));
         co_return outBuffer;
     }
 
-    lfs_file_t nativeHandle(const FilesystemPasskey& passkey)noexcept
+    lfs_file_t* nativeHandle(const FilesystemPasskey& passkey) noexcept
     {
         Meta::UnuseVar(passkey);
-        return m_pFileHandle;
+        return m_pFileHandle.get();
     }
 
 private:
-    lfs_file_t m_pFileHandle;
+    std::unique_ptr<lfs_file_t> m_pFileHandle;
     lfs_t* m_pFsHolder;
 };
 } // namespace Platform::Fs

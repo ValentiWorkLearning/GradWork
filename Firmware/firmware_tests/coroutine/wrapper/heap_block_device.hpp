@@ -52,7 +52,7 @@ public:
     constexpr void write(
         std::uint32_t _address,
         const std::uint8_t* _blockData,
-        std::size_t _blockSize) noexcept
+        std::uint32_t _blockSize) noexcept
     {
         spdlog::info(
             "HeapBlockDevice::WRITE to: address:{0} blockData:{1} blockSize: {2}",

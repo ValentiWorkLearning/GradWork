@@ -27,7 +27,7 @@ public:
         return offspring()->getEraseSize();
     }
 
-    constexpr void write(std::uint32_t _address, const std::uint8_t* _blockData, std::size_t _blockSize) noexcept
+    constexpr void write(std::uint32_t _address, const std::uint8_t* _blockData, std::uint32_t _blockSize) noexcept
     {
         offspring()->write(_address, _blockData, _blockSize);
     }

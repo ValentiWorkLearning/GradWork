@@ -24,32 +24,24 @@
 #include "wrapper/heap_block_device.hpp"
 #include <spdlog/spdlog.h>
 
-CoroUtils::Task<int> coroutineTask()
-{
-    int b = 32;
-
-    co_return b;
-}
-
-void showFlashDeviceId()
-{
-    CoroUtils::Task<int> task = coroutineTask();
-    int testValue = co_await task;
-}
 using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<
     Wrapper::kBlockSize,
     Wrapper::kSectorsCount,
     Wrapper::kReadSize,
     Wrapper::kEraseSize>>;
 
-CoroUtils::VoidTask simpleRwTest(TFilesystem& filesystem, std::string_view fileName, std::string_view fileData)
+CoroUtils::VoidTask simpleRwTest(
+    TFilesystem& filesystem,
+    std::string_view fileName,
+    std::string_view fileData)
 {
     spdlog::warn("simpleRwTest begin");
     auto lfs = filesystem.fsInstance();
     {
         spdlog::warn("FILE open begin");
-        auto holdedFile = filesystem.openFile(fileName);
-        co_await holdedFile.write(std::span(reinterpret_cast<const std::uint8_t*>(fileData.data()), fileData.size()));
+        auto filename{filesystem.openFile(fileName)};
+        co_await filename.write(
+            std::span(reinterpret_cast<const std::uint8_t*>(fileData.data()), fileData.size()));
         spdlog::warn("FILE open finalize");
     }
 
@@ -59,18 +51,17 @@ CoroUtils::VoidTask simpleRwTest(TFilesystem& filesystem, std::string_view fileN
     {
         spdlog::warn("FILE read begin");
         auto holdedFile = filesystem.openFile(fileName);
-        //co_await holdedFile.read(std::span(readFrom.data(), fileData.size()));
+        co_await holdedFile.read(std::span(readFrom.data(), fileData.size()));
         spdlog::warn("FILE read finalize");
     }
 
-    auto kCompareStringView{std::string_view{reinterpret_cast<const char*>(readFrom.data()), readFrom.size()}};
+    auto kCompareStringView{
+        std::string_view{reinterpret_cast<const char*>(readFrom.data()), readFrom.size()}};
     assert(fileData == kCompareStringView);
     spdlog::warn("simpleRwTest finalize");
 }
 CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
 {
-
-    /*   auto fileWrapped = filesystem.openFile("test");*/
     constexpr auto kFileData = std::string_view("Hello world!");
     simpleRwTest(filesystem, "helloworld.txt", kFileData);
 
@@ -109,10 +100,6 @@ CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
     };
     co_await simpleRwTest(filesystem, "nmeaData.txt", kNmeaDataExample);
 
-    /*co_await file.write(
-        {reinterpret_cast<const std::uint8_t*>(kFileData.data()), kFileData.size()});
-    auto data = co_await file.read(kFileData.size());*/
-
     co_return;
 }
 
@@ -139,8 +126,6 @@ int main()
     //    ,  240
     //};
     // displayCoro.fillRectangle(0, 0, 0, 0, nullptr);
-
-    showFlashDeviceId();
 
     while (true)
     {

@@ -14,4 +14,4 @@ target_include_directories(littlefs PUBLIC
 	$<BUILD_INTERFACE:${PROJECT_SOURCE_DIR}/littlefs>
 )
 
-target_compile_definitions(littlefs PUBLIC LFS_YES_TRACE)
+target_compile_definitions(littlefs PUBLIC LFS_YES_TRACE )
