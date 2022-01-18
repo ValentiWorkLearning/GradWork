@@ -4,7 +4,7 @@ name: CI
 # events but only for the master branch
 on:
   push:
-    branches: [ master,dev/develop,dev/migration_gcc_desktop_build]
+    branches: [ master,dev/develop,dev/littlefs_impl]
   pull_request:
     branches: [ master,dev/develop]
 
