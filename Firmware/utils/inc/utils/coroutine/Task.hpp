@@ -28,10 +28,10 @@ template <typename TResult> struct Task
             return stdcoro::suspend_always{};
         }
 
-        template<typename TResult>
-        void return_value(TResult&& _value) noexcept
+        template<typename TResultType>
+        void return_value(TResultType&& _value) noexcept
         {
-            m_coroutineResult.emplace(std::forward<TResult&&>(_value));
+            m_coroutineResult.emplace(std::forward<TResultType&&>(_value));
         }
 
         void set_continuation(stdcoro::coroutine_handle<> continuation)
