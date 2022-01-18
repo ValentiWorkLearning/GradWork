@@ -16,6 +16,3 @@
 [submodule "Schematic/KiCadLibrariesRoot"]
 	path = Schematic/KiCadLibrariesRoot
 	url = https://github.com/ValentiWorkLearning/KiCadLibrariesRoot.git
-[submodule "Firmware/3rdparty/littlefs_lib/littlefs"]
-	path = Firmware/3rdparty/littlefs_lib/littlefs
-	url = https://github.com/littlefs-project/littlefs.git
