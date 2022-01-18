@@ -28,9 +28,10 @@ template <typename TResult> struct Task
             return stdcoro::suspend_always{};
         }
 
-        void return_value(const TResult& _value) noexcept
+        template<typename TResult>
+        void return_value(TResult&& _value) noexcept
         {
-            m_coroutineResult = _value;
+            m_coroutineResult.emplace(std::forward<TResult&&>(_value));
         }
 
         void set_continuation(stdcoro::coroutine_handle<> continuation)
@@ -40,7 +41,7 @@ template <typename TResult> struct Task
 
         TResult& result()
         {
-            return m_coroutineResult;
+            return *m_coroutineResult;
         }
 
         struct final_awaitable
@@ -67,7 +68,7 @@ template <typename TResult> struct Task
             return final_awaitable{};
         }
 
-        TResult m_coroutineResult;
+        std::optional<TResult> m_coroutineResult;
         stdcoro::coroutine_handle<> m_continuation;
     };
 

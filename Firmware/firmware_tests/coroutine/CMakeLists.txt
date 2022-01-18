@@ -21,7 +21,7 @@ target_sources(
     fs_ideas/platform_filesystem.hpp
     wrapper/ih_block_device.hpp
     wrapper/heap_block_device.hpp
-)
+    wrapper/adaptor_block_device.hpp)
 
 target_include_directories(
     coroutine_experiments_app

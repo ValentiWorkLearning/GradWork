@@ -36,14 +36,18 @@ public:
     using This_t = Holder<TBlockDeviceEntity>;
 
 public:
-    constexpr Holder() noexcept
+    Holder() noexcept
     {
         m_fsConfig = createLfsConfig();
-        auto error = lfs_mount(&m_fsInstance, &m_fsConfig);
+    }
+
+    CoroUtils::VoidTask initializeFs()
+    {
+        auto error = co_await lfs_mount(&m_fsInstance, &m_fsConfig);
         if (error)
         {
-            lfs_format(&m_fsInstance, &m_fsConfig);
-            lfs_mount(&m_fsInstance, &m_fsConfig);
+            co_await lfs_format(&m_fsInstance, &m_fsConfig);
+            co_await lfs_mount(&m_fsInstance, &m_fsConfig);
         }
     }
 
@@ -51,16 +55,16 @@ public:
     {
         return &m_fsInstance;
     }
-    File<This_t> openFile(std::string_view path) noexcept
+    CoroUtils::Task<File<This_t>> openFile(std::string_view path) noexcept
     {
         File<This_t> retFile{&m_fsInstance};
-        lfs_file_open(
+        auto error = co_await lfs_file_open(
             &m_fsInstance,
             retFile.nativeHandle(FilesystemPasskey{}),
             path.data(),
             LFS_O_RDWR | LFS_O_CREAT);
 
-        return retFile;
+        co_return retFile;
     }
 
     constexpr TBlockDeviceEntity& getBlockDevice() noexcept
@@ -70,43 +74,43 @@ public:
 
 private:
 private:
-    constexpr static int readCall(
-        const struct lfs_config* c,
+    static CoroUtils::Task<int> readCall(
+        const lfs_config* c,
         lfs_block_t block,
         lfs_off_t off,
         void* buffer,
         lfs_size_t size) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
-        pThis->getBlockDevice().read(
+        co_await pThis->getBlockDevice().read(
             static_cast<std::uint8_t*>(buffer), block * c->block_size + off, size);
-        return LFS_ERR_OK;
+        co_return LFS_ERR_OK;
     }
 
-    constexpr static int progCall(
-        const struct lfs_config* c,
+    static CoroUtils::Task<int> progCall(
+        const lfs_config* c,
         lfs_block_t block,
         lfs_off_t off,
         const void* buffer,
         lfs_size_t size) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
-        pThis->getBlockDevice().write(
+        co_await pThis->getBlockDevice().write(
             (block * c->block_size + off), reinterpret_cast<const std::uint8_t*>(buffer), size);
 
-        return LFS_ERR_OK;
+        co_return LFS_ERR_OK;
     }
 
-    constexpr static int eraseCall(const struct lfs_config* c, lfs_block_t block) noexcept
+    static CoroUtils::Task<int> eraseCall(const lfs_config* c, lfs_block_t block) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
-        return LFS_ERR_OK;
+        co_return LFS_ERR_OK;
     }
 
-    constexpr static int syncCall(const struct lfs_config* c) noexcept
+    static CoroUtils::Task<int> syncCall(const lfs_config* c) noexcept
     {
         auto pThis = reinterpret_cast<This_t*>(c->context);
-        return LFS_ERR_OK;
+        co_return LFS_ERR_OK;
     }
 
 private:
@@ -151,7 +155,8 @@ private:
 template <typename TFilesystemHolder> class File
 {
 public:
-    explicit constexpr File(lfs_t* pFsHolder) noexcept
+
+    constexpr File(lfs_t* pFsHolder) noexcept
         : m_pFileHandle{std::make_unique<lfs_file_t>()}, m_pFsHolder{pFsHolder}
     {
     }
@@ -164,16 +169,16 @@ public:
 
     ~File()
     {
-        if (!m_pFsHolder)
+        if (!m_pFsHolder && !m_pFileHandle)
             return;
 
-        lfs_file_close(m_pFsHolder, m_pFileHandle.get());
+        CoroUtils::syncWait(lfs_file_close(m_pFsHolder, m_pFileHandle.get()));
         spdlog::warn("~File::File()");
     }
 
     CoroUtils::VoidTask write(std::span<const std::uint8_t> dataHolder) noexcept
     {
-        lfs_file_write(
+        co_await lfs_file_write(
             m_pFsHolder,
             m_pFileHandle.get(),
             dataHolder.data(),
@@ -183,7 +188,7 @@ public:
 
     CoroUtils::Task<std::span<std::uint8_t>> read(std::span<std::uint8_t> outBuffer) noexcept
     {
-        lfs_file_read(
+        co_await lfs_file_read(
             m_pFsHolder,
             m_pFileHandle.get(),
             outBuffer.data(),

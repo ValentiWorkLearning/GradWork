@@ -22,13 +22,16 @@
 
 #include "fs_ideas/platform_filesystem.hpp"
 #include "wrapper/heap_block_device.hpp"
+#include "wrapper/adaptor_block_device.hpp"
 #include <spdlog/spdlog.h>
 
-using TFilesystem = Platform::Fs::Holder<Wrapper::HeapBlockDevice<
+using TFilesystem = Platform::Fs::Holder<Wrapper::LogAdaptorBlockDevice<Wrapper::HeapBlockDevice<
     Wrapper::kBlockSize,
     Wrapper::kSectorsCount,
     Wrapper::kReadSize,
-    Wrapper::kEraseSize>>;
+    Wrapper::kEraseSize>>>;
+
+using TFile = Platform::Fs::File<TFilesystem>;
 
 CoroUtils::VoidTask simpleRwTest(
     TFilesystem& filesystem,
@@ -39,7 +42,7 @@ CoroUtils::VoidTask simpleRwTest(
     auto lfs = filesystem.fsInstance();
     {
         spdlog::warn("FILE open begin");
-        auto filename{filesystem.openFile(fileName)};
+        auto filename = std::move(co_await filesystem.openFile(fileName));
         co_await filename.write(
             std::span(reinterpret_cast<const std::uint8_t*>(fileData.data()), fileData.size()));
         spdlog::warn("FILE open finalize");
@@ -50,8 +53,8 @@ CoroUtils::VoidTask simpleRwTest(
 
     {
         spdlog::warn("FILE read begin");
-        auto holdedFile = filesystem.openFile(fileName);
-        co_await holdedFile.read(std::span(readFrom.data(), fileData.size()));
+        auto holdedFile = std::move(co_await filesystem.openFile(fileName));
+        auto resultRead = co_await holdedFile.read(std::span(readFrom.data(), fileData.size()));
         spdlog::warn("FILE read finalize");
     }
 
@@ -107,6 +110,7 @@ int main()
 {
 
     TFilesystem platformFilesystem;
+    CoroUtils::syncWait(platformFilesystem.initializeFs());
 
     CoroUtils::syncWait(fileTest(platformFilesystem));
 

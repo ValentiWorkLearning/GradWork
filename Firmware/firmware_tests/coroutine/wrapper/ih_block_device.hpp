@@ -1,5 +1,6 @@
 #pragma once
 #include <cstdint>
+#include <utils/CoroUtils.hpp>
 
 namespace Wrapper
 {
@@ -27,13 +28,13 @@ public:
         return offspring()->getEraseSize();
     }
 
-    constexpr void write(std::uint32_t _address, const std::uint8_t* _blockData, std::uint32_t _blockSize) noexcept
+    CoroUtils::VoidTask write(std::uint32_t _address, const std::uint8_t* _blockData, std::uint32_t _blockSize) noexcept
     {
-        offspring()->write(_address, _blockData, _blockSize);
+        co_await offspring()->write(_address, _blockData, _blockSize);
     }
-    constexpr void read(std::uint8_t* pblockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
+    CoroUtils::VoidTask read(std::uint8_t* pblockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
     {
-        offspring()->read(pblockOut, _address, _blockSize);
+        co_await offspring()->read(pblockOut, _address, _blockSize);
     }
 
 private:

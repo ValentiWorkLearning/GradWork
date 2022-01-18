@@ -3,8 +3,6 @@
 #include "ih_block_device.hpp"
 #include <etl/vector.h>
 
-#include <spdlog/spdlog.h>
-
 namespace Wrapper
 {
 inline constexpr std::size_t kBlockSize = 256;
@@ -18,7 +16,9 @@ template <
     std::size_t ReadSize = kReadSize,
     std::size_t EraseSize = kEraseSize,
     std::size_t ProgSize = kReadSize>
-class HeapBlockDevice : public BlockDeviceEntity<HeapBlockDevice<BlockSize, SectorsCount, ReadSize,EraseSize,ProgSize>>
+class HeapBlockDevice
+    : public BlockDeviceEntity<
+          HeapBlockDevice<BlockSize, SectorsCount, ReadSize, EraseSize, ProgSize>>
 {
 public:
     constexpr HeapBlockDevice()
@@ -49,20 +49,14 @@ public:
         return EraseSize;
     }
 
-    constexpr void write(
+    CoroUtils::VoidTask write(
         std::uint32_t _address,
         const std::uint8_t* _blockData,
         std::uint32_t _blockSize) noexcept
     {
-        spdlog::info(
-            "HeapBlockDevice::WRITE to: address:{0} blockData:{1} blockSize: {2}",
-            _address,
-            _blockData,
-            _blockSize);
-
         std::uint32_t requestSize = _blockSize;
         const std::uint8_t* pBlockRequest = _blockData;
-        std::uint32_t blockAddress{ _address };
+        std::uint32_t blockAddress{_address};
         while (requestSize > 0)
         {
             std::uint32_t highPart = blockAddress / getBlockSize();
@@ -75,14 +69,16 @@ public:
             pBlockRequest += getProgSize();
             requestSize -= getProgSize();
         }
+        co_return;
     }
-    constexpr void read(std::uint8_t* _pBlockOut, std::uint32_t _address, std::uint32_t _blockSize) noexcept
+    CoroUtils::VoidTask read(
+        std::uint8_t* _pBlockOut,
+        std::uint32_t _address,
+        std::uint32_t _blockSize) noexcept
     {
-        spdlog::info("HeapBlockDevice::READ to: address:{0} blockSize: {1}", _address, _blockSize);
-
-        std::uint32_t blockSize{ _blockSize };
-        std::uint8_t* pReadBuffer{ _pBlockOut };
-        std::uint32_t blockAddress{ _address };
+        std::uint32_t blockSize{_blockSize};
+        std::uint8_t* pReadBuffer{_pBlockOut};
+        std::uint32_t blockAddress{_address};
 
         while (blockSize > 0)
         {
@@ -94,6 +90,7 @@ public:
             pReadBuffer += getReadSize();
             blockSize -= getReadSize();
         }
+        co_return;
     }
 
 private:
