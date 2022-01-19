@@ -34,7 +34,9 @@ add_executable(
     drivers/windond_flash/flash_fixture.hpp
     drivers/spi/mock_gpio.hpp
     drivers/spi/mock_spi.hpp
-)
+ 
+    filesystem/filesystem_fixture.hpp
+    filesystem/filesystem_in_memory_test.cpp)
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
@@ -62,7 +64,7 @@ target_link_libraries(
     watch_display
     lvgl_lib
     drivers_ih
-
+    filesystem
     buttons_driver
     windbond_spi_flash_driver
 )

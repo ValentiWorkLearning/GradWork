@@ -70,6 +70,7 @@ add_subdirectory(utils)
 add_subdirectory(logger)
 add_subdirectory(graphics)
 add_subdirectory(service_providers)
+add_subdirectory(filesystem)
 
 set (NORDIC_TARGET theOpenWatch)
 add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})

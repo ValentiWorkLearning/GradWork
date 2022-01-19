@@ -6,8 +6,6 @@ if( UNIX )
     find_package(Threads REQUIRED)
 endif()
 
-find_package(spdlog REQUIRED)
-
 add_executable(coroutine_experiments_app ${PROJECT_SOURCES})
 
 target_sources(
@@ -16,12 +14,7 @@ target_sources(
     coroutine_thoughts.cpp
     thoughts.hpp
     st7789_draft.hpp
-    fs_ideas/filesystem_holder.hpp
-    
-    fs_ideas/platform_filesystem.hpp
-    wrapper/ih_block_device.hpp
-    wrapper/heap_block_device.hpp
-    wrapper/adaptor_block_device.hpp)
+)
 
 target_include_directories(
     coroutine_experiments_app
@@ -50,8 +43,7 @@ target_link_libraries(
     watch_display
     UtilsLibrary
     logger_service
-    littlefs
-    spdlog::spdlog
+    filesystem
 )
 if(UNIX)
     target_link_libraries( coroutine_experiments_app PUBLIC Threads::Threads)

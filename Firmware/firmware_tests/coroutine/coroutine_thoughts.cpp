@@ -19,10 +19,10 @@
 #include <spi/spi_wrapper_async_templated.hpp>
 
 #include "st7789_draft.hpp"
+#include <filesystem/platform_filesystem.hpp>
+#include <filesystem/block_device_wrapper/heap_block_device.hpp>
+#include <filesystem/block_device_wrapper/adaptor_block_device.hpp>
 
-#include "fs_ideas/platform_filesystem.hpp"
-#include "wrapper/heap_block_device.hpp"
-#include "wrapper/adaptor_block_device.hpp"
 #include <spdlog/spdlog.h>
 
 using TFilesystem = Platform::Fs::Holder<Wrapper::LogAdaptorBlockDevice<Wrapper::HeapBlockDevice<
