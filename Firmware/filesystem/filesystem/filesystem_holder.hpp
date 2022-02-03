@@ -11,6 +11,7 @@
 #include <utils/MetaUtils.hpp>
 
 #include <spdlog/spdlog.h>
+#include <cassert>
 
 namespace Platform::Fs
 {
@@ -58,6 +59,7 @@ public:
     }
     CoroUtils::Task<File<This_t>> openFile(std::string_view path) noexcept
     {
+        assert(!path.empty());
         File<This_t> retFile{&m_fsInstance};
         auto error = co_await lfs_file_open(
             &m_fsInstance,

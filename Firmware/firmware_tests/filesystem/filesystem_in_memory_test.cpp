@@ -3,8 +3,8 @@
 #include <gtest/gtest.h>
 #include <utils/coroutine/SyncWait.hpp>
 
-
-constexpr auto HelloWorldData = FilesystemParamInterfaceData{ .fileData = "Hello world!", .filename = "helloworld.txt" };
+constexpr auto HelloWorldData =
+    FilesystemParamInterfaceData{.fileData = "Hello world!", .filename = "helloworld.txt"};
 
 constexpr auto kNmeaDataExample = std::string_view{
     "$GPGSA,A,1,,,,,,,,,,,,,,,* 1E\n"
@@ -40,35 +40,36 @@ constexpr auto kNmeaDataExample = std::string_view{
 
 };
 
-constexpr auto NmeaData = FilesystemParamInterfaceData{ .fileData = kNmeaDataExample,.filename = "nmea_data.txt" };
-
+constexpr auto NmeaData =
+    FilesystemParamInterfaceData{.fileData = kNmeaDataExample, .filename = "nmea_data.txt"};
 
 TEST_P(FilesystemTopLevelTestFixture, CheckFileReadWriteProcedure)
 {
-    spdlog::warn("simpleRwTest begin");
     auto lfs = m_testFilesystem.fsInstance();
     {
-        auto filename = std::move(CoroUtils::syncWait(m_testFilesystem.openFile(GetParam().filename)));
-        CoroUtils::syncWait(filename.write(
-            std::span(reinterpret_cast<const std::uint8_t*>(GetParam().fileData.data()), GetParam().fileData.size())));
+        auto filePath = GetParam().filename;
+        auto filename = std::move(CoroUtils::syncWait(m_testFilesystem.openFile(filePath)));
+        CoroUtils::syncWait(filename.write(std::span(
+            reinterpret_cast<const std::uint8_t*>(GetParam().fileData.data()),
+            GetParam().fileData.size())));
     }
 
     std::vector<std::uint8_t> readFrom;
     readFrom.resize(GetParam().fileData.size());
 
     {
-        auto holdedFile = std::move(CoroUtils::syncWait(m_testFilesystem.openFile(GetParam().filename)));
-        auto resultRead = CoroUtils::syncWait( holdedFile.read(std::span(readFrom.data(), GetParam().fileData.size())));
+        auto holdedFile =
+            std::move(CoroUtils::syncWait(m_testFilesystem.openFile(GetParam().filename)));
+        auto resultRead = CoroUtils::syncWait(
+            holdedFile.read(std::span(readFrom.data(), GetParam().fileData.size())));
     }
 
     auto kCompareStringView{
-        std::string_view{reinterpret_cast<const char*>(readFrom.data()), readFrom.size()} };
+        std::string_view{reinterpret_cast<const char*>(readFrom.data()), readFrom.size()}};
     EXPECT_EQ(kCompareStringView, GetParam().fileData);
 }
-
 
 INSTANTIATE_TEST_SUITE_P(
     FilesystemTopLevelTesting,
     FilesystemTopLevelTestFixture,
-    ::testing::Values(
-        FilesystemParamInterfaceData{}));
+    ::testing::Values(HelloWorldData, NmeaData));
