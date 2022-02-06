@@ -3,7 +3,7 @@
 #include "ih_block_device.hpp"
 #include <etl/vector.h>
 
-namespace Wrapper
+namespace Filesystem::BlockDevice
 {
 inline constexpr std::size_t kBlockSize = 256;
 inline constexpr std::size_t kSectorsCount = 65'536;

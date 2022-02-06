@@ -25,11 +25,11 @@
 
 #include <spdlog/spdlog.h>
 
-using TFilesystem = Platform::Fs::Holder<Wrapper::LogAdaptorBlockDevice<Wrapper::HeapBlockDevice<
-    Wrapper::kBlockSize,
-    Wrapper::kSectorsCount,
-    Wrapper::kReadSize,
-    Wrapper::kEraseSize>>>;
+using TFilesystem = Platform::Fs::Holder<Filesystem::BlockDevice::LogAdaptorBlockDevice<Filesystem::BlockDevice::HeapBlockDevice<
+    Filesystem::BlockDevice::kBlockSize,
+    Filesystem::BlockDevice::kSectorsCount,
+    Filesystem::BlockDevice::kReadSize,
+    Filesystem::BlockDevice::kEraseSize>>>;
 
 using TFile = Platform::Fs::File<TFilesystem>;
 

@@ -4,6 +4,7 @@
 #include <etl/vector.h>
 
 #include <spdlog/spdlog.h>
+#include <span>
 
 template <> struct fmt::formatter<std::span<const std::uint8_t>>
 {
@@ -35,7 +36,7 @@ template <> struct fmt::formatter<std::span<const std::uint8_t>>
     }
 };
 
-namespace Wrapper
+namespace Filesystem::BlockDevice
 {
 
 template <typename TWrappee>

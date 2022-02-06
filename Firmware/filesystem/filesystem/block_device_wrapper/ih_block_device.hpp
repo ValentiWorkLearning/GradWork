@@ -2,7 +2,7 @@
 #include <cstdint>
 #include <utils/CoroUtils.hpp>
 
-namespace Wrapper
+namespace Filesystem::BlockDevice
 {
 template <typename TImpl> class BlockDeviceEntity
 {

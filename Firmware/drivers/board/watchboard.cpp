@@ -15,11 +15,11 @@ APP_TIMER_DEF(m_ledDriverTimer);
 
 #endif
 
-#include "utils/CallbackConnector.hpp"
-#include "utils/CoroUtils.hpp"
+#include <utils/CallbackConnector.hpp>
+#include <utils/CoroUtils.hpp>
 
-#include "delay/delay_provider.hpp"
-#include "logger/logger_service.hpp"
+#include <delay/delay_provider.hpp>
+#include <logger/logger_service.hpp>
 
 #if defined (USE_DEVICE_SPECIFIC)
 #define FMT_HEADER_ONLY
