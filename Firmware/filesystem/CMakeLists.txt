@@ -2,7 +2,11 @@ if(WIN32 OR UNIX AND ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
     find_package(spdlog REQUIRED)
 endif()
 
-add_library(filesystem INTERFACE filesystem/filesystem_holder.hpp )
+add_library(filesystem INTERFACE
+
+    filesystem/filesystem_holder.hpp
+    filesystem/block_device_wrapper/combiner_block_device.hpp
+)
 
 target_sources(filesystem INTERFACE
     filesystem/block_device_wrapper/ih_block_device.hpp

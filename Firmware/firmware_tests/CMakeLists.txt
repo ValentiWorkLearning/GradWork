@@ -36,7 +36,7 @@ add_executable(
     drivers/spi/mock_spi.hpp
  
     filesystem/filesystem_fixture.hpp
-    filesystem/filesystem_in_memory_test.cpp)
+    filesystem/filesystem_in_memory_test.cpp  )
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS

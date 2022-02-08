@@ -23,7 +23,7 @@ public:
     {
         constexpr std::uint16_t PageSize = 256;
 
-        assert(_blockData.size() < PageSize);
+        assert(_blockData.size() <= PageSize);
 
         using TTupleProgram = decltype(std::forward_as_tuple(
             WindbondCommandSet::PageProgram,

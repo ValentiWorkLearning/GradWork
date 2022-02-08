@@ -22,14 +22,30 @@
 #include <filesystem/platform_filesystem.hpp>
 #include <filesystem/block_device_wrapper/heap_block_device.hpp>
 #include <filesystem/block_device_wrapper/adaptor_block_device.hpp>
+#include <filesystem/block_device_wrapper/spi_block_device.hpp>
+#include <filesystem/block_device_wrapper/combiner_block_device.hpp>
+
+#include <windbondflash/winbond_flash_templated.hpp>
 
 #include <spdlog/spdlog.h>
 
-using TFilesystem = Platform::Fs::Holder<Filesystem::BlockDevice::LogAdaptorBlockDevice<Filesystem::BlockDevice::HeapBlockDevice<
-    Filesystem::BlockDevice::kBlockSize,
-    Filesystem::BlockDevice::kSectorsCount,
-    Filesystem::BlockDevice::kReadSize,
-    Filesystem::BlockDevice::kEraseSize>>>;
+using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
+using TFlashDriver = ExternalFlash::WinbondFlashDriver<TSpiBus>;
+
+using TSpiFlashBlockDevice = Filesystem::BlockDevice::SpiFlashBlockDevice<TFlashDriver>;
+
+using TDisplayDriver = DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
+
+using TLogHeapBlockDevice =
+    Filesystem::BlockDevice::LogAdaptorBlockDevice<Filesystem::BlockDevice::HeapBlockDevice<
+        Filesystem::BlockDevice::kBlockSize,
+        Filesystem::BlockDevice::kSectorsCount,
+        Filesystem::BlockDevice::kReadSize,
+        Filesystem::BlockDevice::kEraseSize>>;
+
+using TCombinedBlockDevice = Filesystem::BlockDevice::CombinerBlockDevice<TLogHeapBlockDevice,TSpiFlashBlockDevice>;
+
+using TFilesystem = Platform::Fs::Holder<TCombinedBlockDevice>;
 
 using TFile = Platform::Fs::File<TFilesystem>;
 
@@ -114,9 +130,6 @@ int main()
 
     CoroUtils::syncWait(fileTest(platformFilesystem));
 
-    using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
-
-    using TDisplayDriver = DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
     /*Display display{};
     display.fillRectangle(0, 0, 220, 220, nullptr);*/
 
