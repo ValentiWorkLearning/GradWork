@@ -1,15 +1,13 @@
 cmake_minimum_required(VERSION 3.14)
 
-set(CMAKE_CXX_EXTENSIONS OFF)
-
 add_library(littlefs)
 
 target_sources(littlefs PRIVATE
-	"littlefs/lfs.cpp"
-	"littlefs/lfs_util.cpp"
+	littlefs/lfs.cpp
+	littlefs/lfs_util.cpp
 )
 
-target_include_directories(littlefs PUBLIC  littlefs
+target_include_directories(littlefs PUBLIC littlefs
 )
 
 target_link_libraries(littlefs PUBLIC UtilsLibrary )
