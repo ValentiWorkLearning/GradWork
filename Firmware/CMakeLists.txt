@@ -13,7 +13,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums -fno-exceptions
         ${CPU_FLAGS}
     )
-    set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake )
+    set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/arm-gcc-toolchain.cmake )
 endif()
 
 project(nordic-template C CXX ASM)
@@ -23,7 +23,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
     set( NRF_TARGET "nrf52" )
     set( NRF52SOFTDEVICE "S112" )
-    set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
+    set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_LIST_DIR}/sdk_dependent")
 
     #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)
@@ -62,9 +62,7 @@ elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
 endif()
 
 
-set (3RDPARTY_DIR "3rdparty")
-add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
-
+add_subdirectory(3rdparty)
 add_subdirectory(drivers)
 add_subdirectory(utils)
 add_subdirectory(logger)
@@ -73,13 +71,9 @@ add_subdirectory(service_providers)
 add_subdirectory(filesystem)
 
 set (NORDIC_TARGET theOpenWatch)
-add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
-
-target_sources(
-    ${NORDIC_TARGET}
-    PRIVATE
-    main.cpp
-    ap_application.cpp
+add_executable(${NORDIC_TARGET}
+    ${CMAKE_CURRENT_LIST_DIR}/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ap_application.cpp
 )
 
 target_link_libraries(
