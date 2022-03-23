@@ -59,14 +59,20 @@ void Application::initBoard() noexcept
 
 void Application::initServices() noexcept
 {
-    m_fakeServiceProvider = ServiceProviders::getFakeServiceCreator();
-    m_batteryLevelService = m_fakeServiceProvider->getBatteryService();
-    m_heartrateService = m_fakeServiceProvider->getHeartrateService();
-    m_dateTimeService = m_fakeServiceProvider->getDateTimeService();
+    auto bleServiceProvider = ServiceProviders::getFakeServiceCreator();
+    m_batteryLevelService = bleServiceProvider->getBatteryService();
+    m_heartrateService = bleServiceProvider->getHeartrateService();
+    m_dateTimeService = bleServiceProvider->getDateTimeService();
 }
 
 void Application::initPeripheral() noexcept
 {
+}
+
+Application& Application::Instance()
+{
+    static Application app;
+    return app;
 }
 
 void Application::initBleStack() noexcept

@@ -20,11 +20,8 @@ class Application : public Utils::noncopyable
 {
 
 public:
-    Application() noexcept;
+    static Application& Instance();
 
-    ~Application() noexcept;
-
-public:
     void runApplicationLoop() noexcept;
 
 private:
@@ -41,8 +38,11 @@ private:
     void connectBoardSpecificEvents() noexcept;
 
 private:
+    Application() noexcept;
+    ~Application() noexcept;
+
+private:
     Ble::Stack::TSoftDevicePtr m_bleStackKeeper;
-    std::unique_ptr<ServiceProviders::IServiceCreator> m_fakeServiceProvider;
     std::unique_ptr<ServiceProviders::BatteryService::IBatteryLevelAppService>
         m_batteryLevelService;
     std::unique_ptr<ServiceProviders::HeartrateService::IHeartrateService> m_heartrateService;
