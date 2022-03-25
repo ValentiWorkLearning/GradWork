@@ -12,7 +12,7 @@
 namespace Buttons
 {
 
-enum class ButtonState
+enum class ButtonState : std::uint8_t
 {
     kButtonUp,
     kButtonDown,
@@ -22,7 +22,7 @@ enum class ButtonState
     Undefined
 };
 
-enum class ButtonId
+enum class ButtonId : std::uint8_t
 {
     kLeftButtonTop,
     kLeftButtonMedium,

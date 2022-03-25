@@ -17,6 +17,8 @@
 
 #include <optional>
 
+namespace GsEvents = Graphics::Events;
+
 namespace EventConvert
 {
 Graphics::Events::TButtonsEvents toButtonEvent(Buttons::ButtonState _buttonToConvert)
@@ -94,23 +96,23 @@ void Application::initBleStack() noexcept
     auto& pMainWindow = m_graphicsService->getMainWindow();
     m_bleStackKeeper->onConnected.connect([&pMainWindow] {
         pMainWindow.getEventDispatcher().postEvent(
-            {Graphics::Events::EventGroup::BleDevice,
-             Graphics::Events::TBleClientEvents::DeviceConnected,
+            {GsEvents::EventGroup::BleDevice,
+             GsEvents::to_underlying(GsEvents::TBleClientEvents::DeviceConnected),
              std::nullopt});
     });
 
     m_bleStackKeeper->onDisconnected.connect([&pMainWindow] {
         pMainWindow.getEventDispatcher().postEvent(
-            {Graphics::Events::EventGroup::BleDevice,
-             Graphics::Events::TBleClientEvents::DeviceDisconnected,
+            {GsEvents::EventGroup::BleDevice,
+             GsEvents::to_underlying(GsEvents::TBleClientEvents::DeviceDisconnected),
              std::nullopt});
     });
 
     auto& dateTimeService = m_bleStackKeeper->getDateTimeService();
     dateTimeService.onDateTimeDiscovered.connect([&pMainWindow](const TimeWrapper& _newBleTime) {
         pMainWindow.getEventDispatcher().postEvent(
-            {Graphics::Events::EventGroup::DateTime,
-             Graphics::Events::TDateTimeEvents::DateTimeChanged,
+            {GsEvents::EventGroup::DateTime,
+             GsEvents::to_underlying(GsEvents::TDateTimeEvents::DateTimeChanged),
              _newBleTime});
     });
 }
@@ -124,15 +126,15 @@ void Application::initGraphicsStack() noexcept
     m_batteryLevelService->onBatteryLevelChangedSig.connect(
         [&pMainWindow](std::uint8_t _newBatteryValue) {
             pMainWindow.getEventDispatcher().postEvent(
-                {Graphics::Events::EventGroup::Battery,
-                 Graphics::Events::TBatteryEvents::BatteryLevelChanged,
+                {GsEvents::EventGroup::Battery,
+                 GsEvents::to_underlying(GsEvents::TBatteryEvents::BatteryLevelChanged),
                  _newBatteryValue});
         });
 
     m_dateTimeService->onDateTimeChanged.connect([&pMainWindow](const TimeWrapper& _newTime) {
         pMainWindow.getEventDispatcher().postEvent(
-            {Graphics::Events::EventGroup::DateTime,
-             Graphics::Events::TDateTimeEvents::DateTimeChanged,
+            {GsEvents::EventGroup::DateTime,
+             GsEvents::to_underlying(GsEvents::TDateTimeEvents::DateTimeChanged),
              _newTime});
     });
 }
@@ -141,17 +143,15 @@ void Application::connectBoardSpecificEvents() noexcept
 {
     auto& pMainWindow = m_graphicsService->getMainWindow();
 
-    m_pBoardImpl->getButtonsDriver()->onButtonEvent.connect(
-        [&pMainWindow](Buttons::ButtonEvent _buttonEvent) {
-            Graphics::Events::HardwareButtonId graphicsButton{
-                Graphics::Events::enumConvert<Graphics::Events::HardwareButtonId>(
-                    _buttonEvent.buttonId)};
+    m_pBoardImpl->getButtonsDriver()->onButtonEvent.connect([&pMainWindow](
+                                                                Buttons::ButtonEvent _buttonEvent) {
+        GsEvents::HardwareButtonId graphicsButton{GsEvents::to_underlying(_buttonEvent.buttonId)};
 
-            pMainWindow.getEventDispatcher().postEvent(
-                {Graphics::Events::EventGroup::Buttons,
-                 EventConvert::toButtonEvent(_buttonEvent.buttonEvent),
-                 graphicsButton});
-        });
+        pMainWindow.getEventDispatcher().postEvent(
+            {GsEvents::EventGroup::Buttons,
+             GsEvents::to_underlying(EventConvert::toButtonEvent(_buttonEvent.buttonEvent)),
+             graphicsButton});
+    });
 }
 
 void Application::runApplicationLoop() noexcept
