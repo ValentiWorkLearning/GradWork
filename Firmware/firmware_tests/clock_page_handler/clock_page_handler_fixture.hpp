@@ -27,7 +27,7 @@ protected:
 
         pageWatchHandler->handleEvent(
             {Graphics::Events::EventGroup::DateTime,
-             Graphics::Events::TDateTimeEvents::DateTimeChanged,
+             Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
              TimeWrapper("2020/06/22 14:24:43", '/', ':')});
     }
 
@@ -45,7 +45,7 @@ protected:
 
         pageMockWatchHandler->handleEvent(
             {Graphics::Events::EventGroup::DateTime,
-             Graphics::Events::TDateTimeEvents::DateTimeChanged,
+             Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
              TimeWrapper("2020/06/22 14:24:43", '/', ':')});
     }
 

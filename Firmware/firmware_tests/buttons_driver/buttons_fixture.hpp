@@ -38,7 +38,7 @@ protected:
         m_pButtonsDriver.onButtonEvent.connect([this](const Buttons::ButtonEvent& _buttonEvent) {
             m_pEventDispatcher->postEvent(
                 {Graphics::Events::EventGroup::Buttons,
-                 toUiEvent(_buttonEvent.buttonEvent),
+                 Graphics::Events::to_underlying(toUiEvent(_buttonEvent.buttonEvent)),
                  _buttonEvent.buttonId});
         });
     }

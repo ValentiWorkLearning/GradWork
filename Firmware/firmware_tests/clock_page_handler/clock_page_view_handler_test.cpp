@@ -35,7 +35,7 @@ TEST_F(ClockPageHandlerTest, ViewStaysUnchangedWhenInviisible)
     // Only hours were changed
     pageWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/22 14:24:43", '/', ':')});
     EXPECT_EQ(fakeView.getHours(), "14");
 }
@@ -53,7 +53,7 @@ TEST_F(ClockPageHandlerTest, OnlyHoursLabelIsRefreshedWhenNewDateTimeEventOccurs
     // Only hours were changed
     pageMockWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+        Graphics::Events::to_underlying( Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/22 15:24:43", '/', ':')});
 }
 
@@ -70,7 +70,7 @@ TEST_F(ClockPageHandlerTest, FulldateRefreshedWhenWeekdayWasChanged)
     // Only weekday was changed
     pageMockWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/29 14:24:43", '/', ':')});
 }
 
@@ -87,7 +87,7 @@ TEST_F(ClockPageHandlerTest, FulldateRefreshedWhenMonthWasChanged)
     // Only month was changed
     pageMockWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/07/13 14:24:43", '/', ':')});
 }
 
@@ -104,7 +104,7 @@ TEST_F(ClockPageHandlerTest, FulldateRefreshedWhenYearWasChanged)
     // Only year was changed
     pageMockWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2021/06/14 14:24:43", '/', ':')});
 }
 
@@ -121,7 +121,7 @@ TEST_F(ClockPageHandlerTest, WeekdayChangeHandledCorrectly)
 
     pageMockWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/23 14:24:43", '/', ':')});
 }
 TEST_F(ClockPageHandlerTest, WeekdayChangeFromSundayToMondayHandledCorrectly)
@@ -137,7 +137,7 @@ TEST_F(ClockPageHandlerTest, WeekdayChangeFromSundayToMondayHandledCorrectly)
 
     pageMockWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/28 14:24:43", '/', ':')});
 
     EXPECT_CALL(fakePageMock, setWeekday(std::string_view("MON"))).Times(1);
@@ -145,7 +145,7 @@ TEST_F(ClockPageHandlerTest, WeekdayChangeFromSundayToMondayHandledCorrectly)
 
     pageMockWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+        Graphics::Events::to_underlying( Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/29 14:24:43", '/', ':')});
 }
 
@@ -159,7 +159,7 @@ TEST_F(ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithoutLeadingZ
 
     pageWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/22 15:24:43", '/', ':')});
     EXPECT_EQ(fakeView.getFullDate(), "JUN/22/2020");
 }
@@ -174,7 +174,7 @@ TEST_F(ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithLeadingZero
 
     pageWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/2 15:24:43", '/', ':')});
     EXPECT_EQ(fakeView.getFullDate(), "JUN/02/2020");
 }
@@ -189,7 +189,7 @@ TEST_F(ClockPageHandlerTest, FormattingDateWorkCorrectlyForDigitsWithTrailingZer
 
     pageWatchHandler->handleEvent(
         {Graphics::Events::EventGroup::DateTime,
-         Graphics::Events::TDateTimeEvents::DateTimeChanged,
+         Graphics::Events::to_underlying(Graphics::Events::TDateTimeEvents::DateTimeChanged),
          TimeWrapper("2020/06/20 15:24:43", '/', ':')});
     EXPECT_EQ(fakeView.getFullDate(), "JUN/20/2020");
 }

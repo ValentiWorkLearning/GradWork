@@ -37,41 +37,41 @@ public:
         case Events::EventGroup::Battery:
             if constexpr (Meta::HasType<Events::TBatteryEvents, EventsToHandle>::value)
                 this->handleEventImpl(
-                    std::any_cast<Events::TBatteryEvents>(genericEvent.eventType),
+                    static_cast<Events::TBatteryEvents>(genericEvent.eventType),
                     genericEvent.eventData);
             break;
 
         case Events::EventGroup::Heartrate:
             if constexpr (Meta::HasType<Events::THeartRateEvents, EventsToHandle>::value)
                 this->handleEventImpl(
-                    std::any_cast<Events::THeartRateEvents>(genericEvent.eventType),
+                    static_cast<Events::THeartRateEvents>(genericEvent.eventType),
                     genericEvent.eventData);
             break;
 
         case Events::EventGroup::BleDevice:
             if constexpr (Meta::HasType<Events::TBleClientEvents, EventsToHandle>::value)
                 this->handleEventImpl(
-                    std::any_cast<Events::TBleClientEvents>(genericEvent.eventType),
+                    static_cast<Events::TBleClientEvents>(genericEvent.eventType),
                     genericEvent.eventData);
             break;
 
         case Events::EventGroup::DateTime:
             if constexpr (Meta::HasType<Events::TDateTimeEvents, EventsToHandle>::value)
                 this->handleEventImpl(
-                    std::any_cast<Events::TDateTimeEvents>(genericEvent.eventType),
+                    static_cast<Events::TDateTimeEvents>(genericEvent.eventType),
                     genericEvent.eventData);
             break;
 
         case Events::EventGroup::GraphicsEvents:
             if constexpr (Meta::HasType<Events::TGraphicsEvents, EventsToHandle>::value)
                 this->handleEventImpl(
-                    std::any_cast<Events::TGraphicsEvents>(genericEvent.eventType),
+                    static_cast<Events::TGraphicsEvents>(genericEvent.eventType),
                     genericEvent.eventData);
             break;
         case Events::EventGroup::Buttons:
             if constexpr (Meta::HasType<Events::TButtonsEvents, EventsToHandle>::value)
                 this->handleEventImpl(
-                    std::any_cast<Events::TButtonsEvents>(genericEvent.eventType),
+                    static_cast<Events::TButtonsEvents>(genericEvent.eventType),
                     genericEvent.eventData);
             break;
         default:
