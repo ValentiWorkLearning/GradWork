@@ -249,7 +249,7 @@ public:
         : DisplayDriver::BaseSpiDisplayCoroutine(std::move(_busPtr), _width, _height)
     {
         initDisplay();
-        LOG_DEBUG_ENDL("Display initialized");
+        LOG_DEBUG("Display initialized");
     }
 
     ~ST7789CppCoro() noexcept override

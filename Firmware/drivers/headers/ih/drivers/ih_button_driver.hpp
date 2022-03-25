@@ -93,12 +93,12 @@ private:
                 switch (buttonDescriptor.pressCount)
                 {
                 case 1:
-                    LOG_DEBUG_ENDL(
+                    LOG_DEBUG(
                         "onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonClick });");
                     onButtonEvent.emit({buttonDescriptor.id, ButtonState::kButtonClick});
                     break;
                 case 2:
-                    LOG_DEBUG_ENDL(
+                    LOG_DEBUG(
                         "onButtonEvent.emit({ _buttonId, ButtonState::kButtonDblClick });");
                     onButtonEvent.emit({buttonDescriptor.id, ButtonState::kButtonDblClick});
                     break;
@@ -139,7 +139,7 @@ private:
             {
                 m_buttons[arrayIndex].pressCount = 0;
                 m_buttons[arrayIndex].longPressTimeoutExpired = false;
-                LOG_DEBUG_ENDL(
+                LOG_DEBUG(
                     "onButtonEvent.emit({ m_lastPressedId, ButtonState::kButtonLongPress });");
                 onButtonEvent.emit({m_buttons[arrayIndex].id, ButtonState::kButtonLongPress});
             }

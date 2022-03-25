@@ -166,8 +166,3 @@ void Logger::logDebugEndl(std::string_view _toLog) noexcept
     m_pLoggerImpl->logString(_toLog);
     m_pLoggerImpl->logString(CaretReset);
 }
-
-void Logger::logDebug(std::string_view _toLog) noexcept
-{
-    m_pLoggerImpl->logString(_toLog);
-}

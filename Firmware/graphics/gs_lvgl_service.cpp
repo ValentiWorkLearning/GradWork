@@ -72,7 +72,7 @@ private:
     void initLvglLogger() noexcept
     {
         auto lvglLoggerCallback = cbc::obtain_connector([](const char* loggerMessage) {
-            LOG_DEBUG_ENDL(loggerMessage);
+            LOG_DEBUG(loggerMessage);
         });
 #if LV_USE_LOG == 1
         lv_log_register_print_cb(lvglLoggerCallback);
@@ -93,9 +93,9 @@ private:
         auto monitorCallback =
             cbc::obtain_connector([](lv_disp_drv_t* disp_drv, uint32_t time, uint32_t px) {
                 LOG_DEBUG("Refresh time:");
-                LOG_DEBUG_ENDL(time);
+                LOG_DEBUG(time);
                 LOG_DEBUG("Refreshed pixels:");
-                LOG_DEBUG_ENDL(px);
+                LOG_DEBUG(px);
             });
 
         m_glDisplayDriver.monitor_cb = monitorCallback;

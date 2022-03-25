@@ -89,7 +89,7 @@ void Board::initBoard() noexcept
     /* Configure board. */
     bsp_board_init(BSP_INIT_LEDS);
 
-    LOG_DEBUG_ENDL("Hello from E73 Mod Board!");
+    LOG_DEBUG("Hello from E73 Mod Board!");
 
     ret_code_t errorCode{};
 
@@ -108,7 +108,7 @@ void Board::initBoardTimer() noexcept
         app_timer_create(&m_ledDriverTimer, APP_TIMER_MODE_SINGLE_SHOT, TimerExpiredCallback);
     APP_ERROR_CHECK(errorCode);
     LOG_DEBUG("LED timer create code is:");
-    LOG_DEBUG_ENDL(errorCode);
+    LOG_DEBUG(errorCode);
 #endif
 }
 
@@ -118,10 +118,10 @@ void Board::initBoardSpiFlash() noexcept
 
     const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
     LOG_DEBUG("Jedec Id is:");
-    LOG_DEBUG_ENDL(fmt::format("{:#04x}", JedecId));
+    LOG_DEBUG(fmt::format("{:#04x}", JedecId));
 
     const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
-    LOG_DEBUG_ENDL(fmt::format("{:02X}", fmt::join(DeviceId, "")));
+    LOG_DEBUG(fmt::format("{:02X}", fmt::join(DeviceId, "")));
 
     m_filesystem = std::make_unique<Hal::TFilesystem>();
     CoroUtils::syncWait(m_filesystem->initializeFs());
@@ -140,7 +140,7 @@ void Board::ledToggle() noexcept
     while (true)
     {
         co_await 300ms;
-        // LOG_DEBUG_ENDL("LED TIMER EXPIRED");
+        // LOG_DEBUG("LED TIMER EXPIRED");
         bsp_board_led_invert(0);
         co_await 100ms;
         bsp_board_led_invert(0);

@@ -264,7 +264,7 @@
 //            std::tuple_size<decltype(CommandsArray)>::value> {}
 //        );
 //
-//        LOG_DEBUG_ENDL("Display initialized");
+//        LOG_DEBUG("Display initialized");
 //        constexpr bool pushToMainQueue = true;
 //        m_displayInitialized.set(pushToMainQueue);
 //    }
@@ -313,7 +313,7 @@
 //        , std::uint16_t _height
 //    )noexcept
 //    {
-//        LOG_DEBUG_ENDL("void initColumnRow");
+//        LOG_DEBUG("void initColumnRow");
 //    }
 //
 //    void setAddrWindow(

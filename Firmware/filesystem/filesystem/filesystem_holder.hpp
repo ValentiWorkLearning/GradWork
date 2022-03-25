@@ -11,7 +11,7 @@
 #include <utils/MetaUtils.hpp>
 
 #include <cassert>
-//#include <spdlog/spdlog.h>
+#include <logger/logger_service.hpp>
 
 namespace Platform::Fs
 {
@@ -45,6 +45,8 @@ public:
 
     CoroUtils::VoidTask initializeFs()
     {
+        LOG_DEBUG("Called to initializeFs");
+
         auto error = co_await lfs_mount(&m_fsInstance, &m_fsConfig);
         if (error)
         {
@@ -175,8 +177,7 @@ public:
             return;
 
         CoroUtils::syncWait(lfs_file_close(m_pFsHolder, m_pFileHandle.get()));
-        // TODO move somewhere to global observer
-        //         spdlog::warn("~File::File()");
+        LOG_DEBUG("~File::File()");
     }
 
     CoroUtils::VoidTask write(std::span<const std::uint8_t> dataHolder) noexcept

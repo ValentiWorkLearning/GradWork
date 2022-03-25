@@ -29,4 +29,5 @@ target_link_libraries(
     watch_filesystem INTERFACE
     drivers_ih
     windbond_spi_flash_driver
+    logger_service
 )
