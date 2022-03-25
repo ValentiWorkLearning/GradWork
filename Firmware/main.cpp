@@ -2,10 +2,6 @@
 
 int main(void)
 {
-
-    Application mainApp;
-
-    mainApp.runApplicationLoop();
-
+    Application::Instance().runApplicationLoop();
     return 0;
 }
