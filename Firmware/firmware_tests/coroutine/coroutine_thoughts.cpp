@@ -32,7 +32,7 @@
 using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
 using TFlashDriver = ExternalFlash::WinbondFlashDriver<TSpiBus>;
 
-using TSpiFlashBlockDevice = Filesystem::BlockDevice::SpiFlashBlockDevice<TFlashDriver>;
+using TSpiFlashBlockDevice = Filesystem::BlockDevice::SpiBlockDeviceDefaultDevice<TFlashDriver>;
 
 using TDisplayDriver = DisplayDriver::GC9A01Compact<TSpiBus, 240, 240>;
 

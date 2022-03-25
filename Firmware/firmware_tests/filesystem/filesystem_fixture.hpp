@@ -21,7 +21,7 @@
 using TFlashTestDriver = ExternalFlash::WinbondFlashDriver<
     Interface::SpiTemplated::SpiBus<Testing::Spi::SpiBusBackendStub>>;
 
-using TSpiFlashBlockDevice = Filesystem::BlockDevice::SpiFlashBlockDevice<TFlashTestDriver>;
+using TSpiFlashBlockDevice = Filesystem::BlockDevice::SpiBlockDeviceDefaultDevice<TFlashTestDriver>;
 
 using TLogHeapBlockDevice =
     Filesystem::BlockDevice::LogAdaptorBlockDevice<Filesystem::BlockDevice::HeapBlockDevice<

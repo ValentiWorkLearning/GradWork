@@ -21,7 +21,7 @@ APP_TIMER_DEF(m_ledDriverTimer);
 #include <delay/delay_provider.hpp>
 #include <logger/logger_service.hpp>
 
-#if defined (USE_DEVICE_SPECIFIC)
+#if defined(USE_DEVICE_SPECIFIC)
 #define FMT_HEADER_ONLY
 #endif
 
@@ -115,15 +115,16 @@ void Board::initBoardTimer() noexcept
 void Board::initBoardSpiFlash() noexcept
 {
     m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
-    if (m_pFlashDriver)
-    {
-        const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
-        LOG_DEBUG("Jedec Id is:");
-        LOG_DEBUG_ENDL(fmt::format("{:#04x}", JedecId));
 
-        const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
-        LOG_DEBUG_ENDL(fmt::format("{:02X}", fmt::join(DeviceId, "")));
-    }
+    const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
+    LOG_DEBUG("Jedec Id is:");
+    LOG_DEBUG_ENDL(fmt::format("{:#04x}", JedecId));
+
+    const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
+    LOG_DEBUG_ENDL(fmt::format("{:02X}", fmt::join(DeviceId, "")));
+
+    m_filesystem = std::make_unique<Hal::TFilesystem>();
+    CoroUtils::syncWait(m_filesystem->initializeFs());
 }
 
 Board::Board() noexcept

@@ -64,7 +64,7 @@ target_link_libraries(
     watch_display
     lvgl_lib
     drivers_ih
-    filesystem
+    watch_filesystem
     buttons_driver
     windbond_spi_flash_driver
 )

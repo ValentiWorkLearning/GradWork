@@ -28,6 +28,11 @@ elseif( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         INTERFACE
         -fcoroutines
     )
+    target_compile_definitions(
+        UtilsLibrary
+        INTERFACE
+        BAREMETAL_PLATFORM
+    )
 endif()
 
 target_link_libraries(

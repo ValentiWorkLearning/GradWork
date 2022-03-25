@@ -3,15 +3,15 @@
 #include <lfs.h>
 #include <memory>
 #include <string>
-#include <utils/coroutine/Task.hpp>
 #include <utils/coroutine/SyncWait.hpp>
+#include <utils/coroutine/Task.hpp>
 
 #include <cstdint>
 #include <span>
 #include <utils/MetaUtils.hpp>
 
-#include <spdlog/spdlog.h>
 #include <cassert>
+//#include <spdlog/spdlog.h>
 
 namespace Platform::Fs
 {
@@ -158,7 +158,6 @@ private:
 template <typename TFilesystemHolder> class File
 {
 public:
-
     constexpr File(lfs_t* pFsHolder) noexcept
         : m_pFileHandle{std::make_unique<lfs_file_t>()}, m_pFsHolder{pFsHolder}
     {
@@ -176,7 +175,8 @@ public:
             return;
 
         CoroUtils::syncWait(lfs_file_close(m_pFsHolder, m_pFileHandle.get()));
-        spdlog::warn("~File::File()");
+        // TODO move somewhere to global observer
+        //         spdlog::warn("~File::File()");
     }
 
     CoroUtils::VoidTask write(std::span<const std::uint8_t> dataHolder) noexcept

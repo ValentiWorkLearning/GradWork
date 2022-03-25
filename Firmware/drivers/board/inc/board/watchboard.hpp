@@ -3,8 +3,11 @@
 #include <utils/FastPimpl.hpp>
 #include <utils/Platform.hpp>
 
-#include "hardware_usings.hpp"
 #include <memory>
+
+#include <board/hardware_usings.hpp>
+#include <filesystem/block_device_wrapper/spi_block_device.hpp>
+#include <filesystem/platform_filesystem.hpp>
 
 namespace WatchBoard
 {
@@ -35,7 +38,9 @@ private:
 private:
     Hal::ButtonsDriver m_buttonsDriver;
     using TFlashDriverPtr = std::unique_ptr<Hal::TFlashDriver>;
+    using TFilesystemPtr = std::unique_ptr<Hal::TFilesystem>;
 
+    TFilesystemPtr m_filesystem;
     TFlashDriverPtr m_pFlashDriver;
 };
 

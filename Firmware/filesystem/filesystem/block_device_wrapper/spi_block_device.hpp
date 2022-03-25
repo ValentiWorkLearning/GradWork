@@ -4,29 +4,40 @@
 
 namespace Filesystem::BlockDevice
 {
-template <typename TFlashDriver>
-class SpiFlashBlockDevice : public BlockDeviceEntity<SpiFlashBlockDevice<TFlashDriver>>
+
+struct FlashBlockDeviceDescriptor
+{
+    static constexpr inline std::size_t kBlockSize = 256;
+    static constexpr inline std::size_t kSectorsCount = 65'536;
+    static constexpr inline std::size_t kReadSize = 256;
+    static constexpr inline std::size_t kEraseSize = 4096;
+};
+
+template <typename TFlashDriver, typename TBlockDeviceDescriptor>
+
+class SpiFlashBlockDevice
+    : public BlockDeviceEntity<SpiFlashBlockDevice<TFlashDriver, TBlockDeviceDescriptor>>
 {
 public:
     constexpr std::uint32_t getBlockSize() const noexcept
     {
-        return kBlockSize;
+        return TBlockDeviceDescriptor::kBlockSize;
     }
     constexpr std::uint32_t getBlocksCount() const noexcept
     {
-        return kSectorsCount;
+        return TBlockDeviceDescriptor::kSectorsCount;
     }
     constexpr std::uint32_t getReadSize() const noexcept
     {
-        return kReadSize;
+        return TBlockDeviceDescriptor::kReadSize;
     }
     constexpr std::uint32_t getProgSize() const noexcept
     {
-        return kBlockSize;
+        return TBlockDeviceDescriptor::kBlockSize;
     }
     constexpr std::uint32_t getEraseSize() const noexcept
     {
-        return kEraseSize;
+        return TBlockDeviceDescriptor::kEraseSize;
     }
 
 public:
@@ -41,10 +52,8 @@ public:
         std::uint32_t blockAddress{_address};
         while (requestSize > 0)
         {
-            std::uint32_t highPart = blockAddress / getBlockSize();
-            std::uint32_t lowPart = blockAddress % getBlockSize();
-
-            co_await m_currentFlashDriver.pageWrite(_address, std::span(_blockData, _blockSize));
+            co_await m_currentFlashDriver.pageWrite(
+                blockAddress, std::span(pBlockRequest, getProgSize()));
 
             blockAddress += getProgSize();
             pBlockRequest += getProgSize();
@@ -64,10 +73,8 @@ public:
 
         while (blockSize > 0)
         {
-            std::uint32_t hi = blockAddress / getBlockSize();
-            std::uint32_t lo = blockAddress % getBlockSize();
-
-            auto resultBuffer = co_await m_currentFlashDriver.requestReadBlock();
+            auto resultBuffer =
+                co_await m_currentFlashDriver.requestReadBlock(blockAddress, getReadSize());
             memcpy(pReadBuffer, resultBuffer.data(), getReadSize());
 
             blockAddress += getReadSize();
@@ -78,13 +85,10 @@ public:
     }
 
 private:
-    static constexpr std::size_t kBlockSize = 256;
-    static constexpr std::size_t kSectorsCount = 65'536;
-    static constexpr std::size_t kReadSize = 256;
-    static constexpr std::size_t kEraseSize = 4096;
-
-private:
     TFlashDriver m_currentFlashDriver;
 };
+
+template <typename DriverBackend>
+using SpiBlockDeviceDefaultDevice = SpiFlashBlockDevice<DriverBackend, FlashBlockDeviceDescriptor>;
 
 }; // namespace Filesystem::BlockDevice
