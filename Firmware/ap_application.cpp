@@ -44,8 +44,12 @@ Graphics::Events::TButtonsEvents toButtonEvent(Buttons::ButtonState _buttonToCon
 
 Application::Application() noexcept
 {
+    LOG_INFO("Application start");
     initBoard();
+    LOG_INFO("Complete board init");
     initPeripheral();
+    LOG_INFO("Complete peripheral init");
+
     initServices();
     initGraphicsStack();
     initBleStack();

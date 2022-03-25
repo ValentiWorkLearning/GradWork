@@ -107,8 +107,7 @@ void Board::initBoardTimer() noexcept
     errorCode =
         app_timer_create(&m_ledDriverTimer, APP_TIMER_MODE_SINGLE_SHOT, TimerExpiredCallback);
     APP_ERROR_CHECK(errorCode);
-    LOG_DEBUG("LED timer create code is:");
-    LOG_DEBUG(errorCode);
+    LOG_DEBUG(fmt::format("LED timer create code is {}", errorCode));
 #endif
 }
 
@@ -117,14 +116,15 @@ void Board::initBoardSpiFlash() noexcept
     m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
 
     const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
-    LOG_DEBUG("Jedec Id is:");
-    LOG_DEBUG(fmt::format("{:#04x}", JedecId));
+    LOG_DEBUG(fmt::format("Jedec Id is  {:#04x}", JedecId));
 
     const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
-    LOG_DEBUG(fmt::format("{:02X}", fmt::join(DeviceId, "")));
+    LOG_DEBUG(fmt::format("Device id is {:02X}", fmt::join(DeviceId, "")));
 
+    LOG_DEBUG("Started filesystem initialization");
     m_filesystem = std::make_unique<Hal::TFilesystem>();
     CoroUtils::syncWait(m_filesystem->initializeFs());
+    LOG_DEBUG("Filesystem is ready");
 }
 
 Board::Board() noexcept

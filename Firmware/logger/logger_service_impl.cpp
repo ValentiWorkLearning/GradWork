@@ -21,8 +21,8 @@
 #include "SEGGER_RTT.h"
 #elif defined(LoggerDesktop)
 #include <cstdio>
-#include <fmt/core.h>
 #include <fmt/color.h>
+#include <fmt/core.h>
 #if defined USE_MSVC_DEBUG_OUT
 #include <Windows.h>
 #endif
@@ -32,7 +32,23 @@
 namespace
 {
 std::string_view CaretReset = "\r\n";
+
+constexpr const char* const severityToString(LogSeverity severity)
+{
+    switch (severity)
+    {
+
+    case LogSeverity::Debug:
+        return "[DEBUG]";
+    case LogSeverity::Info:
+        return "[INFO]";
+    case LogSeverity::Warn:
+        return "[WARN]";
+    case LogSeverity::Error:
+        return "[ERROR]";
+    }
 }
+} // namespace
 
 #if defined(LoggerUart)
 
@@ -143,7 +159,7 @@ class Logger::LoggerImpl
 public:
     void logString(std::string_view _toLog) const noexcept
     {
-        fmt::print(fg(fmt::color::steel_blue),"{}",_toLog.data());
+        fmt::print(fg(fmt::color::steel_blue), "{}", _toLog.data());
 #if defined USE_MSVC_DEBUG_OUT
         OutputDebugString(_toLog.data());
 #endif
@@ -161,8 +177,9 @@ Logger& Logger::Instance() noexcept
     return intance;
 }
 
-void Logger::logDebugEndl(std::string_view _toLog) noexcept
+void Logger::logDebug(LogSeverity severity, std::string_view _toLog) noexcept
 {
+    m_pLoggerImpl->logString(severityToString(severity));
     m_pLoggerImpl->logString(_toLog);
     m_pLoggerImpl->logString(CaretReset);
 }
