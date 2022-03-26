@@ -87,8 +87,6 @@ void PlatformBackend::executeLvTaskHandler() noexcept
 #include <lv_drivers/sdl/sdl.h>
 #include <lvgl/lvgl.h>
 
-#include <fmt/format.h>
-
 namespace Graphics
 {
 

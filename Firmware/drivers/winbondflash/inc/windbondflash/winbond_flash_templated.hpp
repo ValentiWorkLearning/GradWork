@@ -4,8 +4,10 @@
 
 #include <span>
 #include <utils/CoroUtils.hpp>
+#include <utils/coroutine/SyncWait.hpp>
 
 #include <cassert>
+#include <logger/logger_service.hpp>
 #include <tuple>
 #include <utility>
 
@@ -16,75 +18,102 @@ template <typename TSpiBusInstance> class WinbondFlashDriver
 {
     using This_t = WinbondFlashDriver<TSpiBusInstance>;
 
+    struct ChipSelectGuard
+    {
+        ChipSelectGuard(This_t* pThis) : m_pThis{pThis}
+        {
+            m_pThis->getSpiBus()->setCsPinLow();
+        }
+
+        ~ChipSelectGuard()
+        {
+            m_pThis->getSpiBus()->setCsPinHigh();
+        }
+
+        This_t* m_pThis;
+    };
+
 public:
     CoroUtils::VoidTask pageWrite(
         const std::uint32_t _address,
         std::span<const std::uint8_t> _blockData) noexcept
     {
+
+        LOG_DEBUG("WinbondFlashDriver pageWrite");
         constexpr std::uint16_t PageSize = 256;
 
         assert(_blockData.size() <= PageSize);
 
-        using TTupleProgram = decltype(std::forward_as_tuple(
-            WindbondCommandSet::PageProgram,
-            static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
-            static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
-            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
-        constexpr bool ManageSpiTransactions = false;
+        co_await eraseSector(_address);
 
-        getSpiBus()->setCsPinLow();
+        LOG_DEBUG("WinbondFlashDriver XFER WE");
 
-        using TTupleWe = decltype(std::forward_as_tuple(WindbondCommandSet::WriteEnable));
-        co_await prepareXferTransaction<TTupleWe, ManageSpiTransactions>(
-            std::forward_as_tuple(WindbondCommandSet::WriteEnable));
+        {
+            ChipSelectGuard csGuard{this};
+            co_await prepareXferTransaction(std::forward_as_tuple(WindbondCommandSet::WriteEnable));
+        }
+        while (co_await checkIsBusy())
+        {
+            LOG_DEBUG("WinbondFlashDriver wait for write completion");
+            co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
+        }
 
-        co_await prepareXferTransaction<TTupleProgram, ManageSpiTransactions>(std::forward_as_tuple(
-            WindbondCommandSet::PageProgram,
-            static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
-            static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
-            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
+        {
+            ChipSelectGuard csGuard{this};
 
-        co_await transmitChunk(std::span(_blockData.data(), _blockData.size()));
+            LOG_DEBUG("WinbondFlashDriver XFER PageProgram");
+            co_await prepareXferTransaction(std::forward_as_tuple(
+                WindbondCommandSet::PageProgram,
+                static_cast<std::uint8_t>((_address & 0x00'FF'00'00) >> 16),
+                static_cast<std::uint8_t>((_address & 0x00'00'FF'00) >> 8),
+                static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
 
-        getSpiBus()->setCsPinHigh();
+            LOG_DEBUG("WinbondFlashDriver XFER blockData");
+            co_await transmitChunk(std::span(_blockData.data(), _blockData.size()));
+        }
+
+        while (co_await checkIsBusy())
+        {
+            LOG_DEBUG("WinbondFlashDriver wait for write completion");
+            co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
+        }
+
+        LOG_DEBUG("WinbondFlashDriver XFER completed write");
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> requestReadBlock(
         const std::uint32_t _address,
         const std::uint16_t _blockSize) noexcept
     {
+
         constexpr std::uint16_t PageSize = 256;
 
         assert(_blockSize < PageSize);
+        std::span<std::uint8_t> receivedData{};
 
-        using TTupleRead = decltype(std::forward_as_tuple(
-            WindbondCommandSet::ReadData,
-            static_cast<std::uint8_t>(_address & 0x00'FF'00'00 >> 16),
-            static_cast<std::uint8_t>(_address & 0x00'00'FF'00 >> 8),
-            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
-        constexpr bool ManageSpiTransactions = false;
+        {
+            ChipSelectGuard csGuard{this};
 
-        getSpiBus()->setCsPinLow();
+            co_await prepareXferTransaction(std::forward_as_tuple(
+                WindbondCommandSet::ReadData,
+                static_cast<std::uint8_t>((_address & 0x00'FF'00'00) >> 16),
+                static_cast<std::uint8_t>((_address & 0x00'00'FF'00) >> 8),
+                static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
 
-        co_await prepareXferTransaction<TTupleRead, ManageSpiTransactions>(std::forward_as_tuple(
-            WindbondCommandSet::ReadData,
-            static_cast<std::uint8_t>((_address & 0x00'FF'00'00) >> 16),
-            static_cast<std::uint8_t>((_address & 0x00'00'FF'00) >> 8),
-            static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
+            auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
+            auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
 
-        auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
-        auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
+            std::fill_n(transmitBuffer.begin(), _blockSize, WindbondCommandSet::DummyByte);
 
-        std::fill_n(
-            transmitBuffer.begin(),
-            _blockSize,
-            WindbondCommandSet::DummyByte);
-
-        auto receivedData = co_await xferTransaction(
-            std::span(transmitBuffer.data(), _blockSize),
-            std::span(receiveBuffer.data(), _blockSize));
-
-        getSpiBus()->setCsPinHigh();
+            receivedData = co_await xferTransaction(
+                std::span(transmitBuffer.data(), _blockSize),
+                std::span(receiveBuffer.data(), _blockSize));
+        }
+        while (co_await checkIsBusy())
+        {
+            LOG_DEBUG("WinbondFlashDriver wait for read completion");
+            co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
+        }
 
         co_return receivedData;
     }
@@ -94,22 +123,26 @@ public:
 
     CoroUtils::VoidTask requestChipErase() noexcept
     {
+        ChipSelectGuard csGuard{this};
         co_await prepareXferTransaction(std::forward_as_tuple(WindbondCommandSet::ChipErase));
     }
 
     CoroUtils::VoidTask requestPowerDown() noexcept
     {
+        ChipSelectGuard csGuard{this};
         co_await prepareXferTransaction(std::forward_as_tuple(WindbondCommandSet::PowerDownMode));
     }
 
     CoroUtils::VoidTask resumePowerDown() noexcept
     {
+        ChipSelectGuard csGuard{this};
         co_await prepareXferTransaction(
             std::forward_as_tuple(WindbondCommandSet::ResumePowerDownMode));
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> requestDeviceId() noexcept
     {
+        ChipSelectGuard csGuard{this};
         auto receivedData = co_await prepareXferTransaction(
             std::forward_as_tuple(
                 WindbondCommandSet::ReadUniqueId,
@@ -129,6 +162,7 @@ public:
 
     CoroUtils::Task<std::uint32_t> requestJEDEDCId() noexcept
     {
+        ChipSelectGuard csGuard{this};
         auto receivedData = co_await prepareXferTransaction(
             std::forward_as_tuple(WindbondCommandSet::ReadJedecId),
             WindbondCommandSet::DummyByte,
@@ -144,6 +178,20 @@ public:
         co_return JedecDeviceId;
     }
 
+    CoroUtils::Task<bool> checkIsBusy() noexcept
+    {
+        ChipSelectGuard csGuard{this};
+
+        LOG_DEBUG("WinbondFlashDriver checkIsBusy");
+
+        auto busyStatusRegister = co_await prepareXferTransaction(
+            std::forward_as_tuple(WindbondCommandSet::ReadStatusRegister1),
+            WindbondCommandSet::DummyByte);
+
+        LOG_DEBUG("WinbondFlashDriver checkIsBusy completion");
+        co_return busyStatusRegister[0] & WindbondCommandSet::Masks::EraseWriteInProgress;
+    }
+
     const auto getSpiBus() const noexcept
     {
         return &m_spiBus;
@@ -154,17 +202,31 @@ public:
         return &m_spiBus;
     }
 
+    CoroUtils::VoidTask eraseSector(std::uint32_t _address)
+    {
+        {
+            ChipSelectGuard guard{this};
+            co_await prepareXferTransaction(std::forward_as_tuple(
+                WindbondCommandSet::SectorErase4KB,
+                static_cast<std::uint8_t>((_address & 0x00'FF'00'00) >> 16),
+                static_cast<std::uint8_t>((_address & 0x00'00'FF'00) >> 8),
+                static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
+        }
+        while (co_await checkIsBusy())
+        {
+            LOG_DEBUG("WinbondFlashDriver wait for the eraseSector completion");
+            co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
+        }
+    }
+
 private:
-    template <typename TCommand, bool manageCsPin = true, typename... Args>
+    template <typename TCommand, typename... Args>
     CoroUtils::Task<std::span<std::uint8_t>> prepareXferTransaction(
         TCommand&& _command,
         Args&&... _argList)
     {
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
         auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
-
-        if constexpr (manageCsPin)
-            getSpiBus()->setCsPinLow();
 
         processTransmitBuffer(transmitBuffer, std::forward<TCommand>(_command));
 
@@ -180,29 +242,17 @@ private:
             std::span(transmitBuffer.data(), DummyListSize),
             std::span(receiveBuffer.data(), DummyListSize));
 
-        if constexpr (manageCsPin)
-            getSpiBus()->setCsPinHigh();
-
         co_return std::span(receiveBuffer.data(), DummyListSize);
     }
 
-    template <typename TTuple, bool manageCsPin = true>
-    CoroUtils::VoidTask prepareXferTransaction(TTuple&& _command)
+    template <typename TTuple> CoroUtils::VoidTask prepareXferTransaction(TTuple&& _command)
     {
         auto& transmitBuffer = getSpiBus()->getDmaBufferTransmit();
-        auto& receiveBuffer = getSpiBus()->getDmaBufferReceive();
-
-        if constexpr (manageCsPin)
-            getSpiBus()->setCsPinLow();
-
         processTransmitBuffer(transmitBuffer, std::forward<TTuple>(_command));
 
         constexpr std::size_t CommandSize = std::tuple_size_v<TTuple>;
 
         co_await transmitChunk(std::span(transmitBuffer.data(), CommandSize));
-
-        if constexpr (manageCsPin)
-            getSpiBus()->setCsPinHigh();
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> xferTransaction(
@@ -274,9 +324,7 @@ private:
         void await_suspend(std::coroutine_handle<> thisCoroutine) const
         {
             pThis->getSpiBus()->transmitBuffer(
-                pTransmitBuffer,
-                thisCoroutine.address(),
-                restoreInSpiCtx);
+                pTransmitBuffer, thisCoroutine.address(), restoreInSpiCtx);
         }
     };
 
@@ -285,7 +333,7 @@ private:
         std::span<std::uint8_t> _pReceiveBuffer) noexcept
     {
         return XferAwaiter{
-            .restoreInSpiCtx = true,
+            .restoreInSpiCtx = false,
             .pTransmitBuffer = _pTrasnmitBuffer,
             .pReceiveBuffer = _pReceiveBuffer,
             .pThis = this};
@@ -294,7 +342,7 @@ private:
     auto transmitChunk(std::span<const std::uint8_t> _pTrasnmitBuffer) noexcept
     {
         return TransmitAwaiter{
-            .restoreInSpiCtx = true, .pTransmitBuffer = _pTrasnmitBuffer, .pThis = this};
+            .restoreInSpiCtx = false, .pTransmitBuffer = _pTrasnmitBuffer, .pThis = this};
     }
 
 private:

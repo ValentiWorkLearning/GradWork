@@ -40,6 +40,7 @@ public:
 public:
     Holder() noexcept
     {
+        LOG_DEBUG("Filesystem holder c-tor");
         m_fsConfig = createLfsConfig();
     }
 
@@ -48,6 +49,8 @@ public:
         LOG_DEBUG("Called to initializeFs");
 
         auto error = co_await lfs_mount(&m_fsInstance, &m_fsConfig);
+
+        LOG_DEBUG(fmt::format("lfs_mount error is ", error));
         if (error)
         {
             co_await lfs_format(&m_fsInstance, &m_fsConfig);

@@ -8,6 +8,12 @@
 #include <memory>
 #include <string_view>
 
+#if defined(USE_DEVICE_SPECIFIC)
+#define FMT_HEADER_ONLY
+#endif
+#include <fmt/format.h>
+#include <span>
+
 enum class LogSeverity
 {
     Debug,
@@ -28,6 +34,36 @@ enum class LogSeverity
 #define LOG_WARN(ARGS)
 #define LOG_ERROR(ARGS)
 #endif
+
+template <> struct fmt::formatter<std::span<const std::uint8_t>>
+{
+
+    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin())
+    {
+
+        auto it = ctx.begin(), end = ctx.end();
+
+        if (it != end && *it == 'f')
+        {
+            ++it;
+            if (it != end && *it != '}')
+                std::terminate();
+        }
+        return it;
+    }
+
+    template <typename FormatContext>
+    auto format(const std::span<const std::uint8_t>& p, FormatContext& ctx) -> decltype(ctx.out())
+    {
+
+        auto tempFormatHolder = std::string_view{
+            reinterpret_cast<const char*>(p.data()),
+            reinterpret_cast<const char*>(p.data()) + p.size()};
+        auto dataSize = tempFormatHolder.length();
+
+        return format_to(ctx.out(), "{}", tempFormatHolder);
+    }
+};
 
 class Logger
 {

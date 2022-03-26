@@ -3,38 +3,9 @@
 #include "ih_block_device.hpp"
 #include <etl/vector.h>
 
-#include <spdlog/spdlog.h>
+#include <logger/logger_service.hpp>
 #include <span>
-
-template <> struct fmt::formatter<std::span<const std::uint8_t>>
-{
-
-    constexpr auto parse(format_parse_context& ctx) -> decltype(ctx.begin())
-    {
-
-        auto it = ctx.begin(), end = ctx.end();
-
-        if (it != end && *it == 'f')
-        {
-            ++it;
-            if (it != end && *it != '}')
-                throw format_error("invalid format");
-        }
-        return it;
-    }
-
-    template <typename FormatContext>
-    auto format(const std::span<const std::uint8_t>& p, FormatContext& ctx) -> decltype(ctx.out())
-    {
-
-        auto tempFormatHolder = std::string_view{
-            reinterpret_cast<const char*>(p.data()),
-            reinterpret_cast<const char*>(p.data()) + p.size()};
-        auto dataSize = tempFormatHolder.length();
-
-        return format_to(ctx.out(), "{}", tempFormatHolder);
-    }
-};
+#include <spdlog/spdlog.h>
 
 namespace Filesystem::BlockDevice
 {
@@ -93,4 +64,4 @@ public:
 private:
     TWrappee m_wrappedNode;
 };
-} // namespace Wrapper
+} // namespace Filesystem::BlockDevice

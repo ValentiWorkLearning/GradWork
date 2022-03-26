@@ -19,7 +19,21 @@ target_include_directories(watch_filesystem INTERFACE ${CMAKE_CURRENT_LIST_DIR} 
 
 target_link_libraries(watch_filesystem INTERFACE
     littlefs
+    fmt::fmt
 )
+
+target_link_options(
+    watch_filesystem
+    INTERFACE
+    ${CPU_FLAGS}
+)
+
+target_compile_options(
+    watch_filesystem
+    INTERFACE
+    ${COMMON_FLAGS}
+)
+
 
 if(WIN32 OR UNIX AND ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
     target_link_libraries(watch_filesystem INTERFACE spdlog::spdlog)

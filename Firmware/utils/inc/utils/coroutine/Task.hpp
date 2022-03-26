@@ -1,6 +1,8 @@
 #pragma once
 #include "Common.hpp"
+#include "ExecutionQueueCoro.hpp"
 #include <optional>
+
 namespace CoroUtils
 {
 
@@ -28,8 +30,7 @@ template <typename TResult> struct Task
             return stdcoro::suspend_always{};
         }
 
-        template<typename TResultType>
-        void return_value(TResultType&& _value) noexcept
+        template <typename TResultType> void return_value(TResultType&& _value) noexcept
         {
             m_coroutineResult.emplace(std::forward<TResultType&&>(_value));
         }
@@ -62,6 +63,28 @@ template <typename TResult> struct Task
             {
             }
         };
+
+        auto yield_value(CoroQueueMainLoop& loop) const noexcept
+        {
+            struct ScheduleForExecution
+            {
+                CoroQueueMainLoop& loop;
+
+                constexpr bool await_ready() const noexcept
+                {
+                    return false;
+                }
+                void await_suspend(std::coroutine_handle<> thisCoroutine)
+                {
+                    loop.pushToLater(thisCoroutine);
+                }
+                constexpr void await_resume()
+                {
+                }
+            };
+
+            return ScheduleForExecution{loop};
+        }
 
         auto final_suspend() noexcept
         {
@@ -144,6 +167,28 @@ struct VoidTask
         VoidTask get_return_object() noexcept
         {
             return VoidTask{stdcoro::coroutine_handle<task_promise>::from_promise(*this)};
+        }
+
+        auto yield_value(CoroQueueMainLoop& loop) const noexcept
+        {
+            struct ScheduleForExecution
+            {
+                CoroQueueMainLoop& loop;
+
+                constexpr bool await_ready() const noexcept
+                {
+                    return false;
+                }
+                void await_suspend(std::coroutine_handle<> thisCoroutine)
+                {
+                    loop.pushToLater(thisCoroutine);
+                }
+                constexpr void await_resume()
+                {
+                }
+            };
+
+            return ScheduleForExecution{loop};
         }
 
         auto initial_suspend() noexcept
