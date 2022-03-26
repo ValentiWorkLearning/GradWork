@@ -145,10 +145,22 @@ class Logger::LoggerImpl
 {
 
 public:
+    LoggerImpl()
+    {
+        SEGGER_RTT_ConfigUpBuffer(
+            0,
+            "SEGGER_MAIN_BUFFER",
+            seggerBuffer.data(),
+            kSeggerBufferSize,
+            SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
+    }
+
     void logString(std::string_view _toLog) const noexcept
     {
         SEGGER_RTT_WriteString(0, _toLog.data());
     }
+    static constexpr inline std::uint16_t kSeggerBufferSize = 512;
+    static inline std::array<std::uint8_t, kSeggerBufferSize> seggerBuffer{};
 };
 #endif
 
