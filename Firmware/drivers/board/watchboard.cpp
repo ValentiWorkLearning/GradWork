@@ -94,8 +94,8 @@ void Board::initBoard() noexcept
     ret_code_t errorCode{};
 
     errorCode = app_timer_init();
-    LOG_DEBUG(fmt::format("app_timer_init code() {}", errorCode));
-    APP_ERROR_CHECK(errorCode);
+    // LOG_DEBUG(fmt::format("app_timer_init code() {}", errorCode));
+    // APP_ERROR_CHECK(errorCode);
 #endif
     m_buttonsDriver.initializeHalDependent();
     initBoardSpiFlash();
@@ -114,27 +114,29 @@ void Board::initBoardTimer() noexcept
 
 void Board::initBoardSpiFlash() noexcept
 {
-    LOG_DEBUG("creation of flash driver started");
-    m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
+    // LOG_DEBUG("creation of flash driver started");
+    // m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
 
-    const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
-    LOG_DEBUG(fmt::format("Jedec Id is  {:#04x}", JedecId));
+    // const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
+    // LOG_DEBUG(fmt::format("Jedec Id is  {:#04x}", JedecId));
 
-    const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
-    LOG_DEBUG(fmt::format("Device id is {:02X}", fmt::join(DeviceId, "")));
+    // const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
+    // LOG_DEBUG(fmt::format("Device id is {:02X}", fmt::join(DeviceId, "")));
 
-    LOG_DEBUG("m_pFlashDriver->requestBlockWrite");
-    auto blockTest = std::array<std::uint8_t, 8>{1, 2, 3, 4, 5, 6, 7, 8};
-    co_await m_pFlashDriver->pageWrite(0x00, blockTest);
-    LOG_DEBUG("m_pFlashDriver->compltetedBlockWrite");
+    // LOG_DEBUG("m_pFlashDriver->requestBlockWrite");
+    // auto blockTest = std::array<std::uint8_t, 8>{1, 2, 3, 4, 5, 6, 7, 8};
+    // co_await m_pFlashDriver->pageWrite(0x00, blockTest);
+    // LOG_DEBUG("m_pFlashDriver->compltetedBlockWrite");
 
-    LOG_DEBUG("m_pFlashDriver->requestReadBlock");
-    auto readResult = co_await m_pFlashDriver->requestReadBlock(0x00, blockTest.size());
-    LOG_DEBUG(fmt::format("Got read block {}", readResult));
+    // LOG_DEBUG("m_pFlashDriver->requestReadBlock");
+    // auto readResult = co_await m_pFlashDriver->requestReadBlock(0x00, blockTest.size());
+    // LOG_DEBUG(fmt::format("Got read block {}", readResult));
 
+    LOG_DEBUG("Started filesystem creation");
     m_filesystem = std::make_unique<Hal::TFilesystem>();
-    LOG_DEBUG("Started filesystem initialization");
-    CoroUtils::syncWait(m_filesystem->initializeFs());
+
+    LOG_DEBUG("Started filesystem creation");
+    co_await m_filesystem->initializeFs();
     LOG_DEBUG("Filesystem is ready");
 }
 
@@ -174,11 +176,6 @@ std::uint32_t Board::convertToTimerTicks(std::chrono::milliseconds _interval) no
 Hal::ButtonsDriver* Board::getButtonsDriver() noexcept
 {
     return &m_buttonsDriver;
-}
-
-TBoardPtr createBoard() noexcept
-{
-    return std::make_unique<Board>();
 }
 
 }; // namespace WatchBoard
