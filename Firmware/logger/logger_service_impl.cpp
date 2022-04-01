@@ -38,6 +38,8 @@ constexpr const char* const severityToString(LogSeverity severity)
     switch (severity)
     {
 
+    case LogSeverity::Trace:
+        return "[TRACE]";
     case LogSeverity::Debug:
         return "[DEBUG]";
     case LogSeverity::Info:
@@ -46,6 +48,8 @@ constexpr const char* const severityToString(LogSeverity severity)
         return "[WARN]";
     case LogSeverity::Error:
         return "[ERROR]";
+    default:
+        return "";
     }
 }
 } // namespace
@@ -189,7 +193,7 @@ Logger& Logger::Instance() noexcept
     return intance;
 }
 
-void Logger::logDebug(LogSeverity severity, std::string_view _toLog) noexcept
+void Logger::logDebugImpl(LogSeverity severity, std::string_view _toLog) noexcept
 {
     m_pLoggerImpl->logString(severityToString(severity));
     m_pLoggerImpl->logString(_toLog);

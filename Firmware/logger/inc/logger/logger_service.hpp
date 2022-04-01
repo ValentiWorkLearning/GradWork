@@ -16,19 +16,24 @@
 
 enum class LogSeverity
 {
+    Trace,
     Debug,
     Info,
     Warn,
-    Error
+    Error,
+    None
 };
 
 #define ENABLE_DEBUG_LOGGING
 #ifdef ENABLE_DEBUG_LOGGING
-#define LOG_DEBUG(ARGS) (Logger::Instance().logDebug(LogSeverity::Debug, ARGS))
-#define LOG_INFO(ARGS) (Logger::Instance().logDebug(LogSeverity::Info, ARGS))
-#define LOG_WARN(ARGS) (Logger::Instance().logDebug(LogSeverity::Warn, ARGS))
-#define LOG_ERROR(ARGS) (Logger::Instance().logDebug(LogSeverity::Error, ARGS))
+#define LOG_TRACE(ARGS) (Logger::Instance().logDebug<LogSeverity::Trace>(ARGS))
+#define LOG_DEBUG(ARGS) (Logger::Instance().logDebug<LogSeverity::Debug>(ARGS))
+#define LOG_INFO(ARGS) (Logger::Instance().logDebug<LogSeverity::Info>(ARGS))
+#define LOG_WARN(ARGS) (Logger::Instance().logDebug<LogSeverity::Warn>(ARGS))
+#define LOG_ERROR(ARGS) (Logger::Instance().logDebug<LogSeverity::Error>(ARGS))
+
 #else
+#define LOG_TRACE(ARGS)
 #define LOG_DEBUG(ARGS)
 #define LOG_INFO(ARGS)
 #define LOG_WARN(ARGS)
@@ -59,7 +64,6 @@ template <> struct fmt::formatter<std::span<const std::uint8_t>>
         auto tempFormatHolder = std::string_view{
             reinterpret_cast<const char*>(p.data()),
             reinterpret_cast<const char*>(p.data()) + p.size()};
-        auto dataSize = tempFormatHolder.length();
 
         return format_to(ctx.out(), "{}", tempFormatHolder);
     }
@@ -91,7 +95,7 @@ public:
         return isCharType;
     }
 
-    template <typename TToLog> void logDebug(LogSeverity severity, const TToLog& _toLog) noexcept
+    template <auto Severity, typename TToLog> void logDebug(const TToLog& _toLog) noexcept
     {
 
         constexpr bool isString = IsStringType<TToLog>();
@@ -101,27 +105,39 @@ public:
             if (auto [p, ec] = std::to_chars(str.data(), str.data() + str.size(), _toLog);
                 ec == std::errc())
             {
-                logDebug(severity, std::string_view(str.data(), p - str.data()));
+                logDebugChecked<Severity>(std::string_view(str.data(), p - str.data()));
             }
         }
         else
         {
             if constexpr (IsCharType<TToLog>())
-                logDebug(severity, static_cast<std::int16_t>(_toLog));
+                logDebugChecked<Severity>(fmt::format("{}", _toLog));
             else
-                logDebug(severity, static_cast<std::string_view>(_toLog));
+                logDebugChecked<Severity>(static_cast<std::string_view>(_toLog));
         }
     }
 
-    void logDebug(LogSeverity severity, std::string_view _toLog) noexcept;
+    template <auto severity> constexpr void logDebugChecked(std::string_view _toLog) noexcept
+    {
+        if constexpr (
+            static_cast<std::underlying_type_t<LogSeverity>>(severity) >=
+            static_cast<std::underlying_type_t<LogSeverity>>(kCurrentLogLevel))
+        {
+            logDebugImpl(severity, _toLog);
+        }
+    }
 
 private:
     Logger() noexcept;
     ~Logger();
 
 private:
+    void logDebugImpl(LogSeverity severity, std::string_view _toLog) noexcept;
+
+private:
     static constexpr inline std::size_t kImplSize = Platform::LogerImplSize;
     static constexpr inline std::size_t kImplAlignment = Platform::LogerImplAlignment;
+    static constexpr inline LogSeverity kCurrentLogLevel = LogSeverity::Debug;
 
 private:
     mutable std::atomic_flag m_loggerReady;
