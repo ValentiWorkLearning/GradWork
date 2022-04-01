@@ -91,8 +91,7 @@ private:
 
         auto monitorCallback =
             cbc::obtain_connector([](lv_disp_drv_t* disp_drv, uint32_t time, uint32_t px) {
-                LOG_DEBUG(fmt::format("Refresh time: {}", time));
-                LOG_DEBUG(fmt::format("Refreshed pixels: {}", px));
+                LOG_DEBUG(fmt::format("Refresh time: {}, pixels: {}", time, px));
             });
 
         m_glDisplayDriver.monitor_cb = monitorCallback;
