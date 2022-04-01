@@ -50,7 +50,7 @@ public:
 
         auto error = co_await lfs_mount(&m_fsInstance, &m_fsConfig);
 
-        LOG_DEBUG(fmt::format("lfs_mount error is ", error));
+        LOG_DEBUG(fmt::format("lfs_mount error is {}", error));
         if (error)
         {
             co_await lfs_format(&m_fsInstance, &m_fsConfig);
@@ -89,7 +89,6 @@ private:
         void* buffer,
         lfs_size_t size) noexcept
     {
-        LOG_DEBUG("FS: read call");
         auto pThis = reinterpret_cast<This_t*>(c->context);
         co_await pThis->getBlockDevice().read(
             static_cast<std::uint8_t*>(buffer), block * c->block_size + off, size);
@@ -103,7 +102,6 @@ private:
         const void* buffer,
         lfs_size_t size) noexcept
     {
-        LOG_DEBUG("FS: prog call");
         auto pThis = reinterpret_cast<This_t*>(c->context);
         co_await pThis->getBlockDevice().write(
             (block * c->block_size + off), reinterpret_cast<const std::uint8_t*>(buffer), size);
@@ -113,7 +111,6 @@ private:
 
     static CoroUtils::Task<int> eraseCall(const lfs_config* c, lfs_block_t block) noexcept
     {
-        LOG_DEBUG("FS: erase call");
         auto pThis = reinterpret_cast<This_t*>(c->context);
         co_return LFS_ERR_OK;
     }
