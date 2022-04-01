@@ -70,8 +70,6 @@ public:
         std::uint8_t* pReadBuffer{_pBlockOut};
         std::uint32_t blockAddress{_address};
 
-        LOG_DEBUG("FS::SpiBlockDrevice read call");
-
         while (blockSize > 0)
         {
             auto resultBuffer =

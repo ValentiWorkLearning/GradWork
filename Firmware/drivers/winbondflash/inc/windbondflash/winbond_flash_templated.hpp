@@ -186,13 +186,13 @@ public:
     {
         ChipSelectGuard csGuard{this};
 
-        LOG_DEBUG("WinbondFlashDriver checkIsBusy");
+        LOG_TRACE("WinbondFlashDriver checkIsBusy");
 
         auto busyStatusRegister = co_await prepareXferTransaction(
             std::forward_as_tuple(WindbondCommandSet::ReadStatusRegister1),
             WindbondCommandSet::DummyByte);
 
-        LOG_DEBUG("WinbondFlashDriver checkIsBusy completion");
+        LOG_TRACE("WinbondFlashDriver checkIsBusy completion");
         co_return busyStatusRegister[0] & WindbondCommandSet::Masks::EraseWriteInProgress;
     }
 
@@ -218,7 +218,7 @@ public:
         }
         while (co_await checkIsBusy())
         {
-            LOG_DEBUG("WinbondFlashDriver wait for the eraseSector completion");
+            LOG_TRACE("WinbondFlashDriver wait for the eraseSector completion");
             co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
         }
     }
