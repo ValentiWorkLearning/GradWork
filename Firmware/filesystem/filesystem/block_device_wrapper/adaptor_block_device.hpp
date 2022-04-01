@@ -5,7 +5,6 @@
 
 #include <logger/logger_service.hpp>
 #include <span>
-#include <spdlog/spdlog.h>
 
 namespace Filesystem::BlockDevice
 {
@@ -41,10 +40,10 @@ public:
         const std::uint8_t* _blockData,
         std::uint32_t _blockSize) noexcept
     {
-        spdlog::info(
+        LOG_DEBUG(fmt::format(
             "Block Device WRITE to address: {address} blockData: {span_data:f} ",
             fmt::arg("address", _address),
-            fmt::arg("span_data", std::span(_blockData, _blockSize)));
+            fmt::arg("span_data", std::span(_blockData, _blockSize))));
 
         co_await m_wrappedNode.write(_address, _blockData, _blockSize);
     }
@@ -55,10 +54,10 @@ public:
     {
         co_await m_wrappedNode.read(_pBlockOut, _address, _blockSize);
 
-        spdlog::info(
+        LOG_DEBUG(fmt::format(
             "Block Device READ from address: {address} blockData: {span_data:f} ",
             fmt::arg("address", _address),
-            fmt::arg("span_data", std::span(static_cast<const uint8_t*>(_pBlockOut), _blockSize)));
+            fmt::arg("span_data", std::span(static_cast<const uint8_t*>(_pBlockOut), _blockSize))));
     }
 
 private:

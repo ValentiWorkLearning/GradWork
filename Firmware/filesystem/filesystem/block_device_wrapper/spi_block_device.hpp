@@ -46,7 +46,6 @@ public:
         const std::uint8_t* _blockData,
         std::uint32_t _blockSize) noexcept
     {
-
         std::uint32_t requestSize = _blockSize;
         const std::uint8_t* pBlockRequest = _blockData;
         std::uint32_t blockAddress{_address};
@@ -70,6 +69,8 @@ public:
         std::uint32_t blockSize{_blockSize};
         std::uint8_t* pReadBuffer{_pBlockOut};
         std::uint32_t blockAddress{_address};
+
+        LOG_DEBUG("FS::SpiBlockDrevice read call");
 
         while (blockSize > 0)
         {

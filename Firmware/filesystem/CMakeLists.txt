@@ -34,11 +34,6 @@ target_compile_options(
     ${COMMON_FLAGS}
 )
 
-
-if(WIN32 OR UNIX AND ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
-    target_link_libraries(watch_filesystem INTERFACE spdlog::spdlog)
-endif()
-
 target_link_libraries(
     watch_filesystem INTERFACE
     drivers_ih
