@@ -10,12 +10,13 @@
 #else
 #include <backends/spi_backend_nrf.hpp>
 #include <buttons/bt_nordic_hardware_backend.hpp>
+#include <filesystem/block_device_wrapper/adaptor_block_device.hpp>
+#include <filesystem/block_device_wrapper/spi_block_device.hpp>
 #endif
 
 #include <spi/spi_wrapper_async_templated.hpp>
 #include <windbondflash/winbond_flash_templated.hpp>
 
-#include <filesystem/block_device_wrapper/spi_block_device.hpp>
 #include <filesystem/platform_filesystem.hpp>
 
 namespace Hal
@@ -51,8 +52,8 @@ struct BoardSpiFlashDescriptor
     static constexpr inline std::size_t kEraseSize = 4096;
 };
 
-using TSpiFlashBlockDevice =
-    Filesystem::BlockDevice::SpiFlashBlockDevice<TFlashDriver, BoardSpiFlashDescriptor>;
+using TSpiFlashBlockDevice = Filesystem::BlockDevice::LogAdaptorBlockDevice<
+    Filesystem::BlockDevice::SpiFlashBlockDevice<TFlashDriver, BoardSpiFlashDescriptor>>;
 
 using TFilesystem = Platform::Fs::Holder<TSpiFlashBlockDevice>;
 
