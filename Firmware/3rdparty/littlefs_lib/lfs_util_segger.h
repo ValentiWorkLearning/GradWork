@@ -90,7 +90,9 @@ extern "C"
 // Runtime assertions
 #ifndef LFS_ASSERT
 #ifndef LFS_NO_ASSERT
-#define LFS_ASSERT(test) assert(test)
+#define LFS_ASSERT(test)                                                                           \
+    assert(test);                                                                                  \
+    SEGGER_RTT_printf(0, "assert expr:" #test "\n")
 #else
 #define LFS_ASSERT(test)
 #endif
