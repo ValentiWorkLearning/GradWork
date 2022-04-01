@@ -43,8 +43,4 @@ private:
     TFilesystemPtr m_filesystem;
     TFlashDriverPtr m_pFlashDriver;
 };
-
-using TBoardPtr = std::unique_ptr<Board>;
-TBoardPtr createBoard() noexcept;
-
 } // namespace WatchBoard

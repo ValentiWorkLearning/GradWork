@@ -45,11 +45,6 @@ Graphics::Events::TButtonsEvents toButtonEvent(Buttons::ButtonState _buttonToCon
 Application::Application() noexcept
 {
     LOG_INFO("Application start");
-    initBoard();
-    LOG_INFO("Complete board init");
-    initPeripheral();
-    LOG_INFO("Complete peripheral init");
-
     initServices();
     initGraphicsStack();
     initBleStack();
@@ -58,21 +53,12 @@ Application::Application() noexcept
 
 Application::~Application() noexcept = default;
 
-void Application::initBoard() noexcept
-{
-    m_pBoardImpl = WatchBoard::createBoard();
-}
-
 void Application::initServices() noexcept
 {
     auto bleServiceProvider = ServiceProviders::getFakeServiceCreator();
     m_batteryLevelService = bleServiceProvider->getBatteryService();
     m_heartrateService = bleServiceProvider->getHeartrateService();
     m_dateTimeService = bleServiceProvider->getDateTimeService();
-}
-
-void Application::initPeripheral() noexcept
-{
 }
 
 Application& Application::Instance()
@@ -147,8 +133,8 @@ void Application::connectBoardSpecificEvents() noexcept
 {
     auto& pMainWindow = m_graphicsService->getMainWindow();
 
-    m_pBoardImpl->getButtonsDriver()->onButtonEvent.connect([&pMainWindow](
-                                                                Buttons::ButtonEvent _buttonEvent) {
+    m_boardImpl.getButtonsDriver()->onButtonEvent.connect([&pMainWindow](
+                                                              Buttons::ButtonEvent _buttonEvent) {
         GsEvents::HardwareButtonId graphicsButton{GsEvents::to_underlying(_buttonEvent.buttonId)};
 
         pMainWindow.getEventDispatcher().postEvent(
@@ -164,7 +150,7 @@ void Application::runApplicationLoop() noexcept
 
     m_batteryLevelService->startBatteryMeasure();
     m_dateTimeService->launchService();
-    m_pBoardImpl->ledToggle();
+    m_boardImpl.ledToggle();
 
     while (true)
     {

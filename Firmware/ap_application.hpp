@@ -25,11 +25,7 @@ public:
     void runApplicationLoop() noexcept;
 
 private:
-    void initBoard() noexcept;
-
     void initServices() noexcept;
-
-    void initPeripheral() noexcept;
 
     void initBleStack() noexcept;
 
@@ -48,5 +44,5 @@ private:
     std::unique_ptr<ServiceProviders::HeartrateService::IHeartrateService> m_heartrateService;
     std::unique_ptr<ServiceProviders::DateTimeService::IDateTimeService> m_dateTimeService;
     std::unique_ptr<Graphics::LvglGraphicsService> m_graphicsService;
-    WatchBoard::TBoardPtr m_pBoardImpl;
+    WatchBoard::Board m_boardImpl;
 };
