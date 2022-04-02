@@ -89,7 +89,7 @@ void Board::initBoard() noexcept
     /* Configure board. */
     bsp_board_init(BSP_INIT_LEDS);
 
-    LOG_DEBUG("Hello from E73 Mod Board!");
+    LOG_INFO("Hello from E73 Mod Board!");
 
     ret_code_t errorCode{};
 
@@ -132,12 +132,12 @@ void Board::initBoardSpiFlash() noexcept
     // auto readResult = co_await m_pFlashDriver->requestReadBlock(0x00, blockTest.size());
     // LOG_DEBUG(fmt::format("Got read block {}", readResult));
 
-    LOG_DEBUG("Started filesystem creation");
+    LOG_INFO("Started filesystem creation");
     m_filesystem = std::make_unique<Hal::TFilesystem>();
 
-    LOG_DEBUG("Started filesystem creation");
+    LOG_INFO("Completed filesystem creation");
     co_await m_filesystem->initializeFs();
-    LOG_DEBUG("Filesystem is ready");
+    LOG_INFO("Filesystem is ready");
 }
 
 Board::Board() noexcept
@@ -153,7 +153,6 @@ void Board::ledToggle() noexcept
     while (true)
     {
         co_await 300ms;
-        // LOG_DEBUG("LED TIMER EXPIRED");
         bsp_board_led_invert(0);
         co_await 100ms;
         bsp_board_led_invert(0);

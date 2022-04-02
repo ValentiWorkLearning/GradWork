@@ -1,7 +1,3 @@
-if(WIN32 OR UNIX AND ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
-    find_package(spdlog REQUIRED)
-endif()
-
 add_library(watch_filesystem INTERFACE
 
     filesystem/filesystem_holder.hpp
@@ -19,7 +15,6 @@ target_include_directories(watch_filesystem INTERFACE ${CMAKE_CURRENT_LIST_DIR} 
 
 target_link_libraries(watch_filesystem INTERFACE
     littlefs
-    fmt::fmt
 )
 
 target_link_options(

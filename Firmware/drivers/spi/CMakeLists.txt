@@ -5,8 +5,6 @@ add_library(
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
     target_link_libraries( spi INTERFACE NordicSDK::Common )
-elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
-    target_link_libraries( spi INTERFACE fmt::fmt )
 endif()
 
 target_compile_options(

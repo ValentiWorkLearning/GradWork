@@ -27,7 +27,7 @@
 
 #include <windbondflash/winbond_flash_templated.hpp>
 
-#include <spdlog/spdlog.h>
+#include <logger/logger_service.hpp>
 
 using TSpiBus = Interface::SpiTemplated::SpiBus<Interface::SpiTemplated::SpiBusDesktopBackend>;
 using TFlashDriver = ExternalFlash::WinbondFlashDriver<TSpiBus>;
@@ -54,30 +54,30 @@ CoroUtils::VoidTask simpleRwTest(
     std::string_view fileName,
     std::string_view fileData)
 {
-    spdlog::warn("simpleRwTest begin");
+    LOG_WARN("simpleRwTest begin");
     auto lfs = filesystem.fsInstance();
     {
-        spdlog::warn("FILE open begin");
+        LOG_WARN("FILE open begin");
         auto filename = std::move(co_await filesystem.openFile(fileName));
         co_await filename.write(
             std::span(reinterpret_cast<const std::uint8_t*>(fileData.data()), fileData.size()));
-        spdlog::warn("FILE open finalize");
+        LOG_WARN("FILE open finalize");
     }
 
     std::vector<std::uint8_t> readFrom;
     readFrom.resize(fileData.size());
 
     {
-        spdlog::warn("FILE read begin");
+        LOG_WARN("FILE read begin");
         auto holdedFile = std::move(co_await filesystem.openFile(fileName));
         auto resultRead = co_await holdedFile.read(std::span(readFrom.data(), fileData.size()));
-        spdlog::warn("FILE read finalize");
+        LOG_WARN("FILE read finalize");
     }
 
     auto kCompareStringView{
         std::string_view{reinterpret_cast<const char*>(readFrom.data()), readFrom.size()}};
     assert(fileData == kCompareStringView);
-    spdlog::warn("simpleRwTest finalize");
+    LOG_WARN("simpleRwTest finalize");
 }
 CoroUtils::VoidTask fileTest(TFilesystem& filesystem)
 {

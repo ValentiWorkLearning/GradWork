@@ -91,8 +91,8 @@ extern "C"
 #ifndef LFS_ASSERT
 #ifndef LFS_NO_ASSERT
 #define LFS_ASSERT(test)                                                                           \
-    assert(test);                                                                                  \
-    SEGGER_RTT_printf(0, "assert expr:" #test "\n")
+    SEGGER_RTT_printf(0, "%s assert expr: %s", RTT_CTRL_TEXT_YELLOW, #test "\n");                  \
+    assert(test)
 #else
 #define LFS_ASSERT(test)
 #endif
