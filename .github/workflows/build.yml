@@ -69,21 +69,21 @@ jobs:
         id: cache-gcc-toolchain
         uses: actions/cache@v2
         with:
-          path: ${{ github.workspace }}/gcc_toolchain_10_3
-          key: ${{runner.os}}-toolchain-v10_3
+          path: ${{ github.workspace }}/gcc_toolchain_11_2
+          key: ${{runner.os}}-toolchain-v11_2
 
       - name: Get the latest arm-gcc-none-eabi-gcc
         uses: wei/wget@v1
         if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
         id: download-arm-gcc
         with:
-          args: "https://developer.arm.com/-/media/Files/downloads/gnu-rm/10.3-2021.07/gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2"
+          args: "https://developer.arm.com/-/media/Files/downloads/gnu/11.2-2022.02/binrel/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz"
 
       - name: Unpack arm-gcc-compiler
         if: steps.cache-gcc-toolchain.outputs.cache-hit != 'true'
         run: |
-          mkdir gcc_toolchain_10_3
-          tar -xjf gcc-arm-none-eabi-10.3-2021.07-x86_64-linux.tar.bz2 --directory ${{ github.workspace }}/gcc_toolchain_10_3
+          mkdir gcc_toolchain_11_2
+          tar -xJf gcc-arm-11.2-2022.02-x86_64-arm-none-eabi.tar.xz --directory ${{ github.workspace }}/gcc_toolchain_11_2
 
       - name: Cache NordicSDK
         id: cache-nordic-sdk
@@ -113,7 +113,7 @@ jobs:
           cmakeListsOrSettingsJson: CMakeListsTxtAdvanced
           cmakeListsTxtPath: ${{ github.workspace }}/Firmware/CMakeLists.txt
           cmakeBuildType: Debug
-          cmakeAppendedArgs: '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=ON -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_10_3/gcc-arm-none-eabi-10.3-2021.07'
+          cmakeAppendedArgs: '-DTARGET_PLATFORM:STRING="ARM_CORTEX" -DEXECUTE_MCU_FLASHING=OFF -DCMAKE_BUILD_TYPE:STRING=Debug -DREDUCE_LVGL_BINARY_SIZE=ON -DPACKAGE_TESTS=OFF -DNRF5_SDK_PATH=${{ github.workspace }}/Nrf52SDKv16_0 -DARM_NONE_EABI_TOOLCHAIN_PATH:PATH=${{ github.workspace }}/gcc_toolchain_11_2/gcc-arm-11.2-2022.02-x86_64-arm-none-eabi'
           buildWithCMake: true
 
     # # Runs a set of commands using the runners shell
