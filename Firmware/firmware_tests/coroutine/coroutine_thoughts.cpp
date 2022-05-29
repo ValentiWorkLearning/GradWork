@@ -19,11 +19,11 @@
 #include <spi/spi_wrapper_async_templated.hpp>
 
 #include "st7789_draft.hpp"
-#include <filesystem/platform_filesystem.hpp>
-#include <filesystem/block_device_wrapper/heap_block_device.hpp>
 #include <filesystem/block_device_wrapper/adaptor_block_device.hpp>
-#include <filesystem/block_device_wrapper/spi_block_device.hpp>
 #include <filesystem/block_device_wrapper/combiner_block_device.hpp>
+#include <filesystem/block_device_wrapper/heap_block_device.hpp>
+#include <filesystem/block_device_wrapper/spi_block_device.hpp>
+#include <filesystem/platform_filesystem.hpp>
 
 #include <windbondflash/winbond_flash_templated.hpp>
 
@@ -43,7 +43,8 @@ using TLogHeapBlockDevice =
         Filesystem::BlockDevice::kReadSize,
         Filesystem::BlockDevice::kEraseSize>>;
 
-using TCombinedBlockDevice = Filesystem::BlockDevice::CombinerBlockDevice<TLogHeapBlockDevice,TSpiFlashBlockDevice>;
+using TCombinedBlockDevice =
+    Filesystem::BlockDevice::CombinerBlockDevice<TLogHeapBlockDevice, TSpiFlashBlockDevice>;
 
 using TFilesystem = Platform::Fs::Holder<TCombinedBlockDevice>;
 

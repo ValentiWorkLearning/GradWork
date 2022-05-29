@@ -13,6 +13,7 @@ enable_testing()
 find_package(GTest REQUIRED)
 add_subdirectory(coroutine)
 add_subdirectory(article_example)
+add_subdirectory(testing_common)
 
 add_executable(
     ${PROJECT_NAME}
@@ -67,6 +68,7 @@ target_link_libraries(
     watch_filesystem
     buttons_driver
     windbond_spi_flash_driver
+    testing_common
 )
 
 target_compile_features(

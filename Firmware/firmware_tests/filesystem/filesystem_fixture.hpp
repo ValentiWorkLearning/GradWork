@@ -18,6 +18,8 @@
 #include "../drivers/spi/spi_fake_backend.hpp"
 #include "filesystem_test_data.hpp"
 
+#include <testing_common/coroutine_loop_executor.hpp>
+
 using TFlashTestDriver = ExternalFlash::WinbondFlashDriver<
     Interface::SpiTemplated::SpiBus<Testing::Spi::SpiBusBackendStub>>;
 
@@ -62,16 +64,26 @@ template <typename Filesystem> class FilesystemTopLevelTestFixture : public ::te
 public:
     FilesystemTopLevelTestFixture()
         : m_params{std::get<TestParamPlaceholder<Filesystem>>(kFilesystemTestParams)}
+
     {
     }
 
 protected:
     void SetUp() override
     {
+        m_coroLoopExecutor.startCoroLoop();
         CoroUtils::syncWait(m_testFilesystem.initializeFs());
+    }
+
+    void TearDown() override
+    {
+        m_coroLoopExecutor.stopCoroutineLoop();
     }
 
 protected:
     TestParamPlaceholder<Filesystem> m_params;
     Filesystem m_testFilesystem;
+
+private:
+    Testing::Common::CoroutineLoopExecutor m_coroLoopExecutor;
 };

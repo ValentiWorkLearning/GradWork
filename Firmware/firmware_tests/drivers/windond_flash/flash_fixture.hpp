@@ -13,6 +13,7 @@
 // TODO Fix include more clearly
 #include "../spi/spi_fake_backend.hpp"
 #include "../spi/mock_gpio.hpp"
+#include <testing_common/coroutine_loop_executor.hpp>
 
 class FlashDriverTest : public ::testing::Test
 {
@@ -25,7 +26,14 @@ public:
 protected:
     void SetUp() override
     {
+        m_coroLoopExecutor.startCoroLoop();
     }
+
+    void TearDown() override
+    {
+        m_coroLoopExecutor.stopCoroutineLoop();
+    }
+
 
     decltype(auto) getMockGpio()
     {
@@ -44,4 +52,7 @@ protected:
 
 protected:
     TFlashTestDriver flashDriver;
+
+private:
+    Testing::Common::CoroutineLoopExecutor m_coroLoopExecutor;
 };

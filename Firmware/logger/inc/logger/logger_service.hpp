@@ -65,7 +65,7 @@ template <> struct fmt::formatter<std::span<const std::uint8_t>>
             reinterpret_cast<const char*>(p.data()),
             reinterpret_cast<const char*>(p.data()) + p.size()};
 
-        return format_to(ctx.out(), "{}", tempFormatHolder);
+        return fmt::format_to(ctx.out(), "{}", tempFormatHolder);
     }
 };
 
