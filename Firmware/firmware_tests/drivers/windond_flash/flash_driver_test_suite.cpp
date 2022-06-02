@@ -23,9 +23,7 @@ constexpr const std::array<std::uint8_t, ReadStatusCommandLength> readStatusRegi
     WindbondCommandSet::ReadStatusRegister1,
     WindbondCommandSet::DummyByte};
 
-
 constexpr std::uint32_t address{0x10'00};
-
 
 constexpr std::size_t ProgramPageCommandLength = 4;
 constexpr const std::array<std::uint8_t, ProgramPageCommandLength> pageProgramCommand{
@@ -34,7 +32,12 @@ constexpr const std::array<std::uint8_t, ProgramPageCommandLength> pageProgramCo
     static_cast<std::uint8_t>(address & 0x00'00'FF'00 >> 8),
     static_cast<std::uint8_t>(address & 0x00'00'00'FF)};
 
-}
+constexpr const std::array<std::uint8_t, ProgramPageCommandLength> erase4KSectorCommand{
+    WindbondCommandSet::SectorErase4KB,
+    static_cast<std::uint8_t>((address & 0x00'FF'00'00) >> 16),
+    static_cast<std::uint8_t>((address & 0x00'00'FF'00) >> 8),
+    static_cast<std::uint8_t>(address & 0x00'00'00'FF)};
+} // namespace Testing::FlashCommandStubs
 
 namespace Testing::Utils
 {
@@ -80,8 +83,8 @@ MATCHER_P(SpanChecker, spanItem, "Span content equals")
 TEST_F(FlashDriverTest, RequestWriteBlock)
 {
 
-    EXPECT_CALL(getMockGpio(), setGpioLow()).Times(1);
-    EXPECT_CALL(getMockGpio(), setGpioHigh()).Times(1);
+    EXPECT_CALL(getMockGpio(), setGpioLow()).Times(2);
+    EXPECT_CALL(getMockGpio(), setGpioHigh()).Times(2);
 
     auto TransmitData{std::array<std::uint8_t, 7>{0xEF, 0xFF, 0x18, 0x19, 0x20, 0x21, 0x22}};
 
@@ -102,6 +105,14 @@ TEST_F(FlashDriverTest, RequestWriteBlock)
 
     const auto ProgramCommandSpan =
                       Testing::Utils::make_span(Testing::FlashCommandStubs::pageProgramCommand);
+
+    const auto kEraseSectorCommandSpan =
+        Testing::Utils::make_span(Testing::FlashCommandStubs::erase4KSectorCommand);
+
+   EXPECT_CALL(spiMockAccess(), sentData)
+        .With(SpanChecker(kEraseSectorCommandSpan))
+        .Times(1)
+        .InSequence(sequence);
 
     EXPECT_CALL(spiMockAccess(), sentData)
         .With(SpanChecker(writeEnableSpan))
