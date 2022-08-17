@@ -35,7 +35,7 @@ template <typename TSpiBusInstance> class WinbondFlashDriver
 
 public:
     CoroUtils::VoidTask pageWrite(
-        const std::uint32_t _address,
+        std::uint32_t _address,
         std::span<const std::uint8_t> _blockData) noexcept
     {
 
@@ -43,10 +43,6 @@ public:
         constexpr std::uint16_t PageSize = 256;
 
         assert(_blockData.size() <= PageSize);
-
-        co_await eraseSector(_address);
-
-        LOG_TRACE("WinbondFlashDriver XFER WE");
 
         {
             ChipSelectGuard csGuard{this};
@@ -57,6 +53,10 @@ public:
             LOG_TRACE("WinbondFlashDriver wait for write completion");
             co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
         }
+
+        co_await eraseSector(_address);
+
+        LOG_TRACE("WinbondFlashDriver XFER WE");
 
         {
             ChipSelectGuard csGuard{this};
@@ -69,7 +69,7 @@ public:
                 static_cast<std::uint8_t>(_address & 0x00'00'00'FF)));
 
             LOG_TRACE("WinbondFlashDriver XFER blockData");
-            co_await transmitChunk(std::span(_blockData.data(), _blockData.size()));
+            co_await transmitChunk(_blockData);
         }
 
         while (co_await checkIsBusy())
@@ -82,13 +82,20 @@ public:
     }
 
     CoroUtils::Task<std::span<std::uint8_t>> requestReadBlock(
-        const std::uint32_t _address,
-        const std::uint16_t _blockSize) noexcept
+        std::uint32_t _address,
+        std::uint16_t _blockSize) noexcept
     {
         constexpr std::uint16_t PageSize = 256;
 
         LOG_TRACE(fmt::format("WinbondFlashDriver requestReadBlock: {},{}", _blockSize, PageSize));
         assert(_blockSize <= PageSize);
+
+        while (co_await checkIsBusy())
+        {
+            LOG_TRACE("WinbondFlashDriver READ wait for read completion");
+            co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
+        }
+
         std::span<std::uint8_t> receivedData{};
 
         {
@@ -113,15 +120,11 @@ public:
 
             LOG_TRACE("WinbondFlashDriver xferTransaction receive");
         }
-        while (co_await checkIsBusy())
-        {
-            LOG_TRACE("WinbondFlashDriver READ wait for read completion");
-            co_yield CoroUtils::CoroQueueMainLoop::GetInstance();
-        }
+
         LOG_TRACE("WinbondFlashDriver return back");
         co_return receivedData;
     }
-    void requestFastReadBlock(const std::uint32_t _address, const std::uint8_t _blockSize) noexcept
+    void requestFastReadBlock(std::uint32_t _address, const std::uint8_t _blockSize) noexcept
     {
     }
 
