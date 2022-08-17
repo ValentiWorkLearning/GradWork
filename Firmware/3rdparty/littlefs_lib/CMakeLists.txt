@@ -5,7 +5,7 @@ add_library(littlefs)
 target_sources(littlefs PRIVATE
 	littlefs/lfs.cpp
 	littlefs/lfs_util.cpp
-)
+ "lfs_util_desktop.h")
 
 target_include_directories(littlefs PUBLIC littlefs
 )
@@ -35,7 +35,9 @@ target_compile_options(
 target_include_directories(littlefs PUBLIC ${CMAKE_CURRENT_LIST_DIR})
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
-    target_include_directories(littlefs PRIVATE ${CMAKE_CURRENT_LIST_DIR} )
     target_precompile_headers(littlefs PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lfs_util_segger.h)
     target_link_libraries(littlefs PRIVATE NordicSDK::Common)
+elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
+    target_precompile_headers(littlefs PRIVATE ${CMAKE_CURRENT_LIST_DIR}/lfs_util_desktop.h)
+    target_link_libraries(littlefs PUBLIC logger_service)
 endif()
