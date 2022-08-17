@@ -15,6 +15,7 @@
 #include <fmt/ranges.h>
 
 #include <utils/MetaUtils.hpp>
+#include <logger/logger_service.hpp>
 
 #define USE_THREADING_ASYNC_BACKEND
 
@@ -41,7 +42,7 @@ public:
                     using namespace std::chrono_literals;
 
                     std::unique_lock<std::mutex>(m_transactionBufferGuard);
-                    fmt::print("[Desktop SPI simultator]{}\n", m_dataBuffer);
+                    LOG_DEBUG(fmt::format("[Desktop SPI simultator]{}\n", m_dataBuffer));
 
                     m_newDataArrived.store(false);
                     m_transactionCompleted();

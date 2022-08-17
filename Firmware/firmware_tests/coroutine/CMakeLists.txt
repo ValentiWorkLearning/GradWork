@@ -16,18 +16,27 @@ target_sources(
     st7789_draft.hpp
 )
 
+target_include_directories(
+    coroutine_experiments_app
+    PRIVATE
+    fs_ideas
+    wrapper
+)
 target_compile_features(
     coroutine_experiments_app
     PRIVATE
     cxx_std_20
 )
 
-if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
-    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /fsanitize=address")
-else()
-    set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
-    set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
-    set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+ if( ${ENABLE_SANITIZE_BUILD} )
+
+    if(CMAKE_CXX_COMPILER_ID MATCHES "MSVC")
+        set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /fsanitize=address")
+    else()
+        set (CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+        set (CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+        set (CMAKE_LINKER_FLAGS_DEBUG "${CMAKE_LINKER_FLAGS_DEBUG} -fno-omit-frame-pointer -fsanitize=address")
+    endif()
 endif()
 
 target_link_libraries(
@@ -37,6 +46,7 @@ target_link_libraries(
     watch_display
     UtilsLibrary
     logger_service
+    watch_filesystem
 )
 if(UNIX)
     target_link_libraries( coroutine_experiments_app PUBLIC Threads::Threads)

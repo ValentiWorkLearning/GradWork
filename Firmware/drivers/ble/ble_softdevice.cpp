@@ -125,7 +125,7 @@ void BleStackKeeper::gattEventHandler(
 
     if (_pEvent->evt_id == NRF_BLE_GATT_EVT_ATT_MTU_UPDATED)
     {
-        LOG_DEBUG_ENDL("GATT ATT MTU on connection 0x%x changed to %d.");
+        LOG_DEBUG("GATT ATT MTU on connection 0x%x changed to %d.");
 
         onConnected.emitLater();
         // NRF_LOG_INFO("GATT ATT MTU on connection 0x%x changed to %d.",
@@ -175,7 +175,7 @@ void BleStackKeeper::bleEventHandler(ble_evt_t const* _pBleEvent) noexcept
     switch (_pBleEvent->header.evt_id)
     {
     case BLE_GAP_EVT_DISCONNECTED:
-        LOG_DEBUG_ENDL("Disconnected.");
+        LOG_DEBUG("Disconnected.");
         m_isConnected = false;
 
         m_connectionHandle = BLE_CONN_HANDLE_INVALID;
@@ -183,7 +183,7 @@ void BleStackKeeper::bleEventHandler(ble_evt_t const* _pBleEvent) noexcept
         break;
 
     case BLE_GAP_EVT_CONNECTED:
-        LOG_DEBUG_ENDL("Connected");
+        LOG_DEBUG("Connected");
         m_isConnected = true;
         // NRF_LOG_INFO("Connected.");
         // errCode = bsp_indication_set( BSP_INDICATE_CONNECTED );
@@ -196,7 +196,7 @@ void BleStackKeeper::bleEventHandler(ble_evt_t const* _pBleEvent) noexcept
         break;
 
     case BLE_GAP_EVT_PHY_UPDATE_REQUEST: {
-        LOG_DEBUG_ENDL("PHY update request.");
+        LOG_DEBUG("PHY update request.");
 
         ble_gap_phys_t const phys = {
             .tx_phys = BLE_GAP_PHY_AUTO,
@@ -210,7 +210,7 @@ void BleStackKeeper::bleEventHandler(ble_evt_t const* _pBleEvent) noexcept
 
     case BLE_GATTC_EVT_TIMEOUT:
         // Disconnect on GATT Client timeout event.
-        LOG_DEBUG_ENDL("GATT Client Timeout.");
+        LOG_DEBUG("GATT Client Timeout.");
 
         errCode = sd_ble_gap_disconnect(
             _pBleEvent->evt.gattc_evt.conn_handle, BLE_HCI_REMOTE_USER_TERMINATED_CONNECTION);
@@ -270,7 +270,7 @@ void BleStackKeeper::advertisingEventHandler(ble_adv_evt_t _pAdvertisingEvent) n
     switch (_pAdvertisingEvent)
     {
     case BLE_ADV_EVT_FAST:
-        LOG_DEBUG_ENDL("Fast advertising.");
+        LOG_DEBUG("Fast advertising.");
         if (!m_isConnected)
             onDisconnected.emitLater();
         // errorCode = bsp_indication_set(BSP_INDICATE_ADVERTISING);
@@ -282,7 +282,7 @@ void BleStackKeeper::advertisingEventHandler(ble_adv_evt_t _pAdvertisingEvent) n
         break;
 
     case BLE_ADV_EVT_SLOW_WHITELIST:
-        LOG_DEBUG_ENDL("Slow advertising with WhiteList");
+        LOG_DEBUG("Slow advertising with WhiteList");
         // errorCode = bsp_indication_set( BSP_INDICATE_ADVERTISING_WHITELIST );
         // APP_ERROR_CHECK( errorCode );
         errorCode = ble_advertising_restart_without_whitelist(&m_advertising);
@@ -302,7 +302,7 @@ void BleStackKeeper::advertisingEventHandler(ble_adv_evt_t _pAdvertisingEvent) n
             pm_whitelist_get(whiteListAddrs.data(), &AddrCount, whiteListIrks.data(), &IrkCount);
 
         APP_ERROR_CHECK(errorCode);
-        LOG_DEBUG_ENDL("pm_whitelist_get returns %d addr in whitelist and %d irk whitelist");
+        LOG_DEBUG("pm_whitelist_get returns %d addr in whitelist and %d irk whitelist");
 
         // Apply the whitelist.
         errorCode = ble_advertising_whitelist_reply(
@@ -419,7 +419,7 @@ void BleStackKeeper::peerManagerEventHandler(pm_evt_t const* _pPeerEvent) noexce
     switch (_pPeerEvent->evt_id)
     {
     case PM_EVT_BONDED_PEER_CONNECTED: {
-        LOG_DEBUG_ENDL("Connected to a previously bonded device.");
+        LOG_DEBUG("Connected to a previously bonded device.");
     }
     break;
 
@@ -497,7 +497,7 @@ void BleStackKeeper::peerManagerEventHandler(pm_evt_t const* _pPeerEvent) noexce
 
         if (IsUpdateSucceeded)
         {
-            LOG_DEBUG_ENDL("New Bond, add the peer to the whitelist if possible");
+            LOG_DEBUG("New Bond, add the peer to the whitelist if possible");
 
             if (m_whiteListPeerCount < BLE_GAP_WHITELIST_ADDR_MAX_COUNT)
             {
@@ -568,7 +568,7 @@ void BleStackKeeper::deleteBonds() noexcept
 {
     ret_code_t errCode{};
 
-    LOG_DEBUG_ENDL("Erase bonds!");
+    LOG_DEBUG("Erase bonds!");
 
     errCode = pm_peers_delete();
     APP_ERROR_CHECK(errCode);

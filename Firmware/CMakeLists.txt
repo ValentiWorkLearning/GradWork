@@ -13,7 +13,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
         -MP -MD -mthumb -mabi=aapcs -Wall -g3 -ffunction-sections -fdata-sections -fno-strict-aliasing -fno-builtin --short-enums -fno-exceptions
         ${CPU_FLAGS}
     )
-    set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_SOURCE_DIR}/cmake/arm-gcc-toolchain.cmake )
+    set( CMAKE_TOOLCHAIN_FILE ${CMAKE_CURRENT_LIST_DIR}/cmake/arm-gcc-toolchain.cmake )
 endif()
 
 project(nordic-template C CXX ASM)
@@ -23,7 +23,7 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
     set( NRF_TARGET "nrf52" )
     set( NRF52SOFTDEVICE "S112" )
-    set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sdk_dependent")
+    set( SDK_DEPENDENT_DIR "${CMAKE_CURRENT_LIST_DIR}/sdk_dependent")
 
     #https://stackoverflow.com/questions/31355692/how-do-i-enable-link-time-optimization-lto-with-cmake
     set(CMAKE_INTERPROCEDURAL_OPTIMIZATION FALSE)
@@ -32,9 +32,9 @@ if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
     if(NOT EXISTS "${CMAKE_BINARY_DIR}/conan.cmake")
       message(STATUS "Downloading conan.cmake from https://github.com/conan-io/cmake-conan")
-      file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/v0.16.1/conan.cmake"
+      file(DOWNLOAD "https://raw.githubusercontent.com/conan-io/cmake-conan/release/0.17/conan.cmake"
                     "${CMAKE_BINARY_DIR}/conan.cmake"
-                    EXPECTED_HASH SHA256=396e16d0f5eabdc6a14afddbcfff62a54a7ee75c6da23f32f7a31bc85db23484
+                    EXPECTED_HASH SHA256=3bef79da16c2e031dc429e1dac87a08b9226418b300ce004cc125a82687baeef
                     TLS_VERIFY ON)
     endif()
 
@@ -43,12 +43,12 @@ elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
 
     include(${CMAKE_BINARY_DIR}/conan.cmake)
 
-    conan_cmake_configure(REQUIRES sdl/2.0.16 gtest/1.11.0
+    conan_cmake_configure(REQUIRES sdl/2.0.16 gtest/1.11.0 spdlog/1.9.2
                           GENERATORS cmake_find_package
                           IMPORTS "bin, *.dll -> ${CMAKE_CURRENT_BINARY_DIR}"
                           IMPORTS "lib, *.dylib* -> ${CMAKE_CURRENT_BINARY_DIR}"
                           OPTIONS sdl:shared=True
-                          OPTIONS fmt:shared=True
+                          OPTIONS spdlog:header_only=True
                           )
 
     conan_cmake_autodetect(settings)
@@ -62,23 +62,18 @@ elseif(${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR")
 endif()
 
 
-set (3RDPARTY_DIR "3rdparty")
-add_subdirectory( ${3RDPARTY_DIR} ${CMAKE_BINARY_DIR}/3rdparty )
-
+add_subdirectory(3rdparty)
 add_subdirectory(drivers)
 add_subdirectory(utils)
 add_subdirectory(logger)
 add_subdirectory(graphics)
 add_subdirectory(service_providers)
+add_subdirectory(filesystem)
 
 set (NORDIC_TARGET theOpenWatch)
-add_executable(${NORDIC_TARGET} ${PROJECT_SOURCES})
-
-target_sources(
-    ${NORDIC_TARGET}
-    PRIVATE
-    main.cpp
-    ap_application.cpp
+add_executable(${NORDIC_TARGET}
+    ${CMAKE_CURRENT_LIST_DIR}/main.cpp
+    ${CMAKE_CURRENT_LIST_DIR}/ap_application.cpp
 )
 
 target_link_libraries(

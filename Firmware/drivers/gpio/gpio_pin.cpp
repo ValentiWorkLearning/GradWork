@@ -37,13 +37,13 @@ GpioPin<GpioPinNumber, pinDirection>::GpioPin() noexcept = default;
 template <std::uint8_t GpioPinNumber, Direction pinDirection>
 void GpioPin<GpioPinNumber, pinDirection>::set() noexcept
 {
-    LOG_DEBUG_ENDL("Gpio Set called");
+    LOG_DEBUG("Gpio Set called");
 }
 
 template <std::uint8_t GpioPinNumber, Direction pinDirection>
 void GpioPin<GpioPinNumber, pinDirection>::reset() noexcept
 {
-    LOG_DEBUG_ENDL("Gpio Reset called");
+    LOG_DEBUG("Gpio Reset called");
 }
 
 #endif

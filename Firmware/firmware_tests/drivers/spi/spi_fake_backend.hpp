@@ -20,7 +20,8 @@ public:
     void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
         BusTransactionsTransmit.emplace_back(_pBuffer, _bufferSize);
-        m_spiMocker.sentData(std::span(_pBuffer,_bufferSize));
+        auto kChunk{std::span(_pBuffer, _bufferSize)};
+        m_spiMocker.sentData(kChunk);
         m_completedTransaction();
     }
 

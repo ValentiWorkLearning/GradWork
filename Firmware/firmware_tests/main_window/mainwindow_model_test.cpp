@@ -28,7 +28,7 @@ TEST_F(MainWindowTest, HandleNavigateToNextPage_ButtonClickEvent)
 {
     m_pMainWindow->getEventDispatcher().postEvent(
         {Graphics::Events::EventGroup::Buttons,
-         Graphics::Events::TButtonsEvents::ButtonClicked,
+         Graphics::Events::to_underlying(Graphics::Events::TButtonsEvents::ButtonClicked),
          Graphics::Events::HardwareButtonId::kLeftButtonTop});
 
     m_pMainWindow->getEventDispatcher().processEventQueue();
@@ -44,7 +44,7 @@ TEST_F(MainWindowTest, HandleNavigateNextFromLastPage_ButtonClickEvent)
 
     m_pMainWindow->getEventDispatcher().postEvent(
         {Graphics::Events::EventGroup::Buttons,
-         Graphics::Events::TButtonsEvents::ButtonClicked,
+         Graphics::Events::to_underlying(Graphics::Events::TButtonsEvents::ButtonClicked),
          Graphics::Events::HardwareButtonId::kLeftButtonTop});
 
     m_pMainWindow->getEventDispatcher().processEventQueue();
@@ -58,7 +58,7 @@ TEST_F(MainWindowTest, HandleNavigateToPreviousPageFromInitialState_ButtonClickE
 {
     m_pMainWindow->getEventDispatcher().postEvent(
         {Graphics::Events::EventGroup::Buttons,
-         Graphics::Events::TButtonsEvents::ButtonClicked,
+         Graphics::Events::to_underlying(Graphics::Events::TButtonsEvents::ButtonClicked),
          Graphics::Events::HardwareButtonId::kLeftButtonBottom});
 
     m_pMainWindow->getEventDispatcher().processEventQueue();

@@ -40,14 +40,14 @@ void scanI2CSensors()
     errorCode = nrf_drv_twi_rx(&m_twi, Mpu9250Addr, &SampleData, sizeof(SampleData));
 
     if (errorCode == NRF_SUCCESS)
-        LOG_DEBUG_ENDL("MPU9250 detected on address 0x69");
+        LOG_DEBUG("MPU9250 detected on address 0x69");
 
     constexpr std::uint8_t Max30102Addr = 0x57;
 
     errorCode = nrf_drv_twi_rx(&m_twi, Max30102Addr, &SampleData, sizeof(SampleData));
 
     if (errorCode == NRF_SUCCESS)
-        LOG_DEBUG_ENDL("Max30102 detected on address 0x57");
+        LOG_DEBUG("Max30102 detected on address 0x57");
 #endif
 }
 

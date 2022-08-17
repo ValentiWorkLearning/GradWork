@@ -15,13 +15,13 @@ APP_TIMER_DEF(m_ledDriverTimer);
 
 #endif
 
-#include "utils/CallbackConnector.hpp"
-#include "utils/CoroUtils.hpp"
+#include <utils/CallbackConnector.hpp>
+#include <utils/CoroUtils.hpp>
 
-#include "delay/delay_provider.hpp"
-#include "logger/logger_service.hpp"
+#include <delay/delay_provider.hpp>
+#include <logger/logger_service.hpp>
 
-#if defined (USE_DEVICE_SPECIFIC)
+#if defined(USE_DEVICE_SPECIFIC)
 #define FMT_HEADER_ONLY
 #endif
 
@@ -89,12 +89,13 @@ void Board::initBoard() noexcept
     /* Configure board. */
     bsp_board_init(BSP_INIT_LEDS);
 
-    LOG_DEBUG_ENDL("Hello from E73 Mod Board!");
+    LOG_INFO("Hello from E73 Mod Board!");
 
     ret_code_t errorCode{};
 
     errorCode = app_timer_init();
-    APP_ERROR_CHECK(errorCode);
+    // LOG_DEBUG(fmt::format("app_timer_init code() {}", errorCode));
+    // APP_ERROR_CHECK(errorCode);
 #endif
     m_buttonsDriver.initializeHalDependent();
     initBoardSpiFlash();
@@ -107,23 +108,36 @@ void Board::initBoardTimer() noexcept
     errorCode =
         app_timer_create(&m_ledDriverTimer, APP_TIMER_MODE_SINGLE_SHOT, TimerExpiredCallback);
     APP_ERROR_CHECK(errorCode);
-    LOG_DEBUG("LED timer create code is:");
-    LOG_DEBUG_ENDL(errorCode);
+    LOG_DEBUG(fmt::format("LED timer create code is {}", errorCode));
 #endif
 }
 
 void Board::initBoardSpiFlash() noexcept
 {
-    m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
-    if (m_pFlashDriver)
-    {
-        const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
-        LOG_DEBUG("Jedec Id is:");
-        LOG_DEBUG_ENDL(fmt::format("{:#04x}", JedecId));
+    // LOG_DEBUG("creation of flash driver started");
+    // m_pFlashDriver = std::make_unique<Hal::TFlashDriver>();
 
-        const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
-        LOG_DEBUG_ENDL(fmt::format("{:02X}", fmt::join(DeviceId, "")));
-    }
+    // const std::uint32_t JedecId = co_await m_pFlashDriver->requestJEDEDCId();
+    // LOG_DEBUG(fmt::format("Jedec Id is  {:#04x}", JedecId));
+
+    // const std::span<std::uint8_t> DeviceId = co_await m_pFlashDriver->requestDeviceId();
+    // LOG_DEBUG(fmt::format("Device id is {:02X}", fmt::join(DeviceId, "")));
+
+    // LOG_DEBUG("m_pFlashDriver->requestBlockWrite");
+    // auto blockTest = std::array<std::uint8_t, 8>{1, 2, 3, 4, 5, 6, 7, 8};
+    // co_await m_pFlashDriver->pageWrite(0x00, blockTest);
+    // LOG_DEBUG("m_pFlashDriver->compltetedBlockWrite");
+
+    // LOG_DEBUG("m_pFlashDriver->requestReadBlock");
+    // auto readResult = co_await m_pFlashDriver->requestReadBlock(0x00, blockTest.size());
+    // LOG_DEBUG(fmt::format("Got read block {}", readResult));
+
+    LOG_INFO("Started filesystem creation");
+    m_filesystem = std::make_unique<Hal::TFilesystem>();
+
+    LOG_INFO("Completed filesystem creation");
+    co_await m_filesystem->initializeFs();
+    LOG_INFO("Filesystem is ready");
 }
 
 Board::Board() noexcept
@@ -139,7 +153,6 @@ void Board::ledToggle() noexcept
     while (true)
     {
         co_await 300ms;
-        // LOG_DEBUG_ENDL("LED TIMER EXPIRED");
         bsp_board_led_invert(0);
         co_await 100ms;
         bsp_board_led_invert(0);
@@ -162,11 +175,6 @@ std::uint32_t Board::convertToTimerTicks(std::chrono::milliseconds _interval) no
 Hal::ButtonsDriver* Board::getButtonsDriver() noexcept
 {
     return &m_buttonsDriver;
-}
-
-TBoardPtr createBoard() noexcept
-{
-    return std::make_unique<Board>();
 }
 
 }; // namespace WatchBoard

@@ -16,6 +16,7 @@ target_link_libraries(
     buttons_driver
     spi
     windbond_spi_flash_driver
+    watch_filesystem
     PRIVATE
     UtilsLibrary
     logger_service

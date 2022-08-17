@@ -1,6 +1,6 @@
 if( NOT ARM_NONE_EABI_TOOLCHAIN_PATH )
     #set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_none_eabi_9_2_1")
-    set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_arm_none_eabi_10_3")
+    set(ARM_NONE_EABI_TOOLCHAIN_PATH "C:/gcc_arm_none_eabi_11_2")
     message(STATUS "No ARM_NONE_EABI_TOOLCHAIN_PATH specified, using default: " ${ARM_NONE_EABI_TOOLCHAIN_PATH})
 else()
     message(STATUS " ARM_NONE_EABI_TOOLCHAIN_PATH specified using: " ${ARM_NONE_EABI_TOOLCHAIN_PATH})

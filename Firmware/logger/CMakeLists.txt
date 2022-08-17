@@ -20,8 +20,9 @@ target_link_libraries(
     logger_service
     PUBLIC
     UtilsLibrary
-    PRIVATE
+    fmt::fmt
 )
+
 
 if( ${TARGET_PLATFORM} STREQUAL "ARM_CORTEX" )
 
@@ -40,10 +41,5 @@ elseif( ${TARGET_PLATFORM} STREQUAL "FIRMWARE_SIMULATOR" )
         logger_service
         PRIVATE
         LoggerDesktop
-    )
-    target_link_libraries(
-        logger_service
-        PRIVATE
-        fmt::fmt
     )
 endif()

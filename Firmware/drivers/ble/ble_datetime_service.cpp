@@ -54,14 +54,14 @@ void DateTimeServiceNordic::serviceEventHandler(
     switch (_pEvent->evt_type)
     {
     case BLE_CTS_C_EVT_DISCOVERY_COMPLETE:
-        LOG_DEBUG_ENDL("Current Time Service discovered on server.");
+        LOG_DEBUG("Current Time Service discovered on server.");
         errorCode = ble_cts_c_handles_assign(
             &m_currentTimeService, _pEvent->conn_handle, &_pEvent->params.char_handles);
         APP_ERROR_CHECK(errorCode);
         break;
 
     case BLE_CTS_C_EVT_DISCOVERY_FAILED:
-        LOG_DEBUG_ENDL("Current Time Service not found on server. ");
+        LOG_DEBUG("Current Time Service not found on server. ");
         // CTS not found in this case we just disconnect. There is no reason to stay
         // in the connection for this simple app since it all wants is to interact with CT
         // if (_pEvent->conn_handle != BLE_CONN_HANDLE_INVALID)
@@ -73,16 +73,16 @@ void DateTimeServiceNordic::serviceEventHandler(
         break;
 
     case BLE_CTS_C_EVT_DISCONN_COMPLETE:
-        LOG_DEBUG_ENDL("Disconnect Complete.");
+        LOG_DEBUG("Disconnect Complete.");
         break;
 
     case BLE_CTS_C_EVT_CURRENT_TIME:
-        LOG_DEBUG_ENDL("Current Time received.");
+        LOG_DEBUG("Current Time received.");
         // current_time_print(_pEvent);
         break;
 
     case BLE_CTS_C_EVT_INVALID_TIME:
-        LOG_DEBUG_ENDL("Invalid Time received.");
+        LOG_DEBUG("Invalid Time received.");
         break;
 
     default:

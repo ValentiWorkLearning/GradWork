@@ -1,5 +1,7 @@
 #pragma once
 #include "Common.hpp"
+#include "ExecutionQueueCoro.hpp"
+#include <optional>
 
 namespace CoroUtils
 {
@@ -28,9 +30,9 @@ template <typename TResult> struct Task
             return stdcoro::suspend_always{};
         }
 
-        void return_value(const TResult& _value) noexcept
+        template <typename TResultType> void return_value(TResultType&& _value) noexcept
         {
-            m_coroutineResult = _value;
+            m_coroutineResult.emplace(std::forward<TResultType&&>(_value));
         }
 
         void set_continuation(stdcoro::coroutine_handle<> continuation)
@@ -40,7 +42,7 @@ template <typename TResult> struct Task
 
         TResult& result()
         {
-            return m_coroutineResult;
+            return *m_coroutineResult;
         }
 
         struct final_awaitable
@@ -62,12 +64,34 @@ template <typename TResult> struct Task
             }
         };
 
+        auto yield_value(CoroQueueMainLoop& loop) const noexcept
+        {
+            struct ScheduleForExecution
+            {
+                CoroQueueMainLoop& loop;
+
+                constexpr bool await_ready() const noexcept
+                {
+                    return false;
+                }
+                void await_suspend(std::coroutine_handle<> thisCoroutine)
+                {
+                    loop.pushToLater(thisCoroutine);
+                }
+                constexpr void await_resume()
+                {
+                }
+            };
+
+            return ScheduleForExecution{loop};
+        }
+
         auto final_suspend() noexcept
         {
             return final_awaitable{};
         }
 
-        TResult m_coroutineResult;
+        std::optional<TResult> m_coroutineResult;
         stdcoro::coroutine_handle<> m_continuation;
     };
 
@@ -143,6 +167,28 @@ struct VoidTask
         VoidTask get_return_object() noexcept
         {
             return VoidTask{stdcoro::coroutine_handle<task_promise>::from_promise(*this)};
+        }
+
+        auto yield_value(CoroQueueMainLoop& loop) const noexcept
+        {
+            struct ScheduleForExecution
+            {
+                CoroQueueMainLoop& loop;
+
+                constexpr bool await_ready() const noexcept
+                {
+                    return false;
+                }
+                void await_suspend(std::coroutine_handle<> thisCoroutine)
+                {
+                    loop.pushToLater(thisCoroutine);
+                }
+                constexpr void await_resume()
+                {
+                }
+            };
+
+            return ScheduleForExecution{loop};
         }
 
         auto initial_suspend() noexcept

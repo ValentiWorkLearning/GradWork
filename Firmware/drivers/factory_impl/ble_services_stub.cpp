@@ -8,13 +8,13 @@ namespace Ble::BatteryService
 
 StubBatteryService::StubBatteryService() noexcept
 {
-    LOG_DEBUG_ENDL("Initialized DesktopStubBatteryService");
+    LOG_DEBUG("Initialized DesktopStubBatteryService");
 }
 
 void StubBatteryService::onBatteryLevelChanged(std::uint8_t _newBatteryLevel) noexcept
 {
     LOG_DEBUG("New battery level is:");
-    LOG_DEBUG_ENDL(_newBatteryLevel);
+    LOG_DEBUG(_newBatteryLevel);
 }
 
 } // namespace Ble::BatteryService
@@ -24,7 +24,7 @@ namespace Ble::DateTimeService
 
 StubDateTimeService::StubDateTimeService() noexcept
 {
-    LOG_DEBUG_ENDL("Initialized StubDateTimeService");
+    LOG_DEBUG("Initialized StubDateTimeService");
 }
 
 void StubDateTimeService::handleDiscoveryEvent(const std::any& _pBleDbDiscoveryEvent) noexcept

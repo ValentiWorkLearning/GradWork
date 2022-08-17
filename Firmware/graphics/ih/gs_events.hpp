@@ -1,12 +1,13 @@
 #pragma once
 
 #include <any>
+#include <cstdint>
 #include <type_traits>
 
 namespace Graphics::Events
 {
 
-enum class EventGroup
+enum class EventGroup : std::uint8_t
 {
     Battery,
     Heartrate,
@@ -22,7 +23,7 @@ enum class EventGroup
 struct TEvent
 {
     EventGroup eventGroup;
-    std::any eventType;
+    std::uint8_t eventType;
     std::any eventData;
 };
 
@@ -31,54 +32,53 @@ enum class TEventKind
     EventBegin
 };
 
-template <typename TEnumToApply, typename TToConvert>
-constexpr auto enumConvert(TToConvert _valueToConvert)
+template <typename TToConvert> constexpr auto to_underlying(TToConvert _valueToConvert)
 {
-    return static_cast<typename std::underlying_type<TEnumToApply>::type>(_valueToConvert);
+    return static_cast<typename std::underlying_type<TToConvert>::type>(_valueToConvert);
 }
 
-enum class TBatteryEvents
+enum class TBatteryEvents : std::uint8_t
 {
-    BatteryEventsStart = enumConvert<TEventKind>(TEventKind::EventBegin),
+    BatteryEventsStart = to_underlying(TEventKind::EventBegin),
     BatteryLevelChanged,
     BatteryEventsEnd
 };
 
-enum class THeartRateEvents
+enum class THeartRateEvents : std::uint8_t
 {
-    HeartRateEventsBegin = enumConvert<TBatteryEvents>(TBatteryEvents::BatteryEventsEnd),
+    HeartRateEventsBegin = to_underlying(TBatteryEvents::BatteryEventsEnd),
     MeasureStarted,
     MeasureCompleted,
     MeasureFailed,
     HeartRateEventsEnd
 };
 
-enum class TDateTimeEvents
+enum class TDateTimeEvents : std::uint8_t
 {
-    DateTimeEventsBegin = enumConvert<THeartRateEvents>(THeartRateEvents::HeartRateEventsEnd),
+    DateTimeEventsBegin = to_underlying(THeartRateEvents::HeartRateEventsEnd),
     DateTimeChanged,
     DateTimeEventsEnd
 };
 
-enum class TBleClientEvents
+enum class TBleClientEvents : std::uint8_t
 {
-    BleClientEventsBegin = enumConvert<TDateTimeEvents>(TDateTimeEvents::DateTimeEventsEnd),
+    BleClientEventsBegin = to_underlying(TDateTimeEvents::DateTimeEventsEnd),
     DeviceConnected,
     DeviceDisconnected,
     BleClientEventsEnd
 };
 
-enum class TGraphicsEvents
+enum class TGraphicsEvents : std::uint8_t
 {
-    GraphicsEventsBegin = enumConvert<TBleClientEvents>(TBleClientEvents::BleClientEventsEnd),
+    GraphicsEventsBegin = to_underlying(TBleClientEvents::BleClientEventsEnd),
     PageHiding,
     PageActivated,
     GraphicsEventsEnd
 };
 
-enum class TButtonsEvents
+enum class TButtonsEvents : std::uint8_t
 {
-    TButtonsEventsBegin = enumConvert<TGraphicsEvents>(TGraphicsEvents::GraphicsEventsEnd),
+    TButtonsEventsBegin = to_underlying(TGraphicsEvents::GraphicsEventsEnd),
     ButtonClicked,
     ButtonPressed,
     ButtonReleased,
@@ -87,7 +87,7 @@ enum class TButtonsEvents
     ButtonEventsEnd
 };
 
-enum class HardwareButtonId
+enum class HardwareButtonId : std::uint8_t
 {
     kLeftButtonTop,
     kLeftButtonMedium,

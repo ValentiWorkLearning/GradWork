@@ -1,10 +1,12 @@
 #pragma once
 #include "Event.hpp"
 #include "Task.hpp"
+#if defined USE_DESKTOP_SIMULATOR
+#include "BlockingEventCondvar.hpp"
+#else
+#include "BlockingEventBaremetal.hpp"
+#endif
 
-// Detailed research from cppcoro library
-#include <condition_variable>
-#include <mutex>
 
 namespace CoroUtils
 {
@@ -36,27 +38,6 @@ auto awaiterGetter(TAwaiter&& _awaiter) -> decltype(awaiterGetterImpl(_awaiter,0
     return awaiterGetterImpl(static_cast<TAwaiter&&>(_awaiter), 0);
 }
 
-
-class BlockingEvent
-{
-public:
-    void wait()
-    {
-        std::unique_lock<std::mutex> lock(mutex);
-        condEvent.wait(lock, [this] { return m_isSet.load(std::memory_order_acquire); });
-    }
-
-    void set()
-    {
-        m_isSet.store(true, std::memory_order_release);
-        condEvent.notify_all();
-    }
-
-private:
-    std::atomic_bool m_isSet = false;
-    std::mutex mutex;
-    std::condition_variable condEvent;
-};
 
 template <typename TAwaitable>
 struct AwaitResultGetter

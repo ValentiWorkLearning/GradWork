@@ -10,10 +10,10 @@ set (CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set (CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 
 enable_testing()
-set (3RDPARTY_DIR "../3rdparty")
 find_package(GTest REQUIRED)
 add_subdirectory(coroutine)
 add_subdirectory(article_example)
+add_subdirectory(testing_common)
 
 add_executable(
     ${PROJECT_NAME}
@@ -35,7 +35,9 @@ add_executable(
     drivers/windond_flash/flash_fixture.hpp
     drivers/spi/mock_gpio.hpp
     drivers/spi/mock_spi.hpp
-)
+ 
+    filesystem/filesystem_fixture.hpp
+    filesystem/filesystem_in_memory_test.cpp  )
 
 mark_as_advanced(
     BUILD_GMOCK BUILD_GTEST BUILD_SHARED_LIBS
@@ -63,9 +65,10 @@ target_link_libraries(
     watch_display
     lvgl_lib
     drivers_ih
-
+    watch_filesystem
     buttons_driver
     windbond_spi_flash_driver
+    testing_common
 )
 
 target_compile_features(

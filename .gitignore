@@ -32,6 +32,8 @@ _deps
 build/
 out/
 build_simulator/
-
+Firmware/build_firmware
 #ignore vs temp folders
 .vs/
+#Ignore kicad backups
+*.sch-bak

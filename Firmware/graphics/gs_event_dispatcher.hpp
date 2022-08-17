@@ -33,7 +33,7 @@ public:
 
 private:
     static constexpr inline int EventsCount =
-        Events::enumConvert<EventGroup>(EventGroup::EventGroupEnd);
+        Events::to_underlying<EventGroup>(EventGroup::EventGroupEnd);
     static constexpr inline int EventPoolSize = 16;
 
     using TEventsMap = etl::vector<std::pair<EventGroup, SubscriberStorage>, EventsCount>;

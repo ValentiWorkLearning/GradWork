@@ -21,8 +21,8 @@
 #include "SEGGER_RTT.h"
 #elif defined(LoggerDesktop)
 #include <cstdio>
-#include <fmt/core.h>
 #include <fmt/color.h>
+#include <fmt/core.h>
 #if defined USE_MSVC_DEBUG_OUT
 #include <Windows.h>
 #endif
@@ -32,7 +32,27 @@
 namespace
 {
 std::string_view CaretReset = "\r\n";
+
+constexpr const char* const severityToString(LogSeverity severity)
+{
+    switch (severity)
+    {
+
+    case LogSeverity::Trace:
+        return "[TRACE]";
+    case LogSeverity::Debug:
+        return "[DEBUG]";
+    case LogSeverity::Info:
+        return "[INFO]";
+    case LogSeverity::Warn:
+        return "[WARN]";
+    case LogSeverity::Error:
+        return "[ERROR]";
+    default:
+        return "";
+    }
 }
+} // namespace
 
 #if defined(LoggerUart)
 
@@ -129,10 +149,91 @@ class Logger::LoggerImpl
 {
 
 public:
-    void logString(std::string_view _toLog) const noexcept
+    LoggerImpl()
     {
-        SEGGER_RTT_WriteString(0, _toLog.data());
+        SEGGER_RTT_ConfigUpBuffer(
+            0,
+            "SEGGER_MAIN_BUFFER",
+            seggerBuffer.data(),
+            kSeggerBufferSize,
+            SEGGER_RTT_MODE_BLOCK_IF_FIFO_FULL);
     }
+
+    auto formatMessage(std::span<char> formatBuffer, LogSeverity severity, std::string_view _toLog)
+        const noexcept
+    {
+        switch (severity)
+        {
+        case LogSeverity::Trace:
+            return fmt::format_to_n(
+                formatBuffer.data(),
+                formatBuffer.size(),
+                "{} {} {}\n",
+                RTT_CTRL_TEXT_WHITE,
+                severityToString(severity),
+                _toLog.data());
+            break;
+        case LogSeverity::Debug:
+            return fmt::format_to_n(
+                formatBuffer.data(),
+                formatBuffer.size(),
+                "{} {} {}\n",
+                RTT_CTRL_TEXT_BRIGHT_WHITE,
+                severityToString(severity),
+                _toLog.data());
+            break;
+        case LogSeverity::Info:
+            return fmt::format_to_n(
+                formatBuffer.data(),
+                formatBuffer.size(),
+                "{} {} {}\n",
+                RTT_CTRL_TEXT_MAGENTA,
+                severityToString(severity),
+                _toLog.data());
+            break;
+        case LogSeverity::Warn:
+            return fmt::format_to_n(
+                formatBuffer.data(),
+                formatBuffer.size(),
+                "{} {} {}\n",
+                RTT_CTRL_TEXT_BRIGHT_YELLOW,
+                severityToString(severity),
+                _toLog.data());
+            break;
+        case LogSeverity::Error:
+            return fmt::format_to_n(
+                formatBuffer.data(),
+                formatBuffer.size(),
+                "{} {} {}\n",
+                RTT_CTRL_TEXT_BRIGHT_RED,
+                severityToString(severity),
+                _toLog.data());
+            break;
+        case LogSeverity::None:
+            break;
+        default:
+            break;
+        }
+
+        std::terminate();
+    }
+    void logString(LogSeverity severity, std::string_view _toLog) const noexcept
+    {
+        std::array<char, 1024> formatBuffer{};
+        auto formatResult = formatMessage(
+            std::span(formatBuffer.data(), formatBuffer.size() - 1), severity, _toLog);
+        formatBuffer[formatResult.size + 1] = '\0';
+        auto formatString =
+            std::string_view(formatBuffer.data(), formatBuffer.data() + formatResult.size + 1);
+
+        SEGGER_RTT_Write(0, formatString.data(), formatString.size());
+    }
+
+    void completeMessage()
+    {
+    }
+    static constexpr inline std::uint16_t kSeggerBufferSize = 512;
+    static inline std::array<std::uint8_t, kSeggerBufferSize> seggerBuffer{};
 };
 #endif
 
@@ -141,9 +242,33 @@ class Logger::LoggerImpl
 {
 
 public:
-    void logString(std::string_view _toLog) const noexcept
+    void logString(LogSeverity severity, std::string_view _toLog) const noexcept
     {
-        fmt::print(fg(fmt::color::steel_blue),"{}",_toLog.data());
+
+        switch (severity)
+        {
+        case LogSeverity::Trace:
+            fmt::print(
+                fg(fmt::color::white_smoke), "{} {}\n", severityToString(severity), _toLog.data());
+            break;
+        case LogSeverity::Debug:
+            fmt::print(fg(fmt::color::white), "{} {}\n", severityToString(severity), _toLog.data());
+            break;
+        case LogSeverity::Info:
+            fmt::print(fg(fmt::color::blue), "{} {}\n", severityToString(severity), _toLog.data());
+            break;
+        case LogSeverity::Warn:
+            fmt::print(
+                fg(fmt::color::yellow), "{} {}\n", severityToString(severity), _toLog.data());
+            break;
+        case LogSeverity::Error:
+            fmt::print(fg(fmt::color::red), "{} {}\n", severityToString(severity), _toLog.data());
+            break;
+        case LogSeverity::None:
+            break;
+        default:
+            break;
+        }
 #if defined USE_MSVC_DEBUG_OUT
         OutputDebugString(_toLog.data());
 #endif
@@ -161,13 +286,7 @@ Logger& Logger::Instance() noexcept
     return intance;
 }
 
-void Logger::logDebugEndl(std::string_view _toLog) noexcept
+void Logger::logDebugImpl(LogSeverity severity, std::string_view _toLog) noexcept
 {
-    m_pLoggerImpl->logString(_toLog);
-    m_pLoggerImpl->logString(CaretReset);
-}
-
-void Logger::logDebug(std::string_view _toLog) noexcept
-{
-    m_pLoggerImpl->logString(_toLog);
+    m_pLoggerImpl->logString(severity, _toLog);
 }

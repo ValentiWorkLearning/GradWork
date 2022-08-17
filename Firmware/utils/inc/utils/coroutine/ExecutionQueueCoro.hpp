@@ -1,5 +1,6 @@
 #pragma once
 #include "Common.hpp"
+#include <utils/CoroUtils.hpp>
 
 namespace CoroUtils
 {
@@ -27,6 +28,7 @@ struct CoroQueueMainLoop
         }
     }
 
+private:
     template <typename Type, const size_t StorageSize = 3>
     using TQueueStorageType =
         etl::queue_spsc_atomic<Type, StorageSize, etl::memory_model::MEMORY_MODEL_SMALL>;
