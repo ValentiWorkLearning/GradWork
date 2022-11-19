@@ -54,7 +54,7 @@ void ClockPageHandler::handleEventImpl(
 
     if (newDateTime.getWeekDayString() != m_lastReceivedTime.getWeekDayString() ||
         m_forceUpdateAfterVisibilityChange)
-        pClockView->setWeekday(newDateTime.getWeekDayString());
+        pClockView->setWeekday(newDateTime.getWeekDayString().data());
 
     const bool bShouldApplyNewDate{shouldApplyNewDate(newDateTime)};
 

@@ -250,7 +250,7 @@ private:
         void await_resume() const noexcept
         {
         }
-        void await_suspend(std::coroutine_handle<> thisCoroutine) const
+        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
             pThis->getSpiBus()->xferBuffer(
                 pTransmitBuffer, pReceiveBuffer, thisCoroutine.address(), restoreInSpiCtx);
@@ -271,7 +271,7 @@ private:
         void await_resume() const noexcept
         {
         }
-        void await_suspend(std::coroutine_handle<> thisCoroutine) const
+        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
             pThis->getSpiBus()->transmitBuffer(
                 pTransmitBuffer,

@@ -25,7 +25,7 @@ public:
 
     void setSeconds(const std::string& _newSecondsValue) noexcept override;
 
-    void setWeekday(std::string_view _newWeekDay) noexcept override;
+    void setWeekday(const std::string& _newWeekDay) noexcept override;
 
     void setFullDate(const std::string& _fullDate) noexcept override;
 

@@ -23,19 +23,16 @@ auto awaiterGetterImpl(TAwaiter&& _awaiter, long)
     return operator co_await(static_cast<TAwaiter&&>(_awaiter));
 }
 
-template <typename TAwaiter>
-auto awaiterGetterImpl(TAwaiter&& _awaiter, double)
+template <typename TAwaiter> auto awaiterGetterImpl(TAwaiter&& _awaiter, double)
 {
     return static_cast<TAwaiter&&>(_awaiter);
 }
 
-
 template <typename TAwaiter>
-auto awaiterGetter(TAwaiter&& _awaiter) -> decltype(awaiterGetterImpl(_awaiter,0))
+auto awaiterGetter(TAwaiter&& _awaiter) -> decltype(awaiterGetterImpl(_awaiter, 0))
 {
     return awaiterGetterImpl(static_cast<TAwaiter&&>(_awaiter), 0);
 }
-
 
 class BlockingEvent
 {
@@ -58,31 +55,25 @@ private:
     std::condition_variable condEvent;
 };
 
-template <typename TAwaitable>
-struct AwaitResultGetter
+template <typename TAwaitable> struct AwaitResultGetter
 {
     using Type = decltype(awaiterGetter(std::declval<TAwaitable>()));
     using Result = decltype(std::declval<Type>().await_resume());
 };
 
-
-template<typename TResult>
-struct ResultTypeRefHolder
+template <typename TResult> struct ResultTypeRefHolder
 {
     using Type = TResult&&;
 };
 
-template<>
-struct ResultTypeRefHolder<void>
+template <> struct ResultTypeRefHolder<void>
 {
     using Type = void;
 };
 
-template<typename TResultType>
-struct SyncTaskPromise;
+template <typename TResultType> struct SyncTaskPromise;
 
-template <typename TResultType>
-struct SyncWaitTask
+template <typename TResultType> struct SyncWaitTask
 {
     using promise_type = SyncTaskPromise<TResultType>;
     using TResultRef = typename ResultTypeRefHolder<TResultType>::Type;
@@ -113,9 +104,7 @@ struct SyncWaitTask
     stdcoro::coroutine_handle<SyncTaskPromise<TResultType>> m_suspendedRoutine;
 };
 
-
-template<typename TResultType>
-struct SyncTaskPromise
+template <typename TResultType> struct SyncTaskPromise
 {
     using TResultRef = TResultType&&;
 
@@ -138,7 +127,8 @@ struct SyncTaskPromise
 
     auto get_return_object() noexcept
     {
-        return SyncWaitTask<TResultType>{ stdcoro::coroutine_handle<SyncTaskPromise<TResultType>>::from_promise(*this) };
+        return SyncWaitTask<TResultType>{
+            stdcoro::coroutine_handle<SyncTaskPromise<TResultType>>::from_promise(*this)};
     }
     void start(BlockingEvent* _pEvent) noexcept
     {
@@ -147,7 +137,7 @@ struct SyncTaskPromise
     }
     auto initial_suspend() noexcept
     {
-        return std::suspend_always{};
+        return stdcoro::suspend_always{};
     }
 
     auto final_suspend() noexcept
@@ -179,8 +169,7 @@ struct SyncTaskPromise
     std::remove_reference_t<TResultType>* m_value;
 };
 
-template<>
-struct SyncTaskPromise<void>
+template <> struct SyncTaskPromise<void>
 {
     struct FinalAwaitableVoid
     {
@@ -198,7 +187,7 @@ struct SyncTaskPromise<void>
     };
     auto get_return_object() noexcept
     {
-        return SyncWaitTask{ stdcoro::coroutine_handle<SyncTaskPromise<void>>::from_promise(*this) };
+        return SyncWaitTask{stdcoro::coroutine_handle<SyncTaskPromise<void>>::from_promise(*this)};
     }
     void start(BlockingEvent* _pEvent) noexcept
     {
@@ -207,7 +196,7 @@ struct SyncTaskPromise<void>
     }
     auto initial_suspend() noexcept
     {
-        return std::suspend_always{};
+        return stdcoro::suspend_always{};
     }
 
     auto final_suspend() noexcept
@@ -227,7 +216,9 @@ struct SyncTaskPromise<void>
     BlockingEvent* m_event;
 };
 
-template <typename TAwaitable, typename TTaskResult = AwaitResultGetter<TAwaitable>::Result>
+template <
+    typename TAwaitable,
+    typename TTaskResult = typename AwaitResultGetter<TAwaitable>::Result>
 SyncWaitTask<TTaskResult> makeSyncWaitTask(TAwaitable&& _awaitable)
 {
     if constexpr (!std::is_same_v<TTaskResult, void>)
@@ -241,8 +232,8 @@ namespace CoroUtils
 {
 
 template <typename TCoroutine>
-auto syncWait(TCoroutine&& _coroutineTask)
-    -> typename AwaitResultGetter<decltype(static_cast<TCoroutine&&>(_coroutineTask))>::Result
+auto syncWait(TCoroutine&& _coroutineTask) ->
+    typename AwaitResultGetter<decltype(static_cast<TCoroutine&&>(_coroutineTask))>::Result
 {
     BlockingEvent waitOn;
 
@@ -250,7 +241,10 @@ auto syncWait(TCoroutine&& _coroutineTask)
     task.start(waitOn);
     waitOn.wait();
 
-    if constexpr (!std::is_same_v<typename AwaitResultGetter<decltype(static_cast<TCoroutine&&>(_coroutineTask))>::Result,void>)
+    if constexpr (!std::is_same_v<
+                      typename AwaitResultGetter<decltype(static_cast<TCoroutine&&>(
+                          _coroutineTask))>::Result,
+                      void>)
         return task.result();
 }
 

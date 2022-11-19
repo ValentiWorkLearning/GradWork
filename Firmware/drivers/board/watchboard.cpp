@@ -21,7 +21,7 @@ APP_TIMER_DEF(m_ledDriverTimer);
 #include "delay/delay_provider.hpp"
 #include "logger/logger_service.hpp"
 
-#if defined (USE_DEVICE_SPECIFIC)
+#if defined(USE_DEVICE_SPECIFIC)
 #define FMT_HEADER_ONLY
 #endif
 
@@ -32,7 +32,7 @@ namespace
 {
 static void TimerExpiredCallback(void* _pExpiredContext) noexcept
 {
-    std::coroutine_handle<>::from_address(_pExpiredContext).resume();
+    stdcoro::coroutine_handle<>::from_address(_pExpiredContext).resume();
 }
 } // namespace
 
@@ -65,7 +65,7 @@ auto operator co_await(std::chrono::milliseconds _duration)
             app_timer_stop(m_ledDriverTimer);
         }
 #else
-        bool await_suspend(std::coroutine_handle<> _coroLedHandle) noexcept
+        bool await_suspend(stdcoro::coroutine_handle<> _coroLedHandle) noexcept
         {
             return false;
         }

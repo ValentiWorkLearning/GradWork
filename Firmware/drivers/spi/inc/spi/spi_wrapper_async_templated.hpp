@@ -1,11 +1,11 @@
 #pragma once
 
 #include <atomic>
-#include <coroutine>
 #include <cstdint>
 #include <memory>
 #include <optional>
 #include <span>
+#include <utils/CoroUtils.hpp>
 
 #include <etl/vector.h>
 #include <utils/CoroUtils.hpp>
@@ -48,7 +48,7 @@ public:
     {
         m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
-        m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+        m_coroHandle = stdcoro::coroutine_handle<>::from_address(_pUserData);
 
         TransactionContext newContext{
             .restoreInSpiCtx = _restoreInSpiCtx,
@@ -68,7 +68,7 @@ public:
         void* _pUserData,
         bool _restoreInSpiCtx) noexcept
     {
-        m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+        m_coroHandle = stdcoro::coroutine_handle<>::from_address(_pUserData);
         m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
         const size_t TransferBufferSize = _pBuffer.size();
@@ -97,8 +97,8 @@ public:
             m_backendImpl.sendChunk(_pBuffer.data(), _pBuffer.size());
         }
     }
-public:
 
+public:
     void setCsPinHigh() noexcept
     {
         getBackendImpl().setCsPinHigh();
@@ -168,7 +168,7 @@ private:
 
 private:
     SpiBackendImpl m_backendImpl;
-    std::coroutine_handle<> m_coroHandle;
+    stdcoro::coroutine_handle<> m_coroHandle;
 
     struct TransactionContext
     {

@@ -1,7 +1,18 @@
 #pragma once
 #include <atomic>
 #include <condition_variable>
+
+#ifdef _MSC_VER
 #include <coroutine>
+namespace stdcoro = std;
+#elif defined(__GNUC__) && !defined(__clang__)
+#include <coroutine>
+namespace stdcoro = std;
+#else
+#include <experimental/coroutine>
+namespace stdcoro = std::experimental::coroutines_v1;
+#endif
+
 #include <iostream>
 #include <mutex>
 #include <queue>
@@ -11,11 +22,11 @@ struct Promise
 {
     auto initial_suspend() noexcept
     {
-        return std::suspend_never{};
+        return stdcoro::suspend_never{};
     }
     auto final_suspend() noexcept
     {
-        return std::suspend_never{};
+        return stdcoro::suspend_never{};
     }
 
     void get_return_object()
@@ -33,7 +44,7 @@ struct Promise
     }
 };
 
-template <typename... Args> struct std::coroutine_traits<void, Args...>
+template <typename... Args> struct stdcoro::coroutine_traits<void, Args...>
 {
     using promise_type = Promise;
 };
@@ -79,7 +90,7 @@ template <typename TResultType> struct SyncWaitTask
     using promise_type = SyncTaskPromise;
     using TResultRef = TResultType&&;
 
-    SyncWaitTask(std::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
+    SyncWaitTask(stdcoro::coroutine_handle<SyncTaskPromise> _suspendedRoutine)
         : m_suspendedRoutine{_suspendedRoutine}
     {
     }
@@ -96,10 +107,10 @@ template <typename TResultType> struct SyncWaitTask
             return false;
         }
         template <typename TPromise>
-        void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
+        void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
         {
-            // по окончанию работы сопрограммы устанавливаем  blockingEvent  в set, тем самым
-            // восстанавливая текущий поток выполнения
+            // пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ  blockingEvent  пїЅ set, пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ
+            // пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ
             SyncTaskPromise& promise = coroutine.promise();
             promise.m_event->set();
         }
@@ -113,16 +124,16 @@ template <typename TResultType> struct SyncWaitTask
 
         auto get_return_object() noexcept
         {
-            return SyncWaitTask{std::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
+            return SyncWaitTask{stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this)};
         }
         void start(BlockingEvent* _pEvent) noexcept
         {
             m_event = _pEvent;
-            std::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
+            stdcoro::coroutine_handle<SyncTaskPromise>::from_promise(*this).resume();
         }
         auto initial_suspend() noexcept
         {
-            return std::suspend_always{};
+            return stdcoro::suspend_always{};
         }
 
         auto final_suspend() noexcept
@@ -132,7 +143,7 @@ template <typename TResultType> struct SyncWaitTask
 
         auto yield_value(TResultRef result) noexcept
         {
-            // для поддержки operator co_yield
+            // пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ operator co_yield
             m_value = std::addressof(result);
             return final_suspend();
         }
@@ -168,7 +179,7 @@ template <typename TResultType> struct SyncWaitTask
     {
         m_suspendedRoutine.promise().start(&_event);
     }
-    std::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
+    stdcoro::coroutine_handle<SyncTaskPromise> m_suspendedRoutine;
 };
 
 template <
@@ -196,11 +207,11 @@ template <typename TResult> struct Task
         }
         Task<TResult> get_return_object() noexcept
         {
-            return Task<TResult>{std::coroutine_handle<ResultTaskPromise>::from_promise(*this)};
+            return Task<TResult>{stdcoro::coroutine_handle<ResultTaskPromise>::from_promise(*this)};
         }
         auto initial_suspend() noexcept
         {
-            return std::suspend_always{};
+            return stdcoro::suspend_always{};
         }
 
         void return_value(const TResult& _value) noexcept
@@ -208,7 +219,7 @@ template <typename TResult> struct Task
             m_coroutineResult = _value;
         }
 
-        void set_continuation(std::coroutine_handle<> continuation)
+        void set_continuation(stdcoro::coroutine_handle<> continuation)
         {
             m_continuation = continuation;
         }
@@ -225,7 +236,7 @@ template <typename TResult> struct Task
                 return false;
             }
             template <typename TPromise>
-            void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
+            void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
             {
                 ResultTaskPromise& promise = coroutine.promise();
                 if (promise.m_continuation)
@@ -245,19 +256,19 @@ template <typename TResult> struct Task
         }
 
         TResult m_coroutineResult;
-        std::coroutine_handle<> m_continuation;
+        stdcoro::coroutine_handle<> m_continuation;
     };
 
     struct task_awaitable
     {
-        task_awaitable(std::coroutine_handle<promise_type> coroutine) : m_coroutine{coroutine}
+        task_awaitable(stdcoro::coroutine_handle<promise_type> coroutine) : m_coroutine{coroutine}
         {
         }
         bool await_ready() const noexcept
         {
             return !m_coroutine || m_coroutine.done();
         }
-        void await_suspend(std::coroutine_handle<> awaitingRoutine)
+        void await_suspend(stdcoro::coroutine_handle<> awaitingRoutine)
         {
             m_coroutine.promise().set_continuation(awaitingRoutine);
             m_coroutine.resume();
@@ -268,10 +279,10 @@ template <typename TResult> struct Task
             return m_coroutine.promise().result();
         }
 
-        std::coroutine_handle<promise_type> m_coroutine;
+        stdcoro::coroutine_handle<promise_type> m_coroutine;
     };
 
-    Task(std::coroutine_handle<ResultTaskPromise> suspendedCoroutine)
+    Task(stdcoro::coroutine_handle<ResultTaskPromise> suspendedCoroutine)
         : m_coroutine{suspendedCoroutine}
     {
     }
@@ -296,7 +307,7 @@ template <typename TResult> struct Task
     {
     }
 
-    std::coroutine_handle<promise_type> m_coroutine;
+    stdcoro::coroutine_handle<promise_type> m_coroutine;
 };
 
 struct VoidTask
@@ -318,12 +329,12 @@ struct VoidTask
         }
         VoidTask get_return_object() noexcept
         {
-            return VoidTask{std::coroutine_handle<task_promise>::from_promise(*this)};
+            return VoidTask{stdcoro::coroutine_handle<task_promise>::from_promise(*this)};
         }
 
         auto initial_suspend() noexcept
         {
-            return std::suspend_always{};
+            return stdcoro::suspend_always{};
         }
 
         struct final_awaitable
@@ -333,7 +344,7 @@ struct VoidTask
                 return false;
             }
             template <typename TPromise>
-            void await_suspend(std::coroutine_handle<TPromise> coroutine) noexcept
+            void await_suspend(stdcoro::coroutine_handle<TPromise> coroutine) noexcept
             {
                 task_promise& promise = coroutine.promise();
                 if (promise.m_continuation)
@@ -347,7 +358,7 @@ struct VoidTask
             }
         };
 
-        void set_continuation(std::coroutine_handle<> continuation)
+        void set_continuation(stdcoro::coroutine_handle<> continuation)
         {
             m_continuation = continuation;
         }
@@ -357,19 +368,19 @@ struct VoidTask
             return final_awaitable{};
         }
 
-        std::coroutine_handle<> m_continuation;
+        stdcoro::coroutine_handle<> m_continuation;
     };
 
     struct task_awaitable
     {
-        task_awaitable(std::coroutine_handle<promise_type> coroutine) : m_coroutine{coroutine}
+        task_awaitable(stdcoro::coroutine_handle<promise_type> coroutine) : m_coroutine{coroutine}
         {
         }
         bool await_ready() const noexcept
         {
             return !m_coroutine || m_coroutine.done();
         }
-        void await_suspend(std::coroutine_handle<> awaitingRoutine)
+        void await_suspend(stdcoro::coroutine_handle<> awaitingRoutine)
         {
             m_coroutine.resume();
             m_coroutine.promise().set_continuation(awaitingRoutine);
@@ -379,10 +390,10 @@ struct VoidTask
         {
         }
 
-        std::coroutine_handle<promise_type> m_coroutine;
+        stdcoro::coroutine_handle<promise_type> m_coroutine;
     };
 
-    VoidTask(std::coroutine_handle<task_promise> suspendedCoroutine)
+    VoidTask(stdcoro::coroutine_handle<task_promise> suspendedCoroutine)
         : m_coroutine{suspendedCoroutine}
     {
     }
@@ -407,7 +418,7 @@ struct VoidTask
     {
     }
 
-    std::coroutine_handle<promise_type> m_coroutine;
+    stdcoro::coroutine_handle<promise_type> m_coroutine;
 };
 
 template <typename TCoroutine>
@@ -430,7 +441,7 @@ struct CoroQueueMainLoop
         return instance;
     }
 
-    void pushToLater(std::coroutine_handle<> coroHandle)
+    void pushToLater(stdcoro::coroutine_handle<> coroHandle)
     {
         executionQueue.push(coroHandle);
     }
@@ -440,7 +451,7 @@ struct CoroQueueMainLoop
 
         while (!executionQueue.empty())
         {
-            std::coroutine_handle<> coroHandle = executionQueue.front();
+            stdcoro::coroutine_handle<> coroHandle = executionQueue.front();
             if (!coroHandle.done())
             {
                 executionQueue.pop();
@@ -449,7 +460,7 @@ struct CoroQueueMainLoop
         }
     }
 
-    std::queue<std::coroutine_handle<>> executionQueue;
+    std::queue<stdcoro::coroutine_handle<>> executionQueue;
 };
 
 template <typename... Tasks> struct WhenAllSequence
@@ -469,7 +480,7 @@ template <typename... Tasks> struct WhenAllSequence
         return false;
     }
 
-    void await_suspend(std::coroutine_handle<> handle) noexcept
+    void await_suspend(stdcoro::coroutine_handle<> handle) noexcept
     {
         co_await launchAll(std::make_integer_sequence<std::size_t, sizeof...(Tasks)>{});
         handle.resume();
@@ -502,7 +513,7 @@ struct Event
         return m_isSet;
     }
 
-    void await_suspend(std::coroutine_handle<> handle)
+    void await_suspend(stdcoro::coroutine_handle<> handle)
     {
         m_continuation = handle;
     }
@@ -533,7 +544,7 @@ struct Event
     }
 
     std::atomic_bool m_isSet;
-    std::coroutine_handle<> m_continuation;
+    stdcoro::coroutine_handle<> m_continuation;
 };
 
 }; // namespace CoroUtils

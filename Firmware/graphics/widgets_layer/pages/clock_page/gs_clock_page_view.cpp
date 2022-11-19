@@ -38,7 +38,7 @@ void ClockWatch::setSeconds(const std::string& _newSecondsValue) noexcept
     lv_label_set_text(m_pSecondsLabel.get(), m_secondsValue.c_str());
 }
 
-void ClockWatch::setWeekday(std::string_view _newWeekDay) noexcept
+void ClockWatch::setWeekday(const std::string& _newWeekDay) noexcept
 {
     m_weekdayValue = _newWeekDay;
     lv_label_set_text(m_pWeekDayLabel.get(), m_weekdayValue.c_str());

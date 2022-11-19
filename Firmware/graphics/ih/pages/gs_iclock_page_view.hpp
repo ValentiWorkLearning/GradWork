@@ -17,7 +17,7 @@ public:
 
     virtual void setSeconds(const std::string& _newSecondsValue) noexcept = 0;
 
-    virtual void setWeekday(std::string_view _newWeekDay) noexcept = 0;
+    virtual void setWeekday(const std::string& _newWeekDay) noexcept = 0;
 
     virtual void setFullDate(const std::string& _fullDate) noexcept = 0;
 

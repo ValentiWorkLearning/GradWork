@@ -12,7 +12,7 @@ namespace CoroUtils
     {
     }
 
-    void setCoroutineForWaiting( std::coroutine_handle<> _awaitingCoroutine )noexcept
+    void setCoroutineForWaiting( stdcoro::coroutine_handle<> _awaitingCoroutine )noexcept
     {
         m_suspendedCoroutine = _awaitingCoroutine;
         m_whenAllCounter.fetch_sub(1, std::memory_order_acq_rel);
@@ -27,7 +27,7 @@ namespace CoroUtils
         }
     }
 
-    std::coroutine_handle<> m_suspendedCoroutine;
+    stdcoro::coroutine_handle<> m_suspendedCoroutine;
     std::atomic<size_t> m_whenAllCounter;
 };
 
@@ -49,7 +49,7 @@ namespace CoroUtils
         m_whenAllCounter->notifyAwaitingCompleted();
     }
 
-    void await_suspend(std::coroutine_handle<> thisCoroutine) noexcept
+    void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) noexcept
     {
         co_await m_taskItem;
         thisCoroutine.resume();
@@ -83,7 +83,7 @@ namespace CoroUtils
             return m_taskList;
         }
 
-        void await_suspend(std::coroutine_handle<> thisCoroutine) noexcept
+        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) noexcept
         {
             m_whenAllCounter.setCoroutineForWaiting(thisCoroutine);
             std::apply(

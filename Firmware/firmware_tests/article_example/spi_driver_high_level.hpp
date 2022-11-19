@@ -1,7 +1,6 @@
 #pragma once
 #include <array>
 #include <atomic>
-#include <coroutine>
 #include <cstdint>
 #include <memory>
 #include <optional>
@@ -43,7 +42,7 @@ public:
     {
         m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
-        m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+        m_coroHandle = stdcoro::coroutine_handle<>::from_address(_pUserData);
 
         TransactionContext newContext{
             .restoreInSpiCtx = _restoreInSpiCtx,
@@ -64,7 +63,7 @@ public:
         void* _pUserData,
         bool _restoreInSpiCtx) noexcept
     {
-        m_coroHandle = std::coroutine_handle<>::from_address(_pUserData);
+        m_coroHandle = stdcoro::coroutine_handle<>::from_address(_pUserData);
         m_backendImpl.setTransactionCompletedHandler([this] { transmitCompleted(); });
 
         const size_t TransferBufferSize = _pBufferSize;
@@ -153,7 +152,7 @@ private:
 
 private:
     SpiBackendImpl m_backendImpl;
-    std::coroutine_handle<> m_coroHandle;
+    stdcoro::coroutine_handle<> m_coroHandle;
 
     struct TransactionContext
     {

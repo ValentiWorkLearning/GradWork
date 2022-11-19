@@ -4,19 +4,18 @@
 
 #include <array>
 #include <atomic>
-#include <coroutine>
 #include <logger/logger_service.hpp>
 
 #ifdef _MSC_VER
 #include <coroutine>
 #include <thread>
 namespace stdcoro = std;
-#elif __GNUC__
+#elif defined(__GNUC__) && !defined(__clang__)
 #include <coroutine>
 namespace stdcoro = std;
 #else
 #include <experimental/coroutine>
-namespace stdcoro = std::experimental
+namespace stdcoro = std::experimental::coroutines_v1;
 #endif
 
 #include <etl/queue_spsc_atomic.h>

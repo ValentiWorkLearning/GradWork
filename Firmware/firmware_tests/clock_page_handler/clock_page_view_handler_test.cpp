@@ -116,7 +116,7 @@ TEST_F(ClockPageHandlerTest, WeekdayChangeHandledCorrectly)
 
     EXPECT_CALL(fakePageMock, isVisible()).Times(1).WillOnce(Return(true));
 
-    EXPECT_CALL(fakePageMock, setWeekday(std::string_view("TUE"))).Times(1);
+    EXPECT_CALL(fakePageMock, setWeekday("TUE")).Times(1);
     EXPECT_CALL(fakePageMock, setFullDate("JUN/23/2020")).Times(1);
 
     pageMockWatchHandler->handleEvent(
@@ -132,7 +132,7 @@ TEST_F(ClockPageHandlerTest, WeekdayChangeFromSundayToMondayHandledCorrectly)
 
     EXPECT_CALL(fakePageMock, isVisible()).Times(2).WillRepeatedly(Return(true));
 
-    EXPECT_CALL(fakePageMock, setWeekday(std::string_view("SUN"))).Times(1);
+    EXPECT_CALL(fakePageMock, setWeekday("SUN")).Times(1);
     EXPECT_CALL(fakePageMock, setFullDate("JUN/28/2020")).Times(1);
 
     pageMockWatchHandler->handleEvent(
@@ -140,7 +140,7 @@ TEST_F(ClockPageHandlerTest, WeekdayChangeFromSundayToMondayHandledCorrectly)
          Graphics::Events::TDateTimeEvents::DateTimeChanged,
          TimeWrapper("2020/06/28 14:24:43", '/', ':')});
 
-    EXPECT_CALL(fakePageMock, setWeekday(std::string_view("MON"))).Times(1);
+    EXPECT_CALL(fakePageMock, setWeekday("MON")).Times(1);
     EXPECT_CALL(fakePageMock, setFullDate("JUN/29/2020")).Times(1);
 
     pageMockWatchHandler->handleEvent(

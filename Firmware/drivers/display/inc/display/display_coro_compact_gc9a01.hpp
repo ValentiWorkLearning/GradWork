@@ -123,7 +123,7 @@ public:
         std::uint16_t _y,
         std::uint16_t _width,
         std::uint16_t _height,
-        TBaseSpiDisplay::TColor* _colorToFill) noexcept
+        typename TBaseSpiDisplay::TColor* _colorToFill) noexcept
     {
 
         const std::uint16_t DisplayHeight = TBaseSpiDisplay::getHeight();
@@ -140,8 +140,8 @@ public:
             const size_t BytesSizeX = (_width - _x + 1);
             const size_t BytesSizeY = (_height - _y + 1);
             const size_t BytesSquare = BytesSizeX * BytesSizeY;
-            const size_t TransferBufferSize
-                = (BytesSquare * sizeof(typename TBaseSpiDisplay::TColor));
+            const size_t TransferBufferSize =
+                (BytesSquare * sizeof(typename TBaseSpiDisplay::TColor));
 
             co_await TBaseSpiDisplay::m_displayInitialized;
 
