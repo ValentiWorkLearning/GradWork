@@ -2,6 +2,7 @@
 
 #include "ih/widgets/gs_ibattery_widget.hpp"
 
+#include "gs_event_dispatcher.hpp"
 #include "ih/gs_events.hpp"
 #include "utils/MetaUtils.hpp"
 
@@ -45,6 +46,16 @@ void BatteryWidgetHandler::handleEventImpl(
         pBatteryWidget->setBatteryLevelPercentage(batteryValue);
         pBatteryWidget->setBatteryStatus(toBatteryStatus(batteryValue));
     }
+}
+
+void BatteryWidgetHandler::initSubscriptions(Events::EventDispatcher& eventDispatcher)
+{
+    eventDispatcher.subscribe(
+        Events::EventGroup::Battery, [this](const Events::TEvent& _event) { handleEvent(_event); });
+}
+
+void BatteryWidgetHandler::deinitHandler()
+{
 }
 
 std::unique_ptr<Graphics::IEventHandler> createBatteryWidgetHandler(

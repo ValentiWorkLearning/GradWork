@@ -2,6 +2,7 @@
 
 #include "ih/gs_events.hpp"
 
+#include "gs_event_dispatcher.hpp"
 #include "ih/widgets/gs_ibluetooth_widget.hpp"
 
 #include <cassert>
@@ -26,6 +27,17 @@ void BluetoothWidgetHandler::handleEventImpl(
     {
         assert(false);
     }
+}
+
+void BluetoothWidgetHandler::initSubscriptions(Events::EventDispatcher& eventDispatcher)
+{
+    eventDispatcher.subscribe(Events::EventGroup::BleDevice, [this](const Events::TEvent& _event) {
+        handleEvent(_event);
+    });
+}
+
+void BluetoothWidgetHandler::deinitHandler()
+{
 }
 
 std::unique_ptr<Graphics::IEventHandler> createBluetoothWidgetHandler(

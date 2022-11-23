@@ -30,10 +30,7 @@ protected:
         m_pFakeTimer = m_pButtonsDriver.getTimeWrapper();
         m_pFakeButtonsBackend = m_pButtonsDriver.getButtonsBackend();
 
-        m_pEventDispatcher->subscribe(
-            Graphics::Events::EventGroup::Buttons, [this](const Graphics::Events::TEvent& _event) {
-                m_pFakeEventHandler->handleEvent(_event);
-            });
+        m_pFakeEventHandler->initSubscriptions(*m_pEventDispatcher);
 
         m_pButtonsDriver.onButtonEvent.connect([this](const Buttons::ButtonEvent& _buttonEvent) {
             m_pEventDispatcher->postEvent(

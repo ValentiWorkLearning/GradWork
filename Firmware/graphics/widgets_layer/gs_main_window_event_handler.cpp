@@ -7,6 +7,8 @@
 #include "ih/pages/gs_ihealth_page_view.hpp"
 #include "ih/pages/gs_iplayer_page_view.hpp"
 
+#include "gs_event_dispatcher.hpp"
+
 namespace Graphics::MainWindow
 {
 
@@ -55,6 +57,16 @@ void MainWindowHandler::navigateToPreviousPage() noexcept
         m_pMainWindowModel->setPageActive(Graphics::Views::IHealthWatchPage::HealthPageName);
     else if (activePageName == Graphics::Views::IHealthWatchPage::HealthPageName)
         m_pMainWindowModel->setPageActive(Graphics::Views::IClockWatchPage::ClockPageName);
+}
+
+void MainWindowHandler::initSubscriptions(Events::EventDispatcher& eventDispatcher)
+{
+    eventDispatcher.subscribe(
+        Events::EventGroup::Buttons, [this](const Events::TEvent& _event) { handleEvent(_event); });
+}
+
+void MainWindowHandler::deinitHandler()
+{
 }
 
 std::unique_ptr<Graphics::IEventHandler> createMainWindowEventHandler(

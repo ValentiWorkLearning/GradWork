@@ -25,6 +25,11 @@ public:
 
     ~MainWindowHandler() override = default;
 
+public:
+    void initSubscriptions(Events::EventDispatcher& eventDispatcher) override;
+
+    void deinitHandler() override;
+
 protected:
     void handleEventImpl(const Events::TButtonsEvents& _event, const std::any& _eventData) noexcept
         override;

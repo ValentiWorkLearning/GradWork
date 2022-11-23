@@ -1,8 +1,8 @@
 #include "gs_clock_page_handler.hpp"
 
+#include "gs_event_dispatcher.hpp"
 #include "ih/gs_events.hpp"
 #include "ih/pages/gs_iclock_page_view.hpp"
-
 #include "utils/MetaUtils.hpp"
 
 #include <charconv>
@@ -66,6 +66,17 @@ void ClockPageHandler::handleEventImpl(
 
     m_forceUpdateAfterVisibilityChange = false;
     m_lastReceivedTime = newDateTime;
+}
+
+void ClockPageHandler::initSubscriptions(Events::EventDispatcher& eventDispatcher)
+{
+    eventDispatcher.subscribe(Events::EventGroup::DateTime, [this](const Events::TEvent& _event) {
+        handleEvent(_event);
+    });
+}
+
+void ClockPageHandler::deinitHandler()
+{
 }
 
 bool ClockPageHandler::shouldApplyNewDate(const TimeWrapper& _toCheck) noexcept
