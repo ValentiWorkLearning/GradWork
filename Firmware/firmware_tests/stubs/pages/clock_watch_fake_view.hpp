@@ -36,7 +36,7 @@ public:
         m_secondsValue = _newSecondsValue;
     };
 
-    void setWeekday(const std::string& _newWeekDay) noexcept override
+    void setWeekday(const char* const _newWeekDay) noexcept override
     {
         m_weekdayValue = _newWeekDay;
     };
@@ -62,7 +62,7 @@ public:
         return m_secondsValue;
     }
 
-    const std::string& getWeekday() const noexcept
+    const char* const getWeekday() const noexcept
     {
         return m_weekdayValue;
     }
@@ -76,7 +76,7 @@ private:
     std::string m_hoursValue;
     std::string m_minutesValue;
     std::string m_secondsValue;
-    std::string m_weekdayValue;
+    const char* m_weekdayValue;
     std::string m_fulldateValue;
 };
 
@@ -87,6 +87,6 @@ public:
     MOCK_METHOD(void, setHours, (const std::string&), (noexcept, override));
     MOCK_METHOD(void, setMinutes, (const std::string&), (noexcept, override));
     MOCK_METHOD(void, setSeconds, (const std::string&), (noexcept, override));
-    MOCK_METHOD(void, setWeekday, (const std::string&), (noexcept, override));
+    MOCK_METHOD(void, setWeekday, (const char* const), (noexcept, override));
     MOCK_METHOD(void, setFullDate, (const std::string&), (noexcept, override));
 };
