@@ -6,7 +6,8 @@
 namespace Graphics::Events
 {
 struct TEvent;
-}
+class EventDispatcher;
+} // namespace Graphics::Events
 
 namespace Graphics
 {
@@ -18,6 +19,10 @@ public:
 
 public:
     virtual void handleEvent(const Events::TEvent& _event) noexcept = 0;
+
+public:
+    virtual void initSubscriptions(Events::EventDispatcher& eventDispatcher) = 0;
+    virtual void deinitHandler() = 0;
 };
 
 using TEventHandlerPtr = std::unique_ptr<Graphics::IEventHandler>;

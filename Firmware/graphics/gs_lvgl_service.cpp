@@ -71,9 +71,8 @@ public:
 private:
     void initLvglLogger() noexcept
     {
-        auto lvglLoggerCallback = cbc::obtain_connector([](const char* loggerMessage) {
-            LOG_DEBUG_ENDL(loggerMessage);
-        });
+        auto lvglLoggerCallback =
+            cbc::obtain_connector([](const char* loggerMessage) { LOG_DEBUG_ENDL(loggerMessage); });
 #if LV_USE_LOG == 1
         lv_log_register_print_cb(lvglLoggerCallback);
 #endif
@@ -166,14 +165,7 @@ private:
             }
         });
 
-        // m_pPageSwitch.reset(
-        //     lv_task_create(
-        //             pageToggle
-        //         ,   4100
-        //         ,   LV_TASK_PRIO_MID
-        //         ,   nullptr
-        //     )
-        // );
+        m_pPageSwitch.reset(lv_timer_create(pageToggle, 4100, nullptr));
 
         m_pthemeChangeSwitch.reset(lv_timer_create(themeChange, 2000, nullptr));
     }

@@ -40,7 +40,7 @@ protected:
         EXPECT_CALL(fakePageMock, setHours("14")).Times(1);
         EXPECT_CALL(fakePageMock, setMinutes("24")).Times(1);
         EXPECT_CALL(fakePageMock, setSeconds("43")).Times(1);
-        EXPECT_CALL(fakePageMock, setWeekday(std::string_view("MON"))).Times(1);
+        EXPECT_CALL(fakePageMock, setWeekday("MON")).Times(1);
         EXPECT_CALL(fakePageMock, setFullDate("JUN/22/2020")).Times(1);
 
         pageMockWatchHandler->handleEvent(

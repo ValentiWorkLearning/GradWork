@@ -3,6 +3,7 @@
 #include "ih/gs_events.hpp"
 #include "ih/gs_ievent_handler.hpp"
 
+#include "gs_event_dispatcher.hpp"
 #include "widgets_layer/gs_event_handler_base.hpp"
 
 namespace FakeButton
@@ -42,6 +43,18 @@ public:
     Buttons::ButtonId getLastButton() const
     {
         return m_button;
+    }
+
+public:
+    void initSubscriptions(Graphics::Events::EventDispatcher& eventDispatcher) override
+    {
+        eventDispatcher.subscribe(
+            Graphics::Events::EventGroup::Buttons,
+            [this](const Graphics::Events::TEvent& _event) { handleEvent(_event); });
+    }
+
+    void deinitHandler() override
+    {
     }
 
 protected:

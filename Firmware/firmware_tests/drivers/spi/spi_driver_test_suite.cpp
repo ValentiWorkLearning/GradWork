@@ -44,9 +44,10 @@ TEST_P(SpiDriverTest, CheckRandomSequenceWithLengthTransmissionCorrect)
     std::random_device randomDevice;
     std::mt19937 generator(randomDevice());
     std::uniform_int_distribution<> distribution(0x00, 0xFF);
-    std::ranges::generate(ExpectedStream, [&distribution, generator]() mutable {
-        return std::byte(distribution(generator));
-    });
+    std::generate(
+        ExpectedStream.begin(), ExpectedStream.end(), [&distribution, generator]() mutable {
+            return std::byte(distribution(generator));
+        });
 
     CoroUtils::syncWait(sendChunk(
         reinterpret_cast<const std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()));
@@ -59,7 +60,7 @@ TEST_F(SpiDriverTest, CheckXferTransaction)
     constexpr std::uint8_t ReceivedDataLength = 8;
 
     auto& transmitBuffer = testSpiDriver.getDmaBufferTransmit();
-    std::ranges::fill_n(transmitBuffer.begin(), ReceivedDataLength + 1, 0x00);
+    std::fill_n(transmitBuffer.begin(), ReceivedDataLength + 1, 0x00);
     transmitBuffer[0] = ReadUniqueId;
 
     TDataStream ExpectedStream{ReceivedDataLength};
@@ -68,15 +69,15 @@ TEST_F(SpiDriverTest, CheckXferTransaction)
     std::mt19937 generator(randomDevice());
     std::uniform_int_distribution<> distribution(0x00, 0xFF);
 
-    std::ranges::generate(ExpectedStream, [&distribution, generator]() mutable {
-        return std::byte(distribution(generator));
-    });
+    std::generate(
+        ExpectedStream.begin(), ExpectedStream.end(), [&distribution, generator]() mutable {
+            return std::byte(distribution(generator));
+        });
 
-    EXPECT_CALL(
-        testSpiDriver.getBackendImpl().accessToSpiMock(),
-        receivedData()).Times(1).WillOnce(
-            Return(std::span(reinterpret_cast<std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size()))
-        );
+    EXPECT_CALL(testSpiDriver.getBackendImpl().accessToSpiMock(), receivedData())
+        .Times(1)
+        .WillOnce(Return(std::span(
+            reinterpret_cast<std::uint8_t*>(ExpectedStream.data()), ExpectedStream.size())));
 
     auto receivedStreamSpan = CoroUtils::syncWait(xferTransaction(
         std::span(
@@ -84,10 +85,11 @@ TEST_F(SpiDriverTest, CheckXferTransaction)
         std::span(testSpiDriver.getDmaBufferReceive().data(), ReceivedDataLength)));
 
     TDataStream receivedStream;
-    std::ranges::transform(
-        receivedStreamSpan, std::back_inserter(receivedStream), [](auto receivedItem) {
-            return static_cast<std::byte>(receivedItem);
-        });
+    std::transform(
+        receivedStreamSpan.begin(),
+        receivedStreamSpan.end(),
+        std::back_inserter(receivedStream),
+        [](auto receivedItem) { return static_cast<std::byte>(receivedItem); });
 
     EXPECT_EQ(ExpectedStream, receivedStream);
 }

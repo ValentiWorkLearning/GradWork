@@ -77,7 +77,7 @@ protected:
             if (resetDcPin)
                 pBaseDisplay->setDcPin();
         }
-        void await_suspend(std::coroutine_handle<> thisCoroutine) const
+        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
             if (resetDcPin)
                 pBaseDisplay->resetDcPin();

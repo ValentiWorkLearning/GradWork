@@ -38,7 +38,7 @@ protected:
         void await_resume() const noexcept
         {
         }
-        void await_suspend(std::coroutine_handle<> thisCoroutine) const
+        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
             pThis->testSpiDriver.transmitBuffer(
                 std::span(pTransmitBuffer, bufferSize), thisCoroutine.address(), restoreInSpiCtx);
@@ -60,7 +60,7 @@ protected:
         void await_resume() const noexcept
         {
         }
-        void await_suspend(std::coroutine_handle<> thisCoroutine) const
+        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
             pThis->testSpiDriver.xferBuffer(
                 pTransmitBuffer, pReceiveBuffer, thisCoroutine.address(), restoreInSpiCtx);

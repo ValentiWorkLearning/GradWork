@@ -25,7 +25,7 @@ public:
 
     void setSeconds(const std::string& _newSecondsValue) noexcept override;
 
-    void setWeekday(std::string_view _newWeekDay) noexcept override;
+    void setWeekday(const char* const _newWeekDay) noexcept override;
 
     void setFullDate(const std::string& _fullDate) noexcept override;
 
@@ -69,7 +69,7 @@ private:
     std::string m_hoursValue;
     std::string m_minutesValue;
     std::string m_secondsValue;
-    std::string m_weekdayValue;
+    const char* m_weekdayValue;
     std::string m_fulldateValue;
 
     Meta::PointerWrapper<lv_obj_t, lv_obj_del> m_pHoursLabel;

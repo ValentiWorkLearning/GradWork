@@ -12,14 +12,14 @@ struct CoroQueueMainLoop
         return instance;
     }
 
-    void pushToLater(std::coroutine_handle<> coroHandle)
+    void pushToLater(stdcoro::coroutine_handle<> coroHandle)
     {
         executionQueue.push(coroHandle);
     }
 
     void processQueue()
     {
-        std::coroutine_handle<> handle;
+        stdcoro::coroutine_handle<> handle;
         while (executionQueue.pop(handle))
         {
             if (!handle.done())
@@ -31,7 +31,7 @@ struct CoroQueueMainLoop
     using TQueueStorageType =
         etl::queue_spsc_atomic<Type, StorageSize, etl::memory_model::MEMORY_MODEL_SMALL>;
 
-    TQueueStorageType<std::coroutine_handle<>> executionQueue;
+    TQueueStorageType<stdcoro::coroutine_handle<>> executionQueue;
 };
 
 } // namespace CoroUtils

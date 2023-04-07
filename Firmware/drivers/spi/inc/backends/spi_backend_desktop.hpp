@@ -5,14 +5,14 @@
 #include <chrono>
 #include <condition_variable>
 #include <cstdint>
+#include <fmt/ranges.h>
 #include <functional>
 #include <iostream>
 #include <mutex>
 #include <queue>
+#include <span>
 #include <thread>
 #include <vector>
-#include <span>
-#include <fmt/ranges.h>
 
 #include <utils/MetaUtils.hpp>
 
@@ -33,14 +33,14 @@ public:
     {
 #ifdef USE_THREADING_ASYNC_BACKEND
 
-        m_dmaThread = std::make_unique<std::thread>([this]()mutable {
+        m_dmaThread = std::make_unique<std::thread>([this]() mutable {
             while (m_processSpiTransactions)
             {
                 if (m_newDataArrived)
                 {
                     using namespace std::chrono_literals;
 
-                    std::unique_lock<std::mutex>(m_transactionBufferGuard);
+                    std::unique_lock<std::mutex> transactionWrap(m_transactionBufferGuard);
                     fmt::print("[Desktop SPI simultator]{}\n", m_dataBuffer);
 
                     m_newDataArrived.store(false);
@@ -59,7 +59,6 @@ public:
     }
 
 public:
-
     void setCsPinHigh() noexcept
     {
     }
@@ -74,7 +73,7 @@ public:
         m_dataBuffer.clear();
         m_dataBuffer.reserve(_bufferSize);
 
-        std::unique_lock<std::mutex>(m_transactionBufferGuard);
+        std::unique_lock<std::mutex> transactionWrap(m_transactionBufferGuard);
         std::copy(_pBuffer, _pBuffer + _bufferSize, std::back_inserter(m_dataBuffer));
         m_newDataArrived.store(true, std::memory_order_release);
 

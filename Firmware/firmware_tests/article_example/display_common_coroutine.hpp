@@ -74,7 +74,7 @@ protected:
             if (resetDcPin)
                 pBaseDisplay->setDcPin();
         }
-        void await_suspend(std::coroutine_handle<> thisCoroutine) const
+        void await_suspend(stdcoro::coroutine_handle<> thisCoroutine) const
         {
             if (resetDcPin)
                 pBaseDisplay->resetDcPin();
@@ -87,19 +87,13 @@ protected:
     auto sendCommandImpl(const std::uint8_t* _command) noexcept
     {
         return Awaiter{
-            .resetDcPin = true,
-            .pTransmitBuffer = _command,
-            .pBaseDisplay = this,
-            .bufferSize = 1};
+            .resetDcPin = true, .pTransmitBuffer = _command, .pBaseDisplay = this, .bufferSize = 1};
     }
 
     auto sendCommandImplFast(const std::uint8_t* _command) noexcept
     {
         return Awaiter{
-            .resetDcPin = true,
-            .pTransmitBuffer = _command,
-            .pBaseDisplay = this,
-            .bufferSize = 1};
+            .resetDcPin = true, .pTransmitBuffer = _command, .pBaseDisplay = this, .bufferSize = 1};
     }
 
     auto sendChunk(const std::uint8_t* _pBuffer, std::size_t _bufferSize) noexcept

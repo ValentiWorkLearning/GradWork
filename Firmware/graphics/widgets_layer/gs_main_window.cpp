@@ -145,16 +145,10 @@ void GsMainWindow::initWidgets() noexcept
     m_pBluetoothWidget = m_pWidgetsCreator->createBluetoothWidget(getThemeController());
 
     m_pBluetoothWidgetController = Widgets::createBluetoothWidgetHandler(m_pBluetoothWidget.get());
+    m_pBluetoothWidgetController->initSubscriptions(getEventDispatcher());
+
     m_pBatteryWidgetController = Widgets::createBatteryWidgetHandler(m_pBatteryWidget.get());
-
-    getEventDispatcher().subscribe(
-        Events::EventGroup::BleDevice, [this](const Events::TEvent& _event) {
-            m_pBluetoothWidgetController->handleEvent(_event);
-        });
-
-    getEventDispatcher().subscribe(
-        Events::EventGroup::Battery,
-        [this](const Events::TEvent& _event) { m_pBatteryWidgetController->handleEvent(_event); });
+    m_pBatteryWidgetController->initSubscriptions(getEventDispatcher());
 
     onActivePageChanged.connect(
         [this](std::string_view _activePage) { m_pPagesSwitch->setActivePage(_activePage); });
@@ -168,10 +162,7 @@ void GsMainWindow::initWatchPage() noexcept
     pClockPage->addWidget(m_pBluetoothWidget.get());
 
     m_pClockPageController = Views::createPageWatchHandler(pClockPage.get());
-
-    getEventDispatcher().subscribe(
-        Events::EventGroup::DateTime,
-        [this](const Events::TEvent& _event) { m_pClockPageController->handleEvent(_event); });
+    m_pClockPageController->initSubscriptions(getEventDispatcher());
 
     addPage(std::move(pClockPage));
 }
@@ -206,9 +197,8 @@ void GsMainWindow::initMainWindowSubscriptions() noexcept
         auto& activePage = getActivePage();
         activePage.reloadStyle();
     });
-    getEventDispatcher().subscribe(
-        Events::EventGroup::Buttons,
-        [this](const Events::TEvent& _event) { m_pMainWindowHandler->handleEvent(_event); });
+
+    m_pMainWindowHandler->initSubscriptions(getEventDispatcher());
 }
 
 Views::IPageViewObject* GsMainWindow::getPagePointer(std::string_view _pageName) noexcept

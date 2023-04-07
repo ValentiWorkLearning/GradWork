@@ -1,7 +1,13 @@
 #include <array>
 #include <atomic>
 #include <chrono>
+
+#if defined(__clang__)
+#include <experimental/coroutine>
+#else
 #include <coroutine>
+#endif
+
 #include <cstdint>
 #include <functional>
 #include <iostream>

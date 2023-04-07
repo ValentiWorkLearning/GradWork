@@ -23,6 +23,11 @@ public:
 
     ~ClockPageHandler() override = default;
 
+public:
+    void initSubscriptions(Events::EventDispatcher& eventDispatcher) override;
+
+    void deinitHandler() override;
+
 protected:
     void handleEventImpl(const Events::TDateTimeEvents& _event, const std::any& _eventData) noexcept
         override;

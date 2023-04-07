@@ -1,14 +1,14 @@
 #pragma once
 
+#include <algorithm>
 #include <functional>
 #include <queue>
-#include <ranges>
 #include <span>
 #include <vector>
 
-#include <utils/CoroUtils.hpp>
 #include "mock_gpio.hpp"
 #include "mock_spi.hpp"
+#include <utils/CoroUtils.hpp>
 
 namespace Testing::Spi
 {
@@ -20,7 +20,7 @@ public:
     void sendChunk(const std::uint8_t* _pBuffer, const size_t _bufferSize) noexcept
     {
         BusTransactionsTransmit.emplace_back(_pBuffer, _bufferSize);
-        m_spiMocker.sentData(std::span(_pBuffer,_bufferSize));
+        m_spiMocker.sentData(std::span(_pBuffer, _bufferSize));
         m_completedTransaction();
     }
 
@@ -28,7 +28,7 @@ public:
     {
         const auto& receivedRange = m_spiMocker.receivedData();
         auto arraySpan = std::span(_pDestinationArray, _receiveSize);
-        std::ranges::copy_n(receivedRange.begin(), _receiveSize, arraySpan.begin() );
+        std::copy_n(receivedRange.begin(), _receiveSize, arraySpan.begin());
 
         m_completedTransaction();
     }
@@ -44,11 +44,10 @@ public:
         const auto& receivedRange = m_spiMocker.receivedData();
 
         auto streamSpan = std::span(
-            reinterpret_cast<const std::uint8_t*>(receivedRange.data()),
-            receivedRange.size());
+            reinterpret_cast<const std::uint8_t*>(receivedRange.data()), receivedRange.size());
 
         BusTransactionsReceive.emplace_back(streamSpan.data(), streamSpan.size());
-        std::ranges::copy(streamSpan, _receiveArray.begin());
+        std::copy(streamSpan.begin(), streamSpan.end(), _receiveArray.begin());
 
         m_completedTransaction();
     }
@@ -79,13 +78,15 @@ public:
     TDataStream getTransmittedData() const
     {
         TDataStream stream;
-        std::ranges::for_each(
-            BusTransactionsTransmit,
+        std::for_each(
+            BusTransactionsTransmit.begin(),
+            BusTransactionsTransmit.end(),
             [&stream](const auto& _transaction) {
                 const auto& [pArray, blockSize] = _transaction;
                 auto arraySpan = std::span{pArray, blockSize};
-                std::ranges::transform(
-                    arraySpan,
+                std::transform(
+                    arraySpan.begin(),
+                    arraySpan.end(),
                     std::back_inserter(stream),
                     [](std::uint8_t _dataByte) { return std::byte{_dataByte}; });
             });
@@ -114,7 +115,6 @@ public:
     {
         return m_spiMocker;
     }
-
 
 protected:
     using TTransacation = std::pair<const std::uint8_t*, size_t>;

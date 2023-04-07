@@ -38,10 +38,10 @@ void ClockWatch::setSeconds(const std::string& _newSecondsValue) noexcept
     lv_label_set_text(m_pSecondsLabel.get(), m_secondsValue.c_str());
 }
 
-void ClockWatch::setWeekday(std::string_view _newWeekDay) noexcept
+void ClockWatch::setWeekday(const char* const _newWeekDay) noexcept
 {
     m_weekdayValue = _newWeekDay;
-    lv_label_set_text(m_pWeekDayLabel.get(), m_weekdayValue.c_str());
+    lv_label_set_text(m_pWeekDayLabel.get(), m_weekdayValue);
 }
 
 void ClockWatch::setFullDate(const std::string& _fullDate) noexcept
@@ -167,7 +167,7 @@ void ClockWatch::restoreLabelsText() noexcept
     lv_label_set_text(m_pMinutesLabel.get(), m_minutesValue.c_str());
     lv_label_set_text(m_pSecondsLabel.get(), m_secondsValue.c_str());
     lv_label_set_text(m_pFullDateLabel.get(), m_fulldateValue.c_str());
-    lv_label_set_text(m_pWeekDayLabel.get(), m_weekdayValue.c_str());
+    lv_label_set_text(m_pWeekDayLabel.get(), m_weekdayValue);
 }
 
 std::unique_ptr<IClockWatchPage> createClockWatchView(

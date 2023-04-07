@@ -20,6 +20,11 @@ public:
 
     ~BluetoothWidgetHandler() override = default;
 
+public:
+    void initSubscriptions(Events::EventDispatcher& eventDispatcher) override;
+
+    void deinitHandler() override;
+
 protected:
     void handleEventImpl(
         const Events::TBleClientEvents& _event,

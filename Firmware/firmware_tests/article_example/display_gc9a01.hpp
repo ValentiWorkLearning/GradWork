@@ -122,7 +122,7 @@ public:
         std::uint16_t _y,
         std::uint16_t _width,
         std::uint16_t _height,
-        TBaseSpiDisplay::TColor* _colorToFill) noexcept
+        typename TBaseSpiDisplay::TColor* _colorToFill) noexcept
     {
 
         const std::uint16_t DisplayHeight = TBaseSpiDisplay::getHeight();
