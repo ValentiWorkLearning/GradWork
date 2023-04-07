@@ -137,10 +137,7 @@ jobs:
         python-version: '3.8'
 
     - name: Install conan
-      uses:  BSFishy/pip-action@v1
-      with:
-        packages: |
-          conan
+      run:  pip install "conan<2.0" pytest && conan --version
 
     - name: Intall system required packages
       run: |
